@@ -2,7 +2,8 @@ SGCraft-Reloaded
 ================
 
 Update to Greg's SGCraft for 1.6.4 compatability.
-Included config option to disable Generating gates under desert Pyramids, GenerateStructures=false will disable them
+Included config option to disable Generating gates under desert Pyramids, GenerateStructures=false will disable them.
+
 Added support for ComputerCraft dialing to the gate directly via either the Controller, or the Gate base.
 
 Methods are: dial("address"), connect("address"), disconnect(), isConnected(), Stargate base blocks can also use getAddress() to get the gate address.
