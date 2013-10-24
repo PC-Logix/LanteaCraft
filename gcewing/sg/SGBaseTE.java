@@ -314,8 +314,6 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		}
 	}
 	
-
-	
 	
 	void connect(String address, EntityPlayer player) {
 		String homeAddress = findHomeAddress();
@@ -782,7 +780,7 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		//System.out.printf("SGBaseTE.teleportEntityToWorld: %s to %s\n", repr(oldEntity), newWorld);
 		WorldServer oldWorld = (WorldServer)oldEntity.worldObj;
 		NBTTagCompound nbt = new NBTTagCompound();
-		//oldEntity.addEntityID(nbt);
+		oldEntity.writeToNBTOptional(nbt);
 		extractEntityFromWorld(oldWorld, oldEntity);
 		Entity newEntity = EntityList.createEntityFromNBT(nbt, newWorld);
 		if (newEntity != null) {

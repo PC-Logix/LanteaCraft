@@ -68,6 +68,8 @@ class SGBaseTERenderer extends BaseTileEntityRenderer {
 			GL11.glPopMatrix();
 		}
 	}
+
+	
 	
 	void renderStargate(SGBaseTE te, float t) {
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
@@ -76,10 +78,11 @@ class SGBaseTERenderer extends BaseTileEntityRenderer {
 		renderRing(ringMidRadius, ringOuterRadius, RingType.Outer);
 		renderInnerRing(te, t);
 		renderChevrons(te);
-		if (te.isConnected())
+		if (te.isConnected()) {
 			renderEventHorizon(te);
+		}
 	}
-	
+
 	void renderInnerRing(SGBaseTE te, float t) {
 		GL11.glPushMatrix();
 		GL11.glRotatef((float)(te.interpolatedRingAngle(t) - (135 - SGBaseTE.ringSymbolAngle / 2)), 0, 0, 1);
@@ -250,8 +253,7 @@ class SGBaseTERenderer extends BaseTileEntityRenderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 	
-	static ResourceLocation eventHorizonTexture =
-		new ResourceLocation("minecraft", "textures/misc/underwater.png");
+	static ResourceLocation eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/eventhorizon.png");
 	
 	void renderEventHorizon(SGBaseTE te) {
 		//bindTextureByName("/misc/water.png");
