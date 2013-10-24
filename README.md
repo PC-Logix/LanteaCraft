@@ -28,4 +28,3 @@ Credits:
 Greg Ewing: Original SGCraft mod, and code.
 
 Delta NP's SGCraft texture pack for new textures.
-
