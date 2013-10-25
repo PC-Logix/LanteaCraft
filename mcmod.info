@@ -9,7 +9,7 @@
 "mcversion": "",
 "url": "https://github.com/Joshua-Mainer/SGCraft-Reloaded",
 "updateUrl": "",
-"authors": [ "Greg Ewing", "Neo"],
+"authors": [ "Neo", "Greg Ewing"],
 "parent":"",
 "screenshots": [],
 "dependencies": [
