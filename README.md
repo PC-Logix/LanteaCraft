@@ -1,5 +1,6 @@
 SGCraft-Reloaded
 ================
+Jenkins: http://neo.pc-logix.com:8080/job/SGCraft-Reloaded/
 
 Update to Greg's SGCraft for 1.6.4 compatability.
 Included config option to disable Generating gates under desert Pyramids, GenerateStructures=false will disable them.
