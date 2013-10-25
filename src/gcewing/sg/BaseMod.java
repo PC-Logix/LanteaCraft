@@ -179,8 +179,7 @@ public class BaseMod implements IGuiHandler {
 				if (item.getCreativeTab() == null)
 					item.setCreativeTab(CreativeTabs.tabMisc);
 			}
-			//System.out.printf("BaseMod.newItem: %s unlocalizedName = %s title = %s\n",
-			//	item, item.getUnlocalizedName(), title);
+			//System.out.printf("BaseMod.newItem: %s unlocalizedName = %s title = %s\n", item, item.getUnlocalizedName(), title);
 			return item;
 		}
 		catch (Exception e) {
