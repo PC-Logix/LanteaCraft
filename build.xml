@@ -117,7 +117,7 @@
 			<fileset dir="${mcp.dir}/reobf/minecraft/dan200" />
 		</copy>
  		<copy todir="${classes.dir}/net/minecraft/gen/structure/">
-			<fileset dir="${mcp.dir}/net/minecraft/world/gen/structure/" />
+			<fileset dir="${mcp.dir}/reobf/minecraft/net/minecraft/world/gen/structure/" />
 		</copy>
 		<!-- Copy resources -->
 		<copy todir="${classes.dir}/assets/gcewing_sg">
