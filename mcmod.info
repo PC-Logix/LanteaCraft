@@ -1,22 +1,3 @@
-[
-{
-"modid": "SGCraft",
-"name": "SGCraft-Reloaded",
-"description": "Greg's SGCraft, reloaded!",
-"version": "",
-"credits": "Updated by Neo originaly by Greg_Ewing",
-"logoFile": "",
-"mcversion": "",
-"url": "https://github.com/Joshua-Mainer/SGCraft-Reloaded",
-"updateUrl": "",
-"authors": [ "Neo", "Greg Ewing"],
-"parent":"",
-"screenshots": [],
-"dependencies": [
-         "mod_MinecraftForge"
-]
-}
-
 {
   "modinfoversion": 2,
   "modlist": [{
