@@ -91,9 +91,11 @@ public class SGCraft extends BaseMod {
 	@Override
 	void registerOther() {
 		if (GenerateStruct == true) {
+			System.out.println("GenerateStructure = true");
 			MinecraftForge.TERRAIN_GEN_BUS.register(this);
 	        if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
 	        {
+	        	System.out.println("1.6.4");
 	    		MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "SGCraft:DesertPyramid");
 	        }
 		}
