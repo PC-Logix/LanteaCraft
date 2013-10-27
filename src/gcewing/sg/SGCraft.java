@@ -94,7 +94,7 @@ public class SGCraft extends BaseMod {
 			MinecraftForge.TERRAIN_GEN_BUS.register(this);
 	        if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
 	        {
-	    		MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "SGCraftDesert");
+	    		MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "SGCraft:DesertPyramid");
 	        }
 		}
 	}
