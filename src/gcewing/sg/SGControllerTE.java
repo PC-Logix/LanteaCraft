@@ -125,7 +125,7 @@ public class SGControllerTE extends BaseTileEntity implements IPeripheral {
 	@Override
 	@Method(modid = "ComputerCraft")
 	public String[] getMethodNames() {
-		return (new String[] { "dial", "connect", "disconnect", "isConnected", "isDialing" });
+		return (new String[] { "dial", "connect", "disconnect", "isConnected", "isDialing", "listMethods" });
 	}
 
 	@Override
@@ -167,6 +167,8 @@ public class SGControllerTE extends BaseTileEntity implements IPeripheral {
     			}
     		}
 			return new Object[] { isDialing };
+        } else if (method == 5) {
+        	return new Object[] { "dial, connect, disconnect, isConnected, isDialing, listMethods" };
         }
         return null;
 	}
