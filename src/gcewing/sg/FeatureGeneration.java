@@ -30,9 +30,6 @@ public class FeatureGeneration {
 	}
 
 	static MapGenStructure modifyScatteredFeatureGen(MapGenStructure gen) {
-		//System.out.printf("SGCraft: FeatureGeneration.modifyScatteredFeatureGen: %s\n", gen);
-		//return new SGMapGenScatteredFeature(gen);
-		//MapGenStructureIO.func_143034_b(FeatureUnderDesertPyramid.class, "SGCraftDesert");
 		MapGenStructureAccess.setStructureMap(gen, new SGStructureMap());
 		return gen;
 	}
