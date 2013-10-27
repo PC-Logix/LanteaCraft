@@ -1020,7 +1020,7 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 	@Override
 	@Method(modid = "ComputerCraft")
 	public String[] getMethodNames() {
-		return (new String[] { "dial", "connect", "disconnect", "isConnected", "getAddress" });
+		return (new String[] { "dial", "connect", "disconnect", "isConnected", "getAddress", "isDialing" });
 	}
 
 	@Override
@@ -1034,8 +1034,14 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
         	return new Object[] { isConnected() };
         } else if (method == 4) {
         	return new Object[] { getHomeAddress() };
+        } else if (method == 5) {
+        	return new Object[] { isDialing() };
         }
         return null;
+	}
+
+	public boolean isDialing() {
+		return state == SGState.InterDialling || state == SGState.Dialling;
 	}
 
 	@Override
