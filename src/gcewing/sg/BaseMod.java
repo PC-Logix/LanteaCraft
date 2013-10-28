@@ -24,6 +24,7 @@ import net.minecraftforge.common.*;
 import net.minecraftforge.client.*;
 import net.minecraftforge.oredict.*;
 import cpw.mods.fml.common.*;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.registry.*;
@@ -74,6 +75,7 @@ public class BaseMod implements IGuiHandler {
 	}
 
 	//@Mod.PreInit
+	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
 		serverSide = e.getSide().isServer();
 		clientSide = e.getSide().isClient();
@@ -113,6 +115,7 @@ public class BaseMod implements IGuiHandler {
 	}
 	
 	//@Mod.Init
+	@EventHandler
 	public void init(FMLInitializationEvent e) {
 		MinecraftForge.EVENT_BUS.register(this);
 		if (client != null)
@@ -120,6 +123,7 @@ public class BaseMod implements IGuiHandler {
 	}
 	
 	//@Mod.PostInit
+	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
 		registerBlocks();
 		registerItems();

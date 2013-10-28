@@ -93,11 +93,14 @@ public class SGCraft extends BaseMod {
 		if (GenerateStruct == true) {
 			System.out.println("GenerateStructure = true");
 			MinecraftForge.TERRAIN_GEN_BUS.register(this);
-	        if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
+	        try
 	        {
-	        	System.out.println("1.6.4");
-	    		MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "SGCraft:DesertPyramid");
+	        	if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4")) {
+	        		System.out.println("1.6.4");
+	        		MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "SGCraft:DesertPyramid");
+	        	}
 	        }
+	        catch (Throwable e)  { System.out.println("registerOther threw an exception"); }
 		}
 	}
 
@@ -206,17 +209,8 @@ public class SGCraft extends BaseMod {
 
 	@ForgeSubscribe
 	public void onInitMapGen(InitMapGenEvent e) {
+		System.out.println("onInitMapGen");
 		FeatureGeneration.onInitMapGen(e);
 	}
-
-//	@ForgeSubscribe
-//	void onWorldLoad(WorldEvent.Load e) {
-//		System.out.printf("SGCraft: World loaded: %s\n", e.world);
-//	}
-//	
-//	@ForgeSubscribe
-//	void onWorldUnload(WorldEvent.Unload e) {
-//		System.out.printf("SGCraft: World unloaded: %s\n", e.world);
-//	}
 
 }

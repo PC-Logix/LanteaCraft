@@ -16,6 +16,9 @@ import net.minecraft.world.gen.structure.*;
 public class FeatureUnderDesertPyramid extends StructureComponent {
 
 	StructureComponent base;
+	//added cause forge went WAT?
+	public FeatureUnderDesertPyramid() { }
+	
 	
 	public FeatureUnderDesertPyramid(StructureComponent base) {
 		super(0);
