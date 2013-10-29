@@ -35,6 +35,7 @@ public class SGCraft extends BaseMod {
 	public static SGCraft mod;
 
 	static boolean GenerateStruct = false;
+	static boolean GalacticCraftCompat = false;
 	
 	public static SGChannel channel;
 	public static BaseTEChunkManager chunkManager;
@@ -86,6 +87,10 @@ public class SGCraft extends BaseMod {
 		SGBaseTE.configure(config);
 		addOresToExistingWorlds = config.getBoolean("options", "addOresToExistingWorlds", false);
 		GenerateStruct = config.getBoolean("stargate", "GenerateStructures", true);
+		GalacticCraftCompat = config.getBoolean("stargate", "GalacticCraftCompat", false);
+		if (GalacticCraftCompat) {
+			SGAddressing.minDimension = -90;
+		}
 	}		
 
 	@Override

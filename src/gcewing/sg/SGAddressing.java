@@ -32,7 +32,7 @@ public class SGAddressing {
 	public final static int maxCoord = ((int)Math.floor(Math.sqrt(coordPower - 1))) / 2;
 	public final static int minCoord = -maxCoord;
 	public final static int coordRange = maxCoord - minCoord + 1;
-	public final static int minDimension = -1;
+	public static int minDimension = -1;
 	public final static int maxDimension = minDimension + dimensionPower - 1;
 	
 	static boolean isValidSymbolChar(char c) {
