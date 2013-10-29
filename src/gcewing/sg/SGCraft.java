@@ -89,7 +89,7 @@ public class SGCraft extends BaseMod {
 		GenerateStruct = config.getBoolean("stargate", "GenerateStructures", true);
 		GalacticCraftCompat = config.getBoolean("stargate", "GalacticCraftCompat", false);
 		if (GalacticCraftCompat) {
-			SGAddressing.minDimension = -90;
+			SGAddressing.minDimension = -99;
 		}
 	}		
 
