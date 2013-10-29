@@ -47,6 +47,8 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 	final static double closingTransientRandomness = 0.25;
 	final static double transientDamageRate = 50;
 	
+	public static int powerLevel = 0;
+	
 	static int gateOpeningsPerFuelItem = 24;
 	static int minutesOpenPerFuelItem = 80;
 	static int secondsToStayOpen = 5 * 60;
@@ -247,14 +249,27 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		//System.out.printf("SGBaseTE: %s entering state %s with timeout %s\n", side(), newState, newTimeout);
 		state = newState;
 		timeout = newTimeout;
+		//System.out.println("enterState " + isInitiator + " " + newState);
+		if (state == SGState.Dialling || state == SGState.Connected || state == SGState.InterDialling || state == SGState.Transient) {
+			if (!isInitiator) {
+				powerLevel = 15;	
+			} else {
+				powerLevel = 0;
+			}
+		} else if (state == SGState.Disconnecting || state == SGState.Idle) {
+			powerLevel = 0;
+		}
 		onInventoryChanged();
 		markBlockForUpdate();
+
 	}
+
 	
 	public boolean isConnected() {
 		return state == SGState.Transient || state == SGState.Connected || state == SGState.Disconnecting;
 	}
 	
+
 	SGControllerTE getLinkedControllerTE() {
 		if (isLinkedToController) {
 			TileEntity cte = worldObj.getBlockTileEntity(linkedX, linkedY, linkedZ);
@@ -586,6 +601,7 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 	}
 
 	List<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
+
 	
 	void checkForEntitiesInPortal() {
 		if (state == SGState.Connected) {
@@ -1000,6 +1016,11 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 			//System.out.printf("\n");
 		//}
 	}
+	
+	
+	
+
+	
 	
 	@Override
 	BaseTEChunkManager getChunkManager() {

@@ -28,7 +28,7 @@ public class SGBaseBlock extends Base4WayCtrBlock<SGBaseTE> {
 	static int southSide[] = {3, 5, 2, 4};
 	static int unitX[] = {1, 0, -1, 0};
 	static int unitZ[] = {0, -1, 0, 1};
-	
+		
 	static int pattern[][] = {
 		{2, 1, 2, 1, 2},
 		{1, 0, 0, 0, 1},
@@ -45,6 +45,23 @@ public class SGBaseBlock extends Base4WayCtrBlock<SGBaseTE> {
 		super(id, Material.rock /*SGRingBlock.ringMaterial*/, SGBaseTE.class);
 		setHardness(1.5F);
 		setCreativeTab(CreativeTabs.tabMisc);
+		this.setTickRandomly(true);
+	}
+		
+    @Override
+    public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int blockID) {
+        return SGBaseTE.powerLevel;
+    }
+	
+	@Override
+    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
+    {
+		return SGBaseTE.powerLevel;
+    }
+	@Override
+	public boolean canProvidePower()
+	{
+	    return true;
 	}
 	
 	@Override
@@ -205,6 +222,7 @@ public class SGBaseBlock extends Base4WayCtrBlock<SGBaseTE> {
 			unmergeRing(world, x, y, z);
 		}
 		if (goBang) {
+			//THIS is the explode function \/ \/ \/
 			//explode(world, x + 0.5, y + 2.5, z + 0.5, 10);
 			//world.newExplosion(null, x + 0.5, y + 2.5, z + 0.5, 10, true, true);
 			//SGExplosion exp = new SGExplosion(world, null, x + 0.5, y + 2.5, z + 0.5, 10);
