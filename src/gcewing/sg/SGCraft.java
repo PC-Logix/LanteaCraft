@@ -209,7 +209,6 @@ public class SGCraft extends BaseMod {
 
 	@ForgeSubscribe
 	public void onInitMapGen(InitMapGenEvent e) {
-		System.out.println("onInitMapGen");
 		FeatureGeneration.onInitMapGen(e);
 	}
 
