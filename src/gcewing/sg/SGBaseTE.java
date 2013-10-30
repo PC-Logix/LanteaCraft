@@ -259,6 +259,7 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		} else if (state == SGState.Disconnecting || state == SGState.Idle) {
 			powerLevel = 0;
 		}
+		this.worldObj.notifyBlockChange(xCoord, yCoord, zCoord, this.blockType.blockID);
 		onInventoryChanged();
 		markBlockForUpdate();
 

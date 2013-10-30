@@ -45,7 +45,7 @@ public class BaseTileEntity extends TileEntity
 	
 	public void markBlockForUpdate() {
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		this.worldObj.notifyBlockChange(xCoord, yCoord, zCoord, this.blockType.blockID);
+		//herp this.worldObj.notifyBlockChange(xCoord, yCoord, zCoord, this.blockType.blockID);
 	}
 	
 	public void playSoundEffect(String name, float volume, float pitch) {

@@ -45,6 +45,24 @@ public class SGControllerBlock extends Base4WayCtrBlock<SGControllerTE> {
 	}
 
 	@Override
+	public int getRenderType()
+    {
+		return -1;
+	}
+	
+	@Override
+	public boolean renderAsNormalBlock() 
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube() 
+	{
+		return false;
+	}
+	
+	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, player, stack);
 		checkForLink(world, x, y, z);
