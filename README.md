@@ -9,14 +9,14 @@ Added support for ComputerCraft dialing to the gate directly via either the Cont
 
 Methods are: dial("address"), connect("address"), disconnect(), isConnected(), Stargate base blocks can also use getAddress() to get the gate address.
 
-Switched to Delta NP SGCraft Textures, pending permissions to release with these textures.
+Switched to Delta NP SGCraft Textures, thanks http://www.deltastrium.com/ for the Awesome textures!
 
 
 TODO:
 
 Adding a new gate model, Atlantis along with a DHD for it.
 
-Adding a Milky Way DHD model instead of a block.
+-DONE!- Adding a Milky Way DHD model instead of a block.
 
 Powering gates with IC2, UE, or BuildCraft power.
 
