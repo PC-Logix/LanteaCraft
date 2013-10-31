@@ -7,7 +7,7 @@ Included config option to disable Generating gates under desert Pyramids, Genera
 
 Added support for ComputerCraft dialing to the gate directly via either the Controller, or the Gate base.
 
-Methods are: dial("address"), connect("address"), disconnect(), isConnected(), Stargate base blocks can also use getAddress() to get the gate address.
+Methods are: dial("address"), connect("address"), disconnect(), isConnected(), isDialing(), listMethods(), Stargate base blocks can also use getAddress() to get the gate address.
 
 Switched to Delta NP SGCraft Textures, thanks http://www.deltastrium.com/ for the Awesome textures!
 
