@@ -51,9 +51,16 @@ public class SGRingBlock extends BaseContainerBlock<SGRingTE> {
 
 	@Override
 	public void registerIcons(IconRegister reg) {
-		topAndBottomTexture = getIcon(reg, "stargateBlock");
-		sideTextures[0] = getIcon(reg, "stargateRing");
-		sideTextures[1] = getIcon(reg, "stargateChevron");
+		if (SGCraft.RenderHD == true) {
+			topAndBottomTexture = getIcon(reg, "stargateBlock");
+			sideTextures[0] = getIcon(reg, "stargateRing");
+			sideTextures[1] = getIcon(reg, "stargateChevron");
+		} else {
+			topAndBottomTexture = getIcon(reg, "stargateBlock_SD");
+			sideTextures[0] = getIcon(reg, "stargateRing_SD");
+			sideTextures[1] = getIcon(reg, "stargateChevron_SD");
+		}
+
 	}
 	
 	@Override

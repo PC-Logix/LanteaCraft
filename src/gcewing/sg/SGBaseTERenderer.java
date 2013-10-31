@@ -73,7 +73,12 @@ class SGBaseTERenderer extends BaseTileEntityRenderer {
 	
 	void renderStargate(SGBaseTE te, float t) {
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
-		bindTexture(SGCraft.mod.resourceLocation("textures/tileentity/stargate.png"));
+		if (SGCraft.RenderHD == true) {
+			bindTexture(SGCraft.mod.resourceLocation("textures/tileentity/stargate.png"));
+		} else {
+			bindTexture(SGCraft.mod.resourceLocation("textures/tileentity/stargate_SD.png"));
+		}
+		
 		GL11.glNormal3f(0, 1, 0);
 		renderRing(ringMidRadius, ringOuterRadius, RingType.Outer);
 		renderInnerRing(te, t);
@@ -252,10 +257,17 @@ class SGBaseTERenderer extends BaseTileEntityRenderer {
 		GL11.glEnd();
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
-	
-	static ResourceLocation eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/eventhorizon.png");
+
+	static ResourceLocation eventHorizonTexture;
 	
 	void renderEventHorizon(SGBaseTE te) {
+		
+		if (SGCraft.RenderHD == true) {
+			eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/eventhorizon.png");
+		} else {
+			eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/eventhorizon_SD.png");
+		}
+		
 		//bindTextureByName("/misc/water.png");
 		bindTexture(eventHorizonTexture);
 		GL11.glDisable(GL11.GL_CULL_FACE);

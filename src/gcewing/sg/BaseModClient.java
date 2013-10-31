@@ -27,14 +27,12 @@ import net.minecraft.src.*;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraft.world.*;
-
 import net.minecraftforge.common.*;
 import net.minecraftforge.client.*;
 import cpw.mods.fml.client.registry.*;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.registry.*;
-
 import gcewing.sg.BaseMod.IBlock;
 import gcewing.sg.BaseMod.VSBinding;
 
@@ -202,9 +200,16 @@ public class BaseModClient implements IGuiHandler {
 	//-------------- Rendering --------------------------------------------------------
 	
 	public void bindTexture(String path) {
-		ResourceLocation rsrc = base.resourceLocation("textures/" + path);
-		TextureManager tm = Minecraft.getMinecraft().getTextureManager();
-		tm.bindTexture(rsrc);
+		if (SGCraft.RenderHD == true) {
+			ResourceLocation rsrc = base.resourceLocation("textures_HD/" + path);
+			TextureManager tm = Minecraft.getMinecraft().getTextureManager();
+			tm.bindTexture(rsrc);
+		} else {
+			ResourceLocation rsrc = base.resourceLocation("textures_SD/" + path);
+			TextureManager tm = Minecraft.getMinecraft().getTextureManager();
+			tm.bindTexture(rsrc);
+		}
+
 	}
 	
 	//-------------- Internal --------------------------------------------------------

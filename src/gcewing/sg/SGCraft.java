@@ -36,6 +36,7 @@ public class SGCraft extends BaseMod {
 
 	static boolean GenerateStruct = false;
 	static boolean GalacticCraftCompat = false;
+	static boolean RenderHD = true;
 	
 	public static SGChannel channel;
 	public static BaseTEChunkManager chunkManager;
@@ -88,6 +89,7 @@ public class SGCraft extends BaseMod {
 		addOresToExistingWorlds = config.getBoolean("options", "addOresToExistingWorlds", false);
 		GenerateStruct = config.getBoolean("stargate", "GenerateStructures", true);
 		GalacticCraftCompat = config.getBoolean("stargate", "GalacticCraftCompat", false);
+		RenderHD = config.getBoolean("options", "RenderHD", true);
 		if (GalacticCraftCompat) {
 			SGAddressing.minDimension = -99;
 		}
@@ -101,7 +103,6 @@ public class SGCraft extends BaseMod {
 	        try
 	        {
 	        	if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4")) {
-	        		System.out.println("1.6.4");
 	        		MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "SGCraft:DesertPyramid");
 	        	}
 	        }

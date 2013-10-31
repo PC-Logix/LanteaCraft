@@ -30,9 +30,16 @@ public class SGControllerBlock extends Base4WayCtrBlock<SGControllerTE> {
 	
 	@Override
 	public void registerIcons(IconRegister reg) {
-		topTexture = getIcon(reg, "controller_top");
-		bottomTexture = getIcon(reg, "controller_bottom");
-		sideTexture = getIcon(reg, "controller_side");
+		if (SGCraft.RenderHD == true) {
+			topTexture = getIcon(reg, "controller_top");
+			bottomTexture = getIcon(reg, "controller_bottom");
+			sideTexture = getIcon(reg, "controller_side");
+		} else {
+			topTexture = getIcon(reg, "controller_top_SD");
+			bottomTexture = getIcon(reg, "controller_bottom_SD");
+			sideTexture = getIcon(reg, "controller_side_SD");
+		}
+
 	}
 	
 	@Override
@@ -47,19 +54,31 @@ public class SGControllerBlock extends Base4WayCtrBlock<SGControllerTE> {
 	@Override
 	public int getRenderType()
     {
-		return -1;
+		if (SGCraft.RenderHD == true) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 	
 	@Override
 	public boolean renderAsNormalBlock() 
 	{
-		return false;
+		if (SGCraft.RenderHD == true) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	@Override
 	public boolean isOpaqueCube() 
 	{
-		return false;
+		if (SGCraft.RenderHD == true) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	@Override
