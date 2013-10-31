@@ -10,36 +10,39 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
 public class SGControllerTERenderer extends TileEntitySpecialRenderer {
-	private SGControllerModel model = new SGControllerModel();
-
+	//private IModelCustom model;
+	private ResourceLocation theTexture;
 	
 	public  SGControllerTERenderer() {
 		System.out.println("SGControllerTERenderer()");
 	}
 	
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick)
-    {
-    	final ResourceLocation SGController = new ResourceLocation("gcewing_sg:textures/tileentity/stargate.png");
-        System.out.println("renderTileEntityAt");
-        
-		float scale = 1;
+    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f)
+    {    
 
-		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
+		if (SGControllerModel.INSTANCE == null) {
+			SGControllerModel.loadSGControllerModel();
+		}
+		if (SGControllerModel.INSTANCE != null){
+			theTexture = new ResourceLocation("gcewing_sg", "textures/blocks/controller_bottom.png");
+			float scale = 1;
 
-		// Scale, Translate, Rotate
-		GL11.glScalef(scale, scale, scale);
-		GL11.glTranslatef((float)x, (float)y, (float)z);
-		// angle, xaxis, yaxis, zaxis
-		GL11.glRotatef(0F, 0F, 0F, 0F);
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture(SGController);
+			GL11.glPushMatrix();
+			GL11.glDisable(GL11.GL_LIGHTING);
 
-		model.renderPart("sg_controller");
+			// Scale, Translate, Rotate
+			GL11.glScalef(scale, scale, scale);
+			GL11.glTranslatef((float)x, (float)y, (float)z);
+			// angle, xaxis, yaxis, zaxis
+			GL11.glRotatef(0F, 0F, 0F, 0F);
+			FMLClientHandler.instance().getClient().renderEngine.bindTexture(theTexture);
 
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glPopMatrix();
-
+			//model.renderPart("sg_controller");
+			SGControllerModel.INSTANCE.renderAll();
+			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glPopMatrix();
+		}
     }
 
 }

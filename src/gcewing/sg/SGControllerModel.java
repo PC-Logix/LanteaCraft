@@ -8,20 +8,40 @@ import cpw.mods.fml.relauncher.SideOnly;
  
 @SideOnly(Side.CLIENT)
 public class SGControllerModel {
-	private IModelCustom model;
+	public static SGControllerModel INSTANCE = null;
+	public static final String MODEL_FILE = "/assets/gcewing_sg/models/dhd.obj";
+	
+	private IModelCustom SGControllerModel;
      
     public SGControllerModel()
     {
-    	model = AdvancedModelLoader.loadModel("/assets/gcewing_sg/models/dhd.obj");
+    	SGControllerModel = AdvancedModelLoader.loadModel(MODEL_FILE);
         System.out.println("SGCraft DHD Model Loaded");
     }
 
     public void render(){
-    	model.renderAll();
+    	SGControllerModel.renderAll();
+    }
+    
+    public void renderOnly(String groupName){
+    	SGControllerModel.renderOnly(groupName);
+    }
+    
+    public void renderAll(){
+    	SGControllerModel.renderAll();
     }
     
 	public void renderPart(String partName) {
-
-		model.renderPart(partName);
+		SGControllerModel.renderPart(partName);
 	}
+
+	public void renderAllExcept(String group) {
+		SGControllerModel.renderAllExcept(group);
+	}
+	
+	public static void loadSGControllerModel() {
+		System.out.println("loadSGControllerModel");
+		INSTANCE = new SGControllerModel();
+	}
+
 }
