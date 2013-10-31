@@ -11,8 +11,11 @@ import cpw.mods.fml.common.Optional.Method;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.tileentity.*;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.*;
 
 @Interface(iface = "IPeripheral", modid="ComputerCraft")
@@ -30,6 +33,7 @@ public class SGControllerTE extends BaseTileEntity implements IPeripheral {
 		linkRangeY = cfg.getInteger("dhd", "linkRangeY", linkRangeY);
 		linkRangeZ = cfg.getInteger("dhd", "linkRangeZ", linkRangeZ);
 	}
+
 	
 	public SGControllerBlock getBlock() {
 		return (SGControllerBlock)getBlockType();
@@ -115,7 +119,7 @@ public class SGControllerTE extends BaseTileEntity implements IPeripheral {
 		isLinkedToStargate = false;
 		markBlockForUpdate();
 	}
-
+	
 	@Override
 	@Method(modid = "ComputerCraft")
 	public String getType() {
@@ -127,7 +131,7 @@ public class SGControllerTE extends BaseTileEntity implements IPeripheral {
 	public String[] getMethodNames() {
 		return (new String[] { "dial", "connect", "disconnect", "isConnected", "isDialing", "listMethods" });
 	}
-
+	
 	@Override
 	@Method(modid = "ComputerCraft")
 	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {

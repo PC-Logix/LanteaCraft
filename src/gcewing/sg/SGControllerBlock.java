@@ -66,6 +66,8 @@ public class SGControllerBlock extends Base4WayCtrBlock<SGControllerTE> {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, player, stack);
 		checkForLink(world, x, y, z);
+		int dir = MathHelper.floor_double((double)((player.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+        world.setBlockMetadataWithNotify(x, y, z, dir, 0);
 	}
 
 	@Override
