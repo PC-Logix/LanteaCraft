@@ -1096,9 +1096,9 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
         } else if (method == 9) {
         	SGBaseTE dte = SGAddressing.findAddressedStargate(getHomeAddress());
         	if (!reloadFuel(fuelToOpen)) {
-        		return new Object[] { "Stargate has insufficient fuel" };
+        		return new Object[] { false };
         	} else {
-        		return new Object[] { "Stargate has sufficient fuel" };
+        		return new Object[] { true };
         	}
         } else if (method == 10) {
         	String address = arguments[0].toString().toUpperCase();
@@ -1107,11 +1107,11 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
         		return new Object[] { "Stargate addresses must be 7 characters" };
         	} else {
             	if (dte == null) {
-            		return new Object[] { "No Stargate at address " + address };
+            		return new Object[] { false };
             	} if (address == getHomeAddress()) { 
             		return new Object[] { "Stargate cannot connect to itself" };
             	} else {
-            		return new Object[] { "Stargate exists at address " + address };
+            		return new Object[] { true };
             	}
         	}
         }
