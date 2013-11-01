@@ -219,7 +219,9 @@ public class SGBaseBlock extends Base4WayCtrBlock<SGBaseTE> {
 		if (te != null /*&& te.isMerged*/) {
 			if (te.isMerged && te.state == SGState.Connected) {
 				te.state = SGState.Idle;
-				goBang = true;
+				if (SGCraft.ActiveGateExplosion == true) {
+					goBang = true;
+				}
 			}
 			te.disconnect();
 			te.unlinkFromController();
@@ -229,7 +231,7 @@ public class SGBaseBlock extends Base4WayCtrBlock<SGBaseTE> {
 		}
 		if (goBang) {
 			//THIS is the explode function \/ \/ \/
-			//explode(world, x + 0.5, y + 2.5, z + 0.5, 10);
+			explode(world, x + 0.5, y + 2.5, z + 0.5, 10);
 			//world.newExplosion(null, x + 0.5, y + 2.5, z + 0.5, 10, true, true);
 			//SGExplosion exp = new SGExplosion(world, null, x + 0.5, y + 2.5, z + 0.5, 10);
 			//exp.isFlaming = true;

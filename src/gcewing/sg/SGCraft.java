@@ -37,6 +37,7 @@ public class SGCraft extends BaseMod {
 	static boolean GenerateStruct = false;
 	static boolean GalacticCraftCompat = false;
 	static boolean RenderHD = true;
+	static boolean ActiveGateExplosion = true;
 	
 	public static SGChannel channel;
 	public static BaseTEChunkManager chunkManager;
@@ -90,6 +91,7 @@ public class SGCraft extends BaseMod {
 		GenerateStruct = config.getBoolean("stargate", "GenerateStructures", true);
 		GalacticCraftCompat = config.getBoolean("stargate", "GalacticCraftCompat", false);
 		RenderHD = config.getBoolean("options", "RenderHD", true);
+		ActiveGateExplosion = config.getBoolean("options", "ActiveGateExplosion", true);
 		if (GalacticCraftCompat) {
 			SGAddressing.minDimension = -99;
 		}
