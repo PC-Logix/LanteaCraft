@@ -76,6 +76,8 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 	int timeout;
 	int fuelBuffer;
 	
+	public IComputerAccess m_computer;
+	
 	IInventory inventory = new InventoryBasic("Stargate", false, 4);
 	final static int fuelSlot = 0;
 
@@ -409,6 +411,11 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		dialledAddress = address;
 		connectedLocation = new SGLocation(dte);
 		isInitiator = initiator;
+		if (m_computer != null) {
+			if(!isInitiator) {
+				m_computer.queueEvent("sgIncoming", new Object[] { address });
+			}
+		}
 		//markBlockForUpdate();
 		onInventoryChanged();
 		startDiallingNextSymbol();
@@ -1017,12 +1024,7 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 			//System.out.printf("\n");
 		//}
 	}
-	
-	
-	
-
-	
-	
+		
 	@Override
 	BaseTEChunkManager getChunkManager() {
 		return SGCraft.chunkManager;
@@ -1042,14 +1044,31 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 	@Override
 	@Method(modid = "ComputerCraft")
 	public String[] getMethodNames() {
-		return (new String[] { "dial", "connect", "disconnect", "isConnected", "getAddress", "isDialing", "listMethods" });
+		return (new String[] { 
+				"dial", 
+				"connect", 
+				"disconnect", 
+				"isConnected", 
+				"getAddress", 
+				"isDialing", 
+				"listMethods", 
+				"isComplete", 
+				"isBusy",
+				"hasFuel",
+				"isValidAddress"
+				});
 	}
 
 	@Override
 	@Method(modid = "ComputerCraft")
 	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
         if (method == 0 || method == 1) {
-        	connect(arguments[0].toString().toUpperCase(), null);
+        	String address = arguments[0].toString().toUpperCase();
+        	if (address.length() != 7) {
+        		return new Object[] { "Stargate addresses must be 7 characters" };
+        	} else {
+        		connect(address, null);
+        	}
         } else if (method == 2) {
         	disconnect();
         } else if (method == 3) {
@@ -1059,11 +1078,45 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
         } else if (method == 5) {
         	return new Object[] { isDialing() };
         } else if (method == 6) {
-        	return new Object[] { "dial, connect, disconnect, isConnected, getAddress, isDialing, listMethods" };
+        	return new Object[] { "dial, connect, disconnect, isConnected, getAddress, isDialing, isComplete, isBusy, hasFuel, isValidAddress, listMethods" };
+        } else if (method == 7) {
+        	return new Object[] { isMerged };
+        } else if (method == 8) {
+        	String address = arguments[0].toString().toUpperCase();
+        	SGBaseTE dte = SGAddressing.findAddressedStargate(address);
+        	if (address.length() != 7) {
+        		return new Object[] { "Stargate addresses must be 7 characters" };
+        	} else {
+            	if (dte.state != SGState.Idle) {
+            		return new Object[] { "true" };
+            	} else {
+            		return new Object[] { "false" };
+            	}
+        	}
+        } else if (method == 9) {
+        	SGBaseTE dte = SGAddressing.findAddressedStargate(getHomeAddress());
+        	if (!reloadFuel(fuelToOpen)) {
+        		return new Object[] { "Stargate has insufficient fuel" };
+        	} else {
+        		return new Object[] { "Stargate has sufficient fuel" };
+        	}
+        } else if (method == 10) {
+        	String address = arguments[0].toString().toUpperCase();
+        	SGBaseTE dte = SGAddressing.findAddressedStargate(address);
+        	if (address.length() != 7) {
+        		return new Object[] { "Stargate addresses must be 7 characters" };
+        	} else {
+            	if (dte == null) {
+            		return new Object[] { "No Stargate at address " + address };
+            	} if (address == getHomeAddress()) { 
+            		return new Object[] { "Stargate cannot connect to itself" };
+            	} else {
+            		return new Object[] { "Stargate exists at address " + address };
+            	}
+        	}
         }
         return null;
 	}
-
 	public boolean isDialing() {
 		return state == SGState.InterDialling || state == SGState.Dialling;
 	}
@@ -1078,14 +1131,14 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 	@Method(modid = "ComputerCraft")
 	public void attach(IComputerAccess computer) {
 		// TODO Auto-generated method stub
-		
+		m_computer = computer;
 	}
 
 	@Override
 	@Method(modid = "ComputerCraft")
 	public void detach(IComputerAccess computer) {
 		// TODO Auto-generated method stub
-		
+		m_computer = null;
 	}
 	
 }
