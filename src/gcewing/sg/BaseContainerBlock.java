@@ -41,6 +41,7 @@ public class BaseContainerBlock<TE extends TileEntity>
 		tileEntityClass = teClass;
 		if (teClass != null) {
 			try {
+				//Change this to teClass, name to fix skipping TE
 				GameRegistry.registerTileEntity(teClass, teClass.getName());
 			}
 			catch (IllegalArgumentException e) {
@@ -204,11 +205,5 @@ public class BaseContainerBlock<TE extends TileEntity>
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
-	
-
-
-
-
-
 }
 

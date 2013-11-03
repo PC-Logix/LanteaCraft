@@ -71,15 +71,9 @@ public class SGBaseBlock extends Base4WayCtrBlock<SGBaseTE> {
 
 	@Override
 	public void registerIcons(IconRegister reg) {
-		if (SGCraft.RenderHD == true) {
-			topAndBottomTexture = getIcon(reg, "stargateBlock");
-			frontTexture = getIcon(reg, "stargateBase_front");
-			sideTexture = getIcon(reg, "stargateRing");
-		} else {
-			topAndBottomTexture = getIcon(reg, "stargateBlock_SD");
-			frontTexture = getIcon(reg, "stargateBase_front_SD");
-			sideTexture = getIcon(reg, "stargateRing_SD");
-		}
+		topAndBottomTexture = getIcon(reg, "stargateBlock_" + SGCraft.RenderHD);
+		frontTexture = getIcon(reg, "stargateBase_front_" + SGCraft.RenderHD);
+		sideTexture = getIcon(reg, "stargateRing_" + SGCraft.RenderHD);
 	}
 	
 	@Override
@@ -283,7 +277,7 @@ public class SGBaseBlock extends Base4WayCtrBlock<SGBaseTE> {
 		else if (block instanceof SGPortalBlock)
 			world.setBlock(xr, yr, zr, 0, 0, 0x3);
 	}
-	
+
 }
 
 //------------------------------------------------------------------------------------------------

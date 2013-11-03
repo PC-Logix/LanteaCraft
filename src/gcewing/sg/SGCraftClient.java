@@ -28,6 +28,7 @@ public class SGCraftClient extends BaseModClient {
 	void registerRenderers() {
 		//System.out.printf("SGCraft: SGCraftClient.registerScreens\n");
 		addTileEntityRenderer(SGBaseTE.class, new SGBaseTERenderer());
+		addTileEntityRenderer(SGPegasusBaseTE.class, new SGPegasusBaseTERenderer());
 		addTileEntityRenderer(SGControllerTE.class, new SGControllerTERenderer());
 	}
 

@@ -35,8 +35,9 @@ public class SGCraft extends BaseMod {
 	public static SGCraft mod;
 
 	static boolean GenerateStruct = false;
-	static boolean GalacticCraftCompat = false;
-	static boolean RenderHD = true;
+	static boolean GalacticraftCompat = false;
+	static int RenderHD = 32;
+	static boolean HDModels = true;
 	static boolean ActiveGateExplosion = true;
 	
 	public static SGChannel channel;
@@ -45,6 +46,11 @@ public class SGCraft extends BaseMod {
 	public static SGBaseBlock sgBaseBlock;
 	public static SGRingBlock sgRingBlock;
 	public static SGControllerBlock sgControllerBlock;
+
+	public static SGPegasusBaseBlock sgPegasusBaseBlock;
+	public static SGPegasusRingBlock sgPegasusRingBlock;
+	public static SGPegasusControllerBlock sgPegasusControllerBlock;
+	
 	//public static SGPortalBlock sgPortalBlock;
 	public static Block naquadahBlock, naquadahOre;
 	
@@ -88,11 +94,26 @@ public class SGCraft extends BaseMod {
 		NaquadahOreWorldGen.configure(config);
 		SGBaseTE.configure(config);
 		addOresToExistingWorlds = config.getBoolean("options", "addOresToExistingWorlds", false);
-		GenerateStruct = config.getBoolean("stargate", "GenerateStructures", true);
-		GalacticCraftCompat = config.getBoolean("stargate", "GalacticCraftCompat", false);
-		RenderHD = config.getBoolean("options", "RenderHD", true);
+		
+		Property GenerateStruct = config.get("options", "GenerateStructures", true);
+		SGCraft.GenerateStruct = config.getBoolean("stargate", "GenerateStructures", true);
+		GenerateStruct.comment = "true/false Enables/Disables generation of Gate Rooms under Desert Pyramids";
+		
+		Property GalacticraftCompat = config.get("options", "GalacticCraftCompat", false);
+		SGCraft.GalacticraftCompat = config.getBoolean("stargate", "GalacticCraftCompat", false);
+		GalacticraftCompat.comment = "true/false Enables/Disables Galcticraft support THIS WILL CHANGE ALL EXISTING ADDRESSES!";
+		
+		Property textureRes = config.get("graphics_options", "textureRes", 32);
+		SGCraft.RenderHD = 	config.getInteger("graphics_options", "textureRes", 32);
+		textureRes.comment = "This value must be either 32, 64, or 128. Controls Textures Resolution";
+
+		Property HDModels = config.get("graphics_options", "HDModels", true);
+		SGCraft.HDModels = config.getBoolean("graphics_options", "HDModels", true);
+		HDModels.comment = "True/False Should HD models be loaded for DHDs.";
+		
 		ActiveGateExplosion = config.getBoolean("options", "ActiveGateExplosion", true);
-		if (GalacticCraftCompat) {
+		
+		if (SGCraft.GalacticraftCompat == true) {
 			SGAddressing.minDimension = -99;
 		}
 	}		
@@ -117,6 +138,11 @@ public class SGCraft extends BaseMod {
 		sgRingBlock = newBlock("stargateRing", SGRingBlock.class, SGRingItem.class, "Stargate Ring Segment");
 		sgBaseBlock = newBlock("stargateBase", SGBaseBlock.class, "Stargate Base");
 		sgControllerBlock = newBlock("stargateController", SGControllerBlock.class, "Stargate Controller");
+	/*
+		sgPegasusBaseBlock = newBlock("stargatePegasusBase", SGPegasusBaseBlock.class, "Pegasus Stargate Base");
+		sgPegasusRingBlock = newBlock("stargatePegasusRing", SGPegasusRingBlock.class, "Pegasus Ring Segment");
+		sgPegasusControllerBlock = newBlock("stargatePegasusController", SGPegasusControllerBlock.class, "Pegasus Stargate Controller");
+	*/	
 		//sgPortalBlock = newBlock("stargatePortal", SGPortalBlock.class, "Stargate Portal");
 		naquadahBlock = newBlock("naquadahBlock", NaquadahBlock.class, "Naquadah Alloy Block");
 		naquadahOre = newBlock("naquadahOre", NaquadahOreBlock.class, "Naquadah Ore");

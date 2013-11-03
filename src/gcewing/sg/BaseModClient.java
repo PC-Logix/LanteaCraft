@@ -200,15 +200,9 @@ public class BaseModClient implements IGuiHandler {
 	//-------------- Rendering --------------------------------------------------------
 	
 	public void bindTexture(String path) {
-		if (SGCraft.RenderHD == true) {
-			ResourceLocation rsrc = base.resourceLocation("textures_HD/" + path);
+			ResourceLocation rsrc = base.resourceLocation("textures/" + path);
 			TextureManager tm = Minecraft.getMinecraft().getTextureManager();
 			tm.bindTexture(rsrc);
-		} else {
-			ResourceLocation rsrc = base.resourceLocation("textures_SD/" + path);
-			TextureManager tm = Minecraft.getMinecraft().getTextureManager();
-			tm.bindTexture(rsrc);
-		}
 
 	}
 	

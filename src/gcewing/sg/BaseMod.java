@@ -177,11 +177,7 @@ public class BaseMod implements IGuiHandler {
 			String qualName = assetKey + ":" + name;
 			item.setUnlocalizedName(qualName);
 			//item.func_111206_d(qualName.toLowerCase()); // Set default icon name
-			if (SGCraft.RenderHD == true) {
-				item.setTextureName(qualName); // Set default icon name
-			} else {
-				item.setTextureName(qualName + "_SD"); // Set default icon name
-			}
+				item.setTextureName(qualName + "_" + SGCraft.RenderHD); // Set default icon name
 			LanguageRegistry.addName(item, title);
 			if (clientSide) {
 				if (item.getCreativeTab() == null)
@@ -213,7 +209,7 @@ public class BaseMod implements IGuiHandler {
 			String qualName = assetKey + ":" + name;
 			block.setUnlocalizedName(qualName);
 			//block.func_111022_d(qualName.toLowerCase()); // Set default icon name
-			block.setTextureName(qualName); // Set default icon name
+			block.setTextureName(qualName + "_" + SGCraft.RenderHD); // Set default icon name
 			GameRegistry.registerBlock(block, itemClass);
 			if (title != null) {
 				LanguageRegistry.addName(block, title);
@@ -364,11 +360,7 @@ public class BaseMod implements IGuiHandler {
 	}
 	
 	public ResourceLocation textureLocation(String path) {
-		if (SGCraft.RenderHD == true) {
-			return resourceLocation("textures_HD/" + path);
-		} else {
-			return resourceLocation("textures_SD/" + path);
-		}
+			return resourceLocation("textures/" + path);
 		
 	}
 

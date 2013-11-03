@@ -40,6 +40,7 @@ public class Base4WayCtrBlock<TE extends TileEntity> extends BaseOrientedCtrBloc
 		return extractRotation(data);
 	}
 
+	
 	public int extractRotation(int data) {
 		return (data & rotationMask) >> rotationShift;
 	}

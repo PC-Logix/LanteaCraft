@@ -19,12 +19,12 @@ public class SGControllerTERenderer extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f)
     {    
-		if (SGCraft.RenderHD == true) {
+		if (SGCraft.HDModels == true) {
 			if (SGControllerModel.INSTANCE == null) {
 				SGControllerModel.loadSGControllerModel();
 			} 
 			if (SGControllerModel.INSTANCE != null){
-				theTexture = new ResourceLocation("gcewing_sg", "textures/blocks/controller_bottom.png");
+				theTexture = new ResourceLocation("gcewing_sg", "textures/blocks/controller_bottom_" + SGCraft.RenderHD + ".png");
 				float scale = 1;
 				GL11.glPushMatrix();
 				GL11.glDisable(GL11.GL_LIGHTING);

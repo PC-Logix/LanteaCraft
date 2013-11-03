@@ -59,10 +59,19 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 	static int maxFuelBuffer;
 	static int fuelToOpen;
 	static int ticksToStayOpen;
-	
+    final static int irisTimerVal = 2;
+    
 	static Random random = new Random();
 	static DamageSource transientDamage = new TransientDamageSource();
-	
+    static DamageSource irisDamage = new irisDamageSource();
+    static DamageSource recieveDamage = new recieveDamageSource();
+    
+    public SGIrisState irisVarState;
+    public String irisType = "iris";
+    public int irisSlide;
+    private int irisTimer;
+
+    
 	public boolean isMerged;
 	public SGState state = SGState.Idle;
 	public double ringAngle, lastRingAngle, targetRingAngle; // degrees
@@ -118,6 +127,152 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		setForcedChunkRange(-1, -1, 1, 1);
 	}
 
+	
+/*	
+    public String getIrisType()
+    {
+            ItemStack is = getStackInSlot(4);
+            if(is != null)
+            {
+                    if(is.getItem() instanceof SGDarkMultiItem)
+                    {
+                            SGDarkMultiItem mI = (SGDarkMultiItem)is.getItem();
+                            if(mI.isUpgradeType("Stargate Upgrade - Iris",is))
+                            {
+                                    return "Iris";
+                            }
+                            else if(mI.isUpgradeType("Stargate Upgrade - Shield",is))
+                            {
+                                    return "Shield";
+                            }
+                    }
+            }
+            IrisStateFromNum(0);
+            return null;
+    }
+    
+    public int IrisStateToNum()
+    {
+            switch(irisVarState)
+            {
+                    case Open:return 0;
+                    case Closing:return 1;
+                    case Closed:return 2;
+                    case Opening:return 3;
+                    default:
+                            return 0;
+            }
+    }
+    
+    public void IrisStateFromNum(int num)
+    {
+            if(num == 0)irisVarState=SGIrisState.Open;
+            if(num == 1)irisVarState=SGIrisState.Closing;
+            if(num == 2)irisVarState=SGIrisState.Closed;
+            if(num == 3)irisVarState=SGIrisState.Opening;
+            markBlockForUpdate();
+    }
+    
+    public String irisState()
+    {
+            //System.out.printf("SGBaseTE Iris State - %d\n", irisVarState);
+            if(getIrisType() == null)
+            {
+                    return "Error - No Iris";
+            }
+            else
+            {
+                    if(IrisStateToNum() == 0)
+                            return "Iris - Open";
+                    else if(IrisStateToNum() == 1)
+                            return "Iris - Closing";
+                    else if(IrisStateToNum() == 2)
+                            return "Iris - Closed";
+                    else if(IrisStateToNum() == 3)
+                            return "Iris - Opening";
+            }
+            return "Error - Unknown state";
+    }
+    
+    public String openIris()
+    {
+            String IT = getIrisType();
+            if(IT != null)
+            {
+                    if(IrisStateToNum() == 2)
+                    {
+                            if(IT == "Iris")
+                            {
+                                    IrisStateFromNum(3);
+                                    irisSlide = 0;
+                                    irisTimer = irisTimerVal;
+                            }
+                            else if(IT == "Shield")
+                            {
+                                    IrisStateFromNum(0);
+                            }
+                            return "Iris opened";
+                    }
+                    else if(IrisStateToNum() == 1 || IrisStateToNum() == 3)
+                    {
+                            return "Error - Iris in motion";
+                    }
+            }
+            return "Error - No iris";
+    }
+    
+    public String closeIris()
+    {
+            String IT = getIrisType();
+            if(IT != null)
+            {
+                    if(IrisStateToNum() == 0)
+                    {
+                            if(IT == "Iris")
+                            {
+                                    IrisStateFromNum(1);
+                                    irisSlide = SGExtensions.irisFrames - 1;
+                                    irisTimer = irisTimerVal;
+                            }
+                            else if(IT == "Shield")
+                            {
+                                    IrisStateFromNum(2);
+                            }
+                            return "Iris closed";
+                    }
+                    else if(IrisStateToNum() == 1 || IrisStateToNum() == 3)
+                    {
+                            return "Error - Iris in motion";
+                    }
+                    
+            }
+            return "Error - No iris";
+    }
+    
+    public String toggleIris()
+    {
+            String IT = getIrisType();
+            if(IT != null)
+            {
+                    if(irisState() == "Iris - Open")
+                    {
+                            return closeIris();
+                    }
+                    else if(irisState() == "Iris - Closed")
+                    {
+                            return openIris();
+                    }
+                    else
+                    {
+                            return "Error - Iris moving";
+                    }
+            }
+            return "Error - No iris";
+    }
+	
+	*/
+	
+	
 	public static SGBaseTE at(IBlockAccess world, int x, int y, int z) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof SGBaseTE)
@@ -159,6 +314,8 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		linkedX = nbt.getInteger("linkedX");
 		linkedY = nbt.getInteger("linkedY");
 		linkedZ = nbt.getInteger("linkedZ");
+        //irisVarState = SGIrisState.valueOf(nbt.getInteger("irisState"));
+        //irisSlide = nbt.getInteger("irisSlide");
 		if (nbt.hasKey("connectedLocation"))
 			connectedLocation = new SGLocation(nbt.getCompoundTag("connectedLocation"));
 		isInitiator = nbt.getBoolean("isInitiator");
@@ -172,6 +329,8 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		nbt.setBoolean("isMerged", isMerged);
 		nbt.setInteger("state", state.ordinal());
 		nbt.setDouble("targetRingAngle", targetRingAngle);
+        //nbt.setInteger("irisState", irisVarState.ordinal());
+        //nbt.setInteger("irisSlide", irisSlide);
 		nbt.setInteger("numEngagedChevrons", numEngagedChevrons);
 		//nbt.setString("homeAddress", homeAddress);
 		nbt.setString("dialledAddress", dialledAddress);
@@ -952,32 +1111,42 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		}
 		return ehGrid;
 	}
+		
+	public boolean isIrisClosed() {
+		return false;
+	}
 	
 	void initiateOpeningTransient() {
-		double v[][] = getEventHorizonGrid()[1];
-		int n = SGBaseTERenderer.ehGridPolarSize;
-		for (int j = 0; j <= n+1; j++) {
-			v[j][0] = openingTransientIntensity;
-			v[j][1] = v[j][0] + openingTransientRandomness * random.nextGaussian();
+		if (!isIrisClosed()) {
+			double v[][] = getEventHorizonGrid()[1];
+			int n = SGBaseTERenderer.ehGridPolarSize;
+			for (int j = 0; j <= n+1; j++) {
+				v[j][0] = openingTransientIntensity;
+				v[j][1] = v[j][0] + openingTransientRandomness * random.nextGaussian();
+			}
 		}
 	}
 	
 	void initiateClosingTransient() {
-		double v[][] = getEventHorizonGrid()[1];
-		int m = SGBaseTERenderer.ehGridRadialSize;
-		int n = SGBaseTERenderer.ehGridPolarSize;
-		for (int i = 1; i < m; i++)
-			for (int j = 1; j <= n; j++)
-				v[j][i] += closingTransientRandomness * random.nextGaussian();
+		if (!isIrisClosed()) {
+			double v[][] = getEventHorizonGrid()[1];
+			int m = SGBaseTERenderer.ehGridRadialSize;
+			int n = SGBaseTERenderer.ehGridPolarSize;
+			for (int i = 1; i < m; i++)
+				for (int j = 1; j <= n; j++)
+					v[j][i] += closingTransientRandomness * random.nextGaussian();
+		}
 	}
 	
 	void applyRandomImpulse() {
-		double v[][] = getEventHorizonGrid()[1];
-		int m = SGBaseTERenderer.ehGridRadialSize;
-		int n = SGBaseTERenderer.ehGridPolarSize;
-		int i = random.nextInt(m - 1) + 1;
-		int j = random.nextInt(n) + 1;
-		v[j][i] += 0.05 * random.nextGaussian();
+		if (!isIrisClosed()) {
+			double v[][] = getEventHorizonGrid()[1];
+			int m = SGBaseTERenderer.ehGridRadialSize;
+			int n = SGBaseTERenderer.ehGridPolarSize;
+			int i = random.nextInt(m - 1) + 1;
+			int j = random.nextInt(n) + 1;
+			v[j][i] += 0.05 * random.nextGaussian();
+		}
 	}
 	
 	void updateEventHorizon() {
@@ -1155,6 +1324,36 @@ class TransientDamageSource extends DamageSource {
 		return player.username + " was torn apart by an event horizon";
 	}
 	
+}
+
+class irisDamageSource extends DamageSource
+{
+
+        public irisDamageSource()
+        {
+                super("sgIris");
+        }
+
+        public String getDeathMessage(EntityPlayer player)
+        {
+                return player.username + " walked into an iris";
+        }
+
+}
+
+class recieveDamageSource extends DamageSource
+{
+
+        public recieveDamageSource()
+        {
+                super("sgRecieve");
+        }
+
+        public String getDeathMessage(EntityPlayer player)
+        {
+                return player.username + " walked through a receiving stargate";
+        }
+
 }
 
 //------------------------------------------------------------------------------------------------
