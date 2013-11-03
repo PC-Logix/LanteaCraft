@@ -1,5 +1,5 @@
 <!-- nallar's BuildCraft ant build script edited for OpenBlocks and again edited for SGCraft-Reloaded-->
-<project name="SGCraft-Reloaded" default="main">
+<project name="Delta-SGCraft-Reloaded" default="main">
 	<property environment="env"/>
 	<!-- Properties -->
 
