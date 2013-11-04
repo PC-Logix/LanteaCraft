@@ -28,7 +28,7 @@ import cpw.mods.fml.common.registry.*;
 
 @Mod(modid = Info.modID, name = Info.modName, version = Info.versionNumber)
 
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, versionBounds = Info.versionBounds)
+@NetworkMod(clientSideRequired = true, serverSideRequired = false)
 
 public class SGCraft extends BaseMod {
 
