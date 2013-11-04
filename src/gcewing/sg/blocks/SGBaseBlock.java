@@ -35,8 +35,12 @@ public class SGBaseBlock extends Base4WayCtrBlock {
 	static int unitX[] = { 1, 0, -1, 0 };
 	static int unitZ[] = { 0, -1, 0, 1 };
 
-	static int pattern[][] = { { 2, 1, 2, 1, 2 }, { 1, 0, 0, 0, 1 }, { 2, 0, 0, 0, 2 }, { 1, 0, 0, 0, 1 },
-			{ 2, 1, 0, 1, 2 }, };
+	static int pattern[][] = { 
+		{ 2, 1, 2, 1, 2 }, 
+		{ 1, 0, 0, 0, 1 }, 
+		{ 2, 0, 0, 0, 2 }, 
+		{ 1, 0, 0, 0, 1 },
+		{ 2, 1, 0, 1, 2 }, };
 
 	Icon topAndBottomTexture; // = 0x00;
 	Icon frontTexture; // = 0x01;

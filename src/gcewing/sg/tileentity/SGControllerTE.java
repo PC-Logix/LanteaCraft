@@ -125,7 +125,7 @@ public class SGControllerTE extends BaseTileEntity implements IPeripheral {
 	@Override
 	@Method(modid = "ComputerCraft")
 	public String getType() {
-		return "stargate";
+		return "dhd";
 	}
 
 	@Override

@@ -60,8 +60,14 @@ public class GCESGCompatHelper {
 		registerTileEntityMapping("tileEntityController", "gcewing.sg.SGControllerTE");
 
 		registerBlockMapping("blockRing", "gcewing.sg.SGRingBlock");
+		registerBlockMapping("blockPegasusRing", "gcewing.sg.SGPegasusRingBlock");
+		
 		registerBlockMapping("blockBase", "gcewing.sg.SGBaseBlock");
+		registerBlockMapping("blockPegasusBase", "gcewing.sg.SGPegasusBaseBlock");
+		
 		registerBlockMapping("blockController", "gcewing.sg.SGControllerBlock");
+		registerBlockMapping("blockPegasusController", "gcewing.sg.SGPegasusControllerBlock");
+		
 		registerBlockMapping("blockNaquadah", "gcewing.sg.NaquadahBlock");
 		registerBlockMapping("oreNaquadah", "gcewing.sg.NaquadahOreBlock");
 

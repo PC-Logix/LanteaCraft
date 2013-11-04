@@ -28,6 +28,7 @@ import gcewing.sg.generators.FeatureUnderDesertPyramid;
 import gcewing.sg.generators.NaquadahOreWorldGen;
 import gcewing.sg.generators.SGChunkData;
 import gcewing.sg.generators.SGTradeHandler;
+import gcewing.sg.items.SGPegasusRingItem;
 import gcewing.sg.items.SGRingItem;
 import gcewing.sg.render.BaseOrientedCtrBlkRenderer;
 import gcewing.sg.render.SGBaseBlockRenderer;
@@ -260,21 +261,21 @@ public class SGCraft extends BaseMod {
 	void registerBlocks() {
 		Blocks.sgRingBlock = (SGRingBlock) registerBlock(SGRingBlock.class, SGRingItem.class,
 				GCESGCompatHelper.getBlockMapping("blockRing"), "stargateRing", "Stargate Ring Segment");
+		Blocks.sgPegasusRingBlock = (SGPegasusRingBlock) registerBlock(SGPegasusRingBlock.class, SGPegasusRingItem.class,
+				GCESGCompatHelper.getBlockMapping("blockPegasusRing"), "stargatePegasusRing", "Pegasus Stargate Ring Segment");
+		
 
 		Blocks.sgBaseBlock = (SGBaseBlock) registerBlock(SGBaseBlock.class, ItemBlock.class,
 				GCESGCompatHelper.getBlockMapping("blockBase"), "stargateBase", "Stargate Base");
-
+		Blocks.sgPegasusBaseBlock = (SGPegasusBaseBlock) registerBlock(SGPegasusBaseBlock.class, ItemBlock.class, 
+				GCESGCompatHelper.getBlockMapping("blockPegasusBase"), "stargatePegasusBase", "Pegasus Stargate Base");
+		
+		
 		Blocks.sgControllerBlock = (SGControllerBlock) registerBlock(SGControllerBlock.class, ItemBlock.class,
 				GCESGCompatHelper.getBlockMapping("blockController"), "stargateController", "Stargate Controller");
+		Blocks.sgPegasusControllerBlock = (SGPegasusControllerBlock) registerBlock(SGPegasusControllerBlock.class, ItemBlock.class,
+				GCESGCompatHelper.getBlockMapping("blockPegasusController"), "stargatePegasusController", "Pegasus Stargate Controller");
 
-		/*
-		 * sgPegasusBaseBlock = newBlock("stargatePegasusBase",
-		 * SGPegasusBaseBlock.class, "Pegasus Stargate Base");
-		 * sgPegasusRingBlock = newBlock("stargatePegasusRing",
-		 * SGPegasusRingBlock.class, "Pegasus Ring Segment");
-		 * sgPegasusControllerBlock = newBlock("stargatePegasusController",
-		 * SGPegasusControllerBlock.class, "Pegasus Stargate Controller");
-		 */
 
 		Blocks.naquadahBlock = registerBlock(NaquadahBlock.class, ItemBlock.class,
 				GCESGCompatHelper.getBlockMapping("blockNaquadah"), "naquadahBlock", "Naquadah Alloy Block");
