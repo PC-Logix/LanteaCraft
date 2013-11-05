@@ -52,13 +52,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import cpw.mods.fml.common.Optional.Interface;
+import cpw.mods.fml.common.Optional.InterfaceList;
 import cpw.mods.fml.common.Optional.Method;
 import cpw.mods.fml.common.registry.GameRegistry;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 
-@Interface(iface = "IPeripheral", modid = "ComputerCraft")
+@InterfaceList({ @Interface(iface = "IPeripheral", modid = "ComputerCraft") })
 public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeripheral {
 
 	public final static String symbolChars = SGAddressing.symbolChars;
