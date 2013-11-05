@@ -271,11 +271,12 @@ public class SGBaseTERenderer extends BaseTileEntityRenderer {
 			}
 			GL11.glEnd();
 		}
+
 		GL11.glBegin(GL11.GL_TRIANGLE_FAN);
-		GL11.glTexCoord2d(0, 0);
+		GL11.glTexCoord2d(0.5, 0.5);
 		GL11.glVertex3d(0, 0, grid[1][0]);
 		for (int j = 0; j <= ehGridPolarSize; j++)
-			ehVertex(grid, 1, j);
+			ghVertex(grid, 1, j);
 		GL11.glEnd();
 		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
@@ -284,7 +285,21 @@ public class SGBaseTERenderer extends BaseTileEntityRenderer {
 		double r = i * ehBandWidth;
 		double x = r * c[j];
 		double y = r * s[j];
-		GL11.glTexCoord2d(x, y);
+
+		double u = (x + 2) / 4;
+		double v = (y + 2) / 4;
+		GL11.glTexCoord2d(u, v);
+		GL11.glVertex3d(x, y, grid[j + 1][i]);
+	}
+
+	void ghVertex(double[][] grid, int i, int j) {
+		double r = i * ehBandWidth;
+		double x = r * c[j];
+		double y = r * s[j];
+
+		double u = (x + 2) / 4;
+		double v = (y + 2) / 4;
+		GL11.glTexCoord2d(u, v);
 		GL11.glVertex3d(x, y, grid[j + 1][i]);
 	}
 
