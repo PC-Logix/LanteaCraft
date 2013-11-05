@@ -1,4 +1,4 @@
-SGCraft-Reloaded
+Delta SGCraft-Reloaded
 ================
 Jenkins: http://kenobi.pc-logix.com:8080/job/Delta SGCraft/
 
@@ -25,9 +25,11 @@ Possibly using Naquadah for power generation.
 
 Credits:
 
-Greg Ewing: Original SGCraft mod, and code.
-
-Delta NP: SGCraft texture pack for new textures.
+NeoRavenCroft: New Code and improvments
 
 AfterLifeLochie: Code refactoring, and new features to be announced.
+
+DrakeBD: Delta NP SGCraft texture pack for new textures.
+
+Greg Ewing: Original SGCraft mod, and code.
 
