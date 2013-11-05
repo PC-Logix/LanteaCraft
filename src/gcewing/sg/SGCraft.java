@@ -10,36 +10,36 @@ import gcewing.sg.base.BaseConfiguration;
 import gcewing.sg.base.BaseMod;
 import gcewing.sg.base.BaseModClient;
 import gcewing.sg.base.BaseTEChunkManager;
-import gcewing.sg.blocks.NaquadahBlock;
-import gcewing.sg.blocks.NaquadahOreBlock;
-import gcewing.sg.blocks.SGBaseBlock;
-import gcewing.sg.blocks.SGControllerBlock;
-import gcewing.sg.blocks.SGPegasusBaseBlock;
-import gcewing.sg.blocks.SGPegasusControllerBlock;
-import gcewing.sg.blocks.SGPegasusRingBlock;
-import gcewing.sg.blocks.SGPortalBlock;
-import gcewing.sg.blocks.SGRingBlock;
-import gcewing.sg.container.SGBaseContainer;
-import gcewing.sg.core.SGAddressing;
-import gcewing.sg.core.SGChannel;
-import gcewing.sg.core.SGGui;
+import gcewing.sg.blocks.BlockNaquadah;
+import gcewing.sg.blocks.BlockNaquadahOre;
+import gcewing.sg.blocks.BlockStargateBase;
+import gcewing.sg.blocks.BlockStargateController;
+import gcewing.sg.blocks.BlockPegasusStargateBase;
+import gcewing.sg.blocks.BlockPegasusStargateController;
+import gcewing.sg.blocks.BlockPegasusStargateRing;
+import gcewing.sg.blocks.BlockPortal;
+import gcewing.sg.blocks.BlockStargateRing;
+import gcewing.sg.container.ContainerStargateBase;
+import gcewing.sg.core.GateAddressHelper;
+import gcewing.sg.core.StargateNetworkChannel;
+import gcewing.sg.core.EnumGuiList;
 import gcewing.sg.generators.FeatureGeneration;
 import gcewing.sg.generators.FeatureUnderDesertPyramid;
 import gcewing.sg.generators.NaquadahOreWorldGen;
-import gcewing.sg.generators.SGChunkData;
-import gcewing.sg.generators.SGTradeHandler;
-import gcewing.sg.items.SGPegasusRingItem;
-import gcewing.sg.items.SGRingItem;
+import gcewing.sg.generators.ChunkData;
+import gcewing.sg.generators.TradeHandler;
+import gcewing.sg.items.ItemPegasusStargateRing;
+import gcewing.sg.items.ItemStargateRing;
 import gcewing.sg.render.BaseOrientedCtrBlkRenderer;
-import gcewing.sg.render.SGBaseBlockRenderer;
-import gcewing.sg.render.SGBaseTERenderer;
-import gcewing.sg.render.SGControllerModel;
-import gcewing.sg.render.SGControllerTERenderer;
-import gcewing.sg.render.SGPegasusBaseTERenderer;
-import gcewing.sg.render.SGRingBlockRenderer;
-import gcewing.sg.tileentity.SGBaseTE;
-import gcewing.sg.tileentity.SGControllerTE;
-import gcewing.sg.tileentity.SGRingTE;
+import gcewing.sg.render.blocks.BlockStargateBaseRenderer;
+import gcewing.sg.render.blocks.BlockStargateRingRenderer;
+import gcewing.sg.render.model.StargateControllerModel;
+import gcewing.sg.render.tileentity.TileEntityPegasusStargateBaseRenderer;
+import gcewing.sg.render.tileentity.TileEntityStargateBaseRenderer;
+import gcewing.sg.render.tileentity.TileEntityStargateControllerRenderer;
+import gcewing.sg.tileentity.TileEntityStargateBase;
+import gcewing.sg.tileentity.TileEntityStargateController;
+import gcewing.sg.tileentity.TileEntityStargateRing;
 import gcewing.sg.util.HelperCreativeTab;
 
 import java.io.File;
@@ -95,15 +95,15 @@ public class SGCraft extends BaseMod {
 	 * Public declaration of all Block objects
 	 */
 	public static class Blocks {
-		public static SGBaseBlock sgBaseBlock;
-		public static SGRingBlock sgRingBlock;
-		public static SGControllerBlock sgControllerBlock;
+		public static BlockStargateBase sgBaseBlock;
+		public static BlockStargateRing sgRingBlock;
+		public static BlockStargateController sgControllerBlock;
 
-		public static SGPegasusBaseBlock sgPegasusBaseBlock;
-		public static SGPegasusRingBlock sgPegasusRingBlock;
-		public static SGPegasusControllerBlock sgPegasusControllerBlock;
+		public static BlockPegasusStargateBase sgPegasusBaseBlock;
+		public static BlockPegasusStargateRing sgPegasusRingBlock;
+		public static BlockPegasusStargateController sgPegasusControllerBlock;
 
-		public static SGPortalBlock sgPortalBlock;
+		public static BlockPortal sgPortalBlock;
 
 		public static Block naquadahBlock;
 		public static Block naquadahOre;
@@ -123,16 +123,16 @@ public class SGCraft extends BaseMod {
 	 * Public declaration of all render objects
 	 */
 	public static class Render {
-		public static SGControllerModel modelController;
+		public static StargateControllerModel modelController;
 
 		public static BaseOrientedCtrBlkRenderer blockOrientedRenderer;
 
-		public static SGBaseBlockRenderer blockBaseRenderer;
-		public static SGRingBlockRenderer blockRingRenderer;
+		public static BlockStargateBaseRenderer blockBaseRenderer;
+		public static BlockStargateRingRenderer blockRingRenderer;
 
-		public static SGBaseTERenderer tileEntityBaseRenderer;
-		public static SGPegasusBaseTERenderer tileEntityPegausBaseRenderer;
-		public static SGControllerTERenderer tileEntityControllerRenderer;
+		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
+		public static TileEntityPegasusStargateBaseRenderer tileEntityPegausBaseRenderer;
+		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
 	}
 
 	public static HelperCreativeTab sgCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "SGCraft") {
@@ -148,7 +148,7 @@ public class SGCraft extends BaseMod {
 	public static boolean HDModels = true;
 	public static boolean ActiveGateExplosion = true;
 
-	public static SGChannel channel;
+	public static StargateNetworkChannel channel;
 	public static BaseTEChunkManager chunkManager;
 
 	public static boolean addOresToExistingWorlds;
@@ -192,7 +192,7 @@ public class SGCraft extends BaseMod {
 		if (client != null)
 			client.init(e);
 		configure();
-		channel = new SGChannel(Info.modID);
+		channel = new StargateNetworkChannel(Info.modID);
 		chunkManager = new BaseTEChunkManager(this);
 		chunkManager.debug = true;
 	}
@@ -200,6 +200,7 @@ public class SGCraft extends BaseMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
 		registerBlocks();
+		registerTileEntities();
 		registerItems();
 		registerOres();
 		registerRecipes();
@@ -218,9 +219,9 @@ public class SGCraft extends BaseMod {
 	}
 
 	void configure() {
-		SGControllerTE.configure(config);
+		TileEntityStargateController.configure(config);
 		NaquadahOreWorldGen.configure(config);
-		SGBaseTE.configure(config);
+		TileEntityStargateBase.configure(config);
 		addOresToExistingWorlds = config.getBoolean("options", "addOresToExistingWorlds", false);
 
 		Property GenerateStruct = config.get("options", "GenerateStructures", true);
@@ -242,7 +243,7 @@ public class SGCraft extends BaseMod {
 		ActiveGateExplosion = config.getBoolean("options", "ActiveGateExplosion", true);
 
 		if (SGCraft.GalacticraftCompat == true)
-			SGAddressing.minDimension = -99;
+			GateAddressHelper.minDimension = -99;
 	}
 
 	void registerOther() {
@@ -259,34 +260,28 @@ public class SGCraft extends BaseMod {
 	}
 
 	void registerBlocks() {
-		Blocks.sgRingBlock = (SGRingBlock) registerBlock(SGRingBlock.class, SGRingItem.class,
+		Blocks.sgRingBlock = (BlockStargateRing) registerBlock(BlockStargateRing.class, ItemStargateRing.class,
 				GCESGCompatHelper.getBlockMapping("blockRing"), "stargateRing", "Stargate Ring Segment");
-		//Blocks.sgPegasusRingBlock = (SGPegasusRingBlock) registerBlock(SGPegasusRingBlock.class, SGPegasusRingItem.class,
-				//GCESGCompatHelper.getBlockMapping("blockPegasusRing"), "stargatePegasusRing", "Pegasus Stargate Ring Segment");
+		//Blocks.sgPegasusRingBlock = (BlockPegasusStargateRing) registerBlock(BlockPegasusStargateRing.class, ItemPegasusStargateRing.class,
+		//		GCESGCompatHelper.getBlockMapping("blockPegasusRing"), "stargatePegasusRing", "Pegasus Stargate Ring Segment");
 		
 
-		Blocks.sgBaseBlock = (SGBaseBlock) registerBlock(SGBaseBlock.class, ItemBlock.class,
+		Blocks.sgBaseBlock = (BlockStargateBase) registerBlock(BlockStargateBase.class, ItemBlock.class,
 				GCESGCompatHelper.getBlockMapping("blockBase"), "stargateBase", "Stargate Base");
-		//Blocks.sgPegasusBaseBlock = (SGPegasusBaseBlock) registerBlock(SGPegasusBaseBlock.class, ItemBlock.class, 
-				//GCESGCompatHelper.getBlockMapping("blockPegasusBase"), "stargatePegasusBase", "Pegasus Stargate Base");
+		//Blocks.sgPegasusBaseBlock = (BlockPegasusStargateBase) registerBlock(BlockPegasusStargateBase.class, ItemBlock.class, 
+		//		GCESGCompatHelper.getBlockMapping("blockPegasusBase"), "stargatePegasusBase", "Pegasus Stargate Base");
 		
 		
-		Blocks.sgControllerBlock = (SGControllerBlock) registerBlock(SGControllerBlock.class, ItemBlock.class,
+		Blocks.sgControllerBlock = (BlockStargateController) registerBlock(BlockStargateController.class, ItemBlock.class,
 				GCESGCompatHelper.getBlockMapping("blockController"), "stargateController", "Stargate Controller");
-		//Blocks.sgPegasusControllerBlock = (SGPegasusControllerBlock) registerBlock(SGPegasusControllerBlock.class, ItemBlock.class,
-				//GCESGCompatHelper.getBlockMapping("blockPegasusController"), "stargatePegasusController", "Pegasus Stargate Controller");
+		//Blocks.sgPegasusControllerBlock = (BlockPegasusStargateController) registerBlock(BlockPegasusStargateController.class, ItemBlock.class,
+		//		GCESGCompatHelper.getBlockMapping("blockPegasusController"), "stargatePegasusController", "Pegasus Stargate Controller");
 
 
-		Blocks.naquadahBlock = registerBlock(NaquadahBlock.class, ItemBlock.class,
+		Blocks.naquadahBlock = registerBlock(BlockNaquadah.class, ItemBlock.class,
 				GCESGCompatHelper.getBlockMapping("blockNaquadah"), "naquadahBlock", "Naquadah Alloy Block");
-		Blocks.naquadahOre = registerBlock(NaquadahOreBlock.class, ItemBlock.class,
+		Blocks.naquadahOre = registerBlock(BlockNaquadahOre.class, ItemBlock.class,
 				GCESGCompatHelper.getBlockMapping("oreNaquadah"), "naquadahOre", "Naquadah Ore");
-
-		// TODO: registerTileEntities(), at runtime sucks ass.
-		GameRegistry.registerTileEntity(SGBaseTE.class, GCESGCompatHelper.getTileEntityMapping("tileEntityBase"));
-		GameRegistry.registerTileEntity(SGRingTE.class, GCESGCompatHelper.getTileEntityMapping("tileEntityRing"));
-		GameRegistry.registerTileEntity(SGControllerTE.class,
-				GCESGCompatHelper.getTileEntityMapping("tileEntityController"));
 	}
 
 	public Block registerBlock(Class<? extends Block> classOf, Class<? extends ItemBlock> itemClassOf,
@@ -370,7 +365,7 @@ public class SGCraft extends BaseMod {
 	}
 
 	void registerContainers() {
-		addContainer(SGGui.SGBase, SGBaseContainer.class);
+		addContainer(EnumGuiList.SGBase, ContainerStargateBase.class);
 	}
 
 	void registerRandomItems() {
@@ -394,19 +389,25 @@ public class SGCraft extends BaseMod {
 	void registerVillagers() {
 		tokraVillagerID = addVillager(config.getVillager("tokra"), "tokra",
 				SGCraft.getResource("textures/skins/tokra.png"));
-		addTradeHandler(tokraVillagerID, new SGTradeHandler());
+		addTradeHandler(tokraVillagerID, new TradeHandler());
+	}
+	
+	void registerTileEntities() {
+		GameRegistry.registerTileEntity(TileEntityStargateBase.class, GCESGCompatHelper.getTileEntityMapping("tileEntityBase"));
+		GameRegistry.registerTileEntity(TileEntityStargateRing.class, GCESGCompatHelper.getTileEntityMapping("tileEntityRing"));
+		GameRegistry.registerTileEntity(TileEntityStargateController.class, GCESGCompatHelper.getTileEntityMapping("tileEntityController"));
 	}
 
 	@ForgeSubscribe
 	public void onChunkLoad(ChunkDataEvent.Load e) {
 		Chunk chunk = e.getChunk();
-		SGChunkData.onChunkLoad(e);
+		ChunkData.onChunkLoad(e);
 	}
 
 	@ForgeSubscribe
 	public void onChunkSave(ChunkDataEvent.Save e) {
 		Chunk chunk = e.getChunk();
-		SGChunkData.onChunkSave(e);
+		ChunkData.onChunkSave(e);
 	}
 
 	@ForgeSubscribe

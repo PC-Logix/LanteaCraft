@@ -129,7 +129,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 					generateNode(naquadah, x, y, z, 2, 2, 2);
 			}
 		}
-		SGChunkData.forChunk(chunk).oresGenerated = true;
+		ChunkData.forChunk(chunk).oresGenerated = true;
 	}
 
 }

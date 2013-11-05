@@ -9,7 +9,7 @@ package gcewing.sg.render;
 import gcewing.sg.base.BaseOrientedCtrBlock;
 import gcewing.sg.util.Trans3;
 
-public class BaseOrientedCtrBlkRenderer extends BaseBlockRenderer {
+public class BaseOrientedCtrBlkRenderer extends GenericBlockRenderer {
 
 	@Override
 	public Trans3 localToInventoryTransformation(int metadata) {
