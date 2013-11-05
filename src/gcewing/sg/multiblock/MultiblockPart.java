@@ -51,6 +51,13 @@ public abstract class MultiblockPart {
 	public abstract void release();
 
 	/**
+	 * Called by anywhere to get the type of this multi-block part's type name.
+	 * 
+	 * @return The name of the multi-block part's name.
+	 */
+	public abstract String getType();
+
+	/**
 	 * Called by the host multi-block part to devalidate the host, such as when
 	 * the part is placed or removed, moved or otherwise deleted from the world.
 	 * If no host is in range, this will do nothing.
