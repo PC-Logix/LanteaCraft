@@ -22,6 +22,7 @@ Powering gates with IC2, UE, or BuildCraft power.
 
 Possibly using Naquadah for power generation.
 
+
 Credits:
 
 Greg Ewing: Original SGCraft mod, and code.
