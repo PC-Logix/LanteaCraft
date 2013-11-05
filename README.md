@@ -16,7 +16,7 @@ TODO:
 
 Adding a new gate model, Atlantis along with a DHD for it.
 
--DONE!- Adding a Milky Way DHD model instead of a block.
+-DONE!- Adding a Milky Way DHD model instead of a block. -DONE!-
 
 Powering gates with IC2, UE, or BuildCraft power.
 
