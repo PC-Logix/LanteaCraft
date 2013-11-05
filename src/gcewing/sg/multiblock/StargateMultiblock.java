@@ -1,6 +1,9 @@
 package gcewing.sg.multiblock;
 
+import java.util.Map.Entry;
+
 import gcewing.sg.tileentity.TileEntityStargateRing;
+import gcewing.sg.util.ImmutablePair;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -96,9 +99,9 @@ public class StargateMultiblock extends GenericMultiblock {
 			StargatePart teAsPart = null;
 			// TODO: This method doesn't exist yet, but it should be added.
 			// teAsPart = entityAsRing.getAsPart();
-			if (expectedType == 1 && !teAsPart.getType().equals("partStargateBlock"))
+			if (expectedType == 1 && !teAsPart.getType().equals("partStargateBlock") || !teAsPart.canMergeWith(this))
 				return false;
-			if (expectedType == 2 && !teAsPart.getType().equals("partStargateChevron"))
+			if (expectedType == 2 && !teAsPart.getType().equals("partStargateChevron") || !teAsPart.canMergeWith(this))
 				return false;
 		}
 		return true;
@@ -114,7 +117,15 @@ public class StargateMultiblock extends GenericMultiblock {
 				for (int y = 0; y < 5; y++) {
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
 					if (stargateModel[y][x] != 0 && stargateModel[y][x] != 3) {
-						
+						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
+						StargatePart teAsPart = null;
+						// TODO: This method doesn't exist yet, but it should be
+						// added.
+						// teAsPart = entityAsRing.getAsPart();
+						if (!teAsPart.canMergeWith(this))
+							return false;
+						teAsPart.mergeWith(this);
+						structureParts.put(new ImmutablePair<Integer, Integer>(x, y), teAsPart);
 					}
 				}
 			}
@@ -126,8 +137,17 @@ public class StargateMultiblock extends GenericMultiblock {
 			for (int z = 0; z < 5; z++) {
 				for (int y = 0; y < 5; y++) {
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
-					if (!testIsValidForExpected(entity, stargateModel[y][z]))
-						return false;
+					if (stargateModel[y][z] != 0 && stargateModel[y][z] != 3) {
+						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
+						StargatePart teAsPart = null;
+						// TODO: This method doesn't exist yet, but it should be
+						// added.
+						// teAsPart = entityAsRing.getAsPart();
+						if (!teAsPart.canMergeWith(this))
+							return false;
+						teAsPart.mergeWith(this);
+						structureParts.put(new ImmutablePair<Integer, Integer>(z, y), teAsPart);
+					}
 				}
 			}
 			return true;
@@ -138,7 +158,15 @@ public class StargateMultiblock extends GenericMultiblock {
 	}
 
 	@Override
-	public MultiblockPart getPart(String reference) {
+	public void freeStructure() {
+		for (Entry<Object, MultiblockPart> part : structureParts.entrySet()) {
+			part.getValue().release();
+		}
+		structureParts.clear();
+	}
+
+	@Override
+	public MultiblockPart getPart(Object reference) {
 		// TODO Auto-generated method stub
 		return null;
 	}

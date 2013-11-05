@@ -16,15 +16,15 @@ import net.minecraft.world.World;
  */
 public abstract class GenericMultiblock {
 
-	private EnumOrientations structureOrientation;
-	private HashMap<String, MultiblockPart> structureParts;
+	protected EnumOrientations structureOrientation;
+	protected HashMap<Object, MultiblockPart> structureParts;
 
-	private boolean wasInvalidated = false;
-	private boolean isValid = false;
+	protected boolean wasInvalidated = false;
+	protected boolean isValid = false;
 
-	private int xCoord;
-	private int yCoord;
-	private int zCoord;
+	protected int xCoord;
+	protected int yCoord;
+	protected int zCoord;
 
 	/**
 	 * Determine if the current arrangement of blocks around the base is a valid
@@ -45,16 +45,23 @@ public abstract class GenericMultiblock {
 	public abstract boolean collectStructure(World worldAccess, int baseX, int baseY, int baseZ);
 
 	/**
+	 * Called by internal code to totally disband the structure, usually when
+	 * transitioning from an assembled, valid state, to a non-valid block-only
+	 * state.
+	 */
+	public abstract void freeStructure();
+
+	/**
 	 * Called by any code to get a particular part of the multi-block structure,
 	 * referenced as a MultiblockPart object.
 	 * 
 	 * @param reference
-	 *            The name, such as a coordinate or other value the multi-block
-	 *            structure refers to the object as.
+	 *            The object, such as a coordinate or other value the
+	 *            multi-block structure refers to the object as.
 	 * @return The MultiblockPart object registered in the structure using the
 	 *         reference, or, null if no such part exists.
 	 */
-	public abstract MultiblockPart getPart(String reference);
+	public abstract MultiblockPart getPart(Object reference);
 
 	/**
 	 * Called internally to set the base location of this multi-block structure.
@@ -84,6 +91,11 @@ public abstract class GenericMultiblock {
 			isValid = collectStructure(world, baseX, baseY, baseZ);
 			if (isValid())
 				setLocation(baseX, baseY, baseZ);
+		} else {
+			if (isValid) {
+				freeStructure();
+				isValid = false;
+			}
 		}
 	}
 
