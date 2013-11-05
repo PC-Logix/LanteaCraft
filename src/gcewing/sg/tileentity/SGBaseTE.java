@@ -1151,7 +1151,7 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 	@Override
 	@Method(modid = "ComputerCraft")
 	public String[] getMethodNames() {
-		return new String[] { "dial", "connect", "disconnect", "isConnected", "getAddress", "isDialing", "listMethods",
+		return new String[] { "dial", "connect", "disconnect", "isConnected", "getAddress", "isDialing", 
 				"isComplete", "isBusy", "hasFuel", "isValidAddress" };
 	}
 
@@ -1174,10 +1174,8 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 		else if (method == 5)
 			return new Object[] { isDialing() };
 		else if (method == 6)
-			return new Object[] { "dial, connect, disconnect, isConnected, getAddress, isDialing, isComplete, isBusy, hasFuel, isValidAddress, listMethods" };
-		else if (method == 7)
 			return new Object[] { isMerged };
-		else if (method == 8) {
+		else if (method == 7) {
 			String address = arguments[0].toString().toUpperCase();
 			SGBaseTE dte = SGAddressing.findAddressedStargate(address);
 			if (address.length() != 7)
@@ -1186,13 +1184,13 @@ public class SGBaseTE extends BaseChunkLoadingTE implements IInventory, IPeriphe
 				return new Object[] { "true" };
 			else
 				return new Object[] { "false" };
-		} else if (method == 9) {
+		} else if (method == 8) {
 			SGBaseTE dte = SGAddressing.findAddressedStargate(getHomeAddress());
 			if (!reloadFuel(fuelToOpen))
 				return new Object[] { false };
 			else
 				return new Object[] { true };
-		} else if (method == 10) {
+		} else if (method == 9) {
 			String address = arguments[0].toString().toUpperCase();
 			SGBaseTE dte = SGAddressing.findAddressedStargate(address);
 			if (address.length() != 7)
