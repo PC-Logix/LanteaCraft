@@ -18,7 +18,6 @@ import net.minecraftforge.event.terraingen.InitMapGenEvent;
 public class FeatureGeneration {
 
 	public static void onInitMapGen(InitMapGenEvent e) {
-
 		switch (e.type) {
 		case SCATTERED_FEATURE:
 			if (e.newGen instanceof MapGenStructure)

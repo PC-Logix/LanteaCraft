@@ -7,6 +7,7 @@
 package gcewing.sg.generators;
 
 import gcewing.sg.SGCraft;
+import gcewing.sg.config.ConfigValue;
 
 import java.util.WeakHashMap;
 
@@ -41,24 +42,15 @@ public class ChunkData {
 
 	public static void onChunkLoad(ChunkDataEvent.Load e) {
 		Chunk chunk = e.getChunk();
-		// System.out.printf("SGChunkData.onChunkLoad: (%d, %d)\n",
-		// chunk.xPosition, chunk.zPosition);
 		ChunkData data = ChunkData.forChunk(chunk);
 		data.readFromNBT(e.getData());
-		// if (data.oresGenerated)
-		// System.out.printf("SGChunkData.onChunkLoad: Ores already added to chunk (%d, %d)\n",
-		// chunk.xPosition, chunk.zPosition);
-		if (!data.oresGenerated && SGCraft.addOresToExistingWorlds)
-			// if (debug)
-			// System.out.printf("SGChunkData.onChunkLoad: Adding ores to chunk (%d, %d)\n",
-			// chunk.xPosition, chunk.zPosition);
-			SGCraft.naquadahOreGenerator.regenerate(chunk);
+		if (!data.oresGenerated
+				&& ((ConfigValue<Boolean>) SGCraft.getProxy().getConfigValue("addOresToExistingWorlds")).getValue())
+			SGCraft.getProxy().getOreGenerator().regenerate(chunk);
 	}
 
 	public static void onChunkSave(ChunkDataEvent.Save e) {
 		Chunk chunk = e.getChunk();
-		// System.out.printf("SGChunkData.onChunkLoad: (%d, %d)\n",
-		// chunk.xPosition, chunk.zPosition);
 		ChunkData data = ChunkData.forChunk(chunk);
 		data.writeToNBT(e.getData());
 	}
