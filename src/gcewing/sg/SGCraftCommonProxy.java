@@ -271,11 +271,11 @@ public class SGCraftCommonProxy implements IGuiHandler {
 		ItemStack orangeDye = new ItemStack(Item.dyePowder, 1, 14);
 		if (config.getBoolean("options", "allowCraftingNaquadah", false))
 			newShapelessRecipe(Items.naquadah, 1, Item.coal, Item.slimeBall, Item.blazePowder);
-		newRecipe(Blocks.sgRingBlock, 1, "CCC", "NNN", "SSS", 'S', smoothSandstone, 'N', "ingotNaquadahAlloy", 'C',
+		newRecipe(Blocks.sgRingBlock, 1, "ICI", "NNN", "III", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
 				chiselledSandstone);
-		newRecipe(sgChevronBlock, "CgC", "NpN", "SrS", 'S', smoothSandstone, 'N', "ingotNaquadahAlloy", 'C',
+		newRecipe(sgChevronBlock, "CgC", "NpN", "IrI", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
 				chiselledSandstone, 'g', Item.glowstone, 'r', Item.redstone, 'p', Item.enderPearl);
-		newRecipe(Blocks.sgBaseBlock, 1, "CrC", "NeN", "ScS", 'S', smoothSandstone, 'N', "ingotNaquadahAlloy", 'C',
+		newRecipe(Blocks.sgBaseBlock, 1, "CrC", "NeN", "IcI", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
 				chiselledSandstone, 'r', Item.redstone, 'e', Item.eyeOfEnder, 'c', Items.sgCoreCrystal);
 		newRecipe(Blocks.sgControllerBlock, 1, "bbb", "OpO", "OcO", 'b', Block.stoneButton, 'O', Block.obsidian, 'p',
 				Item.enderPearl, 'r', Item.redstone, 'c', Items.sgControllerCrystal);
