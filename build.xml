@@ -1,34 +1,30 @@
 <!-- nallar's BuildCraft ant build script edited for OpenBlocks and again edited for SGCraft-Reloaded-->
 <project name="Delta-SGCraft-Reloaded" default="main">
-	<property environment="env"/>
+	<property environment="env" />
 	<!-- Properties -->
 
-	<property name="env.BUILD_NUMBER"    value="0"/>
+	<property name="env.BUILD_NUMBER"  value="0" />
 	
-	<property name="build.dir"           value="build"/>
-	<property name="src.dir"             value="src"/>
-
-	<property name="download.dir"        value="download"/>
-
-	<property name="classes.dir"         value="${build.dir}/classes"/>
-	<property name="jar.dir"             value="${build.dir}/dist"/>
-
-	<property name="forge.dir"           value="${build.dir}/forge"/>
-	<property name="mcp.dir"             value="${forge.dir}/mcp"/>
-    
-	<condition property="python.exe" value="${mcp.dir}/runtime/bin/python/python_mcp" else="python">
+	<property name="build.dir"         value="build" />
+	<property name="src.dir"           value="src" />
+	<property name="download.dir"      value="download" />
+	<property name="classes.dir"       value="${build.dir}/classes" />
+	<property name="jar.dir"           value="${build.dir}/dist" />
+	<property name="forge.dir"         value="${build.dir}/forge" />
+	<property name="mcp.dir"           value="${forge.dir}/mcp" />
+    <property name="mcpsrc.dir"        value="${mcp.dir}/src/minecraft" />
+	
+	<condition property="python.exe"   value="${mcp.dir}/runtime/bin/python/python_mcp" else="python">
 		<os family="Windows" />
 	</condition>
 
-	<property name="mcpsrc.dir"          value="${mcp.dir}/src/minecraft"/>
-
-	<property name="mc.version"          value="1.6.4"/>
-	<property name="forge.version"       value="9.11.1.933"/>
-	<property name="mod.version"         value="0.1.0"/>
-	<property name="mod.name"	     value="Delta-SGCraft-Reloaded"/>
+	<property name="mc.version"        value="1.6.4"/>
+	<property name="forge.version"     value="9.11.1.933"/>
+	<property name="mod.version"       value="0.1.0"/>
+	<property name="mod.build"         value="${env.BUILD_NUMBER}" />
+	<property name="mod.name"          value="Delta-SGCraft-Reloaded"/>
+	<property name="forge.name"        value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
 	
-	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
-
 	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
 
 	<condition property="out-of-date">
@@ -51,7 +47,7 @@
 
 	<!-- Set full version -->
 	<target name="initialize-version">
-		<echo message="Starting build for ${mod.name} v${mod.version}"/>
+		<echo message="Starting build ${env.BUILD_NUMBER} for ${mod.name} v${mod.version}"/>
 	</target>
 
 	<!-- Download necessary files -->
