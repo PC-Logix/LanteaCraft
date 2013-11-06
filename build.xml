@@ -80,8 +80,19 @@
 
 	<target name="compile" depends="initialize-version,setup">
 
-		<delete dir="${classes.dir}"/>
-		<mkdir dir="${classes.dir}"/>
+		<delete dir="${classes.dir}" />
+		<delete dir="${mcpsrc.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${mcpsrc.dir}" />
+		
+		<echo message="Running decompiler on mcp" />
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c decompile.bat"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="sh" osfamily="unix">
+			<arg value="decompile.sh"/>
+		</exec>
 		
 		<delete includeEmptyDirs="true" failonerror="false">
 			<fileset dir="${mcpsrc.dir}/dan200" />
