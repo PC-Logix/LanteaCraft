@@ -26,11 +26,11 @@ public class ContainerStargateBase extends BaseContainer {
 	public static ContainerStargateBase create(EntityPlayer player, World world, int x, int y, int z) {
 		TileEntityStargateBase te = TileEntityStargateBase.at(world, x, y, z);
 		if (te != null)
-			return new ContainerStargateBase(player, te);
+			return new ContainerStargateBase(te, player);
 		return null;
 	}
 
-	public ContainerStargateBase(EntityPlayer player, TileEntityStargateBase te) {
+	public ContainerStargateBase(TileEntityStargateBase te, EntityPlayer player) {
 		super(256, 208);
 		this.te = te;
 		addFuelSlots();

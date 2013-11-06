@@ -34,11 +34,11 @@ public class ScreenStargateController extends ScreenGlyphRenderer {
 	String enteredAddress = "";
 	int closingDelay = 0;
 
-	public ScreenStargateController(EntityPlayer player, World world, int x, int y, int z) {
-		this.world = world;
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public ScreenStargateController(TileEntityStargateController controller, EntityPlayer actor) {
+		this.world = controller.getWorldObj();
+		this.x = controller.xCoord;
+		this.y = controller.yCoord;
+		this.z = controller.zCoord;
 	}
 
 	TileEntityStargateBase getStargateTE() {
@@ -188,7 +188,8 @@ public class ScreenStargateController extends ScreenGlyphRenderer {
 		bindTexture(SGCraft.getInstance().getResource("textures/gui/dhd_centre.png"), 128, 64);
 		GL11.glEnable(GL11.GL_BLEND);
 		TileEntityStargateBase te = getStargateTE();
-		boolean connected = te != null && te.state != EnumStargateState.Idle && te.state != EnumStargateState.Disconnecting;
+		boolean connected = te != null && te.state != EnumStargateState.Idle
+				&& te.state != EnumStargateState.Disconnecting;
 		if (te == null || !te.isMerged)
 			setColor(0.2, 0.2, 0.2);
 		else if (connected)

@@ -116,7 +116,7 @@ public class BlockStargateBase extends Base4WayCtrBlock {
 			if (!world.isRemote)
 				te.dumpChunkLoadingState("SGBaseBlock.onBlockActivated");
 			if (te.isMerged) {
-				SGCraft.getProxy().openGui(player, EnumGuiList.SGBase.ordinal(), world, x, y, z);
+				player.openGui(SGCraft.getInstance(), EnumGuiList.SGBase.ordinal(), world, x, y, z);
 				return true;
 			}
 		}

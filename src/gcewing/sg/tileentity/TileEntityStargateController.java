@@ -21,7 +21,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 
-@InterfaceList({ @Interface(iface = "IPeripheral", modid = "ComputerCraft") })
+@InterfaceList({ @Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft") })
 public class TileEntityStargateController extends BaseTileEntity implements IPeripheral {
 
 	public static int linkRangeX = 10; // either side

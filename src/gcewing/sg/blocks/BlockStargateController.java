@@ -101,7 +101,7 @@ public class BlockStargateController extends Base4WayCtrBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		SGCraft.getProxy().openGui(player, EnumGuiList.SGController.ordinal(), world, x, y, z);
+		player.openGui(SGCraft.getInstance(), EnumGuiList.SGController.ordinal(), world, x, y, z);
 		return true;
 	}
 

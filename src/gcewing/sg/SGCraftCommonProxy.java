@@ -21,6 +21,7 @@ import gcewing.sg.container.ContainerStargateBase;
 import gcewing.sg.core.EnumGuiList;
 import gcewing.sg.core.GateAddressHelper;
 import gcewing.sg.core.StargateNetworkChannel;
+import gcewing.sg.forge.HelperGUIHandler;
 import gcewing.sg.generators.ChunkData;
 import gcewing.sg.generators.FeatureGeneration;
 import gcewing.sg.generators.FeatureUnderDesertPyramid;
@@ -62,7 +63,7 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class SGCraftCommonProxy implements IGuiHandler {
+public class SGCraftCommonProxy {
 
 	protected File cfgFile;
 	protected BaseConfiguration config;
@@ -102,6 +103,7 @@ public class SGCraftCommonProxy implements IGuiHandler {
 	public void init(FMLInitializationEvent e) {
 		MinecraftForge.EVENT_BUS.register(SGCraft.getInstance());
 		chunkManager = new BaseTEChunkManager(SGCraft.getInstance());
+		NetworkRegistry.instance().registerGuiHandler(SGCraft.getInstance(), new HelperGUIHandler());
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
@@ -116,7 +118,6 @@ public class SGCraftCommonProxy implements IGuiHandler {
 		registerVillagers();
 		registerOther();
 		channel = new StargateNetworkChannel(BuildInfo.modID);
-		NetworkRegistry.instance().registerGuiHandler(SGCraft.getInstance(), this);
 		if (config.extended)
 			config.save();
 	}
@@ -326,26 +327,6 @@ public class SGCraftCommonProxy implements IGuiHandler {
 				GCESGCompatHelper.getTileEntityMapping("tileEntityController"));
 	}
 
-	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		Class cls = registeredContainers.get(id);
-		Object result;
-		if (cls != null)
-			result = createGuiElement(cls, player, world, x, y, z);
-		else
-			result = getGuiContainer(id, player, world, x, y, z);
-		return result;
-	}
-
-	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		return null;
-	}
-
-	public void openGui(EntityPlayer player, int id, World world, int x, int y, int z) {
-		return;
-	}
-
 	public ConfigValue<?> getConfigValue(String name) {
 		for (ConfigValue<?> item : configValues)
 			if (item.getName().equalsIgnoreCase(name))
@@ -447,6 +428,18 @@ public class SGCraftCommonProxy implements IGuiHandler {
 
 	public NaquadahOreWorldGen getOreGenerator() {
 		return naquadahOreGenerator;
+	}
+
+	public Class<? extends Container> getContainer(int id) {
+		return registeredContainers.get(id);
+	}
+
+	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return null;
+	}
+
+	public Class<? extends GuiScreen> getGUI(int id) {
+		return registeredGUIs.get(id);
 	}
 
 }

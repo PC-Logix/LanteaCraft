@@ -59,7 +59,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 
-@InterfaceList({ @Interface(iface = "IPeripheral", modid = "ComputerCraft") })
+@InterfaceList({ @Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft") })
 public class TileEntityStargateBase extends BaseChunkLoadingTE implements IInventory, IPeripheral {
 
 	public final static String symbolChars = GateAddressHelper.symbolChars;

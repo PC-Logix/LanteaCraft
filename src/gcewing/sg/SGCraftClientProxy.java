@@ -1,5 +1,7 @@
 package gcewing.sg;
 
+import java.lang.reflect.Constructor;
+
 import gcewing.sg.core.EnumGuiList;
 import gcewing.sg.gui.ScreenStargateBase;
 import gcewing.sg.gui.ScreenStargateController;
@@ -19,6 +21,7 @@ import net.minecraft.client.audio.SoundPool;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -92,26 +95,20 @@ public class SGCraftClientProxy extends SGCraftCommonProxy {
 	}
 
 	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		return super.getServerGuiElement(id, player, world, x, y, z);
-	}
-
-	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		Class cls = registeredGUIs.get(id);
-		if (cls != null)
-			return super.createGuiElement(cls, player, world, x, y, z);
-		else
-			return getGuiScreen(id, player, world, x, y, z);
-	}
-
-	public GuiScreen getGuiScreen(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		Class<? extends GuiScreen> gui = SGCraft.getProxy().getGUI(ID);
+		if (gui != null) {
+			try {
+				TileEntity entity = world.getBlockTileEntity(x, y, z);
+				Constructor constr = gui.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
+				Object val = constr.newInstance(entity, player);
+				return val;
+			} catch (Throwable t) {
+				System.err.println("Could not create GUI, a " + t.getClass().getName() + " exception occurred.");
+				t.printStackTrace(System.err);
+			}
+		}
 		return null;
-	}
-
-	@Override
-	public void openGui(EntityPlayer player, int id, World world, int x, int y, int z) {
-		player.openGui(SGCraft.getInstance(), id, world, x, y, z);
 	}
 
 }

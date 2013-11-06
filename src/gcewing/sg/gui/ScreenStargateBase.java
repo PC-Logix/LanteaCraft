@@ -32,13 +32,13 @@ public class ScreenStargateBase extends ScreenGlyphRenderer {
 	public static ScreenStargateBase create(EntityPlayer player, World world, int x, int y, int z) {
 		TileEntityStargateBase te = TileEntityStargateBase.at(world, x, y, z);
 		if (te != null)
-			return new ScreenStargateBase(player, te);
+			return new ScreenStargateBase(te, player);
 		else
 			return null;
 	}
 
-	public ScreenStargateBase(EntityPlayer player, TileEntityStargateBase te) {
-		super(new ContainerStargateBase(player, te), guiWidth, guiHeight);
+	public ScreenStargateBase(TileEntityStargateBase te, EntityPlayer player) {
+		super(new ContainerStargateBase(te, player), guiWidth, guiHeight);
 		this.te = te;
 	}
 
