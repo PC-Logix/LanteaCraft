@@ -15,12 +15,13 @@ import gcewing.sg.util.Vector3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.Optional.Interface;
+import cpw.mods.fml.common.Optional.InterfaceList;
 import cpw.mods.fml.common.Optional.Method;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 
-@Interface(iface = "IPeripheral", modid = "ComputerCraft")
+@InterfaceList({ @Interface(iface = "IPeripheral", modid = "ComputerCraft") })
 public class TileEntityStargateController extends BaseTileEntity implements IPeripheral {
 
 	public static int linkRangeX = 10; // either side

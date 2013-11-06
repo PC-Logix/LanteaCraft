@@ -74,7 +74,8 @@ public class TileEntityStargateBaseRenderer extends BaseTileEntityRenderer {
 
 	void renderStargate(TileEntityStargateBase te, float t) {
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
-		bindTexture(SGCraft.getInstance().getResource("textures/tileentity/stargate_" + SGCraft.RenderHD + ".png"));
+		bindTexture(SGCraft.getInstance().getResource(
+				"textures/tileentity/stargate_" + SGCraft.getProxy().getRenderMode() + ".png"));
 		GL11.glNormal3f(0, 1, 0);
 		renderRing(ringMidRadius, ringOuterRadius, RingType.Outer);
 		renderInnerRing(te, t);
@@ -85,7 +86,8 @@ public class TileEntityStargateBaseRenderer extends BaseTileEntityRenderer {
 
 	void renderInnerRing(TileEntityStargateBase te, float t) {
 		GL11.glPushMatrix();
-		GL11.glRotatef((float) (te.interpolatedRingAngle(t) - (135 - TileEntityStargateBase.ringSymbolAngle / 2)), 0, 0, 1);
+		GL11.glRotatef((float) (te.interpolatedRingAngle(t) - (135 - TileEntityStargateBase.ringSymbolAngle / 2)), 0,
+				0, 1);
 		renderRing(ringInnerRadius, ringMidRadius, RingType.Inner);
 		GL11.glPopMatrix();
 	}
@@ -253,10 +255,10 @@ public class TileEntityStargateBaseRenderer extends BaseTileEntityRenderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
-	static ResourceLocation eventHorizonTexture;
+	static ResourceLocation eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/eventhorizon_"
+			+ SGCraft.getProxy().getRenderMode() + ".png");
 
 	void renderEventHorizon(TileEntityStargateBase te) {
-		eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/eventhorizon_" + SGCraft.RenderHD + ".png");
 
 		// bindTextureByName("/misc/water.png");
 		bindTexture(eventHorizonTexture);

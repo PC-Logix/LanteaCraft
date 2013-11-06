@@ -7,8 +7,6 @@
 package gcewing.sg;
 
 import gcewing.sg.base.BaseConfiguration;
-import gcewing.sg.base.BaseMod;
-import gcewing.sg.base.BaseModClient;
 import gcewing.sg.base.BaseTEChunkManager;
 import gcewing.sg.blocks.BlockNaquadah;
 import gcewing.sg.blocks.BlockNaquadahOre;
@@ -63,6 +61,7 @@ import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -72,9 +71,9 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = Info.modID, name = Info.modName, version = Info.versionNumber)
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
-public class SGCraft extends BaseMod {
+@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "build" + BuildInfo.buildNumber)
+@NetworkMod(clientSideRequired = true, serverSideRequired = true)
+public class SGCraft {
 
 	/**
 	 * The private instance of the mod. Use {@link #getInstance()} to access
@@ -142,30 +141,11 @@ public class SGCraft extends BaseMod {
 		}
 	};
 
-	public static boolean GenerateStruct = false;
-	public static boolean GalacticraftCompat = false;
-	public static int RenderHD = 32;
-	public static boolean HDModels = true;
-	public static boolean ActiveGateExplosion = true;
+	@SidedProxy(clientSide = "gcewing.sg.SGCraftClientProxy", serverSide = "gcewing.sg.SGCraftCommonProxy")
+	public static SGCraftCommonProxy proxy;
 
-	public static StargateNetworkChannel channel;
-	public static BaseTEChunkManager chunkManager;
-
-	public static boolean addOresToExistingWorlds;
-	public static NaquadahOreWorldGen naquadahOreGenerator;
-	public static int tokraVillagerID;
-
-	public BaseConfiguration config;
-	public String modPackage;
-	public String assetKey = "gcewing_sg";
-	public String resourceDir;
-	public URL resourceURL;
-	public BaseModClient client;
-	public IGuiHandler proxy;
-	public boolean serverSide, clientSide;
-	public boolean debugGui;
-
-	File cfgFile;
+	private String assetKey = "gcewing_sg";
+	public IGuiHandler guiProxy;
 
 	public SGCraft() {
 		SGCraft.mod = this;
@@ -173,250 +153,48 @@ public class SGCraft extends BaseMod {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
-		serverSide = e.getSide().isServer();
-		clientSide = e.getSide().isClient();
-		if (clientSide) {
-			client = new SGCraftClient(this);
-			proxy = client;
-		}
-		cfgFile = e.getSuggestedConfigurationFile();
-		config = new BaseConfiguration(cfgFile);
-		setConfig(config, clientSide);
-		if (client != null)
-			client.preInit(e);
+		proxy.preInit(e);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent e) {
-		MinecraftForge.EVENT_BUS.register(this);
-		if (client != null)
-			client.init(e);
-		configure();
-		channel = new StargateNetworkChannel(Info.modID);
-		chunkManager = new BaseTEChunkManager(this);
-		chunkManager.debug = true;
+		proxy.init(e);
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
-		registerBlocks();
-		registerTileEntities();
-		registerItems();
-		registerOres();
-		registerRecipes();
-		registerRandomItems();
-		registerWorldGenerators();
-		registerContainers();
-		registerVillagers();
-		registerOther();
-		if (client != null)
-			client.postInit(e);
-		if (proxy == null)
-			proxy = this;
-		NetworkRegistry.instance().registerGuiHandler(this, proxy);
-		if (config.extended)
-			config.save();
-	}
-
-	void configure() {
-		TileEntityStargateController.configure(config);
-		NaquadahOreWorldGen.configure(config);
-		TileEntityStargateBase.configure(config);
-		addOresToExistingWorlds = config.getBoolean("options", "addOresToExistingWorlds", false);
-
-		Property GenerateStruct = config.get("options", "GenerateStructures", true);
-		SGCraft.GenerateStruct = config.getBoolean("stargate", "GenerateStructures", true);
-		GenerateStruct.comment = "true/false Enables/Disables generation of Gate Rooms under Desert Pyramids";
-
-		Property GalacticraftCompat = config.get("options", "GalacticCraftCompat", false);
-		SGCraft.GalacticraftCompat = config.getBoolean("stargate", "GalacticCraftCompat", false);
-		GalacticraftCompat.comment = "true/false Enables/Disables Galcticraft support THIS WILL CHANGE ALL EXISTING ADDRESSES!";
-
-		Property textureRes = config.get("graphics_options", "textureRes", 32);
-		SGCraft.RenderHD = config.getInteger("graphics_options", "textureRes", 32);
-		textureRes.comment = "This value must be either 32, 64, or 128. Controls Textures Resolution";
-
-		Property HDModels = config.get("graphics_options", "HDModels", true);
-		SGCraft.HDModels = config.getBoolean("graphics_options", "HDModels", true);
-		HDModels.comment = "True/False Should HD models be loaded for DHDs.";
-
-		ActiveGateExplosion = config.getBoolean("options", "ActiveGateExplosion", true);
-
-		if (SGCraft.GalacticraftCompat == true)
-			GateAddressHelper.minDimension = -99;
-	}
-
-	void registerOther() {
-		if (GenerateStruct == true) {
-			System.out.println("GenerateStructure = true");
-			MinecraftForge.TERRAIN_GEN_BUS.register(this);
-			try {
-				if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
-					MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "SGCraft:DesertPyramid");
-			} catch (Throwable e) {
-				System.out.println("registerOther threw an exception");
-			}
-		}
-	}
-
-	void registerBlocks() {
-		Blocks.sgRingBlock = (BlockStargateRing) registerBlock(BlockStargateRing.class, ItemStargateRing.class,
-				GCESGCompatHelper.getBlockMapping("blockRing"), "stargateRing", "Stargate Ring Segment");
-		//Blocks.sgPegasusRingBlock = (BlockPegasusStargateRing) registerBlock(BlockPegasusStargateRing.class, ItemPegasusStargateRing.class,
-		//		GCESGCompatHelper.getBlockMapping("blockPegasusRing"), "stargatePegasusRing", "Pegasus Stargate Ring Segment");
-		
-
-		Blocks.sgBaseBlock = (BlockStargateBase) registerBlock(BlockStargateBase.class, ItemBlock.class,
-				GCESGCompatHelper.getBlockMapping("blockBase"), "stargateBase", "Stargate Base");
-		//Blocks.sgPegasusBaseBlock = (BlockPegasusStargateBase) registerBlock(BlockPegasusStargateBase.class, ItemBlock.class, 
-		//		GCESGCompatHelper.getBlockMapping("blockPegasusBase"), "stargatePegasusBase", "Pegasus Stargate Base");
-		
-		
-		Blocks.sgControllerBlock = (BlockStargateController) registerBlock(BlockStargateController.class, ItemBlock.class,
-				GCESGCompatHelper.getBlockMapping("blockController"), "stargateController", "Stargate Controller");
-		//Blocks.sgPegasusControllerBlock = (BlockPegasusStargateController) registerBlock(BlockPegasusStargateController.class, ItemBlock.class,
-		//		GCESGCompatHelper.getBlockMapping("blockPegasusController"), "stargatePegasusController", "Pegasus Stargate Controller");
-
-
-		Blocks.naquadahBlock = registerBlock(BlockNaquadah.class, ItemBlock.class,
-				GCESGCompatHelper.getBlockMapping("blockNaquadah"), "naquadahBlock", "Naquadah Alloy Block");
-		Blocks.naquadahOre = registerBlock(BlockNaquadahOre.class, ItemBlock.class,
-				GCESGCompatHelper.getBlockMapping("oreNaquadah"), "naquadahOre", "Naquadah Ore");
-	}
-
-	public Block registerBlock(Class<? extends Block> classOf, Class<? extends ItemBlock> itemClassOf,
-			String idForName, String unlocalizedName, String localizedName) {
-		try {
-			int id = config.getBlock(unlocalizedName, 4095).getInt();
-			Constructor<? extends Block> ctor = classOf.getConstructor(int.class);
-			Block block = ctor.newInstance(id);
-			block.setUnlocalizedName(assetKey + ":" + unlocalizedName);
-			block.setTextureName(assetKey + ":" + unlocalizedName + "_" + SGCraft.RenderHD);
-			if (clientSide)
-				block.setCreativeTab(sgCraftTab);
-			GameRegistry.registerBlock(block, itemClassOf, idForName);
-			LanguageRegistry.addName(block, localizedName);
-			return block;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public Item registerItem(Class<? extends Item> classOf, String idForName, String unlocalizedName,
-			String localizedName) {
-		try {
-			int id = config.getItem(unlocalizedName, 31743).getInt();
-			Constructor<? extends Item> ctor = classOf.getConstructor(int.class);
-			Item item = ctor.newInstance(id);
-			item.setUnlocalizedName(assetKey + ":" + unlocalizedName);
-			item.setTextureName(assetKey + ":" + unlocalizedName + "_" + SGCraft.RenderHD);
-			if (clientSide)
-				item.setCreativeTab(sgCraftTab);
-			GameRegistry.registerItem(item, idForName);
-			LanguageRegistry.addName(item, localizedName);
-			return item;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	void registerItems() {
-		Items.naquadah = registerItem(Item.class, GCESGCompatHelper.getBlockMapping("itemNaquadah"), "naquadah",
-				"Naquadah");
-		Items.naquadahIngot = registerItem(Item.class, GCESGCompatHelper.getBlockMapping("itemNaquadahIngot"),
-				"naquadahIngot", "Naquadah Alloy Ingot");
-		Items.sgCoreCrystal = registerItem(Item.class, GCESGCompatHelper.getBlockMapping("itemCoreCrystal"),
-				"sgCoreCrystal", "Stargate Core Crystal");
-		Items.sgControllerCrystal = registerItem(Item.class,
-				GCESGCompatHelper.getBlockMapping("itemControllerCrystal"), "sgControllerCrystal",
-				"Stargate Controller Crystal");
-	}
-
-	void registerOres() {
-		registerOre("oreNaquadah", Blocks.naquadahOre);
-		registerOre("naquadah", Items.naquadah);
-		registerOre("ingotNaquadahAlloy", Items.naquadahIngot);
-	}
-
-	void registerRecipes() {
-		ItemStack chiselledSandstone = new ItemStack(Block.sandStone, 1, 1);
-		ItemStack smoothSandstone = new ItemStack(Block.sandStone, 1, 2);
-		ItemStack sgChevronBlock = new ItemStack(Blocks.sgRingBlock, 1, 1);
-		ItemStack blueDye = new ItemStack(Item.dyePowder, 1, 4);
-		ItemStack orangeDye = new ItemStack(Item.dyePowder, 1, 14);
-		if (config.getBoolean("options", "allowCraftingNaquadah", false))
-			newShapelessRecipe(Items.naquadah, 1, Item.coal, Item.slimeBall, Item.blazePowder);
-		newRecipe(Blocks.sgRingBlock, 1, "CCC", "NNN", "SSS", 'S', smoothSandstone, 'N', "ingotNaquadahAlloy", 'C',
-				chiselledSandstone);
-		newRecipe(sgChevronBlock, "CgC", "NpN", "SrS", 'S', smoothSandstone, 'N', "ingotNaquadahAlloy", 'C',
-				chiselledSandstone, 'g', Item.glowstone, 'r', Item.redstone, 'p', Item.enderPearl);
-		newRecipe(Blocks.sgBaseBlock, 1, "CrC", "NeN", "ScS", 'S', smoothSandstone, 'N', "ingotNaquadahAlloy", 'C',
-				chiselledSandstone, 'r', Item.redstone, 'e', Item.eyeOfEnder, 'c', Items.sgCoreCrystal);
-		newRecipe(Blocks.sgControllerBlock, 1, "bbb", "OpO", "OcO", 'b', Block.stoneButton, 'O', Block.obsidian, 'p',
-				Item.enderPearl, 'r', Item.redstone, 'c', Items.sgControllerCrystal);
-		newShapelessRecipe(Items.naquadahIngot, 1, "naquadah", Item.ingotIron);
-		newRecipe(Blocks.naquadahBlock, 1, "NNN", "NNN", "NNN", 'N', "ingotNaquadahAlloy");
-		newRecipe(Items.naquadahIngot, 9, "B", 'B', Blocks.naquadahBlock);
-		if (config.getBoolean("options", "allowCraftingCrystals", false)) {
-			newRecipe(Items.sgCoreCrystal, 1, "bbr", "rdb", "brb", 'b', blueDye, 'r', Item.redstone, 'd', Item.diamond);
-			newRecipe(Items.sgControllerCrystal, 1, "roo", "odr", "oor", 'o', orangeDye, 'r', Item.redstone, 'd',
-					Item.diamond);
-		}
-	}
-
-	void registerContainers() {
-		addContainer(EnumGuiList.SGBase, ContainerStargateBase.class);
-	}
-
-	void registerRandomItems() {
-		String[] categories = { ChestGenHooks.MINESHAFT_CORRIDOR, ChestGenHooks.PYRAMID_DESERT_CHEST,
-				ChestGenHooks.PYRAMID_JUNGLE_CHEST, ChestGenHooks.STRONGHOLD_LIBRARY, ChestGenHooks.VILLAGE_BLACKSMITH };
-		addRandomChestItem(new ItemStack(Blocks.sgBaseBlock), 1, 1, 2, categories);
-		addRandomChestItem(new ItemStack(Blocks.sgControllerBlock), 1, 1, 1, categories);
-		addRandomChestItem(new ItemStack(Blocks.sgRingBlock, 1, 0), 1, 3, 8, categories);
-		addRandomChestItem(new ItemStack(Blocks.sgRingBlock, 1, 1), 1, 3, 7, categories);
-		addRandomChestItem(new ItemStack(Items.sgCoreCrystal, 1, 0), 1, 1, 2, categories);
-		addRandomChestItem(new ItemStack(Items.sgControllerCrystal, 1, 0), 1, 1, 1, categories);
-	}
-
-	void registerWorldGenerators() {
-		if (config.getBoolean("options", "enableNaquadahOre", true)) {
-			naquadahOreGenerator = new NaquadahOreWorldGen();
-			GameRegistry.registerWorldGenerator(naquadahOreGenerator);
-		}
-	}
-
-	void registerVillagers() {
-		tokraVillagerID = addVillager(config.getVillager("tokra"), "tokra",
-				SGCraft.getResource("textures/skins/tokra.png"));
-		addTradeHandler(tokraVillagerID, new TradeHandler());
-	}
-	
-	void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityStargateBase.class, GCESGCompatHelper.getTileEntityMapping("tileEntityBase"));
-		GameRegistry.registerTileEntity(TileEntityStargateRing.class, GCESGCompatHelper.getTileEntityMapping("tileEntityRing"));
-		GameRegistry.registerTileEntity(TileEntityStargateController.class, GCESGCompatHelper.getTileEntityMapping("tileEntityController"));
+		proxy.postInit(e);
 	}
 
 	@ForgeSubscribe
 	public void onChunkLoad(ChunkDataEvent.Load e) {
-		Chunk chunk = e.getChunk();
-		ChunkData.onChunkLoad(e);
+		proxy.onChunkLoad(e);
 	}
 
 	@ForgeSubscribe
 	public void onChunkSave(ChunkDataEvent.Save e) {
-		Chunk chunk = e.getChunk();
-		ChunkData.onChunkSave(e);
+		proxy.onChunkSave(e);
 	}
 
 	@ForgeSubscribe
 	public void onInitMapGen(InitMapGenEvent e) {
-		FeatureGeneration.onInitMapGen(e);
+		proxy.onInitMapGen(e);
 	}
 
 	public static ResourceLocation getResource(String path) {
 		return new ResourceLocation(SGCraft.getInstance().assetKey, path);
+	}
+
+	public static SGCraftCommonProxy getProxy() {
+		return SGCraft.getInstance().proxy;
+	}
+
+	public static String getAssetKey() {
+		return SGCraft.getInstance().assetKey;
+	}
+
+	public static CreativeTabs getCreativeTab() {
+		return SGCraft.getInstance().sgCraftTab;
 	}
 
 }

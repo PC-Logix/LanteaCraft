@@ -55,9 +55,9 @@ public class BlockStargateRing extends BaseContainerBlock {
 
 	@Override
 	public void registerIcons(IconRegister reg) {
-		topAndBottomTexture = getIcon(reg, "stargateBlock_" + SGCraft.RenderHD);
-		sideTextures[0] = getIcon(reg, "stargateRing_" + SGCraft.RenderHD);
-		sideTextures[1] = getIcon(reg, "stargateChevron_" + SGCraft.RenderHD);
+		topAndBottomTexture = getIcon(reg, "stargateBlock_" + SGCraft.getProxy().getRenderMode());
+		sideTextures[0] = getIcon(reg, "stargateRing_" + SGCraft.getProxy().getRenderMode());
+		sideTextures[1] = getIcon(reg, "stargateChevron_" + SGCraft.getProxy().getRenderMode());
 	}
 
 	@Override

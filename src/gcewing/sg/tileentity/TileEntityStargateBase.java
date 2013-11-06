@@ -349,8 +349,8 @@ public class TileEntityStargateBase extends BaseChunkLoadingTE implements IInven
 		state = newState;
 		timeout = newTimeout;
 		// System.out.println("enterState " + isInitiator + " " + newState);
-		if (state == EnumStargateState.Dialling || state == EnumStargateState.Connected || state == EnumStargateState.InterDialling
-				|| state == EnumStargateState.Transient) {
+		if (state == EnumStargateState.Dialling || state == EnumStargateState.Connected
+				|| state == EnumStargateState.InterDialling || state == EnumStargateState.Transient) {
 			if (!isInitiator)
 				powerLevel = 15;
 			else
@@ -364,7 +364,8 @@ public class TileEntityStargateBase extends BaseChunkLoadingTE implements IInven
 	}
 
 	public boolean isConnected() {
-		return state == EnumStargateState.Transient || state == EnumStargateState.Connected || state == EnumStargateState.Disconnecting;
+		return state == EnumStargateState.Transient || state == EnumStargateState.Connected
+				|| state == EnumStargateState.Disconnecting;
 	}
 
 	TileEntityStargateController getLinkedControllerTE() {
@@ -1140,7 +1141,7 @@ public class TileEntityStargateBase extends BaseChunkLoadingTE implements IInven
 
 	@Override
 	public BaseTEChunkManager getChunkManager() {
-		return SGCraft.chunkManager;
+		return SGCraft.getProxy().chunkManager;
 	}
 
 	@Override

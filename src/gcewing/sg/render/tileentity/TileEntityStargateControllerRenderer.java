@@ -14,14 +14,13 @@ public class TileEntityStargateControllerRenderer extends TileEntitySpecialRende
 	private float scale = 1;
 
 	public TileEntityStargateControllerRenderer() {
-		theTexture = new ResourceLocation("gcewing_sg", "textures/blocks/controller_bottom_" + SGCraft.RenderHD
-				+ ".png");
+		theTexture = new ResourceLocation("gcewing_sg", "textures/blocks/controller_bottom_"
+				+ SGCraft.getProxy().getRenderMode() + ".png");
 	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
-		if (SGCraft.HDModels == true) {
-
+		if (SGCraft.getProxy().isUsingModels()) {
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glScalef(scale, scale, scale);

@@ -9,6 +9,7 @@ package gcewing.sg.blocks;
 import gcewing.sg.SGCraft;
 import gcewing.sg.SGCraft.Blocks;
 import gcewing.sg.base.Base4WayCtrBlock;
+import gcewing.sg.config.ConfigValue;
 import gcewing.sg.core.EnumGuiList;
 import gcewing.sg.core.EnumStargateState;
 import gcewing.sg.tileentity.TileEntityStargateBase;
@@ -73,9 +74,9 @@ public class BlockStargateBase extends Base4WayCtrBlock {
 
 	@Override
 	public void registerIcons(IconRegister reg) {
-		topAndBottomTexture = getIcon(reg, "stargateBlock_" + SGCraft.RenderHD);
-		frontTexture = getIcon(reg, "stargateBase_front_" + SGCraft.RenderHD);
-		sideTexture = getIcon(reg, "stargateRing_" + SGCraft.RenderHD);
+		topAndBottomTexture = getIcon(reg, "stargateBlock_" + SGCraft.getProxy().getRenderMode());
+		frontTexture = getIcon(reg, "stargateBase_front_" + SGCraft.getProxy().getRenderMode());
+		sideTexture = getIcon(reg, "stargateRing_" + SGCraft.getProxy().getRenderMode());
 	}
 
 	@Override
@@ -115,7 +116,7 @@ public class BlockStargateBase extends Base4WayCtrBlock {
 			if (!world.isRemote)
 				te.dumpChunkLoadingState("SGBaseBlock.onBlockActivated");
 			if (te.isMerged) {
-				SGCraft.getInstance().openGui(player, EnumGuiList.SGBase, world, x, y, z);
+				SGCraft.getProxy().openGui(player, EnumGuiList.SGBase.ordinal(), world, x, y, z);
 				return true;
 			}
 		}
@@ -199,7 +200,7 @@ public class BlockStargateBase extends Base4WayCtrBlock {
 		if (te != null /* && te.isMerged */) {
 			if (te.isMerged && te.state == EnumStargateState.Connected) {
 				te.state = EnumStargateState.Idle;
-				if (SGCraft.ActiveGateExplosion == true)
+				if (((ConfigValue<Boolean>) SGCraft.getProxy().getConfigValue("doGateExplosion")).getValue())
 					goBang = true;
 			}
 			te.disconnect();

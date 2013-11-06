@@ -35,9 +35,9 @@ public class BlockStargateController extends Base4WayCtrBlock {
 
 	@Override
 	public void registerIcons(IconRegister reg) {
-		topTexture = getIcon(reg, "controller_top_" + SGCraft.RenderHD);
-		bottomTexture = getIcon(reg, "controller_bottom_" + SGCraft.RenderHD);
-		sideTexture = getIcon(reg, "controller_side_" + SGCraft.RenderHD);
+		topTexture = getIcon(reg, "controller_top_" + SGCraft.getProxy().getRenderMode());
+		bottomTexture = getIcon(reg, "controller_bottom_" + SGCraft.getProxy().getRenderMode());
+		sideTexture = getIcon(reg, "controller_side_" + SGCraft.getProxy().getRenderMode());
 	}
 
 	@Override
@@ -54,26 +54,19 @@ public class BlockStargateController extends Base4WayCtrBlock {
 
 	@Override
 	public int getRenderType() {
-		if (SGCraft.HDModels == true)
+		if (SGCraft.getProxy().isUsingModels())
 			return -1;
-		else
-			return 0;
+		return 0;
 	}
 
 	@Override
 	public boolean renderAsNormalBlock() {
-		if (SGCraft.HDModels == true)
-			return false;
-		else
-			return true;
+		return !SGCraft.getProxy().isUsingModels();
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		if (SGCraft.HDModels == true)
-			return false;
-		else
-			return true;
+		return !SGCraft.getProxy().isUsingModels();
 	}
 
 	@Override
@@ -108,7 +101,7 @@ public class BlockStargateController extends Base4WayCtrBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		SGCraft.getInstance().openGui(player, EnumGuiList.SGController, world, x, y, z);
+		SGCraft.getProxy().openGui(player, EnumGuiList.SGController.ordinal(), world, x, y, z);
 		return true;
 	}
 

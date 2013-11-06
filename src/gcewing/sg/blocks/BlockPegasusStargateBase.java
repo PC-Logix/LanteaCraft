@@ -12,9 +12,9 @@ public class BlockPegasusStargateBase extends BlockStargateBase {
 
 	@Override
 	public void registerIcons(IconRegister reg) {
-		topAndBottomTexture = getIcon(reg, "stargateBlock_ATL_" + SGCraft.RenderHD);
-		frontTexture = getIcon(reg, "stargateBase_front_ATL_" + SGCraft.RenderHD);
-		sideTexture = getIcon(reg, "stargateRing_ATL_" + SGCraft.RenderHD);
+		topAndBottomTexture = getIcon(reg, "stargateBlock_ATL_" + SGCraft.getProxy().getRenderMode());
+		frontTexture = getIcon(reg, "stargateBase_front_ATL_" + SGCraft.getProxy().getRenderMode());
+		sideTexture = getIcon(reg, "stargateRing_ATL_" + SGCraft.getProxy().getRenderMode());
 	}
 
 }
