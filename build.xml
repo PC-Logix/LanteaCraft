@@ -47,7 +47,7 @@
 
 	<!-- Set full version -->
 	<target name="initialize-version">
-		<echo message="Starting build ${env.BUILD_NUMBER} for ${mod.name} v${mod.version}"/>
+		<echo message="Starting build ${mod.build} for ${mod.name} v${mod.version}"/>
 	</target>
 
 	<!-- Download necessary files -->
@@ -80,7 +80,7 @@
 	
 	<target name="replace_tokens">
 		<replace dir="${mcpsrc.dir}/gcewing/sg" token="@VERSION@" value="${mod.version}" />
-		<replace dir="${mcpsrc.dir}/gcewing/sg" token="@BUILD@" value="${env.BUILD_NUMBER}" />
+		<replace dir="${mcpsrc.dir}/gcewing/sg" token="@BUILD@" value="${mod.build}" />
 	</target>
 
 	<target name="compile" depends="initialize-version,setup,replace_tokens">
