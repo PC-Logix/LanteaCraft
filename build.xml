@@ -81,8 +81,13 @@
 		</exec>
 
 	</target>
+	
+	<target name="replace_tokens">
+		<replace dir="${mcpsrc.dir}/gcewing/sg" token="@VERSION@" value="${mod.version}" />
+		<replace dir="${mcpsrc.dir}/gcewing/sg" token="@BUILD@" value="${env.BUILD_NUMBER}" />
+	</target>
 
-	<target name="compile" depends="initialize-version,setup">
+	<target name="compile" depends="initialize-version,setup,replace_tokens">
 
 		<delete dir="${classes.dir}"/>
 		<mkdir dir="${classes.dir}"/>
