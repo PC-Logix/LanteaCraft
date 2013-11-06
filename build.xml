@@ -77,13 +77,8 @@
 		</exec>
 
 	</target>
-	
-	<target name="replace_tokens">
-		<replace dir="${mcpsrc.dir}/gcewing/sg" token="@VERSION@" value="${mod.version}" />
-		<replace dir="${mcpsrc.dir}/gcewing/sg" token="@BUILD@" value="${mod.build}" />
-	</target>
 
-	<target name="compile" depends="initialize-version,setup,replace_tokens">
+	<target name="compile" depends="initialize-version,setup">
 
 		<delete dir="${classes.dir}"/>
 		<mkdir dir="${classes.dir}"/>
@@ -98,6 +93,9 @@
 				<filter token="VERSION" value="${mod.version}"/>
 			</filterset>
 		</copy>
+		
+		<replace dir="${mcpsrc.dir}/gcewing/sg" token="@VERSION@" value="${mod.version}" />
+		<replace dir="${mcpsrc.dir}/gcewing/sg" token="@BUILD@" value="${mod.build}" />
 
 		<!-- Recompile -->
 		<exec executable="${python.exe}" dir="${mcp.dir}" failonerror="true">
