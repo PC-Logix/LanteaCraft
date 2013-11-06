@@ -39,6 +39,7 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 	@Override
 	public boolean addComponentParts(World world, Random rand, StructureBoundingBox clip) {
 		StructureBoundingBox box = getBoundingBox();
+		int glowstone = Block.glowStone.blockID;
 		int sandstone = Block.sandStone.blockID;
 		int smoothSandstone = 2;
 		int wool = Block.cloth.blockID;
@@ -71,7 +72,10 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 			placeBlockAtCurrentPosition(world, ladder, ladderSouth, 12, 5 + i, 12, clip);
 		// Wall decorations
 		fillWithMetadataBlocks(world, clip, 0, 3, 0, 10, 3, 10, wool, orange, 0, 0, true);
+		fillWithMetadataBlocks(world, clip, 5, 3, 0, 5, 3, 10, glowstone, 0, 0, 0, true);
 		fillWithMetadataBlocks(world, clip, 3, 4, 10, 7, 4, 10, wool, orange, 0, 0, true);
+		fillWithMetadataBlocks(world, clip, 8, 4, 10, 8, 4, 10, glowstone, 0, 0, 0, true);
+		fillWithMetadataBlocks(world, clip, 2, 4, 10, 2, 4, 10, glowstone, 0, 0, 0, true);
 		// Floor decorations
 		fillWithMetadataBlocks(world, clip, 3, 0, 4, 3, 0, 6, wool, orange, 0, 0, true);
 		fillWithMetadataBlocks(world, clip, 7, 0, 4, 7, 0, 6, wool, orange, 0, 0, true);
