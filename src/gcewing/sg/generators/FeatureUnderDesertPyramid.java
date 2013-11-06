@@ -48,7 +48,7 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 		int ladder = Block.ladder.blockID;
 		int ladderSouth = 2;
 		int dhd = Blocks.sgControllerBlock.blockID;
-		int dhdNorth = 0;
+		int dhdNorth = 4;
 		int sgBase = Blocks.sgBaseBlock.blockID;
 		int sgBaseNorth = 0;
 		int sgRing = Blocks.sgRingBlock.blockID;
