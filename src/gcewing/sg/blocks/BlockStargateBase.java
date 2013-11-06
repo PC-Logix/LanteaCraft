@@ -35,12 +35,8 @@ public class BlockStargateBase extends Base4WayCtrBlock {
 	static int unitX[] = { 1, 0, -1, 0 };
 	static int unitZ[] = { 0, -1, 0, 1 };
 
-	static int pattern[][] = { 
-		{ 2, 1, 2, 1, 2 }, 
-		{ 1, 0, 0, 0, 1 }, 
-		{ 2, 0, 0, 0, 2 }, 
-		{ 1, 0, 0, 0, 1 },
-		{ 2, 1, 0, 1, 2 }, };
+	static int pattern[][] = { { 2, 1, 2, 1, 2 }, { 1, 0, 0, 0, 1 }, { 2, 0, 0, 0, 2 }, { 1, 0, 0, 0, 1 },
+			{ 2, 1, 0, 1, 2 }, };
 
 	Icon topAndBottomTexture; // = 0x00;
 	Icon frontTexture; // = 0x01;
@@ -70,7 +66,9 @@ public class BlockStargateBase extends Base4WayCtrBlock {
 
 	@Override
 	public int getRenderType() {
-		return SGCraft.Render.blockBaseRenderer.renderID;
+		if (SGCraft.Render.blockBaseRenderer != null)
+			return SGCraft.Render.blockBaseRenderer.renderID;
+		return -9001;
 	}
 
 	@Override

@@ -48,7 +48,9 @@ public class BlockStargateRing extends BaseContainerBlock {
 
 	@Override
 	public int getRenderType() {
-		return SGCraft.Render.blockRingRenderer.renderID;
+		if (SGCraft.Render.blockRingRenderer != null)
+			return SGCraft.Render.blockRingRenderer.renderID;
+		return -9001;
 	}
 
 	@Override
