@@ -48,10 +48,10 @@ public class SGCraftClientProxy extends SGCraftCommonProxy {
 	public void registerSounds() {
 		try {
 			SoundPool pool = Minecraft.getMinecraft().sndManager.soundPoolSounds;
-			pool.addSound("gcewing_sg:sg_abort.ogg");
-			pool.addSound("gcewing_sg:sg_close.ogg");
-			pool.addSound("gcewing_sg:sg_dial.ogg");
-			pool.addSound("gcewing_sg:sg_open.ogg");
+			pool.addSound("gcewing_sg:sg1_abort.ogg");
+			pool.addSound("gcewing_sg:sg1_close.ogg");
+			pool.addSound("gcewing_sg:sg1_dial.ogg");
+			pool.addSound("gcewing_sg:sg1_open.ogg");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

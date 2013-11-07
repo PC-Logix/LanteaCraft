@@ -255,7 +255,7 @@ public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
-	static ResourceLocation eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/eventhorizon_"
+	static ResourceLocation eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/fx/eventhorizon_"
 			+ SGCraft.getProxy().getRenderMode() + ".png");
 
 	void renderEventHorizon(TileEntityStargateBase te) {

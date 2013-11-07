@@ -9,8 +9,7 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityPegasusStargateBaseRenderer extends TileEntityStargateBaseRenderer {
 	@Override
 	void renderEventHorizon(TileEntityStargateBase te) {
-		eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/eventhorizon_ATL_"
-				+ SGCraft.getProxy().getRenderMode() + ".png");
+		eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/fx/eventhorizon" + SGCraft.getProxy().getRenderMode() + ".png");
 
 		// bindTextureByName("/misc/water.png");
 		bindTexture(eventHorizonTexture);

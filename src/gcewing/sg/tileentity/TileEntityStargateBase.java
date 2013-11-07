@@ -449,7 +449,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	void diallingFailure(EntityPlayer player, String mess) {
 		player.addChatMessage(mess);
-		playSoundEffect("gcewing_sg:sg_abort", 1.0F, 1.0F);
+		playSoundEffect("gcewing_sg:sg1_abort", 1.0F, 1.0F);
 	}
 
 	String findHomeAddress() {
@@ -482,10 +482,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			if (state == EnumStargateState.Connected) {
 				enterState(EnumStargateState.Disconnecting, disconnectTime);
 				// sendClientEvent(SGEvent.StartDisconnecting, 0);
-				playSoundEffect("gcewing_sg:sg_close", 1.0F, 1.0F);
+				playSoundEffect("gcewing_sg:sg1_close", 1.0F, 1.0F);
 			} else {
 				if (state != EnumStargateState.Idle && state != EnumStargateState.Disconnecting)
-					playSoundEffect("gcewing_sg:sg_abort", 1.0F, 1.0F);
+					playSoundEffect("gcewing_sg:sg1_abort", 1.0F, 1.0F);
 				enterState(EnumStargateState.Idle, 0);
 				// sendClientEvent(SGEvent.FinishDisconnecting, 0);
 			}
@@ -636,7 +636,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		int i = Character.getNumericValue(c) - Character.getNumericValue('A');
 		if (i >= 0 && i < numRingSymbols) {
 			startDiallingToAngle(i * ringSymbolAngle - 45 * numEngagedChevrons);
-			playSoundEffect("gcewing_sg:sg_dial", 1.0F, 1.0F);
+			playSoundEffect("gcewing_sg:sg1_dial", 1.0F, 1.0F);
 		}
 	}
 
@@ -659,7 +659,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		// System.out.printf("SGBaseTE: Connecting to '%s'\n", dialledAddress);
 		if (!isInitiator || useFuel(fuelToOpen)) {
 			enterState(EnumStargateState.Transient, transientDuration);
-			playSoundEffect("gcewing_sg:sg_open", 1.0F, 1.0F);
+			playSoundEffect("gcewing_sg:gate_open", 1.0F, 1.0F);
 		} else
 			// enterState(SGState.Idle, 0);
 			// playSoundEffect("gcewing_sg:sg_abort", 1.0F, 1.0F);
