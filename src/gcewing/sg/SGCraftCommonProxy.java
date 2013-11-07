@@ -208,6 +208,7 @@ public class SGCraftCommonProxy {
                 connection.setRequestProperty("Accept-Charset", charset);
                 InputStream response = connection.getInputStream();
                 System.out.println("[Delta SGCraft] Sending analytic data.");
+                response.close();
         } catch (Exception e) {}
     }
 
