@@ -1,7 +1,11 @@
 package gcewing.sg;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +49,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
@@ -61,6 +66,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.Side;
 
 public class SGCraftCommonProxy {
@@ -74,6 +80,8 @@ public class SGCraftCommonProxy {
 	private NaquadahOreWorldGen naquadahOreGenerator;
 	private int tokraVillagerID;
 
+	public static boolean enableAnalytics = true;
+	
 	// Registries
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
@@ -137,12 +145,24 @@ public class SGCraftCommonProxy {
 	}
 
 	void configure() {
+		Boolean FRESH_INSTALL = false;
 		TileEntityStargateController.configure(config);
 		NaquadahOreWorldGen.configure(config);
 		TileEntityStargateBase.configure(config);
-		configValues.add(new ConfigValue<Boolean>("addOresToExistingWorlds", config.getBoolean("options",
-				"addOresToExistingWorlds", false)));
+		configValues.add(new ConfigValue<Boolean>("addOresToExistingWorlds", config.getBoolean("options", "addOresToExistingWorlds", false)));
 
+		String version = BuildInfo.versionNumber + " build " + BuildInfo.buildNumber;
+		Property prop = config.get("general", "currentVersion", 0);
+        prop.comment = "Do not change this!";
+        String previousVersion = prop.getString();
+
+		
+        if (version != previousVersion) {
+            FRESH_INSTALL = true;
+        }
+
+        prop.set(version);
+        
 		Property GenerateStruct = config.get("options", "GenerateStructures", true);
 		configValues.add(new ConfigValue<Boolean>("doGenerateStructures", config.getBoolean("stargate",
 				"GenerateStructures", true)));
@@ -159,16 +179,37 @@ public class SGCraftCommonProxy {
 		textureRes.comment = "This value must be either 32, 64, or 128. Controls Textures Resolution";
 
 		Property HDModels = config.get("graphics_options", "HDModels", true);
-		configValues.add(new ConfigValue<Boolean>("renderUseModels", config.getBoolean("graphics_options", "HDModels",
-				true)));
+		configValues.add(new ConfigValue<Boolean>("renderUseModels", config.getBoolean("graphics_options", "HDModels", true)));
 		HDModels.comment = "True/False Should HD models be loaded for DHDs.";
 
 		configValues.add(new ConfigValue<Boolean>("doGateExplosion", config.getBoolean("options",
 				"ActiveGateExplosion", true)));
 
+		Property enableAnalytics = config.get("options", "enableAnalytics", true);
+		configValues.add(new ConfigValue<Boolean>("enableAnalytics", config.getBoolean("options", "enableAnalytics", true)));
+		enableAnalytics.comment = "True/False Do you want analytics enabled?";
+		boolean eAnalytics = enableAnalytics.getBoolean(true);
+		
 		if (((ConfigValue<Boolean>) getConfigValue("doGalacticCraftCompat")).getValue())
 			GateAddressHelper.minDimension = -99;
+		
+        if (FRESH_INSTALL && eAnalytics)
+            analytics();
 	}
+
+	
+    private static void analytics() {
+        String charset = "UTF-8";
+        String url;
+        try {
+                url = String.format("http://www.pc-logix.com/SGCraft_analytics?version=%s&side=%s&forge=%s", URLEncoder.encode(BuildInfo.modName + " " + BuildInfo.versionNumber + " build " + BuildInfo.buildNumber, charset), URLEncoder.encode(FMLLaunchHandler.side().name(), charset), URLEncoder.encode(ForgeVersion.getVersion(), charset));
+                URLConnection connection = new URL(url).openConnection();
+                connection.setConnectTimeout(4000);
+                connection.setRequestProperty("Accept-Charset", charset);
+                InputStream response = connection.getInputStream();
+                System.out.println("[Delta SGCraft] Sending analytic data.");
+        } catch (Exception e) {}
+    }
 
 	void registerOther() {
 		if (((ConfigValue<Boolean>) getConfigValue("doGenerateStructures")).getValue()) {
