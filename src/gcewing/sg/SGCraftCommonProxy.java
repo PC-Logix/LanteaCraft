@@ -202,7 +202,7 @@ public class SGCraftCommonProxy {
         String charset = "UTF-8";
         String url;
         try {
-                url = String.format("http://www.pc-logix.com/SGCraft_analytics?version=%s&side=%s&forge=%s", URLEncoder.encode(BuildInfo.modName + " " + BuildInfo.versionNumber + " build " + BuildInfo.buildNumber, charset), URLEncoder.encode(FMLLaunchHandler.side().name(), charset), URLEncoder.encode(ForgeVersion.getVersion(), charset));
+                url = String.format("http://www.pc-logix.com/SGCraft_analytics/?version=%s&side=%s&forge=%s", URLEncoder.encode(BuildInfo.modName + " " + BuildInfo.versionNumber + " build " + BuildInfo.buildNumber, charset), URLEncoder.encode(FMLLaunchHandler.side().name(), charset), URLEncoder.encode(ForgeVersion.getVersion(), charset));
                 URLConnection connection = new URL(url).openConnection();
                 connection.setConnectTimeout(4000);
                 connection.setRequestProperty("Accept-Charset", charset);
