@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   Greg's Mod Base - Generic Block with Tile Entity
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.base;
 
 import java.util.Random;
@@ -20,13 +14,13 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public abstract class BaseContainerBlock extends BlockContainer {
+public abstract class GenericContainerBlock extends BlockContainer {
 
 	static Random random = new Random();
 	String[] iconNames = null;
 	Icon[] icons;
 
-	public BaseContainerBlock(int id, Material material) {
+	public GenericContainerBlock(int id, Material material) {
 		super(id, material);
 	}
 

@@ -1,16 +1,8 @@
-//------------------------------------------------------------------------------------------------
-//
-//   Greg's Mod Base - 3D Transformation
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.util;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import net.minecraft.util.AxisAlignedBB;
-
-//import static gcewing.sg.Utils.*;
 
 public class Trans3 {
 
@@ -99,40 +91,5 @@ public class Trans3 {
 		return AxisAlignedBB.getAABBPool().getAABB(min(p.x, q.x), min(p.y, q.y), min(p.z, q.z), max(p.x, q.x),
 				max(p.y, q.y), max(p.z, q.z));
 	}
-
-	// -------------------------- Forge Directions --------------------------
-
-	// static ForgeDirection[] directions = new ForgeDirection[7];
-	//
-	// static int directionIndex(double dx, double dy, double dz) {
-	// return (int)(dx + dy * 2 + dz * 3 + 3);
-	// }
-	//
-	// static {
-	// for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-	// directions[directionIndex(dir.offsetX, dir.offsetY, dir.offsetZ)] = dir;
-	// directions[3] = ForgeDirection.DOWN;
-	// }
-	//
-	// public static ForgeDirection forgeDirection(double dx, double dy, double
-	// dz) {
-	// int i = directionIndex(dx, dy, dz);
-	// if (i >= 0 && i < 7)
-	// return directions[i];
-	// else
-	// return ForgeDirection.DOWN;
-	// }
-	//
-	// public static ForgeDirection forgeDirection(Vector3 v) {
-	// return forgeDirection(v.x, v.y, v.z);
-	// }
-	//
-	// public ForgeDirection t(ForgeDirection dir) {
-	// return forgeDirection(t.v(dir.offsetX, dir.offsetY, dir.offsetZ));
-	// }
-	//
-	// public ForgeDirection it(ForgeDirection dir) {
-	// return forgeDirection(t.iv(dir.offsetX, dir.offsetY, dir.offsetZ));
-	// }
 
 }

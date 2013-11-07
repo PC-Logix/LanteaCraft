@@ -5,7 +5,7 @@ import java.lang.reflect.Constructor;
 import gcewing.sg.core.EnumGuiList;
 import gcewing.sg.gui.ScreenStargateBase;
 import gcewing.sg.gui.ScreenStargateController;
-import gcewing.sg.render.BaseOrientedCtrBlkRenderer;
+import gcewing.sg.render.RotationOrientedBlockRenderer;
 import gcewing.sg.render.GenericBlockRenderer;
 import gcewing.sg.render.blocks.BlockStargateBaseRenderer;
 import gcewing.sg.render.blocks.BlockStargateRingRenderer;
@@ -67,15 +67,19 @@ public class SGCraftClientProxy extends SGCraftCommonProxy {
 
 		SGCraft.Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
 		addTileEntityRenderer(TileEntityStargateBase.class, SGCraft.Render.tileEntityBaseRenderer);
+
 		SGCraft.Render.tileEntityPegausBaseRenderer = new TileEntityPegasusStargateBaseRenderer();
 		addTileEntityRenderer(TileEntityPegasusStargateBase.class, SGCraft.Render.tileEntityPegausBaseRenderer);
+
 		SGCraft.Render.tileEntityControllerRenderer = new TileEntityStargateControllerRenderer();
 		addTileEntityRenderer(TileEntityStargateController.class, SGCraft.Render.tileEntityControllerRenderer);
 
-		SGCraft.Render.blockOrientedRenderer = new BaseOrientedCtrBlkRenderer();
+		SGCraft.Render.blockOrientedRenderer = new RotationOrientedBlockRenderer();
 		registerRenderer(SGCraft.Render.blockOrientedRenderer);
+
 		SGCraft.Render.blockBaseRenderer = new BlockStargateBaseRenderer();
 		registerRenderer(SGCraft.Render.blockBaseRenderer);
+
 		SGCraft.Render.blockRingRenderer = new BlockStargateRingRenderer();
 		registerRenderer(SGCraft.Render.blockRingRenderer);
 	}

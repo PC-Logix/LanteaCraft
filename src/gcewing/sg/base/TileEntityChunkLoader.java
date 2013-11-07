@@ -11,9 +11,9 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
-public abstract class BaseChunkLoadingTE extends BaseTileEntity {
+public abstract class TileEntityChunkLoader extends GenericTileEntity {
 
-	public abstract BaseTEChunkManager getChunkManager();
+	public abstract TileEntityChunkManager getChunkManager();
 
 	Ticket chunkTicket;
 

@@ -1,15 +1,9 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate ring tile entity
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.tileentity;
 
-import gcewing.sg.base.BaseTileEntity;
+import gcewing.sg.base.GenericTileEntity;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TileEntityStargateRing extends BaseTileEntity {
+public class TileEntityStargateRing extends GenericTileEntity {
 
 	public boolean isMerged;
 	public int baseX, baseY, baseZ;

@@ -1,19 +1,13 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate base gui container
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.container;
 
-import gcewing.sg.base.BaseContainer;
+import gcewing.sg.base.GenericContainer;
 import gcewing.sg.tileentity.TileEntityStargateBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.world.World;
 
-public class ContainerStargateBase extends BaseContainer {
+public class ContainerStargateBase extends GenericContainer {
 
 	static final int numFuelSlotColumns = 2;
 	static final int fuelSlotsX = 174;

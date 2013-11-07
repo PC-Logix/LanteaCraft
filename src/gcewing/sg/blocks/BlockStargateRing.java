@@ -7,7 +7,7 @@
 package gcewing.sg.blocks;
 
 import gcewing.sg.SGCraft;
-import gcewing.sg.base.BaseContainerBlock;
+import gcewing.sg.base.GenericContainerBlock;
 import gcewing.sg.items.ItemStargateRing;
 import gcewing.sg.tileentity.TileEntityStargateRing;
 
@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class BlockStargateRing extends BaseContainerBlock {
+public class BlockStargateRing extends GenericContainerBlock {
 
 	// static final int textureBase = 0x02;
 	// static final int topAndBottomTexture = 0x00;

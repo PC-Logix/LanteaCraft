@@ -12,11 +12,11 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 
-public class BaseTEChunkManager implements ForgeChunkManager.LoadingCallback {
+public class TileEntityChunkManager implements ForgeChunkManager.LoadingCallback {
 
 	private final SGCraft sgcraft;
 
-	public BaseTEChunkManager(SGCraft sgCraft) {
+	public TileEntityChunkManager(SGCraft sgCraft) {
 		this.sgcraft = sgCraft;
 		ForgeChunkManager.setForcedChunkLoadingCallback(sgCraft, this);
 	}
@@ -35,8 +35,8 @@ public class BaseTEChunkManager implements ForgeChunkManager.LoadingCallback {
 					int y = nbt.getInteger("yCoord");
 					int z = nbt.getInteger("zCoord");
 					TileEntity te = world.getBlockTileEntity(x, y, z);
-					if (te instanceof BaseChunkLoadingTE)
-						if (!((BaseChunkLoadingTE) te).reinstateChunkTicket(ticket))
+					if (te instanceof TileEntityChunkLoader)
+						if (!((TileEntityChunkLoader) te).reinstateChunkTicket(ticket))
 							ForgeChunkManager.releaseTicket(ticket);
 				}
 		}

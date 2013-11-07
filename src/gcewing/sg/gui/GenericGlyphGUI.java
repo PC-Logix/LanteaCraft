@@ -1,31 +1,23 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate gui base class
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.gui;
 
 import gcewing.sg.SGCraft;
-import gcewing.sg.base.BaseContainer;
-import gcewing.sg.base.BaseGuiContainer;
+import gcewing.sg.base.GenericContainer;
+import gcewing.sg.base.GenericContainerGUI;
 import gcewing.sg.tileentity.TileEntityStargateBase;
 import net.minecraft.inventory.Container;
 
-//------------------------------------------------------------------------------------------------
-
-public class ScreenGlyphRenderer extends BaseGuiContainer {
+public class GenericGlyphGUI extends GenericContainerGUI {
 
 	final static String padding = "-------";
 
 	double uscale, vscale;
 	float red = 1.0F, green = 1.0F, blue = 1.0F;
 
-	public ScreenGlyphRenderer() {
-		super(new BaseContainer(0, 0));
+	public GenericGlyphGUI() {
+		super(new GenericContainer(0, 0));
 	}
 
-	public ScreenGlyphRenderer(Container container, int width, int height) {
+	public GenericGlyphGUI(Container container, int width, int height) {
 		super(container, width, height);
 	}
 

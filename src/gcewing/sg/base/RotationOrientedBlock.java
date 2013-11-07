@@ -12,12 +12,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public abstract class Base4WayCtrBlock extends BaseOrientedCtrBlock {
+public abstract class RotationOrientedBlock extends OrientedBlock {
 
 	int rotationShift = 0;
 	int rotationMask = 0x3;
 
-	public Base4WayCtrBlock(int id, Material material) {
+	public RotationOrientedBlock(int id, Material material) {
 		super(id, material);
 	}
 

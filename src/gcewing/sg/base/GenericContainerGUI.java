@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   Greg's Mod Base - Generic GUI Screen
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.base;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -15,9 +9,7 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-//------------------------------------------------------------------------------------------------
-
-public class BaseGuiContainer extends GuiContainer {
+public class GenericContainerGUI extends GuiContainer {
 
 	final static int defaultTextColor = 0x404040;
 
@@ -30,13 +22,13 @@ public class BaseGuiContainer extends GuiContainer {
 	// super(new BaseContainer());
 	// }
 
-	public BaseGuiContainer(Container container, int width, int height) {
+	public GenericContainerGUI(Container container, int width, int height) {
 		super(container);
 		xSize = width;
 		ySize = height;
 	}
 
-	public BaseGuiContainer(BaseContainer container) {
+	public GenericContainerGUI(GenericContainer container) {
 		this(container, container.xSize, container.ySize);
 	}
 

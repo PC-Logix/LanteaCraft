@@ -1,14 +1,8 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate Controller Tile Entity
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.tileentity;
 
-import gcewing.sg.base.BaseConfiguration;
-import gcewing.sg.base.BaseTileEntity;
+import gcewing.sg.base.GenericTileEntity;
 import gcewing.sg.blocks.BlockStargateController;
+import gcewing.sg.config.ConfigurationHelper;
 import gcewing.sg.core.StargateNetworkChannel;
 import gcewing.sg.util.Trans3;
 import gcewing.sg.util.Vector3;
@@ -22,7 +16,7 @@ import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 
 @InterfaceList({ @Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft") })
-public class TileEntityStargateController extends BaseTileEntity implements IPeripheral {
+public class TileEntityStargateController extends GenericTileEntity implements IPeripheral {
 
 	public static int linkRangeX = 10; // either side
 	public static int linkRangeY = 10; // up or down
@@ -31,7 +25,7 @@ public class TileEntityStargateController extends BaseTileEntity implements IPer
 	public boolean isLinkedToStargate;
 	public int linkedX, linkedY, linkedZ;
 
-	public static void configure(BaseConfiguration cfg) {
+	public static void configure(ConfigurationHelper cfg) {
 		linkRangeX = cfg.getInteger("dhd", "linkRangeX", linkRangeX);
 		linkRangeY = cfg.getInteger("dhd", "linkRangeY", linkRangeY);
 		linkRangeZ = cfg.getInteger("dhd", "linkRangeZ", linkRangeZ);

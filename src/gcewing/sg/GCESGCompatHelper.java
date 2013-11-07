@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 /**
  * GCESGCompatHelper is the registry driving interop between older versions of
- * the mod (such as Greg's names). This also provides formaizlied names,
+ * the mod (such as Greg's names). This also provides formalized names,
  * particularly considering the coming of 1.7.
  * 
  * DO NOT ALTER UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING.
@@ -61,13 +61,13 @@ public class GCESGCompatHelper {
 
 		registerBlockMapping("blockRing", "gcewing.sg.SGRingBlock");
 		registerBlockMapping("blockPegasusRing", "gcewing.sg.SGPegasusRingBlock");
-		
+
 		registerBlockMapping("blockBase", "gcewing.sg.SGBaseBlock");
 		registerBlockMapping("blockPegasusBase", "gcewing.sg.SGPegasusBaseBlock");
-		
+
 		registerBlockMapping("blockController", "gcewing.sg.SGControllerBlock");
 		registerBlockMapping("blockPegasusController", "gcewing.sg.SGPegasusControllerBlock");
-		
+
 		registerBlockMapping("blockNaquadah", "gcewing.sg.NaquadahBlock");
 		registerBlockMapping("oreNaquadah", "gcewing.sg.NaquadahOreBlock");
 

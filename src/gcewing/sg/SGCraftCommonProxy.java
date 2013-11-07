@@ -9,14 +9,14 @@ import java.util.Map;
 
 import gcewing.sg.SGCraft.Blocks;
 import gcewing.sg.SGCraft.Items;
-import gcewing.sg.base.BaseConfiguration;
-import gcewing.sg.base.BaseTEChunkManager;
+import gcewing.sg.base.TileEntityChunkManager;
 import gcewing.sg.blocks.BlockNaquadah;
 import gcewing.sg.blocks.BlockNaquadahOre;
 import gcewing.sg.blocks.BlockStargateBase;
 import gcewing.sg.blocks.BlockStargateController;
 import gcewing.sg.blocks.BlockStargateRing;
 import gcewing.sg.config.ConfigValue;
+import gcewing.sg.config.ConfigurationHelper;
 import gcewing.sg.container.ContainerStargateBase;
 import gcewing.sg.core.EnumGuiList;
 import gcewing.sg.core.GateAddressHelper;
@@ -66,10 +66,10 @@ import cpw.mods.fml.relauncher.Side;
 public class SGCraftCommonProxy {
 
 	protected File cfgFile;
-	protected BaseConfiguration config;
+	protected ConfigurationHelper config;
 
 	public StargateNetworkChannel channel;
-	public BaseTEChunkManager chunkManager;
+	public TileEntityChunkManager chunkManager;
 
 	private NaquadahOreWorldGen naquadahOreGenerator;
 	private int tokraVillagerID;
@@ -96,13 +96,13 @@ public class SGCraftCommonProxy {
 
 	public void preInit(FMLPreInitializationEvent e) {
 		cfgFile = e.getSuggestedConfigurationFile();
-		config = new BaseConfiguration(cfgFile);
+		config = new ConfigurationHelper(cfgFile);
 		configure();
 	}
 
 	public void init(FMLInitializationEvent e) {
 		MinecraftForge.EVENT_BUS.register(SGCraft.getInstance());
-		chunkManager = new BaseTEChunkManager(SGCraft.getInstance());
+		chunkManager = new TileEntityChunkManager(SGCraft.getInstance());
 		NetworkRegistry.instance().registerGuiHandler(SGCraft.getInstance(), new HelperGUIHandler());
 	}
 

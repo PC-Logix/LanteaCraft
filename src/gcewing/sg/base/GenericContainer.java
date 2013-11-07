@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   Greg's Mod Base - Generic inventory container
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.base;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,13 +7,13 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class BaseContainer extends Container {
+public class GenericContainer extends Container {
 
 	int xSize, ySize;
 
 	// public BaseContainer() {}
 
-	public BaseContainer(int width, int height) {
+	public GenericContainer(int width, int height) {
 		xSize = width;
 		ySize = height;
 	}

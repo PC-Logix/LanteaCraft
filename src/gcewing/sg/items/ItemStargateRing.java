@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate ring block item
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.items;
 
 import gcewing.sg.SGCraft.Blocks;
@@ -30,10 +24,7 @@ public class ItemStargateRing extends ItemBlock {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		String result = subItemName(stack.getItemDamage());
-		// System.out.printf("SGRingItem.getUnlocalizedName: %s --> %s\n",
-		// stack, result);
-		return result;
+		return subItemName(stack.getItemDamage());
 	}
 
 	public static String subItemName(int i) {

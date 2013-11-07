@@ -17,7 +17,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
-public class BaseTileEntity extends TileEntity implements IInventory, ISidedInventory {
+public class GenericTileEntity extends TileEntity implements IInventory, ISidedInventory {
 
 	@Override
 	public Packet getDescriptionPacket() {

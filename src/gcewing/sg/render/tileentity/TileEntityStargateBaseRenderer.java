@@ -7,7 +7,7 @@
 package gcewing.sg.render.tileentity;
 
 import gcewing.sg.SGCraft;
-import gcewing.sg.base.BaseTileEntityRenderer;
+import gcewing.sg.base.GenericTileEntityRenderer;
 import gcewing.sg.tileentity.TileEntityStargateBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class TileEntityStargateBaseRenderer extends BaseTileEntityRenderer {
+public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 
 	public final static int numRingSegments = 32;
 	public final static double ringInnerRadius = 2.0;

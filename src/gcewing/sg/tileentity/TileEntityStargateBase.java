@@ -1,17 +1,11 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate base tile entity
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.tileentity;
 
 import gcewing.sg.SGCraft;
 import gcewing.sg.SGCraft.Items;
-import gcewing.sg.base.BaseChunkLoadingTE;
-import gcewing.sg.base.BaseConfiguration;
-import gcewing.sg.base.BaseTEChunkManager;
+import gcewing.sg.base.TileEntityChunkLoader;
+import gcewing.sg.base.TileEntityChunkManager;
 import gcewing.sg.blocks.BlockStargateBase;
+import gcewing.sg.config.ConfigurationHelper;
 import gcewing.sg.core.GateAddressHelper;
 import gcewing.sg.core.EnumIrisState;
 import gcewing.sg.core.WorldLocation;
@@ -60,7 +54,7 @@ import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 
 @InterfaceList({ @Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft") })
-public class TileEntityStargateBase extends BaseChunkLoadingTE implements IInventory, IPeripheral {
+public class TileEntityStargateBase extends TileEntityChunkLoader implements IInventory, IPeripheral {
 
 	public final static String symbolChars = GateAddressHelper.symbolChars;
 	public final static int numRingSymbols = GateAddressHelper.numSymbols;
@@ -122,7 +116,7 @@ public class TileEntityStargateBase extends BaseChunkLoadingTE implements IInven
 
 	double ehGrid[][][];
 
-	public static void configure(BaseConfiguration cfg) {
+	public static void configure(ConfigurationHelper cfg) {
 		gateOpeningsPerFuelItem = cfg.getInteger("stargate", "gateOpeningsPerFuelItem", gateOpeningsPerFuelItem);
 		minutesOpenPerFuelItem = cfg.getInteger("stargate", "minutesOpenPerFuelItem", minutesOpenPerFuelItem);
 		secondsToStayOpen = cfg.getInteger("stargate", "secondsToStayOpen", secondsToStayOpen);
@@ -1140,7 +1134,7 @@ public class TileEntityStargateBase extends BaseChunkLoadingTE implements IInven
 	}
 
 	@Override
-	public BaseTEChunkManager getChunkManager() {
+	public TileEntityChunkManager getChunkManager() {
 		return SGCraft.getProxy().chunkManager;
 	}
 

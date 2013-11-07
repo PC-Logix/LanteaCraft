@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate base gui screen
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.gui;
 
 import gcewing.sg.SGCraft;
@@ -15,7 +9,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-public class ScreenStargateBase extends ScreenGlyphRenderer {
+public class ScreenStargateBase extends GenericGlyphGUI {
 
 	static String screenTitle = "Stargate Address";
 	static final int guiWidth = 256;

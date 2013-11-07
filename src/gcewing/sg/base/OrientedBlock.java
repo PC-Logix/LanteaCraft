@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   Greg's Mod Base - Generic Oriented Block with Tile Entity
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.base;
 
 import gcewing.sg.SGCraft;
@@ -13,9 +7,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 
-public abstract class BaseOrientedCtrBlock extends BaseContainerBlock {
+public abstract class OrientedBlock extends GenericContainerBlock {
 
-	public BaseOrientedCtrBlock(int id, Material material) {
+	public OrientedBlock(int id, Material material) {
 		super(id, material);
 	}
 

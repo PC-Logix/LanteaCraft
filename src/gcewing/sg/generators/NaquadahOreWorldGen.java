@@ -7,7 +7,7 @@
 package gcewing.sg.generators;
 
 import gcewing.sg.SGCraft.Blocks;
-import gcewing.sg.base.BaseConfiguration;
+import gcewing.sg.config.ConfigurationHelper;
 
 import java.util.Random;
 
@@ -36,7 +36,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 	int lava = Block.lavaStill.blockID;
 	int naquadah = Blocks.naquadahOre.blockID;
 
-	public static void configure(BaseConfiguration cfg) {
+	public static void configure(ConfigurationHelper cfg) {
 		genUnderLavaOdds = cfg.getInteger("naquadah", "genUnderLavaOdds", genUnderLavaOdds);
 		maxNodesUnderLava = cfg.getInteger("naquadah", "maxNodesUnderLava", maxNodesUnderLava);
 		genIsolatedOdds = cfg.getInteger("naquadah", "genIsolatedOdds", genIsolatedOdds);

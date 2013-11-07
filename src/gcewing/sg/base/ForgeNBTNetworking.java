@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   Mod Base - NBT Networking
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.base;
 
 import java.io.ByteArrayInputStream;
@@ -24,11 +18,11 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
-public class BaseNBTChannel<PACKET_TYPE extends Enum> {
+public class ForgeNBTNetworking<PACKET_TYPE extends Enum> {
 
 	public String channelName;
 
-	public BaseNBTChannel(String channelName) {
+	public ForgeNBTNetworking(String channelName) {
 		this.channelName = channelName;
 		NetworkRegistry reg = NetworkRegistry.instance();
 		reg.registerChannel(new ServerPacketHandler(), channelName, Side.SERVER);

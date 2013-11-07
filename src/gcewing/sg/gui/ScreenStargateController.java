@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate controller gui screen
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.gui;
 
 import gcewing.sg.SGCraft;
@@ -20,7 +14,7 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-public class ScreenStargateController extends ScreenGlyphRenderer {
+public class ScreenStargateController extends GenericGlyphGUI {
 
 	final static int dhdWidth = 320;
 	final static int dhdHeight = 120;

@@ -1,13 +1,6 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Main Class
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg;
 
-import gcewing.sg.base.BaseConfiguration;
-import gcewing.sg.base.BaseTEChunkManager;
+import gcewing.sg.base.TileEntityChunkManager;
 import gcewing.sg.blocks.BlockNaquadah;
 import gcewing.sg.blocks.BlockNaquadahOre;
 import gcewing.sg.blocks.BlockStargateBase;
@@ -17,6 +10,7 @@ import gcewing.sg.blocks.BlockPegasusStargateController;
 import gcewing.sg.blocks.BlockPegasusStargateRing;
 import gcewing.sg.blocks.BlockPortal;
 import gcewing.sg.blocks.BlockStargateRing;
+import gcewing.sg.config.ConfigurationHelper;
 import gcewing.sg.container.ContainerStargateBase;
 import gcewing.sg.core.GateAddressHelper;
 import gcewing.sg.core.StargateNetworkChannel;
@@ -28,7 +22,7 @@ import gcewing.sg.generators.ChunkData;
 import gcewing.sg.generators.TradeHandler;
 import gcewing.sg.items.ItemPegasusStargateRing;
 import gcewing.sg.items.ItemStargateRing;
-import gcewing.sg.render.BaseOrientedCtrBlkRenderer;
+import gcewing.sg.render.RotationOrientedBlockRenderer;
 import gcewing.sg.render.blocks.BlockStargateBaseRenderer;
 import gcewing.sg.render.blocks.BlockStargateRingRenderer;
 import gcewing.sg.render.model.StargateControllerModel;
@@ -71,7 +65,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "build" + BuildInfo.buildNumber)
+@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "build"
+		+ BuildInfo.buildNumber)
 @NetworkMod(clientSideRequired = true, serverSideRequired = true)
 public class SGCraft {
 
@@ -124,7 +119,7 @@ public class SGCraft {
 	public static class Render {
 		public static StargateControllerModel modelController;
 
-		public static BaseOrientedCtrBlkRenderer blockOrientedRenderer;
+		public static RotationOrientedBlockRenderer blockOrientedRenderer;
 
 		public static BlockStargateBaseRenderer blockBaseRenderer;
 		public static BlockStargateRingRenderer blockRingRenderer;
@@ -145,7 +140,6 @@ public class SGCraft {
 	public static SGCraftCommonProxy proxy;
 
 	private String assetKey = "gcewing_sg";
-	public IGuiHandler guiProxy;
 
 	public SGCraft() {
 		SGCraft.mod = this;

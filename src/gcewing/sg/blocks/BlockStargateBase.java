@@ -8,7 +8,7 @@ package gcewing.sg.blocks;
 
 import gcewing.sg.SGCraft;
 import gcewing.sg.SGCraft.Blocks;
-import gcewing.sg.base.Base4WayCtrBlock;
+import gcewing.sg.base.RotationOrientedBlock;
 import gcewing.sg.config.ConfigValue;
 import gcewing.sg.core.EnumGuiList;
 import gcewing.sg.core.EnumStargateState;
@@ -26,7 +26,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class BlockStargateBase extends Base4WayCtrBlock {
+public class BlockStargateBase extends RotationOrientedBlock {
 
 	static boolean debugMerge = false;
 

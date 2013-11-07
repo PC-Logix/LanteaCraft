@@ -6,7 +6,7 @@
 
 package gcewing.sg.core;
 
-import gcewing.sg.base.BaseNBTChannel;
+import gcewing.sg.base.ForgeNBTNetworking;
 import gcewing.sg.tileentity.TileEntityStargateBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +18,7 @@ enum PacketType {
 	SetHomeAddress, ConnectOrDisconnect;
 }
 
-public class StargateNetworkChannel extends BaseNBTChannel<PacketType> {
+public class StargateNetworkChannel extends ForgeNBTNetworking<PacketType> {
 
 	static StargateNetworkChannel network;
 

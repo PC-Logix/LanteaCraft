@@ -7,12 +7,12 @@
 package gcewing.sg.render.blocks;
 
 import gcewing.sg.blocks.BlockStargateBase;
-import gcewing.sg.render.BaseOrientedCtrBlkRenderer;
+import gcewing.sg.render.RotationOrientedBlockRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 
-public class BlockStargateBaseRenderer extends BaseOrientedCtrBlkRenderer {
+public class BlockStargateBaseRenderer extends RotationOrientedBlockRenderer {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks rb) {

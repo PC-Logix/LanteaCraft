@@ -12,7 +12,6 @@ public class ItemPegasusStargateRing extends ItemStargateRing {
 		// TODO Auto-generated constructor stub
 	}
 
-
 	@Override
 	public Icon getIconFromDamage(int i) {
 		return Blocks.sgPegasusRingBlock.getIcon(0, i);
@@ -25,10 +24,7 @@ public class ItemPegasusStargateRing extends ItemStargateRing {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		String result = subItemName(stack.getItemDamage());
-		// System.out.printf("SGRingItem.getUnlocalizedName: %s --> %s\n",
-		// stack, result);
-		return result;
+		return subItemName(stack.getItemDamage());
 	}
 
 	public static String subItemName(int i) {

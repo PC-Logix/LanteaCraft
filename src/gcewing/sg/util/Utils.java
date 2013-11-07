@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate base tile entity renderer
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.util;
 
 public class Utils {
@@ -20,7 +14,6 @@ public class Utils {
 	}
 
 	public static double diffAngle(double a, double b) {
-		// Shortest angular distance from a to b, in range -180 to 180
 		double d = a > b ? a - b : b - a;
 		if (d > 180.0)
 			d -= 360.0;

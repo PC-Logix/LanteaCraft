@@ -1,10 +1,4 @@
-//------------------------------------------------------
-//
-//   Greg's Mod Base - Configuration
-//
-//------------------------------------------------------
-
-package gcewing.sg.base;
+package gcewing.sg.config;
 
 import java.io.File;
 import java.util.Collection;
@@ -13,12 +7,12 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
-public class BaseConfiguration extends Configuration {
+public class ConfigurationHelper extends Configuration {
 
 	public boolean extended = false;
 	int nextVillagerID = 100;
 
-	public BaseConfiguration(File file) {
+	public ConfigurationHelper(File file) {
 		super(file);
 	}
 

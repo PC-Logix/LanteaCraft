@@ -7,7 +7,7 @@
 package gcewing.sg.blocks;
 
 import gcewing.sg.SGCraft;
-import gcewing.sg.base.Base4WayCtrBlock;
+import gcewing.sg.base.RotationOrientedBlock;
 import gcewing.sg.core.EnumGuiList;
 import gcewing.sg.tileentity.TileEntityStargateBase;
 import gcewing.sg.tileentity.TileEntityStargateController;
@@ -22,7 +22,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockStargateController extends Base4WayCtrBlock {
+public class BlockStargateController extends RotationOrientedBlock {
 
 	Icon topTexture, bottomTexture, sideTexture;
 
