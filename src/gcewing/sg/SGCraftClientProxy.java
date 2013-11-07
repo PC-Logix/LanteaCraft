@@ -51,7 +51,7 @@ public class SGCraftClientProxy extends SGCraftCommonProxy {
 			pool.addSound("gcewing_sg:sg1_abort.ogg");
 			pool.addSound("gcewing_sg:sg1_close.ogg");
 			pool.addSound("gcewing_sg:sg1_dial.ogg");
-			pool.addSound("gcewing_sg:sg1_open.ogg");
+			pool.addSound("gcewing_sg:gate_open.ogg");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
