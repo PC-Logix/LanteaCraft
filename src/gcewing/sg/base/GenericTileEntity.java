@@ -236,7 +236,7 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 		if (inventory instanceof ISidedInventory)
 			return ((ISidedInventory) inventory).getAccessibleSlotsFromSide(side);
 		else
-			return null;
+			return new int[0];
 	}
 
 	/**
