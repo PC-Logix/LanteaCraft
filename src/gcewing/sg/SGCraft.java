@@ -37,6 +37,8 @@ import gcewing.sg.util.HelperCreativeTab;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.crash.CallableMinecraftVersion;
@@ -53,6 +55,7 @@ import net.minecraftforge.common.Property;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -83,6 +86,16 @@ public class SGCraft {
 	 */
 	public static SGCraft getInstance() {
 		return SGCraft.mod;
+	}
+
+	/**
+	 * The private instance of the logger used. Use {@link #getLogger()} to
+	 * access this object safely
+	 */
+	private static Logger logger;
+
+	public static Logger getLogger() {
+		return SGCraft.logger;
 	}
 
 	/**
@@ -147,6 +160,14 @@ public class SGCraft {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		SGCraft.logger = e.getModLog();
+		SGCraft.logger.setParent(FMLLog.getLogger());
+		if (BuildInfo.buildNumber.equals("@" + "BUILD" + "@")) {
+			SGCraft.logger.setLevel(Level.ALL);
+			SGCraft.logger.log(Level.INFO,
+					"You appear to be inside a development environment, switching to all logging.");
+		} else
+			SGCraft.logger.setLevel(Level.INFO);
 		proxy.preInit(e);
 	}
 

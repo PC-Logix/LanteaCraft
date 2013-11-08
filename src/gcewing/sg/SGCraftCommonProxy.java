@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import gcewing.sg.SGCraft.Blocks;
 import gcewing.sg.SGCraft.Items;
@@ -35,6 +36,7 @@ import gcewing.sg.items.ItemStargateRing;
 import gcewing.sg.tileentity.TileEntityStargateBase;
 import gcewing.sg.tileentity.TileEntityStargateController;
 import gcewing.sg.tileentity.TileEntityStargateRing;
+import gcewing.sg.util.AnalyticsHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.crash.CallableMinecraftVersion;
@@ -73,6 +75,7 @@ public class SGCraftCommonProxy {
 
 	protected File cfgFile;
 	protected ConfigurationHelper config;
+	protected ArrayList<ConfigValue<?>> configValues = new ArrayList<ConfigValue<?>>();
 
 	public StargateNetworkChannel channel;
 	public TileEntityChunkManager chunkManager;
@@ -80,14 +83,11 @@ public class SGCraftCommonProxy {
 	private NaquadahOreWorldGen naquadahOreGenerator;
 	private int tokraVillagerID;
 
-	public static boolean enableAnalytics = true;
-	
-	// Registries
+	private AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
+
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
 	protected List<VSBinding> registeredVillagers = new ArrayList<VSBinding>();
-
-	protected ArrayList<ConfigValue<?>> configValues = new ArrayList<ConfigValue<?>>();
 
 	protected static class IDBinding<T> {
 		public int id;
@@ -109,6 +109,7 @@ public class SGCraftCommonProxy {
 	}
 
 	public void init(FMLInitializationEvent e) {
+		SGCraft.getLogger().log(Level.INFO, "SGCraft setting up...");
 		MinecraftForge.EVENT_BUS.register(SGCraft.getInstance());
 		chunkManager = new TileEntityChunkManager(SGCraft.getInstance());
 		NetworkRegistry.instance().registerGuiHandler(SGCraft.getInstance(), new HelperGUIHandler());
@@ -128,103 +129,89 @@ public class SGCraftCommonProxy {
 		channel = new StargateNetworkChannel(BuildInfo.modID);
 		if (config.extended)
 			config.save();
+		SGCraft.getLogger().log(Level.INFO, "SGCraft done setting up!");
 	}
 
 	public void onChunkLoad(ChunkDataEvent.Load e) {
-		Chunk chunk = e.getChunk();
+		SGCraft.getLogger().log(Level.FINE, "ChunkDataEvent.Load fired");
 		ChunkData.onChunkLoad(e);
 	}
 
 	public void onChunkSave(ChunkDataEvent.Save e) {
-		Chunk chunk = e.getChunk();
+		SGCraft.getLogger().log(Level.FINE, "ChunkDataEvent.Save fired");
 		ChunkData.onChunkSave(e);
 	}
 
 	public void onInitMapGen(InitMapGenEvent e) {
+		SGCraft.getLogger().log(Level.FINE, "InitMapGenEvent fired");
 		FeatureGeneration.onInitMapGen(e);
 	}
 
 	void configure() {
-		Boolean FRESH_INSTALL = false;
 		TileEntityStargateController.configure(config);
 		NaquadahOreWorldGen.configure(config);
 		TileEntityStargateBase.configure(config);
-		configValues.add(new ConfigValue<Boolean>("addOresToExistingWorlds", config.getBoolean("options", "addOresToExistingWorlds", false)));
+		configValues.add(new ConfigValue<Boolean>("addOresToExistingWorlds", config.getBoolean("options",
+				"addOresToExistingWorlds", false)));
 
-		String version = BuildInfo.versionNumber + " build " + BuildInfo.buildNumber;
+		String version = new StringBuilder().append(BuildInfo.versionNumber).append(" build ")
+				.append(BuildInfo.buildNumber).toString();
 		Property prop = config.get("general", "currentVersion", 0);
-        prop.comment = "Do not change this!";
-        String previousVersion = prop.getString();
+		prop.comment = "Version cache - do not change this!";
+		String previousVersion = prop.getString();
 
-		
-        if (version != previousVersion) {
-            FRESH_INSTALL = true;
-        }
+		prop.set(version);
 
-        prop.set(version);
-        
 		Property GenerateStruct = config.get("options", "GenerateStructures", true);
 		configValues.add(new ConfigValue<Boolean>("doGenerateStructures", config.getBoolean("stargate",
 				"GenerateStructures", true)));
-		GenerateStruct.comment = "true/false Enables/Disables generation of Gate Rooms under Desert Pyramids";
+		GenerateStruct.comment = "Enables/Disables generation of Gate Rooms under Desert Pyramids. (true/false)";
 
 		Property GalacticraftCompat = config.get("options", "GalacticCraftCompat", false);
 		configValues.add(new ConfigValue<Boolean>("doGalacticCraftCompat", config.getBoolean("stargate",
 				"GalacticCraftCompat", true)));
-		GalacticraftCompat.comment = "true/false Enables/Disables Galcticraft support THIS WILL CHANGE ALL EXISTING ADDRESSES!";
+		GalacticraftCompat.comment = "Enables/Disables Galcticraft support - this will change all addresses! (true/false)";
 
 		Property textureRes = config.get("graphics_options", "textureRes", 32);
 		configValues.add(new ConfigValue<Integer>("renderQuality", config.getInteger("graphics_options", "textureRes",
 				32)));
-		textureRes.comment = "This value must be either 32, 64, or 128. Controls Textures Resolution";
+		textureRes.comment = "Texture resolution setting. (32 / 64 / 128)";
 
 		Property HDModels = config.get("graphics_options", "HDModels", true);
-		configValues.add(new ConfigValue<Boolean>("renderUseModels", config.getBoolean("graphics_options", "HDModels", true)));
-		HDModels.comment = "True/False Should HD models be loaded for DHDs.";
+		configValues.add(new ConfigValue<Boolean>("renderUseModels", config.getBoolean("graphics_options", "HDModels",
+				true)));
+		HDModels.comment = "Should HD models be used. (true/false)";
 
 		configValues.add(new ConfigValue<Boolean>("doGateExplosion", config.getBoolean("options",
 				"ActiveGateExplosion", true)));
 
 		Property enableAnalytics = config.get("options", "enableAnalytics", true);
-		configValues.add(new ConfigValue<Boolean>("enableAnalytics", config.getBoolean("options", "enableAnalytics", true)));
-		enableAnalytics.comment = "True/False Do you want analytics enabled?";
-		boolean eAnalytics = enableAnalytics.getBoolean(true);
-		
+		configValues.add(new ConfigValue<Boolean>("enableAnalytics", config.getBoolean("options", "enableAnalytics",
+				true)));
+		enableAnalytics.comment = "Submit anonymous usage statistic data. (true/false)";
+
 		if (((ConfigValue<Boolean>) getConfigValue("doGalacticCraftCompat")).getValue())
 			GateAddressHelper.minDimension = -99;
-		
-        if (FRESH_INSTALL && eAnalytics)
-            analytics();
-	}
 
-	
-    private static void analytics() {
-        String charset = "UTF-8";
-        String url;
-        try {
-                url = String.format("http://www.pc-logix.com/SGCraft_analytics/?version=%s&side=%s&forge=%s", URLEncoder.encode(BuildInfo.modName + " " + BuildInfo.versionNumber + " build " + BuildInfo.buildNumber, charset), URLEncoder.encode(FMLLaunchHandler.side().name(), charset), URLEncoder.encode(ForgeVersion.getVersion(), charset));
-                URLConnection connection = new URL(url).openConnection();
-                connection.setConnectTimeout(4000);
-                connection.setRequestProperty("Accept-Charset", charset);
-                InputStream response = connection.getInputStream();
-                System.out.println("[Delta SGCraft] Sending analytic data.");
-                response.close();
-        } catch (Exception e) {}
-    }
+		if (version != previousVersion && enableAnalytics.getBoolean(true))
+			analyticsHelper.start();
+	}
 
 	void registerOther() {
 		if (((ConfigValue<Boolean>) getConfigValue("doGenerateStructures")).getValue()) {
+			SGCraft.getLogger().log(Level.FINE, "Registering SGCraft structures...");
 			MinecraftForge.TERRAIN_GEN_BUS.register(SGCraft.getInstance());
 			try {
 				if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
 					MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "SGCraft:DesertPyramid");
 			} catch (Throwable e) {
-				System.out.println("registerOther threw an exception");
+				SGCraft.getLogger().log(Level.FINE, "Could not register structure type SGCraft:DesertPyramid", e);
 			}
 		}
 	}
 
 	void registerBlocks() {
+		SGCraft.getLogger().log(Level.FINE, "Registering SGCraft blocks...");
 		Blocks.sgRingBlock = (BlockStargateRing) registerBlock(BlockStargateRing.class, ItemStargateRing.class,
 				GCESGCompatHelper.getBlockMapping("blockRing"), "stargateRing", "Stargate Ring Segment");
 		// Blocks.sgPegasusRingBlock = (BlockPegasusStargateRing)
@@ -256,6 +243,7 @@ public class SGCraftCommonProxy {
 
 	public Block registerBlock(Class<? extends Block> classOf, Class<? extends ItemBlock> itemClassOf,
 			String idForName, String unlocalizedName, String localizedName) {
+		SGCraft.getLogger().log(Level.FINE, "Attempting to register block " + idForName);
 		try {
 			int id = config.getBlock(unlocalizedName, 4095).getInt();
 			Constructor<? extends Block> ctor = classOf.getConstructor(int.class);
@@ -267,12 +255,14 @@ public class SGCraftCommonProxy {
 			LanguageRegistry.addName(block, localizedName);
 			return block;
 		} catch (Exception e) {
+			SGCraft.getLogger().log(Level.SEVERE, "Failed to register block, an exception occured.", e);
 			throw new RuntimeException(e);
 		}
 	}
 
 	public Item registerItem(Class<? extends Item> classOf, String idForName, String unlocalizedName,
 			String localizedName) {
+		SGCraft.getLogger().log(Level.FINE, "Attempting to register item " + idForName);
 		try {
 			int id = config.getItem(unlocalizedName, 31743).getInt();
 			Constructor<? extends Item> ctor = classOf.getConstructor(int.class);
@@ -284,11 +274,13 @@ public class SGCraftCommonProxy {
 			LanguageRegistry.addName(item, localizedName);
 			return item;
 		} catch (Exception e) {
+			SGCraft.getLogger().log(Level.SEVERE, "Failed to register item, an exception occured.", e);
 			throw new RuntimeException(e);
 		}
 	}
 
 	void registerItems() {
+		SGCraft.getLogger().log(Level.FINE, "Registering SGCraft items...");
 		Items.naquadah = registerItem(Item.class, GCESGCompatHelper.getBlockMapping("itemNaquadah"), "naquadah",
 				"Naquadah");
 		Items.naquadahIngot = registerItem(Item.class, GCESGCompatHelper.getBlockMapping("itemNaquadahIngot"),
@@ -301,12 +293,14 @@ public class SGCraftCommonProxy {
 	}
 
 	void registerOres() {
+		SGCraft.getLogger().log(Level.FINE, "Registering SGCraft ores...");
 		registerOre("oreNaquadah", Blocks.naquadahOre);
 		registerOre("naquadah", Items.naquadah);
 		registerOre("ingotNaquadahAlloy", Items.naquadahIngot);
 	}
 
 	void registerRecipes() {
+		SGCraft.getLogger().log(Level.FINE, "Registering SGCraft recipes...");
 		ItemStack chiselledSandstone = new ItemStack(Block.sandStone, 1, 1);
 		ItemStack smoothSandstone = new ItemStack(Block.sandStone, 1, 2);
 		ItemStack sgChevronBlock = new ItemStack(Blocks.sgRingBlock, 1, 1);
@@ -333,10 +327,12 @@ public class SGCraftCommonProxy {
 	}
 
 	void registerContainers() {
+		SGCraft.getLogger().log(Level.FINE, "Registering SGCraft containers...");
 		addContainer(EnumGuiList.SGBase.ordinal(), ContainerStargateBase.class);
 	}
 
 	void registerRandomItems() {
+		SGCraft.getLogger().log(Level.FINE, "Registering SGCraft random drop items...");
 		String[] categories = { ChestGenHooks.MINESHAFT_CORRIDOR, ChestGenHooks.PYRAMID_DESERT_CHEST,
 				ChestGenHooks.PYRAMID_JUNGLE_CHEST, ChestGenHooks.STRONGHOLD_LIBRARY, ChestGenHooks.VILLAGE_BLACKSMITH };
 		addRandomChestItem(new ItemStack(Blocks.sgBaseBlock), 1, 1, 2, categories);
@@ -349,18 +345,21 @@ public class SGCraftCommonProxy {
 
 	void registerWorldGenerators() {
 		if (config.getBoolean("options", "enableNaquadahOre", true)) {
+			SGCraft.getLogger().log(Level.FINE, "Registering SGCraft NaquidahOre generator...");
 			naquadahOreGenerator = new NaquadahOreWorldGen();
 			GameRegistry.registerWorldGenerator(naquadahOreGenerator);
 		}
 	}
 
 	void registerVillagers() {
+		SGCraft.getLogger().log(Level.FINE, "Registering SGCraft Tokra villagers...");
 		tokraVillagerID = addVillager(config.getVillager("tokra"), "tokra",
 				SGCraft.getResource("textures/skins/tokra.png"));
 		addTradeHandler(tokraVillagerID, new TradeHandler());
 	}
 
 	void registerTileEntities() {
+		SGCraft.getLogger().log(Level.FINE, "Registering SGCraft tile entities...");
 		GameRegistry.registerTileEntity(TileEntityStargateBase.class,
 				GCESGCompatHelper.getTileEntityMapping("tileEntityBase"));
 		GameRegistry.registerTileEntity(TileEntityStargateRing.class,
@@ -370,6 +369,7 @@ public class SGCraftCommonProxy {
 	}
 
 	public ConfigValue<?> getConfigValue(String name) {
+		SGCraft.getLogger().log(Level.FINE, "Fetching configuration value `" + name + "`");
 		for (ConfigValue<?> item : configValues)
 			if (item.getName().equalsIgnoreCase(name))
 				return item;
@@ -405,6 +405,7 @@ public class SGCraftCommonProxy {
 						.newInstance(player, world, x, y, z);
 			}
 		} catch (Exception e) {
+			SGCraft.getLogger().log(Level.SEVERE, "Failed to create GUI element, an exception occured.", e);
 			Throwable cause = e.getCause();
 			if (cause != null)
 				cause.printStackTrace();
@@ -415,6 +416,7 @@ public class SGCraftCommonProxy {
 	}
 
 	public int addVillager(int id, String name, ResourceLocation skin) {
+		SGCraft.getLogger().log(Level.FINE, "Adding villager ID " + id + " with name " + name);
 		VSBinding b = new VSBinding();
 		b.id = id;
 		b.object = skin;
@@ -423,6 +425,7 @@ public class SGCraftCommonProxy {
 	}
 
 	public void addTradeHandler(int villagerID, IVillageTradeHandler handler) {
+		SGCraft.getLogger().log(Level.FINE, "Registering trade handler for villager ID " + villagerID);
 		VillagerRegistry.instance().registerVillageTradeHandler(villagerID, handler);
 	}
 
@@ -435,6 +438,7 @@ public class SGCraftCommonProxy {
 	}
 
 	public void registerOre(String name, ItemStack item) {
+		SGCraft.getLogger().log(Level.FINE, "Registering ore with name " + name);
 		OreDictionary.registerOre(name, item);
 	}
 
@@ -447,6 +451,7 @@ public class SGCraftCommonProxy {
 	}
 
 	public void newRecipe(ItemStack product, Object... params) {
+		SGCraft.getLogger().log(Level.FINE, "Registering new generic recipe");
 		GameRegistry.addRecipe(new ShapedOreRecipe(product, params));
 	}
 
@@ -455,17 +460,22 @@ public class SGCraftCommonProxy {
 	}
 
 	public void newShapelessRecipe(ItemStack product, Object... params) {
+		SGCraft.getLogger().log(Level.FINE, "Registering new generic shapeless recipe");
 		GameRegistry.addRecipe(new ShapelessOreRecipe(product, params));
 	}
 
 	public void addContainer(int id, Class<? extends Container> cls) {
+		SGCraft.getLogger()
+				.log(Level.FINE, "Registering container with ID " + id + ", class " + cls.getCanonicalName());
 		registeredContainers.put(id, cls);
 	}
 
 	public void addRandomChestItem(ItemStack stack, int minQty, int maxQty, int weight, String... category) {
 		WeightedRandomChestContent item = new WeightedRandomChestContent(stack, minQty, maxQty, weight);
-		for (String element : category)
+		for (String element : category) {
+			SGCraft.getLogger().log(Level.FINE, "Adding new WeightedRandomChestContent for element " + element);
 			ChestGenHooks.addItem(element, item);
+		}
 	}
 
 	public NaquadahOreWorldGen getOreGenerator() {
