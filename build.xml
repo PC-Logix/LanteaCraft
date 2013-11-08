@@ -119,13 +119,13 @@
 			<fileset dir="${mcp.dir}/reobf/minecraft/net/minecraft/world/gen/structure/" />
 		</copy>
 		
-		<exec executable="${build.dir}/crush.sh">
-		</exec>
-		
 		<!-- Copy resources -->
 		<copy todir="${classes.dir}/assets/gcewing_sg">
 			<fileset dir="assets/gcewing_sg" />
 		</copy>
+		
+		<exec executable="${build.dir}/crush.sh">
+		</exec>
 		
 		<!-- Copy resources -->
 		<copy todir="${classes.dir}">
