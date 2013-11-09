@@ -12,6 +12,7 @@ Methods are: dial("address"), connect("address"), disconnect(), isConnected(), i
 Switched to Delta NP SGCraft Textures, thanks http://www.deltastrium.com/ for the Awesome textures!
 
 
+
 TODO:
 
 Adding a new gate model, Atlantis along with a DHD for it.
@@ -23,6 +24,7 @@ Powering gates with IC2, UE, or BuildCraft power.
 Possibly using Naquadah for power generation.
 
 
+
 Credits:
 
 NeoRavenCroft: New Code and improvments
@@ -30,6 +32,8 @@ NeoRavenCroft: New Code and improvments
 AfterLifeLochie: Code refactoring, and new features to be announced.
 
 DrakeBD: Delta NP SGCraft texture pack for new textures.
+
+TempusBD: 3D Modeling & Textures
 
 Greg Ewing: Original SGCraft mod, and code.
 
