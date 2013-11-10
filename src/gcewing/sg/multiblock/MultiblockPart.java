@@ -43,6 +43,15 @@ public abstract class MultiblockPart {
 	public abstract boolean mergeWith(GenericMultiblock structure);
 
 	/**
+	 * Called anywhere to establish if this multi-block is part of a structure.
+	 * This should not be used to test if a merge can be performed with a
+	 * structure!
+	 * 
+	 * @return If this multi-block is already part of a structure.
+	 */
+	public abstract boolean isMerged();
+
+	/**
 	 * Called when the host GenericMultiblock wants to release this part from
 	 * the currently held structure. If this part is engaged, the part should
 	 * perform any disbanding operations, including releasing references to the

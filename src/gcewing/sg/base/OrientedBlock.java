@@ -15,7 +15,9 @@ public abstract class OrientedBlock extends GenericContainerBlock {
 
 	@Override
 	public int getRenderType() {
-		return SGCraft.Render.blockOrientedRenderer.renderID;
+		if (SGCraft.Render.blockOrientedRenderer != null)
+			return SGCraft.Render.blockOrientedRenderer.renderID;
+		return -9001;
 	}
 
 	public int getFacing(IBlockAccess world, int x, int y, int z) {

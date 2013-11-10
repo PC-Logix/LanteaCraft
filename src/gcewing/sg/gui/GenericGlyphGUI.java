@@ -1,14 +1,17 @@
 package gcewing.sg.gui;
 
+import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
+
 import gcewing.sg.SGCraft;
 import gcewing.sg.base.GenericContainer;
 import gcewing.sg.base.GenericContainerGUI;
+import gcewing.sg.core.GateAddressHelper;
 import gcewing.sg.tileentity.TileEntityStargateBase;
 import net.minecraft.inventory.Container;
 
 public class GenericGlyphGUI extends GenericContainerGUI {
 
-	final static String padding = "-------";
+	final static String padding = "       ";
 
 	double uscale, vscale;
 	float red = 1.0F, green = 1.0F, blue = 1.0F;
@@ -34,7 +37,7 @@ public class GenericGlyphGUI extends GenericContainerGUI {
 		bindSGTexture("symbols.png", 512 / scale, 256 / scale);
 		int n = address.length();
 		for (int i = 0; i < n; i++) {
-			int s = TileEntityStargateBase.charToSymbol(address.charAt(i));
+			int s = GateAddressHelper.charToSymbol(address.charAt(i));
 			int row = s / symbolsPerRow;
 			int col = s % symbolsPerRow;
 			drawTexturedRect(x0 + borderSize + i * cellSize, y + borderSize, cellSize, cellSize, col * cellSize, row
@@ -47,6 +50,8 @@ public class GenericGlyphGUI extends GenericContainerGUI {
 	}
 
 	String padAddress(String address, String caret) {
+		if (address.length() == 7)
+			return address;
 		return address + caret + padding.substring(address.length(), 7);
 	}
 

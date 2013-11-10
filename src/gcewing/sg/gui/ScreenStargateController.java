@@ -16,8 +16,8 @@ import org.lwjgl.opengl.GL11;
 
 public class ScreenStargateController extends GenericGlyphGUI {
 
-	final static int dhdWidth = 320;
-	final static int dhdHeight = 120;
+	final static int dhdWidth = 260;
+	final static int dhdHeight = 180;
 	final static double dhdRadius1 = dhdWidth * 0.1;
 	final static double dhdRadius2 = dhdWidth * 0.275;
 	final static double dhdRadius3 = dhdWidth * 0.45;
@@ -27,6 +27,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	int dhdTop, dhdCentreX, dhdCentreY;
 	String enteredAddress = "";
 	int closingDelay = 0;
+	int ticks = 0;
 
 	public ScreenStargateController(TileEntityStargateController controller, EntityPlayer actor) {
 		this.world = controller.getWorldObj();
@@ -65,6 +66,9 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
+		ticks++;
+		if (ticks > 20)
+			ticks = 0;
 		if (closingDelay > 0)
 			if (--closingDelay == 0)
 				close();
@@ -116,7 +120,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		else if (i >= 27)
 			backspace();
 		else
-			enterCharacter(TileEntityStargateBase.symbolToChar(i - 1));
+			enterCharacter(GateAddressHelper.symbolToChar(i - 1));
 	}
 
 	void buttonSound() {
@@ -184,14 +188,15 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		TileEntityStargateBase te = getStargateTE();
 		boolean connected = te != null && te.state != EnumStargateState.Idle
 				&& te.state != EnumStargateState.Disconnecting;
-		if (te == null || !te.isMerged)
+		if (te == null || !te.getAsStructure().isValid())
 			setColor(0.2, 0.2, 0.2);
 		else if (connected)
 			setColor(1.0, 0.5, 0.0);
 		else
 			setColor(0.5, 0.25, 0.0);
-		double rx = dhdWidth * 48 / 512.0;
-		double ry = dhdHeight * 48 / 256.0;
+		double rx = dhdWidth * 48 / 512.0; // fact 48 d 512 s 0.09375
+		double ry = dhdHeight * 48 / (32.0 + 256.0); // fact 48 d 256 s 0.1875
+														// (2rx)
 		Tessellator.instance.disableColor();
 		drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry, 2 * rx, 1.5 * ry, 64, 0, 64, 48);
 		resetColor();
@@ -205,11 +210,11 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	}
 
 	void drawEnteredSymbols() {
-		drawAddressSymbols(width / 2, dhdTop - 80, enteredAddress);
+		drawAddressSymbols(width / 2, dhdTop - 60, enteredAddress);
 	}
 
 	void drawEnteredString() {
-		drawAddressString(width / 2, dhdTop - 20, enteredAddress, "|");
+		drawAddressString(width / 2, dhdTop - 12, enteredAddress, ((ticks > 10) ? "_" : " "));
 	}
 
 }

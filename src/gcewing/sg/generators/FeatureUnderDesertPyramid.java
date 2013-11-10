@@ -100,7 +100,7 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 				}
 				placeBlockAtCurrentPosition(world, id, data, 5 + i, 1 + j, 2, clip);
 			}
-		Blocks.sgBaseBlock.checkForMerge(world, box.minX + 5, box.minY + 1, box.minZ + 2);
+		//Blocks.sgBaseBlock.checkForMerge(world, box.minX + 5, box.minY + 1, box.minZ + 2);
 		// Controller
 		placeBlockAtCurrentPosition(world, dhd, dhdNorth, 5, 1, 7, clip);
 		// SGCraft.sgControllerBlock.checkForLink(world, box.minX + 5, box.minY

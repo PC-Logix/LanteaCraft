@@ -58,10 +58,8 @@ public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float t) {
-		// System.out.printf("SGBaseTERenderer.renderTileEntityAt (%g,%g,%g)\n",
-		// x, y, z);
 		TileEntityStargateBase tesg = (TileEntityStargateBase) te;
-		if (tesg.isMerged) {
+		if (tesg.getAsStructure().isValid()) {
 			GL11.glPushMatrix();
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

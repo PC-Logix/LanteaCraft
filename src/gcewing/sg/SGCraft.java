@@ -20,8 +20,11 @@ import gcewing.sg.generators.FeatureUnderDesertPyramid;
 import gcewing.sg.generators.NaquadahOreWorldGen;
 import gcewing.sg.generators.ChunkData;
 import gcewing.sg.generators.TradeHandler;
+import gcewing.sg.items.ItemDebugTool;
+import gcewing.sg.items.ItemTokraSpawnEgg;
 import gcewing.sg.items.ItemPegasusStargateRing;
 import gcewing.sg.items.ItemStargateRing;
+import gcewing.sg.network.SGCraftPacket;
 import gcewing.sg.render.RotationOrientedBlockRenderer;
 import gcewing.sg.render.blocks.BlockStargateBaseRenderer;
 import gcewing.sg.render.blocks.BlockStargateRingRenderer;
@@ -55,6 +58,7 @@ import net.minecraftforge.common.Property;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -65,12 +69,13 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "build"
 		+ BuildInfo.buildNumber)
-@NetworkMod(clientSideRequired = true, serverSideRequired = true)
+@NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { BuildInfo.modID }, packetHandler = gcewing.sg.network.DefaultPacketHandler.class)
 public class SGCraft {
 
 	/**
@@ -124,6 +129,10 @@ public class SGCraft {
 		public static Item naquadahIngot;
 		public static Item sgCoreCrystal;
 		public static Item sgControllerCrystal;
+
+		public static ItemTokraSpawnEgg tokraSpawnEgg;
+
+		public static ItemDebugTool debugger;
 	}
 
 	/**
@@ -196,6 +205,21 @@ public class SGCraft {
 		proxy.onInitMapGen(e);
 	}
 
+	@ForgeSubscribe
+	public void onWorldLoad(WorldEvent.Load e) {
+		proxy.onWorldLoad(e);
+	}
+
+	@ForgeSubscribe
+	public void onWorldUnload(WorldEvent.Unload e) {
+		proxy.onWorldUnload(e);
+	}
+
+	@ForgeSubscribe
+	public void onWorldSave(WorldEvent.Save e) {
+		proxy.onWorldSave(e);
+	}
+
 	public static ResourceLocation getResource(String path) {
 		return new ResourceLocation(SGCraft.getInstance().assetKey, path);
 	}
@@ -210,6 +234,10 @@ public class SGCraft {
 
 	public static CreativeTabs getCreativeTab() {
 		return SGCraft.getInstance().sgCraftTab;
+	}
+
+	public static void handlePacket(SGCraftPacket packet, Player player) {
+		proxy.handlePacket(packet, player);
 	}
 
 }

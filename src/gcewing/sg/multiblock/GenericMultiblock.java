@@ -1,5 +1,7 @@
 package gcewing.sg.multiblock;
 
+import gcewing.sg.network.SGCraftPacket;
+
 import java.util.HashMap;
 
 import net.minecraft.world.IWorldAccess;
@@ -17,14 +19,20 @@ import net.minecraft.world.World;
 public abstract class GenericMultiblock {
 
 	protected EnumOrientations structureOrientation;
-	protected HashMap<Object, MultiblockPart> structureParts;
+	protected HashMap<Object, MultiblockPart> structureParts = new HashMap<Object, MultiblockPart>();
 
 	protected boolean wasInvalidated = false;
 	protected boolean isValid = false;
 
+	protected boolean isClient = false;
+
 	protected int xCoord;
 	protected int yCoord;
 	protected int zCoord;
+
+	public GenericMultiblock(boolean isClient) {
+		this.isClient = isClient;
+	}
 
 	/**
 	 * Determine if the current arrangement of blocks around the base is a valid
@@ -62,6 +70,27 @@ public abstract class GenericMultiblock {
 	 *         reference, or, null if no such part exists.
 	 */
 	public abstract MultiblockPart getPart(Object reference);
+
+	/**
+	 * Called by any code to disband the structure immediately, usually when the
+	 * host tile entity is being disposed or broken by something in the world.
+	 */
+	public abstract void disband();
+
+	/**
+	 * Packs the structure into a new SGCraftPacket.
+	 * 
+	 * @return The packed multi-block structure data.
+	 */
+	public abstract SGCraftPacket pack();
+
+	/**
+	 * Unpacks the structure data from a SGCraftPacket.
+	 * 
+	 * @param packet
+	 *            The packed multi-block structure data.
+	 */
+	public abstract void unpack(SGCraftPacket packet);
 
 	/**
 	 * Called internally to set the base location of this multi-block structure.
@@ -106,7 +135,6 @@ public abstract class GenericMultiblock {
 	 * tile-entity object.
 	 */
 	public void invalidate() {
-		isValid = false;
 		wasInvalidated = true;
 	}
 
@@ -117,6 +145,19 @@ public abstract class GenericMultiblock {
 	 */
 	public boolean isValid() {
 		return isValid;
+	}
+
+	/**
+	 * Called in the client only to set the validity of this multi-block
+	 * structure.
+	 */
+	public void setValid(boolean b) {
+		if (!isClient)
+			throw new IllegalStateException("Cannot setValid state of a non-slave multiblock instance.");
+		isValid = b;
+		if (isValid)
+			collectStructure(world, baseX, baseY, baseZ);
+			
 	}
 
 	/**

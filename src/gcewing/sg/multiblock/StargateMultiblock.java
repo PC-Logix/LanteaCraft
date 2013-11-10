@@ -1,7 +1,10 @@
 package gcewing.sg.multiblock;
 
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
+import gcewing.sg.SGCraft;
+import gcewing.sg.network.SGCraftPacket;
 import gcewing.sg.tileentity.TileEntityStargateRing;
 import gcewing.sg.util.ImmutablePair;
 import net.minecraft.tileentity.TileEntity;
@@ -11,7 +14,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	private int rotation;
 
-	private int[][] stargateModel = { { 2, 0, 3, 0, 2 }, { 1, 0, 0, 0, 1 }, { 2, 0, 0, 0, 2 }, { 1, 0, 0, 0, 1 },
+	private int[][] stargateModel = { { 2, 1, 3, 1, 2 }, { 1, 0, 0, 0, 1 }, { 2, 0, 0, 0, 2 }, { 1, 0, 0, 0, 1 },
 			{ 2, 1, 2, 1, 2 }, };
 
 	/**
@@ -31,6 +34,10 @@ public class StargateMultiblock extends GenericMultiblock {
 	 */
 	public void setRotation(int rotation) {
 		this.rotation = rotation;
+	}
+
+	public int getPartCount() {
+		return structureParts.size();
 	}
 
 	private boolean isGateTileEntity(TileEntity entity) {
@@ -60,11 +67,12 @@ public class StargateMultiblock extends GenericMultiblock {
 	public boolean isValidStructure(World worldAccess, int baseX, int baseY, int baseZ) {
 		EnumOrientations currentOrientation = getOrientation(worldAccess, baseX, baseY, baseZ);
 
-		// North-South means the gate is aligned along Z
-		if (currentOrientation == EnumOrientations.NORTH_SOUTH) {
-			for (int x = 0; x < 5; x++) {
-				for (int y = 0; y < 5; y++) {
-					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
+		// North-South means the gate is aligned along X
+		if (currentOrientation == EnumOrientations.EAST_WEST) {
+			SGCraft.getLogger().log(Level.INFO, "Testing EASTWEST");
+			for (int y = 0; y < 5; y++) {
+				for (int x = 0; x < 5; x++) {
+					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 2), baseY + y, baseZ);
 					if (!testIsValidForExpected(entity, stargateModel[y][x]))
 						return false;
 				}
@@ -72,11 +80,12 @@ public class StargateMultiblock extends GenericMultiblock {
 			return true;
 		}
 
-		// East-West means the gate is aligned along X
-		if (currentOrientation == EnumOrientations.EAST_WEST) {
-			for (int z = 0; z < 5; z++) {
-				for (int y = 0; y < 5; y++) {
-					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
+		// East-West means the gate is aligned along Z
+		if (currentOrientation == EnumOrientations.NORTH_SOUTH) {
+			SGCraft.getLogger().log(Level.INFO, "Testing NORTHSOUTH");
+			for (int y = 0; y < 5; y++) {
+				for (int z = 0; z < 5; z++) {
+					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 2));
 					if (!testIsValidForExpected(entity, stargateModel[y][z]))
 						return false;
 				}
@@ -97,12 +106,19 @@ public class StargateMultiblock extends GenericMultiblock {
 				return false;
 			TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
 			StargatePart teAsPart = null;
-			// TODO: This method doesn't exist yet, but it should be added.
-			// teAsPart = entityAsRing.getAsPart();
-			if (expectedType == 1 && !teAsPart.getType().equals("partStargateBlock") || !teAsPart.canMergeWith(this))
-				return false;
-			if (expectedType == 2 && !teAsPart.getType().equals("partStargateChevron") || !teAsPart.canMergeWith(this))
-				return false;
+			teAsPart = entityAsRing.getAsPart();
+			if (expectedType == 1) {
+				if (teAsPart.getType() == null || !teAsPart.getType().equals("partStargateBlock"))
+					return false;
+				if (!teAsPart.canMergeWith(this))
+					return false;
+			}
+			if (expectedType == 2) {
+				if (teAsPart.getType() == null || !teAsPart.getType().equals("partStargateChevron"))
+					return false;
+				if (!teAsPart.canMergeWith(this))
+					return false;
+			}
 		}
 		return true;
 	}
@@ -111,17 +127,15 @@ public class StargateMultiblock extends GenericMultiblock {
 	public boolean collectStructure(World worldAccess, int baseX, int baseY, int baseZ) {
 		EnumOrientations currentOrientation = getOrientation(worldAccess, baseX, baseY, baseZ);
 
-		// North-South means the gate is aligned along Z
-		if (currentOrientation == EnumOrientations.NORTH_SOUTH) {
+		// North-South means the gate is aligned along X
+		if (currentOrientation == EnumOrientations.EAST_WEST) {
+			SGCraft.getLogger().log(Level.INFO, "Globbing EASTWEST");
 			for (int x = 0; x < 5; x++) {
 				for (int y = 0; y < 5; y++) {
-					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
+					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 2), baseY + y, baseZ);
 					if (stargateModel[y][x] != 0 && stargateModel[y][x] != 3) {
 						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
-						StargatePart teAsPart = null;
-						// TODO: This method doesn't exist yet, but it should be
-						// added.
-						// teAsPart = entityAsRing.getAsPart();
+						StargatePart teAsPart = entityAsRing.getAsPart();
 						if (!teAsPart.canMergeWith(this))
 							return false;
 						teAsPart.mergeWith(this);
@@ -129,20 +143,19 @@ public class StargateMultiblock extends GenericMultiblock {
 					}
 				}
 			}
+			SGCraft.getLogger().log(Level.INFO, "Merged in orientation EAST-WEST OK");
 			return true;
 		}
 
-		// East-West means the gate is aligned along X
-		if (currentOrientation == EnumOrientations.EAST_WEST) {
+		// East-West means the gate is aligned along Z
+		if (currentOrientation == EnumOrientations.NORTH_SOUTH) {
+			SGCraft.getLogger().log(Level.INFO, "Globbing NORTHSOUTH");
 			for (int z = 0; z < 5; z++) {
 				for (int y = 0; y < 5; y++) {
-					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
+					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 2));
 					if (stargateModel[y][z] != 0 && stargateModel[y][z] != 3) {
 						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
-						StargatePart teAsPart = null;
-						// TODO: This method doesn't exist yet, but it should be
-						// added.
-						// teAsPart = entityAsRing.getAsPart();
+						StargatePart teAsPart = entityAsRing.getAsPart();
 						if (!teAsPart.canMergeWith(this))
 							return false;
 						teAsPart.mergeWith(this);
@@ -150,15 +163,18 @@ public class StargateMultiblock extends GenericMultiblock {
 					}
 				}
 			}
+			SGCraft.getLogger().log(Level.INFO, "Merged in orientation NORTH-SOUTH OK");
 			return true;
 		}
 
 		// Likely not a valid orientation at all
+		SGCraft.getLogger().log(Level.INFO, "Weird orientation result!");
 		return false;
 	}
 
 	@Override
 	public void freeStructure() {
+		SGCraft.getLogger().log(Level.INFO, "Releasing multiblock structure.");
 		for (Entry<Object, MultiblockPart> part : structureParts.entrySet()) {
 			part.getValue().release();
 		}
@@ -167,8 +183,27 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public MultiblockPart getPart(Object reference) {
-		// TODO Auto-generated method stub
-		return null;
+		return structureParts.get(reference);
+	}
+
+	@Override
+	public void disband() {
+		SGCraft.getLogger().log(Level.INFO, "Disbanding structure.");
+		freeStructure();
+	}
+
+	@Override
+	public SGCraftPacket pack() {
+		SGCraftPacket packet = new SGCraftPacket();
+		packet.setIsForServer(false);
+		packet.setType(SGCraftPacket.PacketType.TileUpdate);
+		packet.setValue("isValid", isValid());
+		return packet;
+	}
+
+	@Override
+	public void unpack(SGCraftPacket packet) {
+		isValid = (Boolean) packet.getValue("isValid");
 	}
 
 }

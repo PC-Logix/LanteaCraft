@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import gcewing.sg.core.EnumGuiList;
 import gcewing.sg.gui.ScreenStargateBase;
 import gcewing.sg.gui.ScreenStargateController;
+import gcewing.sg.network.SGCraftPacket;
 import gcewing.sg.render.RotationOrientedBlockRenderer;
 import gcewing.sg.render.GenericBlockRenderer;
 import gcewing.sg.render.blocks.BlockStargateBaseRenderer;
@@ -22,13 +23,18 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class SGCraftClientProxy extends SGCraftCommonProxy {
 
@@ -113,6 +119,19 @@ public class SGCraftClientProxy extends SGCraftCommonProxy {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void handlePacket(SGCraftPacket packet, Player player) {
+		if (packet.getPacketIsForServer())
+			defaultServerPacketHandler.handlePacket(packet, player);
+		else
+			defaultClientPacketHandler.handlePacket(packet, player);
+	}
+
+	@Override
+	public void sendToServer(SGCraftPacket packet) {
+		FMLClientHandler.instance().sendPacket(packet.toPacket());
 	}
 
 }

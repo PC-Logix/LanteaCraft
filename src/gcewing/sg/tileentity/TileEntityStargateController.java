@@ -91,7 +91,7 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 	}
 
 	boolean linkToStargate(TileEntityStargateBase gte) {
-		if (!isLinkedToStargate && !gte.isLinkedToController && gte.isMerged) {
+		if (!isLinkedToStargate && !gte.isLinkedToController && gte.getAsStructure().isValid()) {
 			// System.out.printf(
 			// "SGControllerTE: Linking controller at (%d, %d, %d) with stargate at (%d, %d, %d)\n",
 			// xCoord, yCoord, zCoord, gte.xCoord, gte.yCoord, gte.zCoord);

@@ -72,9 +72,13 @@ public class Vector3 {
 		return new Vector3(Math.max(x, v.x), Math.max(y, v.y), Math.max(z, v.z));
 	}
 
-	public double distance(Vector3 v) {
+	public double distanceTo(Vector3 v) {
 		double dx = x - v.x, dy = y - v.y, dz = z - v.z;
 		return Math.sqrt(dx * dx + dy * dy + dz * dz);
+	}
+
+	public double mag() {
+		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
 	}
 
 	public int floorX() {

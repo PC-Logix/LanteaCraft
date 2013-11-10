@@ -32,7 +32,12 @@ import gcewing.sg.generators.FeatureGeneration;
 import gcewing.sg.generators.FeatureUnderDesertPyramid;
 import gcewing.sg.generators.NaquadahOreWorldGen;
 import gcewing.sg.generators.TradeHandler;
+import gcewing.sg.items.ItemDebugTool;
 import gcewing.sg.items.ItemStargateRing;
+import gcewing.sg.items.ItemTokraSpawnEgg;
+import gcewing.sg.network.ClientPacketHandler;
+import gcewing.sg.network.SGCraftPacket;
+import gcewing.sg.network.ServerPacketHandler;
 import gcewing.sg.tileentity.TileEntityStargateBase;
 import gcewing.sg.tileentity.TileEntityStargateController;
 import gcewing.sg.tileentity.TileEntityStargateRing;
@@ -45,6 +50,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
@@ -56,14 +62,20 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.world.WorldEvent.Load;
+import net.minecraftforge.event.world.WorldEvent.Save;
+import net.minecraftforge.event.world.WorldEvent.Unload;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
@@ -77,7 +89,7 @@ public class SGCraftCommonProxy {
 	protected ConfigurationHelper config;
 	protected ArrayList<ConfigValue<?>> configValues = new ArrayList<ConfigValue<?>>();
 
-	public StargateNetworkChannel channel;
+	//public StargateNetworkChannel channel;
 	public TileEntityChunkManager chunkManager;
 
 	private NaquadahOreWorldGen naquadahOreGenerator;
@@ -87,7 +99,10 @@ public class SGCraftCommonProxy {
 
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
-	protected List<VSBinding> registeredVillagers = new ArrayList<VSBinding>();
+	protected Map<String, VSBinding> registeredVillagers = new HashMap<String, VSBinding>();
+
+	protected ClientPacketHandler defaultClientPacketHandler;
+	protected ServerPacketHandler defaultServerPacketHandler;
 
 	protected static class IDBinding<T> {
 		public int id;
@@ -100,6 +115,9 @@ public class SGCraftCommonProxy {
 	public SGCraftCommonProxy() {
 		System.out.println("This is " + BuildInfo.modName + " version " + BuildInfo.versionNumber + " build "
 				+ BuildInfo.buildNumber + " as modid " + BuildInfo.modID);
+
+		defaultClientPacketHandler = new ClientPacketHandler();
+		defaultServerPacketHandler = new ServerPacketHandler();
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
@@ -126,7 +144,7 @@ public class SGCraftCommonProxy {
 		registerContainers();
 		registerVillagers();
 		registerOther();
-		channel = new StargateNetworkChannel(BuildInfo.modID);
+		//channel = new StargateNetworkChannel(BuildInfo.modID);
 		if (config.extended)
 			config.save();
 		SGCraft.getLogger().log(Level.INFO, "SGCraft done setting up!");
@@ -290,6 +308,13 @@ public class SGCraftCommonProxy {
 		Items.sgControllerCrystal = registerItem(Item.class,
 				GCESGCompatHelper.getBlockMapping("itemControllerCrystal"), "sgControllerCrystal",
 				"Stargate Controller Crystal");
+
+		Items.tokraSpawnEgg = (ItemTokraSpawnEgg) registerItem(ItemTokraSpawnEgg.class,
+				GCESGCompatHelper.getItemMapping("tokraSpawnEgg"), "tokraSpawnEgg", "Tok'ra Spawn Egg");
+
+		Items.debugger = (ItemDebugTool) registerItem(ItemDebugTool.class, "sgcraftdebugger", "sgcraftdebugger",
+				"SGCR Debugger");
+
 	}
 
 	void registerOres() {
@@ -420,7 +445,7 @@ public class SGCraftCommonProxy {
 		VSBinding b = new VSBinding();
 		b.id = id;
 		b.object = skin;
-		registeredVillagers.add(b);
+		registeredVillagers.put(name, b);
 		return id;
 	}
 
@@ -492,6 +517,51 @@ public class SGCraftCommonProxy {
 
 	public Class<? extends GuiScreen> getGUI(int id) {
 		return registeredGUIs.get(id);
+	}
+
+	public int getVillagerID(String name) {
+		VSBinding villager = registeredVillagers.get(name);
+		if (villager != null)
+			return villager.id;
+		return 0;
+	}
+
+	public void onWorldLoad(Load e) {
+		// TODO Auto-generated method stub
+		SGCraft.getLogger().log(Level.WARNING, "Herp derp provider.load: " + e.world.getProviderName());
+	}
+
+	public void onWorldUnload(Unload e) {
+		// TODO Auto-generated method stub
+		SGCraft.getLogger().log(Level.WARNING, "Herp derp provider.unload: " + e.world.getProviderName());
+	}
+
+	public void onWorldSave(Save e) {
+		// TODO Auto-generated method stub
+		SGCraft.getLogger().log(Level.WARNING, "Herp derp provider.save: " + e.world.getProviderName());
+	}
+
+	public void handlePacket(SGCraftPacket packet, Player player) {
+		if (packet.getPacketIsForServer())
+			defaultServerPacketHandler.handlePacket(packet, player);
+		else
+			return;
+	}
+
+	public void sendToServer(SGCraftPacket packet) {
+		throw new RuntimeException("Cannot send to server: this method was not overridden!!");
+	}
+
+	public void sendToAllPlayers(SGCraftPacket packet) {
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		if (server != null) {
+			SGCraft.getLogger().log(Level.INFO, "SGCraft sending packet to all players: " + packet.toString());
+			server.getConfigurationManager().sendPacketToAllPlayers(packet.toPacket());
+		}
+	}
+
+	public void sendToPlayer(EntityPlayer player, SGCraftPacket packet) {
+		PacketDispatcher.sendPacketToPlayer(packet.toPacket(), (Player) player);
 	}
 
 }

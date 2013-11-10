@@ -27,13 +27,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class BlockStargateRing extends GenericContainerBlock {
 
-	// static final int textureBase = 0x02;
-	// static final int topAndBottomTexture = 0x00;
 	static final int numSubBlocks = 2;
 	public static final int subBlockMask = 0x1;
-
-	// public static Material ringMaterial = new Material(MapColor.stoneColor);
-
 	Icon topAndBottomTexture;
 	Icon sideTextures[] = new Icon[numSubBlocks];
 
@@ -118,59 +113,18 @@ public class BlockStargateRing extends GenericContainerBlock {
 		}
 	}
 
-	public boolean isMerged(IBlockAccess world, int x, int y, int z) {
-		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
-		return te.isMerged;
-	}
-
-	public void mergeWith(World world, int x, int y, int z, int xb, int yb, int zb) {
-		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
-		te.isMerged = true;
-		te.baseX = xb;
-		te.baseY = yb;
-		te.baseZ = zb;
-		// te.onInventoryChanged();
-		world.markBlockForUpdate(x, y, z);
-	}
-
-	public void unmergeFrom(World world, int x, int y, int z, int xb, int yb, int zb) {
-		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
-		if (te.isMerged && te.baseX == xb && te.baseY == yb && te.baseZ == zb) {
-			te.isMerged = false;
-			world.markBlockForUpdate(x, y, z);
-		}
-	}
-
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
-		updateBaseBlocks(world, x, y, z, te);
+		te.hostBlockPlaced();
 	}
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int id, int data) {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
 		super.breakBlock(world, x, y, z, id, data);
-		if (te != null && te.isMerged)
-			updateBaseBlocks(world, x, y, z, te);
-	}
-
-	void updateBaseBlocks(World world, int x, int y, int z, TileEntityStargateRing te) {
-		for (int i = -2; i <= 2; i++)
-			for (int j = -4; j <= 0; j++)
-				for (int k = -2; k <= 2; k++) {
-					int xb = x + i;
-					int yb = y + j;
-					int zb = z + k;
-					Block block = Block.blocksList[world.getBlockId(xb, yb, zb)];
-					if (block instanceof BlockStargateBase) {
-						BlockStargateBase base = (BlockStargateBase) block;
-						if (!te.isMerged)
-							base.checkForMerge(world, xb, yb, zb);
-						else if (te.baseX == xb && te.baseY == yb && te.baseZ == zb)
-							base.unmerge(world, xb, yb, zb);
-					}
-				}
+		if (te != null)
+			te.getAsPart().devalidateHostMultiblock();
 	}
 
 	@Override
