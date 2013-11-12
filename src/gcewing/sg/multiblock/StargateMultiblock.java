@@ -1,5 +1,6 @@
 package gcewing.sg.multiblock;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
@@ -7,6 +8,7 @@ import gcewing.sg.SGCraft;
 import gcewing.sg.network.SGCraftPacket;
 import gcewing.sg.tileentity.TileEntityStargateRing;
 import gcewing.sg.util.ImmutablePair;
+import gcewing.sg.util.Vector3;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -16,6 +18,18 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	private int[][] stargateModel = { { 2, 1, 3, 1, 2 }, { 1, 0, 0, 0, 1 }, { 2, 0, 0, 0, 2 }, { 1, 0, 0, 0, 1 },
 			{ 2, 1, 2, 1, 2 }, };
+
+	public StargateMultiblock(TileEntity host) {
+		super(host);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		if (wasInvalidated() && !isClient)
+			validate(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
+	}
 
 	/**
 	 * Gets the Stargate's base-block rotation value.
@@ -36,16 +50,42 @@ public class StargateMultiblock extends GenericMultiblock {
 		this.rotation = rotation;
 	}
 
+	/**
+	 * Gets the number of parts in this Stargate
+	 * 
+	 * @return The number of parts
+	 */
 	public int getPartCount() {
 		return structureParts.size();
 	}
 
+	/**
+	 * Determines if the passed tile entity object is any valid Stargate part
+	 * 
+	 * @param entity
+	 *            The part object
+	 * @return If the tile entity part object is a Stargate part
+	 */
 	private boolean isGateTileEntity(TileEntity entity) {
 		if (entity instanceof TileEntityStargateRing)
 			return true;
 		return false;
 	}
 
+	/**
+	 * Calculates an orientation to test at a given coordinate set in a world
+	 * 
+	 * @param worldAccess
+	 *            The world to test
+	 * @param baseX
+	 *            The x-coordinate of the base
+	 * @param baseY
+	 *            The y-coordinate of the base
+	 * @param baseZ
+	 *            The z-coordinate of the base
+	 * @return Any valid gate orientation, or null if no valid orientation is
+	 *         found
+	 */
 	private EnumOrientations getOrientation(World worldAccess, int baseX, int baseY, int baseZ) {
 		// Test North-South alignment along Z axis
 		int zNorthSouthA = baseZ + 1, zNorthSouthB = baseZ - 1;
@@ -144,6 +184,7 @@ public class StargateMultiblock extends GenericMultiblock {
 				}
 			}
 			SGCraft.getLogger().log(Level.INFO, "Merged in orientation EAST-WEST OK");
+			structureOrientation = EnumOrientations.EAST_WEST;
 			return true;
 		}
 
@@ -164,6 +205,7 @@ public class StargateMultiblock extends GenericMultiblock {
 				}
 			}
 			SGCraft.getLogger().log(Level.INFO, "Merged in orientation NORTH-SOUTH OK");
+			structureOrientation = EnumOrientations.NORTH_SOUTH;
 			return true;
 		}
 
@@ -175,15 +217,19 @@ public class StargateMultiblock extends GenericMultiblock {
 	@Override
 	public void freeStructure() {
 		SGCraft.getLogger().log(Level.INFO, "Releasing multiblock structure.");
-		for (Entry<Object, MultiblockPart> part : structureParts.entrySet()) {
+		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
 			part.getValue().release();
-		}
 		structureParts.clear();
 	}
 
 	@Override
 	public MultiblockPart getPart(Object reference) {
 		return structureParts.get(reference);
+	}
+
+	@Override
+	public void validated(boolean oldState, boolean newState) {
+		host.getDescriptionPacket();
 	}
 
 	@Override
@@ -198,6 +244,12 @@ public class StargateMultiblock extends GenericMultiblock {
 		packet.setIsForServer(false);
 		packet.setType(SGCraftPacket.PacketType.TileUpdate);
 		packet.setValue("isValid", isValid());
+		packet.setValue("orientation", getOrientation());
+		HashMap<Object, Vector3> gparts = new HashMap<Object, Vector3>();
+		for (Entry<Object, MultiblockPart> part : structureParts.entrySet()) {
+			gparts.put(part.getKey(), part.getValue().getVectorLoc());
+		}
+		packet.setValue("parts", gparts);
 		return packet;
 	}
 

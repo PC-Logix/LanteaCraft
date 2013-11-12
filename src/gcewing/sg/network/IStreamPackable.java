@@ -4,11 +4,21 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public interface IStreamPackable<T> {
+public abstract class IStreamPackable<T> {
 
-	public int getTypeOf();
+	private final Class<T> classof;
 
-	public void pack(T valueOf, DataOutputStream streamOf) throws IOException;
+	public IStreamPackable(Class<T> classof) {
+		this.classof = classof;
+	}
 
-	public T unpack(DataInputStream streamOf) throws IOException;
+	public Class<?> getClassOf() {
+		return this.classof;
+	}
+
+	public abstract int getTypeOf();
+
+	public abstract void pack(T valueOf, DataOutputStream streamOf) throws IOException;
+
+	public abstract T unpack(DataInputStream streamOf) throws IOException;
 }

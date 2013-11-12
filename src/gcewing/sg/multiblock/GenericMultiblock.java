@@ -4,6 +4,7 @@ import gcewing.sg.network.SGCraftPacket;
 
 import java.util.HashMap;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
 
@@ -23,15 +24,24 @@ public abstract class GenericMultiblock {
 
 	protected boolean wasInvalidated = false;
 	protected boolean isValid = false;
-
 	protected boolean isClient = false;
+
+	protected TileEntity host;
 
 	protected int xCoord;
 	protected int yCoord;
 	protected int zCoord;
 
-	public GenericMultiblock(boolean isClient) {
-		this.isClient = isClient;
+	public GenericMultiblock(TileEntity host) {
+		this.host = host;
+	}
+
+	/**
+	 * Called by the host tile-entity to tick this structure.
+	 */
+	public void tick() {
+		if (host.worldObj != null)
+			isClient = host.worldObj.isRemote;
 	}
 
 	/**
@@ -47,6 +57,14 @@ public abstract class GenericMultiblock {
 	/**
 	 * Collects all multi-block parts into the generic multi-block base.
 	 * 
+	 * @param worldAccess
+	 *            The world object
+	 * @param baseX
+	 *            The base x-coordinate in the world
+	 * @param baseY
+	 *            The base y-coordinate in the world
+	 * @param baseZ
+	 *            The base z-coordinate in the world
 	 * @return If the collection of all blocks into the structure part map was a
 	 *         success.
 	 */
@@ -70,6 +88,17 @@ public abstract class GenericMultiblock {
 	 *         reference, or, null if no such part exists.
 	 */
 	public abstract MultiblockPart getPart(Object reference);
+
+	/**
+	 * Called when the multi-block transitions from it's current state to the
+	 * new state specified.
+	 * 
+	 * @param oldState
+	 *            The old state of the structure.
+	 * @param newState
+	 *            The new state of the structure.
+	 */
+	public abstract void validated(boolean oldState, boolean newState);
 
 	/**
 	 * Called by any code to disband the structure immediately, usually when the
@@ -109,7 +138,7 @@ public abstract class GenericMultiblock {
 	}
 
 	/**
-	 * Called by the host tile-entity to trigger a redetection of the
+	 * Called by the host tile-entity to trigger a re-detection of the
 	 * multi-block structure. This results in either a success, and the
 	 * multi-block is 'merged', or fails and thus if any merge state is present,
 	 * the multi-block disbands completely.
@@ -117,13 +146,16 @@ public abstract class GenericMultiblock {
 	public void validate(World world, int baseX, int baseY, int baseZ) {
 		wasInvalidated = false;
 		if (isValidStructure(world, baseX, baseY, baseZ)) {
+			boolean wasValid = isValid();
 			isValid = collectStructure(world, baseX, baseY, baseZ);
-			if (isValid())
+			if (isValid)
 				setLocation(baseX, baseY, baseZ);
+			validated(wasValid, isValid);
 		} else {
-			if (isValid) {
+			if (isValid()) {
 				freeStructure();
 				isValid = false;
+				validated(isValid(), false);
 			}
 		}
 	}
@@ -151,13 +183,10 @@ public abstract class GenericMultiblock {
 	 * Called in the client only to set the validity of this multi-block
 	 * structure.
 	 */
-	public void setValid(boolean b) {
+	public void setValid(World world, boolean b) {
 		if (!isClient)
 			throw new IllegalStateException("Cannot setValid state of a non-slave multiblock instance.");
 		isValid = b;
-		if (isValid)
-			collectStructure(world, baseX, baseY, baseZ);
-			
 	}
 
 	/**

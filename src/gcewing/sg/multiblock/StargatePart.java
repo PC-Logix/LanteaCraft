@@ -2,6 +2,7 @@ package gcewing.sg.multiblock;
 
 import gcewing.sg.SGCraft;
 import gcewing.sg.tileentity.TileEntityStargateBase;
+import gcewing.sg.util.Vector3;
 
 import java.lang.ref.WeakReference;
 import java.util.logging.Level;
@@ -13,11 +14,10 @@ public class StargatePart extends MultiblockPart {
 
 	private String typeof;
 
-	private TileEntity hostEntity;
 	private GenericMultiblock currentHost;
 
-	public StargatePart(TileEntity hostTileEntity) {
-		this.hostEntity = hostTileEntity;
+	public StargatePart(TileEntity host) {
+		super(host);
 	}
 
 	public void setType(String typeof) {
@@ -25,22 +25,19 @@ public class StargatePart extends MultiblockPart {
 	}
 
 	@Override
-	public GenericMultiblock findHostMultiblock() {
-		SGCraft.getLogger().log(Level.INFO, "StargatePart looking for host multiblock...");
-		if (currentHost != null) {
-			SGCraft.getLogger().log(Level.INFO, "Using cached host.");
+	public GenericMultiblock findHostMultiblock(boolean allowScanning) {
+		if (currentHost != null)
 			return currentHost;
-		}
-		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5);
-		TileEntity entity = ScanningHelper.findNearestTileEntityOf(hostEntity.worldObj, TileEntityStargateBase.class,
-				hostEntity.xCoord, hostEntity.yCoord, hostEntity.zCoord, bounds);
-		if (entity == null) {
-			SGCraft.getLogger().log(Level.INFO, "Failed, could not find base instance!");
+
+		if (!allowScanning)
 			return null;
-		}
+		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5);
+		TileEntity entity = ScanningHelper.findNearestTileEntityOf(host.worldObj, TileEntityStargateBase.class,
+				host.xCoord, host.yCoord, host.zCoord, bounds);
+		if (entity == null)
+			return null;
 		TileEntityStargateBase baseObj = (TileEntityStargateBase) entity;
 		StargateMultiblock stargateStruct = baseObj.getAsStructure();
-		SGCraft.getLogger().log(Level.INFO, "Using found host.");
 		return stargateStruct;
 	}
 
@@ -53,7 +50,6 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public boolean mergeWith(GenericMultiblock structure) {
-		SGCraft.getLogger().log(Level.INFO, "StargatePart merging with structure.");
 		this.currentHost = structure;
 		return true;
 	}
@@ -65,13 +61,17 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public void release() {
-		SGCraft.getLogger().log(Level.INFO, "StargatePart abandoning structure.");
 		this.currentHost = null;
 	}
 
 	@Override
 	public String getType() {
 		return typeof;
+	}
+
+	@Override
+	public Vector3 getVectorLoc() {
+		return new Vector3(host.xCoord, host.yCoord, host.zCoord);
 	}
 
 }

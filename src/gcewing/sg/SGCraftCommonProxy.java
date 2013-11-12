@@ -36,6 +36,7 @@ import gcewing.sg.items.ItemDebugTool;
 import gcewing.sg.items.ItemStargateRing;
 import gcewing.sg.items.ItemTokraSpawnEgg;
 import gcewing.sg.network.ClientPacketHandler;
+import gcewing.sg.network.NetworkHelpers;
 import gcewing.sg.network.SGCraftPacket;
 import gcewing.sg.network.ServerPacketHandler;
 import gcewing.sg.tileentity.TileEntityStargateBase;
@@ -89,7 +90,7 @@ public class SGCraftCommonProxy {
 	protected ConfigurationHelper config;
 	protected ArrayList<ConfigValue<?>> configValues = new ArrayList<ConfigValue<?>>();
 
-	//public StargateNetworkChannel channel;
+	// public StargateNetworkChannel channel;
 	public TileEntityChunkManager chunkManager;
 
 	private NaquadahOreWorldGen naquadahOreGenerator;
@@ -103,6 +104,7 @@ public class SGCraftCommonProxy {
 
 	protected ClientPacketHandler defaultClientPacketHandler;
 	protected ServerPacketHandler defaultServerPacketHandler;
+	protected NetworkHelpers networkHelpers;
 
 	protected static class IDBinding<T> {
 		public int id;
@@ -118,6 +120,7 @@ public class SGCraftCommonProxy {
 
 		defaultClientPacketHandler = new ClientPacketHandler();
 		defaultServerPacketHandler = new ServerPacketHandler();
+		networkHelpers = new NetworkHelpers();
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
@@ -131,6 +134,7 @@ public class SGCraftCommonProxy {
 		MinecraftForge.EVENT_BUS.register(SGCraft.getInstance());
 		chunkManager = new TileEntityChunkManager(SGCraft.getInstance());
 		NetworkRegistry.instance().registerGuiHandler(SGCraft.getInstance(), new HelperGUIHandler());
+		networkHelpers.init();
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
@@ -144,7 +148,7 @@ public class SGCraftCommonProxy {
 		registerContainers();
 		registerVillagers();
 		registerOther();
-		//channel = new StargateNetworkChannel(BuildInfo.modID);
+		// channel = new StargateNetworkChannel(BuildInfo.modID);
 		if (config.extended)
 			config.save();
 		SGCraft.getLogger().log(Level.INFO, "SGCraft done setting up!");

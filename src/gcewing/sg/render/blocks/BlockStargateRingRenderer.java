@@ -1,12 +1,8 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate ring block renderer
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.render.blocks;
 
 import gcewing.sg.blocks.BlockStargateRing;
+import gcewing.sg.multiblock.StargateMultiblock;
+import gcewing.sg.multiblock.StargatePart;
 import gcewing.sg.render.GenericBlockRenderer;
 import gcewing.sg.tileentity.TileEntityStargateRing;
 import net.minecraft.block.Block;
@@ -20,10 +16,19 @@ public class BlockStargateRingRenderer extends GenericBlockRenderer {
 		BlockStargateRing ringBlock = (BlockStargateRing) block;
 		TileEntityStargateRing ringTE = (TileEntityStargateRing) world.getBlockTileEntity(x, y, z);
 
-		if (ringTE != null && ringTE.getAsPart() != null && ringTE.getAsPart().isMerged())
-			return false;
-		else
+		StargatePart partOf = ringTE.getAsPart();
+		if (partOf == null)
 			return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
+
+		StargateMultiblock structureOf = (StargateMultiblock) partOf.findHostMultiblock(false);
+		if (structureOf == null)
+			return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
+
+		if (!structureOf.isValid())
+			return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
+
+		return false;
+
 	}
 
 }

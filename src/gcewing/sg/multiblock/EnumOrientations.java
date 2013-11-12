@@ -1,5 +1,13 @@
 package gcewing.sg.multiblock;
 
+import gcewing.sg.network.IStreamPackable;
+import gcewing.sg.network.SGCraftPacket;
+import gcewing.sg.util.Vector3;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 /**
  * Declaration of all valid multi-block orientation types and their ordinals.
  * 

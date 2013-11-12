@@ -1,5 +1,8 @@
 package gcewing.sg.multiblock;
 
+import gcewing.sg.util.Vector3;
+import net.minecraft.tileentity.TileEntity;
+
 /**
  * MultiblockPart acts as a root container for all multi-block structure,
  * tile-entities which act as multi-block structures can use these methods to
@@ -10,15 +13,33 @@ package gcewing.sg.multiblock;
  */
 public abstract class MultiblockPart {
 
+	protected boolean isClient = false;
+
+	protected final TileEntity host;
+
+	public MultiblockPart(TileEntity host) {
+		this.host = host;
+	}
+
+	/**
+	 * Called by the host tile-entity to tick this part.
+	 */
+	public void tick() {
+		if (host.worldObj != null)
+			isClient = host.worldObj.isRemote;
+	}
+
 	/**
 	 * Called by the host multi-block part to get a reference to the
 	 * GenericMultiblock instance in range. The GenericMultiblock may not always
 	 * be linked to the structure, so local scanning should be implemented.
 	 * 
+	 * @param allowScanning
+	 *            Flag set to disallow scanning for host multi-blocks.
 	 * @return Any host GenericMultiblock objects in range, or null if there are
 	 *         no hosts linked or in range of this block part.
 	 */
-	public abstract GenericMultiblock findHostMultiblock();
+	public abstract GenericMultiblock findHostMultiblock(boolean allowScanning);
 
 	/**
 	 * Called when the GenericMultiblock wants to test if this part can be added
@@ -67,12 +88,19 @@ public abstract class MultiblockPart {
 	public abstract String getType();
 
 	/**
+	 * Gets the absolute location of this part as a Vector3 location.
+	 * 
+	 * @return A Vector3 location of this part.
+	 */
+	public abstract Vector3 getVectorLoc();
+
+	/**
 	 * Called by the host multi-block part to devalidate the host, such as when
 	 * the part is placed or removed, moved or otherwise deleted from the world.
 	 * If no host is in range, this will do nothing.
 	 */
 	public void devalidateHostMultiblock() {
-		GenericMultiblock structure = findHostMultiblock();
+		GenericMultiblock structure = findHostMultiblock(true);
 		if (structure != null)
 			structure.invalidate();
 	}

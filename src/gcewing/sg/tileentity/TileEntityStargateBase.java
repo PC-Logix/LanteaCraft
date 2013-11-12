@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -107,7 +108,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	// START NEW MULTIBLOCK CODE
 
-	private StargateMultiblock multiblock = new StargateMultiblock();
+	private StargateMultiblock multiblock = new StargateMultiblock(this);
 
 	public StargateMultiblock getAsStructure() {
 		return multiblock;
@@ -269,9 +270,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			// performPendingRemounts();
 		}
 
-		if (multiblock.wasInvalidated()) {
-			multiblock.validate(worldObj, xCoord, yCoord, zCoord);
-		}
+		multiblock.tick();
 	}
 
 	void enterState(EnumStargateState newState, int newTimeout) {
@@ -1027,6 +1026,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	@Override
 	public Packet getDescriptionPacket() {
+		SGCraft.getLogger().log(Level.INFO, "SGCraft sending Stargate update packet.");
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("DimensionID", worldObj.provider.dimensionId);
 		data.put("WorldX", xCoord);
