@@ -11,12 +11,8 @@ import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.Optional.Interface;
 import cpw.mods.fml.common.Optional.InterfaceList;
 import cpw.mods.fml.common.Optional.Method;
-import dan200.computer.api.IComputerAccess;
-import dan200.computer.api.ILuaContext;
-import dan200.computer.api.IPeripheral;
 
-@InterfaceList({ @Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft") })
-public class TileEntityStargateController extends GenericTileEntity implements IPeripheral {
+public class TileEntityStargateController extends GenericTileEntity{
 
 	public static int linkRangeX = 10; // either side
 	public static int linkRangeY = 10; // up or down
@@ -115,73 +111,5 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 		// xCoord, yCoord, zCoord);
 		isLinkedToStargate = false;
 		markBlockForUpdate();
-	}
-
-	@Override
-	@Method(modid = "ComputerCraft")
-	public String getType() {
-		return "dhd";
-	}
-
-	@Override
-	@Method(modid = "ComputerCraft")
-	public String[] getMethodNames() {
-		return new String[] { "dial", "connect", "disconnect", "isConnected", "isDialing" };
-	}
-
-	@Override
-	@Method(modid = "ComputerCraft")
-	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
-			throws Exception {
-		if (method == 0 || method == 1) {
-			TileEntityStargateBase te = getLinkedStargateTE();
-			if (te != null)
-				if (!te.isConnected())
-					StargateNetworkChannel.sendConnectOrDisconnectToServer(te, arguments[0].toString().toUpperCase());
-		} else if (method == 2) {
-			TileEntityStargateBase te = getLinkedStargateTE();
-			if (te != null)
-				if (te.isConnected())
-					StargateNetworkChannel.sendConnectOrDisconnectToServer(te, "");
-		} else if (method == 3) {
-			TileEntityStargateBase te = getLinkedStargateTE();
-			boolean isConnected = false;
-			if (te != null)
-				if (te.isConnected())
-					isConnected = true;
-				else
-					isConnected = false;
-			return new Object[] { isConnected };
-		} else if (method == 4) {
-			TileEntityStargateBase te = getLinkedStargateTE();
-			boolean isDialing = false;
-			if (te != null)
-				if (te.isDialing())
-					isDialing = true;
-				else
-					isDialing = false;
-			return new Object[] { isDialing };
-		}
-		return null;
-	}
-
-	@Override
-	@Method(modid = "ComputerCraft")
-	public boolean canAttachToSide(int side) {
-		return true;
-	}
-
-	@Override
-	@Method(modid = "ComputerCraft")
-	public void attach(IComputerAccess computer) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	@Method(modid = "ComputerCraft")
-	public void detach(IComputerAccess computer) {
-		// TODO Auto-generated method stub
-
 	}
 }
