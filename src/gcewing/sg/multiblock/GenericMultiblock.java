@@ -42,6 +42,9 @@ public abstract class GenericMultiblock {
 	public void tick() {
 		if (host.worldObj != null)
 			isClient = host.worldObj.isRemote;
+		
+		if (wasInvalidated() && !isClient)
+			validate(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
 	}
 
 	/**

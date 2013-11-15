@@ -309,9 +309,7 @@ public class SGCraftPacket {
 		DataOutputStream data = new DataOutputStream(((java.io.OutputStream) (bytes)));
 		Packet250CustomPayload pkt = new Packet250CustomPayload();
 		try {
-			SGCraft.getLogger().log(Level.INFO, "SGCraft writing packet data...");
 			writeData(data);
-			SGCraft.getLogger().log(Level.INFO, "SGCraft done packet data!");
 		} catch (IOException e) {
 			SGCraft.getLogger().log(Level.INFO, "Exception when writing packet!", e);
 		}

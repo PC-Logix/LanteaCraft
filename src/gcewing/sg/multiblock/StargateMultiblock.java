@@ -27,8 +27,6 @@ public class StargateMultiblock extends GenericMultiblock {
 	@Override
 	public void tick() {
 		super.tick();
-		if (wasInvalidated() && !isClient)
-			validate(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
 	}
 
 	/**

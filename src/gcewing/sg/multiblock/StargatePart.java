@@ -43,6 +43,9 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public boolean canMergeWith(GenericMultiblock structure) {
+		if (isClient)
+			return true;
+
 		if (currentHost == null)
 			return true;
 		return false;
