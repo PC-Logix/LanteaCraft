@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Map feature generation
-//
-//------------------------------------------------------------------------------------------------
-
 package gcewing.sg.generators;
 
 import java.util.HashMap;
@@ -15,6 +9,22 @@ import net.minecraft.world.gen.structure.MapGenStructureAccess;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 
+/**
+ * I finally had an epiphany about what this mess does.
+ * 
+ * By hooking to the onInitMapGen event, and then testing for a scattered
+ * feature, we can modify the feature's actual behavior by setting the generator
+ * to use a custom HashMap implementation.
+ * 
+ * In replacing the HashMap object with one with callbacks, the code here is
+ * able to detect when a structure start is stated by the generator
+ * (StructureStart) and then invoke augmentStructureStart, which effectively
+ * allows tacking the additional features onto the structure.
+ * 
+ * It's smart, but I'm pretty sure Forge has a more... non-hacky way of doing
+ * this.
+ * 
+ */
 public class FeatureGeneration {
 
 	public static void onInitMapGen(InitMapGenEvent e) {
@@ -37,29 +47,31 @@ public class FeatureGeneration {
 
 }
 
+/**
+ * The replacement HashMap with added hooks
+ */
 class SGStructureMap extends HashMap {
 
 	@Override
 	public Object put(Object key, Object value) {
-		// System.out.printf("SGCraft: FeatureGeneration: SGStructureMap.put: %s\n",
-		// value);
 		if (value instanceof StructureStart)
 			augmentStructureStart((StructureStart) value);
 		return super.put(key, value);
 	}
 
+	/**
+	 * Called to detect the specific structure type, given the type being added
+	 * is a StructureStart
+	 * 
+	 * @param start
+	 *            The StructureStart reference
+	 */
 	void augmentStructureStart(StructureStart start) {
 		LinkedList oldComponents = start.getComponents();
 		LinkedList newComponents = new LinkedList();
-		// int i = 0;
 		for (Object comp : oldComponents)
-			// StructureBoundingBox box =
-			// ((StructureComponent)comp).getBoundingBox();
-			// System.out.printf("SGCraft: FeatureGeneration: Found component %s at (%s, %s)\n",
-			// comp, box.getCenterX(), box.getCenterZ());
 			if (comp instanceof ComponentScatteredFeatureDesertPyramid)
 				newComponents.add(new FeatureUnderDesertPyramid((ComponentScatteredFeatureDesertPyramid) comp));
-		// ++i;
 		oldComponents.addAll(newComponents);
 	}
 
