@@ -36,7 +36,7 @@ public class ImmutableTuple<A, B, C> {
 	public boolean equals(Object other) {
 		if (other instanceof ImmutableTuple) {
 			ImmutableTuple<?, ?, ?> that = (ImmutableTuple) other;
-			return (this.a == that.a && this.b == that.b && this.c == that.c);
+			return (this.a.equals(that.a) && this.b.equals(that.b) && this.c.equals(that.c));
 		}
 		return false;
 	}

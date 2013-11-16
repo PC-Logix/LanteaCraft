@@ -40,7 +40,7 @@ public class ImmutablePair<A, B> {
 	public boolean equals(Object other) {
 		if (other instanceof ImmutablePair) {
 			ImmutablePair<?, ?> that = (ImmutablePair) other;
-			return (this.a == that.a && this.b == that.b);
+			return (this.a.equals(that.a) && this.b.equals(that.b));
 		}
 		return false;
 	}
