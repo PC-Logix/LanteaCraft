@@ -45,6 +45,13 @@ public class SGCraftPacket {
 	};
 	private static ArrayList<IStreamPackable> packableHelpers = new ArrayList<IStreamPackable>();
 
+	/**
+	 * Registers a network packing agent with the registry
+	 * 
+	 * @param agent
+	 *            The agent to register
+	 * @return The ID of the agent
+	 */
 	public static int registerPackable(IStreamPackable<?> agent) {
 		synchronized (packableHelpers) {
 			packableHelpers.add(agent);
@@ -57,6 +64,13 @@ public class SGCraftPacket {
 		}
 	}
 
+	/**
+	 * Finds a packer by a given ID
+	 * 
+	 * @param idx
+	 *            The ID of the packer
+	 * @return The packer object
+	 */
 	private static IStreamPackable<?> findPacker(int idx) {
 		synchronized (packableHelpers) {
 			for (IStreamPackable<?> packer : packableHelpers) {
@@ -67,6 +81,13 @@ public class SGCraftPacket {
 		return null;
 	}
 
+	/**
+	 * Finds a packer by a given class
+	 * 
+	 * @param clazz
+	 *            The class the packer supports
+	 * @return The packer object
+	 */
 	private static IStreamPackable<?> findPacker(Class<?> clazz) {
 		synchronized (packableHelpers) {
 			for (IStreamPackable<?> packer : packableHelpers) {
@@ -77,6 +98,13 @@ public class SGCraftPacket {
 		return null;
 	}
 
+	/**
+	 * Gets the ID of a generic Java type
+	 * 
+	 * @param clazz
+	 *            The class of the generic
+	 * @return The ID of the generic type
+	 */
 	private static int getGenericID(Class<?> clazz) {
 		for (int i = 0; i < classReferences.length; i++)
 			if (classReferences[i].equals(clazz))
@@ -84,13 +112,28 @@ public class SGCraftPacket {
 		return -1;
 	}
 
+	/**
+	 * Gets the class of a generic Java type
+	 * 
+	 * @param id
+	 *            The ID of the generic type
+	 * @return The class of the generic
+	 */
 	private static Class<?> getGeneric(int id) {
 		if (id >= 0 && id < classReferences.length)
 			return classReferences[id];
 		return null;
 	}
 
-	// Packet instanceof generators
+	/**
+	 * Gets a packet from an array of bytes, usually from the network listener.
+	 * 
+	 * @param bytes
+	 *            The byte array
+	 * @return The SGCraftPacket instance
+	 * @throws IOException
+	 *             Any read exception thrown
+	 */
 	public static SGCraftPacket parse(byte bytes[]) throws IOException {
 		DataInputStream data = new DataInputStream(new ByteArrayInputStream(bytes));
 		SGCraftPacket pkt = new SGCraftPacket();
@@ -98,36 +141,79 @@ public class SGCraftPacket {
 		return pkt;
 	}
 
-	// Packet instanceof values
+	/**
+	 * The type of the packet
+	 */
 	private PacketType packetType = PacketType.InvalidPacket;
+	/**
+	 * The values of objects in the packet
+	 */
 	private HashMap<Object, Object> values;
+	/**
+	 * The destination of the packet
+	 */
 	private volatile boolean isPacketForServer;
 
+	/**
+	 * Generic constructor, creates a blank packet object
+	 */
 	public SGCraftPacket() {
 		packetType = PacketType.InvalidPacket;
 		values = new HashMap<Object, Object>();
 	}
 
+	/**
+	 * Gets the type of the packet
+	 * 
+	 * @return The type of the packet
+	 */
 	public PacketType getType() {
 		return packetType;
 	}
 
+	/**
+	 * Gets a value of a field in the packet
+	 * 
+	 * @param name
+	 *            The name of the field
+	 * @return Any, or null, assigned value to the specified field
+	 */
 	public Object getValue(String name) {
 		synchronized (values) {
 			return values.get(name);
 		}
 	}
 
+	/**
+	 * Gets all fields and their values
+	 * 
+	 * @return All fields and their values
+	 */
 	public HashMap<Object, Object> getValues() {
 		return values;
 	}
 
+	/**
+	 * Sets a field and it's value
+	 * 
+	 * @param name
+	 *            The name of the field
+	 * @param value
+	 *            The value to assign
+	 */
 	public void setValue(String name, Object value) {
 		synchronized (values) {
 			values.put(name, value);
 		}
 	}
 
+	/**
+	 * Sets all fields given the values in the map
+	 * 
+	 * @param map
+	 *            A map of items. Each value in the map will be set as a field
+	 *            inside the packet.
+	 */
 	public void setAllValues(Map<String, Object> map) {
 		synchronized (values) {
 			for (Entry<String, Object> item : map.entrySet())
@@ -135,24 +221,56 @@ public class SGCraftPacket {
 		}
 	}
 
+	/**
+	 * Sets the type of the packet
+	 * 
+	 * @param typeof
+	 *            The packet type
+	 */
 	public void setType(PacketType typeof) {
 		this.packetType = typeof;
 	}
 
+	/**
+	 * Sets the packet destination
+	 * 
+	 * @param state
+	 *            If the packet is for the server
+	 */
 	public void setIsForServer(boolean state) {
 		this.isPacketForServer = state;
 	}
 
+	/**
+	 * Gets the packet destination
+	 * 
+	 * @return If the packet is for the server
+	 */
 	public boolean getPacketIsForServer() {
 		return isPacketForServer;
 	}
 
+	/**
+	 * Determines if a field with the given label is declared
+	 * 
+	 * @param name
+	 *            The field name
+	 * @return If such a field exists
+	 */
 	public boolean hasKey(String name) {
 		synchronized (values) {
 			return values.containsKey(name);
 		}
 	}
 
+	/**
+	 * Writes the packet to a stream
+	 * 
+	 * @param data
+	 *            The stream to write to
+	 * @throws IOException
+	 *             Any write exception
+	 */
 	public void writeData(DataOutputStream data) throws IOException {
 		data.writeByte((byte) 1);
 		data.writeByte(packetType.getPacketID());
@@ -162,6 +280,14 @@ public class SGCraftPacket {
 		}
 	}
 
+	/**
+	 * Reads the packet from a stream
+	 * 
+	 * @param data
+	 *            A stream to read from
+	 * @throws IOException
+	 *             Any read exception
+	 */
 	public void readData(DataInputStream data) throws IOException {
 		if (data.readByte() != (byte) 1)
 			throw new IOException("Malformed packet!!");
@@ -176,6 +302,16 @@ public class SGCraftPacket {
 		}
 	}
 
+	/**
+	 * Writes a generic value to a stream
+	 * 
+	 * @param o
+	 *            The value to write
+	 * @param data
+	 *            The stream to write to
+	 * @throws IOException
+	 *             Any write exception
+	 */
 	public static void writeValue(Object o, DataOutputStream data) throws IOException {
 		int intValueOf = getGenericID(o.getClass());
 		if (intValueOf == -1) {
@@ -227,6 +363,15 @@ public class SGCraftPacket {
 		}
 	}
 
+	/**
+	 * Reads a generic value from a stream
+	 * 
+	 * @param data
+	 *            The stream to read from
+	 * @return The value read
+	 * @throws IOException
+	 *             Any read exception
+	 */
 	public static Object readValue(DataInputStream data) throws IOException {
 		int typeAsInt = data.readInt();
 		if (typeAsInt == -1) {
@@ -265,6 +410,18 @@ public class SGCraftPacket {
 		}
 	}
 
+	/**
+	 * Writes a HashMap of any anonymous type to a stream. This method removes
+	 * all null key or null value pairs from the iteration, only writing values
+	 * which are not null or null-pointers
+	 * 
+	 * @param values
+	 *            The HashMap of values to write
+	 * @param data
+	 *            The stream to write to
+	 * @throws IOException
+	 *             Any write exception
+	 */
 	public static void writeHashMap(HashMap<?, ?> values, DataOutputStream data) throws IOException {
 		int sign = 0;
 		for (Entry<?, ?> entry : values.entrySet())
@@ -279,6 +436,15 @@ public class SGCraftPacket {
 		}
 	}
 
+	/**
+	 * Reads a HashMap of an anonymous type from a stream.
+	 * 
+	 * @param data
+	 *            The stream to read from
+	 * @return The HashMap of values
+	 * @throws IOException
+	 *             Any read exception
+	 */
 	public static HashMap readHashMap(DataInputStream data) throws IOException {
 		int size = data.readInt();
 		HashMap<Object, Object> result = new HashMap<Object, Object>();
@@ -290,12 +456,33 @@ public class SGCraftPacket {
 		return result;
 	}
 
+	/**
+	 * Writes an ArrayList of any anonymous type to a stream. This method
+	 * removes all null value items from the iteration, only writing values
+	 * which are not null or null-pointers
+	 * 
+	 * @param array
+	 *            The ArrayList of values to write
+	 * @param data
+	 *            The stream to write to
+	 * @throws IOException
+	 *             Any write exception
+	 */
 	public static void writeArrayList(ArrayList<?> array, DataOutputStream data) throws IOException {
 		data.writeInt(array.size());
 		for (Object o : array)
 			writeValue(o, data);
 	}
 
+	/**
+	 * Reads an ArrayList of an anonymous type from a stream.
+	 * 
+	 * @param data
+	 *            The stream to read from
+	 * @return The ArrayList of values
+	 * @throws IOException
+	 *             Any read exception
+	 */
 	public static ArrayList<?> readArrayList(DataInputStream data) throws IOException {
 		int size = data.readInt();
 		ArrayList<Object> result = new ArrayList<Object>();
@@ -304,6 +491,11 @@ public class SGCraftPacket {
 		return result;
 	}
 
+	/**
+	 * Converts this packet instance into a Forge payload packet
+	 * 
+	 * @return A custom Packet250CustomPayload packet for Forge networking
+	 */
 	public Packet250CustomPayload toPacket() {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		DataOutputStream data = new DataOutputStream(((java.io.OutputStream) (bytes)));
@@ -319,6 +511,9 @@ public class SGCraftPacket {
 		return pkt;
 	}
 
+	/**
+	 * Dumps the packet to a string.
+	 */
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();

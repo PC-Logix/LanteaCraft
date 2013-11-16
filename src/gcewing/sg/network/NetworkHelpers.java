@@ -2,22 +2,31 @@ package gcewing.sg.network;
 
 import gcewing.sg.multiblock.EnumOrientations;
 import gcewing.sg.util.ImmutablePair;
+import gcewing.sg.util.ImmutableTuple;
 import gcewing.sg.util.Vector3;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+/**
+ * Generic network helper registry, this is where I chose to dump them as I
+ * write jazz.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class NetworkHelpers {
-
 	private static Vector3NetworkPacker vec3Network = new Vector3NetworkPacker();
 	private static EnumOrientationsNetworkPacker orientationNetwork = new EnumOrientationsNetworkPacker();
 	private static ImmutablePairPacker pairNetwork = new ImmutablePairPacker();
+	private static ImmutableTuplePacker tupleNetwork = new ImmutableTuplePacker();
 
 	public void init() {
 		Vector3NetworkPacker.packId = SGCraftPacket.registerPackable(Vector3NetworkPacker.instance);
 		EnumOrientationsNetworkPacker.packId = SGCraftPacket.registerPackable(EnumOrientationsNetworkPacker.instance);
 		ImmutablePairPacker.packId = SGCraftPacket.registerPackable(ImmutablePairPacker.instance);
+		ImmutableTuplePacker.packId = SGCraftPacket.registerPackable(ImmutableTuplePacker.instance);
 	}
 
 	public static class ImmutablePairPacker extends IStreamPackable<ImmutablePair> {
@@ -45,6 +54,36 @@ public class NetworkHelpers {
 			Object valA = SGCraftPacket.readValue(streamOf);
 			Object valB = SGCraftPacket.readValue(streamOf);
 			return new ImmutablePair<Object, Object>(valA, valB);
+		}
+	}
+
+	public static class ImmutableTuplePacker extends IStreamPackable<ImmutableTuple> {
+		private static ImmutableTuplePacker instance;
+		private static int packId;
+
+		public ImmutableTuplePacker() {
+			super(ImmutableTuple.class);
+			ImmutableTuplePacker.instance = this;
+		}
+
+		@Override
+		public int getTypeOf() {
+			return packId;
+		}
+
+		@Override
+		public void pack(ImmutableTuple valueOf, DataOutputStream streamOf) throws IOException {
+			SGCraftPacket.writeValue(valueOf.getA(), streamOf);
+			SGCraftPacket.writeValue(valueOf.getB(), streamOf);
+			SGCraftPacket.writeValue(valueOf.getC(), streamOf);
+		}
+
+		@Override
+		public ImmutableTuple unpack(DataInputStream streamOf) throws IOException {
+			Object valA = SGCraftPacket.readValue(streamOf);
+			Object valB = SGCraftPacket.readValue(streamOf);
+			Object valC = SGCraftPacket.readValue(streamOf);
+			return new ImmutableTuple<Object, Object, Object>(valA, valB, valC);
 		}
 	}
 

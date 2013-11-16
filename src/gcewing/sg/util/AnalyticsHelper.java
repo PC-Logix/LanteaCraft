@@ -90,7 +90,7 @@ public class AnalyticsHelper extends Thread {
 	private void push() throws IOException {
 		HttpURLConnection httpUrlConnection = (HttpURLConnection) new URL(server).openConnection();
 		httpUrlConnection.setDoOutput(true);
-		httpUrlConnection.setConnectTimeout(4000);
+		httpUrlConnection.setConnectTimeout(30 * 1000);
 		httpUrlConnection.setRequestProperty("Accept-Charset", charset);
 		httpUrlConnection.setRequestMethod("POST");
 

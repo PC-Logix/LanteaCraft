@@ -11,7 +11,12 @@ import java.util.HashMap;
  * 
  * @author AfterLifeLochie
  * 
+ * @deprecated This file is to be removed when compatibility is broken
+ *             completely. It should be replaced with a fully qualified name
+ *             host or generator.
+ * 
  */
+@Deprecated
 public class GCESGCompatHelper {
 
 	private static HashMap<String, String> tileEntityRegistry = new HashMap<String, String>();
