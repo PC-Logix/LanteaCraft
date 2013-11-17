@@ -1,6 +1,6 @@
-Delta SGCraft-Reloaded
+LanteaCraft
 ================
-Jenkins: http://kenobi.pc-logix.com:8080/job/Delta-SGCraft/
+Jenkins: http://kenobi.pc-logix.com:8080/job/LanteaCraft/
 
 Update to Greg's SGCraft for 1.6.4 compatability.
 Included config option to disable Generating gates under desert Pyramids, GenerateStructures=false will disable them.
