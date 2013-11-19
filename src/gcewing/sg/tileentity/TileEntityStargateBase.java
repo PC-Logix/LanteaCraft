@@ -1173,13 +1173,15 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			return new Object[] { isMerged };
 		else if (method == 7) {
 			String address = arguments[0].toString().toUpperCase();
-			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 			if (address.length() != 7)
 				return new Object[] { "Stargate addresses must be 7 characters" };
-			else if (dte.state != EnumStargateState.Idle)
-				return new Object[] { "true" };
-			else
-				return new Object[] { "false" };
+			else {
+				TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
+				if (dte.state != EnumStargateState.Idle)
+					return new Object[] { "true" };
+				else
+					return new Object[] { "false" };
+			}
 		} else if (method == 8) {
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(getHomeAddress());
 			if (!reloadFuel(fuelToOpen))
@@ -1188,10 +1190,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 				return new Object[] { true };
 		} else if (method == 9) {
 			String address = arguments[0].toString().toUpperCase();
-			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 			if (address.length() != 7)
 				return new Object[] { "Stargate addresses must be 7 characters" };
 			else {
+				TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 				if (dte == null)
 					return new Object[] { false };
 				if (address == getHomeAddress())
