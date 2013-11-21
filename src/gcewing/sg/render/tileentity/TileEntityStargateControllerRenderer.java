@@ -14,7 +14,7 @@ public class TileEntityStargateControllerRenderer extends TileEntitySpecialRende
 	private float scale = 1;
 
 	public TileEntityStargateControllerRenderer() {
-		theTexture = new ResourceLocation("gcewing_sg", "textures/blocks/controller_bottom_"
+		theTexture = new ResourceLocation("gcewing_sg", "textures/models/dhd_off_"
 				+ SGCraft.getProxy().getRenderMode() + ".png");
 	}
 
