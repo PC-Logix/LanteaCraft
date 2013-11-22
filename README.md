@@ -36,4 +36,3 @@ DrakeBD: Delta NP SGCraft texture pack for new textures.
 TempusBD: 3D Modeling & Textures
 
 Greg Ewing: Original SGCraft mod, and code.
-
