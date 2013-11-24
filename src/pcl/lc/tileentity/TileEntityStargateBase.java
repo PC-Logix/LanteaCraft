@@ -966,7 +966,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		else if (method == 5)
 			return new Object[] { isDialing() };
 		else if (method == 6)
-			return new Object[] { isMerged };
+			return new Object[] { getAsStructure().isMerged() };
 		else if (method == 7) {
 			String address = arguments[0].toString().toUpperCase();
 			if (address.length() <= 7)
