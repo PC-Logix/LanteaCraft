@@ -953,7 +953,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			throws Exception {
 		if (method == 0 || method == 1) {
 			String address = arguments[0].toString().toUpperCase();
-			if (address.length() != 7)
+			if (address.length() <= 7)
 				return new Object[] { "Stargate addresses must be 7 characters" };
 			else
 				connect(address, null);
@@ -966,16 +966,18 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		else if (method == 5)
 			return new Object[] { isDialing() };
 		else if (method == 6)
-			return new Object[] { getAsStructure().isValid() };
+			return new Object[] { isMerged };
 		else if (method == 7) {
 			String address = arguments[0].toString().toUpperCase();
-			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
-			if (address.length() != 7)
-				return new Object[] { "Stargate addresses must be 7 characters" };
-			else if (dte.state != EnumStargateState.Idle)
-				return new Object[] { "true" };
-			else
-				return new Object[] { "false" };
+			if (address.length() <= 7)
+				return new Object[] { "Stargate addresses must be atleast 7 characters" };
+			else {
+				TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
+				if (dte.state != EnumStargateState.Idle)
+					return new Object[] { "true" };
+				else
+					return new Object[] { "false" };
+			}
 		} else if (method == 8) {
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(getHomeAddress());
 			if (!reloadFuel(fuelToOpen))
@@ -984,10 +986,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 				return new Object[] { true };
 		} else if (method == 9) {
 			String address = arguments[0].toString().toUpperCase();
-			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
-			if (address.length() != 7)
-				return new Object[] { "Stargate addresses must be 7 characters" };
+			if (address.length() <= 7)
+				return new Object[] { "Stargate addresses must be atleast 7 characters" };
 			else {
+				TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 				if (dte == null)
 					return new Object[] { false };
 				if (address == getHomeAddress())
