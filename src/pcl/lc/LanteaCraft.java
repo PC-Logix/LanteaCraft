@@ -1,5 +1,8 @@
 package pcl.lc;
 
+import gcewing.sg.render.model.NaquadaGeneratorModel;
+import gcewing.sg.render.tileentity.TileEntityNaquadahGeneratorRenderer;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.net.URL;
@@ -109,6 +112,8 @@ public class LanteaCraft {
 
 		public static Block naquadahBlock;
 		public static Block naquadahOre;
+		
+		public static Block naquadahGenerator;
 	}
 
 	/**
@@ -139,6 +144,9 @@ public class LanteaCraft {
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
 		public static TileEntityPegasusStargateBaseRenderer tileEntityPegausBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
+
+		public static NaquadaGeneratorModel modelNaquadaGenerator;
+		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadaGeneratorRenderer;
 	}
 
 	public static HelperCreativeTab sgCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "SGCraft") {

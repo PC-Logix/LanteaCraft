@@ -16,6 +16,7 @@ import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Items;
 import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.blocks.BlockNaquadah;
+import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockNaquadahOre;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
@@ -41,6 +42,7 @@ import pcl.lc.network.ServerPacketHandler;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
+import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.util.AnalyticsHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
@@ -260,6 +262,9 @@ public class LanteaCraftCommonProxy {
 				GCESGCompatHelper.getBlockMapping("blockNaquadah"), "naquadahBlock", "Naquadah Alloy Block");
 		Blocks.naquadahOre = registerBlock(BlockNaquadahOre.class, ItemBlock.class,
 				GCESGCompatHelper.getBlockMapping("oreNaquadah"), "naquadahOre", "Naquadah Ore");
+		
+		Blocks.naquadahGenerator = registerBlock(BlockNaquadahGenerator.class, ItemBlock.class, 
+				GCESGCompatHelper.getBlockMapping("naquadahGenerator"), "naquadahGenerator", "Naquadah Generator");
 	}
 
 	public Block registerBlock(Class<? extends Block> classOf, Class<? extends ItemBlock> itemClassOf,
@@ -395,6 +400,7 @@ public class LanteaCraftCommonProxy {
 				GCESGCompatHelper.getTileEntityMapping("tileEntityRing"));
 		GameRegistry.registerTileEntity(TileEntityStargateController.class,
 				GCESGCompatHelper.getTileEntityMapping("tileEntityController"));
+		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class, BuildInfo.modID+"tileEntityNaquadaGenerator");
 	}
 
 	public ConfigValue<?> getConfigValue(String name) {
