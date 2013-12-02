@@ -33,7 +33,6 @@ public class FeatureGeneration {
 			if (e.newGen instanceof MapGenStructure)
 				e.newGen = modifyScatteredFeatureGen((MapGenStructure) e.newGen);
 			else
-				// System.out.printf("SGCraft: FeatureGeneration: SCATTERED_FEATURE generator is not a MapGenStructure, cannot customise\n");
 				break;
 		default:
 			break;

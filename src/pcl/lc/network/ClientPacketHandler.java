@@ -12,9 +12,8 @@ import cpw.mods.fml.common.network.Player;
 
 public class ClientPacketHandler {
 
-	public void handlePacket(SGCraftPacket packet, Player player) {
-		LanteaCraft.getLogger().log(Level.INFO, "Incoming SGCraft packet: " + packet.toString());
-		if (packet.getType().equals(SGCraftPacket.PacketType.TileUpdate)) {
+	public void handlePacket(LanteaPacket packet, Player player) {
+		if (packet.getType().equals(LanteaPacket.PacketType.TileUpdate)) {
 			int worldName = (Integer) packet.getValue("DimensionID");
 			int currentWorld = Minecraft.getMinecraft().theWorld.provider.dimensionId;
 			if (worldName == currentWorld) {
@@ -29,7 +28,6 @@ public class ClientPacketHandler {
 					w.markBlockForRenderUpdate(x, y, z);
 				}
 			}
-			
 		}
 	}
 

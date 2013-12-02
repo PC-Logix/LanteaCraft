@@ -67,7 +67,7 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 		drawFuelGauge();
 		String address = getAddress();
 		int cx = xSize / 2;
-		drawAddressSymbols(cx, 22, address);
+		drawFramedSymbols(cx, 22, address);
 		textColor = 0x004c66;
 		drawCenteredString(screenTitle, cx, 8);
 		drawCenteredString(address, cx, 72);

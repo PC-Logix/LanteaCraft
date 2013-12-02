@@ -16,7 +16,7 @@ public class DefaultPacketHandler implements IPacketHandler {
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		try {
-			SGCraftPacket packetAsPeripheralPacket = SGCraftPacket.parse(packet.data);
+			LanteaPacket packetAsPeripheralPacket = LanteaPacket.parse(packet.data);
 			LanteaCraft.handlePacket(packetAsPeripheralPacket, player);
 		} catch (Exception e) {
 			e.printStackTrace();

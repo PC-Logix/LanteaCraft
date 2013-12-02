@@ -9,11 +9,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class BlockNaquadahOre extends BlockOre {
 
-	// static int texture = 0x40;
-
 	public BlockNaquadahOre(int id) {
 		super(id);
-		// setTextureFile(SGCraft.textureFile);
 		setHardness(5.0F);
 		setResistance(10.0F);
 		setStepSound(soundStoneFootstep);
@@ -30,5 +27,4 @@ public class BlockNaquadahOre extends BlockOre {
 	public int quantityDropped(Random random) {
 		return 2 + random.nextInt(5);
 	}
-
 }

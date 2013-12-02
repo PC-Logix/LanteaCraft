@@ -20,7 +20,8 @@ public class StargateRegistry {
 
 	public void postRegister() {
 		for (Entry<Integer, StargateDefinition> gateType : stargateTypes.entrySet()) {
-			LanteaCraft.getLogger().log(Level.INFO, "SGCraft setting up gate typeof " + gateType.getValue().getTypeof());
+			LanteaCraft.getLogger().log(Level.INFO,
+					"LanteaCraft setting up gate typeof " + gateType.getValue().getTypeof());
 
 		}
 	}

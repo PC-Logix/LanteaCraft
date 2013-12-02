@@ -1,9 +1,3 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Structure representing the location of a stargate
-//
-//------------------------------------------------------------------------------------------------
-
 package pcl.lc.core;
 
 import pcl.lc.tileentity.TileEntityStargateBase;
@@ -44,11 +38,8 @@ public class WorldLocation {
 	}
 
 	public TileEntityStargateBase getStargateTE() {
-		World world = /* DimensionManager. */GateAddressHelper.getWorld(dimension);
+		World world = GateAddressHelper.getWorld(dimension);
 		if (world == null)
-			// System.out.printf(
-			// "SGCraft: SGLocation.getStargateTE: Oh, noes! Dimension %d is not loaded. How can this be?",
-			// dimension);
 			return null;
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof TileEntityStargateBase)

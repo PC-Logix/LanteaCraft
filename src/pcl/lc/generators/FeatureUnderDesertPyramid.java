@@ -19,13 +19,11 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 
 	StructureComponent base;
 
-	// added cause forge went WAT?
 	public FeatureUnderDesertPyramid() {
 	}
 
 	public FeatureUnderDesertPyramid(StructureComponent base) {
 		super(0);
-		// System.out.printf("SGCraft: FeatureUnderDesertPyramid\n");
 		this.base = base;
 		StructureBoundingBox baseBox = base.getBoundingBox();
 		int cx = baseBox.getCenterX();
@@ -52,9 +50,6 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 		int sgBase = Blocks.sgBaseBlock.blockID;
 		int sgBaseNorth = 0;
 		int sgRing = Blocks.sgRingBlock.blockID;
-		// System.out.printf("SGCraft: FeatureUnderDesertPyramid.addComponentParts: "
-		// + "Filling (%d,%d,%d)-(%d,%d,%d)\n", box.minX, box.minY, box.minZ,
-		// box.maxX, box.maxY, box.maxZ);
 		// Main chamber
 		fillWithBlocks(world, clip, 0, 0, 0, 10, 7, 10, sandstone, 0, false);
 		// Stairwell
@@ -99,11 +94,10 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 				}
 				placeBlockAtCurrentPosition(world, id, data, 5 + i, 1 + j, 2, clip);
 			}
-		//Blocks.sgBaseBlock.checkForMerge(world, box.minX + 5, box.minY + 1, box.minZ + 2);
+		// Blocks.sgBaseBlock.checkForMerge(world, box.minX + 5, box.minY + 1,
+		// box.minZ + 2);
 		// Controller
 		placeBlockAtCurrentPosition(world, dhd, dhdNorth, 5, 1, 7, clip);
-		// SGCraft.sgControllerBlock.checkForLink(world, box.minX + 5, box.minY
-		// + 1, box.minZ + 7);
 		return true;
 	}
 

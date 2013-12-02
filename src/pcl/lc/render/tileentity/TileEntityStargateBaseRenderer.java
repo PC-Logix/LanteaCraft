@@ -18,12 +18,12 @@ import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 
-	public final static int numRingSegments = 32;
-	public final static double ringInnerRadius = 2.0;
-	public final static double ringMidRadius = 2.25;
-	public final static double ringOuterRadius = 2.5;
+	public final static int numRingSegments = 64; // 32
+	public final static double ringInnerRadius = 3.0;
+	public final static double ringMidRadius = 3.25;
+	public final static double ringOuterRadius = 3.5;
 	public final static double ringDepth = 0.5;
-	public final static double chevronInnerRadius = 2.25;
+	public final static double chevronInnerRadius = 3.25;
 	public final static double chevronOuterRadius = ringOuterRadius + 1 / 16.0;
 	public final static double chevronWidth = (chevronOuterRadius - chevronInnerRadius) * 1.5;
 	public final static double chevronDepth = 0.125;
@@ -40,7 +40,7 @@ public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 	public final static double ringSymbolTextureHeight = 12;
 	public final static double ringSymbolSegmentWidth = ringSymbolTextureLength / numRingSegments;
 
-	public final static int ehGridRadialSize = 5;
+	public final static int ehGridRadialSize = 10;
 	public final static int ehGridPolarSize = numRingSegments;
 	public final static double ehBandWidth = ringInnerRadius / ehGridRadialSize;
 
@@ -64,7 +64,7 @@ public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 			GL11.glPushMatrix();
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslated(x + 0.5, y + 2.5, z + 0.5);
+			GL11.glTranslated(x + 0.5, y + 3.5, z + 0.5);
 			renderStargate(tesg, t);
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 			GL11.glPopMatrix();
@@ -145,9 +145,9 @@ public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 
 	void renderChevrons(TileEntityStargateBase te) {
 		GL11.glNormal3f(0, 0, 1);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 9; i++) {
 			GL11.glPushMatrix();
-			GL11.glRotatef(45 * (i - 1), 0, 0, 1);
+			GL11.glRotatef(90 - (40 * (i - 1)), 0, 0, 1);
 			chevron(6 - i < te.numEngagedChevrons);
 			GL11.glPopMatrix();
 		}
@@ -254,7 +254,7 @@ public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
-	static ResourceLocation eventHorizonTexture = new ResourceLocation("gcewing_sg", "textures/fx/eventhorizon_"
+	static ResourceLocation eventHorizonTexture = new ResourceLocation(LanteaCraft.getAssetKey(), "textures/fx/eventhorizon_"
 			+ LanteaCraft.getProxy().getRenderMode() + ".png");
 
 	void renderEventHorizon(TileEntityStargateBase te) {
@@ -287,8 +287,8 @@ public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 		double x = r * c[j];
 		double y = r * s[j];
 
-		double u = (x + 2) / 4;
-		double v = (y + 2) / 4;
+		double u = (x + 3) / 6;
+		double v = (y + 3) / 6;
 		GL11.glTexCoord2d(u, v);
 		GL11.glVertex3d(x, y, grid[j + 1][i]);
 	}

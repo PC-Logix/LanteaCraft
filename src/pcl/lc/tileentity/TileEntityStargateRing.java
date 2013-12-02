@@ -6,7 +6,7 @@ import java.util.Map;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericTileEntity;
 import pcl.lc.multiblock.StargatePart;
-import pcl.lc.network.SGCraftPacket;
+import pcl.lc.network.LanteaPacket;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 

@@ -100,16 +100,17 @@ public class StargateDefinition {
 	}
 
 	/**
-	 * Gets the type of this definition
+	 * Gets the type of this definition. Stargates use the EnumStargateType as a
+	 * reference typeof, not directly as a class declaration.
 	 * 
-	 * @return The type of this defintion
+	 * @return The type of this definition
 	 */
 	public EnumStargateType getTypeof() {
 		return typeof;
 	}
 
 	/**
-	 * Gets the instance of the base block for this definition
+	 * Gets the instance of the base block for this definition.
 	 * 
 	 * @return The instance of the base block for this definition
 	 */
@@ -118,7 +119,7 @@ public class StargateDefinition {
 	}
 
 	/**
-	 * Gets the instance of the ring block for this definition
+	 * Gets the instance of the ring block for this definition.
 	 * 
 	 * @return The instance of the ring block for this definition
 	 */
@@ -127,7 +128,9 @@ public class StargateDefinition {
 	}
 
 	/**
-	 * Gets the instance of the controller block for this definition
+	 * Gets the instance of the controller block for this definition. By
+	 * default, this will be the standard controller, unless another type is
+	 * explicitly declared in the definition.
 	 * 
 	 * @return The instance of the controller block for this definition
 	 */
