@@ -16,6 +16,7 @@ import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Items;
 import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.blocks.BlockNaquadah;
+import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockNaquadahOre;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
@@ -39,6 +40,7 @@ import pcl.lc.network.ClientPacketHandler;
 import pcl.lc.network.NetworkHelpers;
 import pcl.lc.network.LanteaPacket;
 import pcl.lc.network.ServerPacketHandler;
+import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
@@ -239,7 +241,8 @@ public class LanteaCraftCommonProxy {
 				if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
 					MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "LanteaCraft:DesertPyramid");
 			} catch (Throwable e) {
-				LanteaCraft.getLogger().log(Level.FINE, "Could not register structure type LanteaCraft:DesertPyramid", e);
+				LanteaCraft.getLogger().log(Level.FINE, "Could not register structure type LanteaCraft:DesertPyramid",
+						e);
 			}
 		}
 	}
@@ -248,44 +251,42 @@ public class LanteaCraftCommonProxy {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft blocks...");
 		Blocks.sgRingBlock = (BlockStargateRing) registerBlock(BlockStargateRing.class, ItemStargateRing.class,
 				LanteaNameRegistry.getBlockMapping("blockRing"), "stargateRing", "Stargate Ring Segment");
-		// Blocks.sgPegasusRingBlock = (BlockPegasusStargateRing)
-		// registerBlock(BlockPegasusStargateRing.class,
-		// ItemPegasusStargateRing.class,
-		// LanteaNameRegistry.getBlockMapping("blockPegasusRing"),
-		// "stargatePegasusRing", "Pegasus Stargate Ring Segment");
 
 		Blocks.sgBaseBlock = (BlockStargateBase) registerBlock(BlockStargateBase.class, ItemBlock.class,
 				LanteaNameRegistry.getBlockMapping("blockBase"), "stargateBase", "Stargate Base");
-		// Blocks.sgPegasusBaseBlock = (BlockPegasusStargateBase)
-		// registerBlock(BlockPegasusStargateBase.class, ItemBlock.class,
-		// LanteaNameRegistry.getBlockMapping("blockPegasusBase"),
-		// "stargatePegasusBase", "Pegasus Stargate Base");
 
 		Blocks.sgControllerBlock = (BlockStargateController) registerBlock(BlockStargateController.class,
 				ItemBlock.class, LanteaNameRegistry.getBlockMapping("blockController"), "stargateController",
 				"Stargate Controller");
-		// Blocks.sgPegasusControllerBlock = (BlockPegasusStargateController)
-		// registerBlock(BlockPegasusStargateController.class, ItemBlock.class,
-		// LanteaNameRegistry.getBlockMapping("blockPegasusController"),
-		// "stargatePegasusController", "Pegasus Stargate Controller");
 
 		Blocks.naquadahBlock = registerBlock(BlockNaquadah.class, ItemBlock.class,
 				LanteaNameRegistry.getBlockMapping("blockNaquadah"), "naquadahBlock", "Naquadah Alloy Block");
 		Blocks.naquadahOre = registerBlock(BlockNaquadahOre.class, ItemBlock.class,
 				LanteaNameRegistry.getBlockMapping("oreNaquadah"), "naquadahOre", "Naquadah Ore");
+
+		Blocks.naquadahGenerator = (BlockNaquadahGenerator) registerBlock(BlockNaquadahGenerator.class,
+				ItemBlock.class, LanteaNameRegistry.getBlockMapping("blockNaquadahGenerator"), "naquadahGenerator",
+				"Naquadah Generator");
 	}
 
 	public Block registerBlock(Class<? extends Block> classOf, Class<? extends ItemBlock> itemClassOf,
 			String idForName, String unlocalizedName, String localizedName) {
-		LanteaCraft.getLogger().log(Level.FINE, "Attempting to register block " + idForName);
+		LanteaCraft.getLogger().log(Level.INFO, "Attempting to register block " + idForName);
 		try {
-			int id = config.getBlock(unlocalizedName, 4095).getInt();
+			int id = config.getBlock(unlocalizedName, 4094).getInt();
 			Constructor<? extends Block> ctor = classOf.getConstructor(int.class);
 			Block block = ctor.newInstance(id);
+			LanteaCraft.getLogger().log(
+					Level.INFO,
+					"Registering block " + classOf.getName() + ": { " + id + "->" + idForName + ", " + unlocalizedName
+							+ ", " + localizedName + " }");
 			block.setUnlocalizedName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName);
 			block.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName + "_"
 					+ getRenderMode());
 			block.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
+
+			LanteaCraft.getLogger().log(Level.INFO,
+					"Pushing {" + " " + block.blockID + "->" + block.getUnlocalizedName() + "} to GameRegistry...");
 			GameRegistry.registerBlock(block, itemClassOf, idForName);
 			LanguageRegistry.addName(block, localizedName);
 			return block;
@@ -331,7 +332,6 @@ public class LanteaCraftCommonProxy {
 
 		Items.debugger = (ItemDebugTool) registerItem(ItemDebugTool.class, "lanteadebug", "lanteadebug",
 				"LanteaCraft Debugger");
-
 	}
 
 	void registerOres() {
@@ -408,6 +408,8 @@ public class LanteaCraftCommonProxy {
 				LanteaNameRegistry.getTileEntityMapping("tileEntityRing"));
 		GameRegistry.registerTileEntity(TileEntityStargateController.class,
 				LanteaNameRegistry.getTileEntityMapping("tileEntityController"));
+		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class,
+				LanteaNameRegistry.getTileEntityMapping("tileEntityNaquadahGenerator"));
 	}
 
 	public ConfigValue<?> getConfigValue(String name) {
@@ -545,17 +547,14 @@ public class LanteaCraftCommonProxy {
 
 	public void onWorldLoad(Load e) {
 		// TODO Auto-generated method stub
-		LanteaCraft.getLogger().log(Level.WARNING, "Herp derp provider.load: " + e.world.getProviderName());
 	}
 
 	public void onWorldUnload(Unload e) {
 		// TODO Auto-generated method stub
-		LanteaCraft.getLogger().log(Level.WARNING, "Herp derp provider.unload: " + e.world.getProviderName());
 	}
 
 	public void onWorldSave(Save e) {
 		// TODO Auto-generated method stub
-		LanteaCraft.getLogger().log(Level.WARNING, "Herp derp provider.save: " + e.world.getProviderName());
 	}
 
 	public void handlePacket(LanteaPacket packet, Player player) {

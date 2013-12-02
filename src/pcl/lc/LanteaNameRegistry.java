@@ -13,7 +13,7 @@ public class LanteaNameRegistry {
 			tileEntityRegistry.put(refName, master);
 			return;
 		}
-		throw new IllegalStateException("Cannot register that name; name or value already exists.");
+		throw new RuntimeException("Cannot register that name; name or value already exists.");
 	}
 
 	private static void registerBlockMapping(String refName, String master) {
@@ -21,7 +21,7 @@ public class LanteaNameRegistry {
 			blockRegistry.put(refName, master);
 			return;
 		}
-		throw new IllegalStateException("Cannot register that name; name or value already exists.");
+		throw new RuntimeException("Cannot register that name; name or value already exists.");
 	}
 
 	private static void registerItemMapping(String refName, String master) {
@@ -29,25 +29,36 @@ public class LanteaNameRegistry {
 			itemRegistry.put(refName, master);
 			return;
 		}
-		throw new IllegalStateException("Cannot register that name; name or value already exists.");
+		throw new RuntimeException("Cannot register that name; name or value already exists.");
 	}
 
 	public static String getTileEntityMapping(String refName) {
-		return tileEntityRegistry.get(refName);
+		String name = tileEntityRegistry.get(refName);
+		if (name == null)
+			throw new RuntimeException("Cannot find TileEntityMapping with name reference " + refName
+					+ ", hard failure!");
+		return name;
 	}
 
 	public static String getBlockMapping(String refName) {
-		return blockRegistry.get(refName);
+		String name = blockRegistry.get(refName);
+		if (name == null)
+			throw new RuntimeException("Cannot find BlockMapping with name reference " + refName + ", hard failure!");
+		return name;
 	}
 
 	public static String getItemMapping(String refName) {
-		return itemRegistry.get(refName);
+		String name = itemRegistry.get(refName);
+		if (name == null)
+			throw new RuntimeException("Cannot find ItemMapping with name reference " + refName + ", hard failure!");
+		return name;
 	}
 
 	static {
 		registerTileEntityMapping("tileEntityRing", "pcl.lc.tileentity.TileEntityStargateRing");
 		registerTileEntityMapping("tileEntityBase", "pcl.lc.tileentity.TileEntityStargateBase");
 		registerTileEntityMapping("tileEntityController", "pcl.lc.tileentity.TileEntityStargateController");
+		registerTileEntityMapping("tileEntityNaquadahGenerator", "pcl.lc.tileentity.TileEntityNaquadahGenerator");
 
 		registerBlockMapping("blockRing", "pcl.lc.blocks.BlockStargateRing");
 		registerBlockMapping("blockBase", "pcl.lc.blocks.BlockStargateBase");
@@ -55,6 +66,7 @@ public class LanteaNameRegistry {
 
 		registerBlockMapping("blockNaquadah", "pcl.lc.blocks.BlockNaquadah");
 		registerBlockMapping("oreNaquadah", "pcl.lc.blocks.BlockNaquadahOre");
+		registerBlockMapping("blockNaquadahGenerator", "pcl.lc.blocks.BlockNaquadahGenerator");
 
 		registerItemMapping("itemNaquadah", "pcl.lc.items.ItemNaquadah");
 		registerItemMapping("itemNaquadahIngot", "pcl.lc.items.ItemNaquadahIngot");

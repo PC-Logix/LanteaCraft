@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.blocks.BlockNaquadah;
+import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockNaquadahOre;
 import pcl.lc.blocks.BlockPortal;
 import pcl.lc.blocks.BlockStargateBase;
@@ -29,10 +30,13 @@ import pcl.lc.network.LanteaPacket;
 import pcl.lc.render.RotationOrientedBlockRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
+import pcl.lc.render.model.NaquadahGeneratorModel;
 import pcl.lc.render.model.StargateControllerModel;
+import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
 import pcl.lc.render.tileentity.TileEntityPegasusStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
+import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
@@ -109,6 +113,8 @@ public class LanteaCraft {
 
 		public static Block naquadahBlock;
 		public static Block naquadahOre;
+
+		public static BlockNaquadahGenerator naquadahGenerator;
 	}
 
 	/**
@@ -130,6 +136,7 @@ public class LanteaCraft {
 	 */
 	public static class Render {
 		public static StargateControllerModel modelController;
+		public static NaquadahGeneratorModel modelNaquadahGenerator;
 
 		public static RotationOrientedBlockRenderer blockOrientedRenderer;
 
@@ -139,6 +146,8 @@ public class LanteaCraft {
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
 		public static TileEntityPegasusStargateBaseRenderer tileEntityPegausBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
+		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
+
 	}
 
 	public static HelperCreativeTab lanteaCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "LanteaCraft") {
