@@ -114,8 +114,9 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int id, int data) {
-		TileEntityStargateBase te = (TileEntityStargateBase) getTileEntity(world, x, y, z);
-		te.hostBlockDestroyed();
+		TileEntity te = getTileEntity(world, x, y, z);
+		if (te != null && te instanceof TileEntityStargateBase)
+			((TileEntityStargateBase) te).hostBlockDestroyed();
 		super.breakBlock(world, x, y, z, id, data);
 	}
 
@@ -130,12 +131,15 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntityStargateBase te = (TileEntityStargateBase) getTileEntity(world, x, y, z);
-		te.getAsStructure().invalidate();
+		TileEntity te = getTileEntity(world, x, y, z);
+		if (te != null && te instanceof TileEntityStargateBase)
+			((TileEntityStargateBase) te).getAsStructure().invalidate();
 	}
 
 	public boolean isMerged(IBlockAccess world, int x, int y, int z) {
-		TileEntityStargateBase te = (TileEntityStargateBase) getTileEntity(world, x, y, z);
-		return te.getAsStructure().isValid();
+		TileEntity te = getTileEntity(world, x, y, z);
+		if (te != null && te instanceof TileEntityStargateBase)
+			return ((TileEntityStargateBase) te).getAsStructure().isValid();
+		return false;
 	}
 }

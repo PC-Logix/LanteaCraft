@@ -7,11 +7,9 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class GenericContainer extends Container {
+public abstract class GenericContainer extends Container {
 
-	int xSize, ySize;
-
-	// public BaseContainer() {}
+	protected int xSize, ySize;
 
 	public GenericContainer(int width, int height) {
 		xSize = width;
@@ -20,6 +18,11 @@ public class GenericContainer extends Container {
 
 	public void addPlayerSlots(EntityPlayer player) {
 		addPlayerSlots(player, (xSize - 160) / 2, ySize - 82);
+	}
+
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
+		return null;
 	}
 
 	public void addPlayerSlots(EntityPlayer player, int x, int y) {
@@ -45,14 +48,7 @@ public class GenericContainer extends Container {
 		}
 	}
 
-	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-		// TODO: Try to come up with a generic way of implementing this
-		return null;
-	}
-
-	public void sendStateTo(ICrafting crafter) {
-	}
+	public abstract void sendStateTo(ICrafting crafter);
 
 	@Override
 	public void updateProgressBar(int i, int value) {

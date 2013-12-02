@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import pcl.lc.core.EnumStargateState;
 import pcl.lc.multiblock.EnumOrientations;
 import pcl.lc.util.ImmutablePair;
 import pcl.lc.util.ImmutableTuple;
@@ -19,14 +20,16 @@ import pcl.lc.util.Vector3;
 public class NetworkHelpers {
 	private static Vector3NetworkPacker vec3Network = new Vector3NetworkPacker();
 	private static EnumOrientationsNetworkPacker orientationNetwork = new EnumOrientationsNetworkPacker();
+	private static EnumStargateStateNetworkPacker stargateStateNetwork = new EnumStargateStateNetworkPacker();
 	private static ImmutablePairPacker pairNetwork = new ImmutablePairPacker();
 	private static ImmutableTuplePacker tupleNetwork = new ImmutableTuplePacker();
 
 	public void init() {
-		Vector3NetworkPacker.packId = SGCraftPacket.registerPackable(Vector3NetworkPacker.instance);
-		EnumOrientationsNetworkPacker.packId = SGCraftPacket.registerPackable(EnumOrientationsNetworkPacker.instance);
-		ImmutablePairPacker.packId = SGCraftPacket.registerPackable(ImmutablePairPacker.instance);
-		ImmutableTuplePacker.packId = SGCraftPacket.registerPackable(ImmutableTuplePacker.instance);
+		Vector3NetworkPacker.packId = LanteaPacket.registerPackable(Vector3NetworkPacker.instance);
+		EnumOrientationsNetworkPacker.packId = LanteaPacket.registerPackable(EnumOrientationsNetworkPacker.instance);
+		EnumStargateStateNetworkPacker.packId = LanteaPacket.registerPackable(EnumStargateStateNetworkPacker.instance);
+		ImmutablePairPacker.packId = LanteaPacket.registerPackable(ImmutablePairPacker.instance);
+		ImmutableTuplePacker.packId = LanteaPacket.registerPackable(ImmutableTuplePacker.instance);
 	}
 
 	public static class ImmutablePairPacker extends IStreamPackable<ImmutablePair> {
@@ -45,14 +48,14 @@ public class NetworkHelpers {
 
 		@Override
 		public void pack(ImmutablePair valueOf, DataOutputStream streamOf) throws IOException {
-			SGCraftPacket.writeValue(valueOf.getA(), streamOf);
-			SGCraftPacket.writeValue(valueOf.getB(), streamOf);
+			LanteaPacket.writeValue(valueOf.getA(), streamOf);
+			LanteaPacket.writeValue(valueOf.getB(), streamOf);
 		}
 
 		@Override
 		public ImmutablePair unpack(DataInputStream streamOf) throws IOException {
-			Object valA = SGCraftPacket.readValue(streamOf);
-			Object valB = SGCraftPacket.readValue(streamOf);
+			Object valA = LanteaPacket.readValue(streamOf);
+			Object valB = LanteaPacket.readValue(streamOf);
 			return new ImmutablePair<Object, Object>(valA, valB);
 		}
 	}
@@ -73,16 +76,16 @@ public class NetworkHelpers {
 
 		@Override
 		public void pack(ImmutableTuple valueOf, DataOutputStream streamOf) throws IOException {
-			SGCraftPacket.writeValue(valueOf.getA(), streamOf);
-			SGCraftPacket.writeValue(valueOf.getB(), streamOf);
-			SGCraftPacket.writeValue(valueOf.getC(), streamOf);
+			LanteaPacket.writeValue(valueOf.getA(), streamOf);
+			LanteaPacket.writeValue(valueOf.getB(), streamOf);
+			LanteaPacket.writeValue(valueOf.getC(), streamOf);
 		}
 
 		@Override
 		public ImmutableTuple unpack(DataInputStream streamOf) throws IOException {
-			Object valA = SGCraftPacket.readValue(streamOf);
-			Object valB = SGCraftPacket.readValue(streamOf);
-			Object valC = SGCraftPacket.readValue(streamOf);
+			Object valA = LanteaPacket.readValue(streamOf);
+			Object valB = LanteaPacket.readValue(streamOf);
+			Object valC = LanteaPacket.readValue(streamOf);
 			return new ImmutableTuple<Object, Object, Object>(valA, valB, valC);
 		}
 	}
@@ -140,6 +143,32 @@ public class NetworkHelpers {
 		public EnumOrientations unpack(DataInputStream streamOf) throws IOException {
 			int id = streamOf.readInt();
 			return EnumOrientations.getOrientationFromID(id);
+		}
+	}
+
+	public static class EnumStargateStateNetworkPacker extends IStreamPackable<EnumStargateState> {
+		private static EnumStargateStateNetworkPacker instance;
+		private static int packId;
+
+		public EnumStargateStateNetworkPacker() {
+			super(EnumStargateState.class);
+			EnumStargateStateNetworkPacker.instance = this;
+		}
+
+		@Override
+		public int getTypeOf() {
+			return packId;
+		}
+
+		@Override
+		public void pack(EnumStargateState valueOf, DataOutputStream streamOf) throws IOException {
+			streamOf.writeInt(valueOf.ordinal());
+		}
+
+		@Override
+		public EnumStargateState unpack(DataInputStream streamOf) throws IOException {
+			int id = streamOf.readInt();
+			return EnumStargateState.getStateFromOrdinal(id);
 		}
 	}
 

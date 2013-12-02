@@ -12,15 +12,15 @@ import net.minecraftforge.common.ForgeChunkManager.Type;
 
 public class TileEntityChunkManager implements ForgeChunkManager.LoadingCallback {
 
-	private final LanteaCraft sgcraft;
+	private final LanteaCraft mod;
 
-	public TileEntityChunkManager(LanteaCraft sgCraft) {
-		this.sgcraft = sgCraft;
-		ForgeChunkManager.setForcedChunkLoadingCallback(sgCraft, this);
+	public TileEntityChunkManager(LanteaCraft mod) {
+		this.mod = mod;
+		ForgeChunkManager.setForcedChunkLoadingCallback(mod, this);
 	}
 
 	Ticket newTicket(World world) {
-		return ForgeChunkManager.requestTicket(sgcraft, world, Type.NORMAL);
+		return ForgeChunkManager.requestTicket(mod, world, Type.NORMAL);
 	}
 
 	@Override

@@ -2,7 +2,8 @@ package pcl.lc.multiblock;
 
 import java.util.HashMap;
 
-import pcl.lc.network.SGCraftPacket;
+import pcl.lc.LanteaCraft;
+import pcl.lc.network.LanteaPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
@@ -20,10 +21,12 @@ public abstract class GenericMultiblock {
 
 	protected EnumOrientations structureOrientation;
 	protected HashMap<Object, MultiblockPart> structureParts = new HashMap<Object, MultiblockPart>();
+	protected HashMap<String, Object> metadata = new HashMap<String, Object>();
 
 	protected boolean wasInvalidated = false;
 	protected boolean isValid = false;
 	protected boolean isClient = false;
+	protected boolean hasUpdate = false;
 
 	protected TileEntity host;
 
@@ -41,7 +44,14 @@ public abstract class GenericMultiblock {
 	public void tick() {
 		if (host.worldObj != null)
 			isClient = host.worldObj.isRemote;
-		
+		if (isClient)
+			if (!hasUpdate) {
+				LanteaPacket packet = pollForUpdate();
+				LanteaCraft.getProxy().sendToServer(packet);
+				hasUpdate = true;
+			}
+		// if the structure is currently flagged as invalid, and we're not a
+		// client, attempt a validate
 		if (wasInvalidated() && !isClient)
 			validate(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
 	}
@@ -109,19 +119,26 @@ public abstract class GenericMultiblock {
 	public abstract void disband();
 
 	/**
-	 * Packs the structure into a new SGCraftPacket.
+	 * Packs the structure into a new LanteaPacket.
 	 * 
 	 * @return The packed multi-block structure data.
 	 */
-	public abstract SGCraftPacket pack();
+	public abstract LanteaPacket pack();
 
 	/**
-	 * Unpacks the structure data from a SGCraftPacket.
+	 * Unpacks the structure data from a LanteaPacket.
 	 * 
 	 * @param packet
 	 *            The packed multi-block structure data.
 	 */
-	public abstract void unpack(SGCraftPacket packet);
+	public abstract void unpack(LanteaPacket packet);
+
+	/**
+	 * Requests an update packet from the server.
+	 * 
+	 * @return The update request packet.
+	 */
+	public abstract LanteaPacket pollForUpdate();
 
 	/**
 	 * Called internally to set the base location of this multi-block structure.
@@ -187,7 +204,7 @@ public abstract class GenericMultiblock {
 	 */
 	public void setValid(World world, boolean b) {
 		if (!isClient)
-			throw new IllegalStateException("Cannot setValid state of a non-slave multiblock instance.");
+			return;
 		isValid = b;
 	}
 
@@ -211,4 +228,27 @@ public abstract class GenericMultiblock {
 		return structureOrientation;
 	}
 
+	public void setOrientation(EnumOrientations orientation) {
+		if (!isClient)
+			return;
+		structureOrientation = orientation;
+	}
+
+	public void setMetadata(String name, Object o) {
+		synchronized (metadata) {
+			metadata.put(name, o);
+		}
+	}
+
+	public Object getMetadata(String name) {
+		synchronized (metadata) {
+			return metadata.get(name);
+		}
+	}
+
+	public void removeMetadata(String name) {
+		synchronized (metadata) {
+			metadata.remove(name);
+		}
+	}
 }

@@ -18,7 +18,7 @@ import net.minecraftforge.common.ForgeVersion;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 
 /**
- * Analyics submisison thread. Prevents the entire SGCraftCommonProxy exploding.
+ * Analyics submisison thread. Prevents the entire proxy exploding.
  * 
  * @author AfterLifeLochie
  */
@@ -34,7 +34,7 @@ public class AnalyticsHelper extends Thread {
 	public AnalyticsHelper(boolean submitAnyway, String[] reportData) {
 		super();
 		setDaemon(true);
-		setName("SGCraft analytics submission thread");
+		setName("LanteaCraft analytics submission thread");
 		report = new StringBuilder();
 		overrideValidity = submitAnyway;
 
@@ -61,7 +61,8 @@ public class AnalyticsHelper extends Thread {
 	@Override
 	public void run() {
 		if (BuildInfo.buildNumber.equals("@" + "BUILD" + "@") && !overrideValidity) {
-			LanteaCraft.getLogger().log(Level.INFO, "You appear to be inside a development environment, no data to push.");
+			LanteaCraft.getLogger().log(Level.INFO,
+					"You appear to be inside a development environment, no data to push.");
 			return;
 		}
 

@@ -16,11 +16,11 @@ import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Items;
 import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.blocks.BlockNaquadah;
-import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockNaquadahOre;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
+import pcl.lc.compat.UpgradeHelper;
 import pcl.lc.config.ConfigValue;
 import pcl.lc.config.ConfigurationHelper;
 import pcl.lc.container.ContainerStargateBase;
@@ -37,12 +37,11 @@ import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTokraSpawnEgg;
 import pcl.lc.network.ClientPacketHandler;
 import pcl.lc.network.NetworkHelpers;
-import pcl.lc.network.SGCraftPacket;
+import pcl.lc.network.LanteaPacket;
 import pcl.lc.network.ServerPacketHandler;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
-import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.util.AnalyticsHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
@@ -107,6 +106,8 @@ public class LanteaCraftCommonProxy {
 	protected ServerPacketHandler defaultServerPacketHandler;
 	protected NetworkHelpers networkHelpers;
 
+	public static UpgradeHelper upgradeHelper;
+
 	protected static class IDBinding<T> {
 		public int id;
 		public T object;
@@ -131,7 +132,7 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public void init(FMLInitializationEvent e) {
-		LanteaCraft.getLogger().log(Level.INFO, "SGCraft setting up...");
+		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft setting up...");
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getInstance());
 		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
 		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new HelperGUIHandler());
@@ -152,7 +153,17 @@ public class LanteaCraftCommonProxy {
 		// channel = new StargateNetworkChannel(BuildInfo.modID);
 		if (config.extended)
 			config.save();
-		LanteaCraft.getLogger().log(Level.INFO, "SGCraft done setting up!");
+		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft done setting up!");
+
+		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft looking for other versions of SGCraft...");
+		if (UpgradeHelper.detectSGCraftInstall() || UpgradeHelper.detectSGCraftReloadedInstall()) {
+			upgradeHelper = new UpgradeHelper();
+			if (upgradeHelper.detectSGCraftInstall())
+				upgradeHelper.hookSGCraft();
+			if (upgradeHelper.detectSGCraftReloadedInstall())
+				upgradeHelper.hookSGCraftReloaded();
+		}
+		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft done looking for other versions.");
 	}
 
 	public void onChunkLoad(ChunkDataEvent.Load e) {
@@ -222,49 +233,46 @@ public class LanteaCraftCommonProxy {
 
 	void registerOther() {
 		if (((ConfigValue<Boolean>) getConfigValue("doGenerateStructures")).getValue()) {
-			LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft structures...");
+			LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft structures...");
 			MinecraftForge.TERRAIN_GEN_BUS.register(LanteaCraft.getInstance());
 			try {
 				if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
-					MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "SGCraft:DesertPyramid");
+					MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "LanteaCraft:DesertPyramid");
 			} catch (Throwable e) {
-				LanteaCraft.getLogger().log(Level.FINE, "Could not register structure type SGCraft:DesertPyramid", e);
+				LanteaCraft.getLogger().log(Level.FINE, "Could not register structure type LanteaCraft:DesertPyramid", e);
 			}
 		}
 	}
 
 	void registerBlocks() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft blocks...");
+		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft blocks...");
 		Blocks.sgRingBlock = (BlockStargateRing) registerBlock(BlockStargateRing.class, ItemStargateRing.class,
-				GCESGCompatHelper.getBlockMapping("blockRing"), "stargateRing", "Stargate Ring Segment");
+				LanteaNameRegistry.getBlockMapping("blockRing"), "stargateRing", "Stargate Ring Segment");
 		// Blocks.sgPegasusRingBlock = (BlockPegasusStargateRing)
 		// registerBlock(BlockPegasusStargateRing.class,
 		// ItemPegasusStargateRing.class,
-		// GCESGCompatHelper.getBlockMapping("blockPegasusRing"),
+		// LanteaNameRegistry.getBlockMapping("blockPegasusRing"),
 		// "stargatePegasusRing", "Pegasus Stargate Ring Segment");
 
 		Blocks.sgBaseBlock = (BlockStargateBase) registerBlock(BlockStargateBase.class, ItemBlock.class,
-				GCESGCompatHelper.getBlockMapping("blockBase"), "stargateBase", "Stargate Base");
+				LanteaNameRegistry.getBlockMapping("blockBase"), "stargateBase", "Stargate Base");
 		// Blocks.sgPegasusBaseBlock = (BlockPegasusStargateBase)
 		// registerBlock(BlockPegasusStargateBase.class, ItemBlock.class,
-		// GCESGCompatHelper.getBlockMapping("blockPegasusBase"),
+		// LanteaNameRegistry.getBlockMapping("blockPegasusBase"),
 		// "stargatePegasusBase", "Pegasus Stargate Base");
 
 		Blocks.sgControllerBlock = (BlockStargateController) registerBlock(BlockStargateController.class,
-				ItemBlock.class, GCESGCompatHelper.getBlockMapping("blockController"), "stargateController",
+				ItemBlock.class, LanteaNameRegistry.getBlockMapping("blockController"), "stargateController",
 				"Stargate Controller");
 		// Blocks.sgPegasusControllerBlock = (BlockPegasusStargateController)
 		// registerBlock(BlockPegasusStargateController.class, ItemBlock.class,
-		// GCESGCompatHelper.getBlockMapping("blockPegasusController"),
+		// LanteaNameRegistry.getBlockMapping("blockPegasusController"),
 		// "stargatePegasusController", "Pegasus Stargate Controller");
 
 		Blocks.naquadahBlock = registerBlock(BlockNaquadah.class, ItemBlock.class,
-				GCESGCompatHelper.getBlockMapping("blockNaquadah"), "naquadahBlock", "Naquadah Alloy Block");
+				LanteaNameRegistry.getBlockMapping("blockNaquadah"), "naquadahBlock", "Naquadah Alloy Block");
 		Blocks.naquadahOre = registerBlock(BlockNaquadahOre.class, ItemBlock.class,
-				GCESGCompatHelper.getBlockMapping("oreNaquadah"), "naquadahOre", "Naquadah Ore");
-		
-		Blocks.naquadahGenerator = registerBlock(BlockNaquadahGenerator.class, ItemBlock.class, 
-				GCESGCompatHelper.getBlockMapping("naquadahGenerator"), "naquadahGenerator", "Naquadah Generator");
+				LanteaNameRegistry.getBlockMapping("oreNaquadah"), "naquadahOre", "Naquadah Ore");
 	}
 
 	public Block registerBlock(Class<? extends Block> classOf, Class<? extends ItemBlock> itemClassOf,
@@ -307,34 +315,34 @@ public class LanteaCraftCommonProxy {
 	}
 
 	void registerItems() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft items...");
-		Items.naquadah = registerItem(Item.class, GCESGCompatHelper.getBlockMapping("itemNaquadah"), "naquadah",
+		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft items...");
+		Items.naquadah = registerItem(Item.class, LanteaNameRegistry.getBlockMapping("itemNaquadah"), "naquadah",
 				"Naquadah");
-		Items.naquadahIngot = registerItem(Item.class, GCESGCompatHelper.getBlockMapping("itemNaquadahIngot"),
+		Items.naquadahIngot = registerItem(Item.class, LanteaNameRegistry.getBlockMapping("itemNaquadahIngot"),
 				"naquadahIngot", "Naquadah Alloy Ingot");
-		Items.sgCoreCrystal = registerItem(Item.class, GCESGCompatHelper.getBlockMapping("itemCoreCrystal"),
+		Items.sgCoreCrystal = registerItem(Item.class, LanteaNameRegistry.getBlockMapping("itemCoreCrystal"),
 				"sgCoreCrystal", "Stargate Core Crystal");
 		Items.sgControllerCrystal = registerItem(Item.class,
-				GCESGCompatHelper.getBlockMapping("itemControllerCrystal"), "sgControllerCrystal",
+				LanteaNameRegistry.getBlockMapping("itemControllerCrystal"), "sgControllerCrystal",
 				"Stargate Controller Crystal");
 
 		Items.tokraSpawnEgg = (ItemTokraSpawnEgg) registerItem(ItemTokraSpawnEgg.class,
-				GCESGCompatHelper.getItemMapping("tokraSpawnEgg"), "tokraSpawnEgg", "Tok'ra Spawn Egg");
+				LanteaNameRegistry.getItemMapping("tokraSpawnEgg"), "tokraSpawnEgg", "Tok'ra Spawn Egg");
 
-		Items.debugger = (ItemDebugTool) registerItem(ItemDebugTool.class, "sgcraftdebugger", "sgcraftdebugger",
-				"SGCR Debugger");
+		Items.debugger = (ItemDebugTool) registerItem(ItemDebugTool.class, "lanteadebug", "lanteadebug",
+				"LanteaCraft Debugger");
 
 	}
 
 	void registerOres() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft ores...");
+		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft ores...");
 		registerOre("oreNaquadah", Blocks.naquadahOre);
 		registerOre("naquadah", Items.naquadah);
 		registerOre("ingotNaquadahAlloy", Items.naquadahIngot);
 	}
 
 	void registerRecipes() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft recipes...");
+		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft recipes...");
 		ItemStack chiselledSandstone = new ItemStack(Block.sandStone, 1, 1);
 		ItemStack smoothSandstone = new ItemStack(Block.sandStone, 1, 2);
 		ItemStack sgChevronBlock = new ItemStack(Blocks.sgRingBlock, 1, 1);
@@ -361,12 +369,12 @@ public class LanteaCraftCommonProxy {
 	}
 
 	void registerContainers() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft containers...");
+		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft containers...");
 		addContainer(EnumGuiList.SGBase.ordinal(), ContainerStargateBase.class);
 	}
 
 	void registerRandomItems() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft random drop items...");
+		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft random drop items...");
 		String[] categories = { ChestGenHooks.MINESHAFT_CORRIDOR, ChestGenHooks.PYRAMID_DESERT_CHEST,
 				ChestGenHooks.PYRAMID_JUNGLE_CHEST, ChestGenHooks.STRONGHOLD_LIBRARY, ChestGenHooks.VILLAGE_BLACKSMITH };
 		addRandomChestItem(new ItemStack(Blocks.sgBaseBlock), 1, 1, 2, categories);
@@ -379,28 +387,27 @@ public class LanteaCraftCommonProxy {
 
 	void registerWorldGenerators() {
 		if (config.getBoolean("options", "enableNaquadahOre", true)) {
-			LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft NaquidahOre generator...");
+			LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft NaquadahOre generator...");
 			naquadahOreGenerator = new NaquadahOreWorldGen();
 			GameRegistry.registerWorldGenerator(naquadahOreGenerator);
 		}
 	}
 
 	void registerVillagers() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft Tokra villagers...");
+		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft Tokra villagers...");
 		tokraVillagerID = addVillager(config.getVillager("tokra"), "tokra",
 				LanteaCraft.getResource("textures/skins/tokra.png"));
 		addTradeHandler(tokraVillagerID, new TradeHandler());
 	}
 
 	void registerTileEntities() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering SGCraft tile entities...");
+		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft tile entities...");
 		GameRegistry.registerTileEntity(TileEntityStargateBase.class,
-				GCESGCompatHelper.getTileEntityMapping("tileEntityBase"));
+				LanteaNameRegistry.getTileEntityMapping("tileEntityBase"));
 		GameRegistry.registerTileEntity(TileEntityStargateRing.class,
-				GCESGCompatHelper.getTileEntityMapping("tileEntityRing"));
+				LanteaNameRegistry.getTileEntityMapping("tileEntityRing"));
 		GameRegistry.registerTileEntity(TileEntityStargateController.class,
-				GCESGCompatHelper.getTileEntityMapping("tileEntityController"));
-		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class, BuildInfo.modID+"tileEntityNaquadaGenerator");
+				LanteaNameRegistry.getTileEntityMapping("tileEntityController"));
 	}
 
 	public ConfigValue<?> getConfigValue(String name) {
@@ -551,26 +558,26 @@ public class LanteaCraftCommonProxy {
 		LanteaCraft.getLogger().log(Level.WARNING, "Herp derp provider.save: " + e.world.getProviderName());
 	}
 
-	public void handlePacket(SGCraftPacket packet, Player player) {
+	public void handlePacket(LanteaPacket packet, Player player) {
 		if (packet.getPacketIsForServer())
 			defaultServerPacketHandler.handlePacket(packet, player);
 		else
 			return;
 	}
 
-	public void sendToServer(SGCraftPacket packet) {
+	public void sendToServer(LanteaPacket packet) {
 		throw new RuntimeException("Cannot send to server: this method was not overridden!!");
 	}
 
-	public void sendToAllPlayers(SGCraftPacket packet) {
+	public void sendToAllPlayers(LanteaPacket packet) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		if (server != null) {
-			LanteaCraft.getLogger().log(Level.INFO, "SGCraft sending packet to all players: " + packet.toString());
+			LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft sending packet to all players: " + packet.toString());
 			server.getConfigurationManager().sendPacketToAllPlayers(packet.toPacket());
 		}
 	}
 
-	public void sendToPlayer(EntityPlayer player, SGCraftPacket packet) {
+	public void sendToPlayer(EntityPlayer player, LanteaPacket packet) {
 		PacketDispatcher.sendPacketToPlayer(packet.toPacket(), (Player) player);
 	}
 

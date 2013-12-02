@@ -11,9 +11,9 @@ public enum EnumStargateState {
 
 	static EnumStargateState[] VALUES = values();
 
-	public static EnumStargateState valueOf(int i) {
+	public static EnumStargateState getStateFromOrdinal(int id) {
 		try {
-			return VALUES[i];
+			return VALUES[id];
 		} catch (IndexOutOfBoundsException e) {
 			return Idle;
 		}

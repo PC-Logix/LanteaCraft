@@ -1,11 +1,12 @@
 package pcl.lc;
 
 import java.lang.reflect.Constructor;
+import java.util.logging.Level;
 
 import pcl.lc.core.EnumGuiList;
 import pcl.lc.gui.ScreenStargateBase;
 import pcl.lc.gui.ScreenStargateController;
-import pcl.lc.network.SGCraftPacket;
+import pcl.lc.network.LanteaPacket;
 import pcl.lc.render.GenericBlockRenderer;
 import pcl.lc.render.RotationOrientedBlockRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
@@ -54,10 +55,10 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	public void registerSounds() {
 		try {
 			SoundPool pool = Minecraft.getMinecraft().sndManager.soundPoolSounds;
-			pool.addSound("gcewing_sg:sg1_abort.ogg");
-			pool.addSound("gcewing_sg:sg1_close.ogg");
-			pool.addSound("gcewing_sg:sg1_dial.ogg");
-			pool.addSound("gcewing_sg:gate_open.ogg");
+			pool.addSound("pcl_lc:sg1_abort.ogg");
+			pool.addSound("pcl_lc:sg1_close.ogg");
+			pool.addSound("pcl_lc:sg1_dial.ogg");
+			pool.addSound("pcl_lc:gate_open.ogg");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -69,7 +70,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	}
 
 	public void registerRenderers() {
-		LanteaCraft.Render.modelController = new StargateControllerModel("/assets/gcewing_sg/models/dhd.obj");
+		LanteaCraft.Render.modelController = new StargateControllerModel("/assets/pcl_lc/models/dhd.obj");
 
 		LanteaCraft.Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
 		addTileEntityRenderer(TileEntityStargateBase.class, LanteaCraft.Render.tileEntityBaseRenderer);
@@ -122,7 +123,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	}
 
 	@Override
-	public void handlePacket(SGCraftPacket packet, Player player) {
+	public void handlePacket(LanteaPacket packet, Player player) {
 		if (packet.getPacketIsForServer())
 			defaultServerPacketHandler.handlePacket(packet, player);
 		else
@@ -130,7 +131,8 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	}
 
 	@Override
-	public void sendToServer(SGCraftPacket packet) {
+	public void sendToServer(LanteaPacket packet) {
+		LanteaCraft.getLogger().log(Level.INFO, "SGCraft sending packet to server: " + packet.toString());
 		FMLClientHandler.instance().sendPacket(packet.toPacket());
 	}
 

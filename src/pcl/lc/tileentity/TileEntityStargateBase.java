@@ -19,7 +19,7 @@ import pcl.lc.core.EnumStargateState;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.WorldLocation;
 import pcl.lc.multiblock.StargateMultiblock;
-import pcl.lc.network.SGCraftPacket;
+import pcl.lc.network.LanteaPacket;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.util.Trans3;
 import pcl.lc.util.Utils;
@@ -89,21 +89,20 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	public static DamageSource transientDamage = new TileEntityStargateBase.TransientDamageSource();
 
 	private boolean hasSetChunkZone = false;
-
-	public EnumStargateState state = EnumStargateState.Idle;
-	private double ringAngle, lastRingAngle, targetRingAngle; // degrees
 	public int numEngagedChevrons;
-	public String dialledAddress = "";
 
 	@Deprecated
 	public boolean isLinkedToController;
 	@Deprecated
 	public int linkedX, linkedY, linkedZ;
-	@Deprecated
-	WorldLocation connectedLocation;
-	boolean isInitiator;
-	int timeout;
+	private WorldLocation connectedLocation;
+	private boolean isInitiator;
+	private int timeout;
 	public int fuelBuffer;
+
+	private EnumStargateState lastState = EnumStargateState.Idle;
+
+	private double renderRingAngle, renderLastRingAngle, renderNextRingAngle;
 
 	// START NEW MULTIBLOCK CODE
 
@@ -169,6 +168,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		return TileEntityStargateBase.at(world, nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
 	}
 
+	public TileEntityStargateBase() {
+		getAsStructure().setMetadata("state", EnumStargateState.Idle);
+	}
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return AxisAlignedBB.getAABBPool().getAABB(xCoord - 2, yCoord, zCoord - 2, xCoord + 3, yCoord + 5, zCoord + 3);
@@ -187,10 +190,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		state = EnumStargateState.valueOf(nbt.getInteger("state"));
-		targetRingAngle = nbt.getDouble("targetRingAngle");
 		numEngagedChevrons = nbt.getInteger("numEngagedChevrons");
-		dialledAddress = nbt.getString("dialledAddress");
 		isLinkedToController = nbt.getBoolean("isLinkedToController");
 		linkedX = nbt.getInteger("linkedX");
 		linkedY = nbt.getInteger("linkedY");
@@ -207,10 +207,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setInteger("state", state.ordinal());
-		nbt.setDouble("targetRingAngle", targetRingAngle);
 		nbt.setInteger("numEngagedChevrons", numEngagedChevrons);
-		nbt.setString("dialledAddress", dialledAddress);
 		nbt.setBoolean("isLinkedToController", isLinkedToController);
 		nbt.setInteger("linkedX", linkedX);
 		nbt.setInteger("linkedY", linkedY);
@@ -243,7 +240,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	public double interpolatedRingAngle(double t) {
-		return Utils.interpolateAngle(lastRingAngle, ringAngle, t);
+		return Utils.interpolateAngle(renderLastRingAngle, renderRingAngle, t);
 	}
 
 	@Override
@@ -253,45 +250,130 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote) {
-			clientUpdate();
-			if (!hasSetChunkZone) {
-				setForcedChunkRange(-1, -1, 1, 1);
-				hasSetChunkZone = true;
-			}
-		} else {
-			serverUpdate();
-			checkForEntitiesInPortal();
-			if (!hasSetChunkZone) {
-				setForcedChunkRange(-1, -1, 1, 1);
-				hasSetChunkZone = true;
-			}
-			// performPendingRemounts();
-		}
-
+		advance();
 		multiblock.tick();
 	}
 
-	void enterState(EnumStargateState newState, int newTimeout) {
-		state = newState;
+	/**
+	 * Advances the Stargate by one tick.
+	 */
+	public void advance() {
+		if (!hasSetChunkZone) {
+			setForcedChunkRange(-1, -1, 1, 1);
+			hasSetChunkZone = true;
+		}
+
+		if (worldObj.isRemote) {
+			if (getAsStructure().isValid() && lastState != getState()) {
+				lastState = getState();
+				timeout = (Integer) getAsStructure().getMetadata("timeout");
+				numEngagedChevrons = (Integer) getAsStructure().getMetadata("numEngagedChevrons");
+				int targetpos = Character.getNumericValue(getDialledAddres().indexOf(numEngagedChevrons))
+						- Character.getNumericValue('A');
+				LanteaCraft.getLogger().log(Level.INFO,
+						"Timeout " + timeout + ", neng " + numEngagedChevrons + ", target " + targetpos);
+				renderNextRingAngle = Utils.normaliseAngle(targetpos * ringSymbolAngle - 45 * numEngagedChevrons);
+				switch (getState()) {
+				case Transient:
+					initiateOpeningTransient();
+					break;
+				case Disconnecting:
+					initiateClosingTransient();
+					break;
+				}
+			}
+
+			renderLastRingAngle = renderRingAngle;
+			applyRandomImpulse();
+			updateEventHorizon();
+			if (getState() == EnumStargateState.Dialling)
+				updateRingAngle();
+		} else {
+			if (getAsStructure().isValid()) {
+				if (getState() == EnumStargateState.Connected && isInitiator)
+					if (!useFuel(1))
+						disconnect();
+
+				if (timeout > 0) {
+					if (getState() == EnumStargateState.Transient)
+						performTransientDamage();
+					--timeout;
+				} else
+					switch (getState()) {
+					case Idle:
+						if (undialledDigitsRemaining())
+							startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
+						break;
+					case Dialling:
+						finishDiallingSymbol();
+						break;
+					case InterDialling:
+						startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
+						break;
+					case Transient:
+						enterState(EnumStargateState.Connected, isInitiator ? ticksToStayOpen : 0);
+						break;
+					case Connected:
+						if (isInitiator)
+							disconnect();
+						break;
+					case Disconnecting:
+						enterState(EnumStargateState.Idle, 0);
+						break;
+					}
+			}
+			checkForEntitiesInPortal();
+		}
+	}
+
+	/**
+	 * Gets the metadata state of the Stargate
+	 * 
+	 * @return The metadata dial state of the Stargate
+	 */
+	private EnumStargateState getState() {
+		return (EnumStargateState) getAsStructure().getMetadata("state");
+	}
+
+	/**
+	 * Get the address currently dialling to.
+	 * 
+	 * @return The address currently dialling to.
+	 */
+	private String getDialledAddres() {
+		return (String) getAsStructure().getMetadata("diallingTo");
+	}
+
+	/**
+	 * Causes the Stargate to enter the specified state for the specified number
+	 * of ticks.
+	 * 
+	 * @param newState
+	 *            The state to enter
+	 * @param newTimeout
+	 *            The timeout to set
+	 */
+	private void enterState(EnumStargateState newState, int newTimeout) {
+		getAsStructure().setMetadata("state", newState);
+		getAsStructure().setMetadata("timeout", newTimeout);
+		getAsStructure().setMetadata("numEngagedChevrons", numEngagedChevrons);
 		timeout = newTimeout;
-		if (state == EnumStargateState.Dialling || state == EnumStargateState.Connected
-				|| state == EnumStargateState.InterDialling || state == EnumStargateState.Transient) {
+		if (getState() == EnumStargateState.Dialling || getState() == EnumStargateState.Connected
+				|| getState() == EnumStargateState.InterDialling || getState() == EnumStargateState.Transient) {
 			if (!isInitiator)
 				powerLevel = 15;
 			else
 				powerLevel = 0;
-		} else if (state == EnumStargateState.Disconnecting || state == EnumStargateState.Idle)
+		} else if (getState() == EnumStargateState.Disconnecting || getState() == EnumStargateState.Idle)
 			powerLevel = 0;
 		worldObj.notifyBlockChange(xCoord, yCoord, zCoord, blockType.blockID);
 		onInventoryChanged();
 		markBlockForUpdate();
-
 	}
 
 	public boolean isConnected() {
-		return state == EnumStargateState.Transient || state == EnumStargateState.Connected
-				|| state == EnumStargateState.Disconnecting;
+		return getState() == EnumStargateState.Transient || getState() == EnumStargateState.Connected
+				|| getState() == EnumStargateState.Disconnecting;
 	}
 
 	@Deprecated
@@ -333,7 +415,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	public void connectOrDisconnect(String address, EntityPlayer player) {
-		if (state == EnumStargateState.Idle) {
+		if (getState() == EnumStargateState.Idle) {
 			if (address.length() == GateAddressHelper.addressLength)
 				connect(address, player);
 		} else {
@@ -341,7 +423,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			TileEntityStargateBase dte = getConnectedStargateTE();
 			boolean validConnection = dte != null && dte.getConnectedStargateTE() == this;
 			if (canDisconnect || !validConnection) {
-				if (state != EnumStargateState.Disconnecting)
+				if (getState() != EnumStargateState.Disconnecting)
 					disconnect();
 			} else if (!canDisconnect) {
 			}
@@ -359,7 +441,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			diallingFailure(player, "Stargate cannot connect to itself\n");
 			return;
 		}
-		if (dte.state != EnumStargateState.Idle) {
+		if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle) {
 			diallingFailure(player, "Stargate at address " + address + " is busy");
 			return;
 		}
@@ -398,76 +480,37 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	public void clearConnection() {
-		if (state != EnumStargateState.Idle || connectedLocation != null) {
-			dialledAddress = "";
+		if (getState() != EnumStargateState.Idle || connectedLocation != null) {
+			getAsStructure().removeMetadata("diallingTo");
+			getAsStructure().removeMetadata("numEngagedChevrons");
 			connectedLocation = null;
 			isInitiator = false;
 			numEngagedChevrons = 0;
 			onInventoryChanged();
 			markBlockForUpdate();
-			if (state == EnumStargateState.Connected) {
+			if (getState() == EnumStargateState.Connected) {
 				enterState(EnumStargateState.Disconnecting, disconnectTime);
 				playSoundEffect("gcewing_sg:sg1_close", 1.0F, 1.0F);
 			} else {
-				if (state != EnumStargateState.Idle && state != EnumStargateState.Disconnecting)
+				if (getState() != EnumStargateState.Idle && getState() != EnumStargateState.Disconnecting)
 					playSoundEffect("gcewing_sg:sg1_abort", 1.0F, 1.0F);
 				enterState(EnumStargateState.Idle, 0);
 			}
+
+			getAsStructure().removeMetadata("diallingTo");
 		}
 	}
 
 	void startDiallingStargate(String address, TileEntityStargateBase dte, boolean initiator) {
-		dialledAddress = address;
+		getAsStructure().setMetadata("diallingTo", address);
+		getAsStructure().setMetadata("numEngagedChevrons", numEngagedChevrons);
 		connectedLocation = new WorldLocation(dte);
 		isInitiator = initiator;
 		if (m_computer != null)
 			if (!isInitiator)
 				m_computer.queueEvent("sgIncoming", new Object[] { address });
 		onInventoryChanged();
-		startDiallingNextSymbol();
-	}
-
-	/**
-	 * This should be in {@link update()}
-	 */
-	@Deprecated
-	void serverUpdate() {
-		if (getAsStructure().isValid()) {
-			fuelUsage();
-			if (timeout > 0) {
-				if (state == EnumStargateState.Transient)
-					performTransientDamage();
-				--timeout;
-			} else
-				switch (state) {
-				case Idle:
-					if (undialledDigitsRemaining())
-						startDiallingNextSymbol();
-					break;
-				case Dialling:
-					finishDiallingSymbol();
-					break;
-				case InterDialling:
-					startDiallingNextSymbol();
-					break;
-				case Transient:
-					enterState(EnumStargateState.Connected, isInitiator ? ticksToStayOpen : 0);
-					break;
-				case Connected:
-					if (isInitiator)
-						disconnect();
-					break;
-				case Disconnecting:
-					enterState(EnumStargateState.Idle, 0);
-					break;
-				}
-		}
-	}
-
-	void fuelUsage() {
-		if (state == EnumStargateState.Connected && isInitiator)
-			if (!useFuel(1))
-				disconnect();
+		startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
 	}
 
 	boolean useFuel(int amount) {
@@ -499,21 +542,18 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		return false;
 	}
 
-	void setFuelBuffer(int amount) {
+	private void setFuelBuffer(int amount) {
 		if (fuelBuffer != amount) {
 			fuelBuffer = amount;
 			onInventoryChanged();
 		}
 	}
 
-	public Trans3 localToGlobalTransformation() {
+	private Trans3 localToGlobalTransformation() {
 		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord, getBlockMetadata(), this);
 	}
 
-	/**
-	 * This is the wormhole damage. Why is it 'transient'. my wat.
-	 */
-	void performTransientDamage() {
+	private void performTransientDamage() {
 		Trans3 t = localToGlobalTransformation();
 		Vector3 p0 = t.p(-1.5, 0.5, 0.5);
 		Vector3 p1 = t.p(1.5, 3.5, 5.5);
@@ -532,30 +572,16 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		}
 	}
 
-	/**
-	 * i - 7!?
-	 */
-	@Deprecated
 	boolean undialledDigitsRemaining() {
-		int n = numEngagedChevrons;
-		return n < 7 && n < dialledAddress.length();
-	}
-
-	void startDiallingNextSymbol() {
-		startDiallingSymbol(dialledAddress.charAt(numEngagedChevrons));
+		return numEngagedChevrons < 7 && getDialledAddres() != null && numEngagedChevrons < getDialledAddres().length();
 	}
 
 	void startDiallingSymbol(char c) {
 		int i = Character.getNumericValue(c) - Character.getNumericValue('A');
 		if (i >= 0 && i < GateAddressHelper.numSymbols) {
-			startDiallingToAngle(i * ringSymbolAngle - 45 * numEngagedChevrons);
+			enterState(EnumStargateState.Dialling, diallingTime);
 			playSoundEffect("gcewing_sg:sg1_dial", 1.0F, 1.0F);
 		}
-	}
-
-	void startDiallingToAngle(double a) {
-		targetRingAngle = Utils.normaliseAngle(a);
-		enterState(EnumStargateState.Dialling, diallingTime);
 	}
 
 	void finishDiallingSymbol() {
@@ -569,35 +595,33 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	void finishDiallingAddress() {
-		// System.out.printf("SGBaseTE: Connecting to '%s'\n", dialledAddress);
 		if (!isInitiator || useFuel(fuelToOpen)) {
 			enterState(EnumStargateState.Transient, transientDuration);
 			playSoundEffect("gcewing_sg:gate_open", 1.0F, 1.0F);
 		} else
-			// enterState(SGState.Idle, 0);
-			// playSoundEffect("gcewing_sg:sg_abort", 1.0F, 1.0F);
 			disconnect();
 	}
 
 	boolean canTravelFromThisEnd() {
-		return isInitiator || !oneWayTravel;
+		return !oneWayTravel || isInitiator;
 	}
 
 	class TrackedEntity {
 		public Entity entity;
 		public Vector3 lastPos;
+		public Vector3 lastVel;
 
 		public TrackedEntity(Entity entity) {
 			this.entity = entity;
 			lastPos = new Vector3(entity.posX, entity.posY, entity.posZ);
+			lastVel = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
 		}
-
 	}
 
 	List<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
 
-	void checkForEntitiesInPortal() {
-		if (state == EnumStargateState.Connected) {
+	private void checkForEntitiesInPortal() {
+		if (getState() == EnumStargateState.Connected) {
 			for (TrackedEntity trk : trackedEntities)
 				entityInPortal(trk.entity, trk.lastPos);
 			trackedEntities.clear();
@@ -612,8 +636,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		}
 	}
 
-	public void entityInPortal(Entity entity, Vector3 prevPos) {
-		if (!entity.isDead && state == EnumStargateState.Connected && canTravelFromThisEnd()) {
+	private void entityInPortal(Entity entity, Vector3 prevPos) {
+		if (!entity.isDead && getState() == EnumStargateState.Connected && canTravelFromThisEnd()) {
 			Trans3 t = localToGlobalTransformation();
 			double vx = entity.posX - prevPos.x;
 			double vy = entity.posY - prevPos.y;
@@ -775,76 +799,47 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		world.onEntityRemoved(entity);
 	}
 
-	void checkChunk(World world, Entity entity) {
+	private void checkChunk(World world, Entity entity) {
 		int cx = MathHelper.floor_double(entity.posX / 16.0D);
 		int cy = MathHelper.floor_double(entity.posZ / 16.0D);
 		Chunk chunk = world.getChunkFromChunkCoords(cx, cy);
 	}
 
-	Vector3 yawVector(Entity entity) {
+	private Vector3 yawVector(Entity entity) {
 		return yawVector(entity.rotationYaw);
 	}
 
-	Vector3 yawVector(double yaw) {
+	private Vector3 yawVector(double yaw) {
 		double a = Math.toRadians(yaw);
 		Vector3 v = new Vector3(-Math.sin(a), 0, Math.cos(a));
-		// System.out.printf("SGBaseTE.yawVector: %.2f --> (%.3f, %.3f)\n", yaw,
-		// v.x, v.z);
 		return v;
 	}
 
-	double yawAngle(Vector3 v) {
+	private double yawAngle(Vector3 v) {
 		double a = Math.atan2(-v.x, v.z);
 		double d = Math.toDegrees(a);
-		// System.out.printf("SGBaseTE.yawAngle: (%.3f, %.3f) --> %.2f\n", v.x,
-		// v.z, d);
 		return d;
 	}
 
-	TileEntityStargateBase getConnectedStargateTE() {
+	private TileEntityStargateBase getConnectedStargateTE() {
 		if (connectedLocation != null)
 			return connectedLocation.getStargateTE();
 		else
 			return null;
 	}
 
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		EnumStargateState oldState = state;
-		super.onDataPacket(net, pkt);
-		if (getAsStructure().isValid() && state != oldState)
-			switch (state) {
-			case Transient:
-				initiateOpeningTransient();
-				break;
-			case Disconnecting:
-				initiateClosingTransient();
-				break;
-			}
+	private void setRingAngle(double a) {
+		renderRingAngle = a;
 	}
 
-	void clientUpdate() {
-		lastRingAngle = ringAngle;
-		applyRandomImpulse();
-		updateEventHorizon();
-		switch (state) {
-		case Dialling:
-			updateRingAngle();
-			break;
-		}
-	}
-
-	void setRingAngle(double a) {
-		ringAngle = a;
-	}
-
-	void updateRingAngle() {
+	private void updateRingAngle() {
 		if (timeout > 0) {
-			double da = Utils.diffAngle(ringAngle, targetRingAngle) / timeout;
-			setRingAngle(Utils.addAngle(ringAngle, da));
+			double da = Utils.diffAngle(renderRingAngle, renderNextRingAngle) / timeout;
+			LanteaCraft.getLogger().log(Level.INFO, "Spin angle by factor " + da);
+			setRingAngle(Utils.addAngle(renderRingAngle, da));
 			--timeout;
 		} else
-			setRingAngle(targetRingAngle);
+			setRingAngle(renderNextRingAngle);
 	}
 
 	public double[][][] getEventHorizonGrid() {
@@ -953,7 +948,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			throws Exception {
 		if (method == 0 || method == 1) {
 			String address = arguments[0].toString().toUpperCase();
-			if (address.length() <= 7)
+			if (address.length() != 7)
 				return new Object[] { "Stargate addresses must be 7 characters" };
 			else
 				connect(address, null);
@@ -966,18 +961,16 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		else if (method == 5)
 			return new Object[] { isDialing() };
 		else if (method == 6)
-			return new Object[] { getAsStructure().isMerged() };
+			return new Object[] { getAsStructure().isValid() };
 		else if (method == 7) {
 			String address = arguments[0].toString().toUpperCase();
-			if (address.length() <= 7)
-				return new Object[] { "Stargate addresses must be atleast 7 characters" };
-			else {
-				TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
-				if (dte.state != EnumStargateState.Idle)
-					return new Object[] { "true" };
-				else
-					return new Object[] { "false" };
-			}
+			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
+			if (address.length() != 7)
+				return new Object[] { "Stargate addresses must be 7 characters" };
+			else if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle)
+				return new Object[] { "true" };
+			else
+				return new Object[] { "false" };
 		} else if (method == 8) {
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(getHomeAddress());
 			if (!reloadFuel(fuelToOpen))
@@ -986,10 +979,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 				return new Object[] { true };
 		} else if (method == 9) {
 			String address = arguments[0].toString().toUpperCase();
-			if (address.length() <= 7)
-				return new Object[] { "Stargate addresses must be atleast 7 characters" };
+			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
+			if (address.length() != 7)
+				return new Object[] { "Stargate addresses must be 7 characters" };
 			else {
-				TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 				if (dte == null)
 					return new Object[] { false };
 				if (address == getHomeAddress())
@@ -1002,7 +995,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	public boolean isDialing() {
-		return state == EnumStargateState.InterDialling || state == EnumStargateState.Dialling;
+		return getState() == EnumStargateState.InterDialling || getState() == EnumStargateState.Dialling;
 	}
 
 	@Override
@@ -1027,14 +1020,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getLogger().log(Level.INFO, "SGCraft sending Stargate update packet.");
-		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("DimensionID", worldObj.provider.dimensionId);
-		data.put("WorldX", xCoord);
-		data.put("WorldY", yCoord);
-		data.put("WorldZ", zCoord);
-		SGCraftPacket packet = getAsStructure().pack();
-		packet.setAllValues(data);
+		LanteaPacket packet = getAsStructure().pack();
 		LanteaCraft.getProxy().sendToAllPlayers(packet);
 		return null;
 	}

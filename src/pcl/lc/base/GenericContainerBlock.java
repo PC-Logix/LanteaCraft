@@ -2,6 +2,7 @@ package pcl.lc.base;
 
 import java.util.Random;
 
+import pcl.lc.LanteaCraft;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -31,7 +32,7 @@ public abstract class GenericContainerBlock extends BlockContainer {
 
 	@Deprecated
 	public Icon getIcon(IconRegister register, String whoknows) {
-		return register.registerIcon("gcewing_sg:" + whoknows);
+		return register.registerIcon(LanteaCraft.getAssetKey() + ":" + whoknows);
 	}
 
 	@Override

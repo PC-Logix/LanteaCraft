@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import pcl.lc.network.IStreamPackable;
-import pcl.lc.network.SGCraftPacket;
+import pcl.lc.network.LanteaPacket;
 import net.minecraft.util.Vec3;
 
 public class Vector3 {

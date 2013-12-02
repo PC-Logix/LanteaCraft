@@ -16,11 +16,11 @@ import pcl.lc.LanteaCraft;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
-public class SGCraftPacket {
+public class LanteaPacket {
 
 	// Typeof.PacketType helper
 	public enum PacketType {
-		InvalidPacket(0), TileUpdate(1);
+		InvalidPacket(0), TileUpdate(1), UpdateRequest(2), DialRequest(3);
 
 		private final byte id;
 
@@ -55,10 +55,10 @@ public class SGCraftPacket {
 		synchronized (packableHelpers) {
 			packableHelpers.add(agent);
 			int id = packableHelpers.indexOf(agent);
-			LanteaCraft.getLogger()
-					.log(Level.INFO,
-							"SGCraft network helper registering packer: " + agent.getClass().getCanonicalName()
-									+ ", uid " + id);
+			LanteaCraft.getLogger().log(
+					Level.INFO,
+					"LanteaCraft network helper registering packer: " + agent.getClass().getCanonicalName() + ", uid "
+							+ id);
 			return id;
 		}
 	}
@@ -129,13 +129,13 @@ public class SGCraftPacket {
 	 * 
 	 * @param bytes
 	 *            The byte array
-	 * @return The SGCraftPacket instance
+	 * @return The LanteaPacket instance
 	 * @throws IOException
 	 *             Any read exception thrown
 	 */
-	public static SGCraftPacket parse(byte bytes[]) throws IOException {
+	public static LanteaPacket parse(byte bytes[]) throws IOException {
 		DataInputStream data = new DataInputStream(new ByteArrayInputStream(bytes));
-		SGCraftPacket pkt = new SGCraftPacket();
+		LanteaPacket pkt = new LanteaPacket();
 		pkt.readData(data);
 		return pkt;
 	}
@@ -156,7 +156,7 @@ public class SGCraftPacket {
 	/**
 	 * Generic constructor, creates a blank packet object
 	 */
-	public SGCraftPacket() {
+	public LanteaPacket() {
 		packetType = PacketType.InvalidPacket;
 		values = new HashMap<Object, Object>();
 	}
@@ -318,7 +318,7 @@ public class SGCraftPacket {
 			if (o instanceof IStreamPackable)
 				packer = (IStreamPackable<?>) o;
 			if (packer == null)
-				packer = SGCraftPacket.findPacker(o.getClass());
+				packer = LanteaPacket.findPacker(o.getClass());
 			if (packer != null) {
 				data.writeInt(255);
 				data.writeInt(packer.getTypeOf());
@@ -380,7 +380,7 @@ public class SGCraftPacket {
 			if (classValueOf == null) {
 				if (typeAsInt == 255) {
 					int packerTypeAsInt = data.readInt();
-					IStreamPackable<?> packer = SGCraftPacket.findPacker(packerTypeAsInt);
+					IStreamPackable<?> packer = LanteaPacket.findPacker(packerTypeAsInt);
 					if (packer != null) {
 						return packer.unpack(data);
 					} else
@@ -516,7 +516,7 @@ public class SGCraftPacket {
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		result.append("SGCraftPacket { ");
+		result.append("LanteaPacket { ");
 		result.append("typeof ").append(packetType).append(", ");
 		result.append("payload ").append(values.size()).append(", ");
 		result.append("isforserver ").append(isPacketForServer ? "yes" : "no").append(" }");

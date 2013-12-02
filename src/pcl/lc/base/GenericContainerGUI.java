@@ -67,28 +67,25 @@ public class GenericContainerGUI extends GuiContainer {
 		bindTexture(rsrc, 1, 1);
 	}
 
-	protected void bindTexture(ResourceLocation rsrc, int usize, int vsize) {
-		// System.out.printf("BaseGuiContainer.bindTexture: %s size (%s, %s)\n",
-		// rsrc, usize, vsize);
-		// mc.renderEngine.bindTexture(path);
+	public void bindTexture(ResourceLocation rsrc, int usize, int vsize) {
 		mc.getTextureManager().bindTexture(rsrc);
 		uscale = 1.0 / usize;
 		vscale = 1.0 / vsize;
 	}
 
-	protected void drawTexturedRect(double x, double y, double w, double h) {
+	public void drawTexturedRect(double x, double y, double w, double h) {
 		drawTexturedRectUV(x, y, w, h, 0, 0, 1, 1);
 	}
 
-	protected void drawTexturedRect(double x, double y, double w, double h, double u, double v) {
+	public void drawTexturedRect(double x, double y, double w, double h, double u, double v) {
 		drawTexturedRect(x, y, w, h, u, v, w, h);
 	}
 
-	protected void drawTexturedRect(double x, double y, double w, double h, double u, double v, double us, double vs) {
+	public void drawTexturedRect(double x, double y, double w, double h, double u, double v, double us, double vs) {
 		drawTexturedRectUV(x, y, w, h, u * uscale, v * vscale, us * uscale, vs * vscale);
 	}
 
-	void drawTexturedRectUV(double x, double y, double w, double h, double u, double v, double us, double vs) {
+	public void drawTexturedRectUV(double x, double y, double w, double h, double u, double v, double us, double vs) {
 		Tessellator tess = Tessellator.instance;
 		tess.startDrawingQuads();
 		tess.setColorOpaque_F(red, green, blue);

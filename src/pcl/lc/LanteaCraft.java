@@ -1,8 +1,5 @@
 package pcl.lc;
 
-import gcewing.sg.render.model.NaquadaGeneratorModel;
-import gcewing.sg.render.tileentity.TileEntityNaquadahGeneratorRenderer;
-
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.net.URL;
@@ -28,7 +25,7 @@ import pcl.lc.generators.TradeHandler;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTokraSpawnEgg;
-import pcl.lc.network.SGCraftPacket;
+import pcl.lc.network.LanteaPacket;
 import pcl.lc.render.RotationOrientedBlockRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
@@ -82,9 +79,9 @@ public class LanteaCraft {
 	private static LanteaCraft mod;
 
 	/**
-	 * Returns the current instance singleton of the SGCraft mod object
+	 * Returns the current instance singleton of the LanteaCraft mod object
 	 * 
-	 * @return The current, if any, instance of the SGCraft mod
+	 * @return The current, if any, instance of the LanteaCraft mod
 	 */
 	public static LanteaCraft getInstance() {
 		return LanteaCraft.mod;
@@ -112,8 +109,6 @@ public class LanteaCraft {
 
 		public static Block naquadahBlock;
 		public static Block naquadahOre;
-		
-		public static Block naquadahGenerator;
 	}
 
 	/**
@@ -144,22 +139,19 @@ public class LanteaCraft {
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
 		public static TileEntityPegasusStargateBaseRenderer tileEntityPegausBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
-
-		public static NaquadaGeneratorModel modelNaquadaGenerator;
-		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadaGeneratorRenderer;
 	}
 
-	public static HelperCreativeTab sgCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "SGCraft") {
+	public static HelperCreativeTab lanteaCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "LanteaCraft") {
 		@Override
 		public ItemStack getIconItemStack() {
 			return new ItemStack(Item.bakedPotato);
 		}
 	};
 
-	@SidedProxy(clientSide = "pcl.lc.SGCraftClientProxy", serverSide = "pcl.lc.SGCraftCommonProxy")
+	@SidedProxy(clientSide = "pcl.lc.LanteaCraftClientProxy", serverSide = "pcl.lc.LanteaCraftCommonProxy")
 	public static LanteaCraftCommonProxy proxy;
 
-	private String assetKey = "gcewing_sg";
+	private String assetKey = "pcl_lc";
 
 	public LanteaCraft() {
 		LanteaCraft.mod = this;
@@ -231,10 +223,10 @@ public class LanteaCraft {
 	}
 
 	public static CreativeTabs getCreativeTab() {
-		return LanteaCraft.getInstance().sgCraftTab;
+		return LanteaCraft.getInstance().lanteaCraftTab;
 	}
 
-	public static void handlePacket(SGCraftPacket packet, Player player) {
+	public static void handlePacket(LanteaPacket packet, Player player) {
 		proxy.handlePacket(packet, player);
 	}
 

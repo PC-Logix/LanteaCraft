@@ -58,11 +58,6 @@ public class GateAddressHelper {
 	}
 
 	public static String addressForLocation(WorldLocation loc) throws AddressingError {
-		// if (debugAddressing)
-		// System.out.printf("SGAddressing.addressForLocation: " +
-		// "coord range = %d to %d " +
-		// "dim range = %d to %d\n", minCoord, maxCoord, minDimension,
-		// maxDimension);
 		int chunkx = loc.x >> 4;
 		int chunkz = loc.z >> 4;
 		if (!inCoordRange(chunkx) || !inCoordRange(chunkz))
@@ -71,36 +66,21 @@ public class GateAddressHelper {
 			throw new DimensionRangeError();
 		int s = (chunkx - minCoord) * coordRange + chunkz - minCoord;
 		int d = loc.dimension - minDimension;
-		// if (debugAddressing)
-		// System.out.printf("SGAddressing.addressForLocation: chunk = (%d,%d) s = %d d = %d\n",
-		// chunkx, chunkz, s, d);
 		return intToSymbols(s, numCoordSymbols) + intToSymbols(d, numDimensionSymbols);
 	}
 
 	public static TileEntityStargateBase findAddressedStargate(String address) {
 		String csyms = address.substring(0, numCoordSymbols);
 		String dsyms = address.substring(numCoordSymbols, numCoordSymbols + numDimensionSymbols);
-		// if (debugAddressing)
-		// System.out.printf("SGAddressing.findAddressedStargate: %s %s\n",
-		// csyms, dsyms);
 		int s = intFromSymbols(csyms);
 		int chunkx = minCoord + s / coordRange;
 		int chunkz = minCoord + s % coordRange;
 		int dimension = minDimension + intFromSymbols(dsyms);
-		// if (debugAddressing)
-		// System.out.printf("SGAddressing.findAddressedStargate: chunk = (%d,%d) s = %d dimension = %d\n",
-		// /chunkx, chunkz, s, dimension);
-		World world = /* DimensionManager. */getWorld(dimension);
+		World world = getWorld(dimension);
 		if (world != null) {
-			// System.out.printf("SGAddressing.findAddressedStargate: world = %s\n",
-			// world);
 			Chunk chunk = world.getChunkFromChunkCoords(chunkx, chunkz);
-			// System.out.printf("SGAddressing.findAddressedStargate: chunk = %s\n",
-			// chunk);
 			if (chunk != null)
 				for (Object te : chunk.chunkTileEntityMap.values())
-					// System.out.printf("SGAddressing.findAddressedStargate: te = %s\n",
-					// te);
 					if (te instanceof TileEntityStargateBase)
 						return (TileEntityStargateBase) te;
 		}
