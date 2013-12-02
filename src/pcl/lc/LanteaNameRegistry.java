@@ -1,6 +1,7 @@
 package pcl.lc;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class LanteaNameRegistry {
 
@@ -33,6 +34,7 @@ public class LanteaNameRegistry {
 	}
 
 	public static String getTileEntityMapping(String refName) {
+		LanteaCraft.getLogger().log(Level.INFO, "Request for getTileEntityMapping " + refName);
 		String name = tileEntityRegistry.get(refName);
 		if (name == null)
 			throw new RuntimeException("Cannot find TileEntityMapping with name reference " + refName
@@ -41,6 +43,7 @@ public class LanteaNameRegistry {
 	}
 
 	public static String getBlockMapping(String refName) {
+		LanteaCraft.getLogger().log(Level.INFO, "Request for getBlockMapping " + refName);
 		String name = blockRegistry.get(refName);
 		if (name == null)
 			throw new RuntimeException("Cannot find BlockMapping with name reference " + refName + ", hard failure!");
@@ -48,6 +51,7 @@ public class LanteaNameRegistry {
 	}
 
 	public static String getItemMapping(String refName) {
+		LanteaCraft.getLogger().log(Level.INFO, "Request for getItemMapping " + refName);
 		String name = itemRegistry.get(refName);
 		if (name == null)
 			throw new RuntimeException("Cannot find ItemMapping with name reference " + refName + ", hard failure!");
@@ -55,23 +59,24 @@ public class LanteaNameRegistry {
 	}
 
 	static {
-		registerTileEntityMapping("tileEntityRing", "pcl.lc.tileentity.TileEntityStargateRing");
-		registerTileEntityMapping("tileEntityBase", "pcl.lc.tileentity.TileEntityStargateBase");
-		registerTileEntityMapping("tileEntityController", "pcl.lc.tileentity.TileEntityStargateController");
-		registerTileEntityMapping("tileEntityNaquadahGenerator", "pcl.lc.tileentity.TileEntityNaquadahGenerator");
+		registerTileEntityMapping("tileEntityRing", "tileentity.StargateRing");
+		registerTileEntityMapping("tileEntityBase", "tileentity.StargateBase");
+		registerTileEntityMapping("tileEntityController", "tileentity.StargateController");
+		registerTileEntityMapping("tileEntityNaquadahGenerator", "tileentity.NaquadahGenerator");
 
-		registerBlockMapping("blockRing", "pcl.lc.blocks.BlockStargateRing");
-		registerBlockMapping("blockBase", "pcl.lc.blocks.BlockStargateBase");
-		registerBlockMapping("blockController", "pcl.lc.blocks.BlockStargateController");
+		registerBlockMapping("blockRing", "block.StargateRing");
+		registerBlockMapping("blockBase", "block.StargateBase");
+		registerBlockMapping("blockController", "block.StargateController");
 
-		registerBlockMapping("blockNaquadah", "pcl.lc.blocks.BlockNaquadah");
-		registerBlockMapping("oreNaquadah", "pcl.lc.blocks.BlockNaquadahOre");
-		registerBlockMapping("blockNaquadahGenerator", "pcl.lc.blocks.BlockNaquadahGenerator");
+		registerBlockMapping("blockNaquadah", "block.Naquadah");
+		registerBlockMapping("oreNaquadah", "block.NaquadahOre");
+		registerBlockMapping("blockNaquadahGenerator", "block.NaquadahGenerator");
 
-		registerItemMapping("itemNaquadah", "pcl.lc.items.ItemNaquadah");
-		registerItemMapping("itemNaquadahIngot", "pcl.lc.items.ItemNaquadahIngot");
-		registerItemMapping("itemCoreCrystal", "pcl.lc.items.ItemCoreCrystal");
-		registerItemMapping("itemControllerCrystal", "pcl.lc.items.ItemControllerCrystal");
+		registerItemMapping("itemNaquadah", "item.Naquadah");
+		registerItemMapping("itemNaquadahIngot", "item.NaquadahIngot");
+		registerItemMapping("itemCoreCrystal", "item.CoreCrystal");
+		registerItemMapping("itemControllerCrystal", "item.ControllerCrystal");
+		registerItemMapping("itemTokraSpawnEgg", "item.TokraSpawnEgg");
 	}
 
 }

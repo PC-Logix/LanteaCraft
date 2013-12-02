@@ -40,13 +40,13 @@ public class TileEntityNaquadahGenerator extends GenericTileEntity implements IE
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		powerHandler.writeToNBT(nbt);
+		//powerHandler.writeToNBT(nbt);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		powerHandler.readFromNBT(nbt);
+		//powerHandler.readFromNBT(nbt);
 	}
 
 	// START IC2

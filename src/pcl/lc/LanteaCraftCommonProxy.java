@@ -317,18 +317,18 @@ public class LanteaCraftCommonProxy {
 
 	void registerItems() {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft items...");
-		Items.naquadah = registerItem(Item.class, LanteaNameRegistry.getBlockMapping("itemNaquadah"), "naquadah",
+		Items.naquadah = registerItem(Item.class, LanteaNameRegistry.getItemMapping("itemNaquadah"), "naquadah",
 				"Naquadah");
-		Items.naquadahIngot = registerItem(Item.class, LanteaNameRegistry.getBlockMapping("itemNaquadahIngot"),
+		Items.naquadahIngot = registerItem(Item.class, LanteaNameRegistry.getItemMapping("itemNaquadahIngot"),
 				"naquadahIngot", "Naquadah Alloy Ingot");
-		Items.sgCoreCrystal = registerItem(Item.class, LanteaNameRegistry.getBlockMapping("itemCoreCrystal"),
+		Items.sgCoreCrystal = registerItem(Item.class, LanteaNameRegistry.getItemMapping("itemCoreCrystal"),
 				"sgCoreCrystal", "Stargate Core Crystal");
 		Items.sgControllerCrystal = registerItem(Item.class,
-				LanteaNameRegistry.getBlockMapping("itemControllerCrystal"), "sgControllerCrystal",
+				LanteaNameRegistry.getItemMapping("itemControllerCrystal"), "sgControllerCrystal",
 				"Stargate Controller Crystal");
 
 		Items.tokraSpawnEgg = (ItemTokraSpawnEgg) registerItem(ItemTokraSpawnEgg.class,
-				LanteaNameRegistry.getItemMapping("tokraSpawnEgg"), "tokraSpawnEgg", "Tok'ra Spawn Egg");
+				LanteaNameRegistry.getItemMapping("itemTokraSpawnEgg"), "tokraSpawnEgg", "Tok'ra Spawn Egg");
 
 		Items.debugger = (ItemDebugTool) registerItem(ItemDebugTool.class, "lanteadebug", "lanteadebug",
 				"LanteaCraft Debugger");
