@@ -17,7 +17,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	private int rotation;
 
-	private int[][] stargateModel = { { 1, 2, 1, 3, 1, 2, 1 }, { 1, 0, 0, 0, 0, 0, 1 }, { 2, 0, 0, 0, 0, 0, 2 },
+	private int[][] stargateModel = { { 1, 2, 1, 3, 1, 2, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 2, 1, 2, 1, 2, 1 } };
 
 	public StargateMultiblock(TileEntity host) {
