@@ -28,7 +28,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	Object receiverBuffer;
 
 	public PoweredTileEntity() {
-		if (canReceiveEnergy() && Loader.isModLoaded("BuildCraft|Core")) {
+		if (canReceiveEnergy() && Loader.isModLoaded("BuildCraft")) {
 			setupExportBC();
 		}
 	}
