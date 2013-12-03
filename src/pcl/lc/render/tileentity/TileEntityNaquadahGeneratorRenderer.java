@@ -11,11 +11,15 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class TileEntityNaquadahGeneratorRenderer extends TileEntitySpecialRenderer {
-	public ResourceLocation theTexture;
+	private ResourceLocation inactiveTexture;
+	private ResourceLocation activeTexture;
 	private float scale = 1;
 
 	public TileEntityNaquadahGeneratorRenderer() {
-
+		activeTexture = new ResourceLocation("pcl_lc", "textures/models/naquada_generator_on_"
+				+ LanteaCraft.getProxy().getRenderMode() + ".png");
+		inactiveTexture = new ResourceLocation("pcl_lc", "textures/models/naquada_generator_off_"
+				+ LanteaCraft.getProxy().getRenderMode() + ".png");
 	}
 
 	@Override
@@ -34,14 +38,8 @@ public class TileEntityNaquadahGeneratorRenderer extends TileEntitySpecialRender
 			else
 				GL11.glRotatef(dir * 180F, 0F, 1F, 0F);
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-			if (((TileEntityNaquadahGenerator) tileEntity).isActive()) {
-				theTexture = new ResourceLocation("pcl_lc", "textures/models/naquada_generator_on_"
-						+ LanteaCraft.getProxy().getRenderMode() + ".png");
-			} else {
-				theTexture = new ResourceLocation("pcl_lc", "textures/models/naquada_generator_off_"
-						+ LanteaCraft.getProxy().getRenderMode() + ".png");
-			}
-			FMLClientHandler.instance().getClient().renderEngine.bindTexture(theTexture);
+			FMLClientHandler.instance().getClient().renderEngine.bindTexture(((TileEntityNaquadahGenerator) tileEntity)
+					.isActive() ? activeTexture : inactiveTexture);
 			LanteaCraft.Render.modelNaquadahGenerator.renderAll();
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glPopMatrix();
