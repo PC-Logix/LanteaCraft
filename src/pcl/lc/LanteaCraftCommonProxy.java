@@ -91,8 +91,6 @@ public class LanteaCraftCommonProxy {
 	protected File cfgFile;
 	protected ConfigurationHelper config;
 	protected ArrayList<ConfigValue<?>> configValues = new ArrayList<ConfigValue<?>>();
-
-	// public StargateNetworkChannel channel;
 	public TileEntityChunkManager chunkManager;
 
 	private NaquadahOreWorldGen naquadahOreGenerator;

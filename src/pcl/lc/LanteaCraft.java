@@ -33,7 +33,6 @@ import pcl.lc.render.blocks.BlockStargateRingRenderer;
 import pcl.lc.render.model.NaquadahGeneratorModel;
 import pcl.lc.render.model.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
-import pcl.lc.render.tileentity.TileEntityPegasusStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
@@ -144,7 +143,6 @@ public class LanteaCraft {
 		public static BlockStargateRingRenderer blockRingRenderer;
 
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
-		public static TileEntityPegasusStargateBaseRenderer tileEntityPegausBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
 		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
 
@@ -153,7 +151,7 @@ public class LanteaCraft {
 	public static HelperCreativeTab lanteaCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "LanteaCraft") {
 		@Override
 		public ItemStack getIconItemStack() {
-			return new ItemStack(Item.bakedPotato);
+			return new ItemStack(LanteaCraft.Items.debugger);
 		}
 	};
 

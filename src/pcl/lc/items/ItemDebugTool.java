@@ -67,7 +67,7 @@ public class ItemDebugTool extends Item {
 
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon("gcewing_sg:debugger");
+		this.itemIcon = par1IconRegister.registerIcon("pcl_lc:creative_icon");
 	}
 
 }

@@ -14,8 +14,8 @@ public class StargateRegistry {
 	public void registerGate(EnumStargateType typeof, IStructureConfiguration configuration) {
 		LanteaCraft.getLogger().log(Level.INFO,
 				"Proxy is internally registering gate typeof " + typeof + " ordinal " + typeof.getOrdinal());
-		StargateDefinition config = new StargateDefinition(typeof, configuration);
-		stargateTypes.put(typeof.getOrdinal(), config);
+		//StargateDefinition config = new StargateDefinition(typeof, configuration);
+		//stargateTypes.put(typeof.getOrdinal(), config);
 	}
 
 	public void postRegister() {

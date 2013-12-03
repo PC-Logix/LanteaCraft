@@ -33,6 +33,9 @@ public class StargateDefinition {
 	private Block stargateRingBlock;
 	private Block stargateControllerBlock;
 
+	private Class<?> typeRenderer;
+	private Object renderer;
+
 	/**
 	 * Build a generic definition of a gate
 	 * 
@@ -41,9 +44,10 @@ public class StargateDefinition {
 	 * @param structHost
 	 *            The structure configuration object
 	 */
-	public StargateDefinition(EnumStargateType typeof, IStructureConfiguration structHost) {
+	public StargateDefinition(EnumStargateType typeof, Class<?> rendererClass, IStructureConfiguration structHost) {
 		this.typeof = typeof;
 		this.struct = structHost;
+		this.typeRenderer = rendererClass;
 	}
 
 	/**

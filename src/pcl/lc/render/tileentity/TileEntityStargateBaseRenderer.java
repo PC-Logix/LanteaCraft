@@ -1,11 +1,7 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Stargate base tile entity renderer
-//
-//------------------------------------------------------------------------------------------------
-
 package pcl.lc.render.tileentity;
 
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -13,10 +9,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.GenericTileEntityRenderer;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
-public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
+public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 
 	public final static int numRingSegments = 64; // 32
 	public final static double ringInnerRadius = 3.0;
@@ -56,6 +51,10 @@ public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 	}
 
 	double u0, v0;
+
+	public TileEntityStargateBaseRenderer() {
+
+	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float t) {
@@ -254,8 +253,8 @@ public class TileEntityStargateBaseRenderer extends GenericTileEntityRenderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
-	static ResourceLocation eventHorizonTexture = new ResourceLocation(LanteaCraft.getAssetKey(), "textures/fx/eventhorizon_"
-			+ LanteaCraft.getProxy().getRenderMode() + ".png");
+	static ResourceLocation eventHorizonTexture = new ResourceLocation(LanteaCraft.getAssetKey(),
+			"textures/fx/eventhorizon_" + LanteaCraft.getProxy().getRenderMode() + ".png");
 
 	void renderEventHorizon(TileEntityStargateBase te) {
 

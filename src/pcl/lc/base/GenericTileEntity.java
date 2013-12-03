@@ -15,8 +15,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 
 	@Override
 	public Packet getDescriptionPacket() {
-		// System.out.printf("BaseTileEntity.getDescriptionPacket for %s\n",
-		// this);
 		if (syncWithClient()) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			writeToNBT(nbt);
@@ -27,7 +25,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		// System.out.printf("BaseTileEntity.onDataPacket for %s\n", this);
 		readFromNBT(pkt.data);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
@@ -38,8 +35,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 
 	public void markBlockForUpdate() {
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		// herp this.worldObj.notifyBlockChange(xCoord, yCoord, zCoord,
-		// this.blockType.blockID);
 	}
 
 	public void playSoundEffect(String name, float volume, float pitch) {
@@ -85,9 +80,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 			nbt.setTag("inventory", list);
 		}
 	}
-
-	// ------------------------------------- IInventory
-	// -----------------------------------------
 
 	/**
 	 * Returns the number of slots in the inventory.
@@ -171,11 +163,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	/**
-	 * Called when an the contents of an Inventory change, usually
-	 */
-	// void onInventoryChanged();
-
-	/**
 	 * Do not make give this method the name canInteractWith because it clashes
 	 * with Container
 	 */
@@ -217,9 +204,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 			return false;
 	}
 
-	// ------------------------------------- ISidedInventory
-	// -----------------------------------------
-
 	/**
 	 * Returns an array containing the indices of the slots that can be accessed
 	 * by automation on the given side of this block.
@@ -258,34 +242,5 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 		else
 			return true;
 	}
-
-	// --------------------------------- Old ISidedInventory
-	// -----------------------------------------
-
-	// /**
-	// * Get the start of the side inventory.
-	// * @param side The global side to get the start of range.
-	// */
-	// public int getStartInventorySide(ForgeDirection side) {
-	// IInventory inventory = getInventory();
-	// if (inventory instanceof ISidedInventory)
-	// return ((ISidedInventory)inventory).getStartInventorySide(side);
-	// else
-	// return 0;
-	// }
-	//
-	// /**
-	// * Get the size of the side inventory.
-	// * @param side The global side.
-	// */
-	// public int getSizeInventorySide(ForgeDirection side) {
-	// IInventory inventory = getInventory();
-	// if (inventory instanceof ISidedInventory)
-	// return ((ISidedInventory)inventory).getSizeInventorySide(side);
-	// else if (inventory != null)
-	// return inventory.getSizeInventory();
-	// else
-	// return 0;
-	// }
 
 }

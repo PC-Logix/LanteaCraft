@@ -136,15 +136,4 @@ public class GenericContainerGUI extends GuiContainer {
 	public static String playerInventoryName() {
 		return StatCollector.translateToLocal("container.inventory");
 	}
-
 }
-
-// ------------------------------------------------------------------------------------------------
-
-// class DummyContainer extends Container {
-//
-// public boolean canInteractWith(EntityPlayer var1) {
-// return true;
-// }
-//
-// }

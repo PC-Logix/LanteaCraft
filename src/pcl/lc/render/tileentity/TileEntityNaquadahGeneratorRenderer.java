@@ -34,7 +34,7 @@ public class TileEntityNaquadahGeneratorRenderer extends TileEntitySpecialRender
 			else
 				GL11.glRotatef(dir * 180F, 0F, 1F, 0F);
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-			if (((TileEntityNaquadahGenerator) tileEntity).isActive) {
+			if (((TileEntityNaquadahGenerator) tileEntity).isActive()) {
 				theTexture = new ResourceLocation("pcl_lc", "textures/models/naquada_generator_on_"
 						+ LanteaCraft.getProxy().getRenderMode() + ".png");
 			} else {

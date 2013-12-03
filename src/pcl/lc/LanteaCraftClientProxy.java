@@ -14,11 +14,9 @@ import pcl.lc.render.blocks.BlockStargateRingRenderer;
 import pcl.lc.render.model.NaquadahGeneratorModel;
 import pcl.lc.render.model.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
-import pcl.lc.render.tileentity.TileEntityPegasusStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
-import pcl.lc.tileentity.TileEntityPegasusStargateBase;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import net.minecraft.client.Minecraft;
@@ -79,9 +77,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 		LanteaCraft.Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
 		addTileEntityRenderer(TileEntityStargateBase.class, LanteaCraft.Render.tileEntityBaseRenderer);
-
-		LanteaCraft.Render.tileEntityPegausBaseRenderer = new TileEntityPegasusStargateBaseRenderer();
-		addTileEntityRenderer(TileEntityPegasusStargateBase.class, LanteaCraft.Render.tileEntityPegausBaseRenderer);
 
 		LanteaCraft.Render.tileEntityControllerRenderer = new TileEntityStargateControllerRenderer();
 		addTileEntityRenderer(TileEntityStargateController.class, LanteaCraft.Render.tileEntityControllerRenderer);
