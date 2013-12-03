@@ -1,4 +1,4 @@
-Delta SGCraft-Reloaded
+Lanteacraft
 ================
 Jenkins: http://kenobi.pc-logix.com:8080/job/Delta-SGCraft/
 
