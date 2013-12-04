@@ -1,13 +1,13 @@
-Lanteacraft
+LanteaCraft
 ================
-Jenkins: http://kenobi.pc-logix.com:8080/job/Delta-SGCraft/
+Jenkins: http://kenobi.pc-logix.com:8080/job/LanteaCraft/
 
 Update to Greg's SGCraft for 1.6.4 compatability.
 Included config option to disable Generating gates under desert Pyramids, GenerateStructures=false will disable them.
 
-Added support for ComputerCraft dialing to the gate directly via either the Controller, or the Gate base.
+Added support for ComputerCraft dialing to the gate directly via the Gate base.
 
-Methods are: dial("address"), connect("address"), disconnect(), isConnected(), isDialing(), Stargate base blocks can also use getAddress() to get the gate address.
+Methods are: dial("address"), connect("address"), disconnect(), isConnected(), isDialing(), getAddress().
 
 Switched to Delta NP SGCraft Textures, thanks http://www.deltastrium.com/ for the Awesome textures!
 
