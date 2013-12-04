@@ -3,7 +3,7 @@ package pcl.lc.util;
 public enum EnumUnits {
 
 	NaquadahUnit(new String[] { "LanteaCraft" }, 1), MinecraftJoules(new String[] { "BuildCraft", "Railcraft",
-			"Forestry" }, 256.0), EnergyUnit(new String[] { "IndustrialCraft2" }, 128.0), RedstoneFlux(
+			"Forestry" }, 256.0), EnergyUnit(new String[] { "IndustrialCraft2" }, 2048.0), RedstoneFlux(
 			new String[] { "Thermal Expansion" }, 128.0);
 
 	private String[] modNames;
