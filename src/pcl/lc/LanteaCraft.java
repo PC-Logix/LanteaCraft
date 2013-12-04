@@ -70,8 +70,8 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "build"
-		+ BuildInfo.buildNumber)
+@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber
+		+ "build" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:BuildCraft|Core;after:IC2;after:SGCraft")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { BuildInfo.modID }, packetHandler = pcl.lc.network.DefaultPacketHandler.class)
 public class LanteaCraft {
 
@@ -148,7 +148,8 @@ public class LanteaCraft {
 
 	}
 
-	public static HelperCreativeTab lanteaCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "LanteaCraft") {
+	public static HelperCreativeTab lanteaCraftTab = new HelperCreativeTab(
+			CreativeTabs.getNextID(), "LanteaCraft") {
 		@Override
 		public ItemStack getIconItemStack() {
 			return new ItemStack(LanteaCraft.Items.debugger);
@@ -170,8 +171,9 @@ public class LanteaCraft {
 		LanteaCraft.logger.setParent(FMLLog.getLogger());
 		if (BuildInfo.buildNumber.equals("@" + "BUILD" + "@")) {
 			LanteaCraft.logger.setLevel(Level.ALL);
-			LanteaCraft.logger.log(Level.INFO,
-					"You appear to be inside a development environment, switching to all logging.");
+			LanteaCraft.logger
+					.log(Level.INFO,
+							"You appear to be inside a development environment, switching to all logging.");
 		} else
 			LanteaCraft.logger.setLevel(Level.INFO);
 		proxy.preInit(e);
