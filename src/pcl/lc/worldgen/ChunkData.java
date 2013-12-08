@@ -44,8 +44,8 @@ public class ChunkData {
 		ChunkData data = ChunkData.forChunk(chunk);
 		data.readFromNBT(e.getData());
 		if (!data.oresGenerated
-				&& ((ConfigValue<Boolean>) LanteaCraft.getProxy().getConfigValue("addOresToExistingWorlds")).getValue()) LanteaCraft
-				.getProxy().getOreGenerator().regenerate(chunk);
+				&& ((ConfigValue<Boolean>) LanteaCraft.getProxy().getConfigValue("addOresToExistingWorlds")).getValue())
+			LanteaCraft.getProxy().getOreGenerator().regenerate(chunk);
 	}
 
 	public static void onChunkSave(ChunkDataEvent.Save e) {

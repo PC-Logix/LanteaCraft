@@ -46,7 +46,8 @@ public class StargateAddress {
 	}
 
 	public void setOwner(String own) {
-		if (own.length() > 64 || own.length() <= 0) throw new RuntimeException("Invalid name length.");
+		if (own.length() > 64 || own.length() <= 0)
+			throw new RuntimeException("Invalid name length.");
 		this.owner = own;
 	}
 

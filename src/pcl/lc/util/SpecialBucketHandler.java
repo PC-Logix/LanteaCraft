@@ -24,7 +24,8 @@ public class SpecialBucketHandler {
 	@ForgeSubscribe
 	public void onBucketFill(FillBucketEvent event) {
 		ItemStack result = fillCustomBucket(event.world, event.target);
-		if (result == null) return;
+		if (result == null)
+			return;
 		event.result = result;
 		event.setResult(Result.ALLOW);
 	}

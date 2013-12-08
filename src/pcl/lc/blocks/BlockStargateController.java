@@ -65,7 +65,8 @@ public class BlockStargateController extends RotationOrientedBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.getProxy().isUsingModels()) return -1;
+		if (LanteaCraft.getProxy().isUsingModels())
+			return -1;
 		return 0;
 	}
 
@@ -98,7 +99,8 @@ public class BlockStargateController extends RotationOrientedBlock {
 		super.breakBlock(world, x, y, z, id, data);
 		if (cte.isLinkedToStargate) {
 			TileEntityStargateBase gte = cte.getLinkedStargateTE();
-			if (gte != null) gte.clearLinkToController();
+			if (gte != null)
+				gte.clearLinkToController();
 		}
 	}
 

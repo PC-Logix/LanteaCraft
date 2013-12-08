@@ -66,7 +66,8 @@ public class StargateMultiblock extends GenericMultiblock {
 	 * @return If the tile entity part object is a Stargate part
 	 */
 	private boolean isGateTileEntity(TileEntity entity) {
-		if (entity instanceof TileEntityStargateRing) return true;
+		if (entity instanceof TileEntityStargateRing)
+			return true;
 		return false;
 	}
 
@@ -86,11 +87,13 @@ public class StargateMultiblock extends GenericMultiblock {
 	private EnumOrientations getOrientation(World worldAccess, int baseX, int baseY, int baseZ) {
 		// Test North-South alignment along Z axis
 		if (isGateTileEntity(worldAccess.getBlockTileEntity(baseX, baseY, baseZ + 1))
-				&& isGateTileEntity(worldAccess.getBlockTileEntity(baseX, baseY, baseZ - 1))) return EnumOrientations.NORTH_SOUTH;
+				&& isGateTileEntity(worldAccess.getBlockTileEntity(baseX, baseY, baseZ - 1)))
+			return EnumOrientations.NORTH_SOUTH;
 
 		// Test East-West alignment along X axis
 		if (isGateTileEntity(worldAccess.getBlockTileEntity(baseX + 1, baseY, baseZ))
-				&& isGateTileEntity(worldAccess.getBlockTileEntity(baseX - 1, baseY, baseZ))) return EnumOrientations.EAST_WEST;
+				&& isGateTileEntity(worldAccess.getBlockTileEntity(baseX - 1, baseY, baseZ)))
+			return EnumOrientations.EAST_WEST;
 
 		// Likely not a valid orientation at all
 		return null;
@@ -106,7 +109,8 @@ public class StargateMultiblock extends GenericMultiblock {
 			for (int y = 0; y < 7; y++) {
 				for (int x = 0; x < 7; x++) {
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
-					if (!testIsValidForExpected(entity, stargateModel[y][x])) return false;
+					if (!testIsValidForExpected(entity, stargateModel[y][x]))
+						return false;
 				}
 			}
 			return true;
@@ -118,7 +122,8 @@ public class StargateMultiblock extends GenericMultiblock {
 			for (int y = 0; y < 7; y++) {
 				for (int z = 0; z < 7; z++) {
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
-					if (!testIsValidForExpected(entity, stargateModel[y][z])) return false;
+					if (!testIsValidForExpected(entity, stargateModel[y][z]))
+						return false;
 				}
 			}
 			return true;
@@ -129,19 +134,26 @@ public class StargateMultiblock extends GenericMultiblock {
 	}
 
 	private boolean testIsValidForExpected(TileEntity entity, int expectedType) {
-		if (expectedType == 0) if (entity != null) return false;
+		if (expectedType == 0)
+			if (entity != null)
+				return false;
 		if (expectedType == 1 || expectedType == 2) {
-			if (!(entity instanceof TileEntityStargateRing)) return false;
+			if (!(entity instanceof TileEntityStargateRing))
+				return false;
 			TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
 			StargatePart teAsPart = null;
 			teAsPart = entityAsRing.getAsPart();
 			if (expectedType == 1) {
-				if (teAsPart.getType() == null || !teAsPart.getType().equals("partStargateBlock")) return false;
-				if (!teAsPart.canMergeWith(this)) return false;
+				if (teAsPart.getType() == null || !teAsPart.getType().equals("partStargateBlock"))
+					return false;
+				if (!teAsPart.canMergeWith(this))
+					return false;
 			}
 			if (expectedType == 2) {
-				if (teAsPart.getType() == null || !teAsPart.getType().equals("partStargateChevron")) return false;
-				if (!teAsPart.canMergeWith(this)) return false;
+				if (teAsPart.getType() == null || !teAsPart.getType().equals("partStargateChevron"))
+					return false;
+				if (!teAsPart.canMergeWith(this))
+					return false;
 			}
 		}
 		return true;
@@ -160,7 +172,8 @@ public class StargateMultiblock extends GenericMultiblock {
 					if (stargateModel[y][x] != 0 && stargateModel[y][x] != 3) {
 						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
 						StargatePart teAsPart = entityAsRing.getAsPart();
-						if (!teAsPart.canMergeWith(this)) return false;
+						if (!teAsPart.canMergeWith(this))
+							return false;
 						teAsPart.mergeWith(this);
 						structureParts.put(new ImmutablePair<Integer, Integer>(x, y), teAsPart);
 					}
@@ -180,7 +193,8 @@ public class StargateMultiblock extends GenericMultiblock {
 					if (stargateModel[y][z] != 0 && stargateModel[y][z] != 3) {
 						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
 						StargatePart teAsPart = entityAsRing.getAsPart();
-						if (!teAsPart.canMergeWith(this)) return false;
+						if (!teAsPart.canMergeWith(this))
+							return false;
 						teAsPart.mergeWith(this);
 						structureParts.put(new ImmutablePair<Integer, Integer>(z, y), teAsPart);
 					}
@@ -214,7 +228,8 @@ public class StargateMultiblock extends GenericMultiblock {
 	public void validated(boolean oldState, boolean newState) {
 		// send an update packet only when the server does something, the client
 		// shouldn't be firing this behavior
-		if (!isClient) host.getDescriptionPacket();
+		if (!isClient)
+			host.getDescriptionPacket();
 	}
 
 	@Override

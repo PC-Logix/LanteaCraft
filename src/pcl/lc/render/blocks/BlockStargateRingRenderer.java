@@ -17,12 +17,15 @@ public class BlockStargateRingRenderer extends GenericBlockRenderer {
 		TileEntityStargateRing ringTE = (TileEntityStargateRing) world.getBlockTileEntity(x, y, z);
 
 		StargatePart partOf = ringTE.getAsPart();
-		if (partOf == null) return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
+		if (partOf == null)
+			return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
 
 		StargateMultiblock structureOf = (StargateMultiblock) partOf.findHostMultiblock(false);
-		if (structureOf == null) return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
+		if (structureOf == null)
+			return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
 
-		if (!structureOf.isValid()) return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
+		if (!structureOf.isValid())
+			return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
 
 		return false;
 

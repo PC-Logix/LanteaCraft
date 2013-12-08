@@ -26,7 +26,8 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 
 	public static ScreenStargateBase create(EntityPlayer player, World world, int x, int y, int z) {
 		TileEntityStargateBase te = TileEntityStargateBase.at(world, x, y, z);
-		if (te != null) return new ScreenStargateBase(te, player);
+		if (te != null)
+			return new ScreenStargateBase(te, player);
 		else
 			return null;
 	}
@@ -61,8 +62,7 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 	public void drawBackgroundLayer() {
 		bindTexture(
 				LanteaCraft.getInstance().getResource(
-						"textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png"),
-				256, 256);
+						"textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png"), 256, 256);
 		drawTexturedRect(0, 0, guiWidth, guiHeight, 0, 0);
 		drawFuelGauge();
 		String address = getAddress();

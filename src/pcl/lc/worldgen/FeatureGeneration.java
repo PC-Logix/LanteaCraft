@@ -29,7 +29,8 @@ public class FeatureGeneration {
 	public static void onInitMapGen(InitMapGenEvent e) {
 		switch (e.type) {
 			case SCATTERED_FEATURE:
-				if (e.newGen instanceof MapGenStructure) e.newGen = modifyScatteredFeatureGen((MapGenStructure) e.newGen);
+				if (e.newGen instanceof MapGenStructure)
+					e.newGen = modifyScatteredFeatureGen((MapGenStructure) e.newGen);
 				else
 					break;
 			default:
@@ -51,7 +52,8 @@ class SGStructureMap extends HashMap {
 
 	@Override
 	public Object put(Object key, Object value) {
-		if (value instanceof StructureStart) augmentStructureStart((StructureStart) value);
+		if (value instanceof StructureStart)
+			augmentStructureStart((StructureStart) value);
 		return super.put(key, value);
 	}
 
@@ -66,8 +68,8 @@ class SGStructureMap extends HashMap {
 		LinkedList oldComponents = start.getComponents();
 		LinkedList newComponents = new LinkedList();
 		for (Object comp : oldComponents)
-			if (comp instanceof ComponentScatteredFeatureDesertPyramid) newComponents
-					.add(new FeatureUnderDesertPyramid((ComponentScatteredFeatureDesertPyramid) comp));
+			if (comp instanceof ComponentScatteredFeatureDesertPyramid)
+				newComponents.add(new FeatureUnderDesertPyramid((ComponentScatteredFeatureDesertPyramid) comp));
 		oldComponents.addAll(newComponents);
 	}
 

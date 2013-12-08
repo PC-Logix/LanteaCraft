@@ -64,7 +64,8 @@ public class BlockPortal extends Block {
 			for (int j = -3; j <= -1; j++)
 				for (int k = -1; k <= 1; k++) {
 					TileEntity te = world.getBlockTileEntity(x + i, y + j, z + k);
-					if (te instanceof TileEntityStargateBase) return (TileEntityStargateBase) te;
+					if (te instanceof TileEntityStargateBase)
+						return (TileEntityStargateBase) te;
 				}
 		return null;
 	}

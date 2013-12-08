@@ -173,19 +173,22 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	@Override
 	public void openChest() {
 		IInventory inventory = getInventory();
-		if (inventory != null) inventory.openChest();
+		if (inventory != null)
+			inventory.openChest();
 	}
 
 	@Override
 	public void closeChest() {
 		IInventory inventory = getInventory();
-		if (inventory != null) inventory.closeChest();
+		if (inventory != null)
+			inventory.closeChest();
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		IInventory inventory = getInventory();
-		if (inventory != null) return inventory.isItemValidForSlot(slot, stack);
+		if (inventory != null)
+			return inventory.isItemValidForSlot(slot, stack);
 		else
 			return false;
 	}
@@ -193,7 +196,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	@Override
 	public boolean isInvNameLocalized() {
 		IInventory inventory = getInventory();
-		if (inventory != null) return inventory.isInvNameLocalized();
+		if (inventory != null)
+			return inventory.isInvNameLocalized();
 		else
 			return false;
 	}
@@ -205,7 +209,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
 		IInventory inventory = getInventory();
-		if (inventory instanceof ISidedInventory) return ((ISidedInventory) inventory).getAccessibleSlotsFromSide(side);
+		if (inventory instanceof ISidedInventory)
+			return ((ISidedInventory) inventory).getAccessibleSlotsFromSide(side);
 		else
 			return new int[0];
 	}
@@ -217,7 +222,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	@Override
 	public boolean canInsertItem(int slot, ItemStack stack, int side) {
 		IInventory inventory = getInventory();
-		if (inventory instanceof ISidedInventory) return ((ISidedInventory) inventory).canInsertItem(slot, stack, side);
+		if (inventory instanceof ISidedInventory)
+			return ((ISidedInventory) inventory).canInsertItem(slot, stack, side);
 		else
 			return true;
 	}
@@ -229,8 +235,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	@Override
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
 		IInventory inventory = getInventory();
-		if (inventory instanceof ISidedInventory) return ((ISidedInventory) inventory)
-				.canExtractItem(slot, stack, side);
+		if (inventory instanceof ISidedInventory)
+			return ((ISidedInventory) inventory).canExtractItem(slot, stack, side);
 		else
 			return true;
 	}

@@ -45,7 +45,8 @@ public class GenericGlyphGUI extends GenericContainerGUI {
 	void drawAddressString(int x, int y, String address, int len, String padding, String caret) {
 		StringBuilder result = new StringBuilder();
 		result.append(address);
-		if (len != result.length()) result.append(caret);
+		if (len != result.length())
+			result.append(caret);
 		while (len > result.length())
 			result.append(padding);
 		drawCenteredString(fontRenderer, result.toString(), x, y, 0xffffff);

@@ -44,8 +44,10 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity {
 		super.updateEntity();
 
 		// TODO: This is temporary logic code, so I can test energy emitting.
-		if (8.0 > energy) energy += 0.2;
-		if (energy > 8.0) energy = 8.0;
+		if (8.0 > energy)
+			energy += 0.2;
+		if (energy > 8.0)
+			energy = 8.0;
 	}
 
 	@Override
@@ -80,7 +82,8 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity {
 
 	@Override
 	public double getAvailableExportEnergy() {
-		if (!isActive()) return 0;
+		if (!isActive())
+			return 0;
 		return Math.min(energy, getMaximumExportEnergy());
 	}
 

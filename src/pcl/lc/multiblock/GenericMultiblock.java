@@ -42,15 +42,18 @@ public abstract class GenericMultiblock {
 	 * Called by the host tile-entity to tick this structure.
 	 */
 	public void tick() {
-		if (host.worldObj != null) isClient = host.worldObj.isRemote;
-		if (isClient) if (!hasUpdate) {
-			LanteaPacket packet = pollForUpdate();
-			LanteaCraft.getProxy().sendToServer(packet);
-			hasUpdate = true;
-		}
+		if (host.worldObj != null)
+			isClient = host.worldObj.isRemote;
+		if (isClient)
+			if (!hasUpdate) {
+				LanteaPacket packet = pollForUpdate();
+				LanteaCraft.getProxy().sendToServer(packet);
+				hasUpdate = true;
+			}
 		// if the structure is currently flagged as invalid, and we're not a
 		// client, attempt a validate
-		if (wasInvalidated() && !isClient) validate(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
+		if (wasInvalidated() && !isClient)
+			validate(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
 	}
 
 	/**
@@ -160,7 +163,8 @@ public abstract class GenericMultiblock {
 		if (isValidStructure(world, baseX, baseY, baseZ)) {
 			boolean wasValid = isValid();
 			isValid = collectStructure(world, baseX, baseY, baseZ);
-			if (isValid) setLocation(baseX, baseY, baseZ);
+			if (isValid)
+				setLocation(baseX, baseY, baseZ);
 			validated(wasValid, isValid);
 		} else {
 			if (isValid()) {
@@ -193,7 +197,8 @@ public abstract class GenericMultiblock {
 	 * Called in the client only to set the validity of this multi-block structure.
 	 */
 	public void setValid(World world, boolean b) {
-		if (!isClient) return;
+		if (!isClient)
+			return;
 		isValid = b;
 	}
 
@@ -218,7 +223,8 @@ public abstract class GenericMultiblock {
 	}
 
 	public void setOrientation(EnumOrientations orientation) {
-		if (!isClient) return;
+		if (!isClient)
+			return;
 		structureOrientation = orientation;
 	}
 

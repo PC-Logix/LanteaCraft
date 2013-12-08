@@ -27,8 +27,10 @@ public class TileEntityStargateControllerRenderer extends TileEntitySpecialRende
 			GL11.glTranslated(x, y, z);
 			int dir = tileEntity.getBlockMetadata();
 			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-			if (dir == 1 || dir == 3) GL11.glRotatef(dir * 90F, 0F, 1F, 0F);
-			else if (dir == 0) GL11.glRotatef(-180F, 0F, 1F, 0F);
+			if (dir == 1 || dir == 3)
+				GL11.glRotatef(dir * 90F, 0F, 1F, 0F);
+			else if (dir == 0)
+				GL11.glRotatef(-180F, 0F, 1F, 0F);
 			else
 				GL11.glRotatef(dir * 180F, 0F, 1F, 0F);
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);

@@ -84,10 +84,11 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 		for (int i = x; i <= x + dx; i++)
 			for (int j = y; j <= y + dy; j++)
 				for (int k = z; k <= z + dz; k++)
-					if (i < 16 && j < h && k < 16) if (getBlock(i, j, k) == stone)
-					// System.out.printf("generateNode: putting at (%d, %d, %d)\n",
-					// i, j, k);
-					setBlock(i, j, k, id);
+					if (i < 16 && j < h && k < 16)
+						if (getBlock(i, j, k) == stone)
+							// System.out.printf("generateNode: putting at (%d, %d, %d)\n",
+							// i, j, k);
+							setBlock(i, j, k, id);
 	}
 
 	boolean odds(int n) {
@@ -102,10 +103,10 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				int z = random.nextInt(16);
 				for (int y = 0; y < 64; y++)
 					if (getBlock(x, y, z) == stone && getBlock(x, y + 1, z) == lava)
-					// if (debugLava)
-					// System.out.printf("NaquadahOreWorldGen: generating under lava at (%d, %d, %d)\n",
-					// x0+x, y, z0+z);
-					generateNode(naquadah, x, y, z, 3, 1, 3);
+						// if (debugLava)
+						// System.out.printf("NaquadahOreWorldGen: generating under lava at (%d, %d, %d)\n",
+						// x0+x, y, z0+z);
+						generateNode(naquadah, x, y, z, 3, 1, 3);
 			}
 		}
 		if (odds(genIsolatedOdds)) {
@@ -115,10 +116,10 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				int y = random.nextInt(64);
 				int z = random.nextInt(16);
 				if (getBlock(x, y, z) == stone)
-				// if (debugRandom)
-				// System.out.printf("NaquadahOreWorldGen: generating randomly at (%d, %d, %d)\n",
-				// x0+x, y, z0+z);
-				generateNode(naquadah, x, y, z, 2, 2, 2);
+					// if (debugRandom)
+					// System.out.printf("NaquadahOreWorldGen: generating randomly at (%d, %d, %d)\n",
+					// x0+x, y, z0+z);
+					generateNode(naquadah, x, y, z, 2, 2, 2);
 			}
 		}
 		ChunkData.forChunk(chunk).oresGenerated = true;

@@ -157,14 +157,17 @@ public class LanteaCraftCommonProxy {
 		registerContainers();
 		registerVillagers();
 		registerOther();
-		if (config.extended) config.save();
+		if (config.extended)
+			config.save();
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft done setting up!");
 
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft looking for other versions of SGCraft...");
 		if (UpgradeHelper.detectSGCraftInstall() || UpgradeHelper.detectSGCraftReloadedInstall()) {
 			upgradeHelper = new UpgradeHelper();
-			if (upgradeHelper.detectSGCraftInstall()) upgradeHelper.hookSGCraft();
-			if (upgradeHelper.detectSGCraftReloadedInstall()) upgradeHelper.hookSGCraftReloaded();
+			if (upgradeHelper.detectSGCraftInstall())
+				upgradeHelper.hookSGCraft();
+			if (upgradeHelper.detectSGCraftReloadedInstall())
+				upgradeHelper.hookSGCraftReloaded();
 		}
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft done looking for other versions.");
 	}
@@ -227,9 +230,11 @@ public class LanteaCraftCommonProxy {
 				true)));
 		enableAnalytics.comment = "Submit anonymous usage statistic data. (true/false)";
 
-		if (((ConfigValue<Boolean>) getConfigValue("doGalacticCraftCompat")).getValue()) GateAddressHelper.minDimension = -99;
+		if (((ConfigValue<Boolean>) getConfigValue("doGalacticCraftCompat")).getValue())
+			GateAddressHelper.minDimension = -99;
 
-		if (version != previousVersion && enableAnalytics.getBoolean(true)) analyticsHelper.start();
+		if (version != previousVersion && enableAnalytics.getBoolean(true))
+			analyticsHelper.start();
 	}
 
 	void registerOther() {
@@ -237,8 +242,8 @@ public class LanteaCraftCommonProxy {
 			LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft structures...");
 			MinecraftForge.TERRAIN_GEN_BUS.register(LanteaCraft.getInstance());
 			try {
-				if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4")) MapGenStructureIO
-						.func_143031_a(FeatureUnderDesertPyramid.class, "LanteaCraft:DesertPyramid");
+				if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
+					MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "LanteaCraft:DesertPyramid");
 			} catch (Throwable e) {
 				LanteaCraft.getLogger().log(Level.FINE, "Could not register structure type LanteaCraft:DesertPyramid",
 						e);
@@ -360,8 +365,8 @@ public class LanteaCraftCommonProxy {
 		ItemStack sgChevronBlock = new ItemStack(Blocks.sgRingBlock, 1, 1);
 		ItemStack blueDye = new ItemStack(Item.dyePowder, 1, 4);
 		ItemStack orangeDye = new ItemStack(Item.dyePowder, 1, 14);
-		if (config.getBoolean("options", "allowCraftingNaquadah", false)) newShapelessRecipe(Items.naquadah, 1,
-				Item.coal, Item.slimeBall, Item.blazePowder);
+		if (config.getBoolean("options", "allowCraftingNaquadah", false))
+			newShapelessRecipe(Items.naquadah, 1, Item.coal, Item.slimeBall, Item.blazePowder);
 		newRecipe(Blocks.sgRingBlock, 1, "ICI", "NNN", "III", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
 				chiselledSandstone);
 		newRecipe(sgChevronBlock, "CgC", "NpN", "IrI", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
@@ -441,15 +446,19 @@ public class LanteaCraftCommonProxy {
 	public ConfigValue<?> getConfigValue(String name) {
 		LanteaCraft.getLogger().log(Level.FINE, "Fetching configuration value `" + name + "`");
 		for (ConfigValue<?> item : configValues)
-			if (item.getName().equalsIgnoreCase(name)) return item;
+			if (item.getName().equalsIgnoreCase(name))
+				return item;
 		return null;
 	}
 
 	public int getRenderMode() {
 		int mode = ((ConfigValue<Integer>) getConfigValue("renderQuality")).getValue();
-		if (mode <= 32) return 32;
-		if (mode > 32 && mode <= 64) return 64;
-		if (mode > 64 && mode <= 128) return 128;
+		if (mode <= 32)
+			return 32;
+		if (mode > 32 && mode <= 64)
+			return 64;
+		if (mode > 64 && mode <= 128)
+			return 128;
 		return 32; // invalid value?
 	}
 
@@ -473,7 +482,8 @@ public class LanteaCraftCommonProxy {
 		} catch (Exception e) {
 			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to create GUI element, an exception occured.", e);
 			Throwable cause = e.getCause();
-			if (cause != null) cause.printStackTrace();
+			if (cause != null)
+				cause.printStackTrace();
 			else
 				e.printStackTrace();
 			return null;
@@ -561,7 +571,8 @@ public class LanteaCraftCommonProxy {
 
 	public int getVillagerID(String name) {
 		VSBinding villager = registeredVillagers.get(name);
-		if (villager != null) return villager.id;
+		if (villager != null)
+			return villager.id;
 		return 0;
 	}
 
@@ -578,7 +589,8 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public void handlePacket(LanteaPacket packet, Player player) {
-		if (packet.getPacketIsForServer()) defaultServerPacketHandler.handlePacket(packet, player);
+		if (packet.getPacketIsForServer())
+			defaultServerPacketHandler.handlePacket(packet, player);
 		else
 			return;
 	}

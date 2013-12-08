@@ -53,7 +53,8 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockBaseRenderer != null) return LanteaCraft.Render.blockBaseRenderer.renderID;
+		if (LanteaCraft.Render.blockBaseRenderer != null)
+			return LanteaCraft.Render.blockBaseRenderer.renderID;
 		return -9001;
 	}
 
@@ -103,9 +104,10 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public Icon getIcon(int side, int data) {
-		if (side <= 1) return topAndBottomTexture;
+		if (side <= 1)
+			return topAndBottomTexture;
 		else if (side == 3) // south
-		return frontTexture;
+			return frontTexture;
 		else
 			return sideTexture;
 	}
@@ -113,7 +115,8 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int id, int data) {
 		TileEntity te = getTileEntity(world, x, y, z);
-		if (te != null && te instanceof TileEntityStargateBase) ((TileEntityStargateBase) te).hostBlockDestroyed();
+		if (te != null && te instanceof TileEntityStargateBase)
+			((TileEntityStargateBase) te).hostBlockDestroyed();
 		super.breakBlock(world, x, y, z, id, data);
 	}
 
@@ -129,14 +132,14 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		TileEntity te = getTileEntity(world, x, y, z);
-		if (te != null && te instanceof TileEntityStargateBase) ((TileEntityStargateBase) te).getAsStructure()
-				.invalidate();
+		if (te != null && te instanceof TileEntityStargateBase)
+			((TileEntityStargateBase) te).getAsStructure().invalidate();
 	}
 
 	public boolean isMerged(IBlockAccess world, int x, int y, int z) {
 		TileEntity te = getTileEntity(world, x, y, z);
-		if (te != null && te instanceof TileEntityStargateBase) return ((TileEntityStargateBase) te).getAsStructure()
-				.isValid();
+		if (te != null && te instanceof TileEntityStargateBase)
+			return ((TileEntityStargateBase) te).getAsStructure().isValid();
 		return false;
 	}
 }

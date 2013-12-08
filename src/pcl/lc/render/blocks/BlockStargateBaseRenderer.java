@@ -17,8 +17,8 @@ public class BlockStargateBaseRenderer extends RotationOrientedBlockRenderer {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks rb) {
 		BlockStargateBase baseBlock = (BlockStargateBase) block;
-		if (rb.overrideBlockTexture != null || !baseBlock.isMerged(world, x, y, z)) return super.renderWorldBlock(
-				world, x, y, z, block, modelId, rb);
+		if (rb.overrideBlockTexture != null || !baseBlock.isMerged(world, x, y, z))
+			return super.renderWorldBlock(world, x, y, z, block, modelId, rb);
 		else
 			return false;
 	}

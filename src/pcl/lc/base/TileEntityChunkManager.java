@@ -27,14 +27,16 @@ public class TileEntityChunkManager implements ForgeChunkManager.LoadingCallback
 	public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
 		for (Ticket ticket : tickets) {
 			NBTTagCompound nbt = ticket.getModData();
-			if (nbt != null) if (nbt.getString("type").equals("TileEntity")) {
-				int x = nbt.getInteger("xCoord");
-				int y = nbt.getInteger("yCoord");
-				int z = nbt.getInteger("zCoord");
-				TileEntity te = world.getBlockTileEntity(x, y, z);
-				if (te instanceof TileEntityChunkLoader) if (!((TileEntityChunkLoader) te).reinstateChunkTicket(ticket)) ForgeChunkManager
-						.releaseTicket(ticket);
-			}
+			if (nbt != null)
+				if (nbt.getString("type").equals("TileEntity")) {
+					int x = nbt.getInteger("xCoord");
+					int y = nbt.getInteger("yCoord");
+					int z = nbt.getInteger("zCoord");
+					TileEntity te = world.getBlockTileEntity(x, y, z);
+					if (te instanceof TileEntityChunkLoader)
+						if (!((TileEntityChunkLoader) te).reinstateChunkTicket(ticket))
+							ForgeChunkManager.releaseTicket(ticket);
+				}
 		}
 	}
 

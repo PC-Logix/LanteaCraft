@@ -40,13 +40,15 @@ public class ConfigurationHelper extends Configuration {
 		Collection<Integer> inUse = VillagerRegistry.getRegisteredVillagers();
 		for (;;) {
 			int id = nextVillagerID++;
-			if (!inUse.contains(id)) return id;
+			if (!inUse.contains(id))
+				return id;
 		}
 	}
 
 	@Override
 	public Property get(String category, String key, String defaultValue, String comment, Property.Type type) {
-		if (!hasKey(category, key)) extended = true;
+		if (!hasKey(category, key))
+			extended = true;
 		return super.get(category, key, defaultValue, comment, type);
 	}
 

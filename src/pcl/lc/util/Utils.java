@@ -4,7 +4,8 @@ public class Utils {
 
 	public static double normaliseAngle(double a) {
 		a %= 360.0;
-		if (a < 0.0) a += 360.0;
+		if (a < 0.0)
+			a += 360.0;
 		return a;
 	}
 
@@ -14,8 +15,10 @@ public class Utils {
 
 	public static double diffAngle(double a, double b) {
 		double d = a > b ? a - b : b - a;
-		if (d > 180.0) d -= 360.0;
-		if (a > b) d = -d;
+		if (d > 180.0)
+			d -= 360.0;
+		if (a > b)
+			d = -d;
 		return d;
 	}
 

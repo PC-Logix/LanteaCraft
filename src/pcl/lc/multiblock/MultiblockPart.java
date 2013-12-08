@@ -25,7 +25,8 @@ public abstract class MultiblockPart {
 	 * Called by the host tile-entity to tick this part.
 	 */
 	public void tick() {
-		if (host.worldObj != null) isClient = host.worldObj.isRemote;
+		if (host.worldObj != null)
+			isClient = host.worldObj.isRemote;
 	}
 
 	/**
@@ -98,7 +99,8 @@ public abstract class MultiblockPart {
 	 */
 	public void devalidateHostMultiblock() {
 		GenericMultiblock structure = findHostMultiblock(true);
-		if (structure != null) structure.invalidate();
+		if (structure != null)
+			structure.invalidate();
 	}
 
 }

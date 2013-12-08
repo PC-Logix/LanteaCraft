@@ -50,7 +50,8 @@ public abstract class TileEntityChunkLoader extends GenericTileEntity {
 	}
 
 	public Ticket getChunkTicket() {
-		if (chunkTicket == null) chunkTicket = getChunkManager().newTicket(worldObj);
+		if (chunkTicket == null)
+			chunkTicket = getChunkManager().newTicket(worldObj);
 		return chunkTicket;
 	}
 

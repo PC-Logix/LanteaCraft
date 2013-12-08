@@ -128,7 +128,8 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	@Override
 	public void handlePacket(LanteaPacket packet, Player player) {
-		if (packet.getPacketIsForServer()) defaultServerPacketHandler.handlePacket(packet, player);
+		if (packet.getPacketIsForServer())
+			defaultServerPacketHandler.handlePacket(packet, player);
 		else
 			defaultClientPacketHandler.handlePacket(packet, player);
 	}

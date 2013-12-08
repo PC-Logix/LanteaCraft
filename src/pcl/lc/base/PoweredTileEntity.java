@@ -32,13 +32,12 @@ import ic2.api.reactor.IC2Reactor;
  * 
  * @author AfterLifeLochie
  */
-@InterfaceList({
-		@Interface(iface = "ic2.api.energy.tile.IEnergyAcceptor", modid = "IC2"),
+@InterfaceList({ @Interface(iface = "ic2.api.energy.tile.IEnergyAcceptor", modid = "IC2"),
 		@Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
 		@Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Core"),
 		@Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Core") })
-public abstract class PoweredTileEntity extends GenericTileEntity implements
-		IEnergyAcceptor, IEnergySource, IPowerEmitter, IPowerReceptor {
+public abstract class PoweredTileEntity extends GenericTileEntity implements IEnergyAcceptor, IEnergySource,
+		IPowerEmitter, IPowerReceptor {
 
 	/**
 	 * Incoming power buffer, particularly only for BuildCraft.
@@ -66,11 +65,9 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements
 			 * sources. It might be wise to clamp a maximum prescribed value, if there is one
 			 * in the BC API.
 			 */
-			float maxRecieveQuantity = (float) EnumUnits
-					.convertFromNaquadahUnit(EnumUnits.MinecraftJoules,
-							getMaximumReceiveEnergy());
-			b.configure(0.0f, maxRecieveQuantity,
-					(maxRecieveQuantity == 0.0f) ? 99999.0f : 1.0f,
+			float maxRecieveQuantity = (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.MinecraftJoules,
+					getMaximumReceiveEnergy());
+			b.configure(0.0f, maxRecieveQuantity, (maxRecieveQuantity == 0.0f) ? 99999.0f : 1.0f,
 					(maxRecieveQuantity == 0.0f) ? 0.0f : 1000.0f);
 			b.configurePowerPerdition(0, 0);
 			receiverBuffer = b;
@@ -200,8 +197,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements
 	@Method(modid = "BuildCraft|Core")
 	public void doWork(PowerHandler workProvider) {
 		float quantity = workProvider.useEnergy(0, 100.0f, true);
-		double naqQuantity = EnumUnits.convertToNaquadahUnit(
-				EnumUnits.MinecraftJoules, quantity);
+		double naqQuantity = EnumUnits.convertToNaquadahUnit(EnumUnits.MinecraftJoules, quantity);
 		receiveEnergy(quantity);
 	}
 
@@ -220,8 +216,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements
 	 */
 	@Override
 	@Method(modid = "IC2")
-	public boolean acceptsEnergyFrom(TileEntity emitter,
-			ForgeDirection direction) {
+	public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
 		return canReceiveEnergy();
 	}
 
@@ -232,8 +227,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements
 	@Method(modid = "IC2")
 	public double getOfferedEnergy() {
 		double naqAvailable = getAvailableExportEnergy();
-		return EnumUnits.convertFromNaquadahUnit(EnumUnits.EnergyUnit,
-				naqAvailable);
+		return EnumUnits.convertFromNaquadahUnit(EnumUnits.EnergyUnit, naqAvailable);
 	}
 
 	/**
@@ -249,8 +243,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements
 	@Override
 	@Method(modid = "IC2")
 	public void drawEnergy(double amount) {
-		double naqQuantity = EnumUnits.convertToNaquadahUnit(
-				EnumUnits.NaquadahUnit, amount);
+		double naqQuantity = EnumUnits.convertToNaquadahUnit(EnumUnits.NaquadahUnit, amount);
 		exportEnergy(naqQuantity);
 	}
 
@@ -267,22 +260,17 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements
 		int y = direction.offsetY + yCoord;
 		int z = direction.offsetZ + zCoord;
 		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
-		if (tile != null
-				&& tile instanceof IPowerReceptor
-				&& ((IPowerReceptor) tile).getPowerReceiver(direction
-						.getOpposite()) != null) {
-			PowerReceiver receptor = ((IPowerReceptor) tile)
-					.getPowerReceiver(direction.getOpposite());
+		if (tile != null && tile instanceof IPowerReceptor
+				&& ((IPowerReceptor) tile).getPowerReceiver(direction.getOpposite()) != null) {
+			PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(direction.getOpposite());
 
 			float maxQuantity = receptor.getMaxEnergyReceived();
-			float maxAvailQuantity = (float) EnumUnits.convertFromNaquadahUnit(
-					EnumUnits.MinecraftJoules, getAvailableExportEnergy());
+			float maxAvailQuantity = (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.MinecraftJoules,
+					getAvailableExportEnergy());
 
 			float send = Math.min(maxQuantity, maxAvailQuantity);
-			float quantityUsed = receptor.receiveEnergy(
-					PowerHandler.Type.MACHINE, send, direction.getOpposite());
-			exportEnergy(EnumUnits.convertToNaquadahUnit(
-					EnumUnits.MinecraftJoules, quantityUsed));
+			float quantityUsed = receptor.receiveEnergy(PowerHandler.Type.MACHINE, send, direction.getOpposite());
+			exportEnergy(EnumUnits.convertToNaquadahUnit(EnumUnits.MinecraftJoules, quantityUsed));
 		}
 	}
 }

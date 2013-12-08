@@ -25,13 +25,16 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public GenericMultiblock findHostMultiblock(boolean allowScanning) {
-		if (currentHost != null) return currentHost;
+		if (currentHost != null)
+			return currentHost;
 
-		if (!allowScanning) return null;
+		if (!allowScanning)
+			return null;
 		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5);
 		TileEntity entity = ScanningHelper.findNearestTileEntityOf(host.worldObj, TileEntityStargateBase.class,
 				host.xCoord, host.yCoord, host.zCoord, bounds);
-		if (entity == null) return null;
+		if (entity == null)
+			return null;
 		TileEntityStargateBase baseObj = (TileEntityStargateBase) entity;
 		StargateMultiblock stargateStruct = baseObj.getAsStructure();
 		return stargateStruct;
@@ -39,9 +42,11 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public boolean canMergeWith(GenericMultiblock structure) {
-		if (isClient) return true;
+		if (isClient)
+			return true;
 
-		if (currentHost == null) return true;
+		if (currentHost == null)
+			return true;
 		return false;
 	}
 

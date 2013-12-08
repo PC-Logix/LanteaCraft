@@ -24,8 +24,8 @@ public class UniversalAddressDatabase {
 
 	public void registerAddres(StargateAddress address) throws AddressingException.AddressAlreadyInUseException {
 		synchronized (addressPool) {
-			if (addressPool.contains(address)) throw new AddressingException.AddressAlreadyInUseException(
-					"The address object is already registered.");
+			if (addressPool.contains(address))
+				throw new AddressingException.AddressAlreadyInUseException("The address object is already registered.");
 			addressPool.add(address);
 		}
 	}
@@ -33,7 +33,8 @@ public class UniversalAddressDatabase {
 	public StargateAddress getAddress(String name) throws AddressingException.AddressNotFoundException {
 		synchronized (addressPool) {
 			for (StargateAddress entry : addressPool)
-				if (entry.getAddress().equals(name)) return entry;
+				if (entry.getAddress().equals(name))
+					return entry;
 			return null;
 		}
 	}
@@ -44,19 +45,20 @@ public class UniversalAddressDatabase {
 			bits.seek(0);
 			for (byte b : UniversalAddressDatabase.DBHEADER) {
 				byte b1 = bits.readByte();
-				if (b1 != b) throw new AddressingException.DatabaseException("Invalid database; expected " + b
-						+ ", got " + b1);
+				if (b1 != b)
+					throw new AddressingException.DatabaseException("Invalid database; expected " + b + ", got " + b1);
 			}
 
 			long rem = bits.length() - bits.getFilePointer();
-			if ((rem % 92) != 0) throw new AddressingException.DatabaseException(
-					"Invalid remainder, expected absolute 92.");
+			if ((rem % 92) != 0)
+				throw new AddressingException.DatabaseException("Invalid remainder, expected absolute 92.");
 			int addressSize = (int) Math.floor(rem / 92);
 			for (int i = 0; i < addressSize; i++) {
 				byte[] data = new byte[92];
 				bits.read(data);
 				StargateAddress addr = StargateAddress.load(new ByteArrayInputStream(data));
-				if (addr != null) addressPool.add(addr);
+				if (addr != null)
+					addressPool.add(addr);
 			}
 		} catch (IOException ioex) {
 			throw new AddressingException.DatabaseException("Database file access exception.", ioex);

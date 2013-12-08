@@ -64,7 +64,8 @@ public class ItemTokraSpawnEgg extends Item {
 
 			Entity entity = spawnCreature(par3World, (double) par4 + 0.5D, (double) par5 + d0, (double) par6 + 0.5D);
 
-			if (entity != null && !par2EntityPlayer.capabilities.isCreativeMode) --par1ItemStack.stackSize;
+			if (entity != null && !par2EntityPlayer.capabilities.isCreativeMode)
+				--par1ItemStack.stackSize;
 
 			return true;
 		}
@@ -99,7 +100,8 @@ public class ItemTokraSpawnEgg extends Item {
 
 					if (par2World.getBlockMaterial(i, j, k) == Material.water) {
 						Entity entity = spawnCreature(par2World, (double) i, (double) j, (double) k);
-						if (entity != null && !par3EntityPlayer.capabilities.isCreativeMode) --par1ItemStack.stackSize;
+						if (entity != null && !par3EntityPlayer.capabilities.isCreativeMode)
+							--par1ItemStack.stackSize;
 					}
 				}
 

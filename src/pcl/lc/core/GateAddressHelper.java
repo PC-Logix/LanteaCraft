@@ -60,8 +60,10 @@ public class GateAddressHelper {
 	public static String addressForLocation(WorldLocation loc) throws AddressingError {
 		int chunkx = loc.x >> 4;
 		int chunkz = loc.z >> 4;
-		if (!inCoordRange(chunkx) || !inCoordRange(chunkz)) throw new CoordRangeError();
-		if (!inDimensionRange(loc.dimension)) throw new DimensionRangeError();
+		if (!inCoordRange(chunkx) || !inCoordRange(chunkz))
+			throw new CoordRangeError();
+		if (!inDimensionRange(loc.dimension))
+			throw new DimensionRangeError();
 		int s = (chunkx - minCoord) * coordRange + chunkz - minCoord;
 		int d = loc.dimension - minDimension;
 		return intToSymbols(s, numCoordSymbols) + intToSymbols(d, numDimensionSymbols);
@@ -77,8 +79,10 @@ public class GateAddressHelper {
 		World world = getWorld(dimension);
 		if (world != null) {
 			Chunk chunk = world.getChunkFromChunkCoords(chunkx, chunkz);
-			if (chunk != null) for (Object te : chunk.chunkTileEntityMap.values())
-				if (te instanceof TileEntityStargateBase) return (TileEntityStargateBase) te;
+			if (chunk != null)
+				for (Object te : chunk.chunkTileEntityMap.values())
+					if (te instanceof TileEntityStargateBase)
+						return (TileEntityStargateBase) te;
 		}
 		return null;
 	}

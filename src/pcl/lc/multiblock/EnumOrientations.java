@@ -52,7 +52,8 @@ public enum EnumOrientations {
 	 */
 	public static EnumOrientations getOrientationFromID(int id) {
 		for (EnumOrientations orientation : values())
-			if (orientation.getID() == id) return orientation;
+			if (orientation.getID() == id)
+				return orientation;
 		return null;
 	}
 

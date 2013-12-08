@@ -73,7 +73,8 @@ public class LanteaPacket {
 	private static IStreamPackable<?> findPacker(int idx) {
 		synchronized (packableHelpers) {
 			for (IStreamPackable<?> packer : packableHelpers) {
-				if (packer.getTypeOf() == idx) return packer;
+				if (packer.getTypeOf() == idx)
+					return packer;
 			}
 		}
 		return null;
@@ -89,7 +90,8 @@ public class LanteaPacket {
 	private static IStreamPackable<?> findPacker(Class<?> clazz) {
 		synchronized (packableHelpers) {
 			for (IStreamPackable<?> packer : packableHelpers) {
-				if (packer.getClassOf().equals(clazz)) return packer;
+				if (packer.getClassOf().equals(clazz))
+					return packer;
 			}
 		}
 		return null;
@@ -104,7 +106,8 @@ public class LanteaPacket {
 	 */
 	private static int getGenericID(Class<?> clazz) {
 		for (int i = 0; i < classReferences.length; i++)
-			if (classReferences[i].equals(clazz)) return i;
+			if (classReferences[i].equals(clazz))
+				return i;
 		return -1;
 	}
 
@@ -116,7 +119,8 @@ public class LanteaPacket {
 	 * @return The class of the generic
 	 */
 	private static Class<?> getGeneric(int id) {
-		if (id >= 0 && id < classReferences.length) return classReferences[id];
+		if (id >= 0 && id < classReferences.length)
+			return classReferences[id];
 		return null;
 	}
 
@@ -284,10 +288,12 @@ public class LanteaPacket {
 	 *             Any read exception
 	 */
 	public void readData(DataInputStream data) throws IOException {
-		if (data.readByte() != (byte) 1) throw new IOException("Malformed packet!!");
+		if (data.readByte() != (byte) 1)
+			throw new IOException("Malformed packet!!");
 		byte typeof = data.readByte();
 		for (PacketType typeenum : PacketType.values())
-			if (typeenum.getPacketID() == typeof) packetType = typeenum;
+			if (typeenum.getPacketID() == typeof)
+				packetType = typeenum;
 		isPacketForServer = (data.readByte() == 1);
 
 		synchronized (values) {
@@ -309,8 +315,10 @@ public class LanteaPacket {
 		int intValueOf = getGenericID(o.getClass());
 		if (intValueOf == -1) {
 			IStreamPackable packer = null;
-			if (o instanceof IStreamPackable) packer = (IStreamPackable<?>) o;
-			if (packer == null) packer = LanteaPacket.findPacker(o.getClass());
+			if (o instanceof IStreamPackable)
+				packer = (IStreamPackable<?>) o;
+			if (packer == null)
+				packer = LanteaPacket.findPacker(o.getClass());
 			if (packer != null) {
 				data.writeInt(255);
 				data.writeInt(packer.getTypeOf());
@@ -416,7 +424,8 @@ public class LanteaPacket {
 	public static void writeHashMap(HashMap<?, ?> values, DataOutputStream data) throws IOException {
 		int sign = 0;
 		for (Entry<?, ?> entry : values.entrySet())
-			if (entry.getKey() != null && entry.getValue() != null) sign++;
+			if (entry.getKey() != null && entry.getValue() != null)
+				sign++;
 		data.writeInt(sign);
 		for (Entry<?, ?> entry : values.entrySet()) {
 			if (entry.getKey() != null && entry.getValue() != null) {
@@ -515,7 +524,8 @@ public class LanteaPacket {
 		for (Entry<Object, Object> invariate : values.entrySet()) {
 			result.append(invariate.getKey().toString());
 			result.append(": ");
-			if (invariate.getValue() != null) result.append(invariate.getValue().toString());
+			if (invariate.getValue() != null)
+				result.append(invariate.getValue().toString());
 			else
 				result.append("(null)");
 			result.append(", ");

@@ -128,7 +128,8 @@ public class GenericContainerGUI extends GuiContainer {
 
 	public static String inventoryName(IInventory inv) {
 		String name = inv.getInvName();
-		if (!inv.isInvNameLocalized()) name = StatCollector.translateToLocal(name);
+		if (!inv.isInvNameLocalized())
+			name = StatCollector.translateToLocal(name);
 		return name;
 	}
 

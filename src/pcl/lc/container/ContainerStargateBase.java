@@ -19,7 +19,8 @@ public class ContainerStargateBase extends GenericContainer {
 
 	public static ContainerStargateBase create(EntityPlayer player, World world, int x, int y, int z) {
 		TileEntityStargateBase te = TileEntityStargateBase.at(world, x, y, z);
-		if (te != null) return new ContainerStargateBase(te, player);
+		if (te != null)
+			return new ContainerStargateBase(te, player);
 		return null;
 	}
 
