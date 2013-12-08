@@ -1,8 +1,8 @@
 package pcl.lc;
 
 /**
- * This file is automatically updated by Jenkins as part of the CI build script
- * in Ant. Don't put any pre-set values here.
+ * This file is automatically updated by Jenkins as part of the CI build script in Ant. Don't
+ * put any pre-set values here.
  * 
  * @author AfterLifeLochie
  */

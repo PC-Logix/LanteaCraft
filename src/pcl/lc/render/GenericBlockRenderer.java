@@ -1,8 +1,8 @@
-//------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 //
-//   Greg's Mod Base - Generic Block Renderer
+// Greg's Mod Base - Generic Block Renderer
 //
-//------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 
 package pcl.lc.render;
 
@@ -112,8 +112,7 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	void selectTile(Icon icon, int width, int height) {
-		if (!textureOverridden)
-			useIcon(icon);
+		if (!textureOverridden) useIcon(icon);
 		us = (u1 - u0) / width;
 		vs = (v1 - v0) / height;
 	}

@@ -11,8 +11,7 @@ import pcl.lc.util.ImmutableTuple;
 import pcl.lc.util.Vector3;
 
 /**
- * Generic network helper registry, this is where I chose to dump them as I
- * write jazz.
+ * Generic network helper registry, this is where I chose to dump them as I write jazz.
  * 
  * @author AfterLifeLochie
  * 

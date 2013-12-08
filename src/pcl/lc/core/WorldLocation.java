@@ -39,11 +39,9 @@ public class WorldLocation {
 
 	public TileEntityStargateBase getStargateTE() {
 		World world = GateAddressHelper.getWorld(dimension);
-		if (world == null)
-			return null;
+		if (world == null) return null;
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te instanceof TileEntityStargateBase)
-			return (TileEntityStargateBase) te;
+		if (te instanceof TileEntityStargateBase) return (TileEntityStargateBase) te;
 		else
 			return null;
 	}

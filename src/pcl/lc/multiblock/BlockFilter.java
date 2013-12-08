@@ -18,11 +18,9 @@ public class BlockFilter {
 
 	public boolean matches(World world, Block blockOf, int x, int y, int z) {
 		// test for immediate id match, metadata ignored
-		if (blockOf.blockID == targetId && targetMetadata == -1)
-			return true;
+		if (blockOf.blockID == targetId && targetMetadata == -1) return true;
 		// test for immediate id match & metadata match
-		if (blockOf.blockID == targetId && targetMetadata == world.getBlockMetadata(x, y, z))
-			return true;
+		if (blockOf.blockID == targetId && targetMetadata == world.getBlockMetadata(x, y, z)) return true;
 		return false;
 	}
 

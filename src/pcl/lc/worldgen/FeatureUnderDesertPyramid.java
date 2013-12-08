@@ -1,10 +1,4 @@
-//------------------------------------------------------------------------------------------------
-//
-//   SG Craft - Generate stargate under desert pyramid
-//
-//------------------------------------------------------------------------------------------------
-
-package pcl.lc.generators;
+package pcl.lc.worldgen;
 
 import java.util.Random;
 

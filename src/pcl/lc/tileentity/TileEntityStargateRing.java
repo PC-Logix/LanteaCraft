@@ -28,18 +28,15 @@ public class TileEntityStargateRing extends GenericTileEntity {
 
 	@Override
 	public void updateEntity() {
-		if (thisPart.getType() == null)
-			flagDirty();
+		if (thisPart.getType() == null) flagDirty();
 	}
 
 	public void hostBlockPlaced() {
-		if (!worldObj.isRemote)
-			flagDirty();
+		if (!worldObj.isRemote) flagDirty();
 	}
 
 	public void hostBlockDestroyed() {
-		if (!worldObj.isRemote)
-			flagDirty();
+		if (!worldObj.isRemote) flagDirty();
 	}
 
 	public void flagDirty() {

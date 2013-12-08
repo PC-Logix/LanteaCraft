@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import pcl.lc.LanteaCraft.Blocks;
+import pcl.lc.LanteaCraft.Fluids;
 import pcl.lc.LanteaCraft.Items;
 import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.blocks.BlockNaquadah;
@@ -27,12 +28,10 @@ import pcl.lc.config.ConfigurationHelper;
 import pcl.lc.container.ContainerStargateBase;
 import pcl.lc.core.EnumGuiList;
 import pcl.lc.core.GateAddressHelper;
+import pcl.lc.fluids.BlockLiquidNaquadah;
+import pcl.lc.fluids.ItemSpecialBucket;
+import pcl.lc.fluids.LiquidNaquadah;
 import pcl.lc.forge.HelperGUIHandler;
-import pcl.lc.generators.ChunkData;
-import pcl.lc.generators.FeatureGeneration;
-import pcl.lc.generators.FeatureUnderDesertPyramid;
-import pcl.lc.generators.NaquadahOreWorldGen;
-import pcl.lc.generators.TradeHandler;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTokraSpawnEgg;
@@ -45,6 +44,11 @@ import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
 import pcl.lc.util.AnalyticsHelper;
+import pcl.lc.worldgen.ChunkData;
+import pcl.lc.worldgen.FeatureGeneration;
+import pcl.lc.worldgen.FeatureUnderDesertPyramid;
+import pcl.lc.worldgen.NaquadahOreWorldGen;
+import pcl.lc.worldgen.TradeHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.crash.CallableMinecraftVersion;
@@ -68,6 +72,7 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.event.world.WorldEvent.Unload;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -134,6 +139,7 @@ public class LanteaCraftCommonProxy {
 	public void init(FMLInitializationEvent e) {
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft setting up...");
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getInstance());
+		MinecraftForge.EVENT_BUS.register(LanteaCraft.getSpecialBucketHandler());
 		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
 		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new HelperGUIHandler());
 		networkHelpers.init();
@@ -143,6 +149,7 @@ public class LanteaCraftCommonProxy {
 		registerBlocks();
 		registerTileEntities();
 		registerItems();
+		registerFluids();
 		registerOres();
 		registerRecipes();
 		registerRandomItems();
@@ -150,18 +157,14 @@ public class LanteaCraftCommonProxy {
 		registerContainers();
 		registerVillagers();
 		registerOther();
-		// channel = new StargateNetworkChannel(BuildInfo.modID);
-		if (config.extended)
-			config.save();
+		if (config.extended) config.save();
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft done setting up!");
 
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft looking for other versions of SGCraft...");
 		if (UpgradeHelper.detectSGCraftInstall() || UpgradeHelper.detectSGCraftReloadedInstall()) {
 			upgradeHelper = new UpgradeHelper();
-			if (upgradeHelper.detectSGCraftInstall())
-				upgradeHelper.hookSGCraft();
-			if (upgradeHelper.detectSGCraftReloadedInstall())
-				upgradeHelper.hookSGCraftReloaded();
+			if (upgradeHelper.detectSGCraftInstall()) upgradeHelper.hookSGCraft();
+			if (upgradeHelper.detectSGCraftReloadedInstall()) upgradeHelper.hookSGCraftReloaded();
 		}
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft done looking for other versions.");
 	}
@@ -224,11 +227,9 @@ public class LanteaCraftCommonProxy {
 				true)));
 		enableAnalytics.comment = "Submit anonymous usage statistic data. (true/false)";
 
-		if (((ConfigValue<Boolean>) getConfigValue("doGalacticCraftCompat")).getValue())
-			GateAddressHelper.minDimension = -99;
+		if (((ConfigValue<Boolean>) getConfigValue("doGalacticCraftCompat")).getValue()) GateAddressHelper.minDimension = -99;
 
-		if (version != previousVersion && enableAnalytics.getBoolean(true))
-			analyticsHelper.start();
+		if (version != previousVersion && enableAnalytics.getBoolean(true)) analyticsHelper.start();
 	}
 
 	void registerOther() {
@@ -236,8 +237,8 @@ public class LanteaCraftCommonProxy {
 			LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft structures...");
 			MinecraftForge.TERRAIN_GEN_BUS.register(LanteaCraft.getInstance());
 			try {
-				if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
-					MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "LanteaCraft:DesertPyramid");
+				if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4")) MapGenStructureIO
+						.func_143031_a(FeatureUnderDesertPyramid.class, "LanteaCraft:DesertPyramid");
 			} catch (Throwable e) {
 				LanteaCraft.getLogger().log(Level.FINE, "Could not register structure type LanteaCraft:DesertPyramid",
 						e);
@@ -313,6 +314,19 @@ public class LanteaCraftCommonProxy {
 		}
 	}
 
+	public ItemSpecialBucket registerSpecialBucket(Block hostOf, String idForName, String unlocalizedName,
+			String localizedName) {
+		LanteaCraft.getLogger().log(Level.FINE, "Attempting to register SpecialBucket " + idForName);
+		int id = config.getItem(unlocalizedName, 31743).getInt();
+		ItemSpecialBucket bucket = new ItemSpecialBucket(id, hostOf);
+		bucket.setUnlocalizedName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName);
+		bucket.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName + "_" + getRenderMode());
+		bucket.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
+		GameRegistry.registerItem(bucket, idForName);
+		LanguageRegistry.addName(bucket, localizedName);
+		return bucket;
+	}
+
 	void registerItems() {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft items...");
 		Items.naquadah = registerItem(Item.class, LanteaNameRegistry.getItemMapping("itemNaquadah"), "naquadah",
@@ -346,8 +360,8 @@ public class LanteaCraftCommonProxy {
 		ItemStack sgChevronBlock = new ItemStack(Blocks.sgRingBlock, 1, 1);
 		ItemStack blueDye = new ItemStack(Item.dyePowder, 1, 4);
 		ItemStack orangeDye = new ItemStack(Item.dyePowder, 1, 14);
-		if (config.getBoolean("options", "allowCraftingNaquadah", false))
-			newShapelessRecipe(Items.naquadah, 1, Item.coal, Item.slimeBall, Item.blazePowder);
+		if (config.getBoolean("options", "allowCraftingNaquadah", false)) newShapelessRecipe(Items.naquadah, 1,
+				Item.coal, Item.slimeBall, Item.blazePowder);
 		newRecipe(Blocks.sgRingBlock, 1, "ICI", "NNN", "III", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
 				chiselledSandstone);
 		newRecipe(sgChevronBlock, "CgC", "NpN", "IrI", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
@@ -410,22 +424,32 @@ public class LanteaCraftCommonProxy {
 				LanteaNameRegistry.getTileEntityMapping("tileEntityNaquadahGenerator"));
 	}
 
+	void registerFluids() {
+		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft fluids...");
+
+		Fluids.fluidLiquidNaquadah = new LiquidNaquadah();
+		FluidRegistry.registerFluid(Fluids.fluidLiquidNaquadah);
+
+		Fluids.fluidLiquidNaquadahHost = (BlockLiquidNaquadah) registerBlock(BlockLiquidNaquadah.class,
+				ItemBlock.class, LanteaNameRegistry.getBlockMapping("blockLiquidNaquadah"), "blockLiquidNaquadah",
+				"Liquid Naquadah");
+
+		Fluids.fluidLiquidNaquadahBucket = registerSpecialBucket(Fluids.fluidLiquidNaquadahHost,
+				"liquidNaquadahBucket", "liquidNaquadahBucket", "Liquid Naquadah Bucket");
+	}
+
 	public ConfigValue<?> getConfigValue(String name) {
 		LanteaCraft.getLogger().log(Level.FINE, "Fetching configuration value `" + name + "`");
 		for (ConfigValue<?> item : configValues)
-			if (item.getName().equalsIgnoreCase(name))
-				return item;
+			if (item.getName().equalsIgnoreCase(name)) return item;
 		return null;
 	}
 
 	public int getRenderMode() {
 		int mode = ((ConfigValue<Integer>) getConfigValue("renderQuality")).getValue();
-		if (mode <= 32)
-			return 32;
-		if (mode > 32 && mode <= 64)
-			return 64;
-		if (mode > 64 && mode <= 128)
-			return 128;
+		if (mode <= 32) return 32;
+		if (mode > 32 && mode <= 64) return 64;
+		if (mode > 64 && mode <= 128) return 128;
 		return 32; // invalid value?
 	}
 
@@ -449,8 +473,7 @@ public class LanteaCraftCommonProxy {
 		} catch (Exception e) {
 			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to create GUI element, an exception occured.", e);
 			Throwable cause = e.getCause();
-			if (cause != null)
-				cause.printStackTrace();
+			if (cause != null) cause.printStackTrace();
 			else
 				e.printStackTrace();
 			return null;
@@ -538,8 +561,7 @@ public class LanteaCraftCommonProxy {
 
 	public int getVillagerID(String name) {
 		VSBinding villager = registeredVillagers.get(name);
-		if (villager != null)
-			return villager.id;
+		if (villager != null) return villager.id;
 		return 0;
 	}
 
@@ -556,8 +578,7 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public void handlePacket(LanteaPacket packet, Player player) {
-		if (packet.getPacketIsForServer())
-			defaultServerPacketHandler.handlePacket(packet, player);
+		if (packet.getPacketIsForServer()) defaultServerPacketHandler.handlePacket(packet, player);
 		else
 			return;
 	}

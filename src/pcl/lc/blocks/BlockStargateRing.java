@@ -1,8 +1,8 @@
-//------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 //
-//   SG Craft - Stargate ring block
+// SG Craft - Stargate ring block
 //
-//------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 
 package pcl.lc.blocks;
 
@@ -57,8 +57,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockRingRenderer != null)
-			return LanteaCraft.Render.blockRingRenderer.renderID;
+		if (LanteaCraft.Render.blockRingRenderer != null) return LanteaCraft.Render.blockRingRenderer.renderID;
 		return -9001;
 	}
 
@@ -95,8 +94,8 @@ public class BlockStargateRing extends GenericContainerBlock {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
 		if (te.isMerged) {
 			Block block = Block.blocksList[world.getBlockId(te.baseX, te.baseY, te.baseZ)];
-			if (block instanceof BlockStargateBase)
-				block.onBlockActivated(world, te.baseX, te.baseY, te.baseZ, player, side, cx, cy, cz);
+			if (block instanceof BlockStargateBase) block.onBlockActivated(world, te.baseX, te.baseY, te.baseZ, player,
+					side, cx, cy, cz);
 			return true;
 		}
 		return false;
@@ -104,8 +103,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public Icon getIcon(int side, int data) {
-		if (side <= 1)
-			return topAndBottomTexture;
+		if (side <= 1) return topAndBottomTexture;
 		else
 			return sideTextures[data & subBlockMask];
 	}
@@ -137,8 +135,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 	public void breakBlock(World world, int x, int y, int z, int id, int data) {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
 		super.breakBlock(world, x, y, z, id, data);
-		if (te != null)
-			te.getAsPart().devalidateHostMultiblock();
+		if (te != null) te.getAsPart().devalidateHostMultiblock();
 	}
 
 	@Override

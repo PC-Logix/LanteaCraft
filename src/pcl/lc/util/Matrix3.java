@@ -7,12 +7,12 @@ public class Matrix3 {
 	public static Matrix3[] turnRotations = { rotY(0), rotY(90), rotY(180), rotY(270) };
 
 	public static Matrix3[] sideRotations = {
-	/* 0, -Y, DOWN */ident,
-	/* 1, +Y, UP */rotX(180),
-	/* 2, -Z, NORTH */rotX(90),
-	/* 3, +Z, SOUTH */rotX(-90).mul(rotY(180)),
-	/* 4, -X, WEST */rotZ(-90).mul(rotY(90)),
-	/* 5, +X, EAST */rotZ(90).mul(rotY(-90)) };
+			/* 0, -Y, DOWN */ident,
+			/* 1, +Y, UP */rotX(180),
+			/* 2, -Z, NORTH */rotX(90),
+			/* 3, +Z, SOUTH */rotX(-90).mul(rotY(180)),
+			/* 4, -X, WEST */rotZ(-90).mul(rotY(90)),
+			/* 5, +X, EAST */rotZ(90).mul(rotY(-90)) };
 
 	public double m[][] = new double[][] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
 

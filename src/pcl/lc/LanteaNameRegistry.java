@@ -36,25 +36,24 @@ public class LanteaNameRegistry {
 	public static String getTileEntityMapping(String refName) {
 		LanteaCraft.getLogger().log(Level.INFO, "Request for getTileEntityMapping " + refName);
 		String name = tileEntityRegistry.get(refName);
-		if (name == null)
-			throw new RuntimeException("Cannot find TileEntityMapping with name reference " + refName
-					+ ", hard failure!");
+		if (name == null) throw new RuntimeException("Cannot find TileEntityMapping with name reference " + refName
+				+ ", hard failure!");
 		return name;
 	}
 
 	public static String getBlockMapping(String refName) {
 		LanteaCraft.getLogger().log(Level.INFO, "Request for getBlockMapping " + refName);
 		String name = blockRegistry.get(refName);
-		if (name == null)
-			throw new RuntimeException("Cannot find BlockMapping with name reference " + refName + ", hard failure!");
+		if (name == null) throw new RuntimeException("Cannot find BlockMapping with name reference " + refName
+				+ ", hard failure!");
 		return name;
 	}
 
 	public static String getItemMapping(String refName) {
 		LanteaCraft.getLogger().log(Level.INFO, "Request for getItemMapping " + refName);
 		String name = itemRegistry.get(refName);
-		if (name == null)
-			throw new RuntimeException("Cannot find ItemMapping with name reference " + refName + ", hard failure!");
+		if (name == null) throw new RuntimeException("Cannot find ItemMapping with name reference " + refName
+				+ ", hard failure!");
 		return name;
 	}
 
@@ -71,6 +70,8 @@ public class LanteaNameRegistry {
 		registerBlockMapping("blockNaquadah", "block.Naquadah");
 		registerBlockMapping("oreNaquadah", "block.NaquadahOre");
 		registerBlockMapping("blockNaquadahGenerator", "block.NaquadahGenerator");
+
+		registerBlockMapping("blockLiquidNaquadah", "block.liquidNaquadah");
 
 		registerItemMapping("itemNaquadah", "item.Naquadah");
 		registerItemMapping("itemNaquadahIngot", "item.NaquadahIngot");

@@ -28,16 +28,14 @@ public class LanguageHelper {
 	public static String getLocalNameForGate(EnumStargateType typeof) {
 		String unlocName = getUnlocNameForGate(typeof);
 		String localName = localizedNameMap.get(unlocName);
-		if (localName != null)
-			return localName;
+		if (localName != null) return localName;
 		return unlocName;
 	}
 
 	public static String getLocalNameForGatePart(EnumStargateType typeof, String subof) {
 		String unlocName = getUnlocNameForGatePart(typeof, subof);
 		String localName = localizedNameMap.get(unlocName);
-		if (localName != null)
-			return localName;
+		if (localName != null) return localName;
 		return unlocName;
 	}
 

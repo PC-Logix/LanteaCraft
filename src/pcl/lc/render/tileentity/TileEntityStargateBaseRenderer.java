@@ -78,8 +78,7 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 		renderRing(ringMidRadius, ringOuterRadius, RingType.Outer);
 		renderInnerRing(te, t);
 		renderChevrons(te);
-		if (te.isConnected())
-			renderEventHorizon(te);
+		if (te.isConnected()) renderEventHorizon(te);
 	}
 
 	void renderInnerRing(TileEntityStargateBase te, float t) {
@@ -121,18 +120,18 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 			// Front
 			GL11.glNormal3f(0, 0, 1);
 			switch (type) {
-			case Outer:
-				selectTile(ringFaceTextureIndex);
-				u = 0;
-				du = 16;
-				dv = 16;
-				break;
-			case Inner:
-				selectTile(ringSymbolTextureIndex);
-				u = ringSymbolTextureLength - (i + 1) * ringSymbolSegmentWidth;
-				du = ringSymbolSegmentWidth;
-				dv = ringSymbolTextureHeight;
-				break;
+				case Outer:
+					selectTile(ringFaceTextureIndex);
+					u = 0;
+					du = 16;
+					dv = 16;
+					break;
+				case Inner:
+					selectTile(ringSymbolTextureIndex);
+					u = ringSymbolTextureLength - (i + 1) * ringSymbolSegmentWidth;
+					du = ringSymbolSegmentWidth;
+					dv = ringSymbolTextureHeight;
+					break;
 			}
 			vertex(r1 * c[i], r1 * s[i], z, u + du, dv);
 			vertex(r2 * c[i], r2 * s[i], z, u + du, 0);
@@ -162,8 +161,7 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 		double x1 = r1, y1 = chevronWidth / 4;
 		double x2 = r2, y2 = chevronWidth / 2;
 
-		if (engaged)
-			GL11.glTranslated(-chevronMotionDistance, 0, 0);
+		if (engaged) GL11.glTranslated(-chevronMotionDistance, 0, 0);
 		GL11.glBegin(GL11.GL_QUADS);
 
 		selectTile(chevronTextureIndex);
@@ -225,8 +223,7 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 		GL11.glEnd();
 
 		selectTile(chevronLitTextureIndex);
-		if (!engaged)
-			GL11.glColor3d(0.5, 0.5, 0.5);
+		if (!engaged) GL11.glColor3d(0.5, 0.5, 0.5);
 		else
 			GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glBegin(GL11.GL_QUADS);

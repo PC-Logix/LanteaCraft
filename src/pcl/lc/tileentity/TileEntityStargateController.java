@@ -55,8 +55,7 @@ public class TileEntityStargateController extends GenericTileEntity {
 	public TileEntityStargateBase getLinkedStargateTE() {
 		if (isLinkedToStargate) {
 			TileEntity gte = worldObj.getBlockTileEntity(linkedX, linkedY, linkedZ);
-			if (gte instanceof TileEntityStargateBase)
-				return (TileEntityStargateBase) gte;
+			if (gte instanceof TileEntityStargateBase) return (TileEntityStargateBase) gte;
 		}
 		return null;
 	}
@@ -69,9 +68,7 @@ public class TileEntityStargateController extends GenericTileEntity {
 					for (int k = 1; k <= linkRangeZ; k++) {
 						Vector3 p = t.p(i, j, -k);
 						TileEntity te = worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
-						if (te instanceof TileEntityStargateBase)
-							if (linkToStargate((TileEntityStargateBase) te))
-								return;
+						if (te instanceof TileEntityStargateBase) if (linkToStargate((TileEntityStargateBase) te)) return;
 					}
 		}
 	}

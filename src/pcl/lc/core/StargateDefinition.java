@@ -16,10 +16,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 
 /**
- * Abstract definition of a gate type. Contains a reference to a specific gate
- * type, and the configuration which makes up the gate's structure. It is also
- * responsible for initializing the actual object instances and references to
- * blocks and tile-entities.
+ * Abstract definition of a gate type. Contains a reference to a specific gate type, and the
+ * configuration which makes up the gate's structure. It is also responsible for initializing
+ * the actual object instances and references to blocks and tile-entities.
  * 
  * @author AfterLifeLochie
  * 
@@ -51,8 +50,8 @@ public class StargateDefinition {
 	}
 
 	/**
-	 * Constructs the generic definition of the gate. This populates references
-	 * to blocks and tile-entities, which also fires Forge registrations.
+	 * Constructs the generic definition of the gate. This populates references to blocks and
+	 * tile-entities, which also fires Forge registrations.
 	 */
 	public void buildDefinition() {
 		// TODO: missing ref -> jp id (arg_2)
@@ -64,8 +63,7 @@ public class StargateDefinition {
 	}
 
 	/**
-	 * Builds an instance of a block for this particular abstract generic gate
-	 * definition.
+	 * Builds an instance of a block for this particular abstract generic gate definition.
 	 * 
 	 * @param blockClazz
 	 *            The class to use for the particular block instance
@@ -75,8 +73,7 @@ public class StargateDefinition {
 	 *            The ID of this block
 	 * @param partName
 	 *            The name of the part this block represents
-	 * @return The instance of the block for the current definition and the
-	 *         provided part type
+	 * @return The instance of the block for the current definition and the provided part type
 	 */
 	private Block buildBlockDefinition(Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemClazz, int id,
 			String partName) {
@@ -104,8 +101,8 @@ public class StargateDefinition {
 	}
 
 	/**
-	 * Gets the type of this definition. Stargates use the EnumStargateType as a
-	 * reference typeof, not directly as a class declaration.
+	 * Gets the type of this definition. Stargates use the EnumStargateType as a reference
+	 * typeof, not directly as a class declaration.
 	 * 
 	 * @return The type of this definition
 	 */
@@ -132,9 +129,8 @@ public class StargateDefinition {
 	}
 
 	/**
-	 * Gets the instance of the controller block for this definition. By
-	 * default, this will be the standard controller, unless another type is
-	 * explicitly declared in the definition.
+	 * Gets the instance of the controller block for this definition. By default, this will be
+	 * the standard controller, unless another type is explicitly declared in the definition.
 	 * 
 	 * @return The instance of the controller block for this definition
 	 */

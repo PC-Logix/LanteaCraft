@@ -18,11 +18,9 @@ import pcl.lc.config.ConfigurationHelper;
 import pcl.lc.container.ContainerStargateBase;
 import pcl.lc.core.EnumGuiList;
 import pcl.lc.core.GateAddressHelper;
-import pcl.lc.generators.ChunkData;
-import pcl.lc.generators.FeatureGeneration;
-import pcl.lc.generators.FeatureUnderDesertPyramid;
-import pcl.lc.generators.NaquadahOreWorldGen;
-import pcl.lc.generators.TradeHandler;
+import pcl.lc.fluids.BlockLiquidNaquadah;
+import pcl.lc.fluids.ItemSpecialBucket;
+import pcl.lc.fluids.LiquidNaquadah;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTokraSpawnEgg;
@@ -40,6 +38,12 @@ import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
 import pcl.lc.util.HelperCreativeTab;
+import pcl.lc.util.SpecialBucketHandler;
+import pcl.lc.worldgen.ChunkData;
+import pcl.lc.worldgen.FeatureGeneration;
+import pcl.lc.worldgen.FeatureUnderDesertPyramid;
+import pcl.lc.worldgen.NaquadahOreWorldGen;
+import pcl.lc.worldgen.TradeHandler;
 import net.minecraft.block.Block;
 import net.minecraft.crash.CallableMinecraftVersion;
 import net.minecraft.creativetab.CreativeTabs;
@@ -70,14 +74,14 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber
-		+ "build" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:BuildCraft|Core;after:IC2;after:SGCraft")
-@NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { BuildInfo.modID }, packetHandler = pcl.lc.network.DefaultPacketHandler.class)
+@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "build"
+		+ BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:BuildCraft|Core;after:IC2;after:SGCraft")
+@NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { BuildInfo.modID },
+		packetHandler = pcl.lc.network.DefaultPacketHandler.class)
 public class LanteaCraft {
 
 	/**
-	 * The private instance of the mod. Use {@link #getInstance()} to access
-	 * this object safely
+	 * The private instance of the mod. Use {@link #getInstance()} to access this object safely
 	 */
 	private static LanteaCraft mod;
 
@@ -91,8 +95,8 @@ public class LanteaCraft {
 	}
 
 	/**
-	 * The private instance of the logger used. Use {@link #getLogger()} to
-	 * access this object safely
+	 * The private instance of the logger used. Use {@link #getLogger()} to access this object
+	 * safely
 	 */
 	private static Logger logger;
 
@@ -145,11 +149,15 @@ public class LanteaCraft {
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
 		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
-
 	}
 
-	public static HelperCreativeTab lanteaCraftTab = new HelperCreativeTab(
-			CreativeTabs.getNextID(), "LanteaCraft") {
+	public static class Fluids {
+		public static LiquidNaquadah fluidLiquidNaquadah;
+		public static BlockLiquidNaquadah fluidLiquidNaquadahHost;
+		public static ItemSpecialBucket fluidLiquidNaquadahBucket;
+	}
+
+	public static HelperCreativeTab lanteaCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "LanteaCraft") {
 		@Override
 		public ItemStack getIconItemStack() {
 			return new ItemStack(LanteaCraft.Items.debugger);
@@ -158,6 +166,8 @@ public class LanteaCraft {
 
 	@SidedProxy(clientSide = "pcl.lc.LanteaCraftClientProxy", serverSide = "pcl.lc.LanteaCraftCommonProxy")
 	public static LanteaCraftCommonProxy proxy;
+
+	private SpecialBucketHandler bucketHandler = new SpecialBucketHandler();
 
 	private String assetKey = "pcl_lc";
 
@@ -171,9 +181,8 @@ public class LanteaCraft {
 		LanteaCraft.logger.setParent(FMLLog.getLogger());
 		if (BuildInfo.buildNumber.equals("@" + "BUILD" + "@")) {
 			LanteaCraft.logger.setLevel(Level.ALL);
-			LanteaCraft.logger
-					.log(Level.INFO,
-							"You appear to be inside a development environment, switching to all logging.");
+			LanteaCraft.logger.log(Level.INFO,
+					"You appear to be inside a development environment, switching to all logging.");
 		} else
 			LanteaCraft.logger.setLevel(Level.INFO);
 		proxy.preInit(e);
@@ -233,6 +242,10 @@ public class LanteaCraft {
 
 	public static CreativeTabs getCreativeTab() {
 		return LanteaCraft.getInstance().lanteaCraftTab;
+	}
+
+	public static SpecialBucketHandler getSpecialBucketHandler() {
+		return LanteaCraft.getInstance().bucketHandler;
 	}
 
 	public static void handlePacket(LanteaPacket packet, Player player) {

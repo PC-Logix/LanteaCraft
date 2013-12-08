@@ -24,7 +24,7 @@ public class ServerPacketHandler {
 				base.getDescriptionPacket();
 			}
 		}
-		
+
 		if (packet.getType().equals(LanteaPacket.PacketType.DialRequest)) {
 			int worldName = (Integer) packet.getValue("DimensionID");
 			int x = (Integer) packet.getValue("WorldX");

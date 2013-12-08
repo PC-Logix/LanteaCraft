@@ -1,8 +1,8 @@
-//------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 //
-//   SG Craft - Stargate Controller Block
+// SG Craft - Stargate Controller Block
 //
-//------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 
 package pcl.lc.blocks;
 
@@ -54,19 +54,18 @@ public class BlockStargateController extends RotationOrientedBlock {
 	@Override
 	public Icon getIcon(int side, int data) {
 		switch (side) {
-		case 0:
-			return bottomTexture;
-		case 1:
-			return topTexture;
-		default:
-			return sideTexture;
+			case 0:
+				return bottomTexture;
+			case 1:
+				return topTexture;
+			default:
+				return sideTexture;
 		}
 	}
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.getProxy().isUsingModels())
-			return -1;
+		if (LanteaCraft.getProxy().isUsingModels()) return -1;
 		return 0;
 	}
 
@@ -99,8 +98,7 @@ public class BlockStargateController extends RotationOrientedBlock {
 		super.breakBlock(world, x, y, z, id, data);
 		if (cte.isLinkedToStargate) {
 			TileEntityStargateBase gte = cte.getLinkedStargateTE();
-			if (gte != null)
-				gte.clearLinkToController();
+			if (gte != null) gte.clearLinkToController();
 		}
 	}
 

@@ -43,9 +43,9 @@ public class ItemTokraSpawnEgg extends Item {
 	}
 
 	/**
-	 * Callback for item usage. If the item does something special on right
-	 * clicking, he will have one of those. Return True if something happen and
-	 * false if it don't. This is for ITEMS, not BLOCKS
+	 * Callback for item usage. If the item does something special on right clicking, he will
+	 * have one of those. Return True if something happen and false if it don't. This is for
+	 * ITEMS, not BLOCKS
 	 */
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4,
 			int par5, int par6, int par7, float par8, float par9, float par10) {
@@ -64,16 +64,15 @@ public class ItemTokraSpawnEgg extends Item {
 
 			Entity entity = spawnCreature(par3World, (double) par4 + 0.5D, (double) par5 + d0, (double) par6 + 0.5D);
 
-			if (entity != null && !par2EntityPlayer.capabilities.isCreativeMode)
-				--par1ItemStack.stackSize;
+			if (entity != null && !par2EntityPlayer.capabilities.isCreativeMode) --par1ItemStack.stackSize;
 
 			return true;
 		}
 	}
 
 	/**
-	 * Called whenever this item is equipped and the right mouse button is
-	 * pressed. Args: itemStack, world, entityPlayer
+	 * Called whenever this item is equipped and the right mouse button is pressed. Args:
+	 * itemStack, world, entityPlayer
 	 */
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
 		if (par2World.isRemote) {
@@ -100,8 +99,7 @@ public class ItemTokraSpawnEgg extends Item {
 
 					if (par2World.getBlockMaterial(i, j, k) == Material.water) {
 						Entity entity = spawnCreature(par2World, (double) i, (double) j, (double) k);
-						if (entity != null && !par3EntityPlayer.capabilities.isCreativeMode)
-							--par1ItemStack.stackSize;
+						if (entity != null && !par3EntityPlayer.capabilities.isCreativeMode) --par1ItemStack.stackSize;
 					}
 				}
 
@@ -111,8 +109,8 @@ public class ItemTokraSpawnEgg extends Item {
 	}
 
 	/**
-	 * Spawns the creature specified by the egg's type in the location specified
-	 * by the last three parameters. Parameters: world, x, y, z.
+	 * Spawns the creature specified by the egg's type in the location specified by the last
+	 * three parameters. Parameters: world, x, y, z.
 	 */
 	public static Entity spawnCreature(World par0World, double par2, double par4, double par6) {
 		EntityVillager entity = new EntityVillager(par0World, LanteaCraft.getProxy().getVillagerID("tokra"));

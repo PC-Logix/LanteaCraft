@@ -73,8 +73,7 @@ public class LanteaPacket {
 	private static IStreamPackable<?> findPacker(int idx) {
 		synchronized (packableHelpers) {
 			for (IStreamPackable<?> packer : packableHelpers) {
-				if (packer.getTypeOf() == idx)
-					return packer;
+				if (packer.getTypeOf() == idx) return packer;
 			}
 		}
 		return null;
@@ -90,8 +89,7 @@ public class LanteaPacket {
 	private static IStreamPackable<?> findPacker(Class<?> clazz) {
 		synchronized (packableHelpers) {
 			for (IStreamPackable<?> packer : packableHelpers) {
-				if (packer.getClassOf().equals(clazz))
-					return packer;
+				if (packer.getClassOf().equals(clazz)) return packer;
 			}
 		}
 		return null;
@@ -106,8 +104,7 @@ public class LanteaPacket {
 	 */
 	private static int getGenericID(Class<?> clazz) {
 		for (int i = 0; i < classReferences.length; i++)
-			if (classReferences[i].equals(clazz))
-				return i;
+			if (classReferences[i].equals(clazz)) return i;
 		return -1;
 	}
 
@@ -119,8 +116,7 @@ public class LanteaPacket {
 	 * @return The class of the generic
 	 */
 	private static Class<?> getGeneric(int id) {
-		if (id >= 0 && id < classReferences.length)
-			return classReferences[id];
+		if (id >= 0 && id < classReferences.length) return classReferences[id];
 		return null;
 	}
 
@@ -210,8 +206,8 @@ public class LanteaPacket {
 	 * Sets all fields given the values in the map
 	 * 
 	 * @param map
-	 *            A map of items. Each value in the map will be set as a field
-	 *            inside the packet.
+	 *            A map of items. Each value in the map will be set as a field inside the
+	 *            packet.
 	 */
 	public void setAllValues(Map<String, Object> map) {
 		synchronized (values) {
@@ -288,12 +284,10 @@ public class LanteaPacket {
 	 *             Any read exception
 	 */
 	public void readData(DataInputStream data) throws IOException {
-		if (data.readByte() != (byte) 1)
-			throw new IOException("Malformed packet!!");
+		if (data.readByte() != (byte) 1) throw new IOException("Malformed packet!!");
 		byte typeof = data.readByte();
 		for (PacketType typeenum : PacketType.values())
-			if (typeenum.getPacketID() == typeof)
-				packetType = typeenum;
+			if (typeenum.getPacketID() == typeof) packetType = typeenum;
 		isPacketForServer = (data.readByte() == 1);
 
 		synchronized (values) {
@@ -315,10 +309,8 @@ public class LanteaPacket {
 		int intValueOf = getGenericID(o.getClass());
 		if (intValueOf == -1) {
 			IStreamPackable packer = null;
-			if (o instanceof IStreamPackable)
-				packer = (IStreamPackable<?>) o;
-			if (packer == null)
-				packer = LanteaPacket.findPacker(o.getClass());
+			if (o instanceof IStreamPackable) packer = (IStreamPackable<?>) o;
+			if (packer == null) packer = LanteaPacket.findPacker(o.getClass());
 			if (packer != null) {
 				data.writeInt(255);
 				data.writeInt(packer.getTypeOf());
@@ -330,33 +322,33 @@ public class LanteaPacket {
 			data.writeInt(intValueOf);
 			if (intValueOf != -1) {
 				switch (intValueOf) {
-				case 0:
-				case 1:
-					data.writeInt((Integer) o);
-					break;
-				case 2:
-				case 3:
-					data.writeByte((Boolean) o ? 1 : 0);
-					break;
-				case 4:
-				case 5:
-					data.writeDouble((Double) o);
-					break;
-				case 6:
-				case 7:
-					data.writeFloat((Float) o);
-					break;
-				case 8:
-					Packet.writeString((String) o, data);
-					break;
-				case 9:
-					writeArrayList((ArrayList) o, data);
-					break;
-				case 10:
-					writeHashMap((HashMap) o, data);
-					break;
-				default:
-					throw new IOException("Don't know what to do with typeof " + intValueOf);
+					case 0:
+					case 1:
+						data.writeInt((Integer) o);
+						break;
+					case 2:
+					case 3:
+						data.writeByte((Boolean) o ? 1 : 0);
+						break;
+					case 4:
+					case 5:
+						data.writeDouble((Double) o);
+						break;
+					case 6:
+					case 7:
+						data.writeFloat((Float) o);
+						break;
+					case 8:
+						Packet.writeString((String) o, data);
+						break;
+					case 9:
+						writeArrayList((ArrayList) o, data);
+						break;
+					case 10:
+						writeHashMap((HashMap) o, data);
+						break;
+					default:
+						throw new IOException("Don't know what to do with typeof " + intValueOf);
 				}
 			}
 		}
@@ -410,9 +402,9 @@ public class LanteaPacket {
 	}
 
 	/**
-	 * Writes a HashMap of any anonymous type to a stream. This method removes
-	 * all null key or null value pairs from the iteration, only writing values
-	 * which are not null or null-pointers
+	 * Writes a HashMap of any anonymous type to a stream. This method removes all null key or
+	 * null value pairs from the iteration, only writing values which are not null or
+	 * null-pointers
 	 * 
 	 * @param values
 	 *            The HashMap of values to write
@@ -424,8 +416,7 @@ public class LanteaPacket {
 	public static void writeHashMap(HashMap<?, ?> values, DataOutputStream data) throws IOException {
 		int sign = 0;
 		for (Entry<?, ?> entry : values.entrySet())
-			if (entry.getKey() != null && entry.getValue() != null)
-				sign++;
+			if (entry.getKey() != null && entry.getValue() != null) sign++;
 		data.writeInt(sign);
 		for (Entry<?, ?> entry : values.entrySet()) {
 			if (entry.getKey() != null && entry.getValue() != null) {
@@ -456,9 +447,8 @@ public class LanteaPacket {
 	}
 
 	/**
-	 * Writes an ArrayList of any anonymous type to a stream. This method
-	 * removes all null value items from the iteration, only writing values
-	 * which are not null or null-pointers
+	 * Writes an ArrayList of any anonymous type to a stream. This method removes all null
+	 * value items from the iteration, only writing values which are not null or null-pointers
 	 * 
 	 * @param array
 	 *            The ArrayList of values to write
@@ -525,8 +515,7 @@ public class LanteaPacket {
 		for (Entry<Object, Object> invariate : values.entrySet()) {
 			result.append(invariate.getKey().toString());
 			result.append(": ");
-			if (invariate.getValue() != null)
-				result.append(invariate.getValue().toString());
+			if (invariate.getValue() != null) result.append(invariate.getValue().toString());
 			else
 				result.append("(null)");
 			result.append(", ");

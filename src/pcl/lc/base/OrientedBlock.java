@@ -15,8 +15,7 @@ public abstract class OrientedBlock extends GenericContainerBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockOrientedRenderer != null)
-			return LanteaCraft.Render.blockOrientedRenderer.renderID;
+		if (LanteaCraft.Render.blockOrientedRenderer != null) return LanteaCraft.Render.blockOrientedRenderer.renderID;
 		return -9001;
 	}
 

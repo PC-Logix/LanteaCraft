@@ -28,12 +28,10 @@ public class StreamHelper {
 		int i = 0;
 		while (true) {
 			byte b = (byte) stream.read();
-			if (b == 0x00)
-				break;
+			if (b == 0x00) break;
 			data[i] = b;
 			i++;
-			if (i > len)
-				throw new IOException("String length longer than is permitted!");
+			if (i > len) throw new IOException("String length longer than is permitted!");
 		}
 		return new String(data, "UTF-8");
 	}

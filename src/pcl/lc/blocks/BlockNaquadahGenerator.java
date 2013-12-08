@@ -35,19 +35,18 @@ public class BlockNaquadahGenerator extends pcl.lc.base.RotationOrientedBlock {
 	@Override
 	public Icon getIcon(int side, int data) {
 		switch (side) {
-		case 0:
-			return bottomTexture;
-		case 1:
-			return topTexture;
-		default:
-			return sideTexture;
+			case 0:
+				return bottomTexture;
+			case 1:
+				return topTexture;
+			default:
+				return sideTexture;
 		}
 	}
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.getProxy().isUsingModels())
-			return -1;
+		if (LanteaCraft.getProxy().isUsingModels()) return -1;
 		return 0;
 	}
 

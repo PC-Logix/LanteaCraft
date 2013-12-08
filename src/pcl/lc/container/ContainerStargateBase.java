@@ -19,8 +19,7 @@ public class ContainerStargateBase extends GenericContainer {
 
 	public static ContainerStargateBase create(EntityPlayer player, World world, int x, int y, int z) {
 		TileEntityStargateBase te = TileEntityStargateBase.at(world, x, y, z);
-		if (te != null)
-			return new ContainerStargateBase(te, player);
+		if (te != null) return new ContainerStargateBase(te, player);
 		return null;
 	}
 
@@ -50,9 +49,9 @@ public class ContainerStargateBase extends GenericContainer {
 	@Override
 	public void updateProgressBar(int i, int value) {
 		switch (i) {
-		case 0:
-			te.fuelBuffer = value;
-			break;
+			case 0:
+				te.fuelBuffer = value;
+				break;
 		}
 	}
 

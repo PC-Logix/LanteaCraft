@@ -23,8 +23,7 @@ public class UpgradeHelper {
 		try {
 			Class<?> clazz_a = Class.forName("gcewing.sg.SGCraft");
 			Class<?> clazz_b = Class.forName("gcewing.sg.Utils");
-			if (clazz_a != null && clazz_b != null)
-				return true;
+			if (clazz_a != null && clazz_b != null) return true;
 			return false;
 		} catch (ClassNotFoundException notfound) {
 			return false;
@@ -34,8 +33,7 @@ public class UpgradeHelper {
 	public static boolean detectSGCraftReloadedInstall() {
 		try {
 			Class<?> clazz = Class.forName("gcewing.sg.GCESGCompatHelper");
-			if (clazz != null)
-				return true;
+			if (clazz != null) return true;
 			return false;
 		} catch (ClassNotFoundException notfound) {
 			return false;
