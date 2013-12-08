@@ -18,7 +18,7 @@ import net.minecraftforge.common.ForgeVersion;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 
 /**
- * Analyics submisison thread. Prevents the entire proxy exploding.
+ * Analyics submission thread. Prevents the entire proxy exploding.
  * 
  * @author AfterLifeLochie
  */

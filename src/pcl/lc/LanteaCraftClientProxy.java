@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import pcl.lc.core.EnumGuiList;
 import pcl.lc.gui.ScreenStargateBase;
 import pcl.lc.gui.ScreenStargateController;
+import pcl.lc.network.ClientPacketHandler;
 import pcl.lc.network.LanteaPacket;
 import pcl.lc.render.GenericBlockRenderer;
 import pcl.lc.render.RotationOrientedBlockRenderer;
@@ -39,6 +40,11 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
+
+	public LanteaCraftClientProxy() {
+		super();
+		defaultClientPacketHandler = new ClientPacketHandler();
+	}
 
 	@Override
 	public void preInit(FMLPreInitializationEvent e) {

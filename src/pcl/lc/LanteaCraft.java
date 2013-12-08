@@ -151,28 +151,105 @@ public class LanteaCraft {
 		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
 	}
 
+	/**
+	 * Public declaration of all fluids
+	 */
 	public static class Fluids {
 		public static LiquidNaquadah fluidLiquidNaquadah;
 		public static BlockLiquidNaquadah fluidLiquidNaquadahHost;
 		public static ItemSpecialBucket fluidLiquidNaquadahBucket;
 	}
 
-	public static HelperCreativeTab lanteaCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "LanteaCraft") {
+	/**
+	 * Creative tab instance
+	 */
+	private static HelperCreativeTab lanteaCraftTab = new HelperCreativeTab(CreativeTabs.getNextID(), "LanteaCraft") {
 		@Override
 		public ItemStack getIconItemStack() {
 			return new ItemStack(LanteaCraft.Items.debugger);
 		}
 	};
 
+	/**
+	 * Sided proxy.
+	 * 
+	 * @see pcl.lc.LanteaCraftCommonProxy
+	 * @see pcl.lc.LanteaCraftClientProxy
+	 */
 	@SidedProxy(clientSide = "pcl.lc.LanteaCraftClientProxy", serverSide = "pcl.lc.LanteaCraftCommonProxy")
 	public static LanteaCraftCommonProxy proxy;
 
+	/**
+	 * ItemSpecialBucket bucket collection handler object - Forge eventbus only.
+	 */
 	private SpecialBucketHandler bucketHandler = new SpecialBucketHandler();
 
+	/**
+	 * Declaration of asset key.
+	 */
 	private String assetKey = "pcl_lc";
 
 	public LanteaCraft() {
 		LanteaCraft.mod = this;
+	}
+
+	/**
+	 * Get a resource location from an abstract path
+	 * 
+	 * @param path
+	 *            The path to use
+	 * @return A fully qualified {@link ResourceLocation} to the resource
+	 */
+	public static ResourceLocation getResource(String path) {
+		return new ResourceLocation(LanteaCraft.getInstance().assetKey, path);
+	}
+
+	/**
+	 * Gets the current Proxy object for LanteaCraft
+	 * 
+	 * @return The current Proxy object for LanteaCraft
+	 */
+	public static LanteaCraftCommonProxy getProxy() {
+		return LanteaCraft.getInstance().proxy;
+	}
+
+	/**
+	 * Gets the currently used asset key for resources and other paths
+	 * 
+	 * @return The current asset key
+	 */
+	public static String getAssetKey() {
+		return LanteaCraft.getInstance().assetKey;
+	}
+
+	/**
+	 * Gets the current CreativeTabs creative-tab object
+	 * 
+	 * @return The current creative tab
+	 */
+	public static CreativeTabs getCreativeTab() {
+		return LanteaCraft.getInstance().lanteaCraftTab;
+	}
+
+	/**
+	 * Gets the current SpecialBucketHandler
+	 * 
+	 * @return The current SpecialBucketHandler
+	 */
+	public static SpecialBucketHandler getSpecialBucketHandler() {
+		return LanteaCraft.getInstance().bucketHandler;
+	}
+
+	/**
+	 * Handles an incoming {@link LanteaPacket} with respect to the provided {@link Player}.
+	 * 
+	 * @param packet
+	 *            The packet object
+	 * @param player
+	 *            The respective player
+	 */
+	public static void handlePacket(LanteaPacket packet, Player player) {
+		proxy.handlePacket(packet, player);
 	}
 
 	@EventHandler
@@ -199,57 +276,7 @@ public class LanteaCraft {
 	}
 
 	@ForgeSubscribe
-	public void onChunkLoad(ChunkDataEvent.Load e) {
-		proxy.onChunkLoad(e);
-	}
-
-	@ForgeSubscribe
-	public void onChunkSave(ChunkDataEvent.Save e) {
-		proxy.onChunkSave(e);
-	}
-
-	@ForgeSubscribe
 	public void onInitMapGen(InitMapGenEvent e) {
 		proxy.onInitMapGen(e);
 	}
-
-	@ForgeSubscribe
-	public void onWorldLoad(WorldEvent.Load e) {
-		proxy.onWorldLoad(e);
-	}
-
-	@ForgeSubscribe
-	public void onWorldUnload(WorldEvent.Unload e) {
-		proxy.onWorldUnload(e);
-	}
-
-	@ForgeSubscribe
-	public void onWorldSave(WorldEvent.Save e) {
-		proxy.onWorldSave(e);
-	}
-
-	public static ResourceLocation getResource(String path) {
-		return new ResourceLocation(LanteaCraft.getInstance().assetKey, path);
-	}
-
-	public static LanteaCraftCommonProxy getProxy() {
-		return LanteaCraft.getInstance().proxy;
-	}
-
-	public static String getAssetKey() {
-		return LanteaCraft.getInstance().assetKey;
-	}
-
-	public static CreativeTabs getCreativeTab() {
-		return LanteaCraft.getInstance().lanteaCraftTab;
-	}
-
-	public static SpecialBucketHandler getSpecialBucketHandler() {
-		return LanteaCraft.getInstance().bucketHandler;
-	}
-
-	public static void handlePacket(LanteaPacket packet, Player player) {
-		proxy.handlePacket(packet, player);
-	}
-
 }

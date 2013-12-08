@@ -3,15 +3,35 @@ package pcl.lc.fluids;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import pcl.lc.LanteaCraft;
+import pcl.lc.util.SpecialBucketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 
+/**
+ * ItemSpecialBucket is a special bucket implementation which allows Fluids to create custom
+ * bucket types generically.
+ * 
+ * @author AfterLifeLochie
+ */
 public class ItemSpecialBucket extends ItemBucket {
+
+	/**
+	 * Icon name associated with the unlocalized name of this bucket instance.
+	 */
 	private String iconName;
 
+	/**
+	 * Creates an instance of an ItemSpecialBucket and initializes it with default properties
+	 * and with the {@link SpecialBucketHandler} registry.
+	 * 
+	 * @param i
+	 *            The item ID to use for this bucket.
+	 * @param hostBlock
+	 *            The fluid block this Bucket is hosting.
+	 */
 	public ItemSpecialBucket(int i, Block hostBlock) {
 		super(i, hostBlock.blockID);
 		LanteaCraft.getSpecialBucketHandler().registerBucketMapping(hostBlock, this);

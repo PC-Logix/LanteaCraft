@@ -113,19 +113,14 @@ public class LanteaCraftCommonProxy {
 
 	public static UpgradeHelper upgradeHelper;
 
-	protected static class IDBinding<T> {
+	protected class VSBinding {
 		public int id;
-		public T object;
-	}
-
-	static class VSBinding extends IDBinding<ResourceLocation> {
+		public ResourceLocation object;
 	};
 
 	public LanteaCraftCommonProxy() {
 		System.out.println("This is " + BuildInfo.modName + " version " + BuildInfo.versionNumber + " build "
 				+ BuildInfo.buildNumber + " as modid " + BuildInfo.modID);
-
-		defaultClientPacketHandler = new ClientPacketHandler();
 		defaultServerPacketHandler = new ServerPacketHandler();
 		networkHelpers = new NetworkHelpers();
 	}
@@ -170,16 +165,6 @@ public class LanteaCraftCommonProxy {
 				upgradeHelper.hookSGCraftReloaded();
 		}
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft done looking for other versions.");
-	}
-
-	public void onChunkLoad(ChunkDataEvent.Load e) {
-		LanteaCraft.getLogger().log(Level.FINE, "ChunkDataEvent.Load fired");
-		ChunkData.onChunkLoad(e);
-	}
-
-	public void onChunkSave(ChunkDataEvent.Save e) {
-		LanteaCraft.getLogger().log(Level.FINE, "ChunkDataEvent.Save fired");
-		ChunkData.onChunkSave(e);
 	}
 
 	public void onInitMapGen(InitMapGenEvent e) {
@@ -481,11 +466,6 @@ public class LanteaCraftCommonProxy {
 			}
 		} catch (Exception e) {
 			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to create GUI element, an exception occured.", e);
-			Throwable cause = e.getCause();
-			if (cause != null)
-				cause.printStackTrace();
-			else
-				e.printStackTrace();
 			return null;
 		}
 	}
@@ -574,18 +554,6 @@ public class LanteaCraftCommonProxy {
 		if (villager != null)
 			return villager.id;
 		return 0;
-	}
-
-	public void onWorldLoad(Load e) {
-		// TODO Auto-generated method stub
-	}
-
-	public void onWorldUnload(Unload e) {
-		// TODO Auto-generated method stub
-	}
-
-	public void onWorldSave(Save e) {
-		// TODO Auto-generated method stub
 	}
 
 	public void handlePacket(LanteaPacket packet, Player player) {
