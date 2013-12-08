@@ -9,7 +9,7 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-public class GenericContainerGUI extends GuiContainer {
+public abstract class GenericContainerGUI extends GuiContainer {
 
 	final static int defaultTextColor = 0x404040;
 
@@ -17,10 +17,6 @@ public class GenericContainerGUI extends GuiContainer {
 	float red = 1.0F, green = 1.0F, blue = 1.0F;
 	protected int textColor = defaultTextColor;
 	boolean textShadow = false;
-
-	// public BaseGuiContainer() {
-	// super(new BaseContainer());
-	// }
 
 	public GenericContainerGUI(Container container, int width, int height) {
 		super(container);
@@ -48,16 +44,14 @@ public class GenericContainerGUI extends GuiContainer {
 		GL11.glPopMatrix();
 	}
 
-	public void drawBackgroundLayer() {
-	}
+	protected abstract void drawBackgroundLayer();
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		drawForegroundLayer();
 	}
 
-	void drawForegroundLayer() {
-	}
+	protected abstract void drawForegroundLayer();
 
 	protected void close() {
 		mc.thePlayer.closeScreen();

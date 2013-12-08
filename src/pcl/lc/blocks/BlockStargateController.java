@@ -1,9 +1,3 @@
-// ------------------------------------------------------------------------------------------------
-//
-// SG Craft - Stargate Controller Block
-//
-// ------------------------------------------------------------------------------------------------
-
 package pcl.lc.blocks;
 
 import pcl.lc.LanteaCraft;
@@ -29,7 +23,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.RotationOrientedBlock;
-import pcl.lc.core.EnumGuiList;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 
@@ -40,7 +33,6 @@ public class BlockStargateController extends RotationOrientedBlock {
 	public BlockStargateController(int id) {
 		super(id, Material.rock);
 		setHardness(1.5F);
-		// blockIndexInTexture = 0x0a;
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
@@ -112,7 +104,7 @@ public class BlockStargateController extends RotationOrientedBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		player.openGui(LanteaCraft.getInstance(), EnumGuiList.SGController.ordinal(), world, x, y, z);
+		player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateController.ordinal(), world, x, y, z);
 		return true;
 	}
 

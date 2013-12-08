@@ -7,13 +7,24 @@ import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
+import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericTileEntity;
 import pcl.lc.base.PoweredTileEntity;
+import pcl.lc.base.inventory.FilterRule;
+import pcl.lc.base.inventory.FilteredInventory;
+import pcl.lc.fluids.SpecialFluidTank;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
 import ic2.api.*;
 import ic2.api.energy.*;
@@ -23,13 +34,53 @@ import ic2.api.tile.IWrenchable;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 
-public class TileEntityNaquadahGenerator extends PoweredTileEntity {
+public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler {
 
 	private double energy = 0.0;
 	private boolean addedToEnergyNet = false;
+	private SpecialFluidTank tank = new SpecialFluidTank(LanteaCraft.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
+	private FilteredInventory inventory = new FilteredInventory(1) {
+		@Override
+		public void onInventoryChanged() {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public boolean isInvNameLocalized() {
+			return true;
+		}
+
+		@Override
+		public String getInvName() {
+			return "Naquadah Generator";
+		}
+	};
 
 	public TileEntityNaquadahGenerator() {
 		super();
+		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.naquadah, 1) },
+				null, true));
+	}
+
+	@Override
+	public IInventory getInventory() {
+		return inventory;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		NBTTagCompound tankCompound = nbt.getCompoundTag("tank");
+		if (tankCompound != null)
+			tank.readFromNBT(tankCompound);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		NBTTagCompound tankCompound = new NBTTagCompound();
+		tank.writeToNBT(tankCompound);
+		nbt.setCompoundTag("tank", tankCompound);
 	}
 
 	@Override
@@ -101,5 +152,37 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity {
 
 	public boolean isActive() {
 		return (energy > 0);
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return tank.fill(resource, doFill);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (!resource.isFluidEqual(tank.getFluid()))
+			return null;
+		return tank.drain(resource.amount, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return fluid.getID() == tank.getFluid().fluidID && tank.canFill();
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return fluid.getID() == tank.getFluid().fluidID && tank.canDrain();
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[] { tank.getInfo() };
 	}
 }

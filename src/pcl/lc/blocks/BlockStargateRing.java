@@ -1,9 +1,3 @@
-// ------------------------------------------------------------------------------------------------
-//
-// SG Craft - Stargate ring block
-//
-// ------------------------------------------------------------------------------------------------
-
 package pcl.lc.blocks;
 
 import java.util.List;
@@ -21,7 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.RotationOrientedBlock;
-import pcl.lc.core.EnumGuiList;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateRing;
 import pcl.lc.LanteaCraft;

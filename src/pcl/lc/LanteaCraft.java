@@ -16,7 +16,6 @@ import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
 import pcl.lc.config.ConfigurationHelper;
 import pcl.lc.container.ContainerStargateBase;
-import pcl.lc.core.EnumGuiList;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
@@ -158,6 +157,10 @@ public class LanteaCraft {
 		public static LiquidNaquadah fluidLiquidNaquadah;
 		public static BlockLiquidNaquadah fluidLiquidNaquadahHost;
 		public static ItemSpecialBucket fluidLiquidNaquadahBucket;
+	}
+
+	public static enum EnumGUIs {
+		StargateBase, StargateController, NaquadahGenerator;
 	}
 
 	/**

@@ -3,7 +3,7 @@ package pcl.lc;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
-import pcl.lc.core.EnumGuiList;
+import pcl.lc.gui.ScreenNaquadahGenerator;
 import pcl.lc.gui.ScreenStargateBase;
 import pcl.lc.gui.ScreenStargateController;
 import pcl.lc.network.ClientPacketHandler;
@@ -72,8 +72,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	}
 
 	public void registerScreens() {
-		addScreen(EnumGuiList.SGBase, ScreenStargateBase.class);
-		addScreen(EnumGuiList.SGController, ScreenStargateController.class);
+		addScreen(LanteaCraft.EnumGUIs.StargateBase, ScreenStargateBase.class);
+		addScreen(LanteaCraft.EnumGUIs.StargateController, ScreenStargateController.class);
+		addScreen(LanteaCraft.EnumGUIs.NaquadahGenerator, ScreenNaquadahGenerator.class);
 	}
 
 	public void registerRenderers() {

@@ -188,18 +188,6 @@ public class ScreenStargateController extends GenericGlyphGUI {
 			enteredAddress = enteredAddress + c;
 	}
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-		TileEntityStargateBase te = getStargateTE();
-		drawBackgroundImage();
-		drawOrangeButton();
-		if (te != null)
-			if ((EnumStargateState) te.getAsStructure().getMetadata("state") == EnumStargateState.Idle) {
-				drawEnteredSymbols();
-				drawEnteredString();
-			}
-	}
-
 	void drawBackgroundImage() {
 		bindTexture(LanteaCraft.getInstance().getResource("textures/gui/dhd_gui.png"));
 		drawTexturedRect((width - dhdWidth) / 2, height - dhdHeight, dhdWidth, dhdHeight);
@@ -238,6 +226,22 @@ public class ScreenStargateController extends GenericGlyphGUI {
 
 	void drawEnteredString() {
 		drawAddressString(width / 2, dhdTop - 12, enteredAddress, 9, " ", (ticks > 10) ? "_" : " ");
+	}
+
+	@Override
+	protected void drawBackgroundLayer() {
+		drawBackgroundImage();
+		drawOrangeButton();
+	}
+
+	@Override
+	protected void drawForegroundLayer() {
+		TileEntityStargateBase te = getStargateTE();
+		if (te != null)
+			if ((EnumStargateState) te.getAsStructure().getMetadata("state") == EnumStargateState.Idle) {
+				drawEnteredSymbols();
+				drawEnteredString();
+			}
 	}
 
 }

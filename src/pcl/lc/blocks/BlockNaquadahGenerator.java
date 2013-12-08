@@ -21,7 +21,6 @@ public class BlockNaquadahGenerator extends pcl.lc.base.RotationOrientedBlock {
 	public BlockNaquadahGenerator(int id) {
 		super(id, Material.rock);
 		setHardness(1.5F);
-		// blockIndexInTexture = 0x0a;
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
@@ -64,7 +63,6 @@ public class BlockNaquadahGenerator extends pcl.lc.base.RotationOrientedBlock {
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, player, stack);
-		// checkForLink(world, x, y, z);
 		int dir = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
 		world.setBlockMetadataWithNotify(x, y, z, dir, 0);
 	}
@@ -88,9 +86,12 @@ public class BlockNaquadahGenerator extends pcl.lc.base.RotationOrientedBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		// player.openGui(SGCraft.getInstance(),
-		// EnumGuiList.SGController.ordinal(), world, x, y, z);
-		return true;
+		TileEntityNaquadahGenerator te = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
+		if (te != null) {
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), world, x, y, z);
+			return true;
+		}
+		return false;
 	}
 
 	@Override

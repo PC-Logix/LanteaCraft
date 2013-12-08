@@ -25,8 +25,8 @@ import pcl.lc.blocks.BlockStargateRing;
 import pcl.lc.compat.UpgradeHelper;
 import pcl.lc.config.ConfigValue;
 import pcl.lc.config.ConfigurationHelper;
+import pcl.lc.container.ContainerNaquadahGenerator;
 import pcl.lc.container.ContainerStargateBase;
-import pcl.lc.core.EnumGuiList;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
@@ -372,7 +372,8 @@ public class LanteaCraftCommonProxy {
 
 	void registerContainers() {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft containers...");
-		addContainer(EnumGuiList.SGBase.ordinal(), ContainerStargateBase.class);
+		addContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
+		addContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ContainerNaquadahGenerator.class);
 	}
 
 	void registerRandomItems() {

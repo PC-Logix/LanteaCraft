@@ -12,17 +12,17 @@ import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class ScreenStargateBase extends GenericGlyphGUI {
 
-	static String screenTitle = "Stargate Address";
-	static final int guiWidth = 256;
-	static final int guiHeight = 208;
-	static final int fuelGaugeWidth = 16;
-	static final int fuelGaugeHeight = 34;
-	static final int fuelGaugeX = 214;
-	static final int fuelGaugeY = 84;
-	static final int fuelGaugeU = 0;
-	static final int fuelGaugeV = 208;
+	private static String screenTitle = "Stargate Address";
+	private static final int guiWidth = 256;
+	private static final int guiHeight = 208;
+	private static final int fuelGaugeWidth = 16;
+	private static final int fuelGaugeHeight = 34;
+	private static final int fuelGaugeX = 214;
+	private static final int fuelGaugeY = 84;
+	private static final int fuelGaugeU = 0;
+	private static final int fuelGaugeV = 208;
 
-	TileEntityStargateBase te;
+	private TileEntityStargateBase te;
 
 	public static ScreenStargateBase create(EntityPlayer player, World world, int x, int y, int z) {
 		TileEntityStargateBase te = TileEntityStargateBase.at(world, x, y, z);
@@ -42,28 +42,8 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 		return false;
 	}
 
-	// @Override
-	// protected void keyTyped(char c, int key) {
-	// if (key == Keyboard.KEY_ESCAPE)
-	// close();
-	// else if (key == Keyboard.KEY_BACK || key == Keyboard.KEY_DELETE) {
-	// int n = te.homeAddress.length();
-	// if (n > 0)
-	// setAddress(te.homeAddress.substring(0, n - 1));
-	// }
-	// else {
-	// String s = String.valueOf(c).toUpperCase();
-	// if (SGBaseTE.isValidSymbolChar(s) && te.homeAddress.length() < 7)
-	// setAddress(te.homeAddress + s);
-	// }
-	// }
-
 	@Override
-	public void drawBackgroundLayer() {
-		bindTexture(
-				LanteaCraft.getInstance().getResource(
-						"textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png"), 256, 256);
-		drawTexturedRect(0, 0, guiWidth, guiHeight, 0, 0);
+	protected void drawForegroundLayer() {
 		drawFuelGauge();
 		String address = getAddress();
 		int cx = xSize / 2;
@@ -72,6 +52,14 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 		drawCenteredString(screenTitle, cx, 8);
 		drawCenteredString(address, cx, 72);
 		drawString("Fuel", 150, 96);
+	}
+
+	@Override
+	public void drawBackgroundLayer() {
+		bindTexture(
+				LanteaCraft.getInstance().getResource(
+						"textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png"), 256, 256);
+		drawTexturedRect(0, 0, guiWidth, guiHeight, 0, 0);
 	}
 
 	void drawFuelGauge() {
@@ -83,8 +71,6 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 	}
 
 	String getAddress() {
-		// return te.homeAddress;
-		// return "TESTING";
 		try {
 			return te.getHomeAddress();
 		} catch (GateAddressHelper.CoordRangeError e) {

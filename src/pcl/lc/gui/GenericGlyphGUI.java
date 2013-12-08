@@ -9,7 +9,7 @@ import pcl.lc.core.GateAddressHelper;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import net.minecraft.inventory.Container;
 
-public class GenericGlyphGUI extends GenericContainerGUI {
+public abstract class GenericGlyphGUI extends GenericContainerGUI {
 
 	public GenericGlyphGUI(GenericContainer container) {
 		super(container);
