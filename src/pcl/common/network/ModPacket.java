@@ -270,7 +270,6 @@ public class ModPacket {
 	public void readData(DataInputStream data) throws IOException {
 		if (data.readByte() != (byte) 1)
 			throw new IOException("Malformed packet!!");
-		byte typeof = data.readByte();
 		packetType = Packet.readString(data, 512);
 		isPacketForServer = (data.readByte() == 1);
 		synchronized (values) {
