@@ -10,7 +10,7 @@
     "updateUrl": "",
     "authors": [ "Neo", "Greg Ewing", "AfterLifeLochie" ],
     "credits": "Greg_Ewing for the original mod, deltastrium.com for the Delta NP SGCraft textures.",
-    "logoFile": "",
+    "logoFile": "/assets/textures/forge/LanteaCraft.png",
     "screenshots": [ ],
     "parent": "",
     "requiredMods": [ "Forge"],
