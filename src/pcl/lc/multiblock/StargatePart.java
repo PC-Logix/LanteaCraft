@@ -3,9 +3,12 @@ package pcl.lc.multiblock;
 import java.lang.ref.WeakReference;
 import java.util.logging.Level;
 
+import pcl.common.multiblock.GenericMultiblock;
+import pcl.common.multiblock.MultiblockPart;
+import pcl.common.multiblock.ScanningHelper;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.lc.util.Vector3;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 

@@ -1,5 +1,6 @@
 package pcl.lc.network;
 
+import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,8 +17,7 @@ public class DefaultPacketHandler implements IPacketHandler {
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		try {
-			LanteaPacket packetAsPeripheralPacket = LanteaPacket.parse(packet.data);
-			LanteaCraft.handlePacket(packetAsPeripheralPacket, player);
+			LanteaCraft.handlePacket(ModPacket.parse(packet.data), player);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

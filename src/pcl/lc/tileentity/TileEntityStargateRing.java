@@ -3,10 +3,9 @@ package pcl.lc.tileentity;
 import java.util.HashMap;
 import java.util.Map;
 
+import pcl.common.base.GenericTileEntity;
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.GenericTileEntity;
 import pcl.lc.multiblock.StargatePart;
-import pcl.lc.network.LanteaPacket;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 

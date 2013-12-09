@@ -12,10 +12,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import pcl.common.base.TileEntityChunkManager;
+import pcl.common.helpers.AnalyticsHelper;
+import pcl.common.helpers.ConfigValue;
+import pcl.common.helpers.ConfigurationHelper;
+import pcl.common.helpers.HelperGUIHandler;
+import pcl.common.helpers.NetworkHelpers;
+import pcl.common.network.ModPacket;
+import pcl.common.worldgen.ChunkData;
 import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Fluids;
 import pcl.lc.LanteaCraft.Items;
-import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.blocks.BlockNaquadah;
 import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockNaquadahOre;
@@ -23,28 +30,21 @@ import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
 import pcl.lc.compat.UpgradeHelper;
-import pcl.lc.config.ConfigValue;
-import pcl.lc.config.ConfigurationHelper;
-import pcl.lc.container.ContainerNaquadahGenerator;
-import pcl.lc.container.ContainerStargateBase;
+import pcl.lc.containers.ContainerNaquadahGenerator;
+import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
-import pcl.lc.forge.HelperGUIHandler;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTokraSpawnEgg;
 import pcl.lc.network.ClientPacketHandler;
-import pcl.lc.network.NetworkHelpers;
-import pcl.lc.network.LanteaPacket;
 import pcl.lc.network.ServerPacketHandler;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
-import pcl.lc.util.AnalyticsHelper;
-import pcl.lc.worldgen.ChunkData;
 import pcl.lc.worldgen.FeatureGeneration;
 import pcl.lc.worldgen.FeatureUnderDesertPyramid;
 import pcl.lc.worldgen.NaquadahOreWorldGen;
@@ -57,6 +57,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
@@ -557,27 +558,31 @@ public class LanteaCraftCommonProxy {
 		return 0;
 	}
 
-	public void handlePacket(LanteaPacket packet, Player player) {
-		if (packet.getPacketIsForServer())
-			defaultServerPacketHandler.handlePacket(packet, player);
+	public void handlePacket(ModPacket modPacket, Player player) {
+		if (modPacket.getPacketIsForServer())
+			defaultServerPacketHandler.handlePacket(modPacket, player);
 		else
 			return;
 	}
 
-	public void sendToServer(LanteaPacket packet) {
+	public void sendToServer(ModPacket packet) {
 		throw new RuntimeException("Cannot send to server: this method was not overridden!!");
 	}
 
-	public void sendToAllPlayers(LanteaPacket packet) {
+	public void sendToAllPlayers(ModPacket packet) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		if (server != null) {
 			LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft sending packet to all players: " + packet.toString());
-			server.getConfigurationManager().sendPacketToAllPlayers(packet.toPacket());
+			Packet250CustomPayload payload = packet.toPacket();
+			payload.channel = BuildInfo.modID;
+			server.getConfigurationManager().sendPacketToAllPlayers(payload);
 		}
 	}
 
-	public void sendToPlayer(EntityPlayer player, LanteaPacket packet) {
-		PacketDispatcher.sendPacketToPlayer(packet.toPacket(), (Player) player);
+	public void sendToPlayer(EntityPlayer player, ModPacket packet) {
+		Packet250CustomPayload payload = packet.toPacket();
+		payload.channel = BuildInfo.modID;
+		PacketDispatcher.sendPacketToPlayer(payload, (Player) player);
 	}
 
 }

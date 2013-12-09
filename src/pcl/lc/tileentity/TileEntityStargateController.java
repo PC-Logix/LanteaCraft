@@ -1,10 +1,10 @@
 package pcl.lc.tileentity;
 
-import pcl.lc.base.GenericTileEntity;
+import pcl.common.base.GenericTileEntity;
+import pcl.common.helpers.ConfigurationHelper;
+import pcl.common.util.Trans3;
+import pcl.common.util.Vector3;
 import pcl.lc.blocks.BlockStargateController;
-import pcl.lc.config.ConfigurationHelper;
-import pcl.lc.util.Trans3;
-import pcl.lc.util.Vector3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.Optional.Interface;

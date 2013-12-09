@@ -73,7 +73,7 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 	void renderStargate(TileEntityStargateBase te, float t) {
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		bindTexture(LanteaCraft.getInstance().getResource(
-				"textures/tileentity/stargate_" + LanteaCraft.getProxy().getRenderMode() + ".png"));
+				"textures/tileentity/stargate_pegasus_128.png"));
 		GL11.glNormal3f(0, 1, 0);
 		renderRing(ringMidRadius, ringOuterRadius, RingType.Outer);
 		renderInnerRing(te, t);

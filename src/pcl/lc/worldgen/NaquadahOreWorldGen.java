@@ -2,8 +2,9 @@ package pcl.lc.worldgen;
 
 import java.util.Random;
 
+import pcl.common.helpers.ConfigurationHelper;
+import pcl.common.worldgen.ChunkData;
 import pcl.lc.LanteaCraft.Blocks;
-import pcl.lc.config.ConfigurationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

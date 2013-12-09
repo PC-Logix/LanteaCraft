@@ -6,7 +6,13 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import pcl.lc.base.TileEntityChunkManager;
+import pcl.common.base.TileEntityChunkManager;
+import pcl.common.helpers.ConfigurationHelper;
+import pcl.common.helpers.HelperCreativeTab;
+import pcl.common.helpers.SpecialBucketHandler;
+import pcl.common.network.ModPacket;
+import pcl.common.render.RotationOrientedBlockRenderer;
+import pcl.common.worldgen.ChunkData;
 import pcl.lc.blocks.BlockNaquadah;
 import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockNaquadahOre;
@@ -14,8 +20,7 @@ import pcl.lc.blocks.BlockPortal;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
-import pcl.lc.config.ConfigurationHelper;
-import pcl.lc.container.ContainerStargateBase;
+import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
@@ -23,12 +28,10 @@ import pcl.lc.fluids.LiquidNaquadah;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTokraSpawnEgg;
-import pcl.lc.network.LanteaPacket;
-import pcl.lc.render.RotationOrientedBlockRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
-import pcl.lc.render.model.NaquadahGeneratorModel;
-import pcl.lc.render.model.StargateControllerModel;
+import pcl.lc.render.models.NaquadahGeneratorModel;
+import pcl.lc.render.models.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
@@ -36,9 +39,6 @@ import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
-import pcl.lc.util.HelperCreativeTab;
-import pcl.lc.util.SpecialBucketHandler;
-import pcl.lc.worldgen.ChunkData;
 import pcl.lc.worldgen.FeatureGeneration;
 import pcl.lc.worldgen.FeatureUnderDesertPyramid;
 import pcl.lc.worldgen.NaquadahOreWorldGen;
@@ -244,15 +244,15 @@ public class LanteaCraft {
 	}
 
 	/**
-	 * Handles an incoming {@link LanteaPacket} with respect to the provided {@link Player}.
+	 * Handles an incoming {@link ModPacket} with respect to the provided {@link Player}.
 	 * 
-	 * @param packet
+	 * @param modPacket
 	 *            The packet object
 	 * @param player
 	 *            The respective player
 	 */
-	public static void handlePacket(LanteaPacket packet, Player player) {
-		proxy.handlePacket(packet, player);
+	public static void handlePacket(ModPacket modPacket, Player player) {
+		proxy.handlePacket(modPacket, player);
 	}
 
 	@EventHandler

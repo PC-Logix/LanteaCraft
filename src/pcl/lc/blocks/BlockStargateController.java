@@ -1,7 +1,7 @@
 package pcl.lc.blocks;
 
+import pcl.common.base.RotationOrientedBlock;
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.RotationOrientedBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,7 +22,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.RotationOrientedBlock;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 

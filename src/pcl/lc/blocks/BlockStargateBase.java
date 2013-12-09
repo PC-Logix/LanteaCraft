@@ -11,8 +11,8 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import pcl.common.base.RotationOrientedBlock;
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.RotationOrientedBlock;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class BlockStargateBase extends RotationOrientedBlock {

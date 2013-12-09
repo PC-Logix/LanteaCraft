@@ -2,8 +2,8 @@ package pcl.lc.fluids;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import pcl.common.helpers.SpecialBucketHandler;
 import pcl.lc.LanteaCraft;
-import pcl.lc.util.SpecialBucketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;

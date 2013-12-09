@@ -8,22 +8,22 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 
+import pcl.common.base.TileEntityChunkLoader;
+import pcl.common.base.TileEntityChunkManager;
+import pcl.common.helpers.ConfigurationHelper;
+import pcl.common.network.ModPacket;
+import pcl.common.util.MathUtils;
+import pcl.common.util.Trans3;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Items;
-import pcl.lc.base.TileEntityChunkLoader;
-import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.blocks.BlockStargateBase;
-import pcl.lc.config.ConfigurationHelper;
 import pcl.lc.core.EnumIrisState;
 import pcl.lc.core.EnumStargateState;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.WorldLocation;
 import pcl.lc.multiblock.StargateMultiblock;
-import pcl.lc.network.LanteaPacket;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
-import pcl.lc.util.Trans3;
-import pcl.lc.util.Utils;
-import pcl.lc.util.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -240,7 +240,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	public double interpolatedRingAngle(double t) {
-		return Utils.interpolateAngle(renderLastRingAngle, renderRingAngle, t);
+		return MathUtils.interpolateAngle(renderLastRingAngle, renderRingAngle, t);
 	}
 
 	@Override
@@ -272,7 +272,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 						- Character.getNumericValue('A');
 				LanteaCraft.getLogger().log(Level.INFO,
 						"Timeout " + timeout + ", neng " + numEngagedChevrons + ", target " + targetpos);
-				renderNextRingAngle = Utils.normaliseAngle(targetpos * ringSymbolAngle - 45 * numEngagedChevrons);
+				renderNextRingAngle = MathUtils.normaliseAngle(targetpos * ringSymbolAngle - 45 * numEngagedChevrons);
 				switch (getState()) {
 					case Transient:
 						initiateOpeningTransient();
@@ -833,9 +833,9 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	private void updateRingAngle() {
 		if (timeout > 0) {
-			double da = Utils.diffAngle(renderRingAngle, renderNextRingAngle) / timeout;
+			double da = MathUtils.diffAngle(renderRingAngle, renderNextRingAngle) / timeout;
 			LanteaCraft.getLogger().log(Level.INFO, "Spin angle by factor " + da);
-			setRingAngle(Utils.addAngle(renderRingAngle, da));
+			setRingAngle(MathUtils.addAngle(renderRingAngle, da));
 			--timeout;
 		} else
 			setRingAngle(renderNextRingAngle);
@@ -1019,7 +1019,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaPacket packet = getAsStructure().pack();
+		ModPacket packet = getAsStructure().pack();
 		LanteaCraft.getProxy().sendToAllPlayers(packet);
 		return null;
 	}

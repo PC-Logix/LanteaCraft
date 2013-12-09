@@ -2,6 +2,7 @@ package pcl.lc.network;
 
 import java.util.logging.Level;
 
+import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import net.minecraft.client.Minecraft;
@@ -12,8 +13,8 @@ import cpw.mods.fml.common.network.Player;
 
 public class ClientPacketHandler {
 
-	public void handlePacket(LanteaPacket packet, Player player) {
-		if (packet.getType().equals(LanteaPacket.PacketType.TileUpdate)) {
+	public void handlePacket(ModPacket packet, Player player) {
+		if (packet.getType().equals("LanteaPacket.TileUpdate")) {
 			int worldName = (Integer) packet.getValue("DimensionID");
 			int currentWorld = Minecraft.getMinecraft().theWorld.provider.dimensionId;
 			if (worldName == currentWorld) {

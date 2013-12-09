@@ -1,9 +1,9 @@
 package pcl.lc.render.blocks;
 
+import pcl.common.render.GenericBlockRenderer;
 import pcl.lc.blocks.BlockStargateRing;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.multiblock.StargatePart;
-import pcl.lc.render.GenericBlockRenderer;
 import pcl.lc.tileentity.TileEntityStargateRing;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

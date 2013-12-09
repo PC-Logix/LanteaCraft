@@ -14,7 +14,7 @@ import net.minecraftforge.common.ForgeDirection;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 
-public class BlockNaquadahGenerator extends pcl.lc.base.RotationOrientedBlock {
+public class BlockNaquadahGenerator extends pcl.common.base.RotationOrientedBlock {
 
 	Icon topTexture, bottomTexture, sideTexture;
 

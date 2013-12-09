@@ -5,11 +5,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import pcl.common.multiblock.EnumOrientations;
+import pcl.common.multiblock.GenericMultiblock;
+import pcl.common.multiblock.MultiblockPart;
+import pcl.common.network.ModPacket;
+import pcl.common.util.ImmutablePair;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
-import pcl.lc.network.LanteaPacket;
 import pcl.lc.tileentity.TileEntityStargateRing;
-import pcl.lc.util.ImmutablePair;
-import pcl.lc.util.Vector3;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -240,10 +243,10 @@ public class StargateMultiblock extends GenericMultiblock {
 	}
 
 	@Override
-	public LanteaPacket pack() {
-		LanteaPacket packet = new LanteaPacket();
+	public ModPacket pack() {
+		ModPacket packet = new ModPacket();
 		packet.setIsForServer(false);
-		packet.setType(LanteaPacket.PacketType.TileUpdate);
+		packet.setType("LanteaPacket.TileUpdate");
 		packet.setValue("metadata", metadata);
 		packet.setValue("isValid", isValid());
 		packet.setValue("orientation", getOrientation());
@@ -260,7 +263,7 @@ public class StargateMultiblock extends GenericMultiblock {
 	}
 
 	@Override
-	public void unpack(LanteaPacket packet) {
+	public void unpack(ModPacket packet) {
 		metadata = (HashMap<String, Object>) packet.getValue("metadata");
 		isValid = (Boolean) packet.getValue("isValid");
 		setOrientation((EnumOrientations) packet.getValue("orientation"));
@@ -272,10 +275,10 @@ public class StargateMultiblock extends GenericMultiblock {
 	}
 
 	@Override
-	public LanteaPacket pollForUpdate() {
-		LanteaPacket packet = new LanteaPacket();
+	public ModPacket pollForUpdate() {
+		ModPacket packet = new ModPacket();
 		packet.setIsForServer(true);
-		packet.setType(LanteaPacket.PacketType.UpdateRequest);
+		packet.setType("LanteaPacket.UpdateRequest");
 		packet.setValue("DimensionID", host.worldObj.provider.dimensionId);
 		packet.setValue("WorldX", host.xCoord);
 		packet.setValue("WorldY", host.yCoord);

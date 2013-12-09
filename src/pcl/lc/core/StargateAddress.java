@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import pcl.lc.util.StreamHelper;
+import pcl.common.helpers.StreamHelper;
 
 public class StargateAddress {
 

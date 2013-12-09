@@ -3,13 +3,13 @@ package pcl.lc.core;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
+import pcl.common.helpers.LanguageHelper;
+import pcl.common.multiblock.IStructureConfiguration;
 import pcl.lc.LanteaCraft;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
-import pcl.lc.config.LanguageHelper;
 import pcl.lc.items.ItemStargateRing;
-import pcl.lc.multiblock.IStructureConfiguration;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.block.Block;

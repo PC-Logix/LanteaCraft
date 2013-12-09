@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import pcl.common.multiblock.IStructureConfiguration;
 import pcl.lc.LanteaCraft;
-import pcl.lc.multiblock.IStructureConfiguration;
 import net.minecraft.block.Block;
 
 public class StargateRegistry {

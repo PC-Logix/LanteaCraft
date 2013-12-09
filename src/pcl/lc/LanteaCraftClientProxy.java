@@ -3,17 +3,17 @@ package pcl.lc;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
-import pcl.lc.gui.ScreenNaquadahGenerator;
-import pcl.lc.gui.ScreenStargateBase;
-import pcl.lc.gui.ScreenStargateController;
+import pcl.common.network.ModPacket;
+import pcl.common.render.GenericBlockRenderer;
+import pcl.common.render.RotationOrientedBlockRenderer;
+import pcl.lc.guis.ScreenNaquadahGenerator;
+import pcl.lc.guis.ScreenStargateBase;
+import pcl.lc.guis.ScreenStargateController;
 import pcl.lc.network.ClientPacketHandler;
-import pcl.lc.network.LanteaPacket;
-import pcl.lc.render.GenericBlockRenderer;
-import pcl.lc.render.RotationOrientedBlockRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
-import pcl.lc.render.model.NaquadahGeneratorModel;
-import pcl.lc.render.model.StargateControllerModel;
+import pcl.lc.render.models.NaquadahGeneratorModel;
+import pcl.lc.render.models.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
@@ -26,6 +26,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -134,7 +135,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	}
 
 	@Override
-	public void handlePacket(LanteaPacket packet, Player player) {
+	public void handlePacket(ModPacket packet, Player player) {
 		if (packet.getPacketIsForServer())
 			defaultServerPacketHandler.handlePacket(packet, player);
 		else
@@ -142,9 +143,11 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	}
 
 	@Override
-	public void sendToServer(LanteaPacket packet) {
+	public void sendToServer(ModPacket packet) {
 		LanteaCraft.getLogger().log(Level.INFO, "SGCraft sending packet to server: " + packet.toString());
-		FMLClientHandler.instance().sendPacket(packet.toPacket());
+		Packet250CustomPayload payload = packet.toPacket();
+		payload.channel = BuildInfo.modID;
+		FMLClientHandler.instance().sendPacket(payload);
 	}
 
 }
