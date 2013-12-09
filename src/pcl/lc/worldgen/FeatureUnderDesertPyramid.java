@@ -2,12 +2,12 @@ package pcl.lc.worldgen;
 
 import java.util.Random;
 
-import pcl.lc.LanteaCraft.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+import pcl.lc.LanteaCraft.Blocks;
 
 public class FeatureUnderDesertPyramid extends StructureComponent {
 

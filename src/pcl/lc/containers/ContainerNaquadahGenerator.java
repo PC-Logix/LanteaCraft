@@ -2,8 +2,6 @@ package pcl.lc.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.world.World;
 import pcl.common.base.GenericContainer;
 import pcl.common.inventory.FilteredInventory;
 import pcl.common.inventory.FilteredSlot;
@@ -24,14 +22,14 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 
 	@Override
 	public void sendStateTo(ICrafting crafter) {
-		//crafter.sendProgressBarUpdate(this, 0, te.fuelBuffer);
+		// crafter.sendProgressBarUpdate(this, 0, te.fuelBuffer);
 	}
 
 	@Override
 	public void updateProgressBar(int i, int value) {
 		switch (i) {
 			case 0:
-				//te.fuelBuffer = value;
+				// te.fuelBuffer = value;
 				break;
 		}
 	}

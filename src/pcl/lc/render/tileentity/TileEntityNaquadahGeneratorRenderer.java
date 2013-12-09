@@ -1,13 +1,13 @@
 package pcl.lc.render.tileentity;
 
-import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import pcl.lc.LanteaCraft;
+import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class TileEntityNaquadahGeneratorRenderer extends TileEntitySpecialRenderer {

@@ -3,6 +3,14 @@ package pcl.lc;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundPool;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import pcl.common.network.ModPacket;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.common.render.RotationOrientedBlockRenderer;
@@ -20,24 +28,11 @@ import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundPool;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
@@ -120,7 +115,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	@Override
 	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		Class<? extends GuiScreen> gui = LanteaCraft.getProxy().getGUI(ID);
-		if (gui != null) {
+		if (gui != null)
 			try {
 				TileEntity entity = world.getBlockTileEntity(x, y, z);
 				Constructor constr = gui.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
@@ -130,7 +125,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 				System.err.println("Could not create GUI, a " + t.getClass().getName() + " exception occurred.");
 				t.printStackTrace(System.err);
 			}
-		}
 		return null;
 	}
 

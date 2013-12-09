@@ -1,16 +1,12 @@
 package pcl.lc.multiblock;
 
-import java.lang.ref.WeakReference;
-import java.util.logging.Level;
-
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import pcl.common.multiblock.GenericMultiblock;
 import pcl.common.multiblock.MultiblockPart;
 import pcl.common.multiblock.ScanningHelper;
 import pcl.common.util.Vector3;
-import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityStargateBase;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 
 public class StargatePart extends MultiblockPart {
 
@@ -55,7 +51,7 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public boolean mergeWith(GenericMultiblock structure) {
-		this.currentHost = structure;
+		currentHost = structure;
 		return true;
 	}
 
@@ -66,7 +62,7 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public void release() {
-		this.currentHost = null;
+		currentHost = null;
 	}
 
 	@Override

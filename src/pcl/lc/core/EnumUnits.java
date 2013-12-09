@@ -10,16 +10,16 @@ public enum EnumUnits {
 	private double ratio;
 
 	EnumUnits(String[] names, double rate) {
-		this.modNames = names;
-		this.ratio = rate;
+		modNames = names;
+		ratio = rate;
 	}
 
 	public double getRate() {
-		return this.ratio;
+		return ratio;
 	}
 
 	public String[] getUsingMods() {
-		return this.modNames;
+		return modNames;
 	}
 
 	/**

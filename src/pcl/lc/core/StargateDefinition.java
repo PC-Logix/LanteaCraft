@@ -3,6 +3,8 @@ package pcl.lc.core;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
 import pcl.common.helpers.LanguageHelper;
 import pcl.common.multiblock.IStructureConfiguration;
 import pcl.lc.LanteaCraft;
@@ -12,8 +14,6 @@ import pcl.lc.blocks.BlockStargateRing;
 import pcl.lc.items.ItemStargateRing;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
 
 /**
  * Abstract definition of a gate type. Contains a reference to a specific gate type, and the
@@ -45,8 +45,8 @@ public class StargateDefinition {
 	 */
 	public StargateDefinition(EnumStargateType typeof, Class<?> rendererClass, IStructureConfiguration structHost) {
 		this.typeof = typeof;
-		this.struct = structHost;
-		this.typeRenderer = rendererClass;
+		struct = structHost;
+		typeRenderer = rendererClass;
 	}
 
 	/**

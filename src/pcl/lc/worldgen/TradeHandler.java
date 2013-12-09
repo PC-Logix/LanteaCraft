@@ -2,12 +2,12 @@ package pcl.lc.worldgen;
 
 import java.util.Random;
 
-import pcl.lc.LanteaCraft.Items;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
+import pcl.lc.LanteaCraft.Items;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 public class TradeHandler implements IVillageTradeHandler {

@@ -2,24 +2,6 @@ package pcl.lc.blocks;
 
 import java.util.List;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import pcl.common.base.GenericContainerBlock;
-import pcl.common.base.RotationOrientedBlock;
-import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.lc.tileentity.TileEntityStargateRing;
-import pcl.lc.LanteaCraft;
-import pcl.lc.items.ItemStargateRing;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,9 +9,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import pcl.common.base.GenericContainerBlock;
+import pcl.lc.LanteaCraft;
+import pcl.lc.items.ItemStargateRing;
+import pcl.lc.tileentity.TileEntityStargateRing;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class BlockStargateRing extends GenericContainerBlock {

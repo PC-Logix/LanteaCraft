@@ -1,14 +1,10 @@
 package pcl.lc.network;
 
-import java.util.logging.Level;
-
-import pcl.common.network.ModPacket;
-import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityStargateBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
+import pcl.common.network.ModPacket;
+import pcl.lc.tileentity.TileEntityStargateBase;
 import cpw.mods.fml.common.network.Player;
 
 public class ClientPacketHandler {

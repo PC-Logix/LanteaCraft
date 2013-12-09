@@ -18,37 +18,37 @@ public class StargateAddress {
 	}
 
 	public StargateAddress(String addr, WorldLocation loc, short orient, short typeof, String own) {
-		this.address = addr;
-		this.owner = own;
-		this.location = loc;
+		address = addr;
+		owner = own;
+		location = loc;
 		this.typeof = typeof;
-		this.orientation = orient;
+		orientation = orient;
 	}
 
 	public String getAddress() {
-		return this.address;
+		return address;
 	}
 
 	public WorldLocation getLocation() {
-		return this.location;
+		return location;
 	}
 
 	public String getOwner() {
-		return this.owner;
+		return owner;
 	}
 
 	public void setAddress(String addr) {
-		this.address = addr;
+		address = addr;
 	}
 
 	public void setLocation(WorldLocation loc) {
-		this.location = loc;
+		location = loc;
 	}
 
 	public void setOwner(String own) {
 		if (own.length() > 64 || own.length() <= 0)
 			throw new RuntimeException("Invalid name length.");
-		this.owner = own;
+		owner = own;
 	}
 
 	public static StargateAddress load(ByteArrayInputStream input) throws IOException {

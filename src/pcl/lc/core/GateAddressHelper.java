@@ -6,10 +6,10 @@
 
 package pcl.lc.core;
 
-import pcl.lc.tileentity.TileEntityStargateBase;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class GateAddressHelper {
 

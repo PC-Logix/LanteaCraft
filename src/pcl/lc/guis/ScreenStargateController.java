@@ -43,10 +43,10 @@ public class ScreenStargateController extends GenericGlyphGUI {
 
 			}
 		});
-		this.world = controller.getWorldObj();
-		this.x = controller.xCoord;
-		this.y = controller.yCoord;
-		this.z = controller.zCoord;
+		world = controller.getWorldObj();
+		x = controller.xCoord;
+		y = controller.yCoord;
+		z = controller.zCoord;
 	}
 
 	TileEntityStargateBase getStargateTE() {
@@ -142,8 +142,8 @@ public class ScreenStargateController extends GenericGlyphGUI {
 				enterCharacter(C.charAt(0));
 		}
 
-		if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) {
-			if (key == Keyboard.KEY_V) {
+		if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))
+			if (key == Keyboard.KEY_V)
 				try {
 					String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
 							.getData(DataFlavor.stringFlavor);
@@ -153,9 +153,6 @@ public class ScreenStargateController extends GenericGlyphGUI {
 				} catch (Throwable t) {
 					LanteaCraft.getLogger().log(Level.WARNING, "Clipboard pull failed!", t);
 				}
-
-			}
-		}
 	}
 
 	void orangeButtonPressed(boolean connectOnly) {

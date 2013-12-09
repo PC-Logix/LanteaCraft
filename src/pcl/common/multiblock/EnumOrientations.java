@@ -1,10 +1,5 @@
 package pcl.common.multiblock;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import pcl.common.util.Vector3;
 
 /**
  * Declaration of all valid multi-block orientation types and their ordinals.
@@ -38,7 +33,7 @@ public enum EnumOrientations {
 	 * @return The orientation's UID.
 	 */
 	public int getID() {
-		return this.id;
+		return id;
 	}
 
 	/**
@@ -61,7 +56,7 @@ public enum EnumOrientations {
 	 * @return The orientation's human-readable name.
 	 */
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 }

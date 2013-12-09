@@ -1,9 +1,9 @@
 package pcl.lc.core;
 
-import pcl.lc.tileentity.TileEntityStargateBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class WorldLocation {
 

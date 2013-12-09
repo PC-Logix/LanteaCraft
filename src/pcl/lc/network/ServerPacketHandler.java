@@ -1,14 +1,12 @@
 package pcl.lc.network;
 
-import pcl.common.network.ModPacket;
-import pcl.lc.tileentity.TileEntityStargateBase;
-import cpw.mods.fml.common.network.Player;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import pcl.common.network.ModPacket;
+import pcl.lc.tileentity.TileEntityStargateBase;
+import cpw.mods.fml.common.network.Player;
 
 public class ServerPacketHandler {
 

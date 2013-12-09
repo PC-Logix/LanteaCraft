@@ -2,11 +2,11 @@ package pcl.common.worldgen;
 
 import java.util.WeakHashMap;
 
-import pcl.common.helpers.ConfigValue;
-import pcl.lc.LanteaCraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import pcl.common.helpers.ConfigValue;
+import pcl.lc.LanteaCraft;
 
 public class ChunkData {
 

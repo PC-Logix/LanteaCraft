@@ -5,7 +5,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
-import pcl.lc.LanteaCraft;
 
 public class SpecialFluidTank implements IFluidTank {
 
@@ -16,11 +15,11 @@ public class SpecialFluidTank implements IFluidTank {
 	private Fluid fluid;
 
 	public SpecialFluidTank(Fluid f, int cap, int vol, boolean fill, boolean drain) {
-		this.fluid = f;
-		this.capacity = cap;
-		this.volume = vol;
-		this.canFill = fill;
-		this.canDrain = drain;
+		fluid = f;
+		capacity = cap;
+		volume = vol;
+		canFill = fill;
+		canDrain = drain;
 	}
 
 	public boolean canFill() {
@@ -32,8 +31,8 @@ public class SpecialFluidTank implements IFluidTank {
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
-		this.capacity = nbt.getInteger("capacity");
-		this.volume = nbt.getInteger("volume");
+		capacity = nbt.getInteger("capacity");
+		volume = nbt.getInteger("volume");
 	}
 
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -68,9 +67,8 @@ public class SpecialFluidTank implements IFluidTank {
 		if (!canFill || !resource.isFluidEqual(new FluidStack(fluid, volume)))
 			return 0;
 		int quantity = Math.min(resource.amount, capacity - volume);
-		if (doFill) {
+		if (doFill)
 			volume += quantity;
-		}
 		return quantity;
 	}
 
@@ -79,9 +77,8 @@ public class SpecialFluidTank implements IFluidTank {
 		if (!canDrain)
 			return null;
 		int quantity = Math.min(maxDrain, volume);
-		if (doDrain) {
+		if (doDrain)
 			volume -= quantity;
-		}
 		return new FluidStack(fluid, quantity);
 	}
 }

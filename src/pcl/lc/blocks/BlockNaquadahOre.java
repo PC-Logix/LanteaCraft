@@ -2,10 +2,10 @@ package pcl.lc.blocks;
 
 import java.util.Random;
 
-import pcl.lc.LanteaCraft.Items;
 import net.minecraft.block.BlockOre;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
+import pcl.lc.LanteaCraft.Items;
 
 public class BlockNaquadahOre extends BlockOre {
 

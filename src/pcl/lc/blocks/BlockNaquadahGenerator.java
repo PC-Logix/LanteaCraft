@@ -10,7 +10,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 

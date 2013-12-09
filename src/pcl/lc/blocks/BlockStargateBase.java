@@ -91,12 +91,11 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
 		TileEntityStargateBase te = (TileEntityStargateBase) getTileEntity(world, x, y, z);
-		if (te != null) {
+		if (te != null)
 			if (te.getAsStructure().isValid()) {
 				player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateBase.ordinal(), world, x, y, z);
 				return true;
 			}
-		}
 		return false;
 	}
 

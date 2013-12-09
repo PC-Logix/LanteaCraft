@@ -16,6 +16,7 @@ public class FilteredSlot extends Slot {
 		this.slotIndex = slotIndex;
 	}
 
+	@Override
 	public void putStack(ItemStack par1ItemStack) {
 		if (inventory instanceof FilteredInventory) {
 			FilteredInventory fint = (FilteredInventory) inventory;
@@ -26,6 +27,7 @@ public class FilteredSlot extends Slot {
 			super.putStack(par1ItemStack);
 	}
 
+	@Override
 	public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
 		return !readonly || super.canTakeStack(par1EntityPlayer);
 	}

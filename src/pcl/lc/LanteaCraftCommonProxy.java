@@ -1,25 +1,41 @@
 package pcl.lc;
 
 import java.io.File;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.crash.CallableMinecraftVersion;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Property;
+import net.minecraftforge.event.terraingen.InitMapGenEvent;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import pcl.common.base.TileEntityChunkManager;
 import pcl.common.helpers.AnalyticsHelper;
 import pcl.common.helpers.ConfigValue;
 import pcl.common.helpers.ConfigurationHelper;
-import pcl.common.helpers.HelperGUIHandler;
+import pcl.common.helpers.GUIHandler;
 import pcl.common.helpers.NetworkHelpers;
 import pcl.common.network.ModPacket;
-import pcl.common.worldgen.ChunkData;
 import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Fluids;
 import pcl.lc.LanteaCraft.Items;
@@ -49,39 +65,10 @@ import pcl.lc.worldgen.FeatureGeneration;
 import pcl.lc.worldgen.FeatureUnderDesertPyramid;
 import pcl.lc.worldgen.NaquadahOreWorldGen;
 import pcl.lc.worldgen.TradeHandler;
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.crash.CallableMinecraftVersion;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.ForgeVersion;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Property;
-import net.minecraftforge.event.terraingen.InitMapGenEvent;
-import net.minecraftforge.event.world.ChunkDataEvent;
-import net.minecraftforge.event.world.WorldEvent.Load;
-import net.minecraftforge.event.world.WorldEvent.Save;
-import net.minecraftforge.event.world.WorldEvent.Unload;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -89,8 +76,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
-import cpw.mods.fml.relauncher.Side;
 
 public class LanteaCraftCommonProxy {
 
@@ -124,6 +109,7 @@ public class LanteaCraftCommonProxy {
 				+ BuildInfo.buildNumber + " as modid " + BuildInfo.modID);
 		defaultServerPacketHandler = new ServerPacketHandler();
 		networkHelpers = new NetworkHelpers();
+
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
@@ -137,7 +123,7 @@ public class LanteaCraftCommonProxy {
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getInstance());
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getSpecialBucketHandler());
 		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
-		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new HelperGUIHandler());
+		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
 		networkHelpers.init();
 	}
 
@@ -160,9 +146,9 @@ public class LanteaCraftCommonProxy {
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft looking for other versions of SGCraft...");
 		if (UpgradeHelper.detectSGCraftInstall() || UpgradeHelper.detectSGCraftReloadedInstall()) {
 			upgradeHelper = new UpgradeHelper();
-			if (upgradeHelper.detectSGCraftInstall())
+			if (UpgradeHelper.detectSGCraftInstall())
 				upgradeHelper.hookSGCraft();
-			if (upgradeHelper.detectSGCraftReloadedInstall())
+			if (UpgradeHelper.detectSGCraftReloadedInstall())
 				upgradeHelper.hookSGCraftReloaded();
 		}
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft done looking for other versions.");

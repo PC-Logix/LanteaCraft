@@ -1,14 +1,13 @@
 package pcl.lc.fluids;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import pcl.common.helpers.SpecialBucketHandler;
-import pcl.lc.LanteaCraft;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
-import net.minecraft.item.ItemStack;
+import pcl.common.helpers.SpecialBucketHandler;
+import pcl.lc.LanteaCraft;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * ItemSpecialBucket is a special bucket implementation which allows Fluids to create custom
@@ -48,6 +47,6 @@ public class ItemSpecialBucket extends ItemBucket {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon(LanteaCraft.getAssetKey() + ":" + iconName);
+		itemIcon = par1IconRegister.registerIcon(LanteaCraft.getAssetKey() + ":" + iconName);
 	}
 }

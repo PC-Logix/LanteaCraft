@@ -6,11 +6,11 @@
 
 package pcl.lc.render.blocks;
 
-import pcl.common.render.RotationOrientedBlockRenderer;
-import pcl.lc.blocks.BlockStargateBase;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
+import pcl.common.render.RotationOrientedBlockRenderer;
+import pcl.lc.blocks.BlockStargateBase;
 
 public class BlockStargateBaseRenderer extends RotationOrientedBlockRenderer {
 

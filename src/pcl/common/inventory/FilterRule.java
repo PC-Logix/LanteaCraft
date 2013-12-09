@@ -1,7 +1,6 @@
 package pcl.common.inventory;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
@@ -59,8 +58,8 @@ public class FilterRule {
 	 *            The item to accept
 	 */
 	public void accept(ItemStack item) {
-		this.deny.remove(item);
-		this.accept.add(item);
+		deny.remove(item);
+		accept.add(item);
 	}
 
 	/**
@@ -70,8 +69,8 @@ public class FilterRule {
 	 *            The item to deny
 	 */
 	public void deny(ItemStack item) {
-		this.accept.remove(item);
-		this.deny.add(item);
+		accept.remove(item);
+		deny.add(item);
 	}
 
 	/**
@@ -81,8 +80,8 @@ public class FilterRule {
 	 *            The item to remove
 	 */
 	public void remove(ItemStack item) {
-		this.accept.remove(item);
-		this.deny.remove(item);
+		accept.remove(item);
+		deny.remove(item);
 	}
 
 	/**
@@ -107,9 +106,9 @@ public class FilterRule {
 		if (testing == null || testing.getItem() == null)
 			return true;
 		if (whitelist)
-			return this.accept.contains(new ItemStack(testing.getItem(), 1));
+			return accept.contains(new ItemStack(testing.getItem(), 1));
 		else
-			return !this.deny.contains(new ItemStack(testing.getItem(), 1));
+			return !deny.contains(new ItemStack(testing.getItem(), 1));
 	}
 
 }

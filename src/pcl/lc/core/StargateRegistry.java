@@ -6,7 +6,6 @@ import java.util.logging.Level;
 
 import pcl.common.multiblock.IStructureConfiguration;
 import pcl.lc.LanteaCraft;
-import net.minecraft.block.Block;
 
 public class StargateRegistry {
 	private HashMap<Integer, StargateDefinition> stargateTypes = new HashMap<Integer, StargateDefinition>();
@@ -19,11 +18,9 @@ public class StargateRegistry {
 	}
 
 	public void postRegister() {
-		for (Entry<Integer, StargateDefinition> gateType : stargateTypes.entrySet()) {
+		for (Entry<Integer, StargateDefinition> gateType : stargateTypes.entrySet())
 			LanteaCraft.getLogger().log(Level.INFO,
 					"LanteaCraft setting up gate typeof " + gateType.getValue().getTypeof());
-
-		}
 	}
 
 }

@@ -28,7 +28,6 @@ public class ModPacket {
 	};
 
 	private static ArrayList<IStreamPackable> packableHelpers = new ArrayList<IStreamPackable>();
-	private static HashMap<Integer, String> packetTypes = new HashMap<Integer, String>();
 
 	/**
 	 * Registers a network packing agent with the registry
@@ -46,34 +45,6 @@ public class ModPacket {
 	}
 
 	/**
-	 * Registers a packet type name
-	 * 
-	 * @param typeof
-	 *            The typename to register
-	 */
-	public static void registerPacketType(String typeof) {
-		synchronized (packetTypes) {
-			packetTypes.put(packetTypes.size(), typeof);
-		}
-	}
-
-	public static String getPacketType(int idx) {
-		synchronized (packetTypes) {
-			return packetTypes.get(idx);
-		}
-	}
-
-	public static int getPacketTypeID(String typeof) {
-		synchronized (packetTypes) {
-			for (Entry<Integer, String> entry : packetTypes.entrySet()) {
-				if (entry.getValue().equals(typeof))
-					return entry.getKey();
-			}
-		}
-		return -1;
-	}
-
-	/**
 	 * Finds a packer by a given ID
 	 * 
 	 * @param idx
@@ -82,10 +53,9 @@ public class ModPacket {
 	 */
 	private static IStreamPackable<?> findPacker(int idx) {
 		synchronized (packableHelpers) {
-			for (IStreamPackable<?> packer : packableHelpers) {
+			for (IStreamPackable<?> packer : packableHelpers)
 				if (packer.getTypeOf() == idx)
 					return packer;
-			}
 		}
 		return null;
 	}
@@ -99,10 +69,9 @@ public class ModPacket {
 	 */
 	private static IStreamPackable<?> findPacker(Class<?> clazz) {
 		synchronized (packableHelpers) {
-			for (IStreamPackable<?> packer : packableHelpers) {
+			for (IStreamPackable<?> packer : packableHelpers)
 				if (packer.getClassOf().equals(clazz))
 					return packer;
-			}
 		}
 		return null;
 	}
@@ -236,7 +205,7 @@ public class ModPacket {
 	 *            The packet type
 	 */
 	public void setType(String typeof) {
-		this.packetType = typeof;
+		packetType = typeof;
 	}
 
 	/**
@@ -246,7 +215,7 @@ public class ModPacket {
 	 *            If the packet is for the server
 	 */
 	public void setIsForServer(boolean state) {
-		this.isPacketForServer = state;
+		isPacketForServer = state;
 	}
 
 	/**
@@ -281,7 +250,9 @@ public class ModPacket {
 	 */
 	public void writeData(DataOutputStream data) throws IOException {
 		data.writeByte((byte) 1);
-		data.writeByte(getPacketTypeID(packetType));
+		if (packetType.length() > 512)
+			throw new IOException("packetType exceeds maximum length!");
+		Packet.writeString(packetType, data);
 		data.writeByte((isPacketForServer) ? 1 : 0);
 		synchronized (values) {
 			writeHashMap(values, data);
@@ -300,7 +271,7 @@ public class ModPacket {
 		if (data.readByte() != (byte) 1)
 			throw new IOException("Malformed packet!!");
 		byte typeof = data.readByte();
-		packetType = getPacketType((int) typeof);
+		packetType = Packet.readString(data, 512);
 		isPacketForServer = (data.readByte() == 1);
 		synchronized (values) {
 			values = readHashMap(data);
@@ -329,12 +300,11 @@ public class ModPacket {
 				data.writeInt(255);
 				data.writeInt(packer.getTypeOf());
 				packer.pack(o, data);
-			} else {
+			} else
 				throw new IOException("Cannot pack " + o.getClass().getName() + "; unknown value.");
-			}
 		} else {
 			data.writeInt(intValueOf);
-			if (intValueOf != -1) {
+			if (intValueOf != -1)
 				switch (intValueOf) {
 					case 0:
 					case 1:
@@ -364,7 +334,6 @@ public class ModPacket {
 					default:
 						throw new IOException("Don't know what to do with typeof " + intValueOf);
 				}
-			}
 		}
 	}
 
@@ -379,38 +348,36 @@ public class ModPacket {
 	 */
 	public static Object readValue(DataInputStream data) throws IOException {
 		int typeAsInt = data.readInt();
-		if (typeAsInt == -1) {
+		if (typeAsInt == -1)
 			return null;
-		} else {
+		else {
 			Class<?> classValueOf = getGeneric(typeAsInt);
-			if (classValueOf == null) {
+			if (classValueOf == null)
 				if (typeAsInt == 255) {
 					int packerTypeAsInt = data.readInt();
 					IStreamPackable<?> packer = ModPacket.findPacker(packerTypeAsInt);
-					if (packer != null) {
+					if (packer != null)
 						return packer.unpack(data);
-					} else
+					else
 						throw new IOException("Cannot unpack; unknown value.");
 				} else
 					throw new IOException("Cannot unpack; unknown value.");
-			}
-			if (classValueOf.equals(int.class) || classValueOf.equals(Integer.class)) {
+			if (classValueOf.equals(int.class) || classValueOf.equals(Integer.class))
 				return data.readInt();
-			} else if (classValueOf.equals(boolean.class) || classValueOf.equals(Boolean.class)) {
+			else if (classValueOf.equals(boolean.class) || classValueOf.equals(Boolean.class))
 				return (data.readByte() != 0);
-			} else if (classValueOf.equals(double.class) || classValueOf.equals(Double.class)) {
+			else if (classValueOf.equals(double.class) || classValueOf.equals(Double.class))
 				return data.readDouble();
-			} else if (classValueOf.equals(float.class) || classValueOf.equals(Float.class)) {
+			else if (classValueOf.equals(float.class) || classValueOf.equals(Float.class))
 				return data.readFloat();
-			} else if (classValueOf.equals(String.class)) {
+			else if (classValueOf.equals(String.class))
 				return Packet.readString(data, 8192);
-			} else if (classValueOf.equals(HashMap.class)) {
+			else if (classValueOf.equals(HashMap.class))
 				return readHashMap(data);
-			} else if (classValueOf.equals(ArrayList.class)) {
+			else if (classValueOf.equals(ArrayList.class))
 				return readArrayList(data);
-			} else {
+			else
 				throw new IOException("Do not know what to do with " + classValueOf.getName());
-			}
 
 		}
 	}
@@ -433,12 +400,11 @@ public class ModPacket {
 			if (entry.getKey() != null && entry.getValue() != null)
 				sign++;
 		data.writeInt(sign);
-		for (Entry<?, ?> entry : values.entrySet()) {
+		for (Entry<?, ?> entry : values.entrySet())
 			if (entry.getKey() != null && entry.getValue() != null) {
 				writeValue(entry.getKey(), data);
 				writeValue(entry.getValue(), data);
 			}
-		}
 	}
 
 	/**
@@ -502,7 +468,7 @@ public class ModPacket {
 	 */
 	public Packet250CustomPayload toPacket() {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		DataOutputStream data = new DataOutputStream(((java.io.OutputStream) (bytes)));
+		DataOutputStream data = new DataOutputStream(((bytes)));
 		Packet250CustomPayload pkt = new Packet250CustomPayload();
 		try {
 			writeData(data);

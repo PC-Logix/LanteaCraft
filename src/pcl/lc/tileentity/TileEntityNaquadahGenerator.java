@@ -1,38 +1,21 @@
 package pcl.lc.tileentity;
 
-import buildcraft.api.power.IPowerEmitter;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeTile.PipeType;
-import net.minecraft.entity.player.EntityPlayer;
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.fluids.IFluidTank;
-import pcl.common.base.GenericTileEntity;
 import pcl.common.base.PoweredTileEntity;
 import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
 import pcl.lc.LanteaCraft;
 import pcl.lc.fluids.SpecialFluidTank;
-import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
-import ic2.api.*;
-import ic2.api.energy.*;
-import ic2.api.energy.tile.*;
-import ic2.api.energy.event.*;
-import ic2.api.tile.IWrenchable;
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
 
 public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler {
 
@@ -85,13 +68,12 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	@Override
 	public void updateEntity() {
-		if (!worldObj.isRemote) {
-			if (!this.addedToEnergyNet) {
+		if (!worldObj.isRemote)
+			if (!addedToEnergyNet) {
 				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-				this.addedToEnergyNet = true;
+				addedToEnergyNet = true;
 				onInventoryChanged();
 			}
-		}
 		super.updateEntity();
 
 		// TODO: This is temporary logic code, so I can test energy emitting.

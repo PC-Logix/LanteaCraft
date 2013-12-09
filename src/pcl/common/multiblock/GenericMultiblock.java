@@ -2,11 +2,10 @@ package pcl.common.multiblock;
 
 import java.util.HashMap;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IWorldAccess;
-import net.minecraft.world.World;
 
 /**
  * GenericMultiblock acts as a global declaration for all multi-block structure objects in the
@@ -148,9 +147,9 @@ public abstract class GenericMultiblock {
 	 *            The z-coordinate of the finalized structure
 	 */
 	private void setLocation(int x, int y, int z) {
-		this.xCoord = x;
-		this.yCoord = y;
-		this.zCoord = z;
+		xCoord = x;
+		yCoord = y;
+		zCoord = z;
 	}
 
 	/**
@@ -166,12 +165,10 @@ public abstract class GenericMultiblock {
 			if (isValid)
 				setLocation(baseX, baseY, baseZ);
 			validated(wasValid, isValid);
-		} else {
-			if (isValid()) {
-				freeStructure();
-				isValid = false;
-				validated(isValid(), false);
-			}
+		} else if (isValid()) {
+			freeStructure();
+			isValid = false;
+			validated(isValid(), false);
 		}
 	}
 

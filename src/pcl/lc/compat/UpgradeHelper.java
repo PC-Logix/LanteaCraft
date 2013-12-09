@@ -3,14 +3,11 @@ package pcl.lc.compat;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import pcl.lc.LanteaCraft;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import pcl.lc.LanteaCraft;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class UpgradeHelper {
 
@@ -47,7 +44,7 @@ public class UpgradeHelper {
 			Class<?> ours_blocks = Class.forName("pcl.lc.LanteaCraft$Blocks");
 			Class<?> ours_items = Class.forName("pcl.lc.LanteaCraft$Items");
 
-			for (String block : mapBlocks) {
+			for (String block : mapBlocks)
 				try {
 					Field f1 = clazz.getField(block);
 					Field f2_local = ours_blocks.getField(block);
@@ -70,9 +67,8 @@ public class UpgradeHelper {
 				} catch (IllegalAccessException illegal) {
 					LanteaCraft.getLogger().log(Level.WARNING, "Could not access block field " + block + ", ignoring!");
 				}
-			}
 
-			for (String item : mapItems) {
+			for (String item : mapItems)
 				try {
 					Field f1 = clazz.getField(item);
 					Field f2_local = ours_items.getField(item);
@@ -96,7 +92,6 @@ public class UpgradeHelper {
 				} catch (IllegalAccessException illegal) {
 					LanteaCraft.getLogger().log(Level.WARNING, "Could not access item field " + item + ", ignoring!");
 				}
-			}
 		} catch (ClassNotFoundException notfound) {
 			LanteaCraft.getLogger().log(Level.WARNING, "Could not locate a class required for upgrade!", notfound);
 		}
@@ -110,7 +105,7 @@ public class UpgradeHelper {
 			Class<?> ours_blocks = Class.forName("pcl.lc.LanteaCraft$Blocks");
 			Class<?> ours_items = Class.forName("pcl.lc.LanteaCraft$Items");
 
-			for (String block : mapBlocks) {
+			for (String block : mapBlocks)
 				try {
 					Field f1 = clazz_blocks.getField(block);
 					Field f2_local = ours_blocks.getField(block);
@@ -133,9 +128,8 @@ public class UpgradeHelper {
 				} catch (IllegalAccessException illegal) {
 					LanteaCraft.getLogger().log(Level.WARNING, "Could not access block field " + block + ", ignoring!");
 				}
-			}
 
-			for (String item : mapItems) {
+			for (String item : mapItems)
 				try {
 					Field f1 = clazz_items.getField(item);
 					Field f2_local = ours_items.getField(item);
@@ -159,7 +153,6 @@ public class UpgradeHelper {
 				} catch (IllegalAccessException illegal) {
 					LanteaCraft.getLogger().log(Level.WARNING, "Could not access item field " + item + ", ignoring!");
 				}
-			}
 
 		} catch (ClassNotFoundException notfound) {
 			LanteaCraft.getLogger().log(Level.WARNING, "Could not locate a class required for upgrade!", notfound);
@@ -171,12 +164,11 @@ public class UpgradeHelper {
 				Level.INFO,
 				"Adding block conversion {foreign: " + foreign.getClass().getCanonicalName() + "; local: "
 						+ local.getClass().getCanonicalName() + "; sensitive: " + isMetadataSensitive + "}.");
-		if (!isMetadataSensitive) {
+		if (!isMetadataSensitive)
 			GameRegistry.addShapelessRecipe(new ItemStack(local, 1), new ItemStack(foreign, 1));
-		} else {
+		else
 			for (int i = 0; i < 16; i++)
 				GameRegistry.addShapelessRecipe(new ItemStack(local, 1, i), new ItemStack(foreign, 1, i));
-		}
 	}
 
 	public void createItemConversionRecipe(Item foreign, Item local, boolean isMetadataSensitive) {
@@ -184,11 +176,10 @@ public class UpgradeHelper {
 				Level.INFO,
 				"Adding item conversion {foreign: " + foreign.getClass().getCanonicalName() + "; local: "
 						+ local.getClass().getCanonicalName() + "; sensitive: " + isMetadataSensitive + "}.");
-		if (!isMetadataSensitive) {
+		if (!isMetadataSensitive)
 			GameRegistry.addShapelessRecipe(new ItemStack(local, 1), new ItemStack(foreign, 1));
-		} else {
+		else
 			for (int i = 0; i < 16; i++)
 				GameRegistry.addShapelessRecipe(new ItemStack(foreign, 1, i), new ItemStack(local, 1, i));
-		}
 	}
 }

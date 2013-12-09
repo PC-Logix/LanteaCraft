@@ -1,26 +1,20 @@
 package pcl.common.base;
 
-import java.util.logging.Level;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.common.Optional.InterfaceList;
-import cpw.mods.fml.common.Optional.Method;
-import pcl.lc.LanteaCraft;
-import pcl.lc.core.EnumUnits;
+import ic2.api.energy.tile.IEnergyAcceptor;
+import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import pcl.lc.core.EnumUnits;
 import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.power.PowerHandler.Type;
-import ic2.api.energy.tile.IEnergyAcceptor;
-import ic2.api.energy.tile.IEnergySource;
-import ic2.api.reactor.IC2Reactor;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional.Interface;
+import cpw.mods.fml.common.Optional.InterfaceList;
+import cpw.mods.fml.common.Optional.Method;
 
 /**
  * Holy wrappers, Batman. Factory free wrapper for TileEntity objects which import or export
@@ -149,10 +143,9 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (canExportEnergy() && !worldObj.isRemote && receiverBuffer != null) {
+		if (canExportEnergy() && !worldObj.isRemote && receiverBuffer != null)
 			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
 				emitEnergy(direction);
-		}
 	}
 
 	/**

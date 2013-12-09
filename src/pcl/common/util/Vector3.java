@@ -1,8 +1,5 @@
 package pcl.common.util;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import net.minecraft.util.Vec3;
 
 public class Vector3 {

@@ -1,11 +1,11 @@
 package pcl.common.base;
 
-import pcl.common.util.Trans3;
-import pcl.lc.LanteaCraft;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
+import pcl.common.util.Trans3;
+import pcl.lc.LanteaCraft;
 
 public abstract class OrientedBlock extends GenericContainerBlock {
 

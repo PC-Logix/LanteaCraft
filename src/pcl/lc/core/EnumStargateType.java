@@ -16,8 +16,8 @@ public enum EnumStargateType {
 	private final String name;
 
 	EnumStargateType(int ord, String nm) {
-		this.ordinal = ord;
-		this.name = nm;
+		ordinal = ord;
+		name = nm;
 	}
 
 	/**

@@ -1,13 +1,8 @@
 package pcl.lc.tileentity;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import pcl.common.base.GenericTileEntity;
-import pcl.lc.LanteaCraft;
-import pcl.lc.multiblock.StargatePart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import pcl.common.base.GenericTileEntity;
+import pcl.lc.multiblock.StargatePart;
 
 public class TileEntityStargateRing extends GenericTileEntity {
 

@@ -77,17 +77,4 @@ public abstract class TileEntityChunkLoader extends GenericTileEntity {
 			chunkTicket = null;
 		}
 	}
-
-	public void dumpChunkLoadingState(String label) {
-		// System.out.printf("%s: Chunk loading state:\n", label);
-		// System.out.printf("Chunk ticket = %s\n", chunkTicket);
-		if (chunkTicket != null) {
-			// System.out.printf("Loaded chunks:");
-			for (Object item : chunkTicket.getChunkList()) {
-				ChunkCoordIntPair coords = (ChunkCoordIntPair) item;
-				// System.out.printf(" (%d,%d)", coords.chunkXPos,
-				// coords.chunkZPos);
-			}
-		}
-	}
 }

@@ -10,16 +10,16 @@ public abstract class FilteredInventory implements IInventory {
 	private FilterRule[] rules;
 
 	public FilteredInventory(int size) {
-		this.items = new ItemStack[size];
-		this.rules = new FilterRule[size];
+		items = new ItemStack[size];
+		rules = new FilterRule[size];
 	}
 
 	public void setFilterRule(int slot, FilterRule rule) {
-		this.rules[slot] = rule;
+		rules[slot] = rule;
 	}
 
 	public FilterRule getFilterRule(int slot) {
-		return this.rules[slot];
+		return rules[slot];
 	}
 
 	@Override

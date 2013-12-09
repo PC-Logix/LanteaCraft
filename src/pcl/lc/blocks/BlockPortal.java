@@ -8,12 +8,12 @@ package pcl.lc.blocks;
 
 import java.util.Random;
 
-import pcl.lc.tileentity.TileEntityStargateBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class BlockPortal extends Block {
 

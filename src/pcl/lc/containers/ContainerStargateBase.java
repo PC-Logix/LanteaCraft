@@ -1,11 +1,11 @@
 package pcl.lc.containers;
 
-import pcl.common.base.GenericContainer;
-import pcl.lc.tileentity.TileEntityStargateBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.world.World;
+import pcl.common.base.GenericContainer;
+import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class ContainerStargateBase extends GenericContainer {
 

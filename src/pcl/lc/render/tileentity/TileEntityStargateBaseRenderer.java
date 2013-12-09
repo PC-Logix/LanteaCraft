@@ -1,6 +1,5 @@
 package pcl.lc.render.tileentity;
 
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -72,8 +71,7 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 
 	void renderStargate(TileEntityStargateBase te, float t) {
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
-		bindTexture(LanteaCraft.getInstance().getResource(
-				"textures/tileentity/stargate_pegasus_128.png"));
+		bindTexture(LanteaCraft.getInstance().getResource("textures/tileentity/stargate_pegasus_128.png"));
 		GL11.glNormal3f(0, 1, 0);
 		renderRing(ringMidRadius, ringOuterRadius, RingType.Outer);
 		renderInnerRing(te, t);

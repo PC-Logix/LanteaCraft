@@ -1,13 +1,10 @@
 package pcl.lc.guis;
 
-import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
-
+import net.minecraft.inventory.Container;
 import pcl.common.base.GenericContainer;
 import pcl.common.base.GenericContainerGUI;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.GateAddressHelper;
-import pcl.lc.tileentity.TileEntityStargateBase;
-import net.minecraft.inventory.Container;
 
 public abstract class GenericGlyphGUI extends GenericContainerGUI {
 

@@ -2,19 +2,19 @@ package pcl.common.helpers;
 
 import java.lang.reflect.Constructor;
 
-import pcl.lc.LanteaCraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import pcl.lc.LanteaCraft;
 import cpw.mods.fml.common.network.IGuiHandler;
 
-public class HelperGUIHandler implements IGuiHandler {
+public class GUIHandler implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		Class<? extends Container> container = LanteaCraft.getProxy().getContainer(ID);
-		if (container != null) {
+		if (container != null)
 			try {
 				TileEntity entity = world.getBlockTileEntity(x, y, z);
 				Constructor constr = container.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
@@ -25,7 +25,6 @@ public class HelperGUIHandler implements IGuiHandler {
 						+ " exception occurred.");
 				t.printStackTrace(System.err);
 			}
-		}
 		return null;
 	}
 

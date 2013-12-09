@@ -6,8 +6,6 @@
 
 package pcl.common.render;
 
-import pcl.common.util.Trans3;
-import pcl.common.util.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,6 +13,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
+import pcl.common.util.Trans3;
+import pcl.common.util.Vector3;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {

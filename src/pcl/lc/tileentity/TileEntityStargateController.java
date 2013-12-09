@@ -1,15 +1,12 @@
 package pcl.lc.tileentity;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import pcl.lc.blocks.BlockStargateController;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.common.Optional.InterfaceList;
-import cpw.mods.fml.common.Optional.Method;
 
 public class TileEntityStargateController extends GenericTileEntity {
 

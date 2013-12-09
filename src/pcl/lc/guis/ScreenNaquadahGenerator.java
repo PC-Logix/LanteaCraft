@@ -1,13 +1,10 @@
 package pcl.lc.guis;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import pcl.common.base.GenericContainerGUI;
 import pcl.lc.LanteaCraft;
 import pcl.lc.containers.ContainerNaquadahGenerator;
-import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
-import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class ScreenNaquadahGenerator extends GenericContainerGUI {
 
@@ -18,7 +15,7 @@ public class ScreenNaquadahGenerator extends GenericContainerGUI {
 
 	public ScreenNaquadahGenerator(TileEntityNaquadahGenerator te, EntityPlayer player) {
 		super(new ContainerNaquadahGenerator(te, player), guiWidth, guiHeight);
-		this.tileEntity = te;
+		tileEntity = te;
 	}
 
 	@Override

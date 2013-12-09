@@ -1,12 +1,7 @@
 package pcl.lc.guis;
 
-import java.awt.Container;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.ResourceLocation;
-import pcl.common.base.GenericContainer;
-import pcl.common.base.GenericContainerGUI;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.GateAddressHelper;
 

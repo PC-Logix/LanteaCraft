@@ -1,9 +1,9 @@
 package pcl.lc.items;
 
-import pcl.lc.LanteaCraft.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import pcl.lc.LanteaCraft.Blocks;
 
 public class ItemStargateRing extends ItemBlock {
 

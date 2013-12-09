@@ -1,13 +1,13 @@
 package pcl.lc.render.blocks;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.world.IBlockAccess;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.lc.blocks.BlockStargateRing;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.multiblock.StargatePart;
 import pcl.lc.tileentity.TileEntityStargateRing;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.world.IBlockAccess;
 
 public class BlockStargateRingRenderer extends GenericBlockRenderer {
 

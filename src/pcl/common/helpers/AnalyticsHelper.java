@@ -2,19 +2,17 @@ package pcl.common.helpers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 
+import net.minecraftforge.common.ForgeVersion;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
-import net.minecraftforge.common.ForgeVersion;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 
 /**
@@ -66,7 +64,7 @@ public class AnalyticsHelper extends Thread {
 			return;
 		}
 
-		while (tries < maxTries) {
+		while (tries < maxTries)
 			try {
 				tries++;
 				LanteaCraft.getLogger().log(Level.INFO, "Pushing metrics data (try " + tries + " of " + maxTries + ")");
@@ -76,7 +74,6 @@ public class AnalyticsHelper extends Thread {
 			} catch (IOException ioex) {
 				LanteaCraft.getLogger().log(Level.WARNING, "The metrics push failed.", ioex);
 			}
-		}
 		LanteaCraft.getLogger().log(Level.WARNING, "Failed to push metrics data, maximum tries exceeded!");
 	}
 

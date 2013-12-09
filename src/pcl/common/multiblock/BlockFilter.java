@@ -12,8 +12,8 @@ public class BlockFilter {
 	}
 
 	public BlockFilter(int id, int metadata) {
-		this.targetId = id;
-		this.targetMetadata = metadata;
+		targetId = id;
+		targetMetadata = metadata;
 	}
 
 	public boolean matches(World world, Block blockOf, int x, int y, int z) {
