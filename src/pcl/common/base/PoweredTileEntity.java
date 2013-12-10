@@ -5,7 +5,13 @@ import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import pcl.common.asm.ClassOptional.ClassFilterInterface;
+import pcl.common.asm.ClassOptional.ClassFilterInterfaceList;
+import pcl.common.asm.ClassOptional.ClassFilterMethod;
 import pcl.lc.core.EnumUnits;
+import universalelectricity.core.block.IElectrical;
+import universalelectricity.core.block.IElectricalStorage;
+import universalelectricity.core.electricity.ElectricityPack;
 import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
@@ -30,8 +36,13 @@ import cpw.mods.fml.common.Optional.Method;
 		@Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
 		@Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Core"),
 		@Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Core") })
+@ClassFilterInterfaceList({
+		@ClassFilterInterface(iface = "universalelectricity.core.block.IElectrical",
+				classname = "universalelectricity.core.block.IElectrical"),
+		@ClassFilterInterface(iface = "universalelectricity.core.block.IElectricalStorage",
+				classname = "universalelectricity.core.block.IElectricalStorage") })
 public abstract class PoweredTileEntity extends GenericTileEntity implements IEnergyAcceptor, IEnergySource,
-		IPowerEmitter, IPowerReceptor {
+		IPowerEmitter, IPowerReceptor, IElectrical, IElectricalStorage {
 
 	/**
 	 * Incoming power buffer, particularly only for BuildCraft.
@@ -265,5 +276,68 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 			float quantityUsed = receptor.receiveEnergy(PowerHandler.Type.MACHINE, send, direction.getOpposite());
 			exportEnergy(EnumUnits.convertToNaquadahUnit(EnumUnits.MinecraftJoules, quantityUsed));
 		}
+	}
+
+	@Override
+	@ClassFilterMethod(classname = "universalelectricity.core.block.IConnector")
+	public boolean canConnect(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectricalStorage")
+	public void setEnergyStored(float energy) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectricalStorage")
+	public float getEnergyStored() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectricalStorage")
+	public float getMaxEnergyStored() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectrical")
+	public float receiveElectricity(ForgeDirection from, ElectricityPack receive, boolean doReceive) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectrical")
+	public ElectricityPack provideElectricity(ForgeDirection from, ElectricityPack request, boolean doProvide) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectrical")
+	public float getRequest(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectrical")
+	public float getProvide(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectrical")
+	public float getVoltage() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
