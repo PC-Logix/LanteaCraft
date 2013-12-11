@@ -7,6 +7,7 @@ import java.io.IOException;
 import pcl.common.multiblock.EnumOrientations;
 import pcl.common.network.IStreamPackable;
 import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
 import pcl.common.util.ImmutablePair;
 import pcl.common.util.ImmutableTuple;
 import pcl.common.util.Vector3;
@@ -49,14 +50,14 @@ public class NetworkHelpers {
 
 		@Override
 		public void pack(ImmutablePair valueOf, DataOutputStream streamOf) throws IOException {
-			ModPacket.writeValue(valueOf.getA(), streamOf);
-			ModPacket.writeValue(valueOf.getB(), streamOf);
+			StandardModPacket.writeValue(valueOf.getA(), streamOf);
+			StandardModPacket.writeValue(valueOf.getB(), streamOf);
 		}
 
 		@Override
 		public ImmutablePair unpack(DataInputStream streamOf) throws IOException {
-			Object valA = ModPacket.readValue(streamOf);
-			Object valB = ModPacket.readValue(streamOf);
+			Object valA = StandardModPacket.readValue(streamOf);
+			Object valB = StandardModPacket.readValue(streamOf);
 			return new ImmutablePair<Object, Object>(valA, valB);
 		}
 	}
@@ -77,16 +78,16 @@ public class NetworkHelpers {
 
 		@Override
 		public void pack(ImmutableTuple valueOf, DataOutputStream streamOf) throws IOException {
-			ModPacket.writeValue(valueOf.getA(), streamOf);
-			ModPacket.writeValue(valueOf.getB(), streamOf);
-			ModPacket.writeValue(valueOf.getC(), streamOf);
+			StandardModPacket.writeValue(valueOf.getA(), streamOf);
+			StandardModPacket.writeValue(valueOf.getB(), streamOf);
+			StandardModPacket.writeValue(valueOf.getC(), streamOf);
 		}
 
 		@Override
 		public ImmutableTuple unpack(DataInputStream streamOf) throws IOException {
-			Object valA = ModPacket.readValue(streamOf);
-			Object valB = ModPacket.readValue(streamOf);
-			Object valC = ModPacket.readValue(streamOf);
+			Object valA = StandardModPacket.readValue(streamOf);
+			Object valB = StandardModPacket.readValue(streamOf);
+			Object valC = StandardModPacket.readValue(streamOf);
 			return new ImmutableTuple<Object, Object, Object>(valA, valB, valC);
 		}
 	}

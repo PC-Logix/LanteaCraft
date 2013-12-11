@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.common.base.GenericContainer;
 import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.EnumStargateState;
 import pcl.lc.core.GateAddressHelper;
@@ -159,7 +160,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		TileEntityStargateBase te = getStargateTE();
 		if (te != null)
 			if (!connectOnly || !te.isConnected()) {
-				ModPacket packet = new ModPacket();
+				StandardModPacket packet = new StandardModPacket();
 				packet.setIsForServer(true);
 				packet.setType("LanteaPacket.DialRequest");
 				packet.setValue("Address", enteredAddress);

@@ -1,6 +1,7 @@
 package pcl.common.base;
 
 import ic2.api.energy.tile.IEnergyAcceptor;
+import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -10,7 +11,6 @@ import pcl.common.asm.ClassOptional.ClassFilterInterfaceList;
 import pcl.common.asm.ClassOptional.ClassFilterMethod;
 import pcl.lc.core.EnumUnits;
 import universalelectricity.core.block.IElectrical;
-import universalelectricity.core.block.IElectricalStorage;
 import universalelectricity.core.electricity.ElectricityPack;
 import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
@@ -33,16 +33,14 @@ import cpw.mods.fml.common.Optional.Method;
  * @author AfterLifeLochie
  */
 @InterfaceList({ @Interface(iface = "ic2.api.energy.tile.IEnergyAcceptor", modid = "IC2"),
+		@Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
 		@Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
 		@Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Core"),
 		@Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Core") })
-@ClassFilterInterfaceList({
-		@ClassFilterInterface(iface = "universalelectricity.core.block.IElectrical",
-				classname = "universalelectricity.core.block.IElectrical"),
-		@ClassFilterInterface(iface = "universalelectricity.core.block.IElectricalStorage",
-				classname = "universalelectricity.core.block.IElectricalStorage") })
-public abstract class PoweredTileEntity extends GenericTileEntity implements IEnergyAcceptor, IEnergySource,
-		IPowerEmitter, IPowerReceptor, IElectrical, IElectricalStorage {
+@ClassFilterInterfaceList({ @ClassFilterInterface(iface = "universalelectricity.core.block.IElectrical",
+		classname = "universalelectricity.core.block.IElectrical") })
+public abstract class PoweredTileEntity extends GenericTileEntity implements IEnergyAcceptor, IEnergySink,
+		IEnergySource, IPowerEmitter, IPowerReceptor, IElectrical {
 
 	/**
 	 * Incoming power buffer, particularly only for BuildCraft.
@@ -143,6 +141,18 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	 */
 	public abstract double exportEnergy(double units);
 
+	/**
+	 * Called to establish if a connector of the unit type specified can connect to the
+	 * specified side of this host.
+	 * 
+	 * @param typeof
+	 *            The type of the connector, based on units.
+	 * @param direction
+	 *            The side of the host.
+	 * @return If this host permits a connection of the specified type.
+	 */
+	public abstract boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction);
+
 	// Don't look beyond here unless you want your eyes severely violated.
 
 	/**
@@ -166,7 +176,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	@Override
 	@Method(modid = "IC2")
 	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
-		return canExportEnergy();
+		return canEnergyFormatConnectToSide(EnumUnits.EnergyUnit, direction) && canExportEnergy();
 	}
 
 	/**
@@ -176,7 +186,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	@Override
 	@Method(modid = "BuildCraft|Core")
 	public boolean canEmitPowerFrom(ForgeDirection side) {
-		return canExportEnergy();
+		return canEnergyFormatConnectToSide(EnumUnits.MinecraftJoules, side) && canExportEnergy();
 	}
 
 	/**
@@ -221,7 +231,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	@Override
 	@Method(modid = "IC2")
 	public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
-		return canReceiveEnergy();
+		return canEnergyFormatConnectToSide(EnumUnits.EnergyUnit, direction) && canReceiveEnergy();
 	}
 
 	/**
@@ -252,6 +262,39 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	}
 
 	/**
+	 * Determine if this IC2 accepts energy, and if so, how much energy to accept.
+	 */
+	@Override
+	@Method(modid = "IC2")
+	public double demandedEnergyUnits() {
+		if (!canReceiveEnergy())
+			return 0;
+		return EnumUnits.convertFromNaquadahUnit(EnumUnits.EnergyUnit, getMaximumReceiveEnergy());
+	}
+
+	/**
+	 * Transfer energy from IC2 to this sink.
+	 */
+	@Override
+	@Method(modid = "IC2")
+	public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
+		if (!canReceiveEnergy())
+			return 0;
+		double quantity = EnumUnits.convertToNaquadahUnit(EnumUnits.EnergyUnit, amount);
+		receiveEnergy(quantity);
+		return amount;
+	}
+
+	/**
+	 * Get the maximum safe input IC2 quantity for this host.
+	 */
+	@Override
+	@Method(modid = "IC2")
+	public int getMaxSafeInput() {
+		return Integer.MAX_VALUE;
+	}
+
+	/**
 	 * Attempts to emit BC energy to nearby BC IPowerReceptor objects. Holy crap, this is bad.
 	 * I couldn't find any BC API method to do this, so do we just `gung-ho and do shit`, or is
 	 * there some other fancy way of doing this?
@@ -278,32 +321,13 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 		}
 	}
 
+	/**
+	 * UE method to figure out if a side can be connected to.
+	 */
 	@Override
 	@ClassFilterMethod(classname = "universalelectricity.core.block.IConnector")
 	public boolean canConnect(ForgeDirection direction) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectricalStorage")
-	public void setEnergyStored(float energy) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectricalStorage")
-	public float getEnergyStored() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectricalStorage")
-	public float getMaxEnergyStored() {
-		// TODO Auto-generated method stub
-		return 0;
+		return canEnergyFormatConnectToSide(EnumUnits.UniversalAmperes, direction);
 	}
 
 	@Override
@@ -323,21 +347,18 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	@Override
 	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectrical")
 	public float getRequest(ForgeDirection direction) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.UniversalAmperes, getMaximumReceiveEnergy());
 	}
 
 	@Override
 	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectrical")
 	public float getProvide(ForgeDirection direction) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.UniversalAmperes, getMaximumExportEnergy());
 	}
 
 	@Override
 	@ClassFilterMethod(classname = "universalelectricity.core.block.IElectrical")
 	public float getVoltage() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 240.0f;
 	}
 }

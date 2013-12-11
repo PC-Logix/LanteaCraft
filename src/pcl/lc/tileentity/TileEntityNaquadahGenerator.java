@@ -15,6 +15,7 @@ import pcl.common.base.PoweredTileEntity;
 import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.EnumUnits;
 import pcl.lc.fluids.SpecialFluidTank;
 
 public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler {
@@ -166,5 +167,10 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[] { tank.getInfo() };
+	}
+
+	@Override
+	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
+		return true;
 	}
 }

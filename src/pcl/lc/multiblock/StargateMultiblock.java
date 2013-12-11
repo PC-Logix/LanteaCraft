@@ -10,6 +10,7 @@ import pcl.common.multiblock.EnumOrientations;
 import pcl.common.multiblock.GenericMultiblock;
 import pcl.common.multiblock.MultiblockPart;
 import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
 import pcl.common.util.ImmutablePair;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
@@ -239,7 +240,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public ModPacket pack() {
-		ModPacket packet = new ModPacket();
+		StandardModPacket packet = new StandardModPacket();
 		packet.setIsForServer(false);
 		packet.setType("LanteaPacket.TileUpdate");
 		packet.setValue("metadata", metadata);
@@ -258,9 +259,10 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public void unpack(ModPacket packet) {
-		metadata = (HashMap<String, Object>) packet.getValue("metadata");
-		isValid = (Boolean) packet.getValue("isValid");
-		setOrientation((EnumOrientations) packet.getValue("orientation"));
+		StandardModPacket packetStandard = (StandardModPacket) packet;
+		metadata = (HashMap<String, Object>) packetStandard.getValue("metadata");
+		isValid = (Boolean) packetStandard.getValue("isValid");
+		setOrientation((EnumOrientations) packetStandard.getValue("orientation"));
 		if (!isValid)
 			freeStructure();
 		else
@@ -269,7 +271,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public ModPacket pollForUpdate() {
-		ModPacket packet = new ModPacket();
+		StandardModPacket packet = new StandardModPacket();
 		packet.setIsForServer(true);
 		packet.setType("LanteaPacket.UpdateRequest");
 		packet.setValue("DimensionID", host.worldObj.provider.dimensionId);

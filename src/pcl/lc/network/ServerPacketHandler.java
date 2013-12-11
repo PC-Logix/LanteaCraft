@@ -5,36 +5,40 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import cpw.mods.fml.common.network.Player;
 
 public class ServerPacketHandler {
 
 	public void handlePacket(ModPacket modPacket, Player player) {
-		if (modPacket.getType().equals("LanteaPacket.UpdateRequest")) {
-			int worldName = (Integer) modPacket.getValue("DimensionID");
-			int x = (Integer) modPacket.getValue("WorldX");
-			int y = (Integer) modPacket.getValue("WorldY");
-			int z = (Integer) modPacket.getValue("WorldZ");
-			World w = DimensionManager.getWorld(worldName);
-			TileEntity tile = w.getBlockTileEntity(x, y, z);
-			if (tile instanceof TileEntityStargateBase) {
-				TileEntityStargateBase base = (TileEntityStargateBase) tile;
-				base.getDescriptionPacket();
+		if (modPacket instanceof StandardModPacket) {
+			StandardModPacket spacket = (StandardModPacket) modPacket;
+			if (spacket.getType().equals("LanteaPacket.UpdateRequest")) {
+				int worldName = (Integer) spacket.getValue("DimensionID");
+				int x = (Integer) spacket.getValue("WorldX");
+				int y = (Integer) spacket.getValue("WorldY");
+				int z = (Integer) spacket.getValue("WorldZ");
+				World w = DimensionManager.getWorld(worldName);
+				TileEntity tile = w.getBlockTileEntity(x, y, z);
+				if (tile instanceof TileEntityStargateBase) {
+					TileEntityStargateBase base = (TileEntityStargateBase) tile;
+					base.getDescriptionPacket();
+				}
 			}
-		}
 
-		if (modPacket.getType().equals("LanteaPacket.DialRequest")) {
-			int worldName = (Integer) modPacket.getValue("DimensionID");
-			int x = (Integer) modPacket.getValue("WorldX");
-			int y = (Integer) modPacket.getValue("WorldY");
-			int z = (Integer) modPacket.getValue("WorldZ");
-			World w = DimensionManager.getWorld(worldName);
-			TileEntity tile = w.getBlockTileEntity(x, y, z);
-			if (tile instanceof TileEntityStargateBase) {
-				String address = (String) modPacket.getValue("Address");
-				TileEntityStargateBase base = (TileEntityStargateBase) tile;
-				base.connectOrDisconnect(address, (EntityPlayer) player);
+			if (spacket.getType().equals("LanteaPacket.DialRequest")) {
+				int worldName = (Integer) spacket.getValue("DimensionID");
+				int x = (Integer) spacket.getValue("WorldX");
+				int y = (Integer) spacket.getValue("WorldY");
+				int z = (Integer) spacket.getValue("WorldZ");
+				World w = DimensionManager.getWorld(worldName);
+				TileEntity tile = w.getBlockTileEntity(x, y, z);
+				if (tile instanceof TileEntityStargateBase) {
+					String address = (String) spacket.getValue("Address");
+					TileEntityStargateBase base = (TileEntityStargateBase) tile;
+					base.connectOrDisconnect(address, (EntityPlayer) player);
+				}
 			}
 		}
 	}

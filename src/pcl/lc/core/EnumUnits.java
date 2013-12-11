@@ -4,7 +4,8 @@ public enum EnumUnits {
 
 	NaquadahUnit(new String[] { "LanteaCraft" }, 1), MinecraftJoules(new String[] { "BuildCraft", "Railcraft",
 			"Forestry" }, 256.0), EnergyUnit(new String[] { "IndustrialCraft2" }, 2048.0), RedstoneFlux(
-			new String[] { "Thermal Expansion" }, 128.0);
+			new String[] { "Thermal Expansion" }, 128.0), UniversalAmperes(new String[] { "Universal Electricity" },
+			512.0);
 
 	private String[] modNames;
 	private double ratio;
