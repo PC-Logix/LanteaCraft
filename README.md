@@ -15,13 +15,25 @@ Switched to Delta NP SGCraft Textures, thanks http://www.deltastrium.com/ for th
 ================
 TODO:
 
-Adding a new gate model, Atlantis along with a DHD for it.
+Adding 7X7 stargates, Atlantis along with a DHD for it. [IN PROGRESS]
 
--DONE!- Adding a Milky Way DHD model instead of a block. -DONE!-
+Adding Iris to stargates. [IN PROGRESS]
 
-Powering gates with IC2, UE, or BuildCraft power.
+Adding a Milky Way DHD model instead of a block. [DONE]
 
-Possibly using Naquadah for power generation.
+Adding a chargable crystal for power from the DHD [IN PROGRESS]
+
+Allowing DHD to power the Stargate [IN PROGRESS]
+
+Adding Naquadah Generators. [IN PROGRESS]
+
+Adding Custom Decor Blocks. [Not Started]
+
+Adding Weapons of all kinds. [Not Started]
+
+Adding a form of MALP if possable [Not Started]
+
+
 
 
 ================
