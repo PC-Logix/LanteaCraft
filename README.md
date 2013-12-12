@@ -1,60 +1,34 @@
 LanteaCraft
 ================
-Jenkins: http://kenobi.pc-logix.com:8080/job/LanteaCraft/
+Restructure and overhaul to the original SGCraft Greg Ewing.
 
-Update & Overhaul to Greg's SGCraft for 1.6.4 compatability.
-Included config option to disable Generating gates under desert Pyramids, GenerateStructures=false will disable them.
+Build & health service: http://kenobi.pc-logix.com:8080/job/LanteaCraft/
 
-Added support for ComputerCraft dialing to the gate directly via the Gate base.
-
-Methods are: dial("address"), connect("address"), disconnect(), isConnected(), isDialing(), getAddress().
-
-Switched to Delta NP SGCraft Textures, thanks http://www.deltastrium.com/ for the Awesome textures!
-
-
-================
 TODO:
-
-Adding 7X7 stargates, Atlantis along with a DHD for it. [IN PROGRESS]
-
-Adding Iris to stargates. [IN PROGRESS]
-
-Adding a Milky Way DHD model instead of a block. [DONE]
-
-Adding a chargable crystal for power from the DHD [IN PROGRESS]
-
-Allowing DHD to power the Stargate [IN PROGRESS]
-
-Adding Naquadah Generators. [IN PROGRESS]
-
-Adding Custom Decor Blocks. [Not Started]
-
-Adding Weapons of all kinds. [Not Started]
-
-Adding a form of MALP if possable [Not Started]
-
-
-
-
 ================
+* Adding 7X7 stargates, Atlantis along with a DHD for it. [IN PROGRESS]
+* Adding Iris to stargates. [IN PROGRESS]
+* Adding a Milky Way DHD model instead of a block. [DONE]
+* Adding a chargable crystal for power from the DHD [IN PROGRESS]
+* Allowing DHD to power the Stargate [IN PROGRESS]
+* Adding Naquadah Generators. [IN PROGRESS]
+* Adding Custom Decor Blocks. [Not Started]
+* Adding Weapons of all kinds. [Not Started]
+* Adding a form of MALP if possable [Not Started]
+
+
 Credits:
-
-MichiyoRavenCroft: New Code and improvments.
-
-AfterLifeLochie: Code refactoring, and new features to be announced. 
-
-DrakeBD: Textures & Sound FX.
-
-TempusBD: 3D Modeling & Textures.
-
-Greg Ewing: Original SGCraft mod, and code.
-
 ================
-License:
-The Textures & 3d models in this Mod are property of DeltaStrium & Lanteacraft Team and not to be used in other mods or distributed in any other way other than official distribution from DeltaStrium & Lanteacraft Team unless permissions and license are granted code for the mod is open source.
+* Michiyo Ravencroft: "Yes".
+* AfterLifeLochie: Code monkey. 
+* DrakeBD & TempusBD (DeltaStrium): Textures, sounds and models.
+* Greg Ewing: Original SGCraft sourcecode, since refactored.
 
+License
 ================
-Modpacks:
-No need to ask us to use the mod in a modpack feel free to use it in your modpack all we ask is a link back to the main forum post.
+LanteaCraft may be distributed by anyone - this includes modpacks - under the following conditions:
+* You don't make money from downloads - be this pay-gating (AdFly) or other revenue;
+* You distribute LanteaCraft un-modified and in whole; and
+* We'd much like it if you linked back to our topic (or the Github repository).
 
-
+The textures & 3D models in LanteaCraft are proprietarily produced by DeltaStrium and are the property of DeltaStrium & PC-Logix. You are not permitted to distribute or copy any textures and/or 3D models in any manner outside the official distribution form(s) without prior written permission.
