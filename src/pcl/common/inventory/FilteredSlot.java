@@ -1,5 +1,8 @@
 package pcl.common.inventory;
 
+import java.util.logging.Level;
+
+import pcl.lc.LanteaCraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -21,8 +24,11 @@ public class FilteredSlot extends Slot {
 		if (inventory instanceof FilteredInventory) {
 			FilteredInventory fint = (FilteredInventory) inventory;
 			FilterRule rule = fint.getFilterRule(slotIndex);
-			if (rule.test(par1ItemStack))
+			if (rule.test(par1ItemStack)) {
+				LanteaCraft.getLogger().log(Level.INFO, "Slot rule passed!");
 				super.putStack(par1ItemStack);
+			} else
+				LanteaCraft.getLogger().log(Level.INFO, "Slot rule failed!");
 		} else
 			super.putStack(par1ItemStack);
 	}

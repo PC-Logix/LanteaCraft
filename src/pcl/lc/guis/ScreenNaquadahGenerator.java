@@ -8,8 +8,8 @@ import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 
 public class ScreenNaquadahGenerator extends GenericContainerGUI {
 
-	private static final int guiWidth = 600;
-	private static final int guiHeight = 216;
+	private static final int guiWidth = 177;
+	private static final int guiHeight = 208;
 
 	private final TileEntityNaquadahGenerator tileEntity;
 
@@ -25,8 +25,8 @@ public class ScreenNaquadahGenerator extends GenericContainerGUI {
 
 	@Override
 	protected void drawBackgroundLayer() {
-		bindTexture(LanteaCraft.getInstance().getResource("textures/gui/naquadah_generator.png"), 1024, 256);
-		drawTexturedRectUV(0, 0, 1024, 256, 0, 0, 1, 1);
+		bindTexture(LanteaCraft.getInstance().getResource("textures/gui/naquadah_generator_128.png"), 256, 256);
+		drawTexturedRectUV(0, 0, 177, 208, 0, 0, (double) (177d / 256d), (double) (208d / 256d));
 
 	}
 

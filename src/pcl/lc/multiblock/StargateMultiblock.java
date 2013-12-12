@@ -211,7 +211,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public void freeStructure() {
-		LanteaCraft.getLogger().log(Level.INFO, "Releasing multiblock structure.");
+		LanteaCraft.getLogger().log(Level.INFO, ((isClient) ? "[client]" : "[server]") + " Releasing multiblock structure.");
 		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
 			part.getValue().release();
 		structureParts.clear();
@@ -233,9 +233,11 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public void disband() {
-		LanteaCraft.getLogger().log(Level.INFO, "Disbanding structure.");
+		LanteaCraft.getLogger().log(Level.INFO, ((isClient) ? "[client]" : "[server]") + " Disbanding structure.");
+		boolean wasValid = isValid();
 		freeStructure();
-		validated(isValid(), false);
+		isValid = false;
+		validated(wasValid, isValid());
 	}
 
 	@Override

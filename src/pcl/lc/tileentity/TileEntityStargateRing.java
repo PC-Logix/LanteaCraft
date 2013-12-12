@@ -5,10 +5,6 @@ import pcl.common.base.GenericTileEntity;
 import pcl.lc.multiblock.StargatePart;
 
 public class TileEntityStargateRing extends GenericTileEntity {
-
-	public boolean isMerged;
-	public int baseX, baseY, baseZ;
-
 	private StargatePart thisPart = new StargatePart(this);
 
 	public StargatePart getAsPart() {
@@ -42,26 +38,6 @@ public class TileEntityStargateRing extends GenericTileEntity {
 			thisPart.setType((ord == 0) ? "partStargateBlock" : "partStargateChevron");
 		}
 		thisPart.devalidateHostMultiblock();
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		// System.out.printf("SGRingTE.readFromNBT\n");
-		super.readFromNBT(nbt);
-		isMerged = nbt.getBoolean("isMerged");
-		baseX = nbt.getInteger("baseX");
-		baseY = nbt.getInteger("baseY");
-		baseZ = nbt.getInteger("baseZ");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		// System.out.printf("SGRingTE.writeToNBT\n");
-		super.writeToNBT(nbt);
-		nbt.setBoolean("isMerged", isMerged);
-		nbt.setInteger("baseX", baseX);
-		nbt.setInteger("baseY", baseY);
-		nbt.setInteger("baseZ", baseZ);
 	}
 
 }

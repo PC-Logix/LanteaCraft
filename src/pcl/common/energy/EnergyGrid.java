@@ -3,24 +3,84 @@ package pcl.common.energy;
 import java.util.LinkedHashSet;
 
 import pcl.common.api.energy.IEnergyGridNode;
+import pcl.common.api.energy.IEnergyStore;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class EnergyGrid {
+	private class GridStorage implements IEnergyStore {
+		private double quantity;
+		private double maximum;
+
+		public GridStorage(double max) {
+			this.maximum = max;
+		}
+
+		@Override
+		public double receiveEnergy(double quantity, boolean isSimulated) {
+			double maxima = Math.min(quantity, Math.max(this.maximum - this.quantity, 0));
+			if (!isSimulated)
+				this.quantity += maxima;
+			return quantity;
+		}
+
+		@Override
+		public double extractEnergy(double quantity, boolean isSimulated) {
+			double maxima = Math.min(quantity, this.quantity);
+			if (!isSimulated)
+				this.quantity -= maxima;
+			return maxima;
+		}
+
+		@Override
+		public double getEnergyStored() {
+			return quantity;
+		}
+
+		@Override
+		public double getMaxEnergyStored() {
+			return maximum;
+		}
+
+		@Override
+		public void saveEnergyStore(NBTTagCompound compound) {
+			compound.setDouble("stored-energy", quantity);
+		}
+
+		@Override
+		public void loadEnergyStore(NBTTagCompound compound) {
+			quantity = compound.getDouble("stored-energy");
+		}
+	}
 
 	protected World world;
-
 	protected IEnergyGridNode masterTile;
 	protected LinkedHashSet<IEnergyGridNode> childTiles;
+	protected GridStorage storage;
 
 	public EnergyGrid(World w) {
 		world = w;
+		storage = new GridStorage(64);
+	}
+
+	public void save(IEnergyGridNode tile, NBTTagCompound compound) {
+		if (tile != masterTile)
+			throw new RuntimeException("save called from wrong node!");
+		NBTTagCompound subCompound = new NBTTagCompound();
+		storage.saveEnergyStore(subCompound);
+		compound.setTag("storage", subCompound);
+	}
+
+	public void load(IEnergyGridNode tile, NBTTagCompound compound) {
+		if (tile != masterTile)
+			throw new RuntimeException("load called from wrong node!");
+		storage.loadEnergyStore(compound.getCompoundTag("storage"));
 	}
 
 	public void advance(IEnergyGridNode tile) {
 		if (tile != masterTile)
 			throw new RuntimeException("advance called from wrong node!");
-
 	}
 
 	public void addTile(IEnergyGridNode tile) {
@@ -52,6 +112,8 @@ public class EnergyGrid {
 					}
 			}
 		}
+		this.storage.receiveEnergy(that.storage.getEnergyStored(), false);
+		that.storage.extractEnergy(that.storage.getEnergyStored(), false);
 		that.disband();
 	}
 

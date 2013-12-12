@@ -16,17 +16,9 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class BlockStargateBase extends RotationOrientedBlock {
-
-	static int southSide[] = { 3, 5, 2, 4 };
-	static int unitX[] = { 1, 0, -1, 0 };
-	static int unitZ[] = { 0, -1, 0, 1 };
-
-	static int pattern[][] = { { 2, 1, 2, 1, 2 }, { 1, 0, 0, 0, 1 }, { 2, 0, 0, 0, 2 }, { 1, 0, 0, 0, 1 },
-			{ 2, 1, 0, 1, 2 }, };
-
-	Icon topAndBottomTexture;
-	Icon frontTexture;
-	Icon sideTexture;
+	protected Icon topAndBottomTexture;
+	protected Icon frontTexture;
+	protected Icon sideTexture;
 
 	public BlockStargateBase(int id) {
 		super(id, Material.rock);
@@ -103,7 +95,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	public Icon getIcon(int side, int data) {
 		if (side <= 1)
 			return topAndBottomTexture;
-		else if (side == 3) // south
+		else if (side == 3)
 			return frontTexture;
 		else
 			return sideTexture;

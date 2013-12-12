@@ -75,17 +75,6 @@ public class BlockStargateController extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int id, int data) {
-		TileEntityStargateController cte = (TileEntityStargateController) getTileEntity(world, x, y, z);
-		super.breakBlock(world, x, y, z, id, data);
-		if (cte.isLinkedToStargate) {
-			TileEntityStargateBase gte = cte.getLinkedStargateTE();
-			if (gte != null)
-				gte.clearLinkToController();
-		}
-	}
-
-	@Override
 	public boolean hasTileEntity(int metadata) {
 		return true;
 	}

@@ -22,7 +22,7 @@ public abstract class GenericGlyphGUI extends GenericContainerGUI {
 		int frameWidth = 472 / scale;
 		int frameHeight = 88 / scale;
 		int borderSize = 12 / scale;
-		int cellSize = 64 / scale;
+		int cellSize = 64 / 2;
 		int x0 = x - frameWidth / 2;
 		bindSGTexture("symbol_frame.png", 512 / scale, 128 / scale);
 		drawTexturedRect(x0, y, frameWidth, frameHeight, 0, 0);
@@ -34,8 +34,13 @@ public abstract class GenericGlyphGUI extends GenericContainerGUI {
 			int s = GateAddressHelper.charToSymbol(address.charAt(i));
 			int row = s / symbolsPerRow;
 			int col = s % symbolsPerRow;
-			drawTexturedRect(x0 + borderSize + i * cellSize, y + borderSize, cellSize, cellSize, col * cellSize, row
-					* cellSize);
+			drawTexturedRect(
+					x0 + borderSize + i * cellSize, 
+					y + borderSize, 
+					cellSize, 
+					cellSize, 
+					col * cellSize * scale, 
+					row * cellSize * scale);
 		}
 	}
 

@@ -1,5 +1,7 @@
 package pcl.lc.multiblock;
 
+import java.lang.ref.WeakReference;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import pcl.common.multiblock.GenericMultiblock;
@@ -12,7 +14,7 @@ public class StargatePart extends MultiblockPart {
 
 	private String typeof;
 
-	private GenericMultiblock currentHost;
+	private WeakReference<GenericMultiblock> currentHost;
 
 	public StargatePart(TileEntity host) {
 		super(host);
@@ -24,8 +26,8 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public GenericMultiblock findHostMultiblock(boolean allowScanning) {
-		if (currentHost != null)
-			return currentHost;
+		if (currentHost != null && currentHost.get() != null)
+			return currentHost.get();
 
 		if (!allowScanning)
 			return null;
@@ -41,23 +43,18 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public boolean canMergeWith(GenericMultiblock structure) {
-		if (isClient)
-			return true;
-
-		if (currentHost == null)
-			return true;
-		return false;
+		return isClient || currentHost == null || currentHost.get() == null;
 	}
 
 	@Override
 	public boolean mergeWith(GenericMultiblock structure) {
-		currentHost = structure;
+		currentHost = new WeakReference<GenericMultiblock>(structure);
 		return true;
 	}
 
 	@Override
 	public boolean isMerged() {
-		return (currentHost != null);
+		return (currentHost != null && currentHost.get() != null);
 	}
 
 	@Override

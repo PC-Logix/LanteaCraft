@@ -12,6 +12,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.GenericContainerBlock;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.tileentity.TileEntityStargateRing;
@@ -71,10 +72,11 @@ public class BlockStargateRing extends GenericContainerBlock {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
-		if (te.isMerged) {
-			Block block = Block.blocksList[world.getBlockId(te.baseX, te.baseY, te.baseZ)];
+		if (te.getAsPart().isMerged()) {
+			Vector3 base = te.getAsPart().findHostMultiblock(false).getLocation();
+			Block block = Block.blocksList[world.getBlockId(base.floorX(), base.floorY(), base.floorZ())];
 			if (block instanceof BlockStargateBase)
-				block.onBlockActivated(world, te.baseX, te.baseY, te.baseZ, player, side, cx, cy, cz);
+				block.onBlockActivated(world, base.floorX(), base.floorY(), base.floorZ(), player, side, cx, cy, cz);
 			return true;
 		}
 		return false;
@@ -99,8 +101,6 @@ public class BlockStargateRing extends GenericContainerBlock {
 		for (int i = 0; i < BlockStargateRing.numSubBlocks; i++) {
 			String name = ItemStargateRing.subItemName(i) + ".name";
 			String title = subBlockTitles[i];
-			// System.out.printf("SGRingBlock.registerSubItemNames: %s --> %s\n",
-			// name, title);
 			registry.addStringLocalization(name, "en_US", title);
 		}
 	}

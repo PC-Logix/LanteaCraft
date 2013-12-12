@@ -14,7 +14,7 @@ public class TileEntityStargateControllerRenderer extends TileEntitySpecialRende
 	private float scale = 1;
 
 	public TileEntityStargateControllerRenderer() {
-		theTexture = new ResourceLocation(LanteaCraft.getAssetKey(), "textures/models/dhd_off_"
+		theTexture = new ResourceLocation(LanteaCraft.getAssetKey(), "textures/blocks/controller_bottom_"
 				+ LanteaCraft.getProxy().getRenderMode() + ".png");
 	}
 

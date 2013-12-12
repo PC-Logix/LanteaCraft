@@ -2,7 +2,7 @@ package pcl.common.api.energy;
 
 import pcl.common.energy.EnergyGrid;
 
-public interface IEnergyGridNode {
+public interface IEnergyGridNode extends IEnergyHandler {
 
 	public abstract void setGrid(EnergyGrid grid);
 

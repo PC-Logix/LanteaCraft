@@ -5,6 +5,7 @@ import java.util.HashMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.common.network.ModPacket;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 
 /**
@@ -150,6 +151,15 @@ public abstract class GenericMultiblock {
 		xCoord = x;
 		yCoord = y;
 		zCoord = z;
+	}
+
+	/**
+	 * Gets the base location of this multi-block structure.
+	 * 
+	 * @return The base location of this multi-block structure.
+	 */
+	public Vector3 getLocation() {
+		return new Vector3(xCoord, yCoord, zCoord);
 	}
 
 	/**

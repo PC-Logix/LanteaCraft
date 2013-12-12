@@ -23,7 +23,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 	private double energy = 0.0;
 	private boolean addedToEnergyNet = false;
 	private SpecialFluidTank tank = new SpecialFluidTank(LanteaCraft.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
-	private FilteredInventory inventory = new FilteredInventory(1) {
+	private FilteredInventory inventory = new FilteredInventory(4) {
 		@Override
 		public void onInventoryChanged() {
 			// TODO Auto-generated method stub
@@ -42,8 +42,10 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	public TileEntityNaquadahGenerator() {
 		super();
-		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.naquadah, 1) },
-				null, true));
+		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.naquadah, 1) }, null,
+				true);
+		for (int i = 0; i < 4; i++)
+			inventory.setFilterRule(i, naquadah);
 	}
 
 	@Override

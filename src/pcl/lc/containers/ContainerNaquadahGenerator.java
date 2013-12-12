@@ -13,11 +13,14 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 	private FilteredInventory filterInventory;
 
 	public ContainerNaquadahGenerator(TileEntityNaquadahGenerator te, EntityPlayer player) {
-		super(256, 208);
+		super(177, 208);
 		this.te = te;
 		filterInventory = (FilteredInventory) te.getInventory();
-		addSlotToContainer(new FilteredSlot(filterInventory, 0, 32, 32, false));
-		addPlayerSlots(player, 48, 124);
+		addSlotToContainer(new FilteredSlot(filterInventory, 0, 8, 94, false));
+		addSlotToContainer(new FilteredSlot(filterInventory, 1, 26, 94, false));
+		addSlotToContainer(new FilteredSlot(filterInventory, 2, 134, 94, false));
+		addSlotToContainer(new FilteredSlot(filterInventory, 3, 152, 94, false));
+		addPlayerSlots(player, 8, 123);
 	}
 
 	@Override

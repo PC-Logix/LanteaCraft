@@ -1,5 +1,6 @@
 package pcl.common.api.energy;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 
 public interface IEnergyHandler {
@@ -64,4 +65,22 @@ public interface IEnergyHandler {
 	 * @return The quantity of energy which this side can receive.
 	 */
 	public abstract double getMaxReceiveEnergy(ForgeDirection direction);
+
+	/**
+	 * Saves the energy handler to a {@link NBTTagCompound} compound for saving inside a
+	 * tile-entity NBT structure.
+	 * 
+	 * @param compound
+	 *            The compound to save to.
+	 */
+	public abstract void saveEnergyHandler(NBTTagCompound compound);
+
+	/**
+	 * Loads the energy handler from a {@link NBTTagCompound} compound for loading from a
+	 * tile-entity NBT structure.
+	 * 
+	 * @param compound
+	 *            The compound to load from.
+	 */
+	public abstract void loadEnergyHandler(NBTTagCompound compound);
 }

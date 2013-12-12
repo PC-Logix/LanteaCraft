@@ -10,9 +10,9 @@ import pcl.lc.blocks.BlockStargateController;
 
 public class TileEntityStargateController extends GenericTileEntity {
 
-	public static int linkRangeX = 10; // either side
-	public static int linkRangeY = 10; // up or down
-	public static int linkRangeZ = 10; // in front
+	public static int linkRangeX = 10;
+	public static int linkRangeY = 10;
+	public static int linkRangeZ = 10;
 
 	public boolean isLinkedToStargate;
 	public int linkedX, linkedY, linkedZ;
@@ -74,16 +74,12 @@ public class TileEntityStargateController extends GenericTileEntity {
 	}
 
 	boolean linkToStargate(TileEntityStargateBase gte) {
-		if (!isLinkedToStargate && !gte.isLinkedToController && gte.getAsStructure().isValid()) {
+		if (!isLinkedToStargate && gte.getAsStructure().isValid()) {
 			linkedX = gte.xCoord;
 			linkedY = gte.yCoord;
 			linkedZ = gte.zCoord;
 			isLinkedToStargate = true;
 			markBlockForUpdate();
-			gte.linkedX = xCoord;
-			gte.linkedY = yCoord;
-			gte.linkedZ = zCoord;
-			gte.isLinkedToController = true;
 			gte.markBlockForUpdate();
 			return true;
 		}
