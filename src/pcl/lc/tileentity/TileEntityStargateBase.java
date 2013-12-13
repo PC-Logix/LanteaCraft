@@ -894,7 +894,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		if (method == 0 || method == 1) {
 			String address = arguments[0].toString().toUpperCase();
 			if (address.length() != 7)
-				throw new Exception("Stargate addresses must be 7 characters");
+				throw new Exception("Stargate addresses must be at least 7 characters");
 			else
 				connect(address, null);
 		} else if (method == 2) {
@@ -915,7 +915,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			String address = arguments[0].toString().toUpperCase();
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 			if (address.length() != 7)
-				throw new Exception("Stargate addresses must be 7 characters");
+				throw new Exception("Stargate addresses must be at least 7 characters");
 			else if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle)
 				return new Object[] { true };
 			else
@@ -930,7 +930,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			String address = arguments[0].toString().toUpperCase();
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 			if (address.length() != 7)
-				throw new Exception("Stargate addresses must be 7 characters");
+				throw new Exception("Stargate addresses must be at least 7 characters");
 			else {
 				if (dte == null)
 					return new Object[] { false };
