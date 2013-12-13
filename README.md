@@ -15,6 +15,7 @@ TODO:
 * Adding Custom Decor Blocks. [Not Started]
 * Adding Weapons of all kinds. [Not Started]
 * Adding a form of MALP if possable [Not Started]
+* Adding Transport Rings [Not Started]
 
 
 Credits:
