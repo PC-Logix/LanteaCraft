@@ -459,6 +459,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		if (m_computer != null)
 			if (!isInitiator)
 				m_computer.queueEvent("sgIncoming", new Object[] { address });
+			else 
+				m_computer.queueEvent("sgOutgoing", new Object[] { address });
 		onInventoryChanged();
 		startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
 	}
