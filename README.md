@@ -20,10 +20,10 @@ TODO:
 
 Credits:
 ================
-* Michiyo Ravencroft: "Yes".
-* AfterLifeLochie: Code monkey. 
+* AfterLifeLochie: Head Code monkey. 
 * DrakeBD & TempusBD (DeltaStrium): Textures, sounds and models.
 * Greg Ewing: Original SGCraft sourcecode, since refactored.
+* Michiyo Ravencroft: "Yes". "Retired"
 
 License
 ================
