@@ -3,6 +3,7 @@ package pcl.lc;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
+import net.afterlifelochie.minecore.network.ModPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundPool;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import pcl.common.network.ModPacket;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.common.render.RotationOrientedBlockRenderer;
 import pcl.lc.guis.ScreenNaquadahGenerator;

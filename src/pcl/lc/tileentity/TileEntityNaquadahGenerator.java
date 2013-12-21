@@ -2,6 +2,8 @@ package pcl.lc.tileentity;
 
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import net.afterlifelochie.minecore.inventory.FilterRule;
+import net.afterlifelochie.minecore.inventory.FilteredInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,8 +14,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import pcl.common.base.PoweredTileEntity;
-import pcl.common.inventory.FilterRule;
-import pcl.common.inventory.FilteredInventory;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.EnumUnits;
 import pcl.lc.fluids.SpecialFluidTank;

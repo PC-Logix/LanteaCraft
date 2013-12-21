@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 
+import net.afterlifelochie.minecore.network.ModPacket;
+import net.afterlifelochie.util.Trans3;
+import net.afterlifelochie.util.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -34,10 +37,7 @@ import net.minecraft.world.chunk.Chunk;
 import pcl.common.base.TileEntityChunkLoader;
 import pcl.common.base.TileEntityChunkManager;
 import pcl.common.helpers.ConfigurationHelper;
-import pcl.common.network.ModPacket;
 import pcl.common.util.MathUtils;
-import pcl.common.util.Trans3;
-import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Items;
 import pcl.lc.blocks.BlockStargateBase;
@@ -109,7 +109,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	// END SANE CODE
 
-	public IComputerAccess m_computer;
+	private ArrayList<IComputerAccess> computers = new ArrayList<IComputerAccess>();
 
 	IInventory inventory = new InventoryBasic("Stargate", false, 4);
 	final static int fuelSlot = 0;
@@ -288,8 +288,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 				} else
 					switch (getState()) {
 						case Idle:
-							if (m_computer != null)
-								m_computer.queueEvent("sgIdle", new Object[] { true });
+							for (IComputerAccess c : computers)
+								c.queueEvent("sgIdle", new Object[] { true });
 							if (undialledDigitsRemaining())
 								startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
 							break;
@@ -456,11 +456,12 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		getAsStructure().setMetadata("numEngagedChevrons", numEngagedChevrons);
 		connectedLocation = new WorldLocation(dte);
 		isInitiator = initiator;
-		if (m_computer != null)
-			if (!isInitiator)
-				m_computer.queueEvent("sgIncoming", new Object[] { address });
-			else 
-				m_computer.queueEvent("sgOutgoing", new Object[] { address });
+		if (!isInitiator)
+			for (IComputerAccess c : computers)
+				c.queueEvent("sgIncoming", new Object[] { address });
+		else
+			for (IComputerAccess c : computers)
+				c.queueEvent("sgOutgoing", new Object[] { address });
 		onInventoryChanged();
 		startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
 	}
@@ -538,8 +539,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	void finishDiallingSymbol() {
 		++numEngagedChevrons;
-		if (m_computer != null)
-			m_computer.queueEvent("sgChevronEncode", new Object[] { numEngagedChevrons });
+		for (IComputerAccess c : computers)
+			c.queueEvent("sgChevronEncode", new Object[] { numEngagedChevrons });
 		if (numEngagedChevrons == GateAddressHelper.addressLength)
 			finishDiallingAddress();
 		else if (undialledDigitsRemaining())
@@ -608,8 +609,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 					Trans3 dt = dte.localToGlobalTransformation();
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
-					if (m_computer != null)
-						m_computer.queueEvent("sgOutgoingTraveler", new Object[] { true });
+					for (IComputerAccess c : computers)
+						c.queueEvent("sgOutgoingTraveler", new Object[] { true });
 					teleportEntityAndRider(entity, t, dt, connectedLocation.dimension);
 				}
 			}
@@ -816,8 +817,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	void initiateOpeningTransient() {
-		if (m_computer != null)
-			m_computer.queueEvent("sgWormholeOpening", new Object[] { true });
+		for (IComputerAccess c : computers)
+			c.queueEvent("sgWormholeOpening", new Object[] { true });
 		if (!isIrisClosed()) {
 			double v[][] = getEventHorizonGrid()[1];
 			int n = EventHorizonRenderer.ehGridPolarSize;
@@ -829,8 +830,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	void initiateClosingTransient() {
-		if (m_computer != null)
-			m_computer.queueEvent("sgWormholeClosing", new Object[] { true });
+		for (IComputerAccess c : computers)
+			c.queueEvent("sgWormholeClosing", new Object[] { true });
 		if (!isIrisClosed()) {
 			double v[][] = getEventHorizonGrid()[1];
 			int m = EventHorizonRenderer.ehGridRadialSize;
@@ -906,30 +907,29 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	@Method(modid = "ComputerCraft")
 	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
 			throws Exception {
-		if (method == 0 || method == 1) { //dial or connect
+		if (method == 0 || method == 1) { // dial or connect
 			String address = arguments[0].toString().toUpperCase();
 			if (address.length() != 7)
 				throw new Exception("Stargate addresses must be at least 7 characters");
+			else if (address == getHomeAddress())
+				throw new Exception("Stargate cannot connect to itself");
 			else
-				if (address == getHomeAddress())
-					throw new Exception("Stargate cannot connect to itself");
-				else
 				connect(address, null);
-		} else if (method == 2) {//disconnect
+		} else if (method == 2) {// disconnect
 			if (isInitiator || closeFromEitherEnd) {
 				disconnect();
 				return new Object[] { true };
 			} else
 				throw new Exception("Stargate cannot be closed from this end");
-		} else if (method == 3) //isConnected
+		} else if (method == 3) // isConnected
 			return new Object[] { isConnected() };
-		else if (method == 4) //getAddress
+		else if (method == 4) // getAddress
 			return new Object[] { getHomeAddress() };
-		else if (method == 5) //isDialing
+		else if (method == 5) // isDialing
 			return new Object[] { isDialing() };
-		else if (method == 6) //isComplete
+		else if (method == 6) // isComplete
 			return new Object[] { getAsStructure().isValid() };
-		else if (method == 7) { //isBusy
+		else if (method == 7) { // isBusy
 			String address = arguments[0].toString().toUpperCase();
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 			if (address.length() != 7)
@@ -938,13 +938,13 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 				return new Object[] { true };
 			else
 				return new Object[] { false };
-		} else if (method == 8) { //hasFuel
+		} else if (method == 8) { // hasFuel
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(getHomeAddress());
 			if (!reloadFuel(fuelToOpen))
 				return new Object[] { false };
 			else
 				return new Object[] { true };
-		} else if (method == 9) { //isValidAddress
+		} else if (method == 9) { // isValidAddress
 			String address = arguments[0].toString().toUpperCase();
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 			if (address.length() != 7)
@@ -970,48 +970,27 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	public boolean canAttachToSide(int side) {
 		return true;
 	}
-	private static HashMap<Integer, Integer> mountMap = new HashMap<Integer, Integer>();
-	@Override
-	@Method(modid = "ComputerCraft")
-    public void attach(IComputerAccess computer) {
-    	m_computer = computer;
-            if (LanteaCraft.mount != null) {
-                    int id = computer.getID();
-
-            int mountCount = 0;
-            if (mountMap.containsKey(id)) {
-                    mountCount = mountMap.get(id);
-            }
-            if (mountCount < 1) {
-                mountCount = 0;
-                computer.mount("stargate", LanteaCraft.mount);
-            }
-            mountMap.put(id, mountCount + 1);
-            }
-    }
 
 	@Override
 	@Method(modid = "ComputerCraft")
-    public void detach(IComputerAccess computer) {
-    	m_computer = null;
-            if (LanteaCraft.mount != null) {
-                    int id = computer.getID();
-            int mountCount = 0;
-            if (mountMap.containsKey(id)) {
-                    mountCount = mountMap.get(id);
-            }
-            mountCount--;
-            if (mountCount < 1) {
-                mountCount = 0;
-                try {
-                    computer.unmount("ahttp");
-                } catch (Exception e) {
-                }
-            }
-            mountMap.put(id, mountCount);
-            }
-    }
-	
+	public void attach(IComputerAccess computer) {
+		if (!computers.contains(computer)) {
+			computers.add(computer);
+			String location = computer.mount("lantea", LanteaCraft.getProxy().resourceMount);
+			if (location != null && !location.equals("lantea"))
+				computer.unmount(location);
+		}
+	}
+
+	@Override
+	@Method(modid = "ComputerCraft")
+	public void detach(IComputerAccess computer) {
+		if (computers.contains(computer)) {
+			computers.remove(computer);
+			computer.unmount("lantea");
+		}
+	}
+
 	@Override
 	public Packet getDescriptionPacket() {
 		ModPacket packet = getAsStructure().pack();

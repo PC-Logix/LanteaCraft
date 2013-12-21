@@ -1,6 +1,6 @@
 package pcl.lc.network;
 
-import pcl.common.network.ModPacket;
+import net.afterlifelochie.minecore.network.ModPacket;
 import cpw.mods.fml.common.network.Player;
 
 public interface ILanteaPacketHandler {

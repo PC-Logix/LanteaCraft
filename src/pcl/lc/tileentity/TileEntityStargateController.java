@@ -1,11 +1,11 @@
 package pcl.lc.tileentity;
 
+import net.afterlifelochie.util.Trans3;
+import net.afterlifelochie.util.Vector3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
-import pcl.common.util.Trans3;
-import pcl.common.util.Vector3;
 import pcl.lc.blocks.BlockStargateController;
 
 public class TileEntityStargateController extends GenericTileEntity {

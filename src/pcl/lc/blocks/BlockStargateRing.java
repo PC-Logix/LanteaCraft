@@ -2,6 +2,7 @@ package pcl.lc.blocks;
 
 import java.util.List;
 
+import net.afterlifelochie.util.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -12,7 +13,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.GenericContainerBlock;
-import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.tileentity.TileEntityStargateRing;

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import net.afterlifelochie.minecore.network.ModPacket;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.crash.CallableMinecraftVersion;
@@ -35,7 +36,6 @@ import pcl.common.helpers.ConfigValue;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.helpers.GUIHandler;
 import pcl.common.helpers.NetworkHelpers;
-import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Fluids;
 import pcl.lc.LanteaCraft.Items;
@@ -76,6 +76,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import dan200.computer.api.ComputerCraftAPI;
+import dan200.computer.api.IMount;
 
 public class LanteaCraftCommonProxy {
 
@@ -98,6 +100,8 @@ public class LanteaCraftCommonProxy {
 	protected NetworkHelpers networkHelpers;
 
 	public static UpgradeHelper upgradeHelper;
+	
+	public IMount resourceMount;
 
 	protected class VSBinding {
 		public int id;
@@ -109,7 +113,7 @@ public class LanteaCraftCommonProxy {
 				+ BuildInfo.buildNumber + " as modid " + BuildInfo.modID);
 		defaultServerPacketHandler = new ServerPacketHandler();
 		networkHelpers = new NetworkHelpers();
-
+		resourceMount = ComputerCraftAPI.createResourceMount(LanteaCraft.class, "pcl_lc", "lua");
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
