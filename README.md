@@ -2,7 +2,7 @@ LanteaCraft
 ================
 Restructure and overhaul to the original SGCraft Greg Ewing.
 
-Build & health service: http://kenobi.pc-logix.com:8080/job/LanteaCraft/
+Build & health service: http://kenobi.pc-logix.com:8080/job/LanteaCraft/ ![ScreenShot](http://kenobi.pc-logix.com:8080/job/LanteaCraft/badge/icon/build_status.png)
 
 TODO:
 ================
@@ -20,10 +20,10 @@ TODO:
 
 Credits:
 ================
+* Michiyo Ravencroft: "Yes".
 * AfterLifeLochie: Head Code monkey. 
 * DrakeBD & TempusBD (DeltaStrium): Textures, sounds and models.
 * Greg Ewing: Original SGCraft sourcecode, since refactored.
-* Michiyo Ravencroft: "Yes". "Retired"
 
 License
 ================
