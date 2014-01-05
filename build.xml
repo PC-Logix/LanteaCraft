@@ -12,8 +12,8 @@
         <property name="jar.dir"           value="${build.dir}/dist" />
         <property name="forge.dir"         value="${build.dir}/forge" />
         <property name="mcp.dir"           value="${forge.dir}/mcp" />
-            <property name="mcpsrc.dir"        value="${mcp.dir}/src/minecraft" />
-            <property name="sgsrc.dir"        value="${mcp.dir}/src/minecraft/pcl/lc/" />
+        <property name="mcpsrc.dir"        value="${mcp.dir}/src/minecraft" />
+        <property name="sgsrc.dir"         value="${mcp.dir}/src/minecraft/pcl/lc/" />
         
         <condition property="python.exe"   value="${mcp.dir}/runtime/bin/python/python_mcp" else="python">
                 <os family="Windows" />
@@ -120,7 +120,7 @@
                 </copy>
                 
                 <!-- Copy resources -->
-                <copy todir="${classes.dir}/assets/pcl_lc">
+                <copy todir="${classes.dir}/resources/assets/pcl_lc">
                         <fileset dir="assets/pcl_lc" />
                 </copy>
                 <!--
