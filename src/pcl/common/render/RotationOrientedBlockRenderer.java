@@ -1,7 +1,7 @@
 package pcl.common.render;
 
-import net.afterlifelochie.util.Trans3;
 import pcl.common.base.OrientedBlock;
+import pcl.common.util.Trans3;
 
 public class RotationOrientedBlockRenderer extends GenericBlockRenderer {
 

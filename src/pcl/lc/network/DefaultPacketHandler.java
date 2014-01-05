@@ -1,8 +1,8 @@
 package pcl.lc.network;
 
-import net.afterlifelochie.minecore.network.ModPacket;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;

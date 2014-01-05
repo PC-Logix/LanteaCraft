@@ -11,9 +11,6 @@ import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 
-import net.afterlifelochie.minecore.helpers.CreativeTabHelper;
-import net.afterlifelochie.minecore.helpers.SpecialBucketHandler;
-import net.afterlifelochie.minecore.network.ModPacket;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -21,12 +18,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
+import pcl.common.helpers.CreativeTabHelper;
+import pcl.common.helpers.SpecialBucketHandler;
+import pcl.common.network.ModPacket;
 import pcl.common.render.RotationOrientedBlockRenderer;
 import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockPortal;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
+import pcl.lc.core.MountDir;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
@@ -68,7 +69,7 @@ public class LanteaCraft {
 	public static LanteaCraft getInstance() {
 		return LanteaCraft.mod;
 	}
-
+	public static MountDir mount = new MountDir();
 	/**
 	 * The private instance of the logger used. Use {@link #getLogger()} to access this object
 	 * safely
@@ -237,6 +238,8 @@ public class LanteaCraft {
 	public void preInit(FMLPreInitializationEvent e) {
 		LanteaCraft.logger = e.getModLog();
 		LanteaCraft.logger.setParent(FMLLog.getLogger());
+		mount = new MountDir();
+		copyLua();
 		if (BuildInfo.buildNumber.equals("@" + "BUILD" + "@")) {
 			LanteaCraft.logger.setLevel(Level.ALL);
 			LanteaCraft.logger.log(Level.INFO,
@@ -244,6 +247,45 @@ public class LanteaCraft {
 		} else
 			LanteaCraft.logger.setLevel(Level.INFO);
 		proxy.preInit(e);
+	}
+
+	private void copyLua() {
+		InputStream is = getClass().getResourceAsStream("/assets/pcl_lc/lua/dhd");
+		OutputStream os = null;
+		
+		File file = new File(MountDir.getLocalLuaFolder());
+		if(!file.exists()){
+		    boolean wasDirectoryMade = file.mkdirs();
+		}
+		
+		try {
+			os = new FileOutputStream(MountDir.getLocalLuaFolder() + "/dhd");
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		byte[] buffer = new byte[4096];
+		int length;
+		try {
+			while ((length = is.read(buffer)) > 0) {
+			    os.write(buffer, 0, length);
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			os.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			is.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	@EventHandler

@@ -4,13 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.afterlifelochie.minecore.multiblock.EnumOrientations;
-import net.afterlifelochie.minecore.network.IStreamPackable;
-import net.afterlifelochie.minecore.network.ModPacket;
-import net.afterlifelochie.minecore.network.StandardModPacket;
-import net.afterlifelochie.util.ImmutablePair;
-import net.afterlifelochie.util.ImmutableTuple;
-import net.afterlifelochie.util.Vector3;
+import pcl.common.multiblock.EnumOrientations;
+import pcl.common.network.IStreamPackable;
+import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
+import pcl.common.util.ImmutablePair;
+import pcl.common.util.ImmutableTuple;
+import pcl.common.util.Vector3;
 import pcl.lc.core.EnumStargateState;
 
 /**

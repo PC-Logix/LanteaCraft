@@ -1,7 +1,11 @@
+// ------------------------------------------------------------------------------------------------
+//
+// Greg's Mod Base - Generic Block Renderer
+//
+// ------------------------------------------------------------------------------------------------
+
 package pcl.common.render;
 
-import net.afterlifelochie.util.Trans3;
-import net.afterlifelochie.util.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,6 +13,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
+import pcl.common.util.Trans3;
+import pcl.common.util.Vector3;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
@@ -22,7 +28,7 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	protected int metadata;
 	protected double u0, v0, u1, v1, us, vs;
 	protected boolean textureOverridden;
-	protected float cmr, cmg, cmb;
+	protected float cmr, cmg, cmb; // colour multiplier
 	protected int blockBrightness;
 
 	@Override
@@ -39,7 +45,9 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks rb) {
 		world = null;
 		this.block = block;
-		blockX = blockY = blockZ = 0;
+		blockX = 0;
+		blockY = 0;
+		blockZ = 0;
 		setUpTextureOverride(rb);
 		this.metadata = metadata;
 		blockBrightness = 0xf000f0;
@@ -117,10 +125,13 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 		v1 = icon.getMaxV();
 	}
 
-	public static double cubeFaces[][] = { { -0.5, -0.5, 0.5, 0, 0, -1, 1, 0, 0, 0, -1, 0 },
-			{ -0.5, 0.5, -0.5, 0, 0, 1, 1, 0, 0, 0, 1, 0 }, { 0.5, 0.5, -0.5, 0, -1, 0, -1, 0, 0, 0, 0, -1 },
-			{ -0.5, 0.5, 0.5, 0, -1, 0, 1, 0, 0, 0, 0, 1 }, { -0.5, 0.5, -0.5, 0, -1, 0, 0, 0, 1, -1, 0, 0 },
-			{ 0.5, 0.5, 0.5, 0, -1, 0, 0, 0, -1, 1, 0, 0 }, };
+	public static double cubeFaces[][] = { { -0.5, -0.5, 0.5, 0, 0, -1, 1, 0, 0, 0, -1, 0 }, // DOWN
+			{ -0.5, 0.5, -0.5, 0, 0, 1, 1, 0, 0, 0, 1, 0 }, // UP
+			{ 0.5, 0.5, -0.5, 0, -1, 0, -1, 0, 0, 0, 0, -1 }, // NORTH
+			{ -0.5, 0.5, 0.5, 0, -1, 0, 1, 0, 0, 0, 0, 1 }, // SOUTH
+			{ -0.5, 0.5, -0.5, 0, -1, 0, 0, 0, 1, -1, 0, 0 }, // WEST
+			{ 0.5, 0.5, 0.5, 0, -1, 0, 0, 0, -1, 1, 0, 0 }, // EAST
+	};
 
 	void renderCube(Trans3 t) {
 		renderCubeWithFaceDepths(t, null);
@@ -146,6 +157,8 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 		if (world != null) {
 			ForgeDirection d = ForgeDirection.getOrientation(side);
 			Vector3 p = t.p(d.offsetX, d.offsetY, d.offsetZ);
+			// System.out.printf("BaseBlockRenderer.setBrightnessForSide: side %d is next to (%d,%d,%d)\n",
+			// side, p.floorX(), p.floorY(), p.floorZ());
 			tess.setBrightness(block.getMixedBrightnessForBlock(world, p.floorX(), p.floorY(), p.floorZ()));
 		} else
 			tess.setBrightness(blockBrightness);
@@ -198,12 +211,12 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	void renderBox(Trans3 t, double x0, double y0, double z0, double dx, double dy, double dz, Icon[] icons) {
 		double x1 = x0 + dx, y1 = y0 + dy, z1 = z0 + dz;
 		tess.setBrightness(blockBrightness);
-		boxFace(t, x0, y0, z1, 0, 0, -dz, dx, 0, 0, 0, -1, 0, dx, dz, icons[0]);
-		boxFace(t, x0, y1, z0, 0, 0, dz, dx, 0, 0, 0, 1, 0, dx, dz, icons[1]);
-		boxFace(t, x1, y1, z0, 0, -dy, 0, -dx, 0, 0, 0, 0, -1, dx, dy, icons[2]);
-		boxFace(t, x0, y1, z1, 0, -dy, 0, dx, 0, 0, 0, 0, 1, dx, dy, icons[3]);
-		boxFace(t, x0, y1, z0, 0, -dy, 0, 0, 0, dz, -1, 0, 0, dz, dy, icons[4]);
-		boxFace(t, x1, y1, z1, 0, -dy, 0, 0, 0, -dz, 1, 0, 0, dz, dy, icons[5]);
+		boxFace(t, x0, y0, z1, 0, 0, -dz, dx, 0, 0, 0, -1, 0, dx, dz, icons[0]); // DOWN
+		boxFace(t, x0, y1, z0, 0, 0, dz, dx, 0, 0, 0, 1, 0, dx, dz, icons[1]); // UP
+		boxFace(t, x1, y1, z0, 0, -dy, 0, -dx, 0, 0, 0, 0, -1, dx, dy, icons[2]); // NORTH
+		boxFace(t, x0, y1, z1, 0, -dy, 0, dx, 0, 0, 0, 0, 1, dx, dy, icons[3]); // SOUTH
+		boxFace(t, x0, y1, z0, 0, -dy, 0, 0, 0, dz, -1, 0, 0, dz, dy, icons[4]); // WEST
+		boxFace(t, x1, y1, z1, 0, -dy, 0, 0, 0, -dz, 1, 0, 0, dz, dy, icons[5]); // EAST
 	}
 
 	void boxFace(Trans3 t, double x, double y, double z, double dx1, double dy1, double dz1, double dx2, double dy2,

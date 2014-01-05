@@ -1,10 +1,10 @@
 package pcl.lc.containers;
 
-import net.afterlifelochie.minecore.inventory.FilteredInventory;
-import net.afterlifelochie.minecore.inventory.FilteredSlot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import pcl.common.base.GenericContainer;
+import pcl.common.inventory.FilteredInventory;
+import pcl.common.inventory.FilteredSlot;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 
 public class ContainerNaquadahGenerator extends GenericContainer {

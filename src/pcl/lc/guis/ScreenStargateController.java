@@ -4,8 +4,6 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.util.logging.Level;
 
-import net.afterlifelochie.minecore.network.ModPacket;
-import net.afterlifelochie.minecore.network.StandardModPacket;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
@@ -16,6 +14,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import pcl.common.base.GenericContainer;
+import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.EnumStargateState;
 import pcl.lc.core.GateAddressHelper;

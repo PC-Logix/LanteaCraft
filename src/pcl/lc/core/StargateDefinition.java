@@ -3,10 +3,10 @@ package pcl.lc.core;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
-import net.afterlifelochie.minecore.multiblock.IStructureConfiguration;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import pcl.common.helpers.LanguageHelper;
+import pcl.common.multiblock.IStructureConfiguration;
 import pcl.lc.LanteaCraft;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;

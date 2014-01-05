@@ -2,12 +2,12 @@ package pcl.lc.multiblock;
 
 import java.lang.ref.WeakReference;
 
-import net.afterlifelochie.minecore.multiblock.GenericMultiblock;
-import net.afterlifelochie.minecore.multiblock.MultiblockPart;
-import net.afterlifelochie.minecore.multiblock.ScanningHelper;
-import net.afterlifelochie.util.Vector3;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import pcl.common.multiblock.GenericMultiblock;
+import pcl.common.multiblock.MultiblockPart;
+import pcl.common.multiblock.ScanningHelper;
+import pcl.common.util.Vector3;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class StargatePart extends MultiblockPart {

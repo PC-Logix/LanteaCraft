@@ -1,10 +1,10 @@
 package pcl.lc.network;
 
-import net.afterlifelochie.minecore.network.ModPacket;
-import net.afterlifelochie.minecore.network.StandardModPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import cpw.mods.fml.common.network.Player;
 

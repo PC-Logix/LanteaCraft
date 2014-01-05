@@ -1,10 +1,10 @@
 package pcl.lc.fluids;
 
-import net.afterlifelochie.minecore.helpers.SpecialBucketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
+import pcl.common.helpers.SpecialBucketHandler;
 import pcl.lc.LanteaCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

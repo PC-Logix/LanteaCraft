@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import net.afterlifelochie.minecore.helpers.StreamHelper;
+import pcl.common.helpers.StreamHelper;
 
 public class StargateAddress {
 

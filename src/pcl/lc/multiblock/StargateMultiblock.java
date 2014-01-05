@@ -4,15 +4,15 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import net.afterlifelochie.minecore.multiblock.EnumOrientations;
-import net.afterlifelochie.minecore.multiblock.GenericMultiblock;
-import net.afterlifelochie.minecore.multiblock.MultiblockPart;
-import net.afterlifelochie.minecore.network.ModPacket;
-import net.afterlifelochie.minecore.network.StandardModPacket;
-import net.afterlifelochie.util.ImmutablePair;
-import net.afterlifelochie.util.Vector3;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import pcl.common.multiblock.EnumOrientations;
+import pcl.common.multiblock.GenericMultiblock;
+import pcl.common.multiblock.MultiblockPart;
+import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
+import pcl.common.util.ImmutablePair;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityStargateRing;
 
