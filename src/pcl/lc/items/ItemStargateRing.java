@@ -28,7 +28,7 @@ public class ItemStargateRing extends ItemBlock {
 	}
 
 	public static String subItemName(int i) {
-		return "tile.gcewing.sg.stargateRing." + i;
+		return "tile.stargateRing." + i;
 	}
 
 }

@@ -101,7 +101,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 		for (int i = 0; i < BlockStargateRing.numSubBlocks; i++) {
 			String name = ItemStargateRing.subItemName(i) + ".name";
 			String title = subBlockTitles[i];
-			registry.addStringLocalization(name, "en_US", title);
+			//registry.addStringLocalization(name, "en_US", title);  --Moving to .lang file
 		}
 	}
 
