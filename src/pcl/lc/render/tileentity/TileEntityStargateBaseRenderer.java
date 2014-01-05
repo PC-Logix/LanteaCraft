@@ -8,6 +8,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.render.stargate.AtlantisStargateRenderer;
+import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StandardStargateRenderer;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
@@ -33,10 +35,16 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 	public static double sin[] = new double[numRingSegments + 1];
 	public static double cos[] = new double[numRingSegments + 1];
 
-	protected final static StandardStargateRenderer renderer;
+	protected final static StandardStargateRenderer standardRenderer;
+	protected final static AtlantisStargateRenderer atlantisRenderer;
+	
+	protected final static EventHorizonRenderer horizonRenderer;
 
 	static {
-		renderer = new StandardStargateRenderer();
+		standardRenderer = new StandardStargateRenderer();
+		atlantisRenderer = new AtlantisStargateRenderer();
+		
+		horizonRenderer = new EventHorizonRenderer();
 
 		for (int i = 0; i <= numRingSegments; i++) {
 			double a = 2 * Math.PI * i / numRingSegments;
@@ -57,7 +65,7 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glTranslated(x + 0.5, y + 3.5, z + 0.5);
-			renderer.renderStargateAt(this, tesg, x, y, z, t);
+			atlantisRenderer.renderStargateAt(this, tesg, x, y, z, t);
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 			GL11.glPopMatrix();
 		}
