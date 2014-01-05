@@ -120,7 +120,7 @@
                 </copy>
                 
                 <!-- Copy resources -->
-                <copy todir="${classes.dir}/resources/assets/pcl_lc">
+                <copy todir="${classes.dir}/assets/pcl_lc">
                         <fileset dir="assets/pcl_lc" />
                 </copy>
                 <!--
