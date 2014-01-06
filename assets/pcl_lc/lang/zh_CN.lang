@@ -1,0 +1,16 @@
+tile.naquadahBlock.name=硅岩金方块
+tile.naquadahOre.name=硅岩金矿石
+tile.naquadahGenerator.name=硅岩金发电机
+tile.stargateController.name=星门控制器
+tile.stargateBase.name=星门底座
+tile.stargateRing.0.name=星门环之节
+tile.stargateRing.1.name=星门V字方块
+tile.blockLiquidNaquadah.name=液态硅岩金
+
+item.naquadah.name=硅岩金
+item.naquadahIngot.name=硅岩合金锭
+item.sgCoreCrystal.name=星门核心水晶
+item.sgControllerCrystal.name=星门控制水晶
+item.tokraSpawnEgg.name=陶格拉人刷怪蛋
+item.lanteadebug.name=兰特调试器
+item.liquidNaquadahBucket.name=桶装液态硅岩金
