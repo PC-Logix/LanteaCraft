@@ -34,7 +34,9 @@ import pcl.lc.fluids.LiquidNaquadah;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemEnergyCrystal;
 import pcl.lc.items.ItemTokraSpawnEgg;
+import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
+import pcl.lc.render.blocks.BlockStargateControllerRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
 import pcl.lc.render.models.NaquadahGeneratorModel;
 import pcl.lc.render.models.StargateControllerModel;
@@ -126,6 +128,8 @@ public class LanteaCraft {
 
 		public static BlockStargateBaseRenderer blockBaseRenderer;
 		public static BlockStargateRingRenderer blockRingRenderer;
+		public static BlockStargateControllerRenderer blockControllerRenderer;
+		public static BlockNaquadahGeneratorRenderer blockNaquadahGeneratorRenderer;
 
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;

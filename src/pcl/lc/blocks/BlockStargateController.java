@@ -45,8 +45,8 @@ public class BlockStargateController extends RotationOrientedBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.getProxy().isUsingModels())
-			return -1;
+		if (LanteaCraft.Render.blockBaseRenderer != null)
+			return LanteaCraft.Render.blockControllerRenderer.renderID;
 		return 0;
 	}
 

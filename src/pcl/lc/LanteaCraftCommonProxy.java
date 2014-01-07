@@ -282,7 +282,7 @@ public class LanteaCraftCommonProxy {
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateBaseBlock, 1), "CrC", "NeN", "IcI", 'I',
 				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', chiselledSandstone, 'r', Item.redstone, 'e',
 				Item.eyeOfEnder, 'c', Items.coreCrystal);
-		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateControllerBlock), 1, "bbb", "OpO", "OcO", 'b',
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateControllerBlock, 1), "bbb", "OpO", "OcO", 'b',
 				Block.stoneButton, 'O', Block.obsidian, 'p', Item.enderPearl, 'r', Item.redstone, 'c',
 				Items.controllerCrystal);
 		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.naquadahIngot, 1), "naquadah", Item.ingotIron);
@@ -343,8 +343,8 @@ public class LanteaCraftCommonProxy {
 
 		Fluids.fluidLiquidNaquadah = new LiquidNaquadah();
 		FluidRegistry.registerFluid(Fluids.fluidLiquidNaquadah);
-		Fluids.fluidLiquidNaquadahHost = RegistrationHelper.registerBlock(BlockLiquidNaquadah.class,
-				"blockLiquidNaquadah");
+		Fluids.fluidLiquidNaquadahHost = RegistrationHelper.registerBlock(BlockLiquidNaquadah.class, ItemBlock.class,
+				"blockLiquidNaquadah", false);
 		Fluids.fluidLiquidNaquadahBucket = RegistrationHelper.registerSpecialBucket(Fluids.fluidLiquidNaquadahHost,
 				"liquidNaquadahBucket");
 	}

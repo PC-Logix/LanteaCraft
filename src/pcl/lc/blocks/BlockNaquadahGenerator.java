@@ -44,8 +44,8 @@ public class BlockNaquadahGenerator extends pcl.common.base.RotationOrientedBloc
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.getProxy().isUsingModels())
-			return -1;
+		if (LanteaCraft.Render.blockNaquadahGeneratorRenderer != null)
+			return LanteaCraft.Render.blockNaquadahGeneratorRenderer.renderID;
 		return 0;
 	}
 

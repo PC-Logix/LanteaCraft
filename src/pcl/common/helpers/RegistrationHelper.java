@@ -36,7 +36,8 @@ public class RegistrationHelper {
 	}
 
 	/**
-	 * Register a block with a given class, a given item class and an unlocalized name.
+	 * Register a block with a given class, a given item class and an unlocalized name. The
+	 * block will display by default in CreativeTabs.
 	 * 
 	 * @param classOf
 	 *            The class of the block.
@@ -48,13 +49,33 @@ public class RegistrationHelper {
 	 */
 	public static <T extends Block> T registerBlock(Class<? extends T> classOf, Class<? extends ItemBlock> itemClassOf,
 			String unlocalizedName) {
+		return registerBlock(classOf, itemClassOf, unlocalizedName, true);
+	}
+
+	/**
+	 * Register a block with a given class, a given item class, an unlocalized name and a
+	 * display preference in CreativeTabs.
+	 * 
+	 * @param classOf
+	 *            The class of the block.
+	 * @param itemClassOf
+	 *            The class of the item.
+	 * @param unlocalizedName
+	 *            The unlocalized name.
+	 * @param inCreativeTabs
+	 *            Show the item in the CreativeTabs instance.
+	 * @return The Block singleton.
+	 */
+	public static <T extends Block> T registerBlock(Class<? extends T> classOf, Class<? extends ItemBlock> itemClassOf,
+			String unlocalizedName, boolean inCreativeTabs) {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to register block %s", unlocalizedName));
 		try {
 			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 4094).getInt();
 			Constructor<? extends Block> ctor = classOf.getConstructor(int.class);
 			T theMysteryBlock = (T) ctor.newInstance(id);
-			theMysteryBlock.setUnlocalizedName(unlocalizedName).setCreativeTab(
-					LanteaCraft.getInstance().getCreativeTab());
+			theMysteryBlock.setUnlocalizedName(unlocalizedName);
+			if (inCreativeTabs)
+				theMysteryBlock.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
 			// TODO: Move texture name setting somewhere more useful.
 			// theBlock.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" +
 			// unlocalizedName + "_"
@@ -108,7 +129,7 @@ public class RegistrationHelper {
 		LanteaCraft.getLogger().log(Level.FINE, "Attempting to register SpecialBucket " + unlocalizedName);
 		int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 31743).getInt();
 		ItemSpecialBucket bucket = new ItemSpecialBucket(id, hostOf);
-		bucket.setUnlocalizedName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName);
+		bucket.setUnlocalizedName(unlocalizedName);
 		// TODO: Move texture name setting somewhere more useful.
 		// bucket.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" +
 		// unlocalizedName + "_" + getRenderMode());

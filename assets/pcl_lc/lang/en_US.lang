@@ -9,8 +9,9 @@ tile.blockLiquidNaquadah.name=Liquid Naquadah
 
 item.naquadah.name=Naquadah
 item.naquadahIngot.name=Naquadah Alloy Ingot
-item.sgCoreCrystal.name=Stargate Core Crystal
-item.sgControllerCrystal.name=Stargate Controller Crystal
+item.coreCrystal.name=Stargate Core Crystal
+item.controllerCrystal.name=Stargate Controller Crystal
+item.energyCrystal.name=Energy Crystal
 item.tokraSpawnEgg.name=Tok'ra Spawn Egg
 item.lanteadebug.name=LanteaCraft Debugger
 item.liquidNaquadahBucket.name=Liquid Naquadah Bucket
