@@ -9,8 +9,9 @@ tile.blockLiquidNaquadah.name=液态硅岩金
 
 item.naquadah.name=硅岩金
 item.naquadahIngot.name=硅岩合金锭
-item.sgCoreCrystal.name=星门核心水晶
-item.sgControllerCrystal.name=星门控制水晶
+item.coreCrystal.name=星门核心水晶
+item.controllerCrystal.name=星门控制水晶
+item.energyCrystal.name=能量水晶
 item.tokraSpawnEgg.name=陶格拉人刷怪蛋
 item.lanteadebug.name=兰特调试器
 item.liquidNaquadahBucket.name=桶装液态硅岩金
