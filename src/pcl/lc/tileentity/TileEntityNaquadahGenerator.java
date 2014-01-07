@@ -24,9 +24,12 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 	public double maxEnergy = 8.0;
 	
 	public double displayEnergy = 0;
+	public double displayTankVolume = 0;
+	
+	public SpecialFluidTank tank = new SpecialFluidTank(LanteaCraft.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
 	
 	private boolean addedToEnergyNet = false;
-	private SpecialFluidTank tank = new SpecialFluidTank(LanteaCraft.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
+	
 
 	private FilteredInventory inventory = new FilteredInventory(4) {
 		@Override
@@ -85,10 +88,20 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 		super.updateEntity();
 
 		// TODO: This is temporary logic code, so I can test energy emitting.
-		if (maxEnergy > energy)
-			energy += 0.5;
-		if (energy > maxEnergy)
-			energy = maxEnergy;
+		if (maxEnergy > (energy + 1)) {
+			for (int i = 0; i < 4; i++) {
+				ItemStack stackOf = inventory.getStackInSlot(i);
+				if (stackOf != null && stackOf.stackSize > 0) {
+					ItemStack newStack = stackOf.copy();
+					newStack.stackSize--;
+					if (newStack.stackSize > 0)
+					inventory.setInventorySlotContents(i, newStack);
+					else
+						inventory.setInventorySlotContents(i, null);
+					energy += 1.0;
+				}
+			}
+		}
 	}
 
 	@Override

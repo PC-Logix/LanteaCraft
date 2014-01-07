@@ -27,7 +27,15 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 
 	@Override
 	public void sendStateTo(ICrafting crafter) {
-		crafter.sendProgressBarUpdate(this, 0, (int) Math.floor(100 * (te.energy / te.maxEnergy)));
+		int progress = (int) Math.floor(100 * 100 * (te.energy / te.maxEnergy));
+		if (progress > 10000)
+			progress = 10000;
+		crafter.sendProgressBarUpdate(this, 0, progress);
+		
+		int volume = (int) Math.floor(100 * 100 * (te.tank.getFluidAmount() / te.tank.getCapacity()));
+		if (volume > 10000)
+			volume = 10000;
+		crafter.sendProgressBarUpdate(this, 1, volume);
 	}
 
 	@Override
@@ -36,6 +44,9 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 		switch (i) {
 			case 0:
 				te.displayEnergy = value;
+				break;
+			case 1:
+				te.displayTankVolume = value;
 				break;
 		}
 	}

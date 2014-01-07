@@ -29,6 +29,16 @@ public class FilteredSlot extends Slot {
 		} else
 			super.putStack(par1ItemStack);
 	}
+	
+	@Override
+	public boolean isItemValid(ItemStack par1ItemStack) {
+		if (inventory instanceof FilteredInventory) {
+			FilteredInventory fint = (FilteredInventory) inventory;
+			FilterRule rule = fint.getFilterRule(slotIndex);
+			return rule.test(par1ItemStack);
+		} else
+			return super.isItemValid(par1ItemStack);
+	}
 
 	@Override
 	public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
