@@ -257,7 +257,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	@Override
 	@Method(modid = "IC2")
 	public void drawEnergy(double amount) {
-		double naqQuantity = EnumUnits.convertToNaquadahUnit(EnumUnits.NaquadahUnit, amount);
+		double naqQuantity = EnumUnits.convertToNaquadahUnit(EnumUnits.EnergyUnit, amount);
 		exportEnergy(naqQuantity);
 	}
 

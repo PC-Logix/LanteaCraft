@@ -73,7 +73,6 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
@@ -264,7 +263,7 @@ public class LanteaCraftCommonProxy {
 			LanteaCraft.getLogger().log(Level.INFO,
 					"Pushing {" + " " + block.blockID + "->" + block.getUnlocalizedName() + "} to GameRegistry...");
 			GameRegistry.registerBlock(block, itemClassOf, idForName);
-			//LanguageRegistry.addName(block, localizedName);  --Moving to .lang files
+			// LanguageRegistry.addName(block, localizedName); --Moving to .lang files
 			return block;
 		} catch (Exception e) {
 			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register block, an exception occured.", e);
@@ -283,7 +282,7 @@ public class LanteaCraftCommonProxy {
 			item.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName + "_" + getRenderMode());
 			item.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
 			GameRegistry.registerItem(item, idForName);
-			//LanguageRegistry.addName(item, localizedName);  --Moving to .lang files
+			// LanguageRegistry.addName(item, localizedName); --Moving to .lang files
 			return item;
 		} catch (Exception e) {
 			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register item, an exception occured.", e);
@@ -300,7 +299,7 @@ public class LanteaCraftCommonProxy {
 		bucket.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName + "_" + getRenderMode());
 		bucket.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
 		GameRegistry.registerItem(bucket, idForName);
-		//LanguageRegistry.addName(bucket, localizedName);  --Moving to .lang files
+		// LanguageRegistry.addName(bucket, localizedName); --Moving to .lang files
 		return bucket;
 	}
 

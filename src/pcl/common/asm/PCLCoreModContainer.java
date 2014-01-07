@@ -23,6 +23,7 @@ public class PCLCoreModContainer extends DummyModContainer {
 		md.parent = "PCL CoreMod Factory";
 	}
 
+	@Override
 	public boolean registerBus(EventBus bus, LoadController controller) {
 		return true;
 	}

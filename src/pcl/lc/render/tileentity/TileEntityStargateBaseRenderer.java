@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import pcl.lc.LanteaCraft;
 import pcl.lc.render.stargate.AtlantisStargateRenderer;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StandardStargateRenderer;
@@ -37,13 +36,13 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 
 	protected final static StandardStargateRenderer standardRenderer;
 	protected final static AtlantisStargateRenderer atlantisRenderer;
-	
+
 	protected final static EventHorizonRenderer horizonRenderer;
 
 	static {
 		standardRenderer = new StandardStargateRenderer();
 		atlantisRenderer = new AtlantisStargateRenderer();
-		
+
 		horizonRenderer = new EventHorizonRenderer();
 
 		for (int i = 0; i <= numRingSegments; i++) {

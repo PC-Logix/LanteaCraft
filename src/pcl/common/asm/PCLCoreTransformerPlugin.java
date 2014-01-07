@@ -23,6 +23,7 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 
 	/**
 	 * Gets the logger
+	 * 
 	 * @return The logger
 	 */
 	public static Logger getLogger() {

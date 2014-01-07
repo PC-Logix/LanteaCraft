@@ -1,6 +1,5 @@
 package pcl.common.multiblock;
 
-
 /**
  * Declaration of all valid multi-block orientation types and their ordinals.
  * 

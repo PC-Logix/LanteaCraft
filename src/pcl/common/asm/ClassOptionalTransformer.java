@@ -1,12 +1,7 @@
 package pcl.common.asm;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -16,12 +11,6 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multiset;
-import com.google.common.collect.Sets;
 
 /**
  * Takes {@link ClassOptional} optional rules in a load-time binary base class and evaluates

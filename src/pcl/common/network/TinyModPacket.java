@@ -32,12 +32,12 @@ public class TinyModPacket extends ModPacket {
 	}
 
 	public TinyModPacket() {
-		this.outbuff = new ByteArrayOutputStream();
-		this.outstream = new DataOutputStream(outbuff);
+		outbuff = new ByteArrayOutputStream();
+		outstream = new DataOutputStream(outbuff);
 	}
 
 	public TinyModPacket(DataInputStream data) {
-		this.instream = data;
+		instream = data;
 	}
 
 	public DataInputStream getIn() {
@@ -49,7 +49,7 @@ public class TinyModPacket extends ModPacket {
 	}
 
 	public void setIsForServer(boolean b) {
-		this.toServer = b;
+		toServer = b;
 	}
 
 	@Override
@@ -62,6 +62,7 @@ public class TinyModPacket extends ModPacket {
 	 * 
 	 * @return A custom Packet250CustomPayload packet for Forge networking
 	 */
+	@Override
 	public Packet250CustomPayload toPacket() {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		Packet250CustomPayload pkt = new Packet250CustomPayload();

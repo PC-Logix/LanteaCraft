@@ -1,13 +1,13 @@
 package pcl.lc.containers;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import pcl.common.base.GenericContainer;
 import pcl.common.inventory.FilteredInventory;
 import pcl.common.inventory.FilteredSlot;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerNaquadahGenerator extends GenericContainer {
 
@@ -31,7 +31,7 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 		if (progress > 10000)
 			progress = 10000;
 		crafter.sendProgressBarUpdate(this, 0, progress);
-		
+
 		int volume = (int) Math.floor(100 * 100 * ((double) te.tank.getFluidAmount() / (double) te.tank.getCapacity()));
 		if (volume > 10000)
 			volume = 10000;
@@ -50,7 +50,5 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 				break;
 		}
 	}
-	
-	
 
 }

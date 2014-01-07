@@ -12,7 +12,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import pcl.common.base.RotationOrientedBlock;
 import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 
 public class BlockStargateController extends RotationOrientedBlock {

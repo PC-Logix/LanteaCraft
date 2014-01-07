@@ -46,15 +46,12 @@ import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.WorldLocation;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
-import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import cpw.mods.fml.common.Optional.Interface;
 import cpw.mods.fml.common.Optional.InterfaceList;
 import cpw.mods.fml.common.Optional.Method;
 import cpw.mods.fml.common.registry.GameRegistry;
-import dan200.computer.api.ComputerCraftAPI;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
-import dan200.computer.api.IMount;
 import dan200.computer.api.IPeripheral;
 
 @InterfaceList({ @Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft") })
@@ -459,7 +456,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		if (m_computer != null)
 			if (!isInitiator)
 				m_computer.queueEvent("sgIncoming", new Object[] { address });
-			else 
+			else
 				m_computer.queueEvent("sgOutgoing", new Object[] { address });
 		onInventoryChanged();
 		startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
@@ -906,30 +903,29 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	@Method(modid = "ComputerCraft")
 	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
 			throws Exception {
-		if (method == 0 || method == 1) { //dial or connect
+		if (method == 0 || method == 1) { // dial or connect
 			String address = arguments[0].toString().toUpperCase();
 			if (address.length() != 7)
 				throw new Exception("Stargate addresses must be at least 7 characters");
+			else if (address == getHomeAddress())
+				throw new Exception("Stargate cannot connect to itself");
 			else
-				if (address == getHomeAddress())
-					throw new Exception("Stargate cannot connect to itself");
-				else
 				connect(address, null);
-		} else if (method == 2) {//disconnect
+		} else if (method == 2) {// disconnect
 			if (isInitiator || closeFromEitherEnd) {
 				disconnect();
 				return new Object[] { true };
 			} else
 				throw new Exception("Stargate cannot be closed from this end");
-		} else if (method == 3) //isConnected
+		} else if (method == 3) // isConnected
 			return new Object[] { isConnected() };
-		else if (method == 4) //getAddress
+		else if (method == 4) // getAddress
 			return new Object[] { getHomeAddress() };
-		else if (method == 5) //isDialing
+		else if (method == 5) // isDialing
 			return new Object[] { isDialing() };
-		else if (method == 6) //isComplete
+		else if (method == 6) // isComplete
 			return new Object[] { getAsStructure().isValid() };
-		else if (method == 7) { //isBusy
+		else if (method == 7) { // isBusy
 			String address = arguments[0].toString().toUpperCase();
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 			if (address.length() != 7)
@@ -938,13 +934,13 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 				return new Object[] { true };
 			else
 				return new Object[] { false };
-		} else if (method == 8) { //hasFuel
+		} else if (method == 8) { // hasFuel
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(getHomeAddress());
 			if (!reloadFuel(fuelToOpen))
 				return new Object[] { false };
 			else
 				return new Object[] { true };
-		} else if (method == 9) { //isValidAddress
+		} else if (method == 9) { // isValidAddress
 			String address = arguments[0].toString().toUpperCase();
 			TileEntityStargateBase dte = GateAddressHelper.findAddressedStargate(address);
 			if (address.length() != 7)
@@ -970,48 +966,48 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	public boolean canAttachToSide(int side) {
 		return true;
 	}
+
 	private static HashMap<Integer, Integer> mountMap = new HashMap<Integer, Integer>();
-	@Override
-	@Method(modid = "ComputerCraft")
-    public void attach(IComputerAccess computer) {
-    	m_computer = computer;
-            if (LanteaCraft.mount != null) {
-                    int id = computer.getID();
-
-            int mountCount = 0;
-            if (mountMap.containsKey(id)) {
-                    mountCount = mountMap.get(id);
-            }
-            if (mountCount < 1) {
-                mountCount = 0;
-                computer.mount("stargate", LanteaCraft.mount);
-            }
-            mountMap.put(id, mountCount + 1);
-            }
-    }
 
 	@Override
 	@Method(modid = "ComputerCraft")
-    public void detach(IComputerAccess computer) {
-    	m_computer = null;
-            if (LanteaCraft.mount != null) {
-                    int id = computer.getID();
-            int mountCount = 0;
-            if (mountMap.containsKey(id)) {
-                    mountCount = mountMap.get(id);
-            }
-            mountCount--;
-            if (mountCount < 1) {
-                mountCount = 0;
-                try {
-                    computer.unmount("ahttp");
-                } catch (Exception e) {
-                }
-            }
-            mountMap.put(id, mountCount);
-            }
-    }
-	
+	public void attach(IComputerAccess computer) {
+		m_computer = computer;
+		if (LanteaCraft.mount != null) {
+			int id = computer.getID();
+
+			int mountCount = 0;
+			if (mountMap.containsKey(id))
+				mountCount = mountMap.get(id);
+			if (mountCount < 1) {
+				mountCount = 0;
+				computer.mount("stargate", LanteaCraft.mount);
+			}
+			mountMap.put(id, mountCount + 1);
+		}
+	}
+
+	@Override
+	@Method(modid = "ComputerCraft")
+	public void detach(IComputerAccess computer) {
+		m_computer = null;
+		if (LanteaCraft.mount != null) {
+			int id = computer.getID();
+			int mountCount = 0;
+			if (mountMap.containsKey(id))
+				mountCount = mountMap.get(id);
+			mountCount--;
+			if (mountCount < 1) {
+				mountCount = 0;
+				try {
+					computer.unmount("ahttp");
+				} catch (Exception e) {
+				}
+			}
+			mountMap.put(id, mountCount);
+		}
+	}
+
 	@Override
 	public Packet getDescriptionPacket() {
 		ModPacket packet = getAsStructure().pack();

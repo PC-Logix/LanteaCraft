@@ -2,11 +2,10 @@ package pcl.common.energy;
 
 import java.util.LinkedHashSet;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import pcl.common.api.energy.IEnergyGridNode;
 import pcl.common.api.energy.IEnergyStore;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 public class EnergyGrid {
 	private class GridStorage implements IEnergyStore {
@@ -14,12 +13,12 @@ public class EnergyGrid {
 		private double maximum;
 
 		public GridStorage(double max) {
-			this.maximum = max;
+			maximum = max;
 		}
 
 		@Override
 		public double receiveEnergy(double quantity, boolean isSimulated) {
-			double maxima = Math.min(quantity, Math.max(this.maximum - this.quantity, 0));
+			double maxima = Math.min(quantity, Math.max(maximum - this.quantity, 0));
 			if (!isSimulated)
 				this.quantity += maxima;
 			return quantity;
@@ -103,7 +102,7 @@ public class EnergyGrid {
 
 	public void merge(EnergyGrid that) {
 		synchronized (that.childTiles) {
-			synchronized (this.childTiles) {
+			synchronized (childTiles) {
 				for (IEnergyGridNode tile : that.childTiles)
 					if (!childTiles.contains(tile)) {
 						childTiles.add(tile);
@@ -112,7 +111,7 @@ public class EnergyGrid {
 					}
 			}
 		}
-		this.storage.receiveEnergy(that.storage.getEnergyStored(), false);
+		storage.receiveEnergy(that.storage.getEnergyStored(), false);
 		that.storage.extractEnergy(that.storage.getEnergyStored(), false);
 		that.disband();
 	}
@@ -126,16 +125,15 @@ public class EnergyGrid {
 		if (masterTile != null)
 			masterTile.doesTick(false);
 		if (childTiles.size() > 0)
-			tagTile((IEnergyGridNode) childTiles.iterator().next());
+			tagTile(childTiles.iterator().next());
 	}
 
 	private void tagTile(IEnergyGridNode tile) {
 		if (masterTile == null || masterTile == tile) {
 			masterTile = tile;
 			tile.doesTick(true);
-		} else {
+		} else
 			tile.doesTick(false);
-		}
 	}
 
 	public boolean isMaster(IEnergyGridNode tile) {

@@ -1,11 +1,19 @@
 package pcl.lc.render.stargate;
 
-import net.minecraft.util.ResourceLocation;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.cos;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringDepth;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringInnerRadius;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringMidRadius;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringOuterRadius;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringSymbolSegmentWidth;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringSymbolTextureHeight;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringSymbolTextureIndex;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringSymbolTextureLength;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.sin;
 
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.*;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
@@ -23,7 +31,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 	@Override
 	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x,
 			double y, double z, float t) {
-		this.caller = renderer;
+		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		caller.bind(LanteaCraft.getInstance().getResource("textures/tileentity/stargate_pegasus_128.png"));
 		GL11.glNormal3f(0, 1, 0);

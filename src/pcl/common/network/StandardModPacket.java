@@ -1,6 +1,5 @@
 package pcl.common.network;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -57,6 +56,7 @@ public class StandardModPacket extends ModPacket {
 	 * 
 	 * @return The type of the packet
 	 */
+	@Override
 	public String getType() {
 		return packetType;
 	}
@@ -136,6 +136,7 @@ public class StandardModPacket extends ModPacket {
 	 * 
 	 * @return If the packet is for the server
 	 */
+	@Override
 	public boolean getPacketIsForServer() {
 		return isPacketForServer;
 	}
@@ -379,6 +380,7 @@ public class StandardModPacket extends ModPacket {
 	 * 
 	 * @return A custom Packet250CustomPayload packet for Forge networking
 	 */
+	@Override
 	public Packet250CustomPayload toPacket() {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		DataOutputStream data = new DataOutputStream(((bytes)));

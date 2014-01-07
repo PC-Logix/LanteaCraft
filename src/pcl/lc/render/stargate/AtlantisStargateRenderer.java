@@ -36,7 +36,7 @@ public class AtlantisStargateRenderer implements IStargateRenderer {
 	@Override
 	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x,
 			double y, double z, float t) {
-		this.caller = renderer;
+		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		caller.bind(gateTexture);
 		GL11.glNormal3f(0, 1, 0);

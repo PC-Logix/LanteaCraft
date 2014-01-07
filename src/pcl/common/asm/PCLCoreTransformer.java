@@ -25,7 +25,8 @@ public class PCLCoreTransformer implements IClassTransformer {
 
 	/**
 	 * Initializes the core transformer. This notifies that hooking at runtime was a success,
-	 * and sets up all transformers registered in the {@link PCLCoreTransformerPlugin} instance.
+	 * and sets up all transformers registered in the {@link PCLCoreTransformerPlugin}
+	 * instance.
 	 */
 	public PCLCoreTransformer() {
 		PCLCoreTransformer.ASM_SUCCESS = true;
@@ -49,11 +50,10 @@ public class PCLCoreTransformer implements IClassTransformer {
 	 */
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) {
-		if (bytes == null) {
+		if (bytes == null)
 			return bytes;
-		}
 
-		for (IClassTransformer transformer : transformers) {
+		for (IClassTransformer transformer : transformers)
 			try {
 				bytes = transformer.transform(name, transformedName, bytes);
 				if (bytes == null)
@@ -64,7 +64,6 @@ public class PCLCoreTransformer implements IClassTransformer {
 						"Could not transform class " + name + " using " + transformer);
 				e.printStackTrace();
 			}
-		}
 		return bytes;
 	}
 

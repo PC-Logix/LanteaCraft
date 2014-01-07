@@ -1,10 +1,13 @@
 package pcl.lc.render.stargate;
 
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.cos;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringInnerRadius;
+import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.sin;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.util.ResourceLocation;
 import pcl.lc.LanteaCraft;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.*;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
@@ -23,7 +26,7 @@ public class EventHorizonRenderer implements IStargateRenderer {
 	@Override
 	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x,
 			double y, double z, float t) {
-		this.caller = renderer;
+		caller = renderer;
 		renderEventHorizon(te);
 	}
 

@@ -259,9 +259,9 @@ public class LanteaCraft {
 		OutputStream os = null;
 
 		File file = new File(MountDir.getLocalLuaFolder());
-		if (!file.exists()) {
-			boolean wasDirectoryMade = file.mkdirs();
-		}
+		if (!file.exists())
+			file.mkdirs();
+		
 
 		try {
 			os = new FileOutputStream(MountDir.getLocalLuaFolder() + "/dhd");
@@ -272,9 +272,8 @@ public class LanteaCraft {
 		byte[] buffer = new byte[4096];
 		int length;
 		try {
-			while ((length = is.read(buffer)) > 0) {
+			while ((length = is.read(buffer)) > 0)
 				os.write(buffer, 0, length);
-			}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

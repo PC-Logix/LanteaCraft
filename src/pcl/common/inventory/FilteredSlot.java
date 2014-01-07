@@ -1,8 +1,5 @@
 package pcl.common.inventory;
 
-import java.util.logging.Level;
-
-import pcl.lc.LanteaCraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -29,7 +26,7 @@ public class FilteredSlot extends Slot {
 		} else
 			super.putStack(par1ItemStack);
 	}
-	
+
 	@Override
 	public boolean isItemValid(ItemStack par1ItemStack) {
 		if (inventory instanceof FilteredInventory) {

@@ -14,7 +14,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import pcl.common.base.GenericContainer;
-import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.EnumStargateState;

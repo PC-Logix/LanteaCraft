@@ -12,57 +12,54 @@ import dan200.computer.api.IMount;
 
 public class MountDir implements IMount {
 
-	
-    private static String localLuaFolder;
-    private static String localLuaListing;
-    
-    static {
-            File baseDirectory = null;
-    if (FMLLaunchHandler.side().isClient()) {
-            baseDirectory = Minecraft.getMinecraft().mcDataDir;
-    } else {
-            baseDirectory = new File(".");
-    }
+	private static String localLuaFolder;
+	private static String localLuaListing;
 
-    File modFolder = new File(baseDirectory, "mods");
-    File lanteaCraftFolder = new File(modFolder, "LanteaCraft");
-    File luaFolder = new File(lanteaCraftFolder, "lua");
-    localLuaFolder = luaFolder.getAbsolutePath();
-    }
-	
-        @Override
-        public boolean exists(String path) throws IOException {
-                File file = new File(new File(localLuaFolder), path);
-                return file.exists();
-        }
+	static {
+		File baseDirectory = null;
+		if (FMLLaunchHandler.side().isClient())
+			baseDirectory = Minecraft.getMinecraft().mcDataDir;
+		else
+			baseDirectory = new File(".");
 
-        @Override
-        public boolean isDirectory(String path) throws IOException {
-                File file = new File(new File(localLuaFolder), path);
-                return file.isDirectory();
-        }
+		File modFolder = new File(baseDirectory, "mods");
+		File lanteaCraftFolder = new File(modFolder, "LanteaCraft");
+		File luaFolder = new File(lanteaCraftFolder, "lua");
+		localLuaFolder = luaFolder.getAbsolutePath();
+	}
 
-        @Override
-        public void list(String path, List<String> contents) throws IOException {
-                File directory = new File(new File(localLuaFolder), path);
-                for (File file : directory.listFiles()) {
-                        contents.add(file.getName());
-                }
-        }
+	@Override
+	public boolean exists(String path) throws IOException {
+		File file = new File(new File(localLuaFolder), path);
+		return file.exists();
+	}
 
-        @Override
-        public long getSize(String path) throws IOException {
-                File file = new File(new File(localLuaFolder), path);
-                return file.length();
-        }
+	@Override
+	public boolean isDirectory(String path) throws IOException {
+		File file = new File(new File(localLuaFolder), path);
+		return file.isDirectory();
+	}
 
-        @Override
-        public InputStream openForRead(String path) throws IOException {
-                File file = new File(new File(localLuaFolder), path);
-                return new FileInputStream(file);
-        }
+	@Override
+	public void list(String path, List<String> contents) throws IOException {
+		File directory = new File(new File(localLuaFolder), path);
+		for (File file : directory.listFiles())
+			contents.add(file.getName());
+	}
 
-		public static String getLocalLuaFolder() {
-			return localLuaFolder;
-		}
+	@Override
+	public long getSize(String path) throws IOException {
+		File file = new File(new File(localLuaFolder), path);
+		return file.length();
+	}
+
+	@Override
+	public InputStream openForRead(String path) throws IOException {
+		File file = new File(new File(localLuaFolder), path);
+		return new FileInputStream(file);
+	}
+
+	public static String getLocalLuaFolder() {
+		return localLuaFolder;
+	}
 }
