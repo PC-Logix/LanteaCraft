@@ -26,7 +26,10 @@ public class ScreenNaquadahGenerator extends GenericContainerGUI {
 	@Override
 	protected void drawBackgroundLayer() {
 		bindTexture(LanteaCraft.getInstance().getResource("textures/gui/naquadah_generator_128.png"), 256, 256);
-		drawTexturedRectUV(0, 0, 177, 208, 0, 0, (double) (177d / 256d), (double) (208d / 256d));
+		drawTexturedRectUV(0, 0, 177, 208, 0, 0, 177d / 256d, 208d / 256d);
+		drawTexturedRectUV(48, 96, (80d * tileEntity.displayEnergy) / 100d, 11, 176d / 256d, 0, (80d * tileEntity.displayEnergy) / 100d / 256d, 11d / 256d);
+		int dw = fontRenderer.getStringWidth(tileEntity.displayEnergy + "%");
+		fontRenderer.drawString(tileEntity.displayEnergy + "%", 48 + ((int) Math.floor((80d - dw) / 2)), 98, 0xFFFFFF, true);
 
 	}
 

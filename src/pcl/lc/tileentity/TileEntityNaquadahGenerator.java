@@ -20,9 +20,14 @@ import pcl.lc.fluids.SpecialFluidTank;
 
 public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler {
 
-	private double energy = 0.0;
+	public double energy = 0.0;
+	public double maxEnergy = 8.0;
+	
+	public double displayEnergy = 0;
+	
 	private boolean addedToEnergyNet = false;
 	private SpecialFluidTank tank = new SpecialFluidTank(LanteaCraft.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
+
 	private FilteredInventory inventory = new FilteredInventory(4) {
 		@Override
 		public void onInventoryChanged() {
@@ -31,12 +36,12 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 		@Override
 		public boolean isInvNameLocalized() {
-			return true;
+			return false;
 		}
 
 		@Override
 		public String getInvName() {
-			return "Naquadah Generator";
+			return "naquadah_generator";
 		}
 	};
 
@@ -80,10 +85,10 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 		super.updateEntity();
 
 		// TODO: This is temporary logic code, so I can test energy emitting.
-		if (8.0 > energy)
-			energy += 0.2;
-		if (energy > 8.0)
-			energy = 8.0;
+		if (maxEnergy > energy)
+			energy += 0.5;
+		if (energy > maxEnergy)
+			energy = maxEnergy;
 	}
 
 	@Override

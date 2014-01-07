@@ -1,5 +1,7 @@
 package pcl.lc.containers;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import pcl.common.base.GenericContainer;
@@ -25,16 +27,19 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 
 	@Override
 	public void sendStateTo(ICrafting crafter) {
-		// crafter.sendProgressBarUpdate(this, 0, te.fuelBuffer);
+		crafter.sendProgressBarUpdate(this, 0, (int) Math.floor(100 * (te.energy / te.maxEnergy)));
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int i, int value) {
 		switch (i) {
 			case 0:
-				// te.fuelBuffer = value;
+				te.displayEnergy = value;
 				break;
 		}
 	}
+	
+	
 
 }

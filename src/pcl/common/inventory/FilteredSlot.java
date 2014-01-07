@@ -24,11 +24,8 @@ public class FilteredSlot extends Slot {
 		if (inventory instanceof FilteredInventory) {
 			FilteredInventory fint = (FilteredInventory) inventory;
 			FilterRule rule = fint.getFilterRule(slotIndex);
-			if (rule.test(par1ItemStack)) {
-				LanteaCraft.getLogger().log(Level.INFO, "Slot rule passed!");
+			if (rule.test(par1ItemStack))
 				super.putStack(par1ItemStack);
-			} else
-				LanteaCraft.getLogger().log(Level.INFO, "Slot rule failed!");
 		} else
 			super.putStack(par1ItemStack);
 	}
