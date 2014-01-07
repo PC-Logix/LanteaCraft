@@ -24,6 +24,13 @@ public class ItemDebugTool extends Item {
 		super(itemid);
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	protected String getIconString() {
+		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
+				+ LanteaCraft.getProxy().getRenderMode();
+	}
+
 	/**
 	 * Callback for item usage. If the item does something special on right clicking, he will
 	 * have one of those. Return True if something happen and false if it don't. This is for

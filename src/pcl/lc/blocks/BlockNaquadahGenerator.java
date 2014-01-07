@@ -1,5 +1,7 @@
 package pcl.lc.blocks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,6 +23,13 @@ public class BlockNaquadahGenerator extends pcl.common.base.RotationOrientedBloc
 		super(id, Material.rock);
 		setHardness(1.5F);
 		setCreativeTab(CreativeTabs.tabMisc);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	protected String getTextureName() {
+		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
+				+ LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override

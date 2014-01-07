@@ -2,9 +2,12 @@ package pcl.lc.blocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockOre;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
+import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Items;
 
 public class BlockNaquadahOre extends BlockOre {
@@ -16,6 +19,13 @@ public class BlockNaquadahOre extends BlockOre {
 		setStepSound(soundStoneFootstep);
 		MinecraftForge.setBlockHarvestLevel(this, "pickaxe", 3);
 		setCreativeTab(CreativeTabs.tabBlock);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	protected String getTextureName() {
+		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
+				+ LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override

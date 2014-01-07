@@ -8,11 +8,14 @@ package pcl.lc.blocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class BlockPortal extends Block {
@@ -20,6 +23,13 @@ public class BlockPortal extends Block {
 	public BlockPortal(int id) {
 		super(id, Material.rock);
 		setBlockBounds(0, 0, 0, 0, 0, 0);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	protected String getTextureName() {
+		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
+				+ LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override

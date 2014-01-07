@@ -32,6 +32,13 @@ public class ItemTokraSpawnEgg extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	protected String getIconString() {
+		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
+				+ LanteaCraft.getProxy().getRenderMode();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack par1ItemStack, int par2) {
 		return 16777215;
 	}

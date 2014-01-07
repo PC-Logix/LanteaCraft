@@ -53,8 +53,12 @@ import pcl.lc.core.GateAddressHelper;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
+import pcl.lc.items.ItemControllerCrystal;
+import pcl.lc.items.ItemCoreCrystal;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemEnergyCrystal;
+import pcl.lc.items.ItemNaquadah;
+import pcl.lc.items.ItemNaquadahIngot;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTokraSpawnEgg;
 import pcl.lc.network.ClientPacketHandler;
@@ -244,11 +248,11 @@ public class LanteaCraftCommonProxy {
 
 	void registerItems() {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft items...");
-		Items.naquadah = RegistrationHelper.registerItem(Item.class, "naquadah");
-		Items.naquadahIngot = RegistrationHelper.registerItem(Item.class, "naquadahIngot");
+		Items.naquadah = RegistrationHelper.registerItem(ItemNaquadah.class, "naquadah");
+		Items.naquadahIngot = RegistrationHelper.registerItem(ItemNaquadahIngot.class, "naquadahIngot");
 
-		Items.coreCrystal = RegistrationHelper.registerItem(Item.class, "coreCrystal");
-		Items.controllerCrystal = RegistrationHelper.registerItem(Item.class, "controllerCrystal");
+		Items.coreCrystal = RegistrationHelper.registerItem(ItemCoreCrystal.class, "coreCrystal");
+		Items.controllerCrystal = RegistrationHelper.registerItem(ItemControllerCrystal.class, "controllerCrystal");
 		Items.energyCrystal = RegistrationHelper.registerItem(ItemEnergyCrystal.class, "energyCrystal");
 
 		Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg");

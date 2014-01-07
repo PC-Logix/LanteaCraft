@@ -76,10 +76,6 @@ public class RegistrationHelper {
 			theMysteryBlock.setUnlocalizedName(unlocalizedName);
 			if (inCreativeTabs)
 				theMysteryBlock.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
-			// TODO: Move texture name setting somewhere more useful.
-			// theBlock.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" +
-			// unlocalizedName + "_"
-			// + getRenderMode());
 			GameRegistry.registerBlock(theMysteryBlock, itemClassOf, unlocalizedName);
 			return theMysteryBlock;
 		} catch (Exception e) {
@@ -105,9 +101,6 @@ public class RegistrationHelper {
 			T theMysteryItem = (T) ctor.newInstance(id);
 			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(
 					LanteaCraft.getInstance().getCreativeTab());
-			// TODO: Move texture name setting somewhere more useful.
-			// item.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" +
-			// unlocalizedName + "_" + getRenderMode());
 			GameRegistry.registerItem(theMysteryItem, unlocalizedName);
 			return theMysteryItem;
 		} catch (Exception e) {
@@ -130,9 +123,6 @@ public class RegistrationHelper {
 		int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 31743).getInt();
 		ItemSpecialBucket bucket = new ItemSpecialBucket(id, hostOf);
 		bucket.setUnlocalizedName(unlocalizedName);
-		// TODO: Move texture name setting somewhere more useful.
-		// bucket.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" +
-		// unlocalizedName + "_" + getRenderMode());
 		bucket.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
 		GameRegistry.registerItem(bucket, unlocalizedName);
 		return bucket;

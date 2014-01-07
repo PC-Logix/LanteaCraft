@@ -31,8 +31,12 @@ import pcl.lc.core.MountDir;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
+import pcl.lc.items.ItemControllerCrystal;
+import pcl.lc.items.ItemCoreCrystal;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemEnergyCrystal;
+import pcl.lc.items.ItemNaquadah;
+import pcl.lc.items.ItemNaquadahIngot;
 import pcl.lc.items.ItemTokraSpawnEgg;
 import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
@@ -92,8 +96,6 @@ public class LanteaCraft {
 		public static BlockStargateRing stargateRingBlock;
 		public static BlockStargateController stargateControllerBlock;
 
-		public static BlockPortal sgPortalBlock;
-
 		public static Block naquadahBlock;
 		public static Block naquadahOre;
 
@@ -104,10 +106,10 @@ public class LanteaCraft {
 	 * Public declaration of all Item objects
 	 */
 	public static class Items {
-		public static Item naquadah;
-		public static Item naquadahIngot;
-		public static Item coreCrystal;
-		public static Item controllerCrystal;
+		public static ItemNaquadah naquadah;
+		public static ItemNaquadahIngot naquadahIngot;
+		public static ItemCoreCrystal coreCrystal;
+		public static ItemControllerCrystal controllerCrystal;
 
 		public static ItemEnergyCrystal energyCrystal;
 

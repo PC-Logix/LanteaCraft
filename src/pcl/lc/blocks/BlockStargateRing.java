@@ -17,6 +17,8 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.tileentity.TileEntityStargateRing;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStargateRing extends GenericContainerBlock {
 
@@ -32,6 +34,13 @@ public class BlockStargateRing extends GenericContainerBlock {
 		setHardness(1.5F);
 		setCreativeTab(CreativeTabs.tabMisc);
 		registerSubItemNames();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	protected String getTextureName() {
+		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
+				+ LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
