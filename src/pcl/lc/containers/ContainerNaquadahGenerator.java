@@ -32,7 +32,7 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 			progress = 10000;
 		crafter.sendProgressBarUpdate(this, 0, progress);
 		
-		int volume = (int) Math.floor(100 * 100 * (te.tank.getFluidAmount() / te.tank.getCapacity()));
+		int volume = (int) Math.floor(100 * 100 * ((double) te.tank.getFluidAmount() / (double) te.tank.getCapacity()));
 		if (volume > 10000)
 			volume = 10000;
 		crafter.sendProgressBarUpdate(this, 1, volume);

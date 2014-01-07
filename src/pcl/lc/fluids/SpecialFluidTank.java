@@ -14,12 +14,22 @@ public class SpecialFluidTank implements IFluidTank {
 	private int volume;
 	private Fluid fluid;
 
+	private boolean changed;
+
 	public SpecialFluidTank(Fluid f, int cap, int vol, boolean fill, boolean drain) {
 		fluid = f;
 		capacity = cap;
 		volume = vol;
 		canFill = fill;
 		canDrain = drain;
+	}
+
+	public boolean hasChanged() {
+		if (changed) {
+			changed = !changed;
+			return true;
+		} else
+			return false;
 	}
 
 	public boolean canFill() {
@@ -33,6 +43,7 @@ public class SpecialFluidTank implements IFluidTank {
 	public void readFromNBT(NBTTagCompound nbt) {
 		capacity = nbt.getInteger("capacity");
 		volume = nbt.getInteger("volume");
+		changed = true;
 	}
 
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -67,8 +78,10 @@ public class SpecialFluidTank implements IFluidTank {
 		if (!canFill || !resource.isFluidEqual(new FluidStack(fluid, volume)))
 			return 0;
 		int quantity = Math.min(resource.amount, capacity - volume);
-		if (doFill)
+		if (doFill) {
 			volume += quantity;
+			changed = true;
+		}
 		return quantity;
 	}
 
@@ -77,8 +90,10 @@ public class SpecialFluidTank implements IFluidTank {
 		if (!canDrain)
 			return null;
 		int quantity = Math.min(maxDrain, volume);
-		if (doDrain)
+		if (doDrain) {
 			volume -= quantity;
+			changed = true;
+		}
 		return new FluidStack(fluid, quantity);
 	}
 }

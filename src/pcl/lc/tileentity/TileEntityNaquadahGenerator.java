@@ -22,14 +22,13 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	public double energy = 0.0;
 	public double maxEnergy = 8.0;
-	
+
 	public double displayEnergy = 0;
 	public double displayTankVolume = 0;
-	
+
 	public SpecialFluidTank tank = new SpecialFluidTank(LanteaCraft.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
-	
+
 	private boolean addedToEnergyNet = false;
-	
 
 	private FilteredInventory inventory = new FilteredInventory(4) {
 		@Override
@@ -79,27 +78,41 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	@Override
 	public void updateEntity() {
-		if (!worldObj.isRemote)
+		if (!worldObj.isRemote) {
 			if (!addedToEnergyNet) {
 				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 				addedToEnergyNet = true;
 				onInventoryChanged();
 			}
-		super.updateEntity();
+			if (tank.hasChanged())
+				onInventoryChanged();
+			super.updateEntity();
 
-		// TODO: This is temporary logic code, so I can test energy emitting.
-		if (maxEnergy > (energy + 1)) {
-			for (int i = 0; i < 4; i++) {
-				ItemStack stackOf = inventory.getStackInSlot(i);
-				if (stackOf != null && stackOf.stackSize > 0) {
-					ItemStack newStack = stackOf.copy();
-					newStack.stackSize--;
-					if (newStack.stackSize > 0)
+			if (maxEnergy > (energy + 1))
+				refuel();
+		}
+	}
+
+	public void refuel() {
+		for (int i = 0; i < 4; i++) {
+			ItemStack stackOf = inventory.getStackInSlot(i);
+			if (stackOf != null && stackOf.stackSize > 0) {
+				ItemStack newStack = stackOf.copy();
+				newStack.stackSize--;
+				if (newStack.stackSize > 0)
 					inventory.setInventorySlotContents(i, newStack);
-					else
-						inventory.setInventorySlotContents(i, null);
-					energy += 1.0;
-				}
+				else
+					inventory.setInventorySlotContents(i, null);
+				energy += 1.0;
+				return;
+			}
+		}
+
+		if (tank.getFluidAmount() > 1000) {
+			if (tank.drain(1000, false).amount == 1000) {
+				tank.drain(1000, true);
+				energy += 1.0;
+				return;
 			}
 		}
 	}
