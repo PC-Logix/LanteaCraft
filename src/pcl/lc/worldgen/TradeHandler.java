@@ -15,10 +15,10 @@ public class TradeHandler implements IVillageTradeHandler {
 	@Override
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipes, Random random) {
 		recipes.add(new MerchantRecipe(new ItemStack(Item.emerald, 8), new ItemStack(Item.diamond, 1), new ItemStack(
-				Items.sgCoreCrystal)));
+				Items.coreCrystal)));
 
 		recipes.add(new MerchantRecipe(new ItemStack(Item.emerald, 16), new ItemStack(Item.diamond, 1), new ItemStack(
-				Items.sgControllerCrystal)));
+				Items.controllerCrystal)));
 	}
 
 }

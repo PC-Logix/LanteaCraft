@@ -14,7 +14,7 @@ public class ItemStargateRing extends ItemBlock {
 
 	@Override
 	public Icon getIconFromDamage(int i) {
-		return Blocks.sgRingBlock.getIcon(0, i);
+		return Blocks.stargateRingBlock.getIcon(0, i);
 	}
 
 	@Override

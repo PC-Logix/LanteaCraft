@@ -35,6 +35,7 @@ import pcl.common.helpers.ConfigValue;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.helpers.GUIHandler;
 import pcl.common.helpers.NetworkHelpers;
+import pcl.common.helpers.RegistrationHelper;
 import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Fluids;
@@ -53,6 +54,7 @@ import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
 import pcl.lc.items.ItemDebugTool;
+import pcl.lc.items.ItemEnergyCrystal;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTokraSpawnEgg;
 import pcl.lc.network.ClientPacketHandler;
@@ -108,7 +110,6 @@ public class LanteaCraftCommonProxy {
 				+ BuildInfo.buildNumber + " as modid " + BuildInfo.modID);
 		defaultServerPacketHandler = new ServerPacketHandler();
 		networkHelpers = new NetworkHelpers();
-
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
@@ -151,6 +152,10 @@ public class LanteaCraftCommonProxy {
 				upgradeHelper.hookSGCraftReloaded();
 		}
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft done looking for other versions.");
+	}
+
+	public NaquadahOreWorldGen getOreGenerator() {
+		return naquadahOreGenerator;
 	}
 
 	public void onInitMapGen(InitMapGenEvent e) {
@@ -224,135 +229,71 @@ public class LanteaCraftCommonProxy {
 
 	void registerBlocks() {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft blocks...");
-		Blocks.sgRingBlock = (BlockStargateRing) registerBlock(BlockStargateRing.class, ItemStargateRing.class,
-				LanteaNameRegistry.getBlockMapping("blockRing"), "stargateRing", "Stargate Ring Segment");
+		Blocks.stargateRingBlock = RegistrationHelper.registerBlock(BlockStargateRing.class, ItemStargateRing.class,
+				"stargateRing");
+		Blocks.stargateBaseBlock = RegistrationHelper.registerBlock(BlockStargateBase.class, "stargateBase");
+		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateController.class,
+				"stargateController");
 
-		Blocks.sgBaseBlock = (BlockStargateBase) registerBlock(BlockStargateBase.class, ItemBlock.class,
-				LanteaNameRegistry.getBlockMapping("blockBase"), "stargateBase", "Stargate Base");
+		Blocks.naquadahBlock = RegistrationHelper.registerBlock(BlockNaquadah.class, "naquadahBlock");
+		Blocks.naquadahOre = RegistrationHelper.registerBlock(BlockNaquadahOre.class, "naquadahOre");
 
-		Blocks.sgControllerBlock = (BlockStargateController) registerBlock(BlockStargateController.class,
-				ItemBlock.class, LanteaNameRegistry.getBlockMapping("blockController"), "stargateController",
-				"Stargate Controller");
-
-		Blocks.naquadahBlock = registerBlock(BlockNaquadah.class, ItemBlock.class,
-				LanteaNameRegistry.getBlockMapping("blockNaquadah"), "naquadahBlock", "Naquadah Alloy Block");
-		Blocks.naquadahOre = registerBlock(BlockNaquadahOre.class, ItemBlock.class,
-				LanteaNameRegistry.getBlockMapping("oreNaquadah"), "naquadahOre", "Naquadah Ore");
-
-		Blocks.naquadahGenerator = (BlockNaquadahGenerator) registerBlock(BlockNaquadahGenerator.class,
-				ItemBlock.class, LanteaNameRegistry.getBlockMapping("blockNaquadahGenerator"), "naquadahGenerator",
-				"Naquadah Generator");
-	}
-
-	public Block registerBlock(Class<? extends Block> classOf, Class<? extends ItemBlock> itemClassOf,
-			String idForName, String unlocalizedName, String localizedName) {
-		LanteaCraft.getLogger().log(Level.INFO, "Attempting to register block " + idForName);
-		try {
-			int id = config.getBlock(unlocalizedName, 4094).getInt();
-			Constructor<? extends Block> ctor = classOf.getConstructor(int.class);
-			Block block = ctor.newInstance(id);
-			LanteaCraft.getLogger().log(
-					Level.INFO,
-					"Registering block " + classOf.getName() + ": { " + id + "->" + idForName + ", " + unlocalizedName
-							+ ", " + localizedName + " }");
-			block.setUnlocalizedName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName);
-			block.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName + "_"
-					+ getRenderMode());
-			block.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
-
-			LanteaCraft.getLogger().log(Level.INFO,
-					"Pushing {" + " " + block.blockID + "->" + block.getUnlocalizedName() + "} to GameRegistry...");
-			GameRegistry.registerBlock(block, itemClassOf, idForName);
-			// LanguageRegistry.addName(block, localizedName); --Moving to .lang files
-			return block;
-		} catch (Exception e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register block, an exception occured.", e);
-			throw new RuntimeException(e);
-		}
-	}
-
-	public Item registerItem(Class<? extends Item> classOf, String idForName, String unlocalizedName,
-			String localizedName) {
-		LanteaCraft.getLogger().log(Level.FINE, "Attempting to register item " + idForName);
-		try {
-			int id = config.getItem(unlocalizedName, 31743).getInt();
-			Constructor<? extends Item> ctor = classOf.getConstructor(int.class);
-			Item item = ctor.newInstance(id);
-			item.setUnlocalizedName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName);
-			item.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName + "_" + getRenderMode());
-			item.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
-			GameRegistry.registerItem(item, idForName);
-			// LanguageRegistry.addName(item, localizedName); --Moving to .lang files
-			return item;
-		} catch (Exception e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register item, an exception occured.", e);
-			throw new RuntimeException(e);
-		}
-	}
-
-	public ItemSpecialBucket registerSpecialBucket(Block hostOf, String idForName, String unlocalizedName,
-			String localizedName) {
-		LanteaCraft.getLogger().log(Level.FINE, "Attempting to register SpecialBucket " + idForName);
-		int id = config.getItem(unlocalizedName, 31743).getInt();
-		ItemSpecialBucket bucket = new ItemSpecialBucket(id, hostOf);
-		bucket.setUnlocalizedName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName);
-		bucket.setTextureName(LanteaCraft.getInstance().getAssetKey() + ":" + unlocalizedName + "_" + getRenderMode());
-		bucket.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
-		GameRegistry.registerItem(bucket, idForName);
-		// LanguageRegistry.addName(bucket, localizedName); --Moving to .lang files
-		return bucket;
+		Blocks.naquadahGenerator = (BlockNaquadahGenerator) RegistrationHelper.registerBlock(
+				BlockNaquadahGenerator.class, "naquadahGenerator");
 	}
 
 	void registerItems() {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft items...");
-		Items.naquadah = registerItem(Item.class, LanteaNameRegistry.getItemMapping("itemNaquadah"), "naquadah",
-				"Naquadah");
-		Items.naquadahIngot = registerItem(Item.class, LanteaNameRegistry.getItemMapping("itemNaquadahIngot"),
-				"naquadahIngot", "Naquadah Alloy Ingot");
-		Items.sgCoreCrystal = registerItem(Item.class, LanteaNameRegistry.getItemMapping("itemCoreCrystal"),
-				"sgCoreCrystal", "Stargate Core Crystal");
-		Items.sgControllerCrystal = registerItem(Item.class,
-				LanteaNameRegistry.getItemMapping("itemControllerCrystal"), "sgControllerCrystal",
-				"Stargate Controller Crystal");
+		Items.naquadah = RegistrationHelper.registerItem(Item.class, "naquadah");
+		Items.naquadahIngot = RegistrationHelper.registerItem(Item.class, "naquadahIngot");
 
-		Items.tokraSpawnEgg = (ItemTokraSpawnEgg) registerItem(ItemTokraSpawnEgg.class,
-				LanteaNameRegistry.getItemMapping("itemTokraSpawnEgg"), "tokraSpawnEgg", "Tok'ra Spawn Egg");
+		Items.coreCrystal = RegistrationHelper.registerItem(Item.class, "coreCrystal");
+		Items.controllerCrystal = RegistrationHelper.registerItem(Item.class, "controllerCrystal");
+		Items.energyCrystal = RegistrationHelper.registerItem(ItemEnergyCrystal.class, "energyCrystal");
 
-		Items.debugger = (ItemDebugTool) registerItem(ItemDebugTool.class, "lanteadebug", "lanteadebug",
-				"LanteaCraft Debugger");
+		Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg");
+		Items.debugger = RegistrationHelper.registerItem(ItemDebugTool.class, "lanteadebug");
 	}
 
 	void registerOres() {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft ores...");
-		registerOre("oreNaquadah", Blocks.naquadahOre);
-		registerOre("naquadah", Items.naquadah);
-		registerOre("ingotNaquadahAlloy", Items.naquadahIngot);
+		RegistrationHelper.registerOre("oreNaquadah", new ItemStack(Blocks.naquadahOre));
+		RegistrationHelper.registerOre("naquadah", new ItemStack(Items.naquadah));
+		RegistrationHelper.registerOre("ingotNaquadahAlloy", new ItemStack(Items.naquadahIngot));
 	}
 
 	void registerRecipes() {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft recipes...");
+
 		ItemStack chiselledSandstone = new ItemStack(Block.sandStone, 1, 1);
 		ItemStack smoothSandstone = new ItemStack(Block.sandStone, 1, 2);
-		ItemStack sgChevronBlock = new ItemStack(Blocks.sgRingBlock, 1, 1);
+		ItemStack sgChevronBlock = new ItemStack(Blocks.stargateRingBlock, 1, 1);
 		ItemStack blueDye = new ItemStack(Item.dyePowder, 1, 4);
 		ItemStack orangeDye = new ItemStack(Item.dyePowder, 1, 14);
+
 		if (config.getBoolean("options", "allowCraftingNaquadah", false))
-			newShapelessRecipe(Items.naquadah, 1, Item.coal, Item.slimeBall, Item.blazePowder);
-		newRecipe(Blocks.sgRingBlock, 1, "ICI", "NNN", "III", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
-				chiselledSandstone);
-		newRecipe(sgChevronBlock, "CgC", "NpN", "IrI", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
-				chiselledSandstone, 'g', Item.glowstone, 'r', Item.redstone, 'p', Item.enderPearl);
-		newRecipe(Blocks.sgBaseBlock, 1, "CrC", "NeN", "IcI", 'I', Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C',
-				chiselledSandstone, 'r', Item.redstone, 'e', Item.eyeOfEnder, 'c', Items.sgCoreCrystal);
-		newRecipe(Blocks.sgControllerBlock, 1, "bbb", "OpO", "OcO", 'b', Block.stoneButton, 'O', Block.obsidian, 'p',
-				Item.enderPearl, 'r', Item.redstone, 'c', Items.sgControllerCrystal);
-		newShapelessRecipe(Items.naquadahIngot, 1, "naquadah", Item.ingotIron);
-		newRecipe(Blocks.naquadahBlock, 1, "NNN", "NNN", "NNN", 'N', "ingotNaquadahAlloy");
-		newRecipe(Items.naquadahIngot, 9, "B", 'B', Blocks.naquadahBlock);
+			RegistrationHelper.newShapelessRecipe(new ItemStack(Items.naquadah, 1), Item.coal, Item.slimeBall,
+					Item.blazePowder);
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN", "III", 'I',
+				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', chiselledSandstone);
+		RegistrationHelper.newRecipe(sgChevronBlock, "CgC", "NpN", "IrI", 'I', Item.ingotIron, 'N',
+				"ingotNaquadahAlloy", 'C', chiselledSandstone, 'g', Item.glowstone, 'r', Item.redstone, 'p',
+				Item.enderPearl);
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateBaseBlock, 1), "CrC", "NeN", "IcI", 'I',
+				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', chiselledSandstone, 'r', Item.redstone, 'e',
+				Item.eyeOfEnder, 'c', Items.coreCrystal);
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateControllerBlock), 1, "bbb", "OpO", "OcO", 'b',
+				Block.stoneButton, 'O', Block.obsidian, 'p', Item.enderPearl, 'r', Item.redstone, 'c',
+				Items.controllerCrystal);
+		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.naquadahIngot, 1), "naquadah", Item.ingotIron);
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.naquadahBlock, 1), "NNN", "NNN", "NNN", 'N',
+				"ingotNaquadahAlloy");
+		RegistrationHelper.newRecipe(new ItemStack(Items.naquadahIngot, 9), "B", 'B', Blocks.naquadahBlock);
 		if (config.getBoolean("options", "allowCraftingCrystals", false)) {
-			newRecipe(Items.sgCoreCrystal, 1, "bbr", "rdb", "brb", 'b', blueDye, 'r', Item.redstone, 'd', Item.diamond);
-			newRecipe(Items.sgControllerCrystal, 1, "roo", "odr", "oor", 'o', orangeDye, 'r', Item.redstone, 'd',
-					Item.diamond);
+			RegistrationHelper.newRecipe(new ItemStack(Items.coreCrystal, 1), "bbr", "rdb", "brb", 'b', blueDye, 'r',
+					Item.redstone, 'd', Item.diamond);
+			RegistrationHelper.newRecipe(new ItemStack(Items.controllerCrystal, 1), "roo", "odr", "oor", 'o',
+					orangeDye, 'r', Item.redstone, 'd', Item.diamond);
 		}
 	}
 
@@ -366,12 +307,12 @@ public class LanteaCraftCommonProxy {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft random drop items...");
 		String[] categories = { ChestGenHooks.MINESHAFT_CORRIDOR, ChestGenHooks.PYRAMID_DESERT_CHEST,
 				ChestGenHooks.PYRAMID_JUNGLE_CHEST, ChestGenHooks.STRONGHOLD_LIBRARY, ChestGenHooks.VILLAGE_BLACKSMITH };
-		addRandomChestItem(new ItemStack(Blocks.sgBaseBlock), 1, 1, 2, categories);
-		addRandomChestItem(new ItemStack(Blocks.sgControllerBlock), 1, 1, 1, categories);
-		addRandomChestItem(new ItemStack(Blocks.sgRingBlock, 1, 0), 1, 3, 8, categories);
-		addRandomChestItem(new ItemStack(Blocks.sgRingBlock, 1, 1), 1, 3, 7, categories);
-		addRandomChestItem(new ItemStack(Items.sgCoreCrystal, 1, 0), 1, 1, 2, categories);
-		addRandomChestItem(new ItemStack(Items.sgControllerCrystal, 1, 0), 1, 1, 1, categories);
+		RegistrationHelper.addRandomChestItem(new ItemStack(Blocks.stargateBaseBlock), 1, 1, 2, categories);
+		RegistrationHelper.addRandomChestItem(new ItemStack(Blocks.stargateControllerBlock), 1, 1, 1, categories);
+		RegistrationHelper.addRandomChestItem(new ItemStack(Blocks.stargateRingBlock, 1, 0), 1, 3, 8, categories);
+		RegistrationHelper.addRandomChestItem(new ItemStack(Blocks.stargateRingBlock, 1, 1), 1, 3, 7, categories);
+		RegistrationHelper.addRandomChestItem(new ItemStack(Items.coreCrystal, 1, 0), 1, 1, 2, categories);
+		RegistrationHelper.addRandomChestItem(new ItemStack(Items.controllerCrystal, 1, 0), 1, 1, 1, categories);
 	}
 
 	void registerWorldGenerators() {
@@ -386,19 +327,15 @@ public class LanteaCraftCommonProxy {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft Tokra villagers...");
 		tokraVillagerID = addVillager(config.getVillager("tokra"), "tokra",
 				LanteaCraft.getResource("textures/skins/tokra.png"));
-		addTradeHandler(tokraVillagerID, new TradeHandler());
+		RegistrationHelper.addTradeHandler(tokraVillagerID, new TradeHandler());
 	}
 
 	void registerTileEntities() {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft tile entities...");
-		GameRegistry.registerTileEntity(TileEntityStargateBase.class,
-				LanteaNameRegistry.getTileEntityMapping("tileEntityBase"));
-		GameRegistry.registerTileEntity(TileEntityStargateRing.class,
-				LanteaNameRegistry.getTileEntityMapping("tileEntityRing"));
-		GameRegistry.registerTileEntity(TileEntityStargateController.class,
-				LanteaNameRegistry.getTileEntityMapping("tileEntityController"));
-		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class,
-				LanteaNameRegistry.getTileEntityMapping("tileEntityNaquadahGenerator"));
+		GameRegistry.registerTileEntity(TileEntityStargateBase.class, "tileEntityStargateBase");
+		GameRegistry.registerTileEntity(TileEntityStargateRing.class, "tileEntityStargateRing");
+		GameRegistry.registerTileEntity(TileEntityStargateController.class, "tileEntityStargateController");
+		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class, "tileEntityNaquadahGenerator");
 	}
 
 	void registerFluids() {
@@ -406,13 +343,10 @@ public class LanteaCraftCommonProxy {
 
 		Fluids.fluidLiquidNaquadah = new LiquidNaquadah();
 		FluidRegistry.registerFluid(Fluids.fluidLiquidNaquadah);
-
-		Fluids.fluidLiquidNaquadahHost = (BlockLiquidNaquadah) registerBlock(BlockLiquidNaquadah.class,
-				ItemBlock.class, LanteaNameRegistry.getBlockMapping("blockLiquidNaquadah"), "blockLiquidNaquadah",
-				"Liquid Naquadah");
-
-		Fluids.fluidLiquidNaquadahBucket = registerSpecialBucket(Fluids.fluidLiquidNaquadahHost,
-				"liquidNaquadahBucket", "liquidNaquadahBucket", "Liquid Naquadah Bucket");
+		Fluids.fluidLiquidNaquadahHost = RegistrationHelper.registerBlock(BlockLiquidNaquadah.class,
+				"blockLiquidNaquadah");
+		Fluids.fluidLiquidNaquadahBucket = RegistrationHelper.registerSpecialBucket(Fluids.fluidLiquidNaquadahHost,
+				"liquidNaquadahBucket");
 	}
 
 	public ConfigValue<?> getConfigValue(String name) {
@@ -466,62 +400,10 @@ public class LanteaCraftCommonProxy {
 		return id;
 	}
 
-	public void addTradeHandler(int villagerID, IVillageTradeHandler handler) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering trade handler for villager ID " + villagerID);
-		VillagerRegistry.instance().registerVillageTradeHandler(villagerID, handler);
-	}
-
-	public void registerOre(String name, Block block) {
-		registerOre(name, new ItemStack(block));
-	}
-
-	public void registerOre(String name, Item item) {
-		registerOre(name, new ItemStack(item));
-	}
-
-	public void registerOre(String name, ItemStack item) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering ore with name " + name);
-		OreDictionary.registerOre(name, item);
-	}
-
-	public void newRecipe(Item product, int qty, Object... params) {
-		newRecipe(new ItemStack(product, qty), params);
-	}
-
-	public void newRecipe(Block product, int qty, Object... params) {
-		newRecipe(new ItemStack(product, qty), params);
-	}
-
-	public void newRecipe(ItemStack product, Object... params) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering new generic recipe");
-		GameRegistry.addRecipe(new ShapedOreRecipe(product, params));
-	}
-
-	public void newShapelessRecipe(Item product, int qty, Object... params) {
-		newShapelessRecipe(new ItemStack(product, qty), params);
-	}
-
-	public void newShapelessRecipe(ItemStack product, Object... params) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering new generic shapeless recipe");
-		GameRegistry.addRecipe(new ShapelessOreRecipe(product, params));
-	}
-
 	public void addContainer(int id, Class<? extends Container> cls) {
 		LanteaCraft.getLogger().log(Level.FINE,
 				"Registering container with ID " + id + ", class " + cls.getCanonicalName());
 		registeredContainers.put(id, cls);
-	}
-
-	public void addRandomChestItem(ItemStack stack, int minQty, int maxQty, int weight, String... category) {
-		WeightedRandomChestContent item = new WeightedRandomChestContent(stack, minQty, maxQty, weight);
-		for (String element : category) {
-			LanteaCraft.getLogger().log(Level.FINE, "Adding new WeightedRandomChestContent for element " + element);
-			ChestGenHooks.addItem(element, item);
-		}
-	}
-
-	public NaquadahOreWorldGen getOreGenerator() {
-		return naquadahOreGenerator;
 	}
 
 	public Class<? extends Container> getContainer(int id) {
@@ -568,6 +450,10 @@ public class LanteaCraftCommonProxy {
 		Packet250CustomPayload payload = packet.toPacket();
 		payload.channel = BuildInfo.modID;
 		PacketDispatcher.sendPacketToPlayer(payload, (Player) player);
+	}
+
+	public ConfigurationHelper getConfig() {
+		return config;
 	}
 
 }

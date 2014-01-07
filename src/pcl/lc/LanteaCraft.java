@@ -32,6 +32,7 @@ import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
 import pcl.lc.items.ItemDebugTool;
+import pcl.lc.items.ItemEnergyCrystal;
 import pcl.lc.items.ItemTokraSpawnEgg;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
@@ -85,9 +86,9 @@ public class LanteaCraft {
 	 * Public declaration of all Block objects
 	 */
 	public static class Blocks {
-		public static BlockStargateBase sgBaseBlock;
-		public static BlockStargateRing sgRingBlock;
-		public static BlockStargateController sgControllerBlock;
+		public static BlockStargateBase stargateBaseBlock;
+		public static BlockStargateRing stargateRingBlock;
+		public static BlockStargateController stargateControllerBlock;
 
 		public static BlockPortal sgPortalBlock;
 
@@ -103,12 +104,15 @@ public class LanteaCraft {
 	public static class Items {
 		public static Item naquadah;
 		public static Item naquadahIngot;
-		public static Item sgCoreCrystal;
-		public static Item sgControllerCrystal;
+		public static Item coreCrystal;
+		public static Item controllerCrystal;
+
+		public static ItemEnergyCrystal energyCrystal;
 
 		public static ItemTokraSpawnEgg tokraSpawnEgg;
 
 		public static ItemDebugTool debugger;
+
 	}
 
 	/**
@@ -261,7 +265,6 @@ public class LanteaCraft {
 		File file = new File(MountDir.getLocalLuaFolder());
 		if (!file.exists())
 			file.mkdirs();
-		
 
 		try {
 			os = new FileOutputStream(MountDir.getLocalLuaFolder() + "/dhd");

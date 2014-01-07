@@ -39,11 +39,11 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 		int stairsWest = 0;
 		int ladder = Block.ladder.blockID;
 		int ladderSouth = 2;
-		int dhd = Blocks.sgControllerBlock.blockID;
+		int dhd = Blocks.stargateControllerBlock.blockID;
 		int dhdNorth = 4;
-		int sgBase = Blocks.sgBaseBlock.blockID;
+		int sgBase = Blocks.stargateBaseBlock.blockID;
 		int sgBaseNorth = 0;
-		int sgRing = Blocks.sgRingBlock.blockID;
+		int sgRing = Blocks.stargateRingBlock.blockID;
 		// Main chamber
 		fillWithBlocks(world, clip, 0, 0, 0, 10, 7, 10, sandstone, 0, false);
 		// Stairwell
