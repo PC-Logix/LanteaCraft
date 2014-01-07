@@ -105,10 +105,16 @@ public class FilterRule {
 	public boolean test(ItemStack testing) {
 		if (testing == null || testing.getItem() == null)
 			return true;
-		if (whitelist)
-			return accept.contains(new ItemStack(testing.getItem(), 1));
-		else
-			return !deny.contains(new ItemStack(testing.getItem(), 1));
+		if (whitelist) {
+			for (ItemStack s : accept)
+				if (s.isItemEqual(testing))
+					return true;
+			return false;
+		} else {
+			for (ItemStack s : deny)
+				if (s.isItemEqual(testing))
+					return false;
+			return true;
+		}
 	}
-
 }

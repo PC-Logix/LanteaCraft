@@ -69,6 +69,7 @@ public class LanteaCraft {
 	public static LanteaCraft getInstance() {
 		return LanteaCraft.mod;
 	}
+
 	public static MountDir mount = new MountDir();
 	/**
 	 * The private instance of the logger used. Use {@link #getLogger()} to access this object
@@ -249,15 +250,19 @@ public class LanteaCraft {
 		proxy.preInit(e);
 	}
 
+	/**
+	 * FIXME: It's not safe to address things outside of proxies. This needs to be merged with
+	 * a valid ComputerCraft handler (later).
+	 */
 	private void copyLua() {
 		InputStream is = getClass().getResourceAsStream("/assets/pcl_lc/lua/dhd");
 		OutputStream os = null;
-		
+
 		File file = new File(MountDir.getLocalLuaFolder());
-		if(!file.exists()){
-		    boolean wasDirectoryMade = file.mkdirs();
+		if (!file.exists()) {
+			boolean wasDirectoryMade = file.mkdirs();
 		}
-		
+
 		try {
 			os = new FileOutputStream(MountDir.getLocalLuaFolder() + "/dhd");
 		} catch (FileNotFoundException e1) {
@@ -268,7 +273,7 @@ public class LanteaCraft {
 		int length;
 		try {
 			while ((length = is.read(buffer)) > 0) {
-			    os.write(buffer, 0, length);
+				os.write(buffer, 0, length);
 			}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
