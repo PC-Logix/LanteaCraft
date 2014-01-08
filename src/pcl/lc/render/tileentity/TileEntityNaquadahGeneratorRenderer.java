@@ -16,9 +16,9 @@ public class TileEntityNaquadahGeneratorRenderer extends TileEntitySpecialRender
 	private float scale = 1;
 
 	public TileEntityNaquadahGeneratorRenderer() {
-		activeTexture = new ResourceLocation("pcl_lc", "textures/models/naquada_generator_on_"
+		activeTexture = LanteaCraft.getResource("textures/models/naquada_generator_on_"
 				+ LanteaCraft.getProxy().getRenderMode() + ".png");
-		inactiveTexture = new ResourceLocation("pcl_lc", "textures/models/naquada_generator_off_"
+		inactiveTexture = LanteaCraft.getResource("textures/models/naquada_generator_off_"
 				+ LanteaCraft.getProxy().getRenderMode() + ".png");
 	}
 

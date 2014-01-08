@@ -16,8 +16,8 @@ public class BlockStargateControllerRenderer extends GenericBlockRenderer {
 	private ResourceLocation texture;
 
 	public BlockStargateControllerRenderer() {
-		this.texture = new ResourceLocation(LanteaCraft.getAssetKey(), "textures/models/dhd_off_"
-				+ LanteaCraft.getProxy().getRenderMode() + ".png");
+		this.texture = LanteaCraft.getResource("textures/models/dhd_off_" + LanteaCraft.getProxy().getRenderMode()
+				+ ".png");
 	}
 
 	@Override

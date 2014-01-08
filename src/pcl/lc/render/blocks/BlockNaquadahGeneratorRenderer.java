@@ -18,7 +18,7 @@ public class BlockNaquadahGeneratorRenderer extends GenericBlockRenderer {
 	private ResourceLocation texture;
 
 	public BlockNaquadahGeneratorRenderer() {
-		this.texture = new ResourceLocation(LanteaCraft.getAssetKey(), "textures/models/naquada_generator_off_"
+		this.texture = LanteaCraft.getResource("textures/models/naquada_generator_off_"
 				+ LanteaCraft.getProxy().getRenderMode() + ".png");
 	}
 

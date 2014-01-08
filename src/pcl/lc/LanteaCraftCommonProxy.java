@@ -98,6 +98,8 @@ public class LanteaCraftCommonProxy {
 	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
 	protected Map<String, VSBinding> registeredVillagers = new HashMap<String, VSBinding>();
 
+	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
+
 	protected ClientPacketHandler defaultClientPacketHandler;
 	protected ServerPacketHandler defaultServerPacketHandler;
 	protected NetworkHelpers networkHelpers;
@@ -458,6 +460,12 @@ public class LanteaCraftCommonProxy {
 
 	public ConfigurationHelper getConfig() {
 		return config;
+	}
+
+	public ResourceLocation fetchResource(String resource) {
+		if (!resourceCache.containsKey(resource))
+			resourceCache.put(resource, new ResourceLocation(LanteaCraft.getAssetKey(), resource));
+		return resourceCache.get(resource);
 	}
 
 }

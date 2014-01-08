@@ -1,5 +1,7 @@
 package pcl.lc.fluids;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -18,6 +20,7 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 	public BlockLiquidNaquadah(int id) {
 		super(id, LanteaCraft.Fluids.fluidLiquidNaquadah, Material.water);
 		LanteaCraft.Fluids.fluidLiquidNaquadah.setBlockID(blockID);
+		setTickRandomly(true);
 	}
 
 	@Override
@@ -40,5 +43,12 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 				thePlayer.addPotionEffect(new PotionEffect(17, 20 * 300)); // hunger
 				thePlayer.addPotionEffect(new PotionEffect(19, 20 * 300)); // poison
 			}
+	}
+
+	@Override
+	public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random) {
+		if (par1World.isRemote)
+			par1World.spawnParticle("smoke", x + par5Random.nextFloat(), y + 1, z + par5Random.nextFloat(),
+					0.02 * par5Random.nextFloat() - 0.01, 0.01 + 0.02 * par5Random.nextFloat(), 0.02 * par5Random.nextFloat() - 0.01);
 	}
 }

@@ -16,10 +16,9 @@ public class EventHorizonRenderer implements IStargateRenderer {
 	public final static int ehGridRadialSize = 10;
 	public final static int ehGridPolarSize = TileEntityStargateBaseRenderer.numRingSegments;
 	public final static double ehBandWidth = ringInnerRadius / ehGridRadialSize;
-	private static ResourceLocation eventHorizonTexture = new ResourceLocation(LanteaCraft.getAssetKey(),
-			"textures/fx/eventhorizon_" + LanteaCraft.getProxy().getRenderMode() + ".png");
-	private static ResourceLocation irisTexture = new ResourceLocation(LanteaCraft.getAssetKey(),
-			"textures/fx/energy_iris_128.png");
+	private static ResourceLocation eventHorizonTexture = LanteaCraft.getResource("textures/fx/eventhorizon_"
+			+ LanteaCraft.getProxy().getRenderMode() + ".png");
+	private static ResourceLocation irisTexture = LanteaCraft.getResource("textures/fx/energy_iris_128.png");
 
 	private TileEntityStargateBaseRenderer caller;
 

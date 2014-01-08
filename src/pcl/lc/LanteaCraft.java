@@ -23,7 +23,6 @@ import pcl.common.helpers.SpecialBucketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.render.RotationOrientedBlockRenderer;
 import pcl.lc.blocks.BlockNaquadahGenerator;
-import pcl.lc.blocks.BlockPortal;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
@@ -192,7 +191,7 @@ public class LanteaCraft {
 	 * @return A fully qualified {@link ResourceLocation} to the resource
 	 */
 	public static ResourceLocation getResource(String path) {
-		return new ResourceLocation(LanteaCraft.getInstance().assetKey, path);
+		return getProxy().fetchResource(path);
 	}
 
 	/**
