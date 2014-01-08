@@ -36,19 +36,19 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if (!world.isRemote)
-			if (entity instanceof EntityPlayer) {
-				EntityPlayer thePlayer = (EntityPlayer) entity;
-				thePlayer.addPotionEffect(new PotionEffect(9, 20 * 300)); // nausea
-				thePlayer.addPotionEffect(new PotionEffect(17, 20 * 300)); // hunger
-				thePlayer.addPotionEffect(new PotionEffect(19, 20 * 300)); // poison
-			}
+		if (!world.isRemote && entity instanceof EntityPlayer) {
+			EntityPlayer thePlayer = (EntityPlayer) entity;
+			thePlayer.addPotionEffect(new PotionEffect(9, 20 * 300));
+			thePlayer.addPotionEffect(new PotionEffect(17, 20 * 300));
+			thePlayer.addPotionEffect(new PotionEffect(19, 20 * 300));
+		}
 	}
 
 	@Override
 	public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random) {
 		if (par1World.isRemote)
 			par1World.spawnParticle("smoke", x + par5Random.nextFloat(), y + 1, z + par5Random.nextFloat(),
-					0.02 * par5Random.nextFloat() - 0.01, 0.01 + 0.02 * par5Random.nextFloat(), 0.02 * par5Random.nextFloat() - 0.01);
+					0.02 * par5Random.nextFloat() - 0.01, 0.01 + 0.02 * par5Random.nextFloat(),
+					0.02 * par5Random.nextFloat() - 0.01);
 	}
 }
