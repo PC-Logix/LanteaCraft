@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import pcl.common.base.GenericContainer;
 import pcl.common.network.StandardModPacket;
 import pcl.lc.LanteaCraft;
-import pcl.lc.core.EnumStargateState;
+import pcl.lc.api.EnumStargateState;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;

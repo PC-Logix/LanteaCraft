@@ -1,4 +1,4 @@
-package pcl.lc.core;
+package pcl.lc.api;
 
 /**
  * Enum containing all gate types, their ordinal and the name assigned to them. This file
@@ -9,24 +9,13 @@ package pcl.lc.core;
  */
 public enum EnumStargateType {
 
-	STANDARD(1, "stargate.standard"), ATLANTIS(2, "stargate.atl"), RESERVED_A(3, "stargate.resv_a"), RESERVED_B(4,
+	STANDARD("stargate.standard"), ATLANTIS("stargate.atl"), RESERVED_A("stargate.resv_a"), RESERVED_B(
 			"stargate.resv_b");
 
-	private final int ordinal;
 	private final String name;
 
-	EnumStargateType(int ord, String nm) {
-		ordinal = ord;
-		name = nm;
-	}
-
-	/**
-	 * Gets the unique ordinal for this type.
-	 * 
-	 * @return The ordinal of this type.
-	 */
-	public int getOrdinal() {
-		return ordinal;
+	EnumStargateType(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -36,6 +25,10 @@ public enum EnumStargateType {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	public static EnumStargateType fromOrdinal(int ordinal) {
+		return EnumStargateType.values()[ordinal];
 	}
 
 }

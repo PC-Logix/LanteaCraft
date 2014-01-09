@@ -11,7 +11,7 @@ import pcl.common.network.StandardModPacket;
 import pcl.common.util.ImmutablePair;
 import pcl.common.util.ImmutableTuple;
 import pcl.common.util.Vector3;
-import pcl.lc.core.EnumStargateState;
+import pcl.lc.api.EnumStargateState;
 
 /**
  * Generic network helper registry, this is where I chose to dump them as I write jazz.
@@ -143,8 +143,7 @@ public class NetworkHelpers {
 
 		@Override
 		public EnumOrientations unpack(DataInputStream streamOf) throws IOException {
-			int id = streamOf.readInt();
-			return EnumOrientations.getOrientationFromID(id);
+			return EnumOrientations.getOrientationFromID(streamOf.readInt());
 		}
 	}
 
@@ -169,8 +168,7 @@ public class NetworkHelpers {
 
 		@Override
 		public EnumStargateState unpack(DataInputStream streamOf) throws IOException {
-			int id = streamOf.readInt();
-			return EnumStargateState.getStateFromOrdinal(id);
+			return EnumStargateState.fromOrdinal(streamOf.readInt());
 		}
 	}
 

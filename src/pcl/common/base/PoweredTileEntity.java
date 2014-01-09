@@ -9,7 +9,7 @@ import net.minecraftforge.common.ForgeDirection;
 import pcl.common.asm.ClassOptional.ClassFilterInterface;
 import pcl.common.asm.ClassOptional.ClassFilterInterfaceList;
 import pcl.common.asm.ClassOptional.ClassFilterMethod;
-import pcl.lc.core.EnumUnits;
+import pcl.lc.api.EnumUnits;
 import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.electricity.ElectricityPack;
 import buildcraft.api.power.IPowerEmitter;

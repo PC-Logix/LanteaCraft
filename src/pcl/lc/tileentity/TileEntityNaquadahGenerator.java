@@ -15,7 +15,7 @@ import pcl.common.base.PoweredTileEntity;
 import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
 import pcl.lc.LanteaCraft;
-import pcl.lc.core.EnumUnits;
+import pcl.lc.api.EnumUnits;
 import pcl.lc.fluids.SpecialFluidTank;
 
 public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler {
