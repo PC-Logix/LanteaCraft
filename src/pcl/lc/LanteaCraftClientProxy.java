@@ -111,8 +111,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	}
 
 	void registerRenderer(GenericBlockRenderer renderer) {
-		int id = RenderingRegistry.getNextAvailableRenderId();
-		renderer.renderID = id;
+		renderer.renderID = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(renderer);
 	}
 
@@ -130,8 +129,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 				Object val = constr.newInstance(entity, player);
 				return val;
 			} catch (Throwable t) {
-				System.err.println("Could not create GUI, a " + t.getClass().getName() + " exception occurred.");
-				t.printStackTrace(System.err);
+				LanteaCraft.getLogger().log(Level.SEVERE, String.format("Failed to create GUI with ID %s", ID), t);
 			}
 		return null;
 	}

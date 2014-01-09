@@ -13,6 +13,16 @@ package pcl.lc.api;
 public interface IStargateAccess {
 
 	/**
+	 * Returns the multi-block structure state of the Stargate. As all parts of the Stargate
+	 * act as an {@link IStargateAccess} host, it is important to check to ensure the Stargate
+	 * is a completed structure, and that nothing is directly obstructing or preventing it's
+	 * completeness.
+	 * 
+	 * @return If the current Stargate structure configuration is valid.
+	 */
+	public boolean isValid();
+
+	/**
 	 * Fetches the busy state of the Stargate. If the Stargate is in currently dialling a
 	 * connection, receiving a connection, in a connection or closing a connection, this
 	 * returns true. If the gate is completely idle (that is, doing nothing), this returns
@@ -59,6 +69,14 @@ public interface IStargateAccess {
 	 *         initiating a connection.
 	 */
 	public boolean connect(String address);
+
+	/**
+	 * Requests this Stargate close it's active connection.
+	 * 
+	 * @return Returns true if the connection has been closed. Returns false if the connection
+	 *         was not closed or cannot be closed, or if there is no connection.
+	 */
+	public boolean disconnect();
 
 	/**
 	 * Gets the total quantity of energy which is immediately available to this Stargate.

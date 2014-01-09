@@ -84,43 +84,41 @@ import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 public class LanteaCraftCommonProxy {
 
-	protected File cfgFile;
 	protected ConfigurationHelper config;
 	protected ArrayList<ConfigValue<?>> configValues = new ArrayList<ConfigValue<?>>();
-	public TileEntityChunkManager chunkManager;
-
-	private NaquadahOreWorldGen naquadahOreGenerator;
-	private int tokraVillagerID;
+	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
 
 	private AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
+	protected ClientPacketHandler defaultClientPacketHandler;
+	protected ServerPacketHandler defaultServerPacketHandler;
+	private NetworkHelpers networkHelpers;
+	private UpgradeHelper upgradeHelper;
+
+	public TileEntityChunkManager chunkManager;
+	private NaquadahOreWorldGen naquadahOreGenerator;
 
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
-	protected Map<String, VSBinding> registeredVillagers = new HashMap<String, VSBinding>();
+	protected Map<String, VillagerMapping> registeredVillagers = new HashMap<String, VillagerMapping>();
+	protected int tokraVillagerID;
 
-	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
+	protected class VillagerMapping {
+		public final int villagerID;
+		public final ResourceLocation villagerSkin;
 
-	protected ClientPacketHandler defaultClientPacketHandler;
-	protected ServerPacketHandler defaultServerPacketHandler;
-	protected NetworkHelpers networkHelpers;
-
-	public static UpgradeHelper upgradeHelper;
-
-	protected class VSBinding {
-		public int id;
-		public ResourceLocation object;
+		public VillagerMapping(int id, ResourceLocation skin) {
+			this.villagerID = id;
+			this.villagerSkin = skin;
+		}
 	};
 
 	public LanteaCraftCommonProxy() {
-		System.out.println("This is " + BuildInfo.modName + " version " + BuildInfo.versionNumber + " build "
-				+ BuildInfo.buildNumber + " as modid " + BuildInfo.modID);
 		defaultServerPacketHandler = new ServerPacketHandler();
 		networkHelpers = new NetworkHelpers();
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
-		cfgFile = e.getSuggestedConfigurationFile();
-		config = new ConfigurationHelper(cfgFile);
+		config = new ConfigurationHelper(e.getSuggestedConfigurationFile());
 		configure();
 	}
 
@@ -181,7 +179,6 @@ public class LanteaCraftCommonProxy {
 		Property prop = config.get("general", "currentVersion", 0);
 		prop.comment = "Version cache - do not change this!";
 		String previousVersion = prop.getString();
-
 		prop.set(version);
 
 		Property GenerateStruct = config.get("options", "GenerateStructures", true);
@@ -399,10 +396,7 @@ public class LanteaCraftCommonProxy {
 
 	public int addVillager(int id, String name, ResourceLocation skin) {
 		LanteaCraft.getLogger().log(Level.FINE, "Adding villager ID " + id + " with name " + name);
-		VSBinding b = new VSBinding();
-		b.id = id;
-		b.object = skin;
-		registeredVillagers.put(name, b);
+		registeredVillagers.put(name, new VillagerMapping(id, skin));
 		return id;
 	}
 
@@ -425,9 +419,9 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public int getVillagerID(String name) {
-		VSBinding villager = registeredVillagers.get(name);
+		VillagerMapping villager = registeredVillagers.get(name);
 		if (villager != null)
-			return villager.id;
+			return villager.villagerID;
 		return 0;
 	}
 
