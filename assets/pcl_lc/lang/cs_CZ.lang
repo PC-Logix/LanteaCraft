@@ -1,0 +1,17 @@
+tile.naquadahBlock.name=Blok nakadahu
+tile.naquadahOre.name=Nakadahová ruda
+tile.naquadahGenerator.name=Nakadahový generator
+tile.stargateController.name=Ovládací panel brány
+tile.stargateBase.name=Základní blok brány
+tile.stargateRing.0.name=Segment kruhu brány
+tile.stargateRing.1.name=Zámek brány
+tile.blockLiquidNaquadah.name=Tekutý nakadah
+
+item.naquadah.name=Nakadah
+item.naquadahIngot.name=Ingot nakadahové slitiny
+item.coreCrystal.name=Hlavní krystal
+item.controllerCrystal.name=Řídící krystal
+item.energyCrystal.name=Energetický krystal
+item.tokraSpawnEgg.name=Tok'ří vejce
+item.lanteadebug.name=LanteaCraft Debugger
+item.liquidNaquadahBucket.name=Kbelík tekutého nakadahu
