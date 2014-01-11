@@ -33,13 +33,18 @@ public interface IStargateAccess {
 	public boolean isBusy();
 
 	/**
-	 * Fetches the state of the Stargate's iris. If the Stargate has no iris installed, or no
-	 * valid iris is configured, this will return false. If the iris is currently engaged, this
-	 * will return true. All other conditions return false.
+	 * Fetches the raw state of the Stargate.
 	 * 
-	 * @return If the Stargate has a valid iris and if the iris is currently engaged.
+	 * @return The raw state of the Stargate.
 	 */
-	public boolean isIrisActive();
+	public EnumStargateState getState();
+
+	/**
+	 * Fetches the state of the Stargate's iris.
+	 * 
+	 * @return The state of the Stargate's iris.
+	 */
+	public EnumIrisState isIrisActive();
 
 	/**
 	 * Determines if the current dialled connection is an outgoing one (that is, initiated from

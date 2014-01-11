@@ -41,6 +41,17 @@ public interface INaquadahGeneratorAccess {
 	public double getStoredEnergy();
 
 	/**
+	 * Gets the current quantity of energy stored in the Naquadah Generator in terms of the
+	 * unit specified.
+	 * 
+	 * @param unitsOf
+	 *            The unit to convert to.
+	 * @return The current quantity of energy stored in the Naquadah Generator in terms of the
+	 *         unit specified.
+	 */
+	public double getStoredEnergy(EnumUnits unitsOf);
+
+	/**
 	 * Gets the maximum quantity of energy which may be stored in the Naquadah Generator.
 	 * 
 	 * @return The maximum quantity of energy which may be stored in the Naquadah Generator.
