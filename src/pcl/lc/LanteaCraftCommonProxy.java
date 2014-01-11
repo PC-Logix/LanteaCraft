@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.crash.CallableMinecraftVersion;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
@@ -50,6 +51,7 @@ import pcl.lc.compat.UpgradeHelper;
 import pcl.lc.containers.ContainerNaquadahGenerator;
 import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.core.GateAddressHelper;
+import pcl.lc.entity.EntityTokra;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
@@ -78,6 +80,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
@@ -141,6 +144,7 @@ public class LanteaCraftCommonProxy {
 		registerRandomItems();
 		registerWorldGenerators();
 		registerContainers();
+		registerEntities();
 		registerVillagers();
 		registerOther();
 		if (config.extended)
@@ -324,6 +328,10 @@ public class LanteaCraftCommonProxy {
 			naquadahOreGenerator = new NaquadahOreWorldGen();
 			GameRegistry.registerWorldGenerator(naquadahOreGenerator);
 		}
+	}
+
+	void registerEntities() {
+		EntityRegistry.registerModEntity(EntityTokra.class, "tokra", 0, LanteaCraft.getInstance(), 80, 1, true);
 	}
 
 	void registerVillagers() {

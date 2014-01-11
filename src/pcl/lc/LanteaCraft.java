@@ -27,6 +27,7 @@ import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
 import pcl.lc.core.MountDir;
+import pcl.lc.entity.EntityTokra;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
@@ -41,6 +42,7 @@ import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateControllerRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
+import pcl.lc.render.entities.EntityTokraRenderer;
 import pcl.lc.render.models.NaquadahGeneratorModel;
 import pcl.lc.render.models.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
@@ -135,6 +137,8 @@ public class LanteaCraft {
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
 		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
+		
+		public static EntityTokraRenderer entityTokraRenderer;
 	}
 
 	/**
@@ -144,6 +148,13 @@ public class LanteaCraft {
 		public static LiquidNaquadah fluidLiquidNaquadah;
 		public static BlockLiquidNaquadah fluidLiquidNaquadahHost;
 		public static ItemSpecialBucket fluidLiquidNaquadahBucket;
+	}
+	
+	/**
+	 * Public declaration of all entities
+	 */
+	public static class Entities {
+		public static EntityTokra entityTokra;
 	}
 
 	public static enum EnumGUIs {
