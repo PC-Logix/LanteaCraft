@@ -60,6 +60,8 @@ public class StargatePart extends MultiblockPart {
 	@Override
 	public void release() {
 		currentHost = null;
+		host.worldObj.markBlockForUpdate(host.xCoord, host.yCoord, host.zCoord);
+		host.worldObj.markBlockForRenderUpdate(host.xCoord, host.yCoord, host.zCoord);
 	}
 
 	@Override

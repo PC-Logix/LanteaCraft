@@ -8,8 +8,9 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 /**
- * The main IFMLLoadingPlugin hook. Forge should be told through arguments or through the
- * MANIFEST file that this code should be treated as a tweak in Forge.
+ * The main IFMLLoadingPlugin hook. Forge should be told through arguments or
+ * through the MANIFEST file that this code should be treated as a tweak in
+ * Forge.
  * 
  * @author AfterLifeLochie
  */
@@ -19,7 +20,8 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 	/**
 	 * The logger
 	 */
-	private static final Logger log = Logger.getLogger("PCLCoreTransformerPlugin");
+	private static final Logger log = Logger
+			.getLogger("PCLCoreTransformerPlugin");
 
 	/**
 	 * Gets the logger
@@ -36,11 +38,6 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 	public PCLCoreTransformerPlugin() {
 		log.setParent(FMLLog.getLogger());
 		log.log(Level.INFO, "PCLCoreTransformerPlugin ready for action!");
-	}
-
-	@Override
-	public String[] getLibraryRequestClass() {
-		return null;
 	}
 
 	@Override
