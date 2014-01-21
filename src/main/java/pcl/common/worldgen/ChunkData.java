@@ -7,6 +7,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import pcl.common.helpers.ConfigValue;
 import pcl.lc.LanteaCraft;
+import pcl.lc.worldgen.NaquadahOreWorldGen;
 
 public class ChunkData {
 
@@ -37,9 +38,11 @@ public class ChunkData {
 		Chunk chunk = e.getChunk();
 		ChunkData data = ChunkData.forChunk(chunk);
 		data.readFromNBT(e.getData());
-		if (!data.oresGenerated
-				&& ((ConfigValue<Boolean>) LanteaCraft.getProxy().getConfigValue("addOresToExistingWorlds")).getValue())
-			LanteaCraft.getProxy().getOreGenerator().regenerate(chunk);
+		if (!data.oresGenerated && ((ConfigValue<Boolean>) LanteaCraft.getProxy().getConfigValue("addOresToExistingWorlds")).getValue()) {
+			NaquadahOreWorldGen gen = LanteaCraft.getProxy().getOreGenerator();
+			if (gen != null)
+				gen.regenerate(chunk);
+		}
 	}
 
 	public static void onChunkSave(ChunkDataEvent.Save e) {

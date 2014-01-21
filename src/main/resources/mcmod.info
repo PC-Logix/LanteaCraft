@@ -1,16 +1,21 @@
-[
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authors": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
+  "modinfoversion": 2,
+  "modlist": [{
+    "modid": "LanteaCraft",
+    "name": "LanteaCraft",
+    "description": "LanteaCraft, Adds Stargates, and other Lantean based tech!",
+    "version": "0.1.0",
+    "mcversion": "",
+    "url": "http://www.minecraftforum.net/topic/2059956-",
+    "updateUrl": "",
+    "authors": [ "Michiyo", "AfterLifeLochie", "DrakeBD", "TempusBD", "Greg Ewing" ],
+    "credits": "Greg_Ewing for the original mod, deltastrium.com for the Delta NP SGCraft textures.",
+    "logoFile": "/assets/textures/forge/LanteaCraft.png",
+    "screenshots": [ ],
+    "parent": "",
+    "requiredMods": [ "Forge"],
+    "dependencies": [ "ComputerCraft" ],
+    "dependants": [ ],
+    "useDependencyInformation": "true"
+  }]
 }
-]

@@ -14,8 +14,8 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.0"
-group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+group= "pcl.LanteaCraft"
+archivesBaseName = "LanteaCraft"
 
 minecraft {
 	version = "1.6.4-9.11.1.964"
