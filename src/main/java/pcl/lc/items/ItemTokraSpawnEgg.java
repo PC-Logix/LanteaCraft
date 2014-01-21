@@ -33,7 +33,7 @@ public class ItemTokraSpawnEgg extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
 				+ LanteaCraft.getProxy().getRenderMode();
 	}
 

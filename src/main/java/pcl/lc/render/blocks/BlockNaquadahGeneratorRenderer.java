@@ -11,7 +11,6 @@ import cpw.mods.fml.client.FMLClientHandler;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.lc.LanteaCraft;
 import pcl.lc.render.models.NaquadahGeneratorModel;
-import pcl.lc.render.models.StargateControllerModel;
 
 public class BlockNaquadahGeneratorRenderer extends GenericBlockRenderer {
 

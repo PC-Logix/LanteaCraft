@@ -56,7 +56,8 @@ public class ModuleCore implements IModule {
 		FluidRegistry.registerFluid(Fluids.fluidLiquidNaquadah);
 		Fluids.fluidLiquidNaquadahHost = RegistrationHelper.registerBlock(BlockLiquidNaquadah.class, ItemBlock.class,
 				"blockLiquidNaquadah", false);
-		Fluids.fluidLiquidNaquadahBucket = RegistrationHelper.registerSpecialBucket(Fluids.fluidLiquidNaquadahHost, "liquidNaquadahBucket");
+		Fluids.fluidLiquidNaquadahBucket = RegistrationHelper.registerSpecialBucket(Fluids.fluidLiquidNaquadahHost, "liquidNaquadahBucket",
+				"liquid-naquadah");
 	}
 
 	@Override

@@ -101,8 +101,8 @@ public class StandardModPacket extends ModPacket {
 	 * Sets all fields given the values in the map
 	 * 
 	 * @param map
-	 *            A map of items. Each value in the map will be set as a field inside the
-	 *            packet.
+	 *            A map of items. Each value in the map will be set as a field
+	 *            inside the packet.
 	 */
 	public void setAllValues(Map<String, Object> map) {
 		synchronized (values) {
@@ -220,33 +220,33 @@ public class StandardModPacket extends ModPacket {
 			data.writeInt(intValueOf);
 			if (intValueOf != -1)
 				switch (intValueOf) {
-					case 0:
-					case 1:
-						data.writeInt((Integer) o);
-						break;
-					case 2:
-					case 3:
-						data.writeByte((Boolean) o ? 1 : 0);
-						break;
-					case 4:
-					case 5:
-						data.writeDouble((Double) o);
-						break;
-					case 6:
-					case 7:
-						data.writeFloat((Float) o);
-						break;
-					case 8:
-						Packet.writeString((String) o, data);
-						break;
-					case 9:
-						writeArrayList((ArrayList) o, data);
-						break;
-					case 10:
-						writeHashMap((HashMap) o, data);
-						break;
-					default:
-						throw new IOException("Don't know what to do with typeof " + intValueOf);
+				case 0:
+				case 1:
+					data.writeInt((Integer) o);
+					break;
+				case 2:
+				case 3:
+					data.writeByte((Boolean) o ? 1 : 0);
+					break;
+				case 4:
+				case 5:
+					data.writeDouble((Double) o);
+					break;
+				case 6:
+				case 7:
+					data.writeFloat((Float) o);
+					break;
+				case 8:
+					Packet.writeString((String) o, data);
+					break;
+				case 9:
+					writeArrayList((ArrayList<?>) o, data);
+					break;
+				case 10:
+					writeHashMap((HashMap<?, ?>) o, data);
+					break;
+				default:
+					throw new IOException("Don't know what to do with typeof " + intValueOf);
 				}
 		}
 	}
@@ -297,9 +297,9 @@ public class StandardModPacket extends ModPacket {
 	}
 
 	/**
-	 * Writes a HashMap of any anonymous type to a stream. This method removes all null key or
-	 * null value pairs from the iteration, only writing values which are not null or
-	 * null-pointers
+	 * Writes a HashMap of any anonymous type to a stream. This method removes
+	 * all null key or null value pairs from the iteration, only writing values
+	 * which are not null or null-pointers
 	 * 
 	 * @param values
 	 *            The HashMap of values to write
@@ -342,8 +342,9 @@ public class StandardModPacket extends ModPacket {
 	}
 
 	/**
-	 * Writes an ArrayList of any anonymous type to a stream. This method removes all null
-	 * value items from the iteration, only writing values which are not null or null-pointers
+	 * Writes an ArrayList of any anonymous type to a stream. This method
+	 * removes all null value items from the iteration, only writing values
+	 * which are not null or null-pointers
 	 * 
 	 * @param array
 	 *            The ArrayList of values to write

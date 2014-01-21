@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
 import net.minecraft.block.Block;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -22,8 +21,8 @@ import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 public class RegistrationHelper {
 
 	/**
-	 * Register a Block with a given class and unlocalized name. The block will use the default
-	 * {@link ItemBlock} structure when held as an item.
+	 * Register a Block with a given class and unlocalized name. The block will
+	 * use the default {@link ItemBlock} structure when held as an item.
 	 * 
 	 * @param classOf
 	 *            The class of the block.
@@ -36,8 +35,8 @@ public class RegistrationHelper {
 	}
 
 	/**
-	 * Register a block with a given class, a given item class and an unlocalized name. The
-	 * block will display by default in CreativeTabs.
+	 * Register a block with a given class, a given item class and an
+	 * unlocalized name. The block will display by default in CreativeTabs.
 	 * 
 	 * @param classOf
 	 *            The class of the block.
@@ -53,8 +52,8 @@ public class RegistrationHelper {
 	}
 
 	/**
-	 * Register a block with a given class, a given item class, an unlocalized name and a
-	 * display preference in CreativeTabs.
+	 * Register a block with a given class, a given item class, an unlocalized
+	 * name and a display preference in CreativeTabs.
 	 * 
 	 * @param classOf
 	 *            The class of the block.
@@ -75,7 +74,7 @@ public class RegistrationHelper {
 			T theMysteryBlock = (T) ctor.newInstance(id);
 			theMysteryBlock.setUnlocalizedName(unlocalizedName);
 			if (inCreativeTabs)
-				theMysteryBlock.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
+				theMysteryBlock.setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerBlock(theMysteryBlock, itemClassOf, unlocalizedName);
 			return theMysteryBlock;
 		} catch (Exception e) {
@@ -99,8 +98,7 @@ public class RegistrationHelper {
 			int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 31743).getInt();
 			Constructor<? extends Item> ctor = classOf.getConstructor(int.class);
 			T theMysteryItem = (T) ctor.newInstance(id);
-			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(
-					LanteaCraft.getInstance().getCreativeTab());
+			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerItem(theMysteryItem, unlocalizedName);
 			return theMysteryItem;
 		} catch (Exception e) {
@@ -116,14 +114,17 @@ public class RegistrationHelper {
 	 *            The host fluid.
 	 * @param unlocalizedName
 	 *            The unlocalized name for the bucket.
+	 * @param bucketTextureName
+	 *            The texture target for the bucket.
 	 * @return The ItemSpecialBucket singleton for this host fluid.
 	 */
-	public static ItemSpecialBucket registerSpecialBucket(Block hostOf, String unlocalizedName) {
+	public static ItemSpecialBucket registerSpecialBucket(Block hostOf, String unlocalizedName, String bucketTextureName) {
 		LanteaCraft.getLogger().log(Level.FINE, "Attempting to register SpecialBucket " + unlocalizedName);
 		int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 31743).getInt();
 		ItemSpecialBucket bucket = new ItemSpecialBucket(id, hostOf);
 		bucket.setUnlocalizedName(unlocalizedName);
-		bucket.setCreativeTab(LanteaCraft.getInstance().getCreativeTab());
+		bucket.setCreativeTab(LanteaCraft.getCreativeTab());
+		bucket.setTargetTexture(bucketTextureName);
 		GameRegistry.registerItem(bucket, unlocalizedName);
 		return bucket;
 	}

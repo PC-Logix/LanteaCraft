@@ -145,8 +145,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))
 			if (key == Keyboard.KEY_V)
 				try {
-					String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
-							.getData(DataFlavor.stringFlavor);
+					String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
 					for (char c1 : data.toCharArray())
 						if (GateAddressHelper.isValidSymbolChar(c1))
 							enterCharacter(c1);
@@ -186,16 +185,15 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	}
 
 	void drawBackgroundImage() {
-		bindTexture(LanteaCraft.getInstance().getResource("textures/gui/dhd_gui.png"));
+		bindTexture(LanteaCraft.getResource("textures/gui/dhd_gui.png"));
 		drawTexturedRect((width - dhdWidth) / 2, height - dhdHeight, dhdWidth, dhdHeight);
 	}
 
 	void drawOrangeButton() {
-		bindTexture(LanteaCraft.getInstance().getResource("textures/gui/dhd_centre.png"), 128, 64);
+		bindTexture(LanteaCraft.getResource("textures/gui/dhd_centre.png"), 128, 64);
 		GL11.glEnable(GL11.GL_BLEND);
 		TileEntityStargateBase te = getStargateTE();
-		boolean connected = te != null
-				&& (EnumStargateState) te.getAsStructure().getMetadata("state") != EnumStargateState.Idle
+		boolean connected = te != null && (EnumStargateState) te.getAsStructure().getMetadata("state") != EnumStargateState.Idle
 				&& (EnumStargateState) te.getAsStructure().getMetadata("state") != EnumStargateState.Disconnecting;
 		if (te == null || !te.getAsStructure().isValid())
 			setColor(0.2, 0.2, 0.2);

@@ -29,26 +29,26 @@ public class BlockStargateController extends RotationOrientedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
-	public void registerIcons(IconRegister reg) {
-		topTexture = getIcon(reg, "controller_top_" + LanteaCraft.getProxy().getRenderMode());
-		bottomTexture = getIcon(reg, "controller_bottom_" + LanteaCraft.getProxy().getRenderMode());
-		sideTexture = getIcon(reg, "controller_side_" + LanteaCraft.getProxy().getRenderMode());
+	public void registerIcons(IconRegister register) {
+		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_top_" + LanteaCraft.getProxy().getRenderMode());
+		bottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_bottom_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_side_" + LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
 	public Icon getIcon(int side, int data) {
 		switch (side) {
-			case 0:
-				return bottomTexture;
-			case 1:
-				return topTexture;
-			default:
-				return sideTexture;
+		case 0:
+			return bottomTexture;
+		case 1:
+			return topTexture;
+		default:
+			return sideTexture;
 		}
 	}
 
@@ -88,8 +88,7 @@ public class BlockStargateController extends RotationOrientedBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
-			float cy, float cz) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx, float cy, float cz) {
 		player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateController.ordinal(), world, x, y, z);
 		return true;
 	}

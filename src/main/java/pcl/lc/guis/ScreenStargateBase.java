@@ -56,17 +56,14 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 
 	@Override
 	public void drawBackgroundLayer() {
-		bindTexture(
-				LanteaCraft.getInstance().getResource(
-						"textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png"), 256, 256);
+		bindTexture(LanteaCraft.getResource("textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png"), 256, 256);
 		drawTexturedRect(0, 0, guiWidth, guiHeight, 0, 0);
 	}
 
 	void drawFuelGauge() {
 		int level = fuelGaugeHeight * te.fuelBuffer / TileEntityStargateBase.maxFuelBuffer;
 		GL11.glEnable(GL11.GL_BLEND);
-		drawTexturedRect(fuelGaugeX, fuelGaugeY + fuelGaugeHeight - level, fuelGaugeWidth, level, fuelGaugeU,
-				fuelGaugeV);
+		drawTexturedRect(fuelGaugeX, fuelGaugeY + fuelGaugeHeight - level, fuelGaugeWidth, level, fuelGaugeU, fuelGaugeV);
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 

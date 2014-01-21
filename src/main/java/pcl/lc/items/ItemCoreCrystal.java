@@ -14,7 +14,6 @@ public class ItemCoreCrystal extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":sgCoreCrystal_" + LanteaCraft.getProxy().getRenderMode();
 	}
 }

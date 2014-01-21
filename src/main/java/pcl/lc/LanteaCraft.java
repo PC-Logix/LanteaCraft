@@ -9,11 +9,8 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.IOUtils;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -22,6 +19,7 @@ import pcl.common.helpers.CreativeTabHelper;
 import pcl.common.helpers.SpecialBucketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.render.RotationOrientedBlockRenderer;
+import pcl.lc.blocks.BlockLanteaDecor;
 import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
@@ -101,6 +99,8 @@ public class LanteaCraft {
 		public static Block naquadahOre;
 
 		public static BlockNaquadahGenerator naquadahGenerator;
+		
+		public static BlockLanteaDecor decorBlock;
 	}
 
 	/**

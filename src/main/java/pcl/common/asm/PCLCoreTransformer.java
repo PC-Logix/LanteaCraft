@@ -32,7 +32,7 @@ public class PCLCoreTransformer implements IClassTransformer {
 		PCLCoreTransformer.ASM_SUCCESS = true;
 
 		String[] tnames = PCLCoreTransformerPlugin.getTransformers();
-		transformers = new ArrayList(tnames.length);
+		transformers = new ArrayList<IClassTransformer>(tnames.length);
 		for (String transformer : tnames)
 			try {
 				transformers.add((IClassTransformer) Class.forName(transformer).newInstance());

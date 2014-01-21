@@ -32,8 +32,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
@@ -59,10 +58,12 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister reg) {
-		topAndBottomTexture = getIcon(reg, "stargateBlock_" + LanteaCraft.getProxy().getRenderMode());
-		frontTexture = getIcon(reg, "stargateBase_front_" + LanteaCraft.getProxy().getRenderMode());
-		sideTexture = getIcon(reg, "stargateRing_" + LanteaCraft.getProxy().getRenderMode());
+	public void registerIcons(IconRegister register) {
+		topAndBottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBlock_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		frontTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBase_front_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateRing_" + LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
@@ -89,8 +90,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
-			float cy, float cz) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx, float cy, float cz) {
 		TileEntityStargateBase te = (TileEntityStargateBase) getTileEntity(world, x, y, z);
 		if (te != null)
 			if (te.getAsStructure().isValid()) {

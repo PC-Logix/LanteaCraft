@@ -16,7 +16,6 @@ public class BlockNaquadah extends BlockOreStorage {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":naquadahBlock_" + LanteaCraft.getProxy().getRenderMode();
 	}
 }

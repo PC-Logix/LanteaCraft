@@ -24,8 +24,7 @@ public class BlockNaquadahOre extends BlockOre {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":naquadahOre_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override

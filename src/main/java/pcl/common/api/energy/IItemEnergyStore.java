@@ -1,7 +1,6 @@
 package pcl.common.api.energy;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public interface IItemEnergyStore {
 	

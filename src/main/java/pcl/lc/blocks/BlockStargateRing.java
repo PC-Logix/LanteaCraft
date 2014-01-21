@@ -39,8 +39,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
@@ -51,10 +50,12 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister reg) {
-		topAndBottomTexture = getIcon(reg, "stargateBlock_" + LanteaCraft.getProxy().getRenderMode());
-		sideTextures[0] = getIcon(reg, "stargateRing_" + LanteaCraft.getProxy().getRenderMode());
-		sideTextures[1] = getIcon(reg, "stargateChevron_" + LanteaCraft.getProxy().getRenderMode());
+	public void registerIcons(IconRegister register) {
+		topAndBottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBlock_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		sideTextures[0] = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateRing_" + LanteaCraft.getProxy().getRenderMode());
+		sideTextures[1] = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateChevron_"
+				+ LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
@@ -78,8 +79,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
-			float cy, float cz) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx, float cy, float cz) {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
 		if (te.getAsPart().isMerged()) {
 			Vector3 base = te.getAsPart().findHostMultiblock(false).getLocation();
@@ -110,7 +110,8 @@ public class BlockStargateRing extends GenericContainerBlock {
 		for (int i = 0; i < BlockStargateRing.numSubBlocks; i++) {
 			String name = ItemStargateRing.subItemName(i) + ".name";
 			String title = subBlockTitles[i];
-			// registry.addStringLocalization(name, "en_US", title); --Moving to .lang file
+			// registry.addStringLocalization(name, "en_US", title); --Moving to
+			// .lang file
 		}
 	}
 

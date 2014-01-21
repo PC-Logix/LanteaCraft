@@ -34,8 +34,8 @@ public abstract class GenericGlyphGUI extends GenericContainerGUI {
 			int s = GateAddressHelper.charToSymbol(address.charAt(i));
 			int row = s / symbolsPerRow;
 			int col = s % symbolsPerRow;
-			drawTexturedRect(x0 + borderSize + i * cellSize, y + borderSize, cellSize, cellSize,
-					col * cellSize * scale, row * cellSize * scale);
+			drawTexturedRect(x0 + borderSize + i * cellSize, y + borderSize, cellSize, cellSize, col * cellSize * scale, row * cellSize
+					* scale);
 		}
 	}
 
@@ -50,7 +50,7 @@ public abstract class GenericGlyphGUI extends GenericContainerGUI {
 	}
 
 	void bindSGTexture(String name, int usize, int vsize) {
-		bindTexture(LanteaCraft.getInstance().getResource("textures/gui/" + name), usize, vsize);
+		bindTexture(LanteaCraft.getResource("textures/gui/" + name), usize, vsize);
 	}
 
 }

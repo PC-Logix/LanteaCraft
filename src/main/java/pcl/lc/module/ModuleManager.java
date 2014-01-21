@@ -12,7 +12,7 @@ public class ModuleManager {
 
 	public static enum Module {
 		CORE(new ModuleCore()), STARGATE(new ModuleStargates()), POWER(new ModulePower()), WORLDGEN(new ModuleWorldGenerator()), CRITTERS(
-				new ModuleCritters());
+				new ModuleCritters()), DECOR(new ModuleDecor());
 
 		private final IModule moduleOf;
 		private boolean loaded = false;

@@ -33,7 +33,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 			double y, double z, float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
-		caller.bind(LanteaCraft.getInstance().getResource("textures/tileentity/stargate_pegasus_128.png"));
+		caller.bind(LanteaCraft.getResource("textures/tileentity/stargate_pegasus_128.png"));
 		GL11.glNormal3f(0, 1, 0);
 		renderRing(ringMidRadius, ringOuterRadius, false);
 		renderInnerRing(te, t);

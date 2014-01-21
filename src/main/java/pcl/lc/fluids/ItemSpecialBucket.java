@@ -10,8 +10,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * ItemSpecialBucket is a special bucket implementation which allows Fluids to create custom
- * bucket types generically.
+ * ItemSpecialBucket is a special bucket implementation which allows Fluids to
+ * create custom bucket types generically.
  * 
  * @author AfterLifeLochie
  */
@@ -23,8 +23,8 @@ public class ItemSpecialBucket extends ItemBucket {
 	private String iconName;
 
 	/**
-	 * Creates an instance of an ItemSpecialBucket and initializes it with default properties
-	 * and with the {@link SpecialBucketHandler} registry.
+	 * Creates an instance of an ItemSpecialBucket and initializes it with
+	 * default properties and with the {@link SpecialBucketHandler} registry.
 	 * 
 	 * @param i
 	 *            The item ID to use for this bucket.
@@ -47,6 +47,11 @@ public class ItemSpecialBucket extends ItemBucket {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
-		itemIcon = par1IconRegister.registerIcon(LanteaCraft.getAssetKey() + ":" + iconName);
+		itemIcon = par1IconRegister.registerIcon(LanteaCraft.getAssetKey() + ":bucket_" + iconName + "_"
+				+ LanteaCraft.getProxy().getRenderMode());
+	}
+
+	public void setTargetTexture(String bucketTextureName) {
+		iconName = bucketTextureName;
 	}
 }

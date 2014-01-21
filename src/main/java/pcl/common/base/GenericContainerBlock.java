@@ -30,11 +30,6 @@ public abstract class GenericContainerBlock extends BlockContainer {
 		return getRenderType() == 0;
 	}
 
-	@Deprecated
-	public Icon getIcon(IconRegister register, String whoknows) {
-		return register.registerIcon(LanteaCraft.getAssetKey() + ":" + whoknows);
-	}
-
 	@Override
 	public abstract void registerIcons(IconRegister reg);
 
@@ -60,14 +55,13 @@ public abstract class GenericContainerBlock extends BlockContainer {
 						float var10 = random.nextFloat() * 0.8F + 0.1F;
 						float var11 = random.nextFloat() * 0.8F + 0.1F;
 						EntityItem var14;
-						for (float var12 = random.nextFloat() * 0.8F + 0.1F; var9.stackSize > 0; world
-								.spawnEntityInWorld(var14)) {
+						for (float var12 = random.nextFloat() * 0.8F + 0.1F; var9.stackSize > 0; world.spawnEntityInWorld(var14)) {
 							int var13 = random.nextInt(21) + 10;
 							if (var13 > var9.stackSize)
 								var13 = var9.stackSize;
 							var9.stackSize -= var13;
-							var14 = new EntityItem(world, x + var10, y + var11, z + var12, new ItemStack(var9.itemID,
-									var13, var9.getItemDamage()));
+							var14 = new EntityItem(world, x + var10, y + var11, z + var12, new ItemStack(var9.itemID, var13,
+									var9.getItemDamage()));
 							float var15 = 0.05F;
 							var14.motionX = (float) random.nextGaussian() * var15;
 							var14.motionY = (float) random.nextGaussian() * var15 + 0.2F;

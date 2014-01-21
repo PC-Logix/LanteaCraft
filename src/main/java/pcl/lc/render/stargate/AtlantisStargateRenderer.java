@@ -28,14 +28,12 @@ public class AtlantisStargateRenderer implements IStargateRenderer {
 	private double u0, v0;
 	private TileEntityStargateBaseRenderer caller;
 
-	private final static ResourceLocation gateTexture = LanteaCraft.getInstance().getResource(
-			"textures/tileentity/stargate_pegasus_128.png");
-	private final static ResourceLocation chevronGlowTexture = LanteaCraft.getInstance().getResource(
-			"textures/tileentity/Stargate_glyphs_pegasus_glow_128.png");
+	private final static ResourceLocation gateTexture = LanteaCraft.getResource("textures/tileentity/stargate_pegasus_128.png");
+	private final static ResourceLocation chevronGlowTexture = LanteaCraft
+			.getResource("textures/tileentity/Stargate_glyphs_pegasus_glow_128.png");
 
 	@Override
-	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x,
-			double y, double z, float t) {
+	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x, double y, double z, float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		caller.bind(gateTexture);
@@ -50,8 +48,7 @@ public class AtlantisStargateRenderer implements IStargateRenderer {
 
 	private void renderInnerRing(TileEntityStargateBase te, float t) {
 		GL11.glPushMatrix();
-		GL11.glRotatef((float) (te.interpolatedRingAngle(t) - (135 - TileEntityStargateBase.ringSymbolAngle / 2)), 0,
-				0, 1);
+		GL11.glRotatef((float) (te.interpolatedRingAngle(t) - (135 - TileEntityStargateBase.ringSymbolAngle / 2)), 0, 0, 1);
 		renderRing(ringInnerRadius, ringMidRadius, true);
 		GL11.glPopMatrix();
 	}

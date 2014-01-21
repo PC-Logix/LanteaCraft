@@ -6,7 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemNaquadahIngot extends Item {
-	
+
 	public ItemNaquadahIngot(int id) {
 		super(id);
 	}
@@ -14,8 +14,7 @@ public class ItemNaquadahIngot extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return LanteaCraft.getInstance().getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":naquadahIngot_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 }
