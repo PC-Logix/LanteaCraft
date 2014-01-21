@@ -2,8 +2,8 @@ package pcl.lc.fluids;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
@@ -17,6 +17,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockLiquidNaquadah extends BlockFluidClassic {
 
+	protected Icon[] fluidIcon;
+
 	public BlockLiquidNaquadah(int id) {
 		super(id, LanteaCraft.Fluids.fluidLiquidNaquadah, Material.water);
 		LanteaCraft.Fluids.fluidLiquidNaquadah.setBlockID(blockID);
@@ -26,7 +28,7 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int meta) {
-		return Block.waterMoving.getIcon(side, meta);
+		return (side != 0) && (side != 1) ? fluidIcon[1] : fluidIcon[0];
 	}
 
 	@Override
@@ -48,7 +50,13 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 	public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random) {
 		if (par1World.isRemote)
 			par1World.spawnParticle("smoke", x + par5Random.nextFloat(), y + 1, z + par5Random.nextFloat(),
-					0.02 * par5Random.nextFloat() - 0.01, 0.01 + 0.02 * par5Random.nextFloat(),
-					0.02 * par5Random.nextFloat() - 0.01);
+					0.02 * par5Random.nextFloat() - 0.01, 0.01 + 0.02 * par5Random.nextFloat(), 0.02 * par5Random.nextFloat() - 0.01);
+	}
+
+	@Override
+	public void registerIcons(IconRegister register) {
+		fluidIcon = new Icon[] {
+				register.registerIcon(LanteaCraft.getAssetKey() + ":naquada_still_" + LanteaCraft.getProxy().getRenderMode()),
+				register.registerIcon(LanteaCraft.getAssetKey() + ":naquada_flow_" + LanteaCraft.getProxy().getRenderMode()) };
 	}
 }
