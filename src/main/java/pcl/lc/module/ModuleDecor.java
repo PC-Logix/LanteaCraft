@@ -1,12 +1,9 @@
 package pcl.lc.module;
 
-import java.lang.reflect.Constructor;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
 import cpw.mods.fml.common.registry.GameRegistry;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;

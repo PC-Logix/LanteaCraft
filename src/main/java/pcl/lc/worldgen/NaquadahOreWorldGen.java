@@ -7,7 +7,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import pcl.common.helpers.ConfigurationHelper;
-import pcl.common.worldgen.ChunkData;
 import pcl.lc.LanteaCraft.Blocks;
 import cpw.mods.fml.common.IWorldGenerator;
 

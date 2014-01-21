@@ -1,7 +1,20 @@
 package pcl.lc.core;
 
+import pcl.lc.blocks.BlockLanteaOre;
+import pcl.lc.items.ItemLanteaOre;
+import pcl.lc.items.ItemLanteaOreBlock;
+import pcl.lc.items.ItemLanteaOreIngot;
 import net.minecraft.util.Icon;
 
+/**
+ * Internal Ore registry. Contains all required textures to render each ore (see
+ * individual declarations of those textures; block: {@link BlockLanteaOre},
+ * item: {@link ItemLanteaOre}, ingot: {@link ItemLanteaOreIngot}, block of
+ * ingot: {@link ItemLanteaOreBlock}).
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public enum OreTypes {
 	NAQUADAH("naquadahOre"), NAQAHDRIAH("naqahdriahOre"), TRINIUM("triniumOre");
 
