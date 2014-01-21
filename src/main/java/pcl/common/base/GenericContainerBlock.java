@@ -13,7 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import pcl.lc.LanteaCraft;
 
 public abstract class GenericContainerBlock extends BlockContainer {
 

@@ -1,18 +1,24 @@
 package pcl.lc.blocks;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockOre;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Items;
+import pcl.lc.core.OreTypes;
 
-public class BlockNaquadahOre extends BlockOre {
+public class BlockLanteaOre extends BlockOre {
 
-	public BlockNaquadahOre(int id) {
+	private Icon missing;
+
+	public BlockLanteaOre(int id) {
 		super(id);
 		setHardness(5.0F);
 		setResistance(10.0F);
@@ -22,18 +28,33 @@ public class BlockNaquadahOre extends BlockOre {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":naquadahOre_" + LanteaCraft.getProxy().getRenderMode();
+	public void registerIcons(IconRegister register) {
+		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
+		OreTypes.NAQUADAH.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_ore_"
+				+ LanteaCraft.getProxy().getRenderMode()));
+		OreTypes.NAQAHDRIAH.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naqahdriah_ore_"
+				+ LanteaCraft.getProxy().getRenderMode()));
+		OreTypes.TRINIUM.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":trinium_ore_"
+				+ LanteaCraft.getProxy().getRenderMode()));
 	}
 
 	@Override
-	public int idDropped(int par1, Random par2Random, int par3) {
-		return Items.naquadah.itemID;
+	public Icon getIcon(int side, int data) {
+		if (data > OreTypes.values().length)
+			return missing;
+		return OreTypes.values()[data].getOreTexture();
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
-		return 2 + random.nextInt(5);
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
+		ArrayList<ItemStack> result = new ArrayList<ItemStack>();
+		result.add(new ItemStack(Items.lanteaOreItem, 2, metadata));
+		return result;
+	}
+
+	@Override
+	public void getSubBlocks(int itemID, CreativeTabs tab, List list) {
+		for (int i = 0; i < OreTypes.values().length; i++)
+			list.add(new ItemStack(itemID, 1, i));
 	}
 }

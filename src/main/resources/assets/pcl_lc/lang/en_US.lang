@@ -1,17 +1,37 @@
-tile.naquadahBlock.name=Naquadah Block
-tile.naquadahOre.name=Naquadah Ore
-tile.naquadahGenerator.name=Naquadah Generator
+
 tile.stargateController.name=Stargate Controller
 tile.stargateBase.name=Stargate Base
 tile.stargateRing.0.name=Stargate Ring Segment
 tile.stargateRing.1.name=Stargate Chevron Block
-tile.blockLiquidNaquadah.name=Liquid Naquadah
-
-item.naquadah.name=Naquadah
-item.naquadahIngot.name=Naquadah Alloy Ingot
 item.coreCrystal.name=Stargate Core Crystal
 item.controllerCrystal.name=Stargate Controller Crystal
 item.energyCrystal.name=Energy Crystal
+
+tile.blockLiquidNaquadah.name=Liquid Naquadah
+item.liquidNaquadahBucket.name=Liquid Naquadah Bucket
+
+tile.lanteaDecor.1.name=Lantean Patterned Steel
+tile.lanteaDecor.2.name=Lantean Steel
+tile.lanteaDecor.3.name=Goa'uld Patterned Gold
+tile.lanteaDecor.4.name=Goa'uld Gold
+
+tile.lanteaOre.0.name=Naquadah Ore
+item.lanteaOre.0.name=Naquadah
+item.lanteaOreIngot.0.name=Naquadah Ingot
+tile.lanteaOreIngotBlock.0.name=Block of Naquadah
+
+
+tile.lanteaOre.1.name=Naqahdriah Ore
+item.lanteaOre.1.name=Naqahdriah
+item.lanteaOreIngot.1.name=Naqahdriah Ingot
+tile.lanteaOreIngotBlock.1.name=Block of Naqahdriah
+
+tile.lanteaOre.2.name=Trinium Ore
+item.lanteaOre.2.name=Trinium
+item.lanteaOreIngot.2.name=Trinium Ingot
+tile.lanteaOreIngotBlock.2.name=Block of Trinium
+
+tile.naquadahGenerator.name=Naquadah Generator
+
 item.tokraSpawnEgg.name=Tok'ra Spawn Egg
 item.lanteadebug.name=LanteaCraft Debugger
-item.liquidNaquadahBucket.name=Liquid Naquadah Bucket

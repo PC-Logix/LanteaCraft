@@ -49,7 +49,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	public TileEntityNaquadahGenerator() {
 		super();
-		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.naquadah, 1) }, null,
+		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.lanteaOreItem, 1) }, null,
 				true);
 		for (int i = 0; i < 4; i++)
 			inventory.setFilterRule(i, naquadah);

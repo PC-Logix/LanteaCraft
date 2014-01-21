@@ -59,11 +59,11 @@ public class UpgradeHelper {
 				false, 1));
 		upgrades.add(new UpgradeMapping("sgControllerBlock", new ItemStack(LanteaCraft.Blocks.stargateControllerBlock,
 				1), false));
-		upgrades.add(new UpgradeMapping("naquadahBlock", new ItemStack(LanteaCraft.Blocks.naquadahBlock, 1), false));
-		upgrades.add(new UpgradeMapping("naquadahOre", new ItemStack(LanteaCraft.Blocks.naquadahOre, 1), false));
+		upgrades.add(new UpgradeMapping("naquadahBlock", new ItemStack(LanteaCraft.Blocks.lanteaOreAsBlock, 1), false));
+		upgrades.add(new UpgradeMapping("naquadahOre", new ItemStack(LanteaCraft.Blocks.lanteaOre, 1), false));
 
-		upgrades.add(new UpgradeMapping("naquadah", new ItemStack(LanteaCraft.Items.naquadah, 1), true));
-		upgrades.add(new UpgradeMapping("naquadahIngot", new ItemStack(LanteaCraft.Items.naquadahIngot, 1), true));
+		upgrades.add(new UpgradeMapping("naquadah", new ItemStack(LanteaCraft.Items.lanteaOreItem, 1), true));
+		upgrades.add(new UpgradeMapping("naquadahIngot", new ItemStack(LanteaCraft.Items.lanteaOreIngot, 1), true));
 		upgrades.add(new UpgradeMapping("sgCoreCrystal", new ItemStack(LanteaCraft.Items.coreCrystal, 1), true));
 		upgrades.add(new UpgradeMapping("sgControllerCrystal", new ItemStack(LanteaCraft.Items.controllerCrystal, 1), true));
 	}

@@ -28,7 +28,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 
 	int stone = Block.stone.blockID;
 	int lava = Block.lavaStill.blockID;
-	int naquadah = Blocks.naquadahOre.blockID;
+	int naquadah = Blocks.lanteaOre.blockID;
 
 	public static void configure(ConfigurationHelper cfg) {
 		genUnderLavaOdds = cfg.getInteger("naquadah", "genUnderLavaOdds", genUnderLavaOdds);

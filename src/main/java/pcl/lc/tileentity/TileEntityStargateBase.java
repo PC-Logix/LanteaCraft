@@ -483,7 +483,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		int n = getSizeInventory();
 		for (int i = n - 1; i >= 0; i--) {
 			ItemStack stack = getStackInSlot(i);
-			if (stack != null && stack.getItem() == Items.naquadah && stack.stackSize > 0) {
+			if (stack != null && stack.getItem() == Items.lanteaOreItem && stack.stackSize > 0) {
 				decrStackSize(i, 1);
 				return true;
 			}

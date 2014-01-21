@@ -6,7 +6,6 @@ import java.util.Set;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.blocks.BlockLanteaDecor;
-import pcl.lc.blocks.BlockNaquadah;
 import pcl.lc.items.ItemLanteaDecor;
 import pcl.lc.module.ModuleManager.Module;
 
