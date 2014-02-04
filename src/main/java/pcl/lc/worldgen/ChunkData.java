@@ -82,4 +82,8 @@ public class ChunkData {
 			this.generatedOres.add(typeof);
 	}
 
+	public boolean getOreGenerated(OreTypes typeof) {
+		return this.generatedOres.contains(typeof);
+	}
+
 }
