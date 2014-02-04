@@ -13,10 +13,10 @@ package pcl.lc.api;
 public interface IStargateAccess {
 
 	/**
-	 * Returns the multi-block structure state of the Stargate. As all parts of the Stargate
-	 * act as an {@link IStargateAccess} host, it is important to check to ensure the Stargate
-	 * is a completed structure, and that nothing is directly obstructing or preventing it's
-	 * completeness.
+	 * Returns the multi-block structure state of the Stargate. As all parts of
+	 * the Stargate act as an {@link IStargateAccess} host, it is important to
+	 * check to ensure the Stargate is a completed structure, and that nothing
+	 * is directly obstructing or preventing it's completeness.
 	 * 
 	 * @return If the current Stargate structure configuration is valid.
 	 */

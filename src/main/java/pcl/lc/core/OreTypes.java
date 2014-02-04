@@ -29,6 +29,12 @@ public enum OreTypes {
 		this.tex = tex;
 	}
 
+	public static OreTypes fromOrdinal(int ord) {
+		if (0 > ord || ord > OreTypes.values().length)
+			return null;
+		return OreTypes.values()[ord];
+	}
+
 	public String tex() {
 		return tex;
 	}
@@ -64,4 +70,5 @@ public enum OreTypes {
 	public void setItemAsBlockTexture(Icon texture) {
 		this.textureItemAsBlock = texture;
 	}
+
 }

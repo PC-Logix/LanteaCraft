@@ -1,13 +1,18 @@
 package pcl.lc.worldgen;
 
 import java.util.Random;
+import java.util.logging.Level;
+
+import com.sun.istack.internal.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import pcl.common.helpers.ConfigurationHelper;
+import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Blocks;
+import pcl.lc.core.OreTypes;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class NaquadahOreWorldGen implements IWorldGenerator {
@@ -17,112 +22,132 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 	static int genIsolatedOdds = 8;
 	static int maxIsolatedNodes = 4;
 
-	static boolean debugLava = false;
-	static boolean debugRandom = false;
-
-	Random random;
-	World world;
-	Chunk chunk;
-	int x0, z0;
-
 	int stone = Block.stone.blockID;
 	int lava = Block.lavaStill.blockID;
 	int naquadah = Blocks.lanteaOre.blockID;
 
 	public static void configure(ConfigurationHelper cfg) {
+		// TODO: Replace me!
 		genUnderLavaOdds = cfg.getInteger("naquadah", "genUnderLavaOdds", genUnderLavaOdds);
 		maxNodesUnderLava = cfg.getInteger("naquadah", "maxNodesUnderLava", maxNodesUnderLava);
 		genIsolatedOdds = cfg.getInteger("naquadah", "genIsolatedOdds", genIsolatedOdds);
 		maxIsolatedNodes = cfg.getInteger("naquadah", "maxIsolatedNodes", maxIsolatedNodes);
 	}
 
+	public void readChunk(ChunkData data, Chunk chunk) {
+
+	}
+
+	private Random requestRandomFor(int x, int z, World world, int oreTypeof) {
+		return new Random(oreTypeof * (x + z) ^ world.getSeed());
+	}
+
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,
-			IChunkProvider chunkProvider) {
-		// System.out.printf("NaquadahOreWorldGen: chunk (%d, %d)\n", chunkX,
-		// chunkZ);
-		this.random = random;
-		this.world = world;
-		x0 = chunkX * 16;
-		z0 = chunkZ * 16;
-		chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
-		generateChunk();
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+		generateChunk(world, world.getChunkFromChunkCoords(chunkX, chunkZ));
 	}
 
 	public void regenerate(Chunk chunk) {
-		this.chunk = chunk;
-		world = chunk.worldObj;
-		int chunkX = chunk.xPosition;
-		int chunkZ = chunk.zPosition;
-		long worldSeed = world.getSeed();
-		random = new Random(worldSeed);
-		long xSeed = random.nextLong() >> 2 + 1L;
-		long zSeed = random.nextLong() >> 2 + 1L;
-		random.setSeed(xSeed * chunkX + zSeed * chunkZ ^ worldSeed);
-		x0 = chunkX * 16;
-		z0 = chunkZ * 16;
-		generateChunk();
+		generateChunk(chunk.worldObj, chunk);
 	}
 
-	int getBlock(int x, int y, int z) {
-		// return world.getBlockId(x0 + x, y, z0 + z);
+	private int getBlock(Chunk chunk, int x, int y, int z) {
 		return chunk.getBlockID(x, y, z);
 	}
 
-	void setBlock(int x, int y, int z, int id) {
-		// world.setBlock(x0 + x, y, z0 + z, id);
+	private void setBlock(Chunk chunk, int x, int y, int z, int id) {
 		chunk.setBlockIDWithMetadata(x, y, z, id, 0);
 	}
 
-	void generateNode(int id, int x, int y, int z, int sx, int sy, int sz) {
-		int dx = random.nextInt(sx);
-		int dy = random.nextInt(sy);
-		int dz = random.nextInt(sz);
-		int h = world.getHeight();
-		// System.out.printf("generateNode: %d x %d x %d at (%d, %d, %d)\n",
-		// dx, dy, dz, x, y, z);
-		for (int i = x; i <= x + dx; i++)
-			for (int j = y; j <= y + dy; j++)
-				for (int k = z; k <= z + dz; k++)
-					if (i < 16 && j < h && k < 16)
-						if (getBlock(i, j, k) == stone)
-							// System.out.printf("generateNode: putting at (%d, %d, %d)\n",
-							// i, j, k);
-							setBlock(i, j, k, id);
+	void generateNode(Chunk chunk, World world, Random random, int id, int cx, int cy, int cz, int density) {
+		LanteaCraft.getLogger().log(
+				Level.INFO,
+				String.format("Node generator building node around %s %s %s with density %s", cx
+						+ (16 * chunk.getChunkCoordIntPair().chunkXPos), cy, cz + (16 * chunk.getChunkCoordIntPair().chunkZPos), density));
+		int tries = 0;
+		main: while (density > 0) {
+			int tx = cx, ty = cy, tz = cz;
+			expand: while (true) {
+				int trans = random.nextInt(6);
+				switch (trans) {
+				case 0:
+					tx++;
+					break;
+				case 1:
+					tx--;
+					break;
+				case 2:
+					ty++;
+					break;
+				case 3:
+					ty--;
+					break;
+				case 4:
+					tz++;
+					break;
+				case 5:
+					tz--;
+					break;
+				}
+
+				// catch illegal; one vector out of bounds, reset scan
+				if (tx > 15 || tz > 15 || 0 > tx || 0 > ty || 0 > tz) {
+					LanteaCraft.getLogger().log(Level.INFO, "Can't expand, out of bounds!");
+					continue main;
+				}
+				// expand; this block is already an ore of type id so we can
+				// continue our search
+				else if (getBlock(chunk, tx, ty, tz) == id) {
+					continue expand;
+				}
+				// legal; we wandered here and it's stone, so we'll place
+				// something
+				else if (getBlock(chunk, tx, ty, tz) == stone) {
+					LanteaCraft.getLogger().log(Level.INFO, "Done, can expand this way.");
+					break expand;
+				}
+				// illegal; detected some other block (air, other ores, etc),
+				// so reset the scan and try again.
+				else {
+					LanteaCraft.getLogger().log(Level.INFO, "Strange case: " + getBlock(chunk, tx, tz, tz) + ", well?");
+					break main;
+				}
+			}
+
+			if (getBlock(chunk, tx, ty, tz) == stone) {
+				setBlock(chunk, tx, ty, tz, id);
+				density--;
+				tries = 0;
+				continue main;
+			}
+
+			if (tries++ > 5)
+				break main;
+		}
 	}
 
-	boolean odds(int n) {
+	private boolean odds(Random random, int n) {
 		return random.nextInt(n) == 0;
 	}
 
-	void generateChunk() {
-		if (odds(genUnderLavaOdds)) {
-			int n = random.nextInt(maxNodesUnderLava) + 1;
-			for (int i = 0; i < n; i++) {
-				int x = random.nextInt(16);
-				int z = random.nextInt(16);
-				for (int y = 0; y < 64; y++)
-					if (getBlock(x, y, z) == stone && getBlock(x, y + 1, z) == lava)
-						// if (debugLava)
-						// System.out.printf("NaquadahOreWorldGen: generating under lava at (%d, %d, %d)\n",
-						// x0+x, y, z0+z);
-						generateNode(naquadah, x, y, z, 3, 1, 3);
-			}
-		}
-		if (odds(genIsolatedOdds)) {
-			int n = random.nextInt(maxIsolatedNodes) + 1;
+	void generateChunk(World world, Chunk chunk) {
+		Random random = requestRandomFor(chunk.getChunkCoordIntPair().chunkXPos, chunk.getChunkCoordIntPair().chunkZPos, world, 1);
+		if (odds(random, genIsolatedOdds) || true) {
+			int n = 1; // random.nextInt(maxIsolatedNodes) + 1;
 			for (int i = 0; i < n; i++) {
 				int x = random.nextInt(16);
 				int y = random.nextInt(64);
 				int z = random.nextInt(16);
-				if (getBlock(x, y, z) == stone)
-					// if (debugRandom)
-					// System.out.printf("NaquadahOreWorldGen: generating randomly at (%d, %d, %d)\n",
-					// x0+x, y, z0+z);
-					generateNode(naquadah, x, y, z, 2, 2, 2);
+				if (getBlock(chunk, x, y, z) == stone) {
+					LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to place Naquadah node at %s %s %s", x, y, z));
+					generateNode(chunk, world, random, naquadah, x, y, z, 6);
+				}
 			}
 		}
-		ChunkData.forChunk(chunk).oresGenerated = true;
+		ChunkData metadata = ChunkData.forChunk(chunk);
+		if (metadata == null)
+			throw new RuntimeException("URGH STUPID");
+		metadata.markOreGenerated(OreTypes.NAQUADAH);
 	}
 
 }
