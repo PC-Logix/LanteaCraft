@@ -276,6 +276,7 @@ public class LanteaCraft {
 	 * FIXME: It's not safe to address things outside of proxies. This needs to
 	 * be merged with a valid ComputerCraft handler (later).
 	 */
+	@Deprecated
 	private void copyLua() {
 		InputStream is = getClass().getResourceAsStream("/assets/pcl_lc/lua/dhd");
 		OutputStream os = null;
