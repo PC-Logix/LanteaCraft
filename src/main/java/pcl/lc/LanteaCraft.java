@@ -76,6 +76,7 @@ public class LanteaCraft {
 		return LanteaCraft.mod;
 	}
 
+	@Deprecated
 	public static MountDir mount = new MountDir();
 	/**
 	 * The private instance of the logger used. Use {@link #getLogger()} to
