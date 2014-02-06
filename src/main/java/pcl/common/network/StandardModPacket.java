@@ -188,7 +188,7 @@ public class StandardModPacket extends ModPacket {
 		packetType = Packet.readString(data, 512);
 		isPacketForServer = (data.readByte() == 1);
 		synchronized (values) {
-			values = readHashMap(data);
+			values = (HashMap<Object, Object>) readHashMap(data);
 		}
 	}
 
@@ -330,7 +330,7 @@ public class StandardModPacket extends ModPacket {
 	 * @throws IOException
 	 *             Any read exception
 	 */
-	public static HashMap readHashMap(DataInputStream data) throws IOException {
+	public static HashMap<?, ?> readHashMap(DataInputStream data) throws IOException {
 		int size = data.readInt();
 		HashMap<Object, Object> result = new HashMap<Object, Object>();
 		for (int i = 0; i < size; i++) {

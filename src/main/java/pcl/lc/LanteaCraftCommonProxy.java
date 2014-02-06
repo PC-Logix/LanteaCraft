@@ -43,8 +43,18 @@ import cpw.mods.fml.common.network.Player;
 
 public class LanteaCraftCommonProxy {
 
+	/**
+	 * @deprecated Pending deletion (see XML Configuration)
+	 */
+	@Deprecated
 	protected ConfigurationHelper config;
+
+	/**
+	 * @deprecated Pending deletion (see XML Configuration)
+	 */
+	@Deprecated
 	protected ArrayList<ConfigValue<?>> configValues = new ArrayList<ConfigValue<?>>();
+
 	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
 
 	private AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
@@ -197,10 +207,10 @@ public class LanteaCraftCommonProxy {
 		return ((ConfigValue<Boolean>) getConfigValue("renderUseModels")).getValue();
 	}
 
-	private Container getGuiContainer(int id, EntityPlayer player, World world, int x, int y, int z) {
-		return null;
-	}
-
+	/**
+	 * @deprecated Tagged for deletion (unused locally, verify needed)
+	 */
+	@Deprecated
 	private Object createGuiElement(Class<?> cls, EntityPlayer player, World world, int x, int y, int z) {
 		try {
 			try {

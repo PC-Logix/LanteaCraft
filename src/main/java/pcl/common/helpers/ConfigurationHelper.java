@@ -7,6 +7,10 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
+/**
+ * @deprecated Pending deletion (see XML Configuration)
+ */
+@Deprecated
 public class ConfigurationHelper extends Configuration {
 
 	public boolean extended = false;

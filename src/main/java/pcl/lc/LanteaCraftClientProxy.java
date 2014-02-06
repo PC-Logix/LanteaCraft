@@ -77,8 +77,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	public void registerRenderers() {
 		LanteaCraft.Render.modelController = new StargateControllerModel("/assets/pcl_lc/models/dhd.obj");
-		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel(
-				"/assets/pcl_lc/models/naquada_generator.obj");
+		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel("/assets/pcl_lc/models/naquada_generator.obj");
 
 		LanteaCraft.Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
 		addTileEntityRenderer(TileEntityStargateBase.class, LanteaCraft.Render.tileEntityBaseRenderer);
@@ -115,7 +114,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		RenderingRegistry.registerBlockHandler(renderer);
 	}
 
-	void addScreen(Enum id, Class<? extends GuiScreen> cls) {
+	void addScreen(Enum<?> id, Class<? extends GuiScreen> cls) {
 		registeredGUIs.put(id.ordinal(), cls);
 	}
 
@@ -125,7 +124,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		if (gui != null)
 			try {
 				TileEntity entity = world.getBlockTileEntity(x, y, z);
-				Constructor constr = gui.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
+				Constructor<?> constr = gui.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
 				Object val = constr.newInstance(entity, player);
 				return val;
 			} catch (Throwable t) {

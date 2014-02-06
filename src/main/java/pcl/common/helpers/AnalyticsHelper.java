@@ -58,18 +58,15 @@ public class AnalyticsHelper extends Thread {
 
 	@Override
 	public void run() {
-		if (BuildInfo.buildNumber.equals("@" + "BUILD" + "@") && !overrideValidity) {
-			LanteaCraft.getLogger().log(Level.INFO,
-					"You appear to be inside a development environment, no data to push.");
+		if (BuildInfo.buildNumber.equals("@" + "BUILD" + "@") && !overrideValidity)
 			return;
-		}
 
 		while (tries < maxTries)
 			try {
 				tries++;
-				LanteaCraft.getLogger().log(Level.INFO, "Pushing metrics data (try " + tries + " of " + maxTries + ")");
+				LanteaCraft.getLogger().log(Level.FINE, "Pushing metrics data (try " + tries + " of " + maxTries + ")");
 				push();
-				LanteaCraft.getLogger().log(Level.INFO, "Done submitting anonymous data.");
+				LanteaCraft.getLogger().log(Level.FINE, "Done submitting anonymous data.");
 				return;
 			} catch (IOException ioex) {
 				LanteaCraft.getLogger().log(Level.WARNING, "The metrics push failed.", ioex);

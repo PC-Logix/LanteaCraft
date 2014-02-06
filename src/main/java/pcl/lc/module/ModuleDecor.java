@@ -39,32 +39,16 @@ public class ModuleDecor implements IModule {
 	@Override
 	public void init() {
 		Blocks.decorBlock = RegistrationHelper.registerBlock(BlockLanteaDecor.class, ItemLanteaDecor.class, "lanteaDecor");
-
-		lanteaSteelDecorStair = registerStairDecal("lanteaSteelDecorStair", 1);
-		lanteaPatternedSteelDecorStair = registerStairDecal("lanteaPatternedSteelDecorStair", 2);
-		goauldGoldDecorStair = registerStairDecal("goauldGoldDecorStair", 3);
-		goauldPatternedGoldDecorStair = registerStairDecal("goauldPatternedGoldDecorStair", 4);
+		lanteaSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaSteelDecorStair", 1);
+		lanteaPatternedSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaPatternedSteelDecorStair", 2);
+		goauldGoldDecorStair = RegistrationHelper.registerStairDecal("goauldGoldDecorStair", 3);
+		goauldPatternedGoldDecorStair = RegistrationHelper.registerStairDecal("goauldPatternedGoldDecorStair", 4);
 	}
 
 	@Override
 	public void postInit() {
 		// TODO Auto-generated method stub
 
-	}
-
-	private static BlockLanteaDecorStair registerStairDecal(String unlocalizedName, int targetMetadata) {
-		LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to register stair decal %s", unlocalizedName));
-		try {
-			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 4094).getInt();
-			BlockLanteaDecorStair stair = new BlockLanteaDecorStair(id, targetMetadata);
-			stair.setUnlocalizedName(unlocalizedName);
-			stair.setCreativeTab(LanteaCraft.getCreativeTab());
-			GameRegistry.registerBlock(stair, unlocalizedName);
-			return stair;
-		} catch (Exception e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register stair decal, an exception occured.", e);
-			throw new RuntimeException(e);
-		}
 	}
 
 }

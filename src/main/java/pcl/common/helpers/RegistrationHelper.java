@@ -13,6 +13,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import pcl.lc.LanteaCraft;
+import pcl.lc.blocks.BlockLanteaDecorStair;
 import pcl.lc.fluids.ItemSpecialBucket;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
@@ -200,6 +201,31 @@ public class RegistrationHelper {
 		for (String element : category) {
 			LanteaCraft.getLogger().log(Level.FINE, "Adding new WeightedRandomChestContent for element " + element);
 			ChestGenHooks.addItem(element, item);
+		}
+	}
+
+	/**
+	 * Registers a block as a LanteaCraft stair-type decal.
+	 * 
+	 * @param unlocalizedName
+	 *            The unlocalized name of the target block. Has to already have
+	 *            been reigstered with FML.
+	 * @param targetMetadata
+	 *            The target metadata type, if not default. (0)
+	 * @return The decal stair instance.
+	 */
+	public static BlockLanteaDecorStair registerStairDecal(String unlocalizedName, int targetMetadata) {
+		LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to register stair decal %s", unlocalizedName));
+		try {
+			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 4094).getInt();
+			BlockLanteaDecorStair stair = new BlockLanteaDecorStair(id, targetMetadata);
+			stair.setUnlocalizedName(unlocalizedName);
+			stair.setCreativeTab(LanteaCraft.getCreativeTab());
+			GameRegistry.registerBlock(stair, unlocalizedName);
+			return stair;
+		} catch (Exception e) {
+			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register stair decal, an exception occured.", e);
+			throw new RuntimeException(e);
 		}
 	}
 }

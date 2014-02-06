@@ -1,5 +1,9 @@
 package pcl.common.helpers;
 
+/**
+ * @deprecated Pending deletion (see XML Configuration)
+ */
+@Deprecated
 public class ConfigValue<T> {
 
 	private final String name;

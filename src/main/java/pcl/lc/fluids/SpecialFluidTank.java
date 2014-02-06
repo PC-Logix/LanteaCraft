@@ -6,6 +6,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
 
+/**
+ * Stub class to prevent TileEntity instances from having to directly use
+ * IFluidTank interfaces in their source. Proxy calls to here.
+ * 
+ * @author AfterLifeLochie
+ */
 public class SpecialFluidTank implements IFluidTank {
 
 	private boolean canFill;

@@ -108,7 +108,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 		// North-South means the gate is aligned along X
 		if (currentOrientation == EnumOrientations.EAST_WEST) {
-			LanteaCraft.getLogger().log(Level.INFO, "Testing EASTWEST");
+			LanteaCraft.getLogger().log(Level.FINE, "Testing EASTWEST");
 			for (int y = 0; y < 7; y++)
 				for (int x = 0; x < 7; x++) {
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
@@ -120,7 +120,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 		// East-West means the gate is aligned along Z
 		if (currentOrientation == EnumOrientations.NORTH_SOUTH) {
-			LanteaCraft.getLogger().log(Level.INFO, "Testing NORTHSOUTH");
+			LanteaCraft.getLogger().log(Level.FINE, "Testing NORTHSOUTH");
 			for (int y = 0; y < 7; y++)
 				for (int z = 0; z < 7; z++) {
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
@@ -166,7 +166,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 		// North-South means the gate is aligned along X
 		if (currentOrientation == EnumOrientations.EAST_WEST) {
-			LanteaCraft.getLogger().log(Level.INFO, "Globbing EASTWEST");
+			LanteaCraft.getLogger().log(Level.FINE, "Globbing EASTWEST");
 			for (int x = 0; x < 7; x++)
 				for (int y = 0; y < 7; y++) {
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
@@ -179,14 +179,14 @@ public class StargateMultiblock extends GenericMultiblock {
 						structureParts.put(new ImmutablePair<Integer, Integer>(x, y), teAsPart);
 					}
 				}
-			LanteaCraft.getLogger().log(Level.INFO, "Merged in orientation EAST-WEST OK");
+			LanteaCraft.getLogger().log(Level.FINE, "Merged in orientation EAST-WEST OK");
 			structureOrientation = EnumOrientations.EAST_WEST;
 			return true;
 		}
 
 		// East-West means the gate is aligned along Z
 		if (currentOrientation == EnumOrientations.NORTH_SOUTH) {
-			LanteaCraft.getLogger().log(Level.INFO, "Globbing NORTHSOUTH");
+			LanteaCraft.getLogger().log(Level.FINE, "Globbing NORTHSOUTH");
 			for (int z = 0; z < 7; z++)
 				for (int y = 0; y < 7; y++) {
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
@@ -199,19 +199,19 @@ public class StargateMultiblock extends GenericMultiblock {
 						structureParts.put(new ImmutablePair<Integer, Integer>(z, y), teAsPart);
 					}
 				}
-			LanteaCraft.getLogger().log(Level.INFO, "Merged in orientation NORTH-SOUTH OK");
+			LanteaCraft.getLogger().log(Level.FINE, "Merged in orientation NORTH-SOUTH OK");
 			structureOrientation = EnumOrientations.NORTH_SOUTH;
 			return true;
 		}
 
 		// Likely not a valid orientation at all
-		LanteaCraft.getLogger().log(Level.INFO, "Weird orientation result!");
+		LanteaCraft.getLogger().log(Level.FINE, "Weird orientation result!");
 		return false;
 	}
 
 	@Override
 	public void freeStructure() {
-		LanteaCraft.getLogger().log(Level.INFO,
+		LanteaCraft.getLogger().log(Level.FINE,
 				((isClient) ? "[client]" : "[server]") + " Releasing multiblock structure.");
 		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
 			part.getValue().release();
@@ -234,7 +234,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public void disband() {
-		LanteaCraft.getLogger().log(Level.INFO, ((isClient) ? "[client]" : "[server]") + " Disbanding structure.");
+		LanteaCraft.getLogger().log(Level.FINE, ((isClient) ? "[client]" : "[server]") + " Disbanding structure.");
 		boolean wasValid = isValid();
 		freeStructure();
 		isValid = false;

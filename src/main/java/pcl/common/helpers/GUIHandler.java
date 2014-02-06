@@ -17,12 +17,11 @@ public class GUIHandler implements IGuiHandler {
 		if (container != null)
 			try {
 				TileEntity entity = world.getBlockTileEntity(x, y, z);
-				Constructor constr = container.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
+				Constructor<?> constr = container.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
 				Object val = constr.newInstance(entity, player);
 				return val;
 			} catch (Throwable t) {
-				System.err.println("Could not create Container ID " + ID + ", a " + t.getClass().getName()
-						+ " exception occurred.");
+				System.err.println("Could not create Container ID " + ID + ", a " + t.getClass().getName() + " exception occurred.");
 				t.printStackTrace(System.err);
 			}
 		return null;

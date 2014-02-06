@@ -1,8 +1,9 @@
 package pcl.common.util;
 
 /**
- * A instance of an immutable pair. The A-B pair represented by this object are immutable, but
- * may not be immutable themselves (such as List). ALL GLORY TO THE IMMUTABLE PAIR.
+ * A instance of an immutable pair. The A-B pair represented by this object are
+ * immutable, but may not be immutable themselves (such as List). ALL GLORY TO
+ * THE IMMUTABLE PAIR.
  * 
  * @author AfterLifeLochie
  * 
@@ -38,7 +39,7 @@ public class ImmutablePair<A, B> {
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof ImmutablePair) {
-			ImmutablePair<?, ?> that = (ImmutablePair) other;
+			ImmutablePair<?, ?> that = (ImmutablePair<?, ?>) other;
 			return (this.a.equals(that.a) && this.b.equals(that.b));
 		}
 		return false;

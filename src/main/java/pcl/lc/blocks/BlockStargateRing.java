@@ -27,13 +27,10 @@ public class BlockStargateRing extends GenericContainerBlock {
 	Icon topAndBottomTexture;
 	Icon sideTextures[] = new Icon[numSubBlocks];
 
-	static String[] subBlockTitles = { "Stargate Ring Block", "Stargate Chevron Block", };
-
 	public BlockStargateRing(int id) {
 		super(id, Block.blocksList[4].blockMaterial);
 		setHardness(1.5F);
 		setCreativeTab(CreativeTabs.tabMisc);
-		registerSubItemNames();
 	}
 
 	@Override
@@ -103,16 +100,6 @@ public class BlockStargateRing extends GenericContainerBlock {
 	public void getSubBlocks(int itemID, CreativeTabs tab, List list) {
 		for (int i = 0; i < numSubBlocks; i++)
 			list.add(new ItemStack(itemID, 1, i));
-	}
-
-	void registerSubItemNames() {
-		LanguageRegistry registry = LanguageRegistry.instance();
-		for (int i = 0; i < BlockStargateRing.numSubBlocks; i++) {
-			String name = ItemStargateRing.subItemName(i) + ".name";
-			String title = subBlockTitles[i];
-			// registry.addStringLocalization(name, "en_US", title); --Moving to
-			// .lang file
-		}
 	}
 
 	@Override

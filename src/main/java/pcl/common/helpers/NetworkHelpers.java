@@ -14,7 +14,8 @@ import pcl.common.util.Vector3;
 import pcl.lc.api.EnumStargateState;
 
 /**
- * Generic network helper registry, this is where I chose to dump them as I write jazz.
+ * Generic network helper registry, this is where I chose to dump them as I
+ * write jazz.
  * 
  * @author AfterLifeLochie
  * 
@@ -55,7 +56,7 @@ public class NetworkHelpers {
 		}
 
 		@Override
-		public ImmutablePair unpack(DataInputStream streamOf) throws IOException {
+		public ImmutablePair<?, ?> unpack(DataInputStream streamOf) throws IOException {
 			Object valA = StandardModPacket.readValue(streamOf);
 			Object valB = StandardModPacket.readValue(streamOf);
 			return new ImmutablePair<Object, Object>(valA, valB);
@@ -84,7 +85,7 @@ public class NetworkHelpers {
 		}
 
 		@Override
-		public ImmutableTuple unpack(DataInputStream streamOf) throws IOException {
+		public ImmutableTuple<?, ?, ?> unpack(DataInputStream streamOf) throws IOException {
 			Object valA = StandardModPacket.readValue(streamOf);
 			Object valB = StandardModPacket.readValue(streamOf);
 			Object valC = StandardModPacket.readValue(streamOf);

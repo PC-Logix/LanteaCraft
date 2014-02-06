@@ -20,7 +20,7 @@ public abstract class ModPacket {
 			ArrayList.class, HashMap.class // generic containers
 	};
 
-	protected static ArrayList<IStreamPackable> packableHelpers = new ArrayList<IStreamPackable>();
+	protected static ArrayList<IStreamPackable<?>> packableHelpers = new ArrayList<IStreamPackable<?>>();
 
 	/**
 	 * Registers a network packing agent with the registry
@@ -100,12 +100,12 @@ public abstract class ModPacket {
 		DataInputStream data = new DataInputStream(new ByteArrayInputStream(bytes));
 		byte typeword = data.readByte();
 		switch (typeword) {
-			case 0:
-				return StandardModPacket.createPacket(data);
-			case 1:
-				return TinyModPacket.createPacket(data);
-			default:
-				throw new IOException("Unknown packet typeword!");
+		case 0:
+			return StandardModPacket.createPacket(data);
+		case 1:
+			return TinyModPacket.createPacket(data);
+		default:
+			throw new IOException("Unknown packet typeword!");
 		}
 	}
 
