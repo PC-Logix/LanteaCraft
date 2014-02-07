@@ -28,8 +28,10 @@ public class XMLParser {
 	 * Attempts to read a configuration file structure from the file
 	 * 
 	 * @param chunk
-	 * @return
+	 *            The chunk to read.
+	 * @return The ConfigList root object.
 	 * @throws XMLParserException
+	 *             Any XML or read exception.
 	 */
 	public ConfigList read(InputStream chunk) throws XMLParserException {
 		try {
@@ -49,6 +51,15 @@ public class XMLParser {
 		}
 	}
 
+	/**
+	 * Attempts to read a root config container object.
+	 * 
+	 * @param modRoot
+	 *            The ModConfig root container.
+	 * @return The ModConfig root container, usually containing a list of
+	 *         ModuleConfig nodes.
+	 * @throws XMLParserException
+	 */
 	private ConfigList readRoot(Node modRoot) throws XMLParserException {
 		ConfigList root = new ConfigList("ModConfig");
 		ArrayList<ModuleConfig> rootChildren = new ArrayList<ModuleConfig>();
@@ -65,13 +76,17 @@ public class XMLParser {
 	private ModuleConfig readModuleConfig(Element moduleNode) throws XMLParserException {
 		DOMHelper.checkedAllAttributes(moduleNode, new String[] { "name", "enabled" });
 		ModuleConfig moduleRoot = new ModuleConfig(moduleNode.getAttribute("name"));
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		ArrayList<ConfigNode> rootChildren = new ArrayList<ConfigNode>();
+		parameters.put("enabled", DOMHelper.popBoolean(moduleNode.getAttribute("enabled"), false));
 		NodeList childrenRoot = moduleNode.getChildNodes();
 		for (int i = 0; i < childrenRoot.getLength(); i++) {
 			Node child = childrenRoot.item(i);
 			if (child instanceof Element)
 				rootChildren.add(readRecusriveObject((Element) child));
 		}
+		moduleRoot.setParameters(parameters);
+		moduleRoot.setChildren(rootChildren);
 		return moduleRoot;
 	}
 
@@ -80,9 +95,10 @@ public class XMLParser {
 			ConfigList group = new ConfigList(element.getTagName());
 			ArrayList<ConfigNode> childrenGroup = new ArrayList<ConfigNode>();
 			if (element.hasAttributes()) {
-				HashMap<String, String> parameters = new HashMap<String, String>();
+				HashMap<String, Object> parameters = new HashMap<String, Object>();
 				NamedNodeMap nodes = element.getAttributes();
 				// TOOD: handling of attributes on xml-tag
+				group.setParameters(parameters);
 			}
 			NodeList children = element.getChildNodes();
 			for (int i = 0; i < children.getLength(); i++) {
@@ -90,13 +106,15 @@ public class XMLParser {
 				if (child instanceof Element)
 					childrenGroup.add(readRecusriveObject((Element) child));
 			}
+			group.setChildren(childrenGroup);
 			return group;
 		} else {
 			ConfigNode single = new ConfigNode(element.getTagName());
 			if (element.hasAttributes()) {
-				HashMap<String, String> parameters = new HashMap<String, String>();
+				HashMap<String, Object> parameters = new HashMap<String, Object>();
 				NamedNodeMap nodes = element.getAttributes();
 				// TOOD: handling of attributes on xml-tag
+				single.setParameters(parameters);
 			}
 			return single;
 		}
