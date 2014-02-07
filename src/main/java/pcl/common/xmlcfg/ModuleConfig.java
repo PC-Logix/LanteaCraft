@@ -1,6 +1,6 @@
 package pcl.common.xmlcfg;
 
-public class ModuleConfig extends ConfigNode {
+public class ModuleConfig extends ConfigList {
 
 	public ModuleConfig() {
 		super();

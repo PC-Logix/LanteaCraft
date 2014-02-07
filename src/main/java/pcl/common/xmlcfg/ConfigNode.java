@@ -1,39 +1,64 @@
 package pcl.common.xmlcfg;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
- * Represents a configuration node which contains children nodes of any count
- * and type.
+ * Represents a generic configuration node.
  * 
  * @author AfterLifeLochie
  * 
  */
-public class ConfigNode extends ConfigObject {
+public class ConfigNode {
+
+	/**
+	 * The name of the object.
+	 */
+	private String name;
+
+	/**
+	 * The comment of the object.
+	 */
+	private String comment;
+
+	/**
+	 * The object's parameter map.
+	 */
+	private HashMap<String, Object> parameters;
 
 	public ConfigNode() {
-		super();
 	}
 
 	public ConfigNode(String name) {
-		super(name);
+		this.name = name;
 	}
 
 	public ConfigNode(String name, String comment) {
-		super(name, comment);
+		this.name = name;
+		this.comment = comment;
 	}
 
-	/**
-	 * The children of the object.
-	 */
-	private ArrayList<ConfigObject> children;
-
-	public ArrayList<ConfigObject> children() {
-		return children;
+	public String name() {
+		return name;
 	}
 
-	public void setChildren(ArrayList<ConfigObject> children) {
-		this.children = children;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String comment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public HashMap<String, Object> parameters() {
+		return parameters;
+	}
+
+	public void setParameters(HashMap<String, Object> parameters) {
+		this.parameters = parameters;
 	}
 
 }

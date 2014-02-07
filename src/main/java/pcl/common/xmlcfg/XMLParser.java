@@ -24,7 +24,14 @@ public class XMLParser {
 		this.factory = DocumentBuilderFactory.newInstance();
 	}
 
-	public ConfigNode read(InputStream chunk) throws XMLParserException {
+	/**
+	 * Attempts to read a configuration file structure from the file
+	 * 
+	 * @param chunk
+	 * @return
+	 * @throws XMLParserException
+	 */
+	public ConfigList read(InputStream chunk) throws XMLParserException {
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(chunk);
@@ -42,8 +49,8 @@ public class XMLParser {
 		}
 	}
 
-	private ConfigNode readRoot(Node modRoot) throws XMLParserException {
-		ConfigNode root = new ConfigNode("ModConfig");
+	private ConfigList readRoot(Node modRoot) throws XMLParserException {
+		ConfigList root = new ConfigList("ModConfig");
 		ArrayList<ModuleConfig> rootChildren = new ArrayList<ModuleConfig>();
 		NodeList childrenRoot = modRoot.getChildNodes();
 		for (int i = 0; i < childrenRoot.getLength(); i++) {
@@ -58,7 +65,7 @@ public class XMLParser {
 	private ModuleConfig readModuleConfig(Element moduleNode) throws XMLParserException {
 		DOMHelper.checkedAllAttributes(moduleNode, new String[] { "name", "enabled" });
 		ModuleConfig moduleRoot = new ModuleConfig(moduleNode.getAttribute("name"));
-		ArrayList<ConfigObject> rootChildren = new ArrayList<ConfigObject>();
+		ArrayList<ConfigNode> rootChildren = new ArrayList<ConfigNode>();
 		NodeList childrenRoot = moduleNode.getChildNodes();
 		for (int i = 0; i < childrenRoot.getLength(); i++) {
 			Node child = childrenRoot.item(i);
@@ -68,10 +75,10 @@ public class XMLParser {
 		return moduleRoot;
 	}
 
-	private ConfigObject readRecusriveObject(Element element) throws XMLParserException {
+	private ConfigNode readRecusriveObject(Element element) throws XMLParserException {
 		if (element.hasChildNodes()) {
-			ConfigNode group = new ConfigNode(element.getTagName());
-			ArrayList<ConfigObject> childrenGroup = new ArrayList<ConfigObject>();
+			ConfigList group = new ConfigList(element.getTagName());
+			ArrayList<ConfigNode> childrenGroup = new ArrayList<ConfigNode>();
 			if (element.hasAttributes()) {
 				HashMap<String, String> parameters = new HashMap<String, String>();
 				NamedNodeMap nodes = element.getAttributes();
@@ -85,7 +92,7 @@ public class XMLParser {
 			}
 			return group;
 		} else {
-			ConfigObject single = new ConfigObject(element.getTagName());
+			ConfigNode single = new ConfigNode(element.getTagName());
 			if (element.hasAttributes()) {
 				HashMap<String, String> parameters = new HashMap<String, String>();
 				NamedNodeMap nodes = element.getAttributes();
