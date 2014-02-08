@@ -46,7 +46,8 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 	}
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,
+			IChunkProvider chunkProvider) {
 		Chunk target = world.getChunkFromChunkCoords(chunkX, chunkZ);
 		ChunkData data = ChunkData.forChunk(target);
 		for (OreTypes typeof : enabledOreSpawns) {
@@ -77,7 +78,8 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 		LanteaCraft.getLogger().log(
 				Level.INFO,
 				String.format("Node generator building node around %s %s %s with density %s typeof %s", cx
-						+ (16 * chunk.getChunkCoordIntPair().chunkXPos), cy, cz + (16 * chunk.getChunkCoordIntPair().chunkZPos), density, metadata));
+						+ (16 * chunk.getChunkCoordIntPair().chunkXPos), cy, cz
+						+ (16 * chunk.getChunkCoordIntPair().chunkZPos), density, metadata));
 		int tries = 0;
 		main: while (density > 0) {
 			int tx = cx, ty = cy, tz = cz;
@@ -145,7 +147,8 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 	}
 
 	void generateChunk(OreTypes typeof, World world, Chunk chunk) {
-		Random random = requestRandomFor(chunk.getChunkCoordIntPair().chunkXPos, chunk.getChunkCoordIntPair().chunkZPos, world, typeof.ordinal());
+		Random random = requestRandomFor(chunk.getChunkCoordIntPair().chunkXPos,
+				chunk.getChunkCoordIntPair().chunkZPos, world, typeof.ordinal());
 		if (odds(random, genIsolatedOdds) || true) {
 			int n = 1; // random.nextInt(maxIsolatedNodes) + 1;
 			for (int i = 0; i < n; i++) {
@@ -153,7 +156,8 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				int y = random.nextInt(64);
 				int z = random.nextInt(16);
 				if (getBlock(chunk, x, y, z) == Block.stone.blockID) {
-					LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to place Naquadah node at %s %s %s", x, y, z));
+					LanteaCraft.getLogger().log(Level.INFO,
+							String.format("Attempting to place Naquadah node at %s %s %s", x, y, z));
 					generateNode(chunk, world, random, Blocks.lanteaOre.blockID, typeof.ordinal(), x, y, z, 6);
 				}
 			}

@@ -25,7 +25,6 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	public StargateMultiblock(TileEntity host) {
 		super(host);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

@@ -212,7 +212,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity implements IEn
 	public void doWork(PowerHandler workProvider) {
 		float quantity = workProvider.useEnergy(0, 100.0f, true);
 		double naqQuantity = EnumUnits.convertToNaquadahUnit(EnumUnits.MinecraftJoules, quantity);
-		receiveEnergy(quantity);
+		receiveEnergy(naqQuantity);
 	}
 
 	/**

@@ -71,8 +71,8 @@ public class RegistrationHelper {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to register block %s", unlocalizedName));
 		try {
 			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 4094).getInt();
-			Constructor<? extends Block> ctor = classOf.getConstructor(int.class);
-			T theMysteryBlock = (T) ctor.newInstance(id);
+			Constructor<? extends T> ctor = classOf.getConstructor(int.class);
+			T theMysteryBlock = ctor.newInstance(id);
 			theMysteryBlock.setUnlocalizedName(unlocalizedName);
 			if (inCreativeTabs)
 				theMysteryBlock.setCreativeTab(LanteaCraft.getCreativeTab());
@@ -97,8 +97,8 @@ public class RegistrationHelper {
 		LanteaCraft.getLogger().log(Level.FINE, "Attempting to register item " + unlocalizedName);
 		try {
 			int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 31743).getInt();
-			Constructor<? extends Item> ctor = classOf.getConstructor(int.class);
-			T theMysteryItem = (T) ctor.newInstance(id);
+			Constructor<? extends T> ctor = classOf.getConstructor(int.class);
+			T theMysteryItem = ctor.newInstance(id);
 			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerItem(theMysteryItem, unlocalizedName);
 			return theMysteryItem;
@@ -215,7 +215,8 @@ public class RegistrationHelper {
 	 * @return The decal stair instance.
 	 */
 	public static BlockLanteaDecorStair registerStairDecal(String unlocalizedName, int targetMetadata) {
-		LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to register stair decal %s", unlocalizedName));
+		LanteaCraft.getLogger()
+				.log(Level.INFO, String.format("Attempting to register stair decal %s", unlocalizedName));
 		try {
 			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 4094).getInt();
 			BlockLanteaDecorStair stair = new BlockLanteaDecorStair(id, targetMetadata);
