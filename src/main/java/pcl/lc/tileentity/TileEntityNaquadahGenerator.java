@@ -16,9 +16,10 @@ import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
+import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.fluids.SpecialFluidTank;
 
-public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler {
+public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler, INaquadahGeneratorAccess {
 
 	public double energy = 0.0;
 	public double maxEnergy = 10.0;
@@ -49,8 +50,8 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	public TileEntityNaquadahGenerator() {
 		super();
-		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.lanteaOreItem, 1) }, null,
-				true);
+		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.lanteaOreItem, 1) },
+				null, true);
 		for (int i = 0; i < 4; i++)
 			inventory.setFilterRule(i, naquadah);
 	}
@@ -204,5 +205,31 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 	@Override
 	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
 		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+	@Override
+	public boolean setEnabled(boolean enable) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public double getStoredEnergy() {
+		return energy;
+	}
+
+	@Override
+	public double getStoredEnergy(EnumUnits unitsOf) {
+		return EnumUnits.convertFromNaquadahUnit(unitsOf, energy);
+	}
+
+	@Override
+	public double getMaximumStoredEnergy() {
+		return maxEnergy;
 	}
 }
