@@ -131,38 +131,13 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
 
-	/**
-	 * Someone can fix this fuckup.
-	 */
-	@Deprecated
-	public static TileEntityStargateBase at(IBlockAccess world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te instanceof TileEntityStargateBase)
-			return (TileEntityStargateBase) te;
-		else
-			return null;
-	}
-
-	public static TileEntityStargateBase at(WorldLocation loc) {
-		if (loc != null) {
-			World world = GateAddressHelper.getWorld(loc.dimension);
-			if (world != null)
-				return TileEntityStargateBase.at(world, loc.x, loc.y, loc.z);
-		}
-		return null;
-	}
-
-	public static TileEntityStargateBase at(IBlockAccess world, NBTTagCompound nbt) {
-		return TileEntityStargateBase.at(world, nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
-	}
-
 	public TileEntityStargateBase() {
 		getAsStructure().setMetadata("state", EnumStargateState.Idle);
 	}
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord - 2, yCoord, zCoord - 2, xCoord + 3, yCoord + 5, zCoord + 3);
+		return AxisAlignedBB.getAABBPool().getAABB(xCoord - 3, yCoord, zCoord - 3, xCoord + 5, yCoord + 7, zCoord + 5);
 	}
 
 	@Override
@@ -383,7 +358,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			return;
 		}
 		if (dte == this) {
-			diallingFailure(player, "Stargate cannot connect to itself\n");
+			diallingFailure(player, "Stargate cannot connect to itself");
 			return;
 		}
 		if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle) {
@@ -418,7 +393,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	public void disconnect() {
-		TileEntityStargateBase dte = TileEntityStargateBase.at(connectedLocation);
+		TileEntityStargateBase dte = (TileEntityStargateBase) connectedLocation.getStargateTE();
 		if (dte != null)
 			dte.clearConnection();
 		clearConnection();
@@ -460,6 +435,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
 	}
 
+	/**
+	 * @deprecated Move to energy API
+	 */
+	@Deprecated
 	boolean useFuel(int amount) {
 		if (reloadFuel(amount)) {
 			setFuelBuffer(fuelBuffer - amount);
@@ -468,6 +447,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			return false;
 	}
 
+	/**
+	 * @deprecated Move to energy API
+	 */
+	@Deprecated
 	boolean reloadFuel(int amount) {
 		while (fuelBuffer < amount && fuelBuffer + fuelPerItem <= maxFuelBuffer)
 			if (useFuelItem())
@@ -477,6 +460,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		return fuelBuffer >= amount;
 	}
 
+	/**
+	 * @deprecated Move to energy API
+	 */
+	@Deprecated
 	boolean useFuelItem() {
 		int n = getSizeInventory();
 		for (int i = n - 1; i >= 0; i--) {
@@ -489,6 +476,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 		return false;
 	}
 
+	/**
+	 * @deprecated Move to energy API
+	 */
+	@Deprecated
 	private void setFuelBuffer(int amount) {
 		if (fuelBuffer != amount) {
 			fuelBuffer = amount;
