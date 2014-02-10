@@ -46,6 +46,7 @@ import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.WorldLocation;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
+import pcl.lc.render.stargate.StargateRenderConstants;
 import cpw.mods.fml.common.Optional.Interface;
 import cpw.mods.fml.common.Optional.InterfaceList;
 import cpw.mods.fml.common.Optional.Method;
@@ -57,16 +58,11 @@ import dan200.computer.api.IPeripheral;
 @InterfaceList({ @Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft") })
 public class TileEntityStargateBase extends TileEntityChunkLoader implements IInventory, IPeripheral {
 
-	public final static double ringSymbolAngle = 360.0 / GateAddressHelper.numSymbols;
+	public final static double transientDamageRate = 50;
 	public final static int diallingTime = 40;
 	public final static int interDiallingTime = 10;
 	public final static int transientDuration = 20;
 	public final static int disconnectTime = 30;
-
-	public final static double openingTransientIntensity = 1.3;
-	public final static double openingTransientRandomness = 0.25;
-	public final static double closingTransientRandomness = 0.25;
-	public final static double transientDamageRate = 50;
 
 	public static int powerLevel = 0;
 
@@ -252,24 +248,25 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 				lastState = getState();
 				timeout = (Integer) getAsStructure().getMetadata("timeout");
 				numEngagedChevrons = (Integer) getAsStructure().getMetadata("numEngagedChevrons");
-				int targetpos = Character.getNumericValue(getDialledAddres().indexOf(numEngagedChevrons))
-						- Character.getNumericValue('A');
-				LanteaCraft.getLogger().log(Level.INFO,
-						"Timeout " + timeout + ", neng " + numEngagedChevrons + ", target " + targetpos);
-				renderNextRingAngle = MathUtils.normaliseAngle(targetpos * ringSymbolAngle - 45 * numEngagedChevrons);
+				if (getDialledAddres() != null) {
+					int targetpos = Character.getNumericValue(getDialledAddres().indexOf(numEngagedChevrons))
+							- Character.getNumericValue('A');
+					renderNextRingAngle = MathUtils.normaliseAngle(targetpos * StargateRenderConstants.ringSymbolAngle
+							- 45 * numEngagedChevrons);
+				} else
+					renderNextRingAngle = 0;
 				switch (getState()) {
-					case Transient:
-						initiateOpeningTransient();
-						break;
-					case Disconnecting:
-						initiateClosingTransient();
-						break;
+				case Transient:
+					initiateOpeningTransient();
+					break;
+				case Disconnecting:
+					initiateClosingTransient();
+					break;
 				}
 			}
 
 			renderLastRingAngle = renderRingAngle;
-			applyRandomImpulse();
-			updateEventHorizon();
+			advanceRendering();
 			if (getState() == EnumStargateState.Dialling)
 				updateRingAngle();
 		} else {
@@ -284,28 +281,28 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 					--timeout;
 				} else
 					switch (getState()) {
-						case Idle:
-							if (m_computer != null)
-								m_computer.queueEvent("sgIdle", new Object[] { true });
-							if (undialledDigitsRemaining())
-								startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
-							break;
-						case Dialling:
-							finishDiallingSymbol();
-							break;
-						case InterDialling:
+					case Idle:
+						if (m_computer != null)
+							m_computer.queueEvent("sgIdle", new Object[] { true });
+						if (undialledDigitsRemaining())
 							startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
-							break;
-						case Transient:
-							enterState(EnumStargateState.Connected, isInitiator ? ticksToStayOpen : 0);
-							break;
-						case Connected:
-							if (isInitiator)
-								disconnect();
-							break;
-						case Disconnecting:
-							enterState(EnumStargateState.Idle, 0);
-							break;
+						break;
+					case Dialling:
+						finishDiallingSymbol();
+						break;
+					case InterDialling:
+						startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
+						break;
+					case Transient:
+						enterState(EnumStargateState.Connected, isInitiator ? ticksToStayOpen : 0);
+						break;
+					case Connected:
+						if (isInitiator)
+							disconnect();
+						break;
+					case Disconnecting:
+						enterState(EnumStargateState.Idle, 0);
+						break;
 					}
 			}
 			checkForEntitiesInPortal();
@@ -331,7 +328,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	}
 
 	/**
-	 * Causes the Stargate to enter the specified state for the specified number of ticks.
+	 * Causes the Stargate to enter the specified state for the specified number
+	 * of ticks.
 	 * 
 	 * @param newState
 	 *            The state to enter
@@ -819,8 +817,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			double v[][] = getEventHorizonGrid()[1];
 			int n = EventHorizonRenderer.ehGridPolarSize;
 			for (int j = 0; j <= n + 1; j++) {
-				v[j][0] = openingTransientIntensity;
-				v[j][1] = v[j][0] + openingTransientRandomness * random.nextGaussian();
+				v[j][0] = StargateRenderConstants.openingTransientIntensity;
+				v[j][1] = v[j][0] + StargateRenderConstants.openingTransientRandomness * random.nextGaussian();
 			}
 		}
 	}
@@ -834,30 +832,17 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			int n = EventHorizonRenderer.ehGridPolarSize;
 			for (int i = 1; i < m; i++)
 				for (int j = 1; j <= n; j++)
-					v[j][i] += closingTransientRandomness * random.nextGaussian();
+					v[j][i] += StargateRenderConstants.closingTransientRandomness * random.nextGaussian();
 		}
 	}
 
-	void applyRandomImpulse() {
-		if (!isIrisClosed()) {
-			double v[][] = getEventHorizonGrid()[1];
-			int m = EventHorizonRenderer.ehGridRadialSize;
-			int n = EventHorizonRenderer.ehGridPolarSize;
-			int i = random.nextInt(m - 1) + 1;
-			int j = random.nextInt(n) + 1;
-			v[j][i] += 0.05 * random.nextGaussian();
-		}
-	}
-
-	void updateEventHorizon() {
+	void advanceRendering() {
 		double grid[][][] = getEventHorizonGrid();
-		double u[][] = grid[0];
-		double v[][] = grid[1];
-		int m = EventHorizonRenderer.ehGridRadialSize;
-		int n = EventHorizonRenderer.ehGridPolarSize;
-		double dt = 1.0;
-		double asq = 0.03;
-		double d = 0.95;
+		int m = EventHorizonRenderer.ehGridRadialSize, n = EventHorizonRenderer.ehGridPolarSize;
+		double u[][] = grid[0], v[][] = grid[1];
+		double dt = 1.0, asq = 0.03, d = 0.95;
+		int r = random.nextInt(m - 1) + 1, t = random.nextInt(n) + 1;
+		v[r][t] += 0.05 * random.nextGaussian();
 		for (int i = 1; i < m; i++)
 			for (int j = 1; j <= n; j++) {
 				double du_dr = 0.5 * (u[j][i + 1] - u[j][i - 1]);

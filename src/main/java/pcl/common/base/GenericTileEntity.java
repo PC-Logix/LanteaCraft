@@ -26,7 +26,7 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
 		readFromNBT(pkt.data);
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		markBlockForUpdate();
 	}
 
 	boolean syncWithClient() {
@@ -34,7 +34,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	public void markBlockForUpdate() {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		if (worldObj != null)
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public void playSoundEffect(String name, float volume, float pitch) {
@@ -100,8 +101,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	/**
-	 * Removes from an inventory slot (first arg) up to a specified number (second arg) of
-	 * items and returns them in a new stack.
+	 * Removes from an inventory slot (first arg) up to a specified number
+	 * (second arg) of items and returns them in a new stack.
 	 */
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
@@ -115,8 +116,9 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	/**
-	 * When some containers are closed they call this on each slot, then drop whatever it
-	 * returns as an EntityItem - like when you close a workbench GUI.
+	 * When some containers are closed they call this on each slot, then drop
+	 * whatever it returns as an EntityItem - like when you close a workbench
+	 * GUI.
 	 */
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
@@ -130,8 +132,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	/**
-	 * Sets the given item stack to the specified slot in the inventory (can be crafting or
-	 * armor sections).
+	 * Sets the given item stack to the specified slot in the inventory (can be
+	 * crafting or armor sections).
 	 */
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
@@ -152,8 +154,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	/**
-	 * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly
-	 * will be extended. *Isn't this more of a set than a get?*
+	 * Returns the maximum stack size for a inventory slot. Seems to always be
+	 * 64, possibly will be extended. *Isn't this more of a set than a get?*
 	 */
 	@Override
 	public int getInventoryStackLimit() {
@@ -162,7 +164,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	/**
-	 * Do not make give this method the name canInteractWith because it clashes with Container
+	 * Do not make give this method the name canInteractWith because it clashes
+	 * with Container
 	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -203,8 +206,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	/**
-	 * Returns an array containing the indices of the slots that can be accessed by automation
-	 * on the given side of this block.
+	 * Returns an array containing the indices of the slots that can be accessed
+	 * by automation on the given side of this block.
 	 */
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
@@ -216,8 +219,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	/**
-	 * Returns true if automation can insert the given item in the given slot from the given
-	 * side. Args: Slot, item, side
+	 * Returns true if automation can insert the given item in the given slot
+	 * from the given side. Args: Slot, item, side
 	 */
 	@Override
 	public boolean canInsertItem(int slot, ItemStack stack, int side) {
@@ -229,8 +232,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	/**
-	 * Returns true if automation can extract the given item in the given slot from the given
-	 * side. Args: Slot, item, side
+	 * Returns true if automation can extract the given item in the given slot
+	 * from the given side. Args: Slot, item, side
 	 */
 	@Override
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {

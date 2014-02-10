@@ -1,14 +1,6 @@
 package pcl.lc.render.stargate;
 
 import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.cos;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringDepth;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringInnerRadius;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringMidRadius;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringOuterRadius;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringSymbolSegmentWidth;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringSymbolTextureHeight;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringSymbolTextureIndex;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringSymbolTextureLength;
 import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.sin;
 import net.minecraft.util.ResourceLocation;
 
@@ -20,25 +12,22 @@ import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class AtlantisStargateRenderer implements IStargateRenderer {
 
-	private final static double chevronInnerRadius = 3.25;
-	private final static double chevronOuterRadius = ringOuterRadius + 1 / 16.0;
-	private final static double chevronWidth = (chevronOuterRadius - chevronInnerRadius) * 1.5;
-	private final static double chevronDepth = 0.125;
-	private final static double chevronBorderWidth = chevronWidth / 6;
 	private double u0, v0;
 	private TileEntityStargateBaseRenderer caller;
 
-	private final static ResourceLocation gateTexture = LanteaCraft.getResource("textures/tileentity/stargate_pegasus_128.png");
+	private final static ResourceLocation gateTexture = LanteaCraft
+			.getResource("textures/tileentity/stargate_pegasus_128.png");
 	private final static ResourceLocation chevronGlowTexture = LanteaCraft
 			.getResource("textures/tileentity/Stargate_glyphs_pegasus_glow_128.png");
 
 	@Override
-	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x, double y, double z, float t) {
+	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x,
+			double y, double z, float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		caller.bind(gateTexture);
 		GL11.glNormal3f(0, 1, 0);
-		renderRing(ringMidRadius, ringOuterRadius, false);
+		renderRing(StargateRenderConstants.ringMidRadius, StargateRenderConstants.ringOuterRadius, false);
 		renderInnerRing(te, t);
 		renderChevrons(te);
 		if (te.isConnected()) {
@@ -48,17 +37,18 @@ public class AtlantisStargateRenderer implements IStargateRenderer {
 
 	private void renderInnerRing(TileEntityStargateBase te, float t) {
 		GL11.glPushMatrix();
-		GL11.glRotatef((float) (te.interpolatedRingAngle(t) - (135 - TileEntityStargateBase.ringSymbolAngle / 2)), 0, 0, 1);
-		renderRing(ringInnerRadius, ringMidRadius, true);
+		GL11.glRotatef((float) (te.interpolatedRingAngle(t) - (135 - StargateRenderConstants.ringSymbolAngle / 2)), 0,
+				0, 1);
+		renderRing(StargateRenderConstants.ringInnerRadius, StargateRenderConstants.ringMidRadius, true);
 		GL11.glPopMatrix();
 	}
 
 	private void renderRing(double r1, double r2, boolean isInnerRing) {
-		double z = ringDepth / 2;
+		double z = StargateRenderConstants.ringDepth / 2;
 		double u = 0, du = 0, dv = 0;
 		GL11.glBegin(GL11.GL_QUADS);
-		for (int i = 0; i < TileEntityStargateBaseRenderer.numRingSegments; i++) {
-			selectTile(TileEntityStargateBaseRenderer.ringTextureIndex);
+		for (int i = 0; i < StargateRenderConstants.numRingSegments; i++) {
+			selectTile(StargateRenderConstants.ringTextureIndex);
 			if (!isInnerRing) {
 				GL11.glNormal3d(cos[i], sin[i], 0);
 				vertex(r2 * cos[i], r2 * sin[i], z, 0, 0);
@@ -81,15 +71,16 @@ public class AtlantisStargateRenderer implements IStargateRenderer {
 			// Front
 			GL11.glNormal3f(0, 0, 1);
 			if (!isInnerRing) {
-				selectTile(TileEntityStargateBaseRenderer.ringFaceTextureIndex);
+				selectTile(StargateRenderConstants.ringFaceTextureIndex);
 				u = 0;
 				du = 16;
 				dv = 16;
 			} else {
-				selectTile(ringSymbolTextureIndex);
-				u = ringSymbolTextureLength - (i + 1) * ringSymbolSegmentWidth;
-				du = ringSymbolSegmentWidth;
-				dv = ringSymbolTextureHeight;
+				selectTile(StargateRenderConstants.ringSymbolTextureIndex);
+				u = StargateRenderConstants.ringSymbolTextureLength - (i + 1)
+						* StargateRenderConstants.ringSymbolSegmentWidth;
+				du = StargateRenderConstants.ringSymbolSegmentWidth;
+				dv = StargateRenderConstants.ringSymbolTextureHeight;
 			}
 			vertex(r1 * cos[i], r1 * sin[i], z, u + du, dv);
 			vertex(r2 * cos[i], r2 * sin[i], z, u + du, 0);
@@ -110,18 +101,18 @@ public class AtlantisStargateRenderer implements IStargateRenderer {
 	}
 
 	private void chevron(boolean engaged) {
-		double r1 = chevronInnerRadius;
-		double r2 = chevronOuterRadius;
-		double z2 = ringDepth / 2;
-		double z1 = z2 + chevronDepth;
-		double w1 = chevronBorderWidth;
+		double r1 = StargateRenderConstants.chevronInnerRadius;
+		double r2 = StargateRenderConstants.chevronOuterRadius;
+		double z2 = StargateRenderConstants.ringDepth / 2;
+		double z1 = z2 + StargateRenderConstants.chevronDepth;
+		double w1 = StargateRenderConstants.chevronBorderWidth;
 		double w2 = w1 * 1.25;
-		double x1 = r1, y1 = chevronWidth / 4;
-		double x2 = r2, y2 = chevronWidth / 2;
+		double x1 = r1, y1 = StargateRenderConstants.chevronWidth / 4;
+		double x2 = r2, y2 = StargateRenderConstants.chevronWidth / 2;
 
 		GL11.glBegin(GL11.GL_QUADS);
 
-		selectTile(TileEntityStargateBaseRenderer.chevronTextureIndex);
+		selectTile(StargateRenderConstants.chevronTextureIndex);
 
 		// Face 1
 		vertex(x2, y2, z1, 0, 2);
@@ -179,7 +170,7 @@ public class AtlantisStargateRenderer implements IStargateRenderer {
 
 		GL11.glEnd();
 
-		selectTile(TileEntityStargateBaseRenderer.chevronLitTextureIndex);
+		selectTile(StargateRenderConstants.chevronLitTextureIndex);
 		if (!engaged)
 			GL11.glColor3d(0.5, 0.5, 0.5);
 		else

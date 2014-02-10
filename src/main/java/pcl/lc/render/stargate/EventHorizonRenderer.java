@@ -1,7 +1,6 @@
 package pcl.lc.render.stargate;
 
 import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.cos;
-import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.ringInnerRadius;
 import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.sin;
 import net.minecraft.util.ResourceLocation;
 
@@ -14,8 +13,8 @@ import pcl.lc.tileentity.TileEntityStargateBase;
 public class EventHorizonRenderer implements IStargateRenderer {
 
 	public final static int ehGridRadialSize = 10;
-	public final static int ehGridPolarSize = TileEntityStargateBaseRenderer.numRingSegments;
-	public final static double ehBandWidth = ringInnerRadius / ehGridRadialSize;
+	public final static int ehGridPolarSize = StargateRenderConstants.numRingSegments;
+	public final static double ehBandWidth = StargateRenderConstants.ringInnerRadius / ehGridRadialSize;
 	private static ResourceLocation eventHorizonTexture = LanteaCraft.getResource("textures/fx/eventhorizon_"
 			+ LanteaCraft.getProxy().getRenderMode() + ".png");
 	private static ResourceLocation irisTexture = LanteaCraft.getResource("textures/fx/energy_iris_128.png");
@@ -85,7 +84,7 @@ public class EventHorizonRenderer implements IStargateRenderer {
 		double u = (x + 3) / 6;
 		double v = (y + 3) / 6;
 		GL11.glTexCoord2d(u, v);
-		GL11.glVertex3d(x, y, 0 * grid[j + 1][i]);
+		GL11.glVertex3d(x, y, grid[j + 1][i]);
 	}
 
 	private void irisIntVertex(double k, int i, int j) {
