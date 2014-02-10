@@ -21,6 +21,7 @@ import pcl.common.helpers.ConfigValue;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.helpers.GUIHandler;
 import pcl.common.helpers.NetworkHelpers;
+import pcl.common.helpers.RegistrationHelper;
 import pcl.common.network.ModPacket;
 import pcl.lc.compat.UpgradeHelper;
 import pcl.lc.core.GateAddressHelper;
@@ -105,6 +106,7 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
+		RegistrationHelper.flagLateRegistrationZone();
 		if (config.extended)
 			config.save();
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft done setting up!");
