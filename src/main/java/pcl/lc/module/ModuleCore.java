@@ -41,7 +41,8 @@ public class ModuleCore implements IModule {
 
 	@Override
 	public void init() {
-		Blocks.lanteaOre = RegistrationHelper.registerBlock(BlockLanteaOre.class, ItemLanteaOreBlock.class, "lanteaOreBlock");
+		Blocks.lanteaOre = RegistrationHelper.registerBlock(BlockLanteaOre.class, ItemLanteaOreBlock.class,
+				"lanteaOreBlock");
 		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem");
 		Items.lanteaOreIngot = RegistrationHelper.registerItem(ItemLanteaOreIngot.class, "lanteaOreIngot");
 		Blocks.lanteaOreAsBlock = RegistrationHelper.registerBlock(BlockOfLanteaOre.class, "lanteaOreIngotBlock");
@@ -50,24 +51,28 @@ public class ModuleCore implements IModule {
 		Items.debugger = RegistrationHelper.registerItem(ItemDebugTool.class, "lanteadebug");
 
 		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), "naquadah", Item.ingotIron);
-		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1), "NNN", "NNN", "NNN", 'N', "ingotNaquadahAlloy");
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1), "NNN", "NNN", "NNN", 'N',
+				"ingotNaquadahAlloy");
 		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9), "B", 'B', Blocks.lanteaOreAsBlock);
 
 		Fluids.fluidLiquidNaquadah = new LiquidNaquadah();
 		FluidRegistry.registerFluid(Fluids.fluidLiquidNaquadah);
 		Fluids.fluidLiquidNaquadahHost = RegistrationHelper.registerBlock(BlockLiquidNaquadah.class, ItemBlock.class,
 				"blockLiquidNaquadah", false);
-		Fluids.fluidLiquidNaquadahBucket = RegistrationHelper.registerSpecialBucket(Fluids.fluidLiquidNaquadahHost, "liquidNaquadahBucket",
-				"liquid-naquadah");
-	}
+		Fluids.fluidLiquidNaquadahBucket = RegistrationHelper.registerSpecialBucket(Fluids.fluidLiquidNaquadahHost,
+				"liquidNaquadahBucket", "liquid-naquadah");
 
-	@Override
-	public void postInit() {
 		RegistrationHelper.registerOre("oreNaquadah", new ItemStack(Blocks.lanteaOre));
 		RegistrationHelper.registerOre("naquadah", new ItemStack(Items.lanteaOreItem));
 		RegistrationHelper.registerOre("ingotNaquadahAlloy", new ItemStack(Items.lanteaOreIngot));
 
-		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreItem, 1), Item.coal, Item.slimeBall, Item.blazePowder);
+		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreItem, 1), Item.coal, Item.slimeBall,
+				Item.blazePowder);
+	}
+
+	@Override
+	public void postInit() {
+
 	}
 
 }

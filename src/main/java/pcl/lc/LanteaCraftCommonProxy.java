@@ -138,35 +138,42 @@ public class LanteaCraftCommonProxy {
 		TileEntityStargateController.configure(config);
 		NaquadahOreWorldGen.configure(config);
 		TileEntityStargateBase.configure(config);
-		configValues
-				.add(new ConfigValue<Boolean>("addOresToExistingWorlds", config.getBoolean("options", "addOresToExistingWorlds", false)));
+		configValues.add(new ConfigValue<Boolean>("addOresToExistingWorlds", config.getBoolean("options",
+				"addOresToExistingWorlds", false)));
 
-		String version = new StringBuilder().append(BuildInfo.versionNumber).append(" build ").append(BuildInfo.buildNumber).toString();
+		String version = new StringBuilder().append(BuildInfo.versionNumber).append(" build ")
+				.append(BuildInfo.buildNumber).toString();
 		Property prop = config.get("general", "currentVersion", 0);
 		prop.comment = "Version cache - do not change this!";
 		String previousVersion = prop.getString();
 		prop.set(version);
 
 		Property GenerateStruct = config.get("options", "GenerateStructures", true);
-		configValues.add(new ConfigValue<Boolean>("doGenerateStructures", config.getBoolean("stargate", "GenerateStructures", true)));
+		configValues.add(new ConfigValue<Boolean>("doGenerateStructures", config.getBoolean("stargate",
+				"GenerateStructures", true)));
 		GenerateStruct.comment = "Enables/Disables generation of Gate Rooms under Desert Pyramids. (true/false)";
 
 		Property GalacticraftCompat = config.get("options", "GalacticCraftCompat", false);
-		configValues.add(new ConfigValue<Boolean>("doGalacticCraftCompat", config.getBoolean("stargate", "GalacticCraftCompat", true)));
+		configValues.add(new ConfigValue<Boolean>("doGalacticCraftCompat", config.getBoolean("stargate",
+				"GalacticCraftCompat", true)));
 		GalacticraftCompat.comment = "Enables/Disables Galcticraft support - this will change all addresses! (true/false)";
 
 		Property textureRes = config.get("graphics_options", "textureRes", 32);
-		configValues.add(new ConfigValue<Integer>("renderQuality", config.getInteger("graphics_options", "textureRes", 32)));
+		configValues.add(new ConfigValue<Integer>("renderQuality", config.getInteger("graphics_options", "textureRes",
+				32)));
 		textureRes.comment = "Texture resolution setting. (32 / 64 / 128)";
 
 		Property HDModels = config.get("graphics_options", "HDModels", true);
-		configValues.add(new ConfigValue<Boolean>("renderUseModels", config.getBoolean("graphics_options", "HDModels", true)));
+		configValues.add(new ConfigValue<Boolean>("renderUseModels", config.getBoolean("graphics_options", "HDModels",
+				true)));
 		HDModels.comment = "Should HD models be used. (true/false)";
 
-		configValues.add(new ConfigValue<Boolean>("doGateExplosion", config.getBoolean("options", "ActiveGateExplosion", true)));
+		configValues.add(new ConfigValue<Boolean>("doGateExplosion", config.getBoolean("options",
+				"ActiveGateExplosion", true)));
 
 		Property enableAnalytics = config.get("options", "enableAnalytics", true);
-		configValues.add(new ConfigValue<Boolean>("enableAnalytics", config.getBoolean("options", "enableAnalytics", true)));
+		configValues.add(new ConfigValue<Boolean>("enableAnalytics", config.getBoolean("options", "enableAnalytics",
+				true)));
 		enableAnalytics.comment = "Submit anonymous usage statistic data. (true/false)";
 
 		if (((ConfigValue<Boolean>) getConfigValue("doGalacticCraftCompat")).getValue())
@@ -216,11 +223,11 @@ public class LanteaCraftCommonProxy {
 	private Object createGuiElement(Class<?> cls, EntityPlayer player, World world, int x, int y, int z) {
 		try {
 			try {
-				return cls.getMethod("create", EntityPlayer.class, World.class, int.class, int.class, int.class).invoke(null, player,
-						world, x, y, z);
+				return cls.getMethod("create", EntityPlayer.class, World.class, int.class, int.class, int.class)
+						.invoke(null, player, world, x, y, z);
 			} catch (NoSuchMethodException e) {
-				return cls.getConstructor(EntityPlayer.class, World.class, int.class, int.class, int.class).newInstance(player, world, x,
-						y, z);
+				return cls.getConstructor(EntityPlayer.class, World.class, int.class, int.class, int.class)
+						.newInstance(player, world, x, y, z);
 			}
 		} catch (Exception e) {
 			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to create GUI element, an exception occured.", e);
@@ -235,7 +242,8 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public void addContainer(int id, Class<? extends Container> cls) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering container with ID " + id + ", class " + cls.getCanonicalName());
+		LanteaCraft.getLogger().log(Level.FINE,
+				"Registering container with ID " + id + ", class " + cls.getCanonicalName());
 		registeredContainers.put(id, cls);
 	}
 
