@@ -10,16 +10,26 @@ public class GlyphRenderer {
 	private static double uscale, vscale;
 
 	public static void drawAddress(Minecraft mc, String address, int x, int y, int length, int scale, float zLevel) {
-		bindSGTexture(mc, "symbols.png", 512 / scale, 256 / scale);
+		bindSGTexture(mc, "symbols.png", 512 / scale, 320 / scale);
+		int paddingTop = 0, paddingLeft = 0;
 		int borderSize = 12 / scale;
 		int cellSize = 64 / scale;
-		int n = address.length();
-		for (int i = 0; i < n; i++) {
+		if (address.length() > 7) {
+			cellSize = (int) Math.floor(448 / address.length()) / scale;
+			if (448 / scale > (address.length() * cellSize)) {
+				double freeLeftRight = 448 / scale - (address.length() * cellSize);
+				double freeTopBottom = 64 / scale - cellSize;
+				paddingLeft += (int) Math.floor(freeLeftRight / address.length());
+				paddingTop += (int) Math.floor(freeTopBottom / 2);
+			}
+		}
+
+		for (int i = 0; i < address.length(); i++) {
 			int s = GateAddressHelper.charToSymbol(address.charAt(i));
-			int row = s / length;
-			int col = s % length;
-			drawTexturedRect(x + borderSize + i * cellSize, y + borderSize, cellSize, cellSize, col * cellSize, row
-					* cellSize, zLevel);
+			double u = uscale * ((s / (length - 1)) * 32), v = vscale * ((s % (length - 1)) * 32);
+			double u2 = uscale * 32, v2 = vscale * 32;
+			drawTexturedRectUV(x + borderSize + i * cellSize + paddingLeft, y + borderSize + paddingTop, cellSize,
+					cellSize, u, v, u2, v2, zLevel);
 		}
 	}
 
@@ -27,15 +37,6 @@ public class GlyphRenderer {
 		mc.getTextureManager().bindTexture(LanteaCraft.getResource("textures/gui/" + name));
 		uscale = 1.0 / usize;
 		vscale = 1.0 / vsize;
-	}
-
-	private static void drawTexturedRect(double x, double y, double w, double h, double u, double v, float zLevel) {
-		drawTexturedRect(x, y, w, h, u, v, w, h, zLevel);
-	}
-
-	private static void drawTexturedRect(double x, double y, double w, double h, double u, double v, double us,
-			double vs, float zLevel) {
-		drawTexturedRectUV(x, y, w, h, u * uscale, v * vscale, us * uscale, vs * vscale, zLevel);
 	}
 
 	private static void drawTexturedRectUV(double x, double y, double w, double h, double u, double v, double us,

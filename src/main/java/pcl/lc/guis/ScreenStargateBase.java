@@ -1,9 +1,9 @@
 package pcl.lc.guis;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
+import java.util.logging.Level;
 
-import org.lwjgl.opengl.GL11;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.containers.ContainerStargateBase;
@@ -15,26 +15,15 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 	private static String screenTitle = "Stargate Address";
 	private static final int guiWidth = 256;
 	private static final int guiHeight = 208;
-	private static final int fuelGaugeWidth = 16;
-	private static final int fuelGaugeHeight = 34;
-	private static final int fuelGaugeX = 214;
-	private static final int fuelGaugeY = 84;
-	private static final int fuelGaugeU = 0;
-	private static final int fuelGaugeV = 208;
 
+	private ResourceLocation background;
 	private TileEntityStargateBase te;
+	private String address;
 
-	public static ScreenStargateBase create(EntityPlayer player, World world, int x, int y, int z) {
-		TileEntityStargateBase te = (TileEntityStargateBase) world.getBlockTileEntity(x, y, z);
-		if (te != null)
-			return new ScreenStargateBase(te, player);
-		else
-			return null;
-	}
-
-	public ScreenStargateBase(TileEntityStargateBase te, EntityPlayer player) {
-		super(new ContainerStargateBase(te, player), guiWidth, guiHeight);
-		this.te = te;
+	public ScreenStargateBase(TileEntityStargateBase entity, EntityPlayer player) {
+		super(new ContainerStargateBase(entity, player), guiWidth, guiHeight);
+		te = entity;
+		background = LanteaCraft.getResource("textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png");
 	}
 
 	@Override
@@ -44,45 +33,32 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 
 	@Override
 	protected void drawForegroundLayer() {
-		drawFuelGauge();
 		String address = getAddress();
 		int cx = xSize / 2;
 		drawFramedSymbols(cx, 22, address);
 		textColor = 0x004c66;
 		drawCenteredString(screenTitle, cx, 8);
 		drawCenteredString(address, cx, 72);
-		drawString("Fuel", 150, 96);
 	}
 
 	@Override
 	public void drawBackgroundLayer() {
-		bindTexture(LanteaCraft.getResource("textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png"),
-				256, 256);
+		bindTexture(background, 256, 256);
 		drawTexturedRect(0, 0, guiWidth, guiHeight, 0, 0);
 	}
 
-	void drawFuelGauge() {
-		int level = fuelGaugeHeight * te.fuelBuffer / TileEntityStargateBase.maxFuelBuffer;
-		GL11.glEnable(GL11.GL_BLEND);
-		drawTexturedRect(fuelGaugeX, fuelGaugeY + fuelGaugeHeight - level, fuelGaugeWidth, level, fuelGaugeU,
-				fuelGaugeV);
-		GL11.glDisable(GL11.GL_BLEND);
+	private String getAddress() {
+		if (address == null)
+			try {
+				address = te.getHomeAddress();
+			} catch (GateAddressHelper.CoordRangeError e) {
+				address = "Coordinates out of stargate range";
+			} catch (GateAddressHelper.DimensionRangeError e) {
+				address = "Dimension not reachable by stargate";
+			} catch (GateAddressHelper.AddressingError e) {
+				LanteaCraft.getLogger().log(Level.INFO, "Addressing error!", e);
+				address = "Stargate addressing error; check the log";
+			}
+		return address;
 	}
-
-	String getAddress() {
-		try {
-			return te.getHomeAddress();
-		} catch (GateAddressHelper.CoordRangeError e) {
-			return "Coordinates out of stargate range";
-		} catch (GateAddressHelper.DimensionRangeError e) {
-			return "Dimension not reachable by stargate";
-		} catch (GateAddressHelper.AddressingError e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	void setAddress(String newAddress) {
-		// te.setHomeAddress(newAddress);
-	}
-
 }

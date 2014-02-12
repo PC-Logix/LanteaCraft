@@ -11,8 +11,9 @@ import pcl.lc.LanteaCraft;
 public class ModuleManager {
 
 	public static enum Module {
-		CORE(new ModuleCore()), STARGATE(new ModuleStargates()), POWER(new ModulePower()), WORLDGEN(new ModuleWorldGenerator()), CRITTERS(
-				new ModuleCritters()), DECOR(new ModuleDecor());
+		CORE(new ModuleCore()), STARGATE(new ModuleStargates()), POWER(new ModulePower()), WORLDGEN(
+				new ModuleWorldGenerator()), CRITTERS(new ModuleCritters()), DECOR(new ModuleDecor()), INTEGRATION(
+				new ModuleIntegration());
 
 		private final IModule moduleOf;
 		private boolean loaded = false;
@@ -38,7 +39,8 @@ public class ModuleManager {
 		while (i.hasNext()) {
 			Module theModule = (Module) i.next();
 			if (!isModuleEnabled(theModule)) {
-				LanteaCraft.getLogger().log(Level.INFO, "Removing module " + theModule + " because it is disabled in config.");
+				LanteaCraft.getLogger().log(Level.INFO,
+						"Removing module " + theModule + " because it is disabled in config.");
 				i.remove();
 			}
 		}
@@ -51,7 +53,8 @@ public class ModuleManager {
 				Module theModule = (Module) j.next();
 				Set<Module> dependencies = theModule.moduleOf().getDependencies();
 				if (dependencies != null && !modules.containsAll(dependencies)) {
-					LanteaCraft.getLogger().log(Level.INFO, "Removing module " + theModule + " because it is missing dependencies.");
+					LanteaCraft.getLogger().log(Level.INFO,
+							"Removing module " + theModule + " because it is missing dependencies.");
 					j.remove();
 					flag = true;
 				}
@@ -74,7 +77,8 @@ public class ModuleManager {
 				Set<Module> loadAfter = theModule.moduleOf().getLoadDependenciesAfter();
 				if (loadAfter == null) {
 					if (!loadStack.contains(theModule)) {
-						LanteaCraft.getLogger().log(Level.INFO, "Adding module " + theModule + " as it has no load order.");
+						LanteaCraft.getLogger().log(Level.INFO,
+								"Adding module " + theModule + " as it has no load order.");
 						loadStack.add(theModule);
 						k.remove();
 					}
@@ -83,16 +87,19 @@ public class ModuleManager {
 					for (Module mod : loadAfter)
 						if (loadStack.indexOf(mod) > l)
 							l = loadStack.indexOf(mod);
-					LanteaCraft.getLogger().log(Level.INFO, "Adding module " + theModule + " as it has all parents resolved.");
+					LanteaCraft.getLogger().log(Level.INFO,
+							"Adding module " + theModule + " as it has all parents resolved.");
 					loadStack.add(l + 1, theModule);
 					k.remove();
 				} else
-					LanteaCraft.getLogger().log(Level.INFO, "Cannot add module " + theModule + "; waiting for other loading data.");
+					LanteaCraft.getLogger().log(Level.INFO,
+							"Cannot add module " + theModule + "; waiting for other loading data.");
 
 			}
 		}
 		if (p == 255)
-			LanteaCraft.getLogger().log(Level.WARNING, "There were issues resolving dependencies; full resolution was aborted.");
+			LanteaCraft.getLogger().log(Level.WARNING,
+					"There were issues resolving dependencies; full resolution was aborted.");
 
 		loadedModules.addAll(loadStack);
 

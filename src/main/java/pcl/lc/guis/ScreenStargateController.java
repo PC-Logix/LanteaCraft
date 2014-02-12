@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
@@ -29,12 +30,14 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	final static double dhdRadius2 = dhdWidth * 0.275;
 	final static double dhdRadius3 = dhdWidth * 0.45;
 
-	World world;
-	int x, y, z;
-	int dhdTop, dhdCentreX, dhdCentreY;
-	String enteredAddress = "";
-	int closingDelay = 0;
-	int ticks = 0;
+	private TileEntityStargateController controller;
+
+	private ResourceLocation dhdLayer;
+	private ResourceLocation dhdButtonLayer;
+
+	private int dhdTop, dhdCentreX, dhdCentreY;
+	private String enteredAddress = "", warningMessage = "";
+	private int ticks = 0, ticksWarning = 0;
 
 	public ScreenStargateController(TileEntityStargateController controller, EntityPlayer actor) {
 		super(new GenericContainer(0, 0) {
@@ -43,26 +46,13 @@ public class ScreenStargateController extends GenericGlyphGUI {
 
 			}
 		});
-		world = controller.getWorldObj();
-		x = controller.xCoord;
-		y = controller.yCoord;
-		z = controller.zCoord;
+		this.controller = controller;
+		dhdLayer = LanteaCraft.getResource("textures/gui/dhd_gui.png");
+		dhdButtonLayer = LanteaCraft.getResource("textures/gui/dhd_centre.png");
 	}
 
 	TileEntityStargateBase getStargateTE() {
-		TileEntityStargateController cte = getControllerTE();
-		if (cte != null)
-			return cte.getLinkedStargateTE();
-		else
-			return null;
-	}
-
-	TileEntityStargateController getControllerTE() {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te instanceof TileEntityStargateController)
-			return (TileEntityStargateController) te;
-		else
-			return null;
+		return controller.getLinkedStargateTE();
 	}
 
 	@Override
@@ -78,13 +68,13 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		ticks++;
 		if (ticks > 20)
 			ticks = 0;
-		if (closingDelay > 0)
-			if (--closingDelay == 0)
-				close();
+		if (ticksWarning > 0)
+			ticksWarning--;
 	}
 
 	@Override
 	protected void mouseClicked(int x, int y, int mouseButton) {
+		mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 		if (mouseButton == 0) {
 			int i = findDHDButton(x, y);
 			if (i >= 0) {
@@ -93,10 +83,6 @@ public class ScreenStargateController extends GenericGlyphGUI {
 			}
 		}
 		super.mouseClicked(x, y, mouseButton);
-	}
-
-	void closeAfterDelay(int ticks) {
-		closingDelay = ticks;
 	}
 
 	int findDHDButton(int mx, int my) {
@@ -114,8 +100,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		return i0 + (int) Math.floor(a * 14 / 360);
 	}
 
-	void dhdButtonPressed(int i) {
-		buttonSound();
+	private void dhdButtonPressed(int i) {
 		if (i == 0)
 			orangeButtonPressed(false);
 		else if (i >= 27)
@@ -124,12 +109,9 @@ public class ScreenStargateController extends GenericGlyphGUI {
 			enterCharacter(GateAddressHelper.symbolToChar(i - 1));
 	}
 
-	void buttonSound() {
-		mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-	}
-
 	@Override
 	protected void keyTyped(char c, int key) {
+		mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 		if (key == Keyboard.KEY_ESCAPE)
 			close();
 		else if (key == Keyboard.KEY_BACK || key == Keyboard.KEY_DELETE)
@@ -145,12 +127,15 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))
 			if (key == Keyboard.KEY_V)
 				try {
-					String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+					String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
+							.getData(DataFlavor.stringFlavor);
 					for (char c1 : data.toCharArray())
 						if (GateAddressHelper.isValidSymbolChar(c1))
 							enterCharacter(c1);
 				} catch (Throwable t) {
 					LanteaCraft.getLogger().log(Level.WARNING, "Clipboard pull failed!", t);
+					warningMessage = "Couldn't read the clipboard!";
+					ticksWarning = 20 * 10;
 				}
 	}
 
@@ -167,33 +152,39 @@ public class ScreenStargateController extends GenericGlyphGUI {
 				packet.setValue("WorldY", te.yCoord);
 				packet.setValue("WorldZ", te.zCoord);
 				LanteaCraft.getProxy().sendToServer(packet);
-				closeAfterDelay(10);
+				close();
 			}
 	}
 
-	void backspace() {
-		buttonSound();
+	private void backspace() {
 		int n = enteredAddress.length();
 		if (n > 0)
 			enteredAddress = enteredAddress.substring(0, n - 1);
 	}
 
-	void enterCharacter(char c) {
-		buttonSound();
+	private void enterCharacter(char c) {
 		if (enteredAddress.length() < 9)
 			enteredAddress = enteredAddress + c;
 	}
 
-	void drawBackgroundImage() {
-		bindTexture(LanteaCraft.getResource("textures/gui/dhd_gui.png"));
-		drawTexturedRect((width - dhdWidth) / 2, height - dhdHeight, dhdWidth, dhdHeight);
+	void drawEnteredSymbols() {
+		drawFramedSymbols(width / 2, dhdTop - 60, enteredAddress);
 	}
 
-	void drawOrangeButton() {
-		bindTexture(LanteaCraft.getResource("textures/gui/dhd_centre.png"), 128, 64);
+	void drawEnteredString() {
+		drawAddressString(width / 2, dhdTop - 12, enteredAddress, 9, " ", (ticks > 10) ? "_" : " ");
+	}
+
+	@Override
+	protected void drawBackgroundLayer() {
+		bindTexture(dhdLayer);
+		drawTexturedRect((width - dhdWidth) / 2, height - dhdHeight, dhdWidth, dhdHeight);
+
+		bindTexture(dhdButtonLayer, 128, 64);
 		GL11.glEnable(GL11.GL_BLEND);
 		TileEntityStargateBase te = getStargateTE();
-		boolean connected = te != null && (EnumStargateState) te.getAsStructure().getMetadata("state") != EnumStargateState.Idle
+		boolean connected = te != null
+				&& (EnumStargateState) te.getAsStructure().getMetadata("state") != EnumStargateState.Idle
 				&& (EnumStargateState) te.getAsStructure().getMetadata("state") != EnumStargateState.Disconnecting;
 		if (te == null || !te.getAsStructure().isValid())
 			setColor(0.2, 0.2, 0.2);
@@ -215,20 +206,6 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		}
 	}
 
-	void drawEnteredSymbols() {
-		drawFramedSymbols(width / 2, dhdTop - 60, enteredAddress);
-	}
-
-	void drawEnteredString() {
-		drawAddressString(width / 2, dhdTop - 12, enteredAddress, 9, " ", (ticks > 10) ? "_" : " ");
-	}
-
-	@Override
-	protected void drawBackgroundLayer() {
-		drawBackgroundImage();
-		drawOrangeButton();
-	}
-
 	@Override
 	protected void drawForegroundLayer() {
 		TileEntityStargateBase te = getStargateTE();
@@ -237,6 +214,8 @@ public class ScreenStargateController extends GenericGlyphGUI {
 				drawEnteredSymbols();
 				drawEnteredString();
 			}
+		if (ticksWarning > 0 && warningMessage != null)
+			drawCenteredString(fontRenderer, warningMessage, width / 2, dhdTop - 3, 0xffaaaa);
 	}
 
 }

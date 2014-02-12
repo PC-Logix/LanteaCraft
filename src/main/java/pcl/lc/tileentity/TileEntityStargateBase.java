@@ -23,11 +23,9 @@ import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -566,7 +564,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 				entityInPortal(trk.entity, trk.lastPos);
 			trackedEntities.clear();
 			Vector3 p0 = new Vector3(-1.5, 0.5, -3.5);
-			Vector3 p1 = new Vector3(1.5, 3.5, 3.5);
+			Vector3 p1 = new Vector3(1.5, 5.5, 3.5);
 			Trans3 t = localToGlobalTransformation();
 			AxisAlignedBB box = t.box(p0, p1);
 			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
@@ -829,11 +827,11 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	void advanceRendering() {
 		double grid[][][] = getEventHorizonGrid();
-		int m = EventHorizonRenderer.ehGridRadialSize, n = EventHorizonRenderer.ehGridPolarSize;
+		final int m = EventHorizonRenderer.ehGridRadialSize, n = EventHorizonRenderer.ehGridPolarSize;
 		double u[][] = grid[0], v[][] = grid[1];
 		double dt = 1.0, asq = 0.03, d = 0.95;
 		int r = random.nextInt(m - 1) + 1, t = random.nextInt(n) + 1;
-		v[r][t] += 0.05 * random.nextGaussian();
+		v[t][r] += 0.05 * random.nextGaussian();
 		for (int i = 1; i < m; i++)
 			for (int j = 1; j <= n; j++) {
 				double du_dr = 0.5 * (u[j][i + 1] - u[j][i - 1]);
