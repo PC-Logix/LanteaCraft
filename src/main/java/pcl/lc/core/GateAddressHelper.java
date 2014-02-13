@@ -1,9 +1,3 @@
-// ------------------------------------------------------------------------------------------------
-//
-// SG Craft - Conversions between coordinates and stargate addresses
-//
-// ------------------------------------------------------------------------------------------------
-
 package pcl.lc.core;
 
 import net.minecraft.server.MinecraftServer;

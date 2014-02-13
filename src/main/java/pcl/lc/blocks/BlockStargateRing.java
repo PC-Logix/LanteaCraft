@@ -50,7 +50,8 @@ public class BlockStargateRing extends GenericContainerBlock {
 	public void registerIcons(IconRegister register) {
 		topAndBottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBlock_"
 				+ LanteaCraft.getProxy().getRenderMode());
-		sideTextures[0] = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateRing_" + LanteaCraft.getProxy().getRenderMode());
+		sideTextures[0] = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateRing_"
+				+ LanteaCraft.getProxy().getRenderMode());
 		sideTextures[1] = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateChevron_"
 				+ LanteaCraft.getProxy().getRenderMode());
 	}
@@ -76,7 +77,8 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx, float cy, float cz) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
+			float cy, float cz) {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
 		if (te.getAsPart().isMerged()) {
 			Vector3 base = te.getAsPart().findHostMultiblock(false).getLocation();
