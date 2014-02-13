@@ -1,0 +1,36 @@
+tile.stargateController.name=Stargate Controller
+tile.stargateBase.name=Stargate Basis
+tile.stargateRing.0.name=Stargate Ring Segment
+tile.stargateRing.1.name=Stargate Chevron Block
+item.coreCrystal.name=Stargate Kern Kristall
+item.controllerCrystal.name=Stargate Controllkristall
+item.energyCrystal.name=Energiekristall
+
+tile.blockLiquidNaquadah.name=Flüssiges Naquadah
+item.liquidNaquadahBucket.name=Eimer mit flüssig Naquadah
+
+tile.lanteaDecor.1.name=Antiker Verzierter Stahl
+tile.lanteaDecor.2.name=Antiker Stah
+tile.lanteaDecor.3.name=Goa'uld Verziertes Gold
+tile.lanteaDecor.4.name=Goa'uld Gold
+
+tile.lanteaOre.0.name=Naquadah Erz
+item.lanteaOre.0.name=Naquadah
+item.lanteaOreIngot.0.name=Naquadah Barren
+tile.lanteaOreIngotBlock.0.name=Naquadah Block
+
+
+tile.lanteaOre.1.name=Naqahdriah Erz
+item.lanteaOre.1.name=Naqahdriah
+item.lanteaOreIngot.1.name=Naqahdriah Barren
+tile.lanteaOreIngotBlock.1.name=Naqahdriah Block
+
+tile.lanteaOre.2.name=Trinium Erz
+item.lanteaOre.2.name=Trinium
+item.lanteaOreIngot.2.name=Trinium Barren
+tile.lanteaOreIngotBlock.2.name=Trinium Block
+
+tile.naquadahGenerator.name=Naquadah Generator
+
+item.tokraSpawnEgg.name=Tok'ra Spawn Ei
+item.lanteadebug.name=LanteaCraft Debugger
