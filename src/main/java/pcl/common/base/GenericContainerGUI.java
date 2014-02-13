@@ -37,7 +37,7 @@ public abstract class GenericContainerGUI extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
+	protected void drawGuiContainerBackgroundLayer(float mouseX, int mouseY, int partialTicks) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
 		drawBackgroundLayer();
@@ -47,7 +47,7 @@ public abstract class GenericContainerGUI extends GuiContainer {
 	protected abstract void drawBackgroundLayer();
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		drawForegroundLayer();
 	}
 

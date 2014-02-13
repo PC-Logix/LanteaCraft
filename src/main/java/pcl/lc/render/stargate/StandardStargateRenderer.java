@@ -30,8 +30,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 
 	private void renderInnerRing(TileEntityStargateBase te, float t) {
 		GL11.glPushMatrix();
-		GL11.glRotatef((float) (te.interpolatedRingAngle(t) - (135 - StargateRenderConstants.ringSymbolAngle / 2)), 0,
-				0, 1);
+		GL11.glRotatef((float) (95 + te.interpolatedRingAngle(t)), 0, 0, 1);
 		renderRing(StargateRenderConstants.ringInnerRadius, StargateRenderConstants.ringMidRadius, true);
 		GL11.glPopMatrix();
 	}

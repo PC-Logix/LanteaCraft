@@ -43,34 +43,36 @@ public abstract class GenericContainerBlock extends BlockContainer {
 	public abstract void onBlockAdded(World world, int x, int y, int z);
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
+	public void breakBlock(World world, int x, int y, int z, int blockId, int blockMeta) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof IInventory) {
-			IInventory var7 = (IInventory) te;
-			if (var7 != null)
-				for (int var8 = 0; var8 < var7.getSizeInventory(); ++var8) {
-					ItemStack var9 = var7.getStackInSlot(var8);
-					if (var9 != null) {
-						float var10 = random.nextFloat() * 0.8F + 0.1F;
-						float var11 = random.nextFloat() * 0.8F + 0.1F;
-						EntityItem var14;
-						for (float var12 = random.nextFloat() * 0.8F + 0.1F; var9.stackSize > 0; world.spawnEntityInWorld(var14)) {
-							int var13 = random.nextInt(21) + 10;
-							if (var13 > var9.stackSize)
-								var13 = var9.stackSize;
-							var9.stackSize -= var13;
-							var14 = new EntityItem(world, x + var10, y + var11, z + var12, new ItemStack(var9.itemID, var13,
-									var9.getItemDamage()));
-							float var15 = 0.05F;
-							var14.motionX = (float) random.nextGaussian() * var15;
-							var14.motionY = (float) random.nextGaussian() * var15 + 0.2F;
-							var14.motionZ = (float) random.nextGaussian() * var15;
-							if (var9.hasTagCompound())
-								var14.getEntityItem().setTagCompound((NBTTagCompound) var9.getTagCompound().copy());
+			IInventory inventory = (IInventory) te;
+			if (inventory != null)
+				for (int i = 0; i < inventory.getSizeInventory(); ++i) {
+					ItemStack stack = inventory.getStackInSlot(i);
+					if (stack != null) {
+						float objectDropX = random.nextFloat() * 0.8F + 0.1F;
+						float objectDropY = random.nextFloat() * 0.8F + 0.1F;
+						EntityItem itemEntity;
+						for (float objectDropHeight = random.nextFloat() * 0.8F + 0.1F; stack.stackSize > 0; world
+								.spawnEntityInWorld(itemEntity)) {
+							int stackSize = random.nextInt(21) + 10;
+							if (stackSize > stack.stackSize)
+								stackSize = stack.stackSize;
+							stack.stackSize -= stackSize;
+							itemEntity = new EntityItem(world, x + objectDropX, y + objectDropY, z + objectDropHeight,
+									new ItemStack(stack.itemID, stackSize, stack.getItemDamage()));
+							float motionMul = 0.05F;
+							itemEntity.motionX = (float) random.nextGaussian() * motionMul;
+							itemEntity.motionY = (float) random.nextGaussian() * motionMul + 0.2F;
+							itemEntity.motionZ = (float) random.nextGaussian() * motionMul;
+							if (stack.hasTagCompound())
+								itemEntity.getEntityItem().setTagCompound(
+										(NBTTagCompound) stack.getTagCompound().copy());
 						}
 					}
 				}
 		}
-		super.breakBlock(world, x, y, z, par5, par6);
+		super.breakBlock(world, x, y, z, blockId, blockMeta);
 	}
 }

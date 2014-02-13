@@ -3,8 +3,11 @@ package net.minecraft.world.gen.structure;
 import java.util.*;
 
 /**
- * FIXME: This is definitely not a safe way of accessing the structure map. We can use
- * reflection or even our runtime transformers to access this. REMOVE THIS ASAP.
+ * FIXME: This is definitely not a safe way of accessing the structure map. We
+ * can use reflection or even our runtime transformers to access this. REMOVE
+ * THIS ASAP.
+ * 
+ * @deprecated Tagged for immediate replacement.
  */
 public class MapGenStructureAccess {
 

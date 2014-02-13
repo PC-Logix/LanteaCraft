@@ -12,29 +12,36 @@ import net.minecraftforge.event.terraingen.InitMapGenEvent;
 /**
  * I finally had an epiphany about what this mess does.
  * 
- * By hooking to the onInitMapGen event, and then testing for a scattered feature, we can
- * modify the feature's actual behavior by setting the generator to use a custom HashMap
- * implementation.
+ * By hooking to the onInitMapGen event, and then testing for a scattered
+ * feature, we can modify the feature's actual behavior by setting the generator
+ * to use a custom HashMap implementation.
  * 
- * In replacing the HashMap object with one with callbacks, the code here is able to detect
- * when a structure start is stated by the generator (StructureStart) and then invoke
- * augmentStructureStart, which effectively allows tacking the additional features onto the
- * structure.
+ * In replacing the HashMap object with one with callbacks, the code here is
+ * able to detect when a structure start is stated by the generator
+ * (StructureStart) and then invoke augmentStructureStart, which effectively
+ * allows tacking the additional features onto the structure.
  * 
- * It's smart, but I'm pretty sure Forge has a more... non-hacky way of doing this.
+ * It's smart, but I'm pretty sure Forge has a more... non-hacky way of doing
+ * this.
  * 
+ * FIXME: Hacking like this is not allowed. We should be creating
+ * StructureComponent objects and using MapGenStructureIO to register them, not
+ * doing shit in net.minecraft;
+ * 
+ * @deprecated Tagged for immediate replacement.
  */
+@Deprecated
 public class FeatureGeneration {
 
 	public static void onInitMapGen(InitMapGenEvent e) {
 		switch (e.type) {
-			case SCATTERED_FEATURE:
-				if (e.newGen instanceof MapGenStructure)
-					e.newGen = modifyScatteredFeatureGen((MapGenStructure) e.newGen);
-				else
-					break;
-			default:
+		case SCATTERED_FEATURE:
+			if (e.newGen instanceof MapGenStructure)
+				e.newGen = modifyScatteredFeatureGen((MapGenStructure) e.newGen);
+			else
 				break;
+		default:
+			break;
 		}
 	}
 
@@ -47,7 +54,14 @@ public class FeatureGeneration {
 
 /**
  * The replacement HashMap with added hooks
+ * 
+ * FIXME: Hacking like this is not allowed. We should be creating
+ * StructureComponent objects and using MapGenStructureIO to register them, not
+ * doing shit in net.minecraft;
+ * 
+ * @deprecated Tagged for immediate replacement.
  */
+@Deprecated
 class SGStructureMap extends HashMap {
 
 	@Override
@@ -58,8 +72,8 @@ class SGStructureMap extends HashMap {
 	}
 
 	/**
-	 * Called to detect the specific structure type, given the type being added is a
-	 * StructureStart
+	 * Called to detect the specific structure type, given the type being added
+	 * is a StructureStart
 	 * 
 	 * @param start
 	 *            The StructureStart reference
