@@ -1,17 +1,35 @@
-tile.naquadahBlock.name=Blok nakadahu
-tile.naquadahOre.name=Nakadahová ruda
-tile.naquadahGenerator.name=Nakadahový generator
 tile.stargateController.name=Ovládací panel brány
 tile.stargateBase.name=Základní blok brány
 tile.stargateRing.0.name=Segment kruhu brány
 tile.stargateRing.1.name=Zámek brány
-tile.blockLiquidNaquadah.name=Tekutý nakadah
-
-item.naquadah.name=Nakadah
-item.naquadahIngot.name=Ingot nakadahové slitiny
 item.coreCrystal.name=Hlavní krystal
 item.controllerCrystal.name=Řídící krystal
 item.energyCrystal.name=Energetický krystal
+
+tile.blockLiquidNaquadah.name=Tekutý nakadah
+item.liquidNaquadahBucket.name=Kbelík tekutého nakadahu
+
+tile.lanteaDecor.1.name=Kov předků s ornamenty (dekor)
+tile.lanteaDecor.2.name=Kov předků (dekor)
+tile.lanteaDecor.3.name=Goa'uldské zlato s ornamenty (dekor)
+tile.lanteaDecor.4.name=Goa'uldské zlato (dekor)
+
+tile.lanteaOre.0.name=Nakadahová ruda
+item.lanteaOre.0.name=Nakadah
+item.lanteaOreIngot.0.name=Ingot nakadahu
+tile.lanteaOreIngotBlock.0.name=Blok nakadahu
+
+tile.lanteaOre.1.name=Nakadriová ruda
+item.lanteaOre.1.name=Nakadria
+item.lanteaOreIngot.1.name=Nakadriový ingot
+tile.lanteaOreIngotBlock.1.name=Blok nakadrie
+
+tile.lanteaOre.2.name=Triniová ruda
+item.lanteaOre.2.name=Trinium
+item.lanteaOreIngot.2.name=Triniový ingot
+tile.lanteaOreIngotBlock.2.name=Blok trinia
+
+tile.naquadahGenerator.name=Nakadahový generator
+
 item.tokraSpawnEgg.name=Tok'ří vejce
 item.lanteadebug.name=LanteaCraft Debugger
-item.liquidNaquadahBucket.name=Kbelík tekutého nakadahu
