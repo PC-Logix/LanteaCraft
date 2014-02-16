@@ -37,21 +37,21 @@ public abstract class GenericContainerGUI extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float mouseX, int mouseY, int partialTicks) {
+	protected void drawGuiContainerBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
-		drawBackgroundLayer();
+		drawBackgroundLayer(partialTickCount, mouseX, mouseY);
 		GL11.glPopMatrix();
 	}
 
-	protected abstract void drawBackgroundLayer();
+	protected abstract void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY);
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		drawForegroundLayer();
+		drawForegroundLayer(mouseX, mouseY);
 	}
 
-	protected abstract void drawForegroundLayer();
+	protected abstract void drawForegroundLayer(int mouseX, int mouseY);
 
 	protected void close() {
 		mc.thePlayer.closeScreen();

@@ -176,7 +176,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	}
 
 	@Override
-	protected void drawBackgroundLayer() {
+	protected void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
 		bindTexture(dhdLayer);
 		drawTexturedRect((width - dhdWidth) / 2, height - dhdHeight, dhdWidth, dhdHeight);
 
@@ -207,7 +207,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	}
 
 	@Override
-	protected void drawForegroundLayer() {
+	protected void drawForegroundLayer(int mouseX, int mouseY) {
 		TileEntityStargateBase te = getStargateTE();
 		if (te != null)
 			if ((EnumStargateState) te.getAsStructure().getMetadata("state") == EnumStargateState.Idle) {

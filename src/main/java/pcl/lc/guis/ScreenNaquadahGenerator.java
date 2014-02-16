@@ -28,7 +28,7 @@ public class ScreenNaquadahGenerator extends GenericContainerGUI {
 	}
 
 	@Override
-	protected void drawBackgroundLayer() {
+	protected void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
 		bindTexture(background, 256, 256);
 		drawTexturedRectUV(0, 0, 177, 208, 0, 0, 177d / 256d, 208d / 256d);
 		drawTexturedRectUV(48, 96, (80d * (tileEntity.displayEnergy / 100d)) / 100d, 11, 176d / 256d, 0,
@@ -36,7 +36,7 @@ public class ScreenNaquadahGenerator extends GenericContainerGUI {
 	}
 
 	@Override
-	protected void drawForegroundLayer() {
+	protected void drawForegroundLayer(int mouseX, int mouseY) {
 		StringBuilder sg = new StringBuilder().append(tileEntity.displayEnergy / 100d);
 		if (sg.substring(sg.indexOf(".") + 1).length() != 2)
 			sg.append("0");
