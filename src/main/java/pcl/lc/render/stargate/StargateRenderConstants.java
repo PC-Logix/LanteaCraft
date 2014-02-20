@@ -4,7 +4,7 @@ import pcl.lc.core.GateAddressHelper;
 
 public class StargateRenderConstants {
 
-	public final static int numRingSegments = 38 * 2;
+	public final static int numRingSegments = 38;
 	public final static double ringSymbolAngle = 360.0 / GateAddressHelper.numSymbols;
 	public final static double ringSymbolTextureLength = 38 * 8;
 	public final static double ringSymbolTextureHeight = 12;
@@ -31,5 +31,8 @@ public class StargateRenderConstants {
 	public final static int ringSymbolTextureIndex = 0x20;
 	public final static int chevronTextureIndex = 0x05;
 	public final static int chevronLitTextureIndex = 0x16;
+
+	public final static int[] standardRenderQueue = { 1, 2, 3, 9, 8, 7, 0 };
+	public final static int[] extendedRenderQueue = { 1, 2, 3, 4, 9, 8, 7, 6, 0 };
 
 }

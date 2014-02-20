@@ -33,6 +33,7 @@ import pcl.common.base.TileEntityChunkLoader;
 import pcl.common.base.TileEntityChunkManager;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.network.ModPacket;
+import pcl.common.util.Facing3;
 import pcl.common.util.MathUtils;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
@@ -41,6 +42,7 @@ import pcl.lc.LanteaCraft.Items;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.core.GateAddressHelper;
+import pcl.lc.core.TeleportationAgent;
 import pcl.lc.core.WorldLocation;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
@@ -76,7 +78,9 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 	public static int ticksToStayOpen;
 
 	public static Random random = new Random();
-	public static DamageSource transientDamage = new TileEntityStargateBase.TransientDamageSource();
+
+	public static TransientDamageSource transientDamage = new TransientDamageSource();
+	public static IrisDamageSource irisDamange = new IrisDamageSource();
 
 	private boolean hasSetChunkZone = false;
 	public int numEngagedChevrons;
@@ -107,13 +111,24 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 
 	double ehGrid[][][];
 
-	public static class TransientDamageSource extends DamageSource {
+	private static class TransientDamageSource extends DamageSource {
 		public TransientDamageSource() {
-			super("sgTransient");
+			super("wormhole_transient");
 		}
 
 		public String getDeathMessage(EntityPlayer player) {
-			return player.username + " was torn apart by an event horizon";
+			return new StringBuilder().append(player.username).append(" was torn apart by an event horizon.")
+					.toString();
+		}
+	}
+
+	private static class IrisDamageSource extends DamageSource {
+		public IrisDamageSource() {
+			super("stargate_iris");
+		}
+
+		public String getDeathMessage(EntityPlayer player) {
+			return new StringBuilder().append(player.username).append(" was obliterated by an iris.").toString();
 		}
 	}
 
@@ -322,7 +337,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 				powerLevel = 0;
 		} else if (getState() == EnumStargateState.Disconnecting || getState() == EnumStargateState.Idle)
 			powerLevel = 0;
-		worldObj.notifyBlockChange(xCoord, yCoord, zCoord, blockType.blockID);
+		if (worldObj != null)
+			worldObj.notifyBlockChange(xCoord, yCoord, zCoord, blockType.blockID);
 		onInventoryChanged();
 		markBlockForUpdate();
 	}
@@ -563,8 +579,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 			for (TrackedEntity trk : trackedEntities)
 				entityInPortal(trk.entity, trk.lastPos);
 			trackedEntities.clear();
-			Vector3 p0 = new Vector3(-1.5, 0.5, -3.5);
-			Vector3 p1 = new Vector3(1.5, 5.5, 3.5);
+			Vector3 p0 = new Vector3(-2.5, 0.5, -3.5);
+			Vector3 p1 = new Vector3(2.5, 5.5, 3.5);
 			Trans3 t = localToGlobalTransformation();
 			AxisAlignedBB box = t.box(p0, p1);
 			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
@@ -595,6 +611,50 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements IIn
 					if (m_computer != null)
 						m_computer.queueEvent("sgOutgoingTraveler", new Object[] { true });
 					teleportEntityAndRider(entity, t, dt, connectedLocation.dimension);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Replacement teleportation method (wip)
+	 * 
+	 * @param entity
+	 *            The entity to move.
+	 * @param prevPos
+	 *            param2:prevPos
+	 */
+	@SuppressWarnings("unused")
+	private void moveEntityInPortal(Entity entity, Vector3 prevPos) {
+		if (!entity.isDead && getState() == EnumStargateState.Connected && canTravelFromThisEnd()) {
+			Trans3 worldTrans = localToGlobalTransformation();
+			double vx = entity.posX - prevPos.x, vy = entity.posY - prevPos.y, vz = entity.posZ - prevPos.z;
+			Vector3 p1 = worldTrans.ip(entity.posX, entity.posY, entity.posZ);
+			Vector3 p0 = worldTrans.ip(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z
+					- entity.posZ);
+			double z0 = 0.0;
+			if (p0.z >= z0 && p1.z < z0) {
+				entity.motionX = vx;
+				entity.motionY = vy;
+				entity.motionZ = vz;
+				TileEntityStargateBase dte = getConnectedStargateTE();
+				if (dte != null) {
+					Trans3 dt = dte.localToGlobalTransformation();
+					Vector3 p = worldTrans.ip(entity.posX, entity.posY, entity.posZ);
+					Vector3 v = worldTrans.iv(entity.motionX, entity.motionY, entity.motionZ);
+					Vector3 r = worldTrans.iv(yawVector(entity));
+
+					Vector3 q = dt.p(-p.x, p.y, -p.z); // new global position
+					Vector3 u = dt.v(-v.x, v.y, -v.z); // new global velocity
+					Vector3 s = dt.v(r.mul(-1)); // new global facing
+					double a = yawAngle(s); // new global yaw angle
+
+					while (entity.ridingEntity != null)
+						entity = entity.ridingEntity;
+					if (m_computer != null)
+						m_computer.queueEvent("sgOutgoingTraveler", new Object[] { true });
+					new TeleportationAgent().teleportEntityAndRider(entity, q, u, new Facing3(a, entity.rotationPitch),
+							connectedLocation.dimension);
 				}
 			}
 		}

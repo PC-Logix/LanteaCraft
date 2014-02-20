@@ -4,32 +4,97 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import net.minecraft.util.AxisAlignedBB;
 
+/**
+ * Represents a Transformation in three-dimensional space.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class Trans3 {
 
+	/**
+	 * The identity Transformation.
+	 */
 	public static Trans3 ident = new Trans3(Vector3.zero, Matrix3.ident, 1.0);
 
+	/**
+	 * A vector representing an origin-based offset.
+	 */
 	public Vector3 offset;
+
+	/**
+	 * A matrix representing a rotation.
+	 */
 	public Matrix3 rotation;
+
+	/**
+	 * A double representing a scaling factor.
+	 */
 	public double scaling;
 
+	/**
+	 * Creates a new Trans3.
+	 * 
+	 * @param v
+	 *            The offset vector.
+	 * @param m
+	 *            The rotation matrix.
+	 * @param s
+	 *            The scaling factor.
+	 */
 	Trans3(Vector3 v, Matrix3 m, double s) {
 		offset = v;
 		rotation = m;
 		scaling = s;
 	}
 
+	/**
+	 * Creates a new Trans3.
+	 * 
+	 * @param dx
+	 *            The offset on the x-axis.
+	 * @param dy
+	 *            The offset on the y-axis.
+	 * @param dz
+	 *            The offset on the z-axis.
+	 */
 	public Trans3(double dx, double dy, double dz) {
 		this(new Vector3(dx, dy, dz), Matrix3.ident, 1.0);
 	}
 
+	/**
+	 * Translates this Trans3 into a new Trans3, applying the local rotation and
+	 * local offset factors.
+	 * 
+	 * @param dx
+	 *            The offset on the x-axis.
+	 * @param dy
+	 *            The offset on the y-axis.
+	 * @param dz
+	 *            The offset on the z-axis.
+	 */
 	public Trans3 translate(double dx, double dy, double dz) {
 		return new Trans3(offset.add(rotation.mul(dx * scaling, dy * scaling, dz * scaling)), rotation, scaling);
 	}
 
+	/**
+	 * Rotates this Trans3 around a Matrix3.
+	 * 
+	 * @param m
+	 *            The rotation matrix.
+	 * @return The new Trans3.
+	 */
 	public Trans3 rotate(Matrix3 m) {
 		return new Trans3(offset, rotation.mul(m), scaling);
 	}
 
+	/**
+	 * Scales this Trans3 by a factor s.
+	 * 
+	 * @param s
+	 *            The scaling factor.
+	 * @return The new Trans3.
+	 */
 	public Trans3 scale(double s) {
 		return new Trans3(offset, rotation, scaling * s);
 	}

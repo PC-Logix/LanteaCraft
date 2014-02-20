@@ -2,7 +2,6 @@ package pcl.lc.guis;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.util.logging.Level;
 
@@ -11,6 +10,7 @@ import org.lwjgl.input.Keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import pcl.common.util.ImmutablePair;
 import pcl.lc.LanteaCraft;
 import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.core.GateAddressHelper;
@@ -26,10 +26,20 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 	private TileEntityStargateBase te;
 	private String address;
 
+	private boolean mouseDown = false;
+	private int clipboardAction = 0;
+
 	public ScreenStargateBase(TileEntityStargateBase entity, EntityPlayer player) {
 		super(new ContainerStargateBase(entity, player), guiWidth, guiHeight);
 		te = entity;
 		background = LanteaCraft.getResource("textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png");
+	}
+
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+		if (clipboardAction > 0)
+			clipboardAction--;
 	}
 
 	@Override
@@ -38,14 +48,17 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 	}
 
 	@Override
-	protected void drawForegroundLayer(int mouseX, int mouseY) {
+	protected void drawForegroundLayer(int x, int y) {
 		String address = getAddress();
 		int cx = xSize / 2;
 		drawFramedSymbols(cx, 22, address);
 		textColor = 0x004c66;
 		drawCenteredString(screenTitle, cx, 8);
 		drawCenteredString(address, cx, 72);
-		IconButtonRenderer.drawButton(Minecraft.getMinecraft(), "copy", false, 232, 70, 0.5, zLevel);
+		ImmutablePair<Integer, Integer> coord = transformMouseCoordinates(x, y);
+		IconButtonRenderer.drawButton(Minecraft.getMinecraft(), (clipboardAction > 0) ? "tick" : "copy", (coord.getA() >= 232
+				&& coord.getA() <= 232 + 12 && coord.getB() >= 70 && coord.getB() <= 70 + 12), mouseDown, 232, 70, 0.5,
+				zLevel);
 	}
 
 	@Override
@@ -56,9 +69,25 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 
 	@Override
 	protected void mouseClicked(int x, int y, int mouseButton) {
-		if (mouseButton == 0 && x >= 232 && x <= 232 + 12 && y >= 70 && y <= 70 + 12)
-			addressToClipboard();
+		if (mouseButton == 0) {
+			ImmutablePair<Integer, Integer> coord = transformMouseCoordinates(x, y);
+			if (coord.getA() >= 232 && coord.getA() <= 232 + 12 && coord.getB() >= 70 && coord.getB() <= 70 + 12)
+				mouseDown = true;
+		}
 		super.mouseClicked(x, y, mouseButton);
+	}
+
+	@Override
+	protected void mouseMovedOrUp(int x, int y, int which) {
+		if (which == 0 || which == 1) {
+			if (mouseDown) {
+				ImmutablePair<Integer, Integer> coord = transformMouseCoordinates(x, y);
+				if (coord.getA() >= 232 && coord.getA() <= 232 + 12 && coord.getB() >= 70 && coord.getB() <= 70 + 12)
+					addressToClipboard();
+				mouseDown = false;
+			}
+		}
+		super.mouseMovedOrUp(x, y, which);
 	}
 
 	@Override
@@ -69,11 +98,16 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 		super.keyTyped(c, key);
 	}
 
+	private ImmutablePair<Integer, Integer> transformMouseCoordinates(int x, int y) {
+		return new ImmutablePair<Integer, Integer>(x - guiLeft, y - guiTop);
+	}
+
 	private void addressToClipboard() {
 		try {
 			mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 			Clipboard destination = Toolkit.getDefaultToolkit().getSystemClipboard();
 			destination.setContents(new StringSelection(address), null);
+			clipboardAction = 60;
 		} catch (Throwable t) {
 			LanteaCraft.getLogger().log(Level.WARNING, "Clipboard push failed!", t);
 		}
