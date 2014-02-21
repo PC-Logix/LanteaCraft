@@ -36,6 +36,7 @@ jar.doFirst {
 }
 
 jar.classifier = "${ext.buildNumber}"
+jar.manifest = manifest { attributes("FMLCorePlugin": "pcl.common.asm.PCLCoreTransformerPlugin") }
 
 processResources {
     // replace stuff in mcmod.info, nothing else
