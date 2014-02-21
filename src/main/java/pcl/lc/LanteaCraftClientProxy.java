@@ -60,10 +60,16 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	public void registerSounds() {
 		try {
 			SoundPool pool = Minecraft.getMinecraft().sndManager.soundPoolSounds;
-			pool.addSound("pcl_lc:sg1_abort.ogg");
-			pool.addSound("pcl_lc:sg1_close.ogg");
-			pool.addSound("pcl_lc:sg1_dial.ogg");
-			pool.addSound("pcl_lc:gate_open.ogg");
+
+			for (String group : new String[] { "milkyway", "pegasus" }) {
+				for (String tag : new String[] { "abort", "chevron_incoming", "chevron_lock", "close", "dhd_button",
+						"open", "roll" }) {
+					StringBuilder label = new StringBuilder().append("pcl_lc:stargate/").append(group).append("/");
+					label.append(group).append("_").append(tag).append(".ogg");
+					pool.addSound(label.toString());
+				}
+			}
+
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -77,7 +83,8 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	public void registerRenderers() {
 		LanteaCraft.Render.modelController = new StargateControllerModel("/assets/pcl_lc/models/dhd.obj");
-		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel("/assets/pcl_lc/models/naquadah_generator.obj");
+		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel(
+				"/assets/pcl_lc/models/naquadah_generator.obj");
 
 		LanteaCraft.Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
 		addTileEntityRenderer(TileEntityStargateBase.class, LanteaCraft.Render.tileEntityBaseRenderer);

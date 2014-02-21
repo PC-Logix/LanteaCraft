@@ -84,12 +84,24 @@ public class StandardStargateRenderer implements IStargateRenderer {
 
 	private void renderChevrons(TileEntityStargateBase te) {
 		GL11.glNormal3f(0, 0, 1);
+		int sizeof = (te.getDialledAddres() != null) ? te.getDialledAddres().length() : -1;
+		int[] renderQueue = (sizeof == 7) ? StargateRenderConstants.standardRenderQueue
+				: StargateRenderConstants.extendedRenderQueue;
 		for (int i = 0; i < 9; i++) {
 			GL11.glPushMatrix();
-			GL11.glRotatef(90 - (40 * (i - 1)), 0, 0, 1);
-			chevron(6 - i < te.numEngagedChevrons);
+			GL11.glRotatef(90 - 40 - (40 * (i - 1)), 0, 0, 1);
+			chevron((sizeof != -1) && before(renderQueue, i, te.numEngagedChevrons));
 			GL11.glPopMatrix();
 		}
+	}
+
+	private boolean before(int[] i, int j, int k) {
+		if (k >= i.length)
+			return true;
+		for (int l = k; 0 <= l; l--)
+			if (i[l] == j)
+				return true;
+		return false;
 	}
 
 	private void chevron(boolean engaged) {

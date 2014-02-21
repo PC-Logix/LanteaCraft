@@ -31,7 +31,7 @@ public class StargatePart extends MultiblockPart {
 
 		if (!allowScanning)
 			return null;
-		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5);
+		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(-7, -7, -7, 7, 7, 7);
 		TileEntity entity = ScanningHelper.findNearestTileEntityOf(host.worldObj, TileEntityStargateBase.class,
 				host.xCoord, host.yCoord, host.zCoord, bounds);
 		if (entity == null)

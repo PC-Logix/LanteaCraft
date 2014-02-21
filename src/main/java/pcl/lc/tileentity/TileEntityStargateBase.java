@@ -1,7 +1,6 @@
 package pcl.lc.tileentity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -53,9 +52,6 @@ import pcl.lc.render.stargate.StargateRenderConstants;
 import pcl.lc.util.AddressingError;
 import pcl.lc.util.AddressingError.CoordRangeError;
 import pcl.lc.util.AddressingError.DimensionRangeError;
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.common.Optional.InterfaceList;
-import cpw.mods.fml.common.Optional.Method;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityStargateBase extends TileEntityChunkLoader implements IStargateAccess, IInventory {
@@ -300,7 +296,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	 * 
 	 * @return The address currently dialling to.
 	 */
-	private String getDialledAddres() {
+	public String getDialledAddres() {
 		return (String) getAsStructure().getMetadata("diallingTo");
 	}
 
@@ -367,8 +363,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 		} catch (DimensionRangeError dimension) {
 			return dimension.getMessage();
 		} catch (AddressingError error) {
-			LanteaCraft.getLogger().log(Level.INFO, "Strange address: " + address + ".", error);
-			return "Could not decode address.";
+			return error.getMessage();
 		}
 
 		if (dte == null) {
@@ -519,7 +514,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	void finishDiallingAddress() {
 		if (!isInitiator || useFuel(fuelToOpen)) {
 			enterState(EnumStargateState.Transient, transientDuration);
-			playSoundEffect("gcewing_sg:gate_open", 1.0F, 1.0F);
+			playSoundEffect("stargate/milkyway/milkyway_open", 1.0F, 1.0F);
 		} else
 			disconnect();
 	}
