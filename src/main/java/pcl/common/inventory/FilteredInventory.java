@@ -2,12 +2,13 @@ package pcl.common.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 
-public abstract class FilteredInventory implements IInventory {
+public abstract class FilteredInventory implements ISidedInventory {
 
-	private ItemStack[] items;
-	private FilterRule[] rules;
+	protected ItemStack[] items;
+	protected FilterRule[] rules;
 
 	public FilteredInventory(int size) {
 		items = new ItemStack[size];

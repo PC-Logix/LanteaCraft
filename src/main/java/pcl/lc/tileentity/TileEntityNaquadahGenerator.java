@@ -46,6 +46,25 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 		public String getInvName() {
 			return "naquadah_generator";
 		}
+
+		@Override
+		public int[] getAccessibleSlotsFromSide(int var1) {
+			return new int[] { 0, 1, 2, 3 };
+		}
+
+		@Override
+		public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+			if (0 > i || i > items.length)
+				return false;
+			return items[i] == null || ItemStack.areItemStacksEqual(items[i], itemstack);
+		}
+
+		@Override
+		public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+			if (0 > i || i > items.length)
+				return false;
+			return true;
+		}
 	};
 
 	public TileEntityNaquadahGenerator() {
