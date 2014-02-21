@@ -1,6 +1,6 @@
 package pcl.lc.items;
 
-import pcl.lc.LanteaCraft.Blocks;
+import pcl.lc.module.ModuleDecor.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;

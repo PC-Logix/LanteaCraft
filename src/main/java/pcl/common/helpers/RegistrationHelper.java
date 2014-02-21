@@ -238,21 +238,6 @@ public class RegistrationHelper {
 		}
 	}
 
-	public static <T extends ILanteaDecoration> T registerDecorationObject(Class<? extends T> classOf,
-			String unlocalizedName) {
-		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING,
-					"Warning, registration of this material decor is later than was expected!");
-		try {
-			// Switch: T instanceof Block || T instanceof Item || T instanceof
-			// ?? extends ItemBlock (why?)
-		} catch (Exception e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register material decor, an exception occured.", e);
-			throw new RuntimeException(e);
-		}
-
-	}
-
 	/**
 	 * Registers a block as a LanteaCraft stair-type decal.
 	 * 
