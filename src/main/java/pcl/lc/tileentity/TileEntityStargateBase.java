@@ -802,7 +802,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	private void updateRingAngle() {
 		if (timeout > 0) {
 			double da = MathUtils.diffAngle(renderRingAngle, renderNextRingAngle) / timeout;
-			LanteaCraft.getLogger().log(Level.INFO, "Spin angle by factor " + da);
 			setRingAngle(MathUtils.addAngle(renderRingAngle, da));
 			--timeout;
 		} else

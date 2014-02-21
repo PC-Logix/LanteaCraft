@@ -1,8 +1,11 @@
 package pcl.common.base;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 import pcl.lc.LanteaCraft;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.Resource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -13,6 +16,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 public class GenericTileEntity extends TileEntity implements IInventory, ISidedInventory {
 
@@ -46,7 +50,14 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 			LanteaCraft.getLogger().log(Level.WARNING, "Old SoundSystem label detected, can't play label: " + name);
 		} else {
 			String label = new StringBuilder().append(LanteaCraft.getAssetKey()).append(":").append(name).toString();
-			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, label, volume, pitch);
+			try {
+				ResourceLocation location = new ResourceLocation(label);
+				if (Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream() == null)
+					return;
+				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, label, volume, pitch);
+			} catch (Throwable t) {
+				LanteaCraft.getLogger().log(Level.FINE, "Couldn't play sound, doesn't exist: " + label, t);
+			}
 		}
 	}
 
