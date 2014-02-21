@@ -13,6 +13,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.ILanteaDecoration;
 import pcl.lc.blocks.BlockLanteaDecorStair;
 import pcl.lc.fluids.ItemSpecialBucket;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -237,6 +238,21 @@ public class RegistrationHelper {
 		}
 	}
 
+	public static <T extends ILanteaDecoration> T registerDecorationObject(Class<? extends T> classOf,
+			String unlocalizedName) {
+		if (isLateRegistrationZone)
+			LanteaCraft.getLogger().log(Level.WARNING,
+					"Warning, registration of this material decor is later than was expected!");
+		try {
+			// Switch: T instanceof Block || T instanceof Item || T instanceof
+			// ?? extends ItemBlock (why?)
+		} catch (Exception e) {
+			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register material decor, an exception occured.", e);
+			throw new RuntimeException(e);
+		}
+
+	}
+
 	/**
 	 * Registers a block as a LanteaCraft stair-type decal.
 	 * 
@@ -247,6 +263,7 @@ public class RegistrationHelper {
 	 *            The target metadata type, if not default. (0)
 	 * @return The decal stair instance.
 	 */
+	@Deprecated
 	public static BlockLanteaDecorStair registerStairDecal(String unlocalizedName, int targetMetadata) {
 		LanteaCraft.getLogger()
 				.log(Level.INFO, String.format("Attempting to register stair decal %s", unlocalizedName));
