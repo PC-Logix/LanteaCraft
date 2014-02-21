@@ -24,8 +24,10 @@ The textures & 3D models in LanteaCraft are proprietarily produced by DeltaStriu
 Building & Gradling.
 ================
 You should setup the decompile environment if you plan on using Eclipse:
-1. `gradlew setupDecompWorkspace`
-2. `gradlew eclipse [--refresh-dependencies]`
+
+1. `gradlew setupDecompWorkspace` to build the deobfuscation environment for the first time.
+2. `gradlew eclipse [--refresh-dependencies]` to build Eclipse project files. Use the refresh-dependencies if the job fails; quite often than not the Amazon AWS causes resources to fail silently or violently.
+
 
 The build tasks and gradle setup has been configured to operate out of the box, but requires some user-end setup before it will work properly.
 
