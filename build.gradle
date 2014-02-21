@@ -13,7 +13,10 @@ buildscript {
 
 apply plugin: 'forge'
 
-ext.buildNumber = System.getenv().BUILD_NUMBER?.toInteger()
+if (System.getenv().BUILD_NUMBER != null)
+	ext.buildNumber = System.getenv().BUILD_NUMBER?.toInteger()
+else
+	ext.buildNumber = 0
 
 version = "RC1"
 group = "pcl.LanteaCraft"
