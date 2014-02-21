@@ -16,7 +16,7 @@ apply plugin: 'forge'
 ext.buildNumber = System.getenv().BUILD_NUMBER?.toInteger()
 
 version = "RC1"
-group= "pcl.LanteaCraft"
+group = "pcl.LanteaCraft"
 archivesBaseName = "LanteaCraft"
 
 minecraft {
@@ -31,6 +31,8 @@ jar.doFirst {
 	for (String s : new File("./src/externs/java").list())
 		delete new File(sourceSets.main.output.classesDir, s);
 }
+
+jar.classifier = "${ext.buildNumber}"
 
 processResources {
     // replace stuff in mcmod.info, nothing else
