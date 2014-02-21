@@ -498,7 +498,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	}
 
 	boolean undialledDigitsRemaining() {
-		return numEngagedChevrons < 7 && getDialledAddres() != null && numEngagedChevrons < getDialledAddres().length();
+		return getDialledAddres() != null && numEngagedChevrons < getDialledAddres().length();
 	}
 
 	void startDiallingSymbol(char c) {
@@ -511,7 +511,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 
 	void finishDiallingSymbol() {
 		++numEngagedChevrons;
-		if (numEngagedChevrons == GateAddressHelper.singleton().radixSize)
+		if (numEngagedChevrons == getDialledAddres().length())
 			finishDiallingAddress();
 		else if (undialledDigitsRemaining())
 			enterState(EnumStargateState.InterDialling, interDiallingTime);
