@@ -1,6 +1,5 @@
 package pcl.lc.worldgen;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Random;
 import java.util.logging.Level;
@@ -76,7 +75,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 
 	void generateNode(Chunk chunk, World world, Random random, int id, int metadata, int cx, int cy, int cz, int density) {
 		LanteaCraft.getLogger().log(
-				Level.INFO,
+				Level.FINEST,
 				String.format("Node generator building node around %s %s %s with density %s typeof %s", cx
 						+ (16 * chunk.getChunkCoordIntPair().chunkXPos), cy, cz
 						+ (16 * chunk.getChunkCoordIntPair().chunkZPos), density, metadata));
@@ -108,7 +107,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 
 				// catch illegal; one vector out of bounds, reset scan
 				if (tx > 15 || tz > 15 || 0 > tx || 0 > ty || 0 > tz) {
-					LanteaCraft.getLogger().log(Level.INFO, "Can't expand, out of bounds!");
+					LanteaCraft.getLogger().log(Level.FINEST, "Can't expand, out of bounds!");
 					continue main;
 				}
 				// expand; this block is already an ore of type id so we can
@@ -119,13 +118,14 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				// legal; we wandered here and it's stone, so we'll place
 				// something
 				else if (getBlock(chunk, tx, ty, tz) == Block.stone.blockID) {
-					LanteaCraft.getLogger().log(Level.INFO, "Done, can expand this way.");
+					LanteaCraft.getLogger().log(Level.FINEST, "Done, can expand this way.");
 					break expand;
 				}
 				// illegal; detected some other block (air, other ores, etc),
 				// so reset the scan and try again.
 				else {
-					LanteaCraft.getLogger().log(Level.INFO, "Strange case: " + getBlock(chunk, tx, tz, tz) + ", well?");
+					LanteaCraft.getLogger().log(Level.FINEST,
+							"Strange case: " + getBlock(chunk, tx, tz, tz) + ", well?");
 					break main;
 				}
 			}
@@ -156,16 +156,13 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				int y = random.nextInt(64);
 				int z = random.nextInt(16);
 				if (getBlock(chunk, x, y, z) == Block.stone.blockID) {
-					LanteaCraft.getLogger().log(Level.INFO,
+					LanteaCraft.getLogger().log(Level.FINEST,
 							String.format("Attempting to place Naquadah node at %s %s %s", x, y, z));
 					generateNode(chunk, world, random, Blocks.lanteaOre.blockID, typeof.ordinal(), x, y, z, 6);
 				}
 			}
 		}
-		ChunkData metadata = ChunkData.forChunk(chunk);
-		if (metadata == null)
-			throw new RuntimeException("URGH STUPID");
-		metadata.markOreGenerated(OreTypes.NAQUADAH);
+		ChunkData.forChunk(chunk).markOreGenerated(OreTypes.NAQUADAH);
 	}
 
 }
