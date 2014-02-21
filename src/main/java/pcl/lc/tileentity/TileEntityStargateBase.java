@@ -502,11 +502,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	}
 
 	void startDiallingSymbol(char c) {
-		int i = Character.getNumericValue(c) - Character.getNumericValue('A');
-		if (i >= 0 && i < GateAddressHelper.singleton().radixSize) {
-			enterState(EnumStargateState.Dialling, diallingTime);
-			playSoundEffect("sg1_dial", 1.0F, 1.0F);
-		}
+		enterState(EnumStargateState.Dialling, diallingTime);
+		playSoundEffect("sg1_dial", 1.0F, 1.0F);
 	}
 
 	void finishDiallingSymbol() {
