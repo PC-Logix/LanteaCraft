@@ -45,3 +45,4 @@ The build tasks and gradle setup has been configured to operate out of the box, 
 12. If you need to specify a JDT Launcher, select one, then press Apply.
 13. If you find you have no `/build/natives` directory after performing a build or jar task, use `gradle[w] eclipse --refresh-dependencies`.
 14. If you intend to run the `gradle[w] jar` task, you need to set `JAVA_HOME`. `BUILD_NUMBER` is usually set by Jenkins and will default to `0` if not set in the environment (see http://lanteacraft.com/jenkins/env-vars.html).
+15. More often than not, gradle doesn't create the assets cache in `/.gradle/assets`. You should copy it from your local Minecraft folder to this directory.
