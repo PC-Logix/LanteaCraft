@@ -57,7 +57,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.Player;
 
-@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "build" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:BuildCraft|Core;after:IC2;after:SGCraft")
+@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "build"
+		+ BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:BuildCraft|Core;after:IC2;after:SGCraft")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { BuildInfo.modID }, packetHandler = pcl.lc.network.DefaultPacketHandler.class)
 public class LanteaCraft {
 
@@ -76,8 +77,6 @@ public class LanteaCraft {
 		return LanteaCraft.mod;
 	}
 
-	@Deprecated
-	public static MountDir mount = new MountDir();
 	/**
 	 * The private instance of the logger used. Use {@link #getLogger()} to
 	 * access this object safely
@@ -262,56 +261,13 @@ public class LanteaCraft {
 	public void preInit(FMLPreInitializationEvent e) {
 		LanteaCraft.logger = e.getModLog();
 		LanteaCraft.logger.setParent(FMLLog.getLogger());
-		mount = new MountDir();
-		copyLua();
 		if (BuildInfo.buildNumber.equals("@" + "BUILD" + "@")) {
 			LanteaCraft.logger.setLevel(Level.ALL);
-			LanteaCraft.logger.log(Level.INFO, "You appear to be inside a development environment, switching to all logging.");
+			LanteaCraft.logger.log(Level.INFO,
+					"You appear to be inside a development environment, switching to all logging.");
 		} else
 			LanteaCraft.logger.setLevel(Level.INFO);
 		proxy.preInit(e);
-	}
-
-	/**
-	 * FIXME: It's not safe to address things outside of proxies. This needs to
-	 * be merged with a valid ComputerCraft handler (later).
-	 */
-	@Deprecated
-	private void copyLua() {
-		InputStream is = getClass().getResourceAsStream("/assets/pcl_lc/lua/dhd");
-		OutputStream os = null;
-
-		File file = new File(MountDir.getLocalLuaFolder());
-		if (!file.exists())
-			file.mkdirs();
-
-		try {
-			os = new FileOutputStream(MountDir.getLocalLuaFolder() + "/dhd");
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		byte[] buffer = new byte[4096];
-		int length;
-		try {
-			while ((length = is.read(buffer)) > 0)
-				os.write(buffer, 0, length);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			os.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			is.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 
 	@EventHandler

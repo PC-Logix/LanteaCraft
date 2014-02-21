@@ -7,9 +7,15 @@ import java.io.InputStream;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import cpw.mods.fml.common.Optional.Interface;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import dan200.computer.api.IMount;
 
+/**
+ * @deprecated MUST FIX YO.
+ */
+@Deprecated
+@Interface(iface = "dan200.computer.api.IMount", modid = "ComputerCraft")
 public class MountDir implements IMount {
 
 	private static String localLuaFolder;
