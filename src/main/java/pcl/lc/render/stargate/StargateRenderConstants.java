@@ -5,7 +5,7 @@ import pcl.lc.core.GateAddressHelper;
 public class StargateRenderConstants {
 
 	public final static int numRingSegments = 38;
-	public final static double ringSymbolAngle = 360.0 / GateAddressHelper.numSymbols;
+	public final static double ringSymbolAngle = 360.0 / GateAddressHelper.singleton().radixSize;
 	public final static double ringSymbolTextureLength = 38 * 8;
 	public final static double ringSymbolTextureHeight = 12;
 	public final static double ringSymbolSegmentWidth = ringSymbolTextureLength / numRingSegments;

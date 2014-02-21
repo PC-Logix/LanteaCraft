@@ -43,8 +43,7 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 
 	public void playSoundEffect(String name, float volume, float pitch) {
 		if (name.contains(":")) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Old SoundSystem label detected: " + name);
-			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, name, volume, pitch);
+			LanteaCraft.getLogger().log(Level.WARNING, "Old SoundSystem label detected, can't play label: " + name);
 		} else {
 			String label = new StringBuilder().append(LanteaCraft.getAssetKey()).append(":").append(name).toString();
 			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, label, volume, pitch);

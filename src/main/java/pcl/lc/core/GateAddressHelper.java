@@ -1,84 +1,83 @@
 package pcl.lc.core;
 
+import java.util.logging.Level;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityStargateBase;
+import pcl.lc.util.AddressingError;
+import pcl.lc.util.AddressingError.CoordRangeError;
+import pcl.lc.util.AddressingError.DimensionRangeError;
 
 public class GateAddressHelper {
 
-	static boolean debugAddressing = false;
+	private static GateAddressHelper singleton = new GateAddressHelper();
 
-	public static class AddressingError extends Exception {
+	public static GateAddressHelper singleton() {
+		return singleton;
 	}
 
-	public static class CoordRangeError extends AddressingError {
+	private static long maximumShortSize;
+	private static long maximumLongSize;
+
+	public static String addressForLocation(WorldLocation position) throws AddressingError {
+		return addressForLocation(position.toChunkLocation());
 	}
 
-	public static class DimensionRangeError extends AddressingError {
-	}
+	public static String addressForLocation(ChunkLocation location) throws AddressingError {
+		try {
+			int dcx = Math.abs(location.cx), dcz = Math.abs(location.cz);
+			int dd = Math.abs(location.dimension);
 
-	public final static String symbolChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	public final static int numSymbols = symbolChars.length();
-	public final static int addressLength = 7;
-	public final static int numDimensionSymbols = 2;
-	public final static int numCoordSymbols = addressLength - numDimensionSymbols;
-	public final static int coordPower = (int) Math.pow(numSymbols, numCoordSymbols);
-	public final static int dimensionPower = (int) Math.pow(numSymbols, numDimensionSymbols);
-	public final static int maxCoord = (int) Math.floor(Math.sqrt(coordPower - 1)) / 2;
-	public final static int minCoord = -maxCoord;
-	public final static int coordRange = maxCoord - minCoord + 1;
-	public static int minDimension = -1;
-	public final static int maxDimension = minDimension + dimensionPower - 1;
+			if (dcx > maximumLongSize)
+				throw new CoordRangeError("X-coordinate out of range");
+			if (dcz > maximumLongSize)
+				throw new CoordRangeError("Z-coordinate out of range");
+			if (dd > maximumShortSize)
+				throw new DimensionRangeError("Dimension out of range");
 
-	public static boolean isValidSymbolChar(char c) {
-		return isValidSymbolChar(String.valueOf(c));
-	}
-
-	public static boolean isValidSymbolChar(String c) {
-		return symbolChars.indexOf(c) >= 0;
-	}
-
-	public static char symbolToChar(int i) {
-		return symbolChars.charAt(i);
-	}
-
-	public static int charToSymbol(char c) {
-		return charToSymbol(String.valueOf(c));
-	}
-
-	public static int charToSymbol(String c) {
-		return symbolChars.indexOf(c);
-	}
-
-	public static String addressForLocation(WorldLocation loc) throws AddressingError {
-		int chunkx = loc.x >> 4;
-		int chunkz = loc.z >> 4;
-		if (!inCoordRange(chunkx) || !inCoordRange(chunkz))
-			throw new CoordRangeError();
-		if (!inDimensionRange(loc.dimension))
-			throw new DimensionRangeError();
-		int s = (chunkx - minCoord) * coordRange + chunkz - minCoord;
-		int d = loc.dimension - minDimension;
-		return intToSymbols(s, numCoordSymbols) + intToSymbols(d, numDimensionSymbols);
-	}
-
-	public static TileEntityStargateBase findAddressedStargate(String address) {
-		String csyms = address.substring(0, numCoordSymbols);
-		String dsyms = address.substring(numCoordSymbols, numCoordSymbols + numDimensionSymbols);
-		int s = intFromSymbols(csyms);
-		int chunkx = minCoord + s / coordRange;
-		int chunkz = minCoord + s % coordRange;
-		int dimension = minDimension + intFromSymbols(dsyms);
-		World world = getWorld(dimension);
-		if (world != null) {
-			Chunk chunk = world.getChunkFromChunkCoords(chunkx, chunkz);
-			if (chunk != null)
-				for (Object te : chunk.chunkTileEntityMap.values())
-					if (te instanceof TileEntityStargateBase)
-						return (TileEntityStargateBase) te;
+			StringBuilder output = new StringBuilder();
+			output.append(singleton.btos(new boolean[] { // metadata
+					(dcx != location.cx), // dcx != cx => neg dx
+							(dcz != location.cz), // dcz != cz => neg dz
+							(dd != location.dimension), // dd != d => neg dim
+							false // unused
+					}));
+			output.append(singleton.itos(dcx, 3)).append(singleton.itos(dcz, 3));
+			output.append(singleton.itos(dd, 2));
+			singleton.legal(output.toString());
+			return output.toString();
+		} catch (NumberFormatException format) {
+			throw new AddressingError("Unexpected exception.", format);
 		}
-		return null;
+	}
+
+	public static ChunkLocation locationForAddress(String address) throws AddressingError {
+		try {
+			singleton.legal(address);
+		} catch (NumberFormatException format) {
+			throw new AddressingError("Illegal address character!");
+		}
+
+		try {
+			boolean[] flags = singleton.stob(address.substring(0, 1));
+			int dcx = singleton.stoi(address.substring(1, 4)), dcz = singleton.stoi(address.substring(4, 7));
+			if (flags[0])
+				dcx = -dcx;
+			if (flags[1])
+				dcz = -dcz;
+			if (address.length() > 7) {
+				int ddimension = singleton.stoi(address.substring(7));
+				if (flags[2])
+					ddimension = -ddimension;
+				return new ChunkLocation(ddimension, dcx, dcz);
+			} else
+				return new ChunkLocation(dcx, dcz);
+		} catch (NumberFormatException format) {
+			throw new AddressingError("");
+		}
 	}
 
 	public static World getWorld(int dimension) {
@@ -86,31 +85,173 @@ public class GateAddressHelper {
 		return s.worldServerForDimension(dimension);
 	}
 
-	static boolean inCoordRange(int i) {
-		return i >= minCoord && i <= maxCoord;
-	}
-
-	static boolean inDimensionRange(int i) {
-		return i >= minDimension && i <= maxDimension;
-	}
-
-	static String intToSymbols(int i, int n) {
-		String s = "";
-		while (n-- > 0) {
-			s = s + symbolToChar(i % numSymbols);
-			i /= numSymbols;
+	public static TileEntityStargateBase findStargate(ChunkLocation hostLocation, String address)
+			throws AddressingError {
+		TileEntityStargateBase dte = null;
+		ChunkLocation location = GateAddressHelper.locationForAddress(address);
+		if (!location.isStrongLocation)
+			if (hostLocation.isStrongLocation)
+				location.setDimension(hostLocation.dimension);
+			else
+				throw new AddressingError("Cannot guess effective dimension; location and host location are both weak!");
+		WorldLocation localize = location.toWorldLocation();
+		World world = GateAddressHelper.getWorld(localize.dimension);
+		if (world != null) {
+			Chunk chunk = world.getChunkFromBlockCoords(localize.x, localize.z);
+			if (chunk != null)
+				for (Object o : chunk.chunkTileEntityMap.values())
+					if (o instanceof TileEntityStargateBase) {
+						dte = (TileEntityStargateBase) o;
+						break;
+					}
 		}
-		return s;
+		return dte;
 	}
 
-	static int intFromSymbols(String s) {
-		int i = 0;
-		int n = s.length();
-		for (int j = n - 1; j >= 0; j--) {
-			char c = s.charAt(j);
-			i = i * numSymbols + charToSymbol(c);
+	public GateAddressHelper() {
+		this.radixSize = radix.length;
+		GateAddressHelper.maximumLongSize = stoi(build(radix[radixSize - 1], 3));
+		GateAddressHelper.maximumShortSize = stoi(build(radix[radixSize - 1], 2));
+	}
+
+	/**
+	 * Radix declaration; order sensitive.
+	 */
+	private final char[] radix = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-+").toCharArray();
+
+	/**
+	 * Radix size reference.
+	 */
+	public final int radixSize;
+
+	/**
+	 * Builds a string of specified length out of character c.
+	 * 
+	 * @param c
+	 *            The character.
+	 * @param l
+	 *            The number of times to repeat the character.
+	 * @return The string.
+	 */
+	private String build(char c, int l) {
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < l; i++)
+			result.append(c);
+		return result.toString();
+	}
+
+	/**
+	 * test: (each char in s) => (char in radix)
+	 */
+	public void legal(String s) {
+		for (char c : s.toCharArray())
+			index(c);
+	}
+
+	/**
+	 * test: (each char in s) => (char in radix); throws no unchecked
+	 * exceptions.
+	 */
+	public boolean isLegal(String s) {
+		try {
+			legal(s);
+		} catch (Throwable t) {
+			return false;
 		}
-		return i;
+		return true;
+	}
+
+	/**
+	 * Test: char c => char in radix; throws no unchecked exceptions.
+	 */
+	public boolean isLegal(char c) {
+		try {
+			return (index(c) > -1);
+		} catch (Throwable t) {
+			return false;
+		}
+	}
+
+	/**
+	 * index of c in radix; exception if not radix-char
+	 */
+	public int index(char c) {
+		for (int i = 0; i < radix.length; i++)
+			if (radix[i] == c)
+				return i;
+		throw new NumberFormatException("Illegal radix value.");
+	}
+
+	/**
+	 * value of index i in radix; exception if out of radix bounds
+	 */
+	public char index(int i) {
+		if (0 > i || i > radix.length)
+			throw new NumberFormatException("Illegal radix value.");
+		return radix[i];
+	}
+
+	/**
+	 * boolean[4] to String(1)
+	 */
+	private String btos(boolean[] flags) {
+		int accum = 0;
+		if (flags.length != 4)
+			throw new NumberFormatException("Illegal btos dimension.");
+		for (int i = 0; i < 4; i++)
+			if (flags[i])
+				accum |= 1 << i;
+		return itos(accum, 1);
+	}
+
+	/**
+	 * String(1) to boolean[4]
+	 */
+	private boolean[] stob(String value) {
+		boolean[] result = new boolean[4];
+		int accum = stoi(value);
+		for (int i = 0; i < 4; i++)
+			if ((accum & (1 << i)) != 0)
+				result[i] = true;
+		return result;
+	}
+
+	/**
+	 * int to String(width)
+	 */
+	private String itos(int value, int width) {
+		final char[] buf = new char[width];
+		while (width > 0) {
+			buf[--width] = index(value % radix.length);
+			value /= radix.length;
+		}
+		if (value != 0)
+			throw new NumberFormatException("Number too large.");
+		return new String(buf);
+	}
+
+	/**
+	 * String(?) to int
+	 */
+	private int stoi(String value) {
+		int result = 0, multmin, digit;
+		int i = 0, len = value.length(), limit = -Integer.MAX_VALUE;
+		if (len > 0) {
+			multmin = limit / radix.length;
+			while (i < len) {
+				digit = index(value.charAt(i++));
+				if (digit < 0)
+					throw new NumberFormatException("Not a legal radix-38 symbol.");
+				if (result < multmin)
+					throw new NumberFormatException("Out of legal radix-multiplication range.");
+				result *= radix.length;
+				if (result < limit + digit)
+					throw new NumberFormatException("Out of legal radix range.");
+				result += digit;
+			}
+		} else
+			throw new NumberFormatException("Not a legal radix-38 number.");
+		return result;
 	}
 
 }

@@ -15,6 +15,9 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.tileentity.TileEntityStargateBase;
+import pcl.lc.util.AddressingError;
+import pcl.lc.util.AddressingError.CoordRangeError;
+import pcl.lc.util.AddressingError.DimensionRangeError;
 
 public class ScreenStargateBase extends GenericGlyphGUI {
 
@@ -56,9 +59,9 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 		drawCenteredString(screenTitle, cx, 8);
 		drawCenteredString(address, cx, 72);
 		ImmutablePair<Integer, Integer> coord = transformMouseCoordinates(x, y);
-		IconButtonRenderer.drawButton(Minecraft.getMinecraft(), (clipboardAction > 0) ? "tick" : "copy", (coord.getA() >= 232
-				&& coord.getA() <= 232 + 12 && coord.getB() >= 70 && coord.getB() <= 70 + 12), mouseDown, 232, 70, 0.5,
-				zLevel);
+		IconButtonRenderer.drawButton(Minecraft.getMinecraft(), (clipboardAction > 0) ? "tick" : "copy",
+				(coord.getA() >= 232 && coord.getA() <= 232 + 12 && coord.getB() >= 70 && coord.getB() <= 70 + 12),
+				mouseDown, 232, 70, 0.5, zLevel);
 	}
 
 	@Override
@@ -117,11 +120,11 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 		if (address == null)
 			try {
 				address = te.getHomeAddress();
-			} catch (GateAddressHelper.CoordRangeError e) {
+			} catch (CoordRangeError e) {
 				address = "Coordinates out of stargate range";
-			} catch (GateAddressHelper.DimensionRangeError e) {
+			} catch (DimensionRangeError e) {
 				address = "Dimension not reachable by stargate";
-			} catch (GateAddressHelper.AddressingError e) {
+			} catch (AddressingError e) {
 				LanteaCraft.getLogger().log(Level.INFO, "Addressing error!", e);
 				address = "Stargate addressing error; check the log";
 			}

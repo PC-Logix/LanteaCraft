@@ -37,6 +37,10 @@ public class WorldLocation {
 		return nbt;
 	}
 
+	public ChunkLocation toChunkLocation() {
+		return new ChunkLocation(dimension, x >> 4, z >> 4);
+	}
+
 	public TileEntityStargateBase getStargateTE() {
 		World world = GateAddressHelper.getWorld(dimension);
 		if (world == null)

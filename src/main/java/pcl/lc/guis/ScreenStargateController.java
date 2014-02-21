@@ -106,7 +106,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		else if (i >= 27)
 			backspace();
 		else
-			enterCharacter(GateAddressHelper.symbolToChar(i - 1));
+			enterCharacter(GateAddressHelper.singleton().index(i - 1));
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 			orangeButtonPressed(true);
 		else {
 			String C = String.valueOf(c).toUpperCase();
-			if (GateAddressHelper.isValidSymbolChar(C))
+			if (GateAddressHelper.singleton().isLegal(C))
 				enterCharacter(C.charAt(0));
 		}
 
@@ -130,7 +130,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 					String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
 							.getData(DataFlavor.stringFlavor);
 					for (char c1 : data.toCharArray())
-						if (GateAddressHelper.isValidSymbolChar(c1))
+						if (GateAddressHelper.singleton().isLegal(c1))
 							enterCharacter(c1);
 				} catch (Throwable t) {
 					LanteaCraft.getLogger().log(Level.WARNING, "Clipboard pull failed!", t);

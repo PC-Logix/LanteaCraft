@@ -25,7 +25,7 @@ public class GlyphRenderer {
 		}
 
 		for (int i = 0; i < address.length(); i++) {
-			int s = GateAddressHelper.charToSymbol(address.charAt(i));
+			int s = GateAddressHelper.singleton().index(address.charAt(i));
 			double u = uscale * ((s / (length - 1)) * 32), v = vscale * ((s % (length - 1)) * 32);
 			double u2 = uscale * 32, v2 = vscale * 32;
 			drawTexturedRectUV(x + borderSize + i * cellSize + paddingLeft, y + borderSize + paddingTop, cellSize,

@@ -153,11 +153,6 @@ public class LanteaCraftCommonProxy {
 				"GenerateStructures", true)));
 		GenerateStruct.comment = "Enables/Disables generation of Gate Rooms under Desert Pyramids. (true/false)";
 
-		Property GalacticraftCompat = config.get("options", "GalacticCraftCompat", false);
-		configValues.add(new ConfigValue<Boolean>("doGalacticCraftCompat", config.getBoolean("stargate",
-				"GalacticCraftCompat", true)));
-		GalacticraftCompat.comment = "Enables/Disables Galcticraft support - this will change all addresses! (true/false)";
-
 		Property textureRes = config.get("graphics_options", "textureRes", 32);
 		configValues.add(new ConfigValue<Integer>("renderQuality", config.getInteger("graphics_options", "textureRes",
 				32)));
@@ -175,9 +170,6 @@ public class LanteaCraftCommonProxy {
 		configValues.add(new ConfigValue<Boolean>("enableAnalytics", config.getBoolean("options", "enableAnalytics",
 				true)));
 		enableAnalytics.comment = "Submit anonymous usage statistic data. (true/false)";
-
-		if (((ConfigValue<Boolean>) getConfigValue("doGalacticCraftCompat")).getValue())
-			GateAddressHelper.minDimension = -99;
 
 		if (version != previousVersion && enableAnalytics.getBoolean(true))
 			analyticsHelper.start();
@@ -280,7 +272,7 @@ public class LanteaCraftCommonProxy {
 	public void sendToAllPlayers(ModPacket packet) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		if (server != null) {
-			LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft sending packet to all players: " + packet.toString());
+			LanteaCraft.getLogger().log(Level.FINEST, "LanteaCraft sending packet to all players: " + packet.toString());
 			Packet250CustomPayload payload = packet.toPacket();
 			payload.channel = BuildInfo.modID;
 			server.getConfigurationManager().sendPacketToAllPlayers(payload);

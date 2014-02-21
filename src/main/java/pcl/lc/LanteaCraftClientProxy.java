@@ -77,7 +77,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	public void registerRenderers() {
 		LanteaCraft.Render.modelController = new StargateControllerModel("/assets/pcl_lc/models/dhd.obj");
-		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel("/assets/pcl_lc/models/naquada_generator.obj");
+		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel("/assets/pcl_lc/models/naquadah_generator.obj");
 
 		LanteaCraft.Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
 		addTileEntityRenderer(TileEntityStargateBase.class, LanteaCraft.Render.tileEntityBaseRenderer);
@@ -143,7 +143,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	@Override
 	public void sendToServer(ModPacket packet) {
-		LanteaCraft.getLogger().log(Level.INFO, "SGCraft sending packet to server: " + packet.toString());
+		LanteaCraft.getLogger().log(Level.FINEST, "LanteaCraft sending packet to server: " + packet.toString());
 		Packet250CustomPayload payload = packet.toPacket();
 		payload.channel = BuildInfo.modID;
 		FMLClientHandler.instance().sendPacket(payload);

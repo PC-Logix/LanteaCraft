@@ -4,6 +4,8 @@
  */
 package pcl.lc.api;
 
+import pcl.lc.core.ChunkLocation;
+
 /**
  * Provides an interface for external code to interact with Stargate structures.
  * You should avoid interacting with Stargates outside of this API.
@@ -40,11 +42,18 @@ public interface IStargateAccess {
 	public EnumStargateState getState();
 
 	/**
+	 * Fetches the chunk location of the Stargate.
+	 * 
+	 * @return The chunk location of the Stargate.
+	 */
+	public ChunkLocation getLocation();
+
+	/**
 	 * Fetches the state of the Stargate's iris.
 	 * 
 	 * @return The state of the Stargate's iris.
 	 */
-	public EnumIrisState isIrisActive();
+	public EnumIrisState getIrisState();
 
 	/**
 	 * Determines if the current dialled connection is an outgoing one (that is,
