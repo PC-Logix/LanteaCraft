@@ -41,8 +41,8 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockRingRenderer != null)
-			return LanteaCraft.Render.blockRingRenderer.renderID;
+		if (LanteaCraft.Render.blockStargateRingRenderer != null)
+			return LanteaCraft.Render.blockStargateRingRenderer.renderID;
 		return -9001;
 	}
 

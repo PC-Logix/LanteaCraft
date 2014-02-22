@@ -56,7 +56,7 @@ public class BlockStargateController extends RotationOrientedBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockBaseRenderer != null)
+		if (LanteaCraft.Render.blockStargateBaseRenderer != null)
 			return LanteaCraft.Render.blockControllerRenderer.renderID;
 		return 0;
 	}
