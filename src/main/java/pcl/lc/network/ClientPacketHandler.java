@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
+import pcl.lc.tileentity.TileEntityRingPlatform;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import cpw.mods.fml.common.network.Player;
 
@@ -25,6 +26,10 @@ public class ClientPacketHandler {
 					if (tile instanceof TileEntityStargateBase) {
 						TileEntityStargateBase base = (TileEntityStargateBase) tile;
 						base.getAsStructure().unpack(packet);
+						w.markBlockForRenderUpdate(x, y, z);
+					} else if (tile instanceof TileEntityRingPlatform) {
+						TileEntityRingPlatform platform = (TileEntityRingPlatform) tile;
+						platform.getStateFromPacket(packet);
 						w.markBlockForRenderUpdate(x, y, z);
 					}
 				}
