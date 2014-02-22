@@ -1,25 +1,33 @@
 package pcl.lc.tileentity;
 
+import java.util.logging.Level;
+
+import pcl.common.base.GenericTileEntity;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumRingPlatformState;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
-public class TileEntityRingPlatform extends TileEntity {
+public class TileEntityRingPlatform extends GenericTileEntity {
 
-	private EnumRingPlatformState state;
+	private final double ringExtended = 2.5d;
+
+	private EnumRingPlatformState state = EnumRingPlatformState.Idle;
 	private int timeout;
 	private boolean slave;
+
+	private double ringPosition, lastRingPosition, nextRingPosition;
 
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote)
 			updateRendering();
 		else {
-			if (state != EnumRingPlatformState.Idle || timeout != 0) {
+			if (state == EnumRingPlatformState.Idle)
+				updateState(EnumRingPlatformState.Connecting, 20);
+			else if (state != EnumRingPlatformState.Idle || timeout != 0) {
 				if (timeout > 0)
 					timeout--;
 				else {
@@ -39,13 +47,32 @@ public class TileEntityRingPlatform extends TileEntity {
 	}
 
 	private void updateRendering() {
-		// TODO Auto-generated method stub
+		lastRingPosition = ringPosition;
+		if (0 > ringPosition) ringPosition = 0;
+		ringPosition += nextRingPosition;
+		if (ringPosition > ringExtended) ringPosition = ringExtended;
+		if (timeout > 0) {
+			if (state == EnumRingPlatformState.Connecting)
+				nextRingPosition = (ringExtended / 20.0d);
+			else if (state == EnumRingPlatformState.Disconnecting)
+				nextRingPosition = -(ringExtended / 20.0d);
+			else
+				nextRingPosition = 0;
+		}
+	}
 
+	public double getRingPosition(float partialticks) {
+		double next = ringPosition + partialticks * nextRingPosition;
+		if (next > ringExtended)
+			return ringExtended;
+		return next;
 	}
 
 	private void updateState(EnumRingPlatformState state, int timeout) {
+		LanteaCraft.getLogger().log(Level.INFO, "Transporter entering state " + state + " timeout " + timeout);
 		this.state = state;
 		this.timeout = timeout;
+		markBlockForUpdate();
 	}
 
 	public void getStateFromPacket(ModPacket packet) {

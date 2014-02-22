@@ -11,6 +11,7 @@ import pcl.common.network.StandardModPacket;
 import pcl.common.util.ImmutablePair;
 import pcl.common.util.ImmutableTuple;
 import pcl.common.util.Vector3;
+import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.api.EnumStargateState;
 
 /**
@@ -24,6 +25,7 @@ public class NetworkHelpers {
 	private static Vector3NetworkPacker vec3Network = new Vector3NetworkPacker();
 	private static EnumOrientationsNetworkPacker orientationNetwork = new EnumOrientationsNetworkPacker();
 	private static EnumStargateStateNetworkPacker stargateStateNetwork = new EnumStargateStateNetworkPacker();
+	private static EnumRingPlatformStateNetworkPacker ringPlatformStateNetwork = new EnumRingPlatformStateNetworkPacker();
 	private static ImmutablePairPacker pairNetwork = new ImmutablePairPacker();
 	private static ImmutableTuplePacker tupleNetwork = new ImmutableTuplePacker();
 
@@ -31,6 +33,7 @@ public class NetworkHelpers {
 		Vector3NetworkPacker.packId = ModPacket.registerPackable(Vector3NetworkPacker.instance);
 		EnumOrientationsNetworkPacker.packId = ModPacket.registerPackable(EnumOrientationsNetworkPacker.instance);
 		EnumStargateStateNetworkPacker.packId = ModPacket.registerPackable(EnumStargateStateNetworkPacker.instance);
+		EnumRingPlatformStateNetworkPacker.packId = ModPacket.registerPackable(EnumRingPlatformStateNetworkPacker.instance);
 		ImmutablePairPacker.packId = ModPacket.registerPackable(ImmutablePairPacker.instance);
 		ImmutableTuplePacker.packId = ModPacket.registerPackable(ImmutableTuplePacker.instance);
 	}
@@ -170,6 +173,31 @@ public class NetworkHelpers {
 		@Override
 		public EnumStargateState unpack(DataInputStream streamOf) throws IOException {
 			return EnumStargateState.fromOrdinal(streamOf.readInt());
+		}
+	}
+
+	public static class EnumRingPlatformStateNetworkPacker extends IStreamPackable<EnumRingPlatformState> {
+		private static EnumRingPlatformStateNetworkPacker instance;
+		private static int packId;
+
+		public EnumRingPlatformStateNetworkPacker() {
+			super(EnumRingPlatformState.class);
+			EnumRingPlatformStateNetworkPacker.instance = this;
+		}
+
+		@Override
+		public int getTypeOf() {
+			return packId;
+		}
+
+		@Override
+		public void pack(EnumRingPlatformState valueOf, DataOutputStream streamOf) throws IOException {
+			streamOf.writeInt(valueOf.ordinal());
+		}
+
+		@Override
+		public EnumRingPlatformState unpack(DataInputStream streamOf) throws IOException {
+			return EnumRingPlatformState.fromOrdinal(streamOf.readInt());
 		}
 	}
 

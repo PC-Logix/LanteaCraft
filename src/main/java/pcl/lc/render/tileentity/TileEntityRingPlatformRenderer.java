@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import pcl.lc.LanteaCraft;
+import pcl.lc.tileentity.TileEntityRingPlatform;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -12,6 +13,7 @@ public class TileEntityRingPlatformRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
+		TileEntityRingPlatform platform = (TileEntityRingPlatform) tileEntity;
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -27,7 +29,11 @@ public class TileEntityRingPlatformRenderer extends TileEntitySpecialRenderer {
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(LanteaCraft
 				.getResource("textures/models/transport_rings_" + LanteaCraft.getProxy().getRenderMode() + ".png"));
 		GL11.glTranslated(0, -0.2, 0);
-		for (int i = 0; i < 5; i++) {
+		
+		double heightOf = platform.getRingPosition(f);
+		int numRingsOf = (int) Math.floor(heightOf / 0.5d);
+		GL11.glTranslated(0, heightOf % 0.5d, 0);
+		for (int i = 0; i < numRingsOf; i++) {
 			GL11.glTranslated(0.d, 0.5d, 0d);
 			LanteaCraft.Render.modelRingPlatformRing.renderAll();
 		}
