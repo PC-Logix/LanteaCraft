@@ -23,7 +23,7 @@ public class ItemLanteaOre extends Item {
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 		OreTypes.NAQUADAH.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_"
 				+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.NAQAHDRIAH.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naqahdriah_"
+		OreTypes.NAQAHDRIAH.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadriah_"
 				+ LanteaCraft.getProxy().getRenderMode()));
 		OreTypes.TRINIUM.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":trinium_"
 				+ LanteaCraft.getProxy().getRenderMode()));
