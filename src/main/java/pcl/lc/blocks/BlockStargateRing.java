@@ -15,6 +15,7 @@ import pcl.common.base.GenericContainerBlock;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.items.ItemStargateRing;
+import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateRing;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -113,9 +114,13 @@ public class BlockStargateRing extends GenericContainerBlock {
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int id, int data) {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
-		super.breakBlock(world, x, y, z, id, data);
-		if (te != null)
+		if (te != null) {
 			te.getAsPart().devalidateHostMultiblock();
+			TileEntity host = te.getAsPart().findHostMultiblock(false).getTileEntity();
+			if (host instanceof TileEntityStargateBase)
+				((TileEntityStargateBase) host).hostBlockDestroyed();
+		}
+		super.breakBlock(world, x, y, z, id, data);
 	}
 
 	@Override

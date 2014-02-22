@@ -252,7 +252,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 
 			renderLastRingAngle = renderRingAngle;
 			advanceRendering();
-			if (getState() == EnumStargateState.Dialling || (getState() == EnumStargateState.Disconnecting && timeout > 0))
+			if (getState() == EnumStargateState.Dialling
+					|| (getState() == EnumStargateState.Disconnecting && timeout > 0))
 				updateRingAngle();
 		} else {
 			if (getAsStructure().isValid()) {
@@ -893,6 +894,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	}
 
 	public void hostBlockDestroyed() {
+		TileEntityStargateBase dte = (TileEntityStargateBase) connectedLocation.getStargateTE();
+		if (dte != null)
+			dte.clearConnection();
+		clearConnection();
 		if (!worldObj.isRemote)
 			getAsStructure().disband();
 	}
