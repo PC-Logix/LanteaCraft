@@ -1,7 +1,10 @@
 package pcl.lc.blocks;
 
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -12,10 +15,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import pcl.common.base.RotationOrientedBlock;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 
-public class BlockNaquadahGenerator extends pcl.common.base.RotationOrientedBlock {
+public class BlockNaquadahGenerator extends RotationOrientedBlock {
 
 	Icon topTexture, bottomTexture, sideTexture;
 
@@ -85,6 +89,7 @@ public class BlockNaquadahGenerator extends pcl.common.base.RotationOrientedBloc
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int id, int data) {
 		TileEntityNaquadahGenerator cte = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
+		cte.onHostBlockBreak();
 		super.breakBlock(world, x, y, z, id, data);
 	}
 
@@ -114,4 +119,32 @@ public class BlockNaquadahGenerator extends pcl.common.base.RotationOrientedBloc
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, int l) {
+		if (!world.isRemote) {
+			int sig = 0;
+			int a = isBlockProvidingPower(world, x, y + 1, z, 1);
+			int b = isBlockProvidingPower(world, x, y - 1, z, 0);
+			int c = isBlockProvidingPower(world, x, y, z + 1, 3);
+			int d = isBlockProvidingPower(world, x, y, z - 1, 2);
+			int e = isBlockProvidingPower(world, x + 1, y, z, 5);
+			int f = isBlockProvidingPower(world, x - 1, y, z, 4);
+			sig = Math.max(a, Math.max(b, Math.max(c, Math.max(d, Math.max(e, f)))));
+			TileEntityNaquadahGenerator cte = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
+			cte.setRedstoneInputSignal(sig);
+		}
+	}
+
+	private int isBlockProvidingPower(World world, int x, int y, int z, int direction) {
+		if (y >= 0 && y < world.getHeight()) {
+			int redstoneWireValue = (world.getBlockId(x, y, z) == Block.redstoneWire.blockID) ? world.getBlockMetadata(
+					x, y, z) : 0;
+			int indirectPowerTo = world.getIndirectPowerLevelTo(x, y, z, direction);
+			int directPowerTo = world.isBlockProvidingPowerTo(x, y, z, direction);
+			return Math.max(Math.max(redstoneWireValue, indirectPowerTo), directPowerTo);
+		} else
+			return 0;
+	}
+
 }

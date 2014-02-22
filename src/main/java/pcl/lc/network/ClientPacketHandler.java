@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
+import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityRingPlatform;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import cpw.mods.fml.common.network.Player;
@@ -23,6 +24,7 @@ public class ClientPacketHandler {
 					int z = (Integer) spacket.getValue("WorldZ");
 					World w = Minecraft.getMinecraft().theWorld;
 					TileEntity tile = w.getBlockTileEntity(x, y, z);
+
 					if (tile instanceof TileEntityStargateBase) {
 						TileEntityStargateBase base = (TileEntityStargateBase) tile;
 						base.getAsStructure().unpack(packet);
@@ -30,6 +32,10 @@ public class ClientPacketHandler {
 					} else if (tile instanceof TileEntityRingPlatform) {
 						TileEntityRingPlatform platform = (TileEntityRingPlatform) tile;
 						platform.getStateFromPacket(packet);
+						w.markBlockForRenderUpdate(x, y, z);
+					} else if (tile instanceof TileEntityNaquadahGenerator) {
+						TileEntityNaquadahGenerator generator = (TileEntityNaquadahGenerator) tile;
+						generator.getStateFromPacket(packet);
 						w.markBlockForRenderUpdate(x, y, z);
 					}
 				}

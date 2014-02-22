@@ -5,6 +5,7 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
@@ -14,12 +15,17 @@ import net.minecraftforge.fluids.IFluidHandler;
 import pcl.common.base.PoweredTileEntity;
 import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
+import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.fluids.SpecialFluidTank;
 
 public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler, INaquadahGeneratorAccess {
+
+	public boolean simulate = false;
 
 	public double energy = 0.0;
 	public double maxEnergy = 10.0;
@@ -102,14 +108,45 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 			if (!addedToEnergyNet) {
 				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 				addedToEnergyNet = true;
-				onInventoryChanged();
+				stateChanged();
 			}
 			if (tank.hasChanged())
-				onInventoryChanged();
+				stateChanged();
 			super.updateEntity();
 
 			refuel();
 		}
+	}
+
+	public void stateChanged() {
+		onInventoryChanged();
+		getDescriptionPacket();
+	}
+
+	public void getStateFromPacket(ModPacket packet) {
+		StandardModPacket packetOf = (StandardModPacket) packet;
+		this.simulate = (Boolean) packetOf.getValue("simulate");
+		this.energy = (Double) packetOf.getValue("energy");
+	}
+
+	public ModPacket getPacketFromState() {
+		StandardModPacket packet = new StandardModPacket();
+		packet.setIsForServer(false);
+		packet.setType("LanteaPacket.TileUpdate");
+		packet.setValue("DimensionID", worldObj.provider.dimensionId);
+		packet.setValue("WorldX", xCoord);
+		packet.setValue("WorldY", yCoord);
+		packet.setValue("WorldZ", zCoord);
+
+		packet.setValue("simulate", simulate);
+		packet.setValue("energy", energy);
+		return packet;
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		LanteaCraft.getProxy().sendToAllPlayers(getPacketFromState());
+		return null;
 	}
 
 	public void refuel() {
@@ -124,6 +161,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 					else
 						inventory.setInventorySlotContents(i, null);
 					energy += 1.0;
+					stateChanged();
 					return;
 				}
 			}
@@ -132,6 +170,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 			if (tank.drain(100, false).amount == 100) {
 				tank.drain(100, true);
 				energy += 0.1;
+				stateChanged();
 				return;
 			}
 	}
@@ -168,7 +207,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	@Override
 	public double getAvailableExportEnergy() {
-		if (!isActive())
+		if (!isActive() || !simulate)
 			return 0;
 		return Math.min(energy, getMaximumExportEnergy());
 	}
@@ -180,13 +219,15 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	@Override
 	public double exportEnergy(double units) {
+		if (!simulate)
+			return 0.0d;
 		double reallyExportedUnits = Math.min(units, energy);
 		energy -= reallyExportedUnits;
 		return reallyExportedUnits;
 	}
 
 	public boolean isActive() {
-		return (energy > 0);
+		return simulate && energy > 0;
 	}
 
 	@Override
@@ -228,27 +269,42 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return simulate;
 	}
 
 	@Override
 	public boolean setEnabled(boolean enable) {
-		// TODO Auto-generated method stub
-		return false;
+		return (simulate = enable) || true;
 	}
 
 	@Override
 	public double getStoredEnergy() {
+		if (!simulate)
+			return 0;
 		return energy;
 	}
 
 	@Override
 	public double getStoredEnergy(EnumUnits unitsOf) {
+		if (!simulate)
+			return 0;
 		return EnumUnits.convertFromNaquadahUnit(unitsOf, energy);
 	}
 
 	@Override
 	public double getMaximumStoredEnergy() {
 		return maxEnergy;
+	}
+
+	public void onHostBlockBreak() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setRedstoneInputSignal(int sig) {
+		boolean oldState = simulate;
+		simulate = (sig > 0);
+		if (oldState != simulate)
+			getDescriptionPacket();
 	}
 }

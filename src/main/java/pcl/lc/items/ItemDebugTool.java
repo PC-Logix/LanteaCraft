@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
+import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
@@ -59,6 +60,14 @@ public class ItemDebugTool extends Item {
 			TileEntityStargateController controller = (TileEntityStargateController) entity;
 			par2EntityPlayer.addChatMessage("type: TileEntityStargateController");
 			par2EntityPlayer.addChatMessage("isLinkedToBase: " + (controller.isLinkedToStargate ? "yes" : "no"));
+		}
+		
+		if (entity instanceof TileEntityNaquadahGenerator) {
+			TileEntityNaquadahGenerator generator = (TileEntityNaquadahGenerator) entity;
+			par2EntityPlayer.addChatMessage("type: TileEntityNaquadahGenerator");
+			par2EntityPlayer.addChatMessage("simulating: " + generator.simulate);
+			par2EntityPlayer.addChatMessage("energy: " + generator.energy);
+			par2EntityPlayer.addChatMessage("exportEnergy: " + generator.getAvailableExportEnergy());
 		}
 		return true;
 	}
