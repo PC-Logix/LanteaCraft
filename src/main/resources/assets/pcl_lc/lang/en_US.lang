@@ -21,10 +21,10 @@ item.lanteaOreIngot.0.name=Naquadah Ingot
 tile.lanteaOreIngotBlock.0.name=Block of Naquadah
 
 
-tile.lanteaOre.1.name=Naqahdriah Ore
-item.lanteaOre.1.name=Naqahdriah
-item.lanteaOreIngot.1.name=Naqahdriah Ingot
-tile.lanteaOreIngotBlock.1.name=Block of Naqahdriah
+tile.lanteaOre.1.name=Naquadriah Ore
+item.lanteaOre.1.name=Naquadriah
+item.lanteaOreIngot.1.name=Naquadriah Ingot
+tile.lanteaOreIngotBlock.1.name=Block of Naquadriah
 
 tile.lanteaOre.2.name=Trinium Ore
 item.lanteaOre.2.name=Trinium
