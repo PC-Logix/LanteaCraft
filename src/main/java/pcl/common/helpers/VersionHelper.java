@@ -70,7 +70,7 @@ public class VersionHelper extends Thread {
 				else
 					version.append(versionAndBuild[i]).append("-");
 			String versionStr = version.toString();
-			remoteVersion = versionStr.substring(0, versionStr.length() - 1);
+			remoteVersion = versionStr.substring(0, versionStr.length() - 2);
 			remoteLabel = section[1].trim();
 
 			if (remoteBuild > BuildInfo.getBuildNumber())
