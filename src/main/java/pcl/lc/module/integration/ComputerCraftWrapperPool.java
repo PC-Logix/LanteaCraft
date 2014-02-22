@@ -87,9 +87,9 @@ public class ComputerCraftWrapperPool {
 			case 0:
 			case 1:
 				String address = arguments[0].toString().toUpperCase();
-				if (address.length() != 7)
-					throw new Exception("Stargate addresses must be at least 7 characters.");
-				else if (address == access.getLocalAddress())
+				if (address.length() != 7 || address.length() != 9)
+					throw new Exception("Stargate addresses must be 7 or 9 characters.");
+				else if (address == access.getLocalAddress() || address == access.getLocalAddress().substring(0, 7))
 					throw new Exception("Stargate cannot connect to itself.");
 				else if (!access.connect(address))
 					throw new Exception("Stargate cannot dial now.");
@@ -97,6 +97,7 @@ public class ComputerCraftWrapperPool {
 			case 2:
 				if (!access.disconnect())
 					throw new Exception("Stargate cannot be closed from this end");
+				return new Object[] { true };
 			case 3:
 				return new Object[] { access.isBusy() };
 			case 4:
