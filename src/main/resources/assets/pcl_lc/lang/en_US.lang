@@ -1,4 +1,3 @@
-
 tile.stargateController.name=Stargate Controller
 tile.stargateBase.name=Stargate Base
 tile.stargateRing.0.name=Stargate Ring Segment
@@ -14,6 +13,11 @@ tile.lanteaDecor.1.name=Lantean Patterned Steel
 tile.lanteaDecor.2.name=Lantean Steel
 tile.lanteaDecor.3.name=Goa'uld Patterned Gold
 tile.lanteaDecor.4.name=Goa'uld Gold
+
+tile.goauldPatternedGoldDecorStair.name=Goa'uld Gold Stairs
+tile.goauldGoldDecorStair.name=Goa'uld Patterned Gold Stairs
+tile.lanteaPatternedSteelDecorStair.name=Lantean Steel Stairs
+tile.lanteaSteelDecorStair.name=Lantean Patterned Steel Stairs
 
 tile.lanteaOre.0.name=Naquadah Ore
 item.lanteaOre.0.name=Naquadah
