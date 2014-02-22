@@ -22,8 +22,10 @@ import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.helpers.GUIHandler;
 import pcl.common.helpers.NetworkHelpers;
 import pcl.common.helpers.RegistrationHelper;
+import pcl.common.helpers.VersionHelper;
 import pcl.common.network.ModPacket;
 import pcl.lc.compat.UpgradeHelper;
+import pcl.lc.core.CoreTickHandler;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.module.ModuleManager;
 import pcl.lc.module.ModuleManager.Module;
@@ -41,6 +43,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class LanteaCraftCommonProxy {
 
@@ -59,6 +63,8 @@ public class LanteaCraftCommonProxy {
 	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
 
 	private AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
+	private VersionHelper versionHelper = new VersionHelper();
+
 	protected ClientPacketHandler defaultClientPacketHandler;
 	protected ServerPacketHandler defaultServerPacketHandler;
 	private NetworkHelpers networkHelpers;
@@ -90,6 +96,8 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
+		LanteaCraft.getLogger().log(Level.INFO,
+				"Hello there, I'm LanteaCraft " + BuildInfo.versionNumber + "-" + BuildInfo.buildNumber + "!");
 		config = new ConfigurationHelper(e.getSuggestedConfigurationFile());
 		configure();
 		moduleManager.preInit();
@@ -101,6 +109,7 @@ public class LanteaCraftCommonProxy {
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getSpecialBucketHandler());
 		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
 		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
+		TickRegistry.registerTickHandler(new CoreTickHandler(), Side.SERVER);
 		networkHelpers.init();
 		moduleManager.init();
 	}
@@ -127,6 +136,10 @@ public class LanteaCraftCommonProxy {
 		if (!Module.WORLDGEN.isLoaded())
 			return null;
 		return ((ModuleWorldGenerator) Module.WORLDGEN.moduleOf()).getNaquadahOreGenerator();
+	}
+
+	public VersionHelper getVersionHelper() {
+		return versionHelper;
 	}
 
 	public void onInitMapGen(InitMapGenEvent e) {
@@ -173,6 +186,7 @@ public class LanteaCraftCommonProxy {
 
 		if (version != previousVersion && enableAnalytics.getBoolean(true))
 			analyticsHelper.start();
+		versionHelper.start();
 	}
 
 	void registerRecipes() {
@@ -272,7 +286,8 @@ public class LanteaCraftCommonProxy {
 	public void sendToAllPlayers(ModPacket packet) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		if (server != null) {
-			LanteaCraft.getLogger().log(Level.FINEST, "LanteaCraft sending packet to all players: " + packet.toString());
+			LanteaCraft.getLogger()
+					.log(Level.FINEST, "LanteaCraft sending packet to all players: " + packet.toString());
 			Packet250CustomPayload payload = packet.toPacket();
 			payload.channel = BuildInfo.modID;
 			server.getConfigurationManager().sendPacketToAllPlayers(payload);
