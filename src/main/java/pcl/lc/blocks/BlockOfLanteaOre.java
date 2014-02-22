@@ -27,7 +27,7 @@ public class BlockOfLanteaOre extends BlockOreStorage {
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 		OreTypes.NAQUADAH.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_block_"
 				+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.NAQAHDRIAH.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey()
+		OreTypes.NAQUADRIAH.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey()
 				+ ":naqahdriah_block_" + LanteaCraft.getProxy().getRenderMode()));
 		OreTypes.TRINIUM.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":trinium_block_"
 				+ LanteaCraft.getProxy().getRenderMode()));
