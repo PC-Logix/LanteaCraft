@@ -32,7 +32,7 @@ public class BlockLanteaOre extends BlockOre {
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 		OreTypes.NAQUADAH.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_ore_"
 				+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.NAQAHDRIAH.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naqahdriah_ore_"
+		OreTypes.NAQADRIAH.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naqadriah_ore_"
 				+ LanteaCraft.getProxy().getRenderMode()));
 		OreTypes.TRINIUM.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":trinium_ore_"
 				+ LanteaCraft.getProxy().getRenderMode()));

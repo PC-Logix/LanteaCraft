@@ -23,7 +23,7 @@ public class ItemLanteaOre extends Item {
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 		OreTypes.NAQUADAH.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_"
 				+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.NAQAHDRIAH.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naqahdriah_"
+		OreTypes.NAQADRIAH.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naqadriah_"
 				+ LanteaCraft.getProxy().getRenderMode()));
 		OreTypes.TRINIUM.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":trinium_"
 				+ LanteaCraft.getProxy().getRenderMode()));
@@ -41,7 +41,7 @@ public class ItemLanteaOre extends Item {
 		for (int i = 0; i < OreTypes.values().length; i++)
 			par3List.add(new ItemStack(this, 1, i));
 	}
-	
+
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		return "item.lanteaOre." + stack.getItemDamage();
