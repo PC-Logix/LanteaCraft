@@ -376,7 +376,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 			return "Stargate has insufficient fuel";
 		} else {
 			startDiallingStargate(address, dte, true);
-			dte.startDiallingStargate(homeAddress, this, false);
+			dte.startDiallingStargate((address.length() == 7) ? homeAddress.substring(0, 7) : homeAddress, this, false);
 			return true;
 		}
 	}

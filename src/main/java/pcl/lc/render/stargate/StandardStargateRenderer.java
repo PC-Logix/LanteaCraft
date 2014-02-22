@@ -40,26 +40,35 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		double u = 0, du = 0, dv = 0;
 		GL11.glBegin(GL11.GL_QUADS);
 		for (int i = 0; i < StargateRenderConstants.numRingSegments; i++) {
-			selectTile(StargateRenderConstants.ringTextureIndex);
+			
+			// Insides & Outsides
 			if (!isInnerRing) {
+				selectTile(0x4);
 				GL11.glNormal3d(cos[i], sin[i], 0);
 				vertex(r2 * cos[i], r2 * sin[i], z, 0, 0);
 				vertex(r2 * cos[i], r2 * sin[i], -z, 0, 16);
 				vertex(r2 * cos[i + 1], r2 * sin[i + 1], -z, 16, 16);
 				vertex(r2 * cos[i + 1], r2 * sin[i + 1], z, 16, 0);
 			} else {
+				selectTile(0x17);
 				GL11.glNormal3d(-cos[i], -sin[i], 0);
 				vertex(r1 * cos[i], r1 * sin[i], -z, 0, 0);
 				vertex(r1 * cos[i], r1 * sin[i], z, 0, 16);
 				vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, 16, 16);
 				vertex(r1 * cos[i + 1], r1 * sin[i + 1], -z, 16, 0);
 			}
+			
 			// Back
+			if (!isInnerRing)
+				selectTile(StargateRenderConstants.ringFaceTextureIndex);
+			else
+				selectTile(StargateRenderConstants.ringFaceTextureIndex + 0x4);
 			GL11.glNormal3f(0, 0, -1);
 			vertex(r1 * cos[i], r1 * sin[i], -z, 0, 16);
 			vertex(r1 * cos[i + 1], r1 * sin[i + 1], -z, 16, 16);
 			vertex(r2 * cos[i + 1], r2 * sin[i + 1], -z, 16, 0);
 			vertex(r2 * cos[i], r2 * sin[i], -z, 0, 0);
+			
 			// Front
 			GL11.glNormal3f(0, 0, 1);
 			if (!isInnerRing) {
@@ -87,10 +96,11 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		int sizeof = (te.getDialledAddres() != null) ? te.getDialledAddres().length() : -1;
 		int[] renderQueue = (sizeof == 7) ? StargateRenderConstants.standardRenderQueue
 				: StargateRenderConstants.extendedRenderQueue;
+
 		for (int i = 0; i < 9; i++) {
 			GL11.glPushMatrix();
-			GL11.glRotatef(90 - 40 - (40 * (i - 1)), 0, 0, 1);
-			chevron((sizeof != -1) && before(renderQueue, i, te.numEngagedChevrons));
+			GL11.glRotatef(90 - (40 * i), 0, 0, 1);
+			chevron((sizeof != -1) && before(renderQueue, i, te.getEncodedChevrons()));
 			GL11.glPopMatrix();
 		}
 	}
