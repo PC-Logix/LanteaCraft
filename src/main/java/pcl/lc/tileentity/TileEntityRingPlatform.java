@@ -25,9 +25,7 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 		if (worldObj.isRemote)
 			updateRendering();
 		else {
-			if (state == EnumRingPlatformState.Idle)
-				updateState(EnumRingPlatformState.Connecting, 20);
-			else if (state != EnumRingPlatformState.Idle || timeout != 0) {
+			if (state != EnumRingPlatformState.Idle || timeout != 0) {
 				if (timeout > 0)
 					timeout--;
 				else {
@@ -48,9 +46,11 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 
 	private void updateRendering() {
 		lastRingPosition = ringPosition;
-		if (0 > ringPosition) ringPosition = 0;
+		if (0 > ringPosition)
+			ringPosition = 0;
 		ringPosition += nextRingPosition;
-		if (ringPosition > ringExtended) ringPosition = ringExtended;
+		if (ringPosition > ringExtended)
+			ringPosition = ringExtended;
 		if (timeout > 0) {
 			if (state == EnumRingPlatformState.Connecting)
 				nextRingPosition = (ringExtended / 20.0d);
@@ -69,7 +69,6 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 	}
 
 	private void updateState(EnumRingPlatformState state, int timeout) {
-		LanteaCraft.getLogger().log(Level.INFO, "Transporter entering state " + state + " timeout " + timeout);
 		this.state = state;
 		this.timeout = timeout;
 		markBlockForUpdate();
