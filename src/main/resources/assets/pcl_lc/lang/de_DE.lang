@@ -24,7 +24,6 @@ item.lanteaOre.0.name=Naquadah
 item.lanteaOreIngot.0.name=Naquadah Barren
 tile.lanteaOreIngotBlock.0.name=Naquadah Block
 
-
 tile.lanteaOre.1.name=Naqahdriah Erz
 item.lanteaOre.1.name=Naqahdriah
 item.lanteaOreIngot.1.name=Naqahdriah Barren
@@ -36,6 +35,7 @@ item.lanteaOreIngot.2.name=Trinium Barren
 tile.lanteaOreIngotBlock.2.name=Trinium Block
 
 tile.naquadahGenerator.name=Naquadah Generator
+tile.ringPlatform.name=Ring Transporter
 
 item.tokraSpawnEgg.name=Erschaffe Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
