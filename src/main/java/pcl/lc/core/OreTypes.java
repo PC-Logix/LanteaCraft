@@ -16,7 +16,7 @@ import net.minecraft.util.Icon;
  * 
  */
 public enum OreTypes {
-	NAQUADAH("naquadahOre"), NAQUADRIAH("naqahdriahOre"), TRINIUM("triniumOre");
+	NAQUADAH("naquadahOre"), NAQUADRIAH("naquadriahOre"), TRINIUM("triniumOre");
 
 	private String tex;
 
