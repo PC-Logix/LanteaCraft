@@ -53,12 +53,12 @@ public class ModuleStargates implements IModule {
 		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateController.class,
 				"stargateController");
 
-		Blocks.ringPlatform = RegistrationHelper.registerBlock(BlockRingPlatform.class, "ringPlatform");
+		// Blocks.ringPlatform = RegistrationHelper.registerBlock(BlockRingPlatform.class, "ringPlatform");
 
 		GameRegistry.registerTileEntity(TileEntityStargateBase.class, "tileEntityStargateBase");
 		GameRegistry.registerTileEntity(TileEntityStargateRing.class, "tileEntityStargateRing");
 		GameRegistry.registerTileEntity(TileEntityStargateController.class, "tileEntityStargateController");
-		GameRegistry.registerTileEntity(TileEntityRingPlatform.class, "tileEntityRingPlatform");
+		// GameRegistry.registerTileEntity(TileEntityRingPlatform.class, "tileEntityRingPlatform");
 
 		Items.coreCrystal = RegistrationHelper.registerItem(ItemCoreCrystal.class, "coreCrystal");
 		Items.controllerCrystal = RegistrationHelper.registerItem(ItemControllerCrystal.class, "controllerCrystal");
