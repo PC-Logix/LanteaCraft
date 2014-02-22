@@ -244,6 +244,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 					initiateOpeningTransient();
 					break;
 				case Disconnecting:
+					renderNextRingAngle = 0;
 					initiateClosingTransient();
 					break;
 				}
@@ -251,7 +252,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 
 			renderLastRingAngle = renderRingAngle;
 			advanceRendering();
-			if (getState() == EnumStargateState.Dialling)
+			if (getState() == EnumStargateState.Dialling || (getState() == EnumStargateState.Disconnecting && timeout > 0))
 				updateRingAngle();
 		} else {
 			if (getAsStructure().isValid()) {
@@ -403,7 +404,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 					playSoundEffect("gcewing_sg:sg1_abort", 1.0F, 1.0F);
 				enterState(EnumStargateState.Idle, 0);
 			}
-
+			renderNextRingAngle = 0;
+			timeout = 15;
 			getAsStructure().removeMetadata("diallingTo");
 		}
 	}
@@ -951,7 +953,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 
 	@Override
 	public int getEncodedChevrons() {
-		if (!isDialling() || !isConnected())
+		if (!isDialling() && !isConnected())
 			return -1;
 		return numEngagedChevrons;
 	}
