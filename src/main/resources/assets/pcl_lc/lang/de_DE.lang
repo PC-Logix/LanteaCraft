@@ -4,7 +4,7 @@ tile.stargateRing.0.name=Stargate Ring Segment
 tile.stargateRing.1.name=Stargate Chevron Block
 item.coreCrystal.name=Stargate Kernkristall
 item.controllerCrystal.name=Stargate Kontrollkristall
-item.energyCrystal.name=ZPM
+item.energyCrystal.name=Energiekristall
 
 tile.blockLiquidNaquadah.name=Flüssiges Naquadah
 item.liquidNaquadahBucket.name=Eimer mit flüssiges Naquadah
