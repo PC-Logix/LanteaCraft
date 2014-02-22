@@ -245,6 +245,15 @@ public class Vector3 {
 	}
 
 	/**
+	 * Returns the unit vector for this vector.
+	 * 
+	 * @return The unit vector for this vector.
+	 */
+	public Vector3 unitV() {
+		return new Vector3(x / mag(), y / mag(), z / mag());
+	}
+
+	/**
 	 * Calculates the floored x-component of this Vector3.
 	 * 
 	 * @return The floored x-component of this Vector3.
