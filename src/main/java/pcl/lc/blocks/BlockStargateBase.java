@@ -37,12 +37,22 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int blockID) {
-		return TileEntityStargateBase.powerLevel;
+		TileEntity host = world.getBlockTileEntity(x, y, z);
+		if (host instanceof TileEntityStargateBase) {
+			TileEntityStargateBase base = (TileEntityStargateBase) host;
+			return (base.isConnected()) ? 15 : 0;
+		}
+		return 0;
 	}
 
 	@Override
-	public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
-		return TileEntityStargateBase.powerLevel;
+	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int blockID) {
+		TileEntity host = world.getBlockTileEntity(x, y, z);
+		if (host instanceof TileEntityStargateBase) {
+			TileEntityStargateBase base = (TileEntityStargateBase) host;
+			return (base.isConnected()) ? 15 : 0;
+		}
+		return 0;
 	}
 
 	@Override
