@@ -84,7 +84,7 @@ public class RegistrationHelper {
 			LanteaCraft.getLogger().log(Level.WARNING,
 					"Warning, registration of this block is later than was expected!");
 		try {
-			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 4094).getInt();
+			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 2048).getInt();
 			Constructor<? extends T> ctor = classOf.getConstructor(int.class);
 			T theMysteryBlock = ctor.newInstance(id);
 			theMysteryBlock.setUnlocalizedName(unlocalizedName);
@@ -256,7 +256,7 @@ public class RegistrationHelper {
 			LanteaCraft.getLogger().log(Level.WARNING,
 					"Warning, registration of this stair decal is later than was expected!");
 		try {
-			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 4094).getInt();
+			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 2048).getInt();
 			BlockLanteaDecorStair stair = new BlockLanteaDecorStair(id, targetMetadata);
 			stair.setUnlocalizedName(unlocalizedName);
 			stair.setCreativeTab(LanteaCraft.getCreativeTab());

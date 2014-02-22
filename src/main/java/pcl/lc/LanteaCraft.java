@@ -38,8 +38,11 @@ import pcl.lc.render.blocks.BlockStargateRingRenderer;
 import pcl.lc.render.blocks.BlockVoidRenderer;
 import pcl.lc.render.entities.EntityTokraRenderer;
 import pcl.lc.render.models.NaquadahGeneratorModel;
+import pcl.lc.render.models.RingPlatformBaseModel;
+import pcl.lc.render.models.RingPlatformRingModel;
 import pcl.lc.render.models.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
+import pcl.lc.render.tileentity.TileEntityRingPlatformRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
 import cpw.mods.fml.common.FMLLog;
@@ -120,6 +123,8 @@ public class LanteaCraft {
 	public static class Render {
 		public static StargateControllerModel modelController;
 		public static NaquadahGeneratorModel modelNaquadahGenerator;
+		public static RingPlatformBaseModel modelRingPlatformBase;
+		public static RingPlatformRingModel modelRingPlatformRing;
 
 		public static RotationOrientedBlockRenderer blockOrientedRenderer;
 		public static BlockVoidRenderer blockVoidRenderer;
@@ -132,6 +137,7 @@ public class LanteaCraft {
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
 		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
+		public static TileEntityRingPlatformRenderer tileEntityRingPlatformRenderer;
 
 		public static EntityTokraRenderer entityTokraRenderer;
 	}
