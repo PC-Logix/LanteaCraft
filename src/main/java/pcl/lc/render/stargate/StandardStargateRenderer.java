@@ -21,7 +21,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		caller.bind(LanteaCraft.getResource("textures/tileentity/stargate_128.png"));
 		GL11.glNormal3f(0, 1, 0);
-		renderRing(StargateRenderConstants.ringMidRadius, StargateRenderConstants.ringOuterRadius, false);
+		renderRing(StargateRenderConstants.ringInnerRadius, StargateRenderConstants.ringOuterRadius, false);
 		renderInnerRing(te, t);
 		renderChevrons(te);
 		if (te.isConnected())
@@ -31,7 +31,27 @@ public class StandardStargateRenderer implements IStargateRenderer {
 	private void renderInnerRing(TileEntityStargateBase te, float t) {
 		GL11.glPushMatrix();
 		GL11.glRotatef((float) (95 + te.interpolatedRingAngle(t)), 0, 0, 1);
-		renderRing(StargateRenderConstants.ringInnerRadius, StargateRenderConstants.ringMidRadius, true);
+		double dvt = 1d / 8d;
+		double r1 = StargateRenderConstants.ringInnerRadius + dvt, r2 = StargateRenderConstants.ringMidRadius + dvt;
+		GL11.glNormal3f(0, 0, 1);
+		GL11.glBegin(GL11.GL_QUADS);
+
+		selectTile(StargateRenderConstants.ringSymbolTextureIndex);
+		double u = 0, du = 0, dv = 0;
+		for (int i = 0; i < StargateRenderConstants.numRingSegments; i++) {
+			double z = StargateRenderConstants.ringDepth / 2 - (1d / 16d);
+			u = StargateRenderConstants.ringSymbolTextureLength - (i + 1)
+					* StargateRenderConstants.ringSymbolSegmentWidth;
+			du = StargateRenderConstants.ringSymbolSegmentWidth;
+			dv = StargateRenderConstants.ringSymbolTextureHeight;
+
+			vertex(r1 * cos[i], r1 * sin[i], z, u + du, dv);
+			vertex(r2 * cos[i], r2 * sin[i], z, u + du, 0);
+			vertex(r2 * cos[i + 1], r2 * sin[i + 1], z, u, 0);
+			vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, u, dv);
+		}
+
+		GL11.glEnd();
 		GL11.glPopMatrix();
 	}
 
@@ -40,53 +60,62 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		double u = 0, du = 0, dv = 0;
 		GL11.glBegin(GL11.GL_QUADS);
 		for (int i = 0; i < StargateRenderConstants.numRingSegments; i++) {
-			
+
 			// Insides & Outsides
-			if (!isInnerRing) {
-				selectTile(0x4);
-				GL11.glNormal3d(cos[i], sin[i], 0);
-				vertex(r2 * cos[i], r2 * sin[i], z, 0, 0);
-				vertex(r2 * cos[i], r2 * sin[i], -z, 0, 16);
-				vertex(r2 * cos[i + 1], r2 * sin[i + 1], -z, 16, 16);
-				vertex(r2 * cos[i + 1], r2 * sin[i + 1], z, 16, 0);
-			} else {
-				selectTile(0x17);
-				GL11.glNormal3d(-cos[i], -sin[i], 0);
-				vertex(r1 * cos[i], r1 * sin[i], -z, 0, 0);
-				vertex(r1 * cos[i], r1 * sin[i], z, 0, 16);
-				vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, 16, 16);
-				vertex(r1 * cos[i + 1], r1 * sin[i + 1], -z, 16, 0);
-			}
-			
+			selectTile(0x4);
+			GL11.glNormal3d(-cos[i], -sin[i], 0);
+			vertex(r2 * cos[i], r2 * sin[i], z, 0, 0);
+			vertex(r2 * cos[i], r2 * sin[i], -z, 0, 16);
+			vertex(r2 * cos[i + 1], r2 * sin[i + 1], -z, 16, 16);
+			vertex(r2 * cos[i + 1], r2 * sin[i + 1], z, 16, 0);
+
+			selectTile(0x17);
+			GL11.glNormal3d(-cos[i], -sin[i], 0);
+			vertex(r1 * cos[i], r1 * sin[i], z, 0, 0);
+			vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, 16, 0);
+			vertex(r1 * cos[i + 1], r1 * sin[i + 1], -z, 16, 16);
+			vertex(r1 * cos[i], r1 * sin[i], -z, 0, 16);
+
 			// Back
-			if (!isInnerRing)
-				selectTile(StargateRenderConstants.ringFaceTextureIndex);
-			else
-				selectTile(StargateRenderConstants.ringFaceTextureIndex + 0x4);
+			selectTile(StargateRenderConstants.ringFaceTextureIndex);
 			GL11.glNormal3f(0, 0, -1);
 			vertex(r1 * cos[i], r1 * sin[i], -z, 0, 16);
 			vertex(r1 * cos[i + 1], r1 * sin[i + 1], -z, 16, 16);
 			vertex(r2 * cos[i + 1], r2 * sin[i + 1], -z, 16, 0);
 			vertex(r2 * cos[i], r2 * sin[i], -z, 0, 0);
-			
+
 			// Front
 			GL11.glNormal3f(0, 0, 1);
-			if (!isInnerRing) {
-				selectTile(StargateRenderConstants.ringFaceTextureIndex);
-				u = 0;
-				du = 16;
-				dv = 16;
-			} else {
-				selectTile(StargateRenderConstants.ringSymbolTextureIndex);
-				u = StargateRenderConstants.ringSymbolTextureLength - (i + 1)
-						* StargateRenderConstants.ringSymbolSegmentWidth;
-				du = StargateRenderConstants.ringSymbolSegmentWidth;
-				dv = StargateRenderConstants.ringSymbolTextureHeight;
-			}
+			selectTile(StargateRenderConstants.ringFaceTextureIndex);
+			u = 0;
+			du = 16;
+			dv = 16;
+			double dxt = 1d / 8d;
+			double r3 = r1 + dxt + 0.25, r4 = r1 + dxt;
+
+			GL11.glNormal3d(-cos[i], -sin[i], 0);
+			vertex(r4 * cos[i], r4 * sin[i], z, 0, 0);
+			vertex(r4 * cos[i], r4 * sin[i], -z, 0, 16);
+			vertex(r4 * cos[i + 1], r4 * sin[i + 1], -z, 16, 16);
+			vertex(r4 * cos[i + 1], r4 * sin[i + 1], z, 16, 0);
+			
+			GL11.glNormal3f(0, 0, 1);
 			vertex(r1 * cos[i], r1 * sin[i], z, u + du, dv);
+			vertex(r4 * cos[i], r4 * sin[i], z, u + du, 0);
+			vertex(r4 * cos[i + 1], r4 * sin[i + 1], z, u, 0);
+			vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, u, dv);
+			
+			GL11.glNormal3d(-cos[i], -sin[i], 0);
+			vertex(r3 * cos[i], r3 * sin[i], z, 0, 0);
+			vertex(r3 * cos[i + 1], r3 * sin[i + 1], z, 16, 0);
+			vertex(r3 * cos[i + 1], r3 * sin[i + 1], -z, 16, 16);
+			vertex(r3 * cos[i], r3 * sin[i], -z, 0, 16);
+			
+			GL11.glNormal3f(0, 0, 1);
+			vertex(r3 * cos[i], r3 * sin[i], z, u + du, dv);
 			vertex(r2 * cos[i], r2 * sin[i], z, u + du, 0);
 			vertex(r2 * cos[i + 1], r2 * sin[i + 1], z, u, 0);
-			vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, u, dv);
+			vertex(r3 * cos[i + 1], r3 * sin[i + 1], z, u, dv);
 		}
 		GL11.glEnd();
 	}
@@ -96,7 +125,6 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		int sizeof = (te.getDialledAddres() != null) ? te.getDialledAddres().length() : -1;
 		int[] renderQueue = (sizeof == 7) ? StargateRenderConstants.standardRenderQueue
 				: StargateRenderConstants.extendedRenderQueue;
-
 		for (int i = 0; i < 9; i++) {
 			GL11.glPushMatrix();
 			GL11.glRotatef(90 - (40 * i), 0, 0, 1);

@@ -33,6 +33,6 @@ public class StargateRenderConstants {
 	public final static int chevronLitTextureIndex = 0x16;
 
 	public final static int[] standardRenderQueue = { -1, 1, 2, 3, 9, 8, 7, 0 };
-	public final static int[] extendedRenderQueue = { -1, 1, 2, 3, 4, 9, 8, 7, 6, 0 };
+	public final static int[] extendedRenderQueue = { -1, 1, 2, 3, 4, 8, 7, 6, 5, 0 };
 
 }
