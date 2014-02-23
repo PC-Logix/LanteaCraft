@@ -28,9 +28,11 @@ import pcl.lc.render.models.RingPlatformBaseModel;
 import pcl.lc.render.models.RingPlatformRingModel;
 import pcl.lc.render.models.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
+import pcl.lc.render.tileentity.TileEntityRingPlatformRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
+import pcl.lc.tileentity.TileEntityRingPlatform;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -103,10 +105,8 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		LanteaCraft.Render.tileEntityNaquadahGeneratorRenderer = new TileEntityNaquadahGeneratorRenderer();
 		addTileEntityRenderer(TileEntityNaquadahGenerator.class, LanteaCraft.Render.tileEntityNaquadahGeneratorRenderer);
 
-		// LanteaCraft.Render.tileEntityRingPlatformRenderer = new
-		// TileEntityRingPlatformRenderer();
-		// addTileEntityRenderer(TileEntityRingPlatform.class,
-		// LanteaCraft.Render.tileEntityRingPlatformRenderer);
+		LanteaCraft.Render.tileEntityRingPlatformRenderer = new TileEntityRingPlatformRenderer();
+		addTileEntityRenderer(TileEntityRingPlatform.class, LanteaCraft.Render.tileEntityRingPlatformRenderer);
 
 		LanteaCraft.Render.blockOrientedRenderer = new RotationOrientedBlockRenderer();
 		registerRenderer(LanteaCraft.Render.blockOrientedRenderer);

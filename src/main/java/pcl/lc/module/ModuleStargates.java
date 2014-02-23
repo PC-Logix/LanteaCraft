@@ -20,6 +20,7 @@ import pcl.lc.items.ItemControllerCrystal;
 import pcl.lc.items.ItemCoreCrystal;
 import pcl.lc.items.ItemEnergyCrystal;
 import pcl.lc.items.ItemStargateRing;
+import pcl.lc.items.ItemTransportRingActivator;
 import pcl.lc.module.ModuleManager.Module;
 import pcl.lc.tileentity.TileEntityRingPlatform;
 import pcl.lc.tileentity.TileEntityStargateBase;
@@ -53,16 +54,19 @@ public class ModuleStargates implements IModule {
 		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateController.class,
 				"stargateController");
 
-		// Blocks.ringPlatform = RegistrationHelper.registerBlock(BlockRingPlatform.class, "ringPlatform");
+		Blocks.ringPlatform = RegistrationHelper.registerBlock(BlockRingPlatform.class, "ringPlatform");
 
 		GameRegistry.registerTileEntity(TileEntityStargateBase.class, "tileEntityStargateBase");
 		GameRegistry.registerTileEntity(TileEntityStargateRing.class, "tileEntityStargateRing");
 		GameRegistry.registerTileEntity(TileEntityStargateController.class, "tileEntityStargateController");
-		// GameRegistry.registerTileEntity(TileEntityRingPlatform.class, "tileEntityRingPlatform");
+		GameRegistry.registerTileEntity(TileEntityRingPlatform.class, "tileEntityRingPlatform");
 
 		Items.coreCrystal = RegistrationHelper.registerItem(ItemCoreCrystal.class, "coreCrystal");
 		Items.controllerCrystal = RegistrationHelper.registerItem(ItemControllerCrystal.class, "controllerCrystal");
 		Items.energyCrystal = RegistrationHelper.registerItem(ItemEnergyCrystal.class, "energyCrystal");
+
+		Items.transportRingActivator = RegistrationHelper.registerItem(ItemTransportRingActivator.class,
+				"transportRingActivator");
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN", "III", 'I',
 				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1));

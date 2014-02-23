@@ -4,9 +4,9 @@ import java.lang.ref.WeakReference;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import pcl.common.helpers.ScanningHelper;
 import pcl.common.multiblock.GenericMultiblock;
 import pcl.common.multiblock.MultiblockPart;
-import pcl.common.multiblock.ScanningHelper;
 import pcl.common.util.Vector3;
 import pcl.lc.tileentity.TileEntityStargateBase;
 

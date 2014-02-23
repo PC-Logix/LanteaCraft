@@ -10,6 +10,7 @@ import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.GenericContainerBlock;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityRingPlatform;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -21,6 +22,7 @@ public class BlockRingPlatform extends GenericContainerBlock {
 		super(id, Material.rock);
 		setHardness(1.5F);
 		setTickRandomly(true);
+		LanguageRegistry.instance().addStringLocalization("tile.ringPlatform.name", "en_US", "Ring Transporter (WIP - DO NOT USE)");
 	}
 
 	@Override

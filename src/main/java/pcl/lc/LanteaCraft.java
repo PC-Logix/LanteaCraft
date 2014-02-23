@@ -31,6 +31,7 @@ import pcl.lc.items.ItemEnergyCrystal;
 import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreIngot;
 import pcl.lc.items.ItemTokraSpawnEgg;
+import pcl.lc.items.ItemTransportRingActivator;
 import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateControllerRenderer;
@@ -108,8 +109,9 @@ public class LanteaCraft {
 
 		public static ItemCoreCrystal coreCrystal;
 		public static ItemControllerCrystal controllerCrystal;
-
 		public static ItemEnergyCrystal energyCrystal;
+
+		public static ItemTransportRingActivator transportRingActivator;
 
 		public static ItemTokraSpawnEgg tokraSpawnEgg;
 
