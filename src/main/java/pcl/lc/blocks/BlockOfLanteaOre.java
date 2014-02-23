@@ -27,8 +27,8 @@ public class BlockOfLanteaOre extends BlockOreStorage {
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 		OreTypes.NAQUADAH.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_block_"
 				+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.NAQUADRIAH.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadriah_block_"
-				+ LanteaCraft.getProxy().getRenderMode()));
+		OreTypes.NAQUADRIAH.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey()
+				+ ":naquadriah_block_" + LanteaCraft.getProxy().getRenderMode()));
 		OreTypes.TRINIUM.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":trinium_block_"
 				+ LanteaCraft.getProxy().getRenderMode()));
 	}
@@ -44,5 +44,10 @@ public class BlockOfLanteaOre extends BlockOreStorage {
 	public void getSubBlocks(int itemID, CreativeTabs tab, List list) {
 		for (int i = 0; i < OreTypes.values().length; i++)
 			list.add(new ItemStack(itemID, 1, i));
+	}
+
+	@Override
+	public int damageDropped(int par1) {
+		return par1;
 	}
 }

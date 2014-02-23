@@ -60,5 +60,10 @@ public class BlockLanteaDecor extends Block {
 		for (int i = 0; i < 4; i++)
 			list.add(new ItemStack(itemID, 1, i + 1));
 	}
+	
+	@Override
+	public int damageDropped(int par1) {
+		return par1;
+	}
 
 }
