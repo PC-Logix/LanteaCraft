@@ -116,9 +116,11 @@ public class BlockStargateRing extends GenericContainerBlock {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
 		if (te != null) {
 			te.getAsPart().devalidateHostMultiblock();
-			TileEntity host = te.getAsPart().findHostMultiblock(false).getTileEntity();
-			if (host instanceof TileEntityStargateBase)
-				((TileEntityStargateBase) host).hostBlockDestroyed();
+			if (te.getAsPart().findHostMultiblock(false) != null) {
+				TileEntity host = te.getAsPart().findHostMultiblock(false).getTileEntity();
+				if (host instanceof TileEntityStargateBase)
+					((TileEntityStargateBase) host).hostBlockDestroyed();
+			}
 		}
 		super.breakBlock(world, x, y, z, id, data);
 	}
