@@ -16,12 +16,7 @@ import net.minecraft.util.Icon;
  * 
  */
 public enum OreTypes {
-	NAQUADAH("naquadahOre"),
-
-	// Disabled because people keep bitching, and I'm trying to work.
-	// NAQADRIAH("naqadriahOre"),
-	
-	TRINIUM("triniumOre");
+	NAQUADAH("naquadahOre"), NAQADRIAH("naqadriahOre"), TRINIUM("triniumOre");
 
 	private String tex;
 
