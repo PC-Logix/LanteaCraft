@@ -1,12 +1,16 @@
 package pcl.lc.items;
 
+import pcl.common.helpers.ScanningHelper;
 import pcl.lc.LanteaCraft;
+import pcl.lc.tileentity.TileEntityRingPlatform;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class ItemTransportRingActivator extends Item {
@@ -35,9 +39,17 @@ public class ItemTransportRingActivator extends Item {
 		onItemClicked(par1ItemStack, par2World, par3EntityPlayer);
 		return par1ItemStack;
 	}
-	
+
 	private void onItemClicked(ItemStack stackOf, World world, EntityPlayer player) {
-		
+		if (!world.isRemote) {
+			TileEntity of = ScanningHelper.findNearestTileEntityOf(world, TileEntityRingPlatform.class,
+					(int) Math.floor(player.posX), (int) Math.floor(player.posY), (int) Math.floor(player.posZ),
+					AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5));
+			if (of != null && (of instanceof TileEntityRingPlatform)) {
+				TileEntityRingPlatform platform = (TileEntityRingPlatform) of;
+				platform.connect();
+			}
+		}
 	}
 
 }

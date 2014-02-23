@@ -1,13 +1,20 @@
 package pcl.lc.tileentity;
 
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import pcl.common.base.GenericTileEntity;
+import pcl.common.helpers.ScanningHelper;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumRingPlatformState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntityRingPlatform extends GenericTileEntity {
@@ -16,9 +23,10 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 
 	private EnumRingPlatformState state = EnumRingPlatformState.Idle;
 	private int timeout;
-	private boolean slave;
+	private boolean isSlave;
+	private Vector3 connectionTo;
 
-	private double ringPosition, lastRingPosition, nextRingPosition;
+	private double ringPosition, nextRingPosition;
 
 	@Override
 	public void updateEntity() {
@@ -30,13 +38,16 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 					timeout--;
 				else {
 					if (state == EnumRingPlatformState.Connecting) {
-						if (slave)
+						if (isSlave)
 							updateState(EnumRingPlatformState.Recieveing, 10);
-						else
+						else {
 							updateState(EnumRingPlatformState.Transmitting, 10);
+							transportEntitiesInRings();
+						}
 					} else if (state == EnumRingPlatformState.Recieveing || state == EnumRingPlatformState.Transmitting) {
 						updateState(EnumRingPlatformState.Disconnecting, 20);
 					} else if (state == EnumRingPlatformState.Disconnecting) {
+						clearConnection();
 						updateState(EnumRingPlatformState.Idle, 0);
 					}
 				}
@@ -45,7 +56,6 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 	}
 
 	private void updateRendering() {
-		lastRingPosition = ringPosition;
 		if (0 > ringPosition)
 			ringPosition = 0;
 		ringPosition += nextRingPosition;
@@ -68,7 +78,23 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 		return next;
 	}
 
+	public void performConnection(Vector3 slaveObject, boolean slave) {
+		this.connectionTo = slaveObject;
+		this.isSlave = slave;
+		updateState(EnumRingPlatformState.Connecting, 20);
+	}
+
+	public void clearConnection() {
+		this.connectionTo = null;
+		this.isSlave = false;
+	}
+
+	public boolean isBusy() {
+		return state != EnumRingPlatformState.Idle;
+	}
+
 	private void updateState(EnumRingPlatformState state, int timeout) {
+		System.out.println("State change: " + state + ", t: " + timeout);
 		this.state = state;
 		this.timeout = timeout;
 		markBlockForUpdate();
@@ -103,6 +129,76 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return AxisAlignedBB.getAABBPool().getAABB(xCoord - 4, yCoord, zCoord - 4, xCoord + 4, yCoord + 7, zCoord + 4);
+	}
+
+	public void connect() {
+		ArrayList<Vector3> others = ScanningHelper.findAllTileEntitesOf(worldObj, TileEntityRingPlatform.class, xCoord,
+				yCoord, zCoord, AxisAlignedBB.getBoundingBox(-10, -yCoord, -10, 10, worldObj.getHeight(), 10));
+		for (Vector3 other : others) {
+			TileEntity at = worldObj.getBlockTileEntity(xCoord + (int) Math.floor(other.x),
+					yCoord + (int) Math.floor(other.y), zCoord + (int) Math.floor(other.z));
+			if ((at instanceof TileEntityRingPlatform) && !at.equals(this)) {
+				TileEntityRingPlatform that = (TileEntityRingPlatform) at;
+				if (!that.isBusy()) {
+					this.performConnection(other.add(xCoord, yCoord, zCoord), false);
+					that.performConnection(null, true);
+					return;
+				}
+			}
+		}
+	}
+
+	private TileEntityRingPlatform getSlave() {
+		return (TileEntityRingPlatform) worldObj.getBlockTileEntity((int) Math.floor(connectionTo.x),
+				(int) Math.floor(connectionTo.y), (int) Math.floor(connectionTo.z));
+	}
+
+	private void transportEntitiesInRings() {
+		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(this.xCoord - 2, this.yCoord, this.zCoord - 2,
+				this.xCoord + 2, this.yCoord + 3, this.zCoord + 2);
+		List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, bounds);
+		for (Entity entity : ents)
+			if (!entity.isDead && entity.ridingEntity == null)
+				entityInPortal(entity);
+
+	}
+
+	private void entityInPortal(Entity entity) {
+		System.out.println("Transmitting : " + entity.toString());
+		TileEntityRingPlatform dte = getSlave();
+		if (dte != null) {
+			System.out.println("Teleporting..");
+			while (entity.ridingEntity != null)
+				entity = entity.ridingEntity;
+			Vector3 host = new Vector3(xCoord, yCoord, zCoord);
+			Vector3 entPos = new Vector3(entity.posX, entity.posY, entity.posZ);
+			Vector3 dest = new Vector3(dte.xCoord, dte.yCoord, dte.zCoord);
+			Vector3 output = dest.add(entPos.sub(host));
+			teleportEntityAndRider(entity, output);
+		}
+	}
+
+	Entity teleportEntityAndRider(Entity entity, Vector3 destination) {
+		Entity rider = entity.riddenByEntity;
+		if (rider != null)
+			rider.mountEntity(null);
+		entity = teleportWithinDimension(entity, destination);
+		if (rider != null) {
+			rider = teleportEntityAndRider(rider, destination);
+			rider.mountEntity(entity);
+			entity.forceSpawn = false;
+		}
+		return entity;
+	}
+
+	Entity teleportWithinDimension(Entity entity, Vector3 destination) {
+		if (entity instanceof EntityPlayerMP)
+			((EntityPlayerMP) entity).setPositionAndUpdate(destination.x, destination.y, destination.z);
+		else
+			entity.setPosition(destination.x, destination.y, destination.z);
+		System.out.println("done!");
+		entity.worldObj.updateEntityWithOptionalForce(entity, false);
+		return entity;
 	}
 
 }
