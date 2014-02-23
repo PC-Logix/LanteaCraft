@@ -894,9 +894,11 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	}
 
 	public void hostBlockDestroyed() {
-		TileEntityStargateBase dte = (TileEntityStargateBase) connectedLocation.getStargateTE();
-		if (dte != null)
-			dte.clearConnection();
+		if (connectedLocation != null) {
+			TileEntityStargateBase dte = (TileEntityStargateBase) connectedLocation.getStargateTE();
+			if (dte != null)
+				dte.clearConnection();
+		}
 		clearConnection();
 		if (!worldObj.isRemote)
 			getAsStructure().disband();
