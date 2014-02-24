@@ -7,9 +7,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Blocks;
+import pcl.lc.api.internal.IModule;
 import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.containers.ContainerNaquadahGenerator;
-import pcl.lc.module.ModuleManager.Module;
+import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 
 public class ModulePower implements IModule {

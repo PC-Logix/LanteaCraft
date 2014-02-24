@@ -1,6 +1,9 @@
-package pcl.lc.module;
+package pcl.lc.api.internal;
 
 import java.util.Set;
+
+import pcl.lc.core.ModuleManager;
+import pcl.lc.core.ModuleManager.Module;
 
 public interface IModule {
 

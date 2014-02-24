@@ -61,17 +61,10 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	public final static int transientDuration = 20;
 	public final static int disconnectTime = 30;
 
-	public static int powerLevel = 0;
-
-	public static int gateOpeningsPerFuelItem = 24;
-	public static int minutesOpenPerFuelItem = 80;
 	public static int secondsToStayOpen = 5 * 60;
 	public static boolean oneWayTravel = false;
 	public static boolean closeFromEitherEnd = true;
 
-	public static int fuelPerItem;
-	public static int maxFuelBuffer;
-	public static int fuelToOpen;
 	public static int ticksToStayOpen;
 
 	public static Random random = new Random();
@@ -85,8 +78,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	private WorldLocation connectedLocation;
 	private boolean isInitiator;
 	private int timeout;
-	public int fuelBuffer;
-
 	private EnumStargateState lastState = EnumStargateState.Idle;
 
 	private double renderRingAngle, renderLastRingAngle, renderNextRingAngle;
@@ -125,14 +116,9 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	}
 
 	public static void configure(ConfigurationHelper cfg) {
-		gateOpeningsPerFuelItem = cfg.getInteger("stargate", "gateOpeningsPerFuelItem", gateOpeningsPerFuelItem);
-		minutesOpenPerFuelItem = cfg.getInteger("stargate", "minutesOpenPerFuelItem", minutesOpenPerFuelItem);
 		secondsToStayOpen = cfg.getInteger("stargate", "secondsToStayOpen", secondsToStayOpen);
 		oneWayTravel = cfg.getBoolean("stargate", "oneWayTravel", oneWayTravel);
 		closeFromEitherEnd = cfg.getBoolean("stargate", "closeFromEitherEnd", closeFromEitherEnd);
-		fuelPerItem = minutesOpenPerFuelItem * 60 * 20;
-		maxFuelBuffer = 2 * fuelPerItem;
-		fuelToOpen = fuelPerItem / gateOpeningsPerFuelItem;
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
 
@@ -158,7 +144,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 			connectedLocation = new WorldLocation(nbt.getCompoundTag("connectedLocation"));
 		isInitiator = nbt.getBoolean("isInitiator");
 		timeout = nbt.getInteger("timeout");
-		fuelBuffer = nbt.getInteger("fuelBuffer");
 
 		clearConnection();
 	}
@@ -171,7 +156,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 			nbt.setCompoundTag("connectedLocation", connectedLocation.toNBT());
 		nbt.setBoolean("isInitiator", isInitiator);
 		nbt.setInteger("timeout", timeout);
-		nbt.setInteger("fuelBuffer", fuelBuffer);
 	}
 
 	public NBTTagCompound nbtWithCoords() {
@@ -244,12 +228,18 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 			renderLastRingAngle = renderRingAngle;
 			advanceRendering();
 			if (getState() == EnumStargateState.Dialling
-					|| (getState() == EnumStargateState.Disconnecting && timeout > 0))
-				updateRingAngle();
+					|| (getState() == EnumStargateState.Disconnecting && timeout > 0)) {
+				if (timeout > 0) {
+					double da = MathUtils.diffAngle(renderRingAngle, renderNextRingAngle) / timeout;
+					setRingAngle(MathUtils.addAngle(renderRingAngle, da));
+					--timeout;
+				} else
+					setRingAngle(renderNextRingAngle);
+			}
 		} else {
 			if (getAsStructure().isValid()) {
 				if (getState() == EnumStargateState.Connected && isInitiator)
-					if (!useEnergy(1))
+					if (true || !useEnergy(1))
 						disconnect();
 
 				if (timeout > 0) {
@@ -284,6 +274,11 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 		}
 	}
 
+	private boolean useEnergy(int i) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	/**
 	 * Get the address currently dialling to.
 	 * 
@@ -307,14 +302,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 		getAsStructure().setMetadata("timeout", newTimeout);
 		getAsStructure().setMetadata("numEngagedChevrons", numEngagedChevrons);
 		timeout = newTimeout;
-		if (getState() == EnumStargateState.Dialling || getState() == EnumStargateState.Connected
-				|| getState() == EnumStargateState.InterDialling || getState() == EnumStargateState.Transient) {
-			if (!isInitiator)
-				powerLevel = 15;
-			else
-				powerLevel = 0;
-		} else if (getState() == EnumStargateState.Disconnecting || getState() == EnumStargateState.Idle)
-			powerLevel = 0;
 		if (worldObj != null)
 			worldObj.notifyBlockChange(xCoord, yCoord, zCoord, blockType.blockID);
 		onInventoryChanged();
@@ -365,7 +352,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 			return "Stargate cannot connect to itself";
 		} else if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle) {
 			return "Stargate at address " + address + " is busy";
-		} else if (!hasEnergy(fuelToOpen)) {
+		} else if (1 > getRemainingDials()) {
 			return "Stargate has insufficient fuel";
 		} else {
 			startDiallingStargate(address, dte, true);
@@ -454,7 +441,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	}
 
 	void finishDiallingAddress() {
-		if (!isInitiator || useEnergy(fuelToOpen)) {
+		if (!isInitiator || useEnergy(1)) {
 			enterState(EnumStargateState.Transient, transientDuration);
 			playSoundEffect("stargate/milkyway/milkyway_open", 1.0F, 1.0F);
 		} else
@@ -731,15 +718,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 
 	private void setRingAngle(double a) {
 		renderRingAngle = a;
-	}
-
-	private void updateRingAngle() {
-		if (timeout > 0) {
-			double da = MathUtils.diffAngle(renderRingAngle, renderNextRingAngle) / timeout;
-			setRingAngle(MathUtils.addAngle(renderRingAngle, da));
-			--timeout;
-		} else
-			setRingAngle(renderNextRingAngle);
 	}
 
 	public double[][][] getEventHorizonGrid() {

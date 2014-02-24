@@ -1,4 +1,4 @@
-package pcl.lc.module;
+package pcl.lc.core;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -7,6 +7,14 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.internal.IModule;
+import pcl.lc.module.ModuleCore;
+import pcl.lc.module.ModuleCritters;
+import pcl.lc.module.ModuleDecor;
+import pcl.lc.module.ModuleIntegration;
+import pcl.lc.module.ModulePower;
+import pcl.lc.module.ModuleStargates;
+import pcl.lc.module.ModuleWorldGenerator;
 
 public class ModuleManager {
 

@@ -10,8 +10,10 @@ import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Fluids;
 import pcl.lc.LanteaCraft.Items;
+import pcl.lc.api.internal.IModule;
 import pcl.lc.blocks.BlockOfLanteaOre;
 import pcl.lc.blocks.BlockLanteaOre;
+import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.LiquidNaquadah;
 import pcl.lc.items.ItemBlockOfLanteaOre;
@@ -20,7 +22,6 @@ import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreBlock;
 import pcl.lc.items.ItemLanteaOreIngot;
 import pcl.lc.items.ItemTokraSpawnEgg;
-import pcl.lc.module.ModuleManager.Module;
 
 public class ModuleCore implements IModule {
 

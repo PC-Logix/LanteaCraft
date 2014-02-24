@@ -14,7 +14,8 @@ import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Items;
-import pcl.lc.module.ModuleManager.Module;
+import pcl.lc.api.internal.IModule;
+import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.worldgen.FeatureUnderDesertPyramid;
 import pcl.lc.worldgen.NaquadahOreWorldGen;
 

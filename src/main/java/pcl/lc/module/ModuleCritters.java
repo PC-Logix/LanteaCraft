@@ -7,8 +7,9 @@ import java.util.logging.Level;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.internal.IModule;
+import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.entity.EntityTokra;
-import pcl.lc.module.ModuleManager.Module;
 import pcl.lc.worldgen.TradeHandler;
 
 public class ModuleCritters implements IModule {

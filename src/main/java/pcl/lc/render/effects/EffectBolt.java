@@ -21,7 +21,7 @@ public class EffectBolt {
 	private class BoltSegment {
 		public BoltVector3 start, end;
 		public BoltSegment parent, child;
-		public Vector3 idiff;
+		public Vector3 idiff, pdiff, ndiff;
 		public float isin_p, isin_n;
 		public float ilight;
 		public int n, s;
@@ -35,6 +35,15 @@ public class EffectBolt {
 			this.idiff = end.point.sub(start.point);
 		}
 
+		public void vbuild() {
+			if (parent != null) {
+				Vector3 pdn = parent.idiff.unitV();
+				Vector3 tdn = this.idiff.unitV();
+				this.pdiff = tdn.add(pdn).unitV();
+				// FIXME: label: anglePNorm (angle pre normal method missing).
+				isin_p = (float) Math.sin(tdn.anglePNorm())
+			}
+		}
 	}
 
 	private final ArrayList<BoltSegment> segments = new ArrayList<BoltSegment>();

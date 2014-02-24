@@ -4,7 +4,8 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import dan200.computer.api.ComputerCraftAPI;
-import pcl.lc.module.ModuleManager.Module;
+import pcl.lc.api.internal.IModule;
+import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.integration.ComputerCraftAgent;
 
 public class ModuleIntegration implements IModule {

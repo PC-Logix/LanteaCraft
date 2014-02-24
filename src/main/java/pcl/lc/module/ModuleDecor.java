@@ -4,12 +4,13 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import pcl.common.helpers.RegistrationHelper;
+import pcl.lc.api.internal.IModule;
 import pcl.lc.blocks.BlockLanteaDecor;
 import pcl.lc.blocks.BlockLanteaDecorDoor;
 import pcl.lc.blocks.BlockLanteaDecorStair;
+import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.items.ItemLanteaDecor;
 import pcl.lc.items.ItemLanteaDecorDoor;
-import pcl.lc.module.ModuleManager.Module;
 
 public class ModuleDecor implements IModule {
 

@@ -13,7 +13,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import pcl.lc.LanteaCraft;
-import pcl.lc.api.ILanteaDecoration;
+import pcl.lc.api.internal.ILanteaDecoration;
 import pcl.lc.blocks.BlockLanteaDecorStair;
 import pcl.lc.fluids.ItemSpecialBucket;
 import cpw.mods.fml.common.registry.GameRegistry;
