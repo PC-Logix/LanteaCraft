@@ -1,5 +1,7 @@
 package pcl.lc.tileentity;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import pcl.common.base.GenericTileEntity;
@@ -17,10 +19,17 @@ public class TileEntityStargateController extends GenericTileEntity {
 	public boolean isLinkedToStargate;
 	public int linkedX, linkedY, linkedZ;
 
+	private IInventory inventory = new InventoryBasic("Energy", false, 1);
+
 	public static void configure(ConfigurationHelper cfg) {
 		linkRangeX = cfg.getInteger("dhd", "linkRangeX", linkRangeX);
 		linkRangeY = cfg.getInteger("dhd", "linkRangeY", linkRangeY);
 		linkRangeZ = cfg.getInteger("dhd", "linkRangeZ", linkRangeZ);
+	}
+
+	@Override
+	public IInventory getInventory() {
+		return inventory;
 	}
 
 	public BlockStargateController getBlock() {

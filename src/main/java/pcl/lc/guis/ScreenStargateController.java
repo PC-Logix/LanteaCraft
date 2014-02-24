@@ -7,9 +7,7 @@ import java.util.logging.Level;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -18,6 +16,7 @@ import pcl.common.base.GenericContainer;
 import pcl.common.network.StandardModPacket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
+import pcl.lc.containers.ContainerStargateController;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
@@ -40,12 +39,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	private int ticks = 0, ticksWarning = 0;
 
 	public ScreenStargateController(TileEntityStargateController controller, EntityPlayer actor) {
-		super(new GenericContainer(0, 0) {
-			@Override
-			public void sendStateTo(ICrafting crafter) {
-
-			}
-		});
+		super(new ContainerStargateController(controller, actor), dhdWidth, dhdHeight);
 		this.controller = controller;
 		dhdLayer = LanteaCraft.getResource("textures/gui/dhd_gui.png");
 		dhdButtonLayer = LanteaCraft.getResource("textures/gui/dhd_centre.png");
@@ -204,6 +198,11 @@ public class ScreenStargateController extends GenericGlyphGUI {
 			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY, 2 * (rx + d), 0.5 * ry + d, 0, 32, 64, 32);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		}
+
+		ResourceLocation slot = LanteaCraft.getResource("textures/gui/dhd_powercrystal_slot.png");
+		bindTexture(slot, 60, 60);
+		drawTexturedRect(width / 2 + 128, dhdTop, 30, 30);
+
 	}
 
 	@Override

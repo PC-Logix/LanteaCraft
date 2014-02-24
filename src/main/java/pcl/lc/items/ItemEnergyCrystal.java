@@ -11,7 +11,10 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 
 	public ItemEnergyCrystal(int id) {
 		super(id);
+		setHasSubtypes(false);
 		setMaxStackSize(1);
+		setMaxDamage(21);
+		setNoRepair();
 	}
 
 	@Override
@@ -30,6 +33,7 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 		double actualPayload = Math.min(getMaximumEnergy() - getEnergyStored(itemStack), quantity);
 		if (!isSimulated)
 			setEnergyStored(itemStack, getEnergyStored(itemStack) + actualPayload);
+		updateDisplay(itemStack);
 		return actualPayload;
 	}
 
@@ -38,16 +42,23 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 		double actualPayload = Math.min(getEnergyStored(itemStack), quantity);
 		if (!isSimulated)
 			setEnergyStored(itemStack, getEnergyStored(itemStack) - actualPayload);
+		updateDisplay(itemStack);
 		return actualPayload;
 	}
 
 	@Override
 	public double getEnergyStored(ItemStack itemStack) {
+		updateDisplay(itemStack);
 		return itemStack.stackTagCompound.getDouble("stored-energy");
 	}
 
 	@Override
 	public void setEnergyStored(ItemStack itemStack, double value) {
+		updateDisplay(itemStack);
 		itemStack.stackTagCompound.setDouble("stored-energy", value);
+	}
+
+	private void updateDisplay(ItemStack stack) {
+		stack.setItemDamage(1 + (int) Math.floor(getEnergyStored(stack) / getMaximumEnergy()));
 	}
 }

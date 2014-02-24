@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -54,7 +53,7 @@ import pcl.lc.util.AddressingError.CoordRangeError;
 import pcl.lc.util.AddressingError.DimensionRangeError;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class TileEntityStargateBase extends TileEntityChunkLoader implements IStargateAccess, IInventory {
+public class TileEntityStargateBase extends TileEntityChunkLoader implements IStargateAccess {
 
 	public final static double transientDamageRate = 50;
 	public final static int diallingTime = 40;
@@ -101,9 +100,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	}
 
 	// END SANE CODE
-
-	IInventory inventory = new InventoryBasic("Stargate", false, 4);
-	final static int fuelSlot = 0;
 
 	double ehGrid[][][];
 
@@ -152,11 +148,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	@Override
 	public boolean isInvNameLocalized() {
 		return false;
-	}
-
-	@Override
-	public IInventory getInventory() {
-		return inventory;
 	}
 
 	@Override
@@ -258,7 +249,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 		} else {
 			if (getAsStructure().isValid()) {
 				if (getState() == EnumStargateState.Connected && isInitiator)
-					if (!useFuel(1))
+					if (!useEnergy(1))
 						disconnect();
 
 				if (timeout > 0) {
@@ -374,7 +365,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 			return "Stargate cannot connect to itself";
 		} else if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle) {
 			return "Stargate at address " + address + " is busy";
-		} else if (!reloadFuel(fuelToOpen)) {
+		} else if (!hasEnergy(fuelToOpen)) {
 			return "Stargate has insufficient fuel";
 		} else {
 			startDiallingStargate(address, dte, true);
@@ -420,58 +411,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 		startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
 	}
 
-	/**
-	 * @deprecated Move to energy API
-	 */
-	@Deprecated
-	boolean useFuel(int amount) {
-		if (reloadFuel(amount)) {
-			setFuelBuffer(fuelBuffer - amount);
-			return true;
-		} else
-			return false;
-	}
-
-	/**
-	 * @deprecated Move to energy API
-	 */
-	@Deprecated
-	boolean reloadFuel(int amount) {
-		while (fuelBuffer < amount && fuelBuffer + fuelPerItem <= maxFuelBuffer)
-			if (useFuelItem())
-				setFuelBuffer(fuelBuffer + fuelPerItem);
-			else
-				break;
-		return fuelBuffer >= amount;
-	}
-
-	/**
-	 * @deprecated Move to energy API
-	 */
-	@Deprecated
-	boolean useFuelItem() {
-		int n = getSizeInventory();
-		for (int i = n - 1; i >= 0; i--) {
-			ItemStack stack = getStackInSlot(i);
-			if (stack != null && stack.getItem() == Items.lanteaOreItem && stack.stackSize > 0) {
-				decrStackSize(i, 1);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * @deprecated Move to energy API
-	 */
-	@Deprecated
-	private void setFuelBuffer(int amount) {
-		if (fuelBuffer != amount) {
-			fuelBuffer = amount;
-			onInventoryChanged();
-		}
-	}
-
 	private Trans3 localToGlobalTransformation() {
 		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord, getBlockMetadata(), this);
 	}
@@ -515,7 +454,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	}
 
 	void finishDiallingAddress() {
-		if (!isInitiator || useFuel(fuelToOpen)) {
+		if (!isInitiator || useEnergy(fuelToOpen)) {
 			enterState(EnumStargateState.Transient, transientDuration);
 			playSoundEffect("stargate/milkyway/milkyway_open", 1.0F, 1.0F);
 		} else

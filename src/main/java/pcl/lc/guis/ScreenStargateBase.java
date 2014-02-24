@@ -9,15 +9,15 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.util.ResourceLocation;
 import pcl.common.util.ImmutablePair;
 import pcl.lc.LanteaCraft;
-import pcl.lc.containers.ContainerStargateBase;
-import pcl.lc.core.GateAddressHelper;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.util.AddressingError;
 import pcl.lc.util.AddressingError.CoordRangeError;
 import pcl.lc.util.AddressingError.DimensionRangeError;
+import pcl.common.base.GenericContainer;
 
 public class ScreenStargateBase extends GenericGlyphGUI {
 
@@ -33,7 +33,11 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 	private int clipboardAction = 0;
 
 	public ScreenStargateBase(TileEntityStargateBase entity, EntityPlayer player) {
-		super(new ContainerStargateBase(entity, player), guiWidth, guiHeight);
+		super(new GenericContainer(0, 0) {
+			@Override
+			public void sendStateTo(ICrafting crafter) {
+			}
+		});
 		te = entity;
 		background = LanteaCraft.getResource("textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png");
 	}
