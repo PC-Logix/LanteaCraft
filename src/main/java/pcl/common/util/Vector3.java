@@ -120,6 +120,15 @@ public class Vector3 {
 	}
 
 	/**
+	 * Copy the Vector3.
+	 * 
+	 * @return A copy of this Vector3.
+	 */
+	public Vector3 copy() {
+		return new Vector3(x, y, z);
+	}
+
+	/**
 	 * Adds the specified components to this Vector3, returns a new Vector3
 	 * product.
 	 * 
@@ -282,10 +291,20 @@ public class Vector3 {
 
 	/**
 	 * Computes the angle pre normal.
-	 * @param mul The other Vector3.
+	 * 
+	 * @param mul
+	 *            The other Vector3.
 	 * @return The angle pre normal.
 	 */
 	public float anglePNorm(Vector3 mul) {
 		return (float) Math.acos(dot(mul));
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Vector3))
+			return false;
+		Vector3 that = (Vector3) o;
+		return (this.x == that.x && this.y == that.y && this.z == that.z);
 	}
 }
