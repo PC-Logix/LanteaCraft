@@ -1,25 +1,37 @@
 package pcl.lc.core;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatMessageComponent;
 import pcl.common.helpers.VersionHelper;
-import pcl.common.network.ModPacket;
-import pcl.common.network.StandardModPacket;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.internal.IWorldTickHost;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
 public class CoreTickHandler implements ITickHandler {
 
-	private ArrayDeque<ModPacket> taskQueue = new ArrayDeque<ModPacket>();
 	private boolean messageSent;
+	private ArrayList<IWorldTickHost> children = new ArrayList<IWorldTickHost>();
 
-	public void putTask(ModPacket thePacket) {
-		taskQueue.add(thePacket);
+	private ReentrantLock childLock = new ReentrantLock();
+	private ArrayList<IWorldTickHost> newChildren = new ArrayList<IWorldTickHost>();
+
+	public void registerTickHost(IWorldTickHost host) {
+		try {
+			childLock.lock();
+			if (!newChildren.contains(host))
+				newChildren.add(host);
+			childLock.unlock();
+		} catch (Throwable t) {
+		} finally {
+			if (childLock.isLocked())
+				childLock.unlock();
+		}
 	}
 
 	@Override
@@ -35,6 +47,33 @@ public class CoreTickHandler implements ITickHandler {
 				}
 				messageSent = true;
 			}
+		}
+
+		if (type.equals(EnumSet.of(TickType.WORLD))) {
+			// Only allow modification of the child stack when the child input
+			// stack is not locked; don't wait to obtain the lock either.
+			if (!childLock.isLocked()) {
+				if (newChildren.size() > 0) {
+					try {
+						childLock.lock();
+						for (IWorldTickHost host : newChildren)
+							children.add(host);
+						newChildren.clear();
+						childLock.unlock();
+					} catch (Throwable t) {
+					} finally {
+						if (childLock.isLocked())
+							childLock.unlock();
+					}
+				}
+			}
+
+			for (IWorldTickHost host : children)
+				try {
+					host.tick();
+				} catch (Throwable t) {
+					LanteaCraft.getLogger().log(Level.WARNING, "Unhandled exception in IWorldTickHost.", t);
+				}
 		}
 	}
 

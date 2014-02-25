@@ -71,6 +71,7 @@ public class LanteaCraftCommonProxy {
 	private UpgradeHelper upgradeHelper;
 
 	public TileEntityChunkManager chunkManager;
+	private CoreTickHandler tickHandler = new CoreTickHandler();
 
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
@@ -109,7 +110,7 @@ public class LanteaCraftCommonProxy {
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getSpecialBucketHandler());
 		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
 		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
-		TickRegistry.registerTickHandler(new CoreTickHandler(), Side.SERVER);
+		TickRegistry.registerTickHandler(tickHandler, Side.SERVER);
 		networkHelpers.init();
 		moduleManager.init();
 	}
