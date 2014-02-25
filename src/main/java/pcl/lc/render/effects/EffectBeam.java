@@ -64,8 +64,10 @@ public class EffectBeam extends EntityFX {
 	}
 
 	public void initialize() {
-		if (0 > duration)
+		if (0 >= duration)
 			LanteaCraft.getLogger().log(Level.WARNING, "Spawned EffectBeam with no duration, this might end badly!");
+		if (0 >= duration && length != 0.0D)
+			LanteaCraft.getLogger().log(Level.WARNING, "Even worse, an animation was requested but with no duration.");
 		position = origin;
 		rotation = new Facing3(0, 0);
 		Vector3 d0, d1;
