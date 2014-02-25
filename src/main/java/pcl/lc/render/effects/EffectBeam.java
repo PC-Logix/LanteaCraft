@@ -1,9 +1,14 @@
 package pcl.lc.render.effects;
 
+import java.util.logging.Level;
+
 import org.lwjgl.opengl.GL11;
 
+import pcl.common.network.StandardModPacket;
 import pcl.common.util.Facing3;
 import pcl.common.util.Vector3;
+import pcl.lc.LanteaCraft;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.World;
@@ -24,6 +29,18 @@ public class EffectBeam extends EntityFX {
 
 	private int ticks;
 
+	public static EntityFX fromPacket(StandardModPacket spacket) {
+		World world = Minecraft.getMinecraft().theWorld;
+		Vector3 o = (Vector3) spacket.getValue("origin");
+		Vector3 d = (Vector3) spacket.getValue("destination");
+		int duration = (Integer) spacket.getValue("duration");
+		if (spacket.hasField("length")) {
+			double length = (Double) spacket.getValue("length");
+			return new EffectBeam(world, o, d, length, duration);
+		} else
+			return new EffectBeam(world, o, d, duration);
+	}
+
 	protected EffectBeam(World par1World, Vector3 origin, Vector3 destination, int duration) {
 		super(par1World, origin.x, origin.y, origin.z);
 		this.origin = origin;
@@ -32,6 +49,7 @@ public class EffectBeam extends EntityFX {
 		this.deltaVelocity = Vector3.zero;
 		this.length = delta.mag();
 		this.duration = duration;
+		initialize();
 	}
 
 	protected EffectBeam(World par1World, Vector3 origin, Vector3 destination, double length, int duration) {
@@ -42,9 +60,12 @@ public class EffectBeam extends EntityFX {
 		this.deltaVelocity = new Vector3(delta.x / duration, delta.y / duration, delta.z / duration);
 		this.length = length;
 		this.duration = duration;
+		initialize();
 	}
 
 	public void initialize() {
+		if (0 > duration)
+			LanteaCraft.getLogger().log(Level.WARNING, "Spawned EffectBeam with no duration, this might end badly!");
 		position = origin;
 		rotation = new Facing3(0, 0);
 		Vector3 d0, d1;
@@ -61,7 +82,7 @@ public class EffectBeam extends EntityFX {
 
 	@Override
 	public void onUpdate() {
-		if (ticks > duration)
+		if (duration > 0 && ticks > duration)
 			setDead();
 		if (deltaVelocity.mag() > 0)
 			position.add(deltaVelocity);

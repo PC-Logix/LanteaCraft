@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundPool;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -139,6 +140,10 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	void addScreen(Enum<?> id, Class<? extends GuiScreen> cls) {
 		registeredGUIs.put(id.ordinal(), cls);
+	}
+	
+	public void spawnEffect(EntityFX effect) {
+		Minecraft.getMinecraft().effectRenderer.addEffect(effect);
 	}
 
 	@Override
