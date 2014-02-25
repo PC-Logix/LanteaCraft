@@ -2,6 +2,7 @@ package pcl.lc.module.integration;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
@@ -103,7 +104,8 @@ public class ComputerCraftWrapperPool {
 			case 4:
 				return new Object[] { access.getLocalAddress() };
 			case 5:
-				return new Object[] { access.getState() == EnumStargateState.Dialling };
+				return new Object[] { (access.getState() == EnumStargateState.Dialling
+						|| access.getState() == EnumStargateState.Dialling || access.getState() == EnumStargateState.InterDialling) };
 			case 6:
 				return new Object[] { access.isValid() };
 			case 7:
