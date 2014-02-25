@@ -62,6 +62,32 @@ public class StandardModPacket extends ModPacket {
 	}
 
 	/**
+	 * Determines if this packet contains a field
+	 * 
+	 * @param name
+	 *            The name of the field
+	 * @return If the field exists
+	 */
+	public boolean hasField(String name) {
+		synchronized (values) {
+			return values.containsKey(name);
+		}
+	}
+
+	/**
+	 * Determines if this packet contains a field with a value not null
+	 * 
+	 * @param name
+	 *            The name of the field
+	 * @return If the field exists and contains a non null value
+	 */
+	public boolean hasFieldWithValue(String name) {
+		synchronized (values) {
+			return values.containsKey(name) && values.get(name) != null;
+		}
+	}
+
+	/**
 	 * Gets a value of a field in the packet
 	 * 
 	 * @param name
