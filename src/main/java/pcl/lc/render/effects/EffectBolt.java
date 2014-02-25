@@ -1,6 +1,7 @@
 package pcl.lc.render.effects;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import pcl.common.util.Vector3;
@@ -36,12 +37,24 @@ public class EffectBolt {
 		}
 
 		public void vbuild() {
-			if (parent != null) {
-				Vector3 pdn = parent.idiff.unitV();
+			if (this.parent != null) {
+				Vector3 pdn = this.parent.idiff.unitV();
 				Vector3 tdn = this.idiff.unitV();
 				this.pdiff = tdn.add(pdn).unitV();
-				// FIXME: label: anglePNorm (angle pre normal method missing).
-				isin_p = (float) Math.sin(tdn.anglePNorm())
+				this.isin_p = (float) Math.sin(tdn.anglePNorm(pdn.mul(-1.0D)) / 2.0F);
+			} else {
+				this.pdiff = this.idiff.unitV();
+				this.isin_p = 1.0F;
+			}
+			
+			if (this.child != null) {
+				Vector3 ndn = this.child.idiff.unitV();
+				Vector3 tdn = this.idiff.unitV();
+				this.ndiff = tdn.add(ndn).unitV();
+				this.isin_n = (float) Math.sin(tdn.anglePNorm(ndn.mul(-1.0D)) / 2.0F);
+			} else {
+				this.ndiff = this.idiff.unitV();
+				this.isin_n = 1.0F;
 			}
 		}
 	}
@@ -63,6 +76,10 @@ public class EffectBolt {
 
 		this.maxTicks = (2 + this.random.nextInt(2));
 		this.ticks = (int) (-length * 2.0D);
+	}
+	
+	private void buildAndDiff() {
+		
 	}
 
 }

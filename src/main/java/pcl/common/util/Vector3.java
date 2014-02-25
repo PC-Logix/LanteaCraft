@@ -279,4 +279,13 @@ public class Vector3 {
 	public int floorZ() {
 		return (int) Math.floor(z);
 	}
+
+	/**
+	 * Computes the angle pre normal.
+	 * @param mul The other Vector3.
+	 * @return The angle pre normal.
+	 */
+	public float anglePNorm(Vector3 mul) {
+		return (float) Math.acos(dot(mul));
+	}
 }
