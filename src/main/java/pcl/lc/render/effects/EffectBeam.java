@@ -4,6 +4,7 @@ import java.util.logging.Level;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.Facing3;
 import pcl.common.util.Vector3;
@@ -64,6 +65,7 @@ public class EffectBeam extends EntityFX {
 	}
 
 	public void initialize() {
+		LanteaCraft.getLogger().log(Level.INFO, "Spawning EffectBeam!");
 		if (0 >= duration)
 			LanteaCraft.getLogger().log(Level.WARNING, "Spawned EffectBeam with no duration, this might end badly!");
 		if (0 >= duration && length != 0.0D)
@@ -84,8 +86,11 @@ public class EffectBeam extends EntityFX {
 
 	@Override
 	public void onUpdate() {
-		if (duration > 0 && ticks > duration)
+		if (duration > 0 && ticks > duration) {
+			LanteaCraft.getLogger().log(Level.INFO, "EffectBeam is now dead.");
 			setDead();
+			return;
+		}
 		if (deltaVelocity.mag() > 0)
 			position.add(deltaVelocity);
 		ticks++;
@@ -93,16 +98,38 @@ public class EffectBeam extends EntityFX {
 
 	public void renderParticle(Tessellator tessellator, float partialTicks, float playerYawC, float playerPitchC,
 			float playerYawS, float f4, float f5) {
-		Vector3 renderOrigin = position.copy().add(deltaVelocity.mul(partialTicks));
-		GL11.glPushMatrix();
-		GL11.glTranslated(renderOrigin.x, renderOrigin.y, renderOrigin.z);
-		GL11.glRotated(rotation.yaw, 1, 0, 0);
-		GL11.glRotated(rotation.pitch, 0, 1, 0);
+		tessellator.draw();
 
-		GL11.glDisable(GL11.GL_LIGHTING);
+		Vector3 renderOrigin = position.copy().add(deltaVelocity.mul(partialTicks));
+
+		GL11.glPushMatrix();
+		//GL11.glLoadIdentity();
+		//GL11.glTranslated(renderOrigin.x, renderOrigin.y, renderOrigin.z);
+		System.out.println(String.format("RenderAt: %s %s %s", renderOrigin.x, renderOrigin.y, renderOrigin.z));
+		Minecraft.getMinecraft().renderEngine.bindTexture(LanteaCraft.getResource("textures/models/transport_rings_"
+				+ LanteaCraft.getProxy().getRenderMode() + ".png"));
+
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glBegin(GL11.GL_QUADS);
 
+		GL11.glTexCoord2d(0, 0);
+		GL11.glVertex3d(0, 0, 0);
+
+		GL11.glTexCoord2d(1, 0);
+		GL11.glVertex3d(32, 0, 0);
+
+		GL11.glTexCoord2d(1, 1);
+		GL11.glVertex3d(32, 32, 0);
+
+		GL11.glTexCoord2d(0, 1);
+		GL11.glVertex3d(0, 32, 0);
+
 		GL11.glEnd();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glPopMatrix();
+
+		// Minecraft.getMinecraft().renderEngine.bindTexture(UtilsFX.getParticleTexture());
+
+		tessellator.startDrawingQuads();
 	}
 }

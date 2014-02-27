@@ -239,7 +239,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 		} else {
 			if (getAsStructure().isValid()) {
 				if (getState() == EnumStargateState.Connected && isInitiator)
-					if (true || !useEnergy(1))
+					if (!useEnergy(1))
 						disconnect();
 
 				if (timeout > 0) {
@@ -276,7 +276,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 
 	private boolean useEnergy(int i) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	/**
@@ -884,20 +884,17 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 
 	@Override
 	public double getAvailableEnergy() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 99999.0d;
 	}
 
 	@Override
 	public double getRemainingDials() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	@Override
 	public double getRemainingConnectionTime() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 99999.0d;
 	}
 
 	@Override

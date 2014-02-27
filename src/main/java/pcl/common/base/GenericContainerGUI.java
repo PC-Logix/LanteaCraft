@@ -38,10 +38,7 @@ public abstract class GenericContainerGUI extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
-		GL11.glPushMatrix();
-		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
 		drawBackgroundLayer(partialTickCount, mouseX, mouseY);
-		GL11.glPopMatrix();
 	}
 
 	protected abstract void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY);

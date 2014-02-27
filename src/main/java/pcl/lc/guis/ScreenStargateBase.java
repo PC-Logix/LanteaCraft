@@ -6,6 +6,7 @@ import java.awt.datatransfer.StringSelection;
 import java.util.logging.Level;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +34,7 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 	private int clipboardAction = 0;
 
 	public ScreenStargateBase(TileEntityStargateBase entity, EntityPlayer player) {
-		super(new GenericContainer(0, 0) {
+		super(new GenericContainer(guiWidth, guiHeight) {
 			@Override
 			public void sendStateTo(ICrafting crafter) {
 			}
@@ -70,8 +71,11 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 
 	@Override
 	public void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
+		GL11.glPushMatrix();
+		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
 		bindTexture(background, 256, 256);
 		drawTexturedRect(0, 0, guiWidth, guiHeight, 0, 0);
+		GL11.glPopMatrix();
 	}
 
 	@Override

@@ -28,14 +28,13 @@ public class ItemDebugTool extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	/**
-	 * Callback for item usage. If the item does something special on right clicking, he will
-	 * have one of those. Return True if something happen and false if it don't. This is for
-	 * ITEMS, not BLOCKS
+	 * Callback for item usage. If the item does something special on right
+	 * clicking, he will have one of those. Return True if something happen and
+	 * false if it don't. This is for ITEMS, not BLOCKS
 	 */
 	@Override
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4,
@@ -50,8 +49,13 @@ public class ItemDebugTool extends Item {
 		if (entity instanceof TileEntityStargateBase) {
 			TileEntityStargateBase base = (TileEntityStargateBase) entity;
 			par2EntityPlayer.addChatMessage("type: TileEntityStargateBase");
-			par2EntityPlayer.addChatMessage("isValid: " + (base.getAsStructure().isValid() ? "yes" : "no"));
-			par2EntityPlayer.addChatMessage("partCount: " + base.getAsStructure().getPartCount());
+			par2EntityPlayer.addChatMessage("mValid: " + (base.getAsStructure().isValid() ? "yes" : "no"));
+			par2EntityPlayer.addChatMessage("mRotation: " + base.getAsStructure().getOrientation());
+			par2EntityPlayer.addChatMessage("mPartCount: " + base.getAsStructure().getPartCount());
+			par2EntityPlayer.addChatMessage("wValid: "
+					+ ((base.getAsStructure().isValidStructure(par3World, par4, par5, par6)) ? "yes" : "no"));
+			if (base.getState() != null)
+				par2EntityPlayer.addChatMessage("mState: " + base.getState());
 		} else if (entity instanceof TileEntityStargateRing) {
 			TileEntityStargateRing ring = (TileEntityStargateRing) entity;
 			par2EntityPlayer.addChatMessage("type: TileEntityStargateBase");
@@ -61,7 +65,7 @@ public class ItemDebugTool extends Item {
 			par2EntityPlayer.addChatMessage("type: TileEntityStargateController");
 			par2EntityPlayer.addChatMessage("isLinkedToBase: " + (controller.isLinkedToStargate ? "yes" : "no"));
 		}
-		
+
 		if (entity instanceof TileEntityNaquadahGenerator) {
 			TileEntityNaquadahGenerator generator = (TileEntityNaquadahGenerator) entity;
 			par2EntityPlayer.addChatMessage("type: TileEntityNaquadahGenerator");
