@@ -34,7 +34,6 @@ import pcl.lc.network.ClientPacketHandler;
 import pcl.lc.network.ServerPacketHandler;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
-import pcl.lc.worldgen.FeatureGeneration;
 import pcl.lc.worldgen.NaquadahOreWorldGen;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -145,7 +144,6 @@ public class LanteaCraftCommonProxy {
 
 	public void onInitMapGen(InitMapGenEvent e) {
 		LanteaCraft.getLogger().log(Level.FINE, "InitMapGenEvent fired");
-		FeatureGeneration.onInitMapGen(e);
 	}
 
 	void configure() {
