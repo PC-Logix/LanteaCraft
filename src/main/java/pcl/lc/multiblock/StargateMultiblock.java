@@ -19,6 +19,7 @@ import pcl.lc.tileentity.TileEntityStargateRing;
 public class StargateMultiblock extends GenericMultiblock {
 
 	private int rotation;
+	private boolean modified = false;
 
 	private int[][] stargateModel = { { 1, 2, 1, 3, 1, 2, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 2, 1, 2, 1, 2, 1 } };
@@ -30,6 +31,10 @@ public class StargateMultiblock extends GenericMultiblock {
 	@Override
 	public void tick() {
 		super.tick();
+		if (!isClient && modified) {
+			modified = !modified;
+			host.getDescriptionPacket();
+		}
 	}
 
 	/**
@@ -180,6 +185,7 @@ public class StargateMultiblock extends GenericMultiblock {
 				}
 			LanteaCraft.getLogger().log(Level.FINE, "Merged in orientation EAST-WEST OK");
 			structureOrientation = EnumOrientations.EAST_WEST;
+			modified = true;
 			return true;
 		}
 
@@ -200,6 +206,7 @@ public class StargateMultiblock extends GenericMultiblock {
 				}
 			LanteaCraft.getLogger().log(Level.FINE, "Merged in orientation NORTH-SOUTH OK");
 			structureOrientation = EnumOrientations.NORTH_SOUTH;
+			modified = true;
 			return true;
 		}
 
@@ -215,7 +222,7 @@ public class StargateMultiblock extends GenericMultiblock {
 		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
 			part.getValue().release();
 		structureParts.clear();
-
+		modified = true;
 	}
 
 	@Override
