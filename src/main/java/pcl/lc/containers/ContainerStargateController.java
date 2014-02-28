@@ -28,7 +28,7 @@ public class ContainerStargateController extends GenericContainer {
 		super(256, 208);
 		this.te = te;
 		addSlotToContainer(new Slot(te, 0, 1, 1));
-		addPlayerSlots(player, playerSlotsX, playerSlotsY);
+		//addPlayerSlots(player, playerSlotsX, playerSlotsY);
 	}
 
 	@Override

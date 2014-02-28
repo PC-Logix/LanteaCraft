@@ -1,5 +1,7 @@
 package pcl.lc.guis;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import pcl.common.base.GenericContainerGUI;
@@ -29,10 +31,13 @@ public class ScreenNaquadahGenerator extends GenericContainerGUI {
 
 	@Override
 	protected void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
+		GL11.glPushMatrix();
+		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
 		bindTexture(background, 256, 256);
 		drawTexturedRectUV(0, 0, 177, 208, 0, 0, 177d / 256d, 208d / 256d);
 		drawTexturedRectUV(48, 96, (80d * (tileEntity.displayEnergy / 100d)) / 100d, 11, 176d / 256d, 0,
 				(80d * (tileEntity.displayEnergy / 100d)) / 100d / 256d, 11d / 256d);
+		GL11.glPopMatrix();
 	}
 
 	@Override
