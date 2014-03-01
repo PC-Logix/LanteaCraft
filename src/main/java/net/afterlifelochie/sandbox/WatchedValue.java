@@ -99,4 +99,10 @@ public class WatchedValue<T extends Object> extends Observable {
 		return this.get().equals(o);
 	}
 
+	@Override
+	public String toString() {
+		return new StringBuilder().append("WatchedValue: { ")
+				.append((this.get() != null) ? this.get().toString() : "null").append(" }").toString();
+	}
+
 }

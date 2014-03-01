@@ -3,6 +3,8 @@ package net.afterlifelochie.sandbox;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Represents a list with assigned key-value pairs which is Observable. Adding
@@ -58,7 +60,7 @@ public class WatchedList<A, B> extends Observable {
 		this.key_add = new ArrayList<A>();
 		this.key_remove = new ArrayList<A>();
 	}
-	
+
 	@Override
 	public void clearModified() {
 		super.clearModified();
@@ -71,6 +73,27 @@ public class WatchedList<A, B> extends Observable {
 	 */
 	public B get(A key) {
 		return values.get(key);
+	}
+
+	/**
+	 * @see {@link HashMap#entrySet()}
+	 */
+	public Set<Entry<A, B>> entrySet() {
+		return values.entrySet();
+	}
+
+	/**
+	 * @return The iterator of all values.
+	 */
+	public Iterator<B> values() {
+		return values.values().iterator();
+	}
+
+	/**
+	 * @return The iterator of all keys.
+	 */
+	public Iterator<A> keys() {
+		return values.keySet().iterator();
 	}
 
 	/**
