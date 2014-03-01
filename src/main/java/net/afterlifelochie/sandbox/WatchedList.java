@@ -58,6 +58,13 @@ public class WatchedList<A, B> extends Observable {
 		this.key_add = new ArrayList<A>();
 		this.key_remove = new ArrayList<A>();
 	}
+	
+	@Override
+	public void clearModified() {
+		super.clearModified();
+		this.key_add.clear();
+		this.key_remove.clear();
+	}
 
 	/**
 	 * @see {@link HashMap#get(Object)}

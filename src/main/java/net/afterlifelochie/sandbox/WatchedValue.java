@@ -45,6 +45,12 @@ public class WatchedValue<T extends Object> extends Observable {
 		this.value = initial;
 	}
 
+	@Override
+	public void clearModified() {
+		super.clearModified();
+		this.last = 0;
+	}
+
 	/**
 	 * Gets the value of this WatchedValue at the moment of invocation.
 	 */

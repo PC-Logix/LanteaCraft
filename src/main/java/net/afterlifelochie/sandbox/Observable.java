@@ -41,7 +41,8 @@ public class Observable {
 	}
 
 	/**
-	 * Resets the state of this Observable.
+	 * Resets the state of this Observable. If the Observable has any meta-data
+	 * about the change in the Observable state, it should also be reset.
 	 */
 	public void clearModified() {
 		this.modified = false;
