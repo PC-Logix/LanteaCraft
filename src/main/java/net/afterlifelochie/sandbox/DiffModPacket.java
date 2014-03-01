@@ -1,0 +1,77 @@
+package net.afterlifelochie.sandbox;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.HashMap;
+
+import net.minecraft.network.packet.Packet250CustomPayload;
+import pcl.common.network.ModPacket;
+
+
+/**
+ * Packet to calculate and send Observable state changes.
+ * 
+ * @author AfterLifeLochie
+ */
+public class DiffModPacket extends ModPacket {
+
+	private enum EnumOperation { 
+		ADD, REMOVE, MODIFY;
+	}
+	
+	public static DiffModPacket createPacket(DataInputStream data) throws IOException {
+		DiffModPacket pkt = new DiffModPacket();
+		pkt.unpack(data);
+		return pkt;
+	}
+
+	public static DiffModPacket createPacket(WatchedList<?, ?> list) {
+		DiffModPacket pkt = new DiffModPacket();
+		pkt.pack(list);
+		return pkt;
+	}
+
+	private HashMap<String, Object> metadata;
+	private volatile boolean forServer;
+
+	private void unpack(DataInputStream data) {
+		// TODO Auto-generated method stub
+	}
+
+	private void pack(WatchedList<?, ?> list) {
+		// TODO Auto-generated method stub
+	}
+	
+	public void setMetadata(String key, Object value) {
+		this.metadata.put(key, value);
+	}
+	
+	public Object getMetadata(String key) {
+		return this.metadata.get(key);
+	}
+	
+	public boolean hasMetadata() {
+		return this.metadata.size() > 0;
+	}
+	
+	public boolean hasMetadataField(String key) {
+		return this.metadata.containsKey(key);
+	}
+
+	@Override
+	public boolean getPacketIsForServer() {
+		return forServer;
+	}
+
+	@Override
+	public Packet250CustomPayload toPacket() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getType() {
+		return "DiffModPacket";
+	}
+
+}
