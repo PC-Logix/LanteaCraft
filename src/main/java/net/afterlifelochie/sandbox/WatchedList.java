@@ -1,9 +1,14 @@
 package net.afterlifelochie.sandbox;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
- * Represents a list with assigned key-value pairs which is Observable.
+ * Represents a list with assigned key-value pairs which is Observable. Adding
+ * and removing of key-pair values does not guarantee garbage-collection until
+ * the key additions and removals have been acknowledged by any Observable
+ * observer.
  * 
  * @author AfterLifeLochie
  * 
@@ -20,11 +25,25 @@ public class WatchedList<A, B> extends Observable {
 	private HashMap<A, B> values;
 
 	/**
+	 * The map of all keys added this Observable session. As B values may not be
+	 * Observable themselves, we must keep a record of changes from the outside.
+	 */
+	private ArrayList<A> key_add;
+	/**
+	 * The map of all keys removed this Observable session. As B values may not
+	 * be Observable themselves, we must keep a record of changes from the
+	 * outside.
+	 */
+	private ArrayList<A> key_remove;
+
+	/**
 	 * Creates a new WatchedList.
 	 */
 	public WatchedList() {
 		super(null);
 		this.values = new HashMap<A, B>();
+		this.key_add = new ArrayList<A>();
+		this.key_remove = new ArrayList<A>();
 	}
 
 	/**
@@ -36,6 +55,8 @@ public class WatchedList<A, B> extends Observable {
 	public WatchedList(Observable parent) {
 		super(parent);
 		this.values = new HashMap<A, B>();
+		this.key_add = new ArrayList<A>();
+		this.key_remove = new ArrayList<A>();
 	}
 
 	/**
@@ -50,6 +71,10 @@ public class WatchedList<A, B> extends Observable {
 	 */
 	public B set(A key, B value) {
 		this.modify();
+		// Operation SET(A, B) will create key A if it does not exist already;
+		// reflect this in key_add list if key_add has no such key A.
+		if (!values.containsKey(key) && !key_add.contains(key))
+			key_add.add(key);
 		return values.put(key, value);
 	}
 
@@ -65,6 +90,11 @@ public class WatchedList<A, B> extends Observable {
 	 */
 	public B remove(A key) {
 		this.modify();
+		// Operation REMOVE(A) will remove key A with value B if key A exists
+		// already; reflect this in key_remove list if key_remove has no such
+		// key A.
+		if (values.containsKey(key) && !key_remove.contains(key))
+			key_remove.add(key);
 		return values.remove(key);
 	}
 
@@ -73,7 +103,31 @@ public class WatchedList<A, B> extends Observable {
 	 */
 	public void clear() {
 		this.modify();
+		// Operation CLEAR() will remove all key A with value B; reflect this in
+		// key_remove list if key_remove has no duplicates of each(key A).
+		Iterator<A> of = values.keySet().iterator();
+		while (of.hasNext()) {
+			A next = of.next();
+			if (!key_remove.contains(next))
+				key_remove.add(next);
+		}
 		values.clear();
+	}
+
+	/**
+	 * Gets the history of all key values which have been added this Observable
+	 * session.
+	 */
+	public ArrayList<A> added() {
+		return key_add;
+	}
+
+	/**
+	 * Gets the history of all key values which have been removed this
+	 * Observable session.
+	 */
+	public ArrayList<A> removed() {
+		return key_remove;
 	}
 
 }
