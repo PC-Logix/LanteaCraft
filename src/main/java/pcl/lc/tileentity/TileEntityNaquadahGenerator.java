@@ -150,7 +150,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 	}
 
 	public void refuel() {
-		if (maxEnergy > energy)
+		if (isEnabled() && maxEnergy > energy)
 			for (int i = 0; i < 4; i++) {
 				ItemStack stackOf = inventory.getStackInSlot(i);
 				if (stackOf != null && stackOf.stackSize > 0) {
@@ -166,7 +166,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 				}
 			}
 
-		if (maxEnergy > (energy + 0.1) && tank.getFluidAmount() > 100)
+		if (isEnabled() && maxEnergy > (energy + 0.1) && tank.getFluidAmount() > 100)
 			if (tank.drain(100, false).amount == 100) {
 				tank.drain(100, true);
 				energy += 0.1;
