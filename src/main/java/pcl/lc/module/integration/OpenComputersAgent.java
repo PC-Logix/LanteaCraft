@@ -5,10 +5,10 @@ import java.util.logging.Level;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
+import pcl.lc.api.IStargateControllerAccess;
 import net.minecraft.world.World;
 import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.network.ManagedEnvironment;
-
 
 
 public class OpenComputersAgent implements Block {
@@ -24,6 +24,7 @@ public class OpenComputersAgent implements Block {
 			return;
 		}
 	}
+	
 	@Override
 	public boolean worksWith(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
@@ -40,6 +41,9 @@ public class OpenComputersAgent implements Block {
 		} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
 			INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
 			return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
+		} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
+			IStargateControllerAccess dhd = (IStargateControllerAccess) world.getBlockTileEntity(x, y, z);
+			return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
 		} else
 			throw new RuntimeException("Driver.Block handler specified invalid typeof!");
 	}
