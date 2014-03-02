@@ -10,12 +10,13 @@ public class FilterRule {
 	private ArrayList<ItemStack> deny = new ArrayList<ItemStack>();
 
 	private boolean whitelist;
+	private boolean observeMetadata;
 
 	/**
 	 * Creates a blank FilterRule.
 	 */
 	public FilterRule() {
-		new FilterRule(null, null, false);
+		new FilterRule(null, null, false, true);
 	}
 
 	/**
@@ -27,12 +28,12 @@ public class FilterRule {
 	 *            The list of deny rules
 	 */
 	public FilterRule(ItemStack[] accept, ItemStack[] deny) {
-		new FilterRule(accept, deny, false);
+		new FilterRule(accept, deny, false, true);
 	}
 
 	/**
-	 * Creates a new FilterRule with the provided Lists of accept and deny rules, and a given
-	 * mode
+	 * Creates a new FilterRule with the provided Lists of accept and deny
+	 * rules, and a given mode
 	 * 
 	 * @param accept
 	 *            The list of accept rules
@@ -40,8 +41,10 @@ public class FilterRule {
 	 *            The list of deny rules
 	 * @param whitelist
 	 *            If this FilterRule is a white-list rule-set
+	 * @param metadata
+	 *            If this FilterRule is metadata sensitive.
 	 */
-	public FilterRule(ItemStack[] accept, ItemStack[] deny, boolean whitelist) {
+	public FilterRule(ItemStack[] accept, ItemStack[] deny, boolean whitelist, boolean metadata) {
 		if (accept != null)
 			for (ItemStack item : accept)
 				this.accept.add(new ItemStack(item.getItem(), 1));
@@ -49,10 +52,12 @@ public class FilterRule {
 			for (ItemStack item : deny)
 				this.deny.add(new ItemStack(item.getItem(), 1));
 		this.whitelist = whitelist;
+		this.observeMetadata = metadata;
 	}
 
 	/**
-	 * Adds an item to the accept list. This also removes the item from the deny list.
+	 * Adds an item to the accept list. This also removes the item from the deny
+	 * list.
 	 * 
 	 * @param item
 	 *            The item to accept
@@ -63,7 +68,8 @@ public class FilterRule {
 	}
 
 	/**
-	 * Adds an item to the deny list. This also removes the item from the accept list.
+	 * Adds an item to the deny list. This also removes the item from the accept
+	 * list.
 	 * 
 	 * @param item
 	 *            The item to deny
@@ -95,8 +101,8 @@ public class FilterRule {
 	}
 
 	/**
-	 * Tests an ItemStack of any size to see if the underlying Item is permitted in this
-	 * particular rule-set.
+	 * Tests an ItemStack of any size to see if the underlying Item is permitted
+	 * in this particular rule-set.
 	 * 
 	 * @param testing
 	 *            The ItemStack to test
@@ -107,14 +113,22 @@ public class FilterRule {
 			return true;
 		if (whitelist) {
 			for (ItemStack s : accept)
-				if (s.isItemEqual(testing))
+				if (isItemVirtuallyEqual(s, testing))
 					return true;
 			return false;
 		} else {
 			for (ItemStack s : deny)
-				if (s.isItemEqual(testing))
+				if (isItemVirtuallyEqual(s, testing))
 					return false;
 			return true;
 		}
+	}
+	
+	private boolean isItemVirtuallyEqual(ItemStack a, ItemStack b) {
+		if (a.itemID != b.itemID)
+			return false;
+		if (observeMetadata && a.getItemDamage() != b.getItemDamage())
+			return false;
+		return true;
 	}
 }

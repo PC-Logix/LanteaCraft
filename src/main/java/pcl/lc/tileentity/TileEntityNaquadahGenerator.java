@@ -22,6 +22,7 @@ import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.fluids.SpecialFluidTank;
+import pcl.lc.items.ItemEnergyCrystal;
 
 public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler, INaquadahGeneratorAccess {
 
@@ -37,7 +38,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 
 	private boolean addedToEnergyNet = false;
 
-	private FilteredInventory inventory = new FilteredInventory(4) {
+	private FilteredInventory inventory = new FilteredInventory(5) {
 		@Override
 		public void onInventoryChanged() {
 			// TODO Auto-generated method stub
@@ -76,9 +77,12 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 	public TileEntityNaquadahGenerator() {
 		super();
 		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.lanteaOreItem, 1) },
-				null, true);
+				null, true, true);
+		FilterRule energyCrystal = new FilterRule(
+				new ItemStack[] { new ItemStack(LanteaCraft.Items.energyCrystal, 1) }, null, true, false);
 		for (int i = 0; i < 4; i++)
 			inventory.setFilterRule(i, naquadah);
+		inventory.setFilterRule(4, energyCrystal);
 	}
 
 	@Override
@@ -150,7 +154,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 	}
 
 	public void refuel() {
-		if (isEnabled() && maxEnergy > energy)
+		if (isEnabled() && maxEnergy > energy + 1.0d)
 			for (int i = 0; i < 4; i++) {
 				ItemStack stackOf = inventory.getStackInSlot(i);
 				if (stackOf != null && stackOf.stackSize > 0) {
@@ -162,7 +166,6 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 						inventory.setInventorySlotContents(i, null);
 					energy += 1.0;
 					stateChanged();
-					return;
 				}
 			}
 
@@ -171,8 +174,16 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 				tank.drain(100, true);
 				energy += 0.1;
 				stateChanged();
-				return;
 			}
+
+		if (isEnabled() && inventory.getStackInSlot(4) != null) {
+			ItemStack stack = inventory.getStackInSlot(4);
+			ItemEnergyCrystal crystal = (ItemEnergyCrystal) stack.getItem();
+			if (crystal.getMaximumEnergy() > crystal.getEnergyStored(stack) && energy > 0.01d) {
+				double used = crystal.receiveEnergy(stack, 0.01d, false);
+				energy -= used;
+			}
+		}
 	}
 
 	@Override

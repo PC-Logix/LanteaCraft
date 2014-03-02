@@ -22,6 +22,7 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 		addSlotToContainer(new FilteredSlot(filterInventory, 1, 26, 94, false));
 		addSlotToContainer(new FilteredSlot(filterInventory, 2, 134, 94, false));
 		addSlotToContainer(new FilteredSlot(filterInventory, 3, 152, 94, false));
+		addSlotToContainer(new FilteredSlot(filterInventory, 4, 79, 14, false));
 		addPlayerSlots(player, 8, 123);
 	}
 
@@ -42,12 +43,12 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int i, int value) {
 		switch (i) {
-			case 0:
-				te.displayEnergy = value;
-				break;
-			case 1:
-				te.displayTankVolume = value;
-				break;
+		case 0:
+			te.displayEnergy = value;
+			break;
+		case 1:
+			te.displayTankVolume = value;
+			break;
 		}
 	}
 
