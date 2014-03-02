@@ -43,6 +43,12 @@ public class ModuleStargates implements IModule {
 
 	@Override
 	public void preInit() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void init() {
 		Blocks.stargateRingBlock = RegistrationHelper.registerBlock(BlockStargateRing.class, ItemStargateRing.class,
 				"stargateRing");
 		Blocks.stargateBaseBlock = RegistrationHelper.registerBlock(BlockStargateBase.class, "stargateBase");
@@ -80,10 +86,6 @@ public class ModuleStargates implements IModule {
 		RegistrationHelper.newRecipe(new ItemStack(Items.controllerCrystal, 1), "roo", "odr", "oor", 'o',
 				new ItemStack(Item.dyePowder, 1, 14), 'r', Item.redstone, 'd', Item.diamond);
 
-	}
-
-	@Override
-	public void init() {
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateController.ordinal(),
 				ContainerStargateController.class);
 	}
