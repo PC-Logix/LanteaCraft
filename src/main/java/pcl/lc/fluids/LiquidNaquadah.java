@@ -5,7 +5,7 @@ import net.minecraftforge.fluids.Fluid;
 public class LiquidNaquadah extends Fluid {
 
 	public LiquidNaquadah() {
-		super("Liquid Naquadah");
+		super("liquid_naquadah");
 		setDensity(10);
 		setViscosity(1000);
 	}
