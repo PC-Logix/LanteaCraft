@@ -23,14 +23,11 @@ public class OpenComputersAgent implements Block {
 		int id = world.getBlockId(x, y, z);
 		if (id == LanteaCraft.Blocks.stargateBaseBlock.blockID) {
 			IStargateAccess base = (IStargateAccess) world.getBlockTileEntity(x, y, z);
-			System.out.println("ManagedEnvrionment SGBase");
 			return new OpenComputersWrapperPool.StargateAccessWrapper(base);
 		} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
 			INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
-			System.out.println("ManagedEnvrionment Generator");
 			return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
 		} else
-			System.out.println("ZOMGERROR!");
 			throw new RuntimeException("Driver.Block handler specified invalid typeof!");
 	}
 
