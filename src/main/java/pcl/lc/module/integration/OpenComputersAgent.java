@@ -8,7 +8,9 @@ import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.network.ManagedEnvironment;
 
 public class OpenComputersAgent implements Block {
-
+	public OpenComputersAgent() {
+		li.cil.oc.api.Driver.add(this);
+	}
 	@Override
 	public boolean worksWith(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
@@ -21,11 +23,14 @@ public class OpenComputersAgent implements Block {
 		int id = world.getBlockId(x, y, z);
 		if (id == LanteaCraft.Blocks.stargateBaseBlock.blockID) {
 			IStargateAccess base = (IStargateAccess) world.getBlockTileEntity(x, y, z);
+			System.out.println("ManagedEnvrionment SGBase");
 			return new OpenComputersWrapperPool.StargateAccessWrapper(base);
 		} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
 			INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
+			System.out.println("ManagedEnvrionment Generator");
 			return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
 		} else
+			System.out.println("ZOMGERROR!");
 			throw new RuntimeException("Driver.Block handler specified invalid typeof!");
 	}
 
