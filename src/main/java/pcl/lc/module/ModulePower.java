@@ -30,13 +30,12 @@ public class ModulePower implements IModule {
 		Blocks.naquadahGenerator = (BlockNaquadahGenerator) RegistrationHelper.registerBlock(BlockNaquadahGenerator.class,
 				"naquadahGenerator");
 		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class, "tileEntityNaquadahGenerator");
-		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ContainerNaquadahGenerator.class);
-
 	}
 
 	@Override
 	public void init() {
-
+		
+		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ContainerNaquadahGenerator.class);
 
 	}
 

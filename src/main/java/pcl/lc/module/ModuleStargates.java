@@ -80,14 +80,12 @@ public class ModuleStargates implements IModule {
 		RegistrationHelper.newRecipe(new ItemStack(Items.controllerCrystal, 1), "roo", "odr", "oor", 'o',
 				new ItemStack(Item.dyePowder, 1, 14), 'r', Item.redstone, 'd', Item.diamond);
 
-		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateController.ordinal(),
-				ContainerStargateController.class);
-
 	}
 
 	@Override
 	public void init() {
-
+		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateController.ordinal(),
+				ContainerStargateController.class);
 	}
 
 	@Override
