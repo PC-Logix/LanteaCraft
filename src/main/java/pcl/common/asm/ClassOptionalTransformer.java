@@ -13,9 +13,10 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 /**
- * Takes {@link ClassOptional} optional rules in a load-time binary base class and evaluates
- * them. This removes interfaces and methods from the class provided if the interfaces and
- * methods meet the criteria specified in the {@link ClassOptional} rules.
+ * Takes {@link ClassOptional} optional rules in a load-time binary base class
+ * and evaluates them. This removes interfaces and methods from the class
+ * provided if the interfaces and methods meet the criteria specified in the
+ * {@link ClassOptional} rules.
  * 
  * @author AfterLifeLochie
  */
@@ -38,12 +39,12 @@ public class ClassOptionalTransformer implements IClassTransformer {
 		methodQueue.clear();
 
 		// Figure out if there are any visible annotations
-		if (classNode.visibleAnnotations != null)
+		if (classNode.visibleAnnotations != null) {
 			for (AnnotationNode a : classNode.visibleAnnotations) {
 				// Annotation belongs to a ClassFilterInterfaceList, iterate
 				if (a.desc.equals("Lpcl/common/asm/ClassOptional$ClassFilterInterfaceList;")) {
 					PCLCoreTransformerPlugin.getLogger().log(Level.FINE,
-							"Found ClassFilterInterface annotation data, processing...");
+							"Found ClassFilterInterfaceList annotation data, processing...");
 					int j = a.values.indexOf("value");
 					ArrayList<AnnotationNode> nodes = (ArrayList<AnnotationNode>) a.values.get(j + 1);
 					// Annotation child is a single ClassFilterInterface, queue
@@ -54,6 +55,7 @@ public class ClassOptionalTransformer implements IClassTransformer {
 							interfaceQueue.add(iface);
 					}
 				}
+
 				// Annotation is a single ClassFilterInterface, queue
 				if (a.desc.equals("Lpcl/common/asm/ClassOptional$ClassFilterInterface;")) {
 					PCLCoreTransformerPlugin.getLogger().log(Level.FINE,
@@ -63,14 +65,42 @@ public class ClassOptionalTransformer implements IClassTransformer {
 					if (!classExists(classname))
 						interfaceQueue.add(iface);
 				}
+
+				// Annotation belongs to a ClassFilterInterfaceSelfList, iterate
+				if (a.desc.equals("Lpcl/common/asm/ClassOptional$ClassFilterInterfaceSelfList;")) {
+					PCLCoreTransformerPlugin.getLogger().log(Level.FINE,
+							"Found ClassFilterInterfaceSelfList annotation data, processing...");
+					int j = a.values.indexOf("value");
+					ArrayList<AnnotationNode> nodes = (ArrayList<AnnotationNode>) a.values.get(j + 1);
+					// Annotation child is a single ClassFilterInterfaceSelf,
+					// queue
+					for (AnnotationNode node : nodes) {
+						int k = node.values.indexOf("iface");
+						String classname = (String) node.values.get(k + 1);
+						if (!classExists(classname))
+							interfaceQueue.add(classname);
+					}
+				}
+
+				// Annotation is a single ClassFilterInterfaceSelf, queue
+				if (a.desc.equals("Lpcl/common/asm/ClassOptional$ClassFilterInterfaceSelf;")) {
+					PCLCoreTransformerPlugin.getLogger().log(Level.FINE,
+							"Found ClassFilterInterfaceSelf annotation data, processing...");
+					int k = a.values.indexOf("iface");
+					String classname = (String) a.values.get(k + 1);
+					if (!classExists(classname))
+						interfaceQueue.add(classname);
+				}
 			}
+		}
 
 		// Figure out if there are any methods
 		if (classNode.methods != null)
 			for (MethodNode n : classNode.methods)
 				if (n.visibleAnnotations != null)
-					for (AnnotationNode a : n.visibleAnnotations)
-						// Annotation on method is a single ClassFilterMethod, queue
+					for (AnnotationNode a : n.visibleAnnotations) {
+						// Annotation on method is a single ClassFilterMethod,
+						// queue
 						if (a.desc.equals("Lpcl/common/asm/ClassOptional$ClassFilterMethod;")) {
 							PCLCoreTransformerPlugin.getLogger().log(Level.FINE,
 									"Found ClassFilterMethod annotation data, processing...");
@@ -79,6 +109,7 @@ public class ClassOptionalTransformer implements IClassTransformer {
 							if (!classExists(classname))
 								methodQueue.add(n.name + n.desc);
 						}
+					}
 
 		// Figure out if there is anything to do
 		int ops = interfaceQueue.size() + methodQueue.size();
@@ -111,7 +142,8 @@ public class ClassOptionalTransformer implements IClassTransformer {
 	}
 
 	/**
-	 * Removes a method from a given ClassNode object, described by the descriptor provided
+	 * Removes a method from a given ClassNode object, described by the
+	 * descriptor provided
 	 * 
 	 * @param classNode
 	 *            The ClassNode object to remove the method from
@@ -124,17 +156,17 @@ public class ClassOptionalTransformer implements IClassTransformer {
 			if (methodDescriptor.equals(method.name + method.desc)) {
 				iterator.remove();
 				PCLCoreTransformerPlugin.getLogger().log(Level.INFO,
-						String.format("ClassOptional removal - method %s removed", methodDescriptor));
+						String.format("ClassOptional removal - method `%s` removed", methodDescriptor));
 				return;
 			}
 		}
 		PCLCoreTransformerPlugin.getLogger().log(Level.WARNING,
-				String.format("ClassOptional removal - method %s NOT removed - method not found", methodDescriptor));
+				String.format("ClassOptional removal - method `%s` NOT removed - method not found", methodDescriptor));
 	}
 
 	/**
-	 * Removes an interface from a given ClassNode object, described the the interface name
-	 * provided
+	 * Removes an interface from a given ClassNode object, described the the
+	 * interface name provided
 	 * 
 	 * @param classNode
 	 *            The ClassNode object to remove the interface from
@@ -146,23 +178,24 @@ public class ClassOptionalTransformer implements IClassTransformer {
 		boolean found = classNode.interfaces.remove(ifaceName);
 		if (found)
 			PCLCoreTransformerPlugin.getLogger().log(Level.INFO,
-					String.format("ClassOptional removal - interface %s removed", interfaceName));
+					String.format("ClassOptional removal - interface `%s` removed", interfaceName));
 		if (!found)
 			PCLCoreTransformerPlugin.getLogger().log(
 					Level.WARNING,
-					String.format("ClassOptional removal - interface %s NOT removed - interface not found",
+					String.format("ClassOptional removal - interface `%s` NOT removed - interface not found",
 							interfaceName));
 	}
 
 	/**
-	 * Determines if a class currently exists (declared). This does not create an instance of
-	 * the class.
+	 * Determines if a class currently exists (declared). This does not create
+	 * an instance of the class.
 	 * 
 	 * @param classname
 	 *            The class name to test
 	 * @return If the class exists or not (declared)
 	 */
 	private boolean classExists(String classname) {
+		PCLCoreTransformerPlugin.getLogger().log(Level.FINE, String.format("Evaluating class: %s", classname));
 		try {
 			Class.forName(classname, false, this.getClass().getClassLoader());
 			return true;

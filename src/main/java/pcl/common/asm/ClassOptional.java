@@ -52,6 +52,40 @@ public final class ClassOptional {
 		 */
 		public String classname();
 	}
+	
+	/**
+	 * Mark a list of self- interfaces as removable
+	 * 
+	 * @author AfterLifeLochie
+	 * 
+	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE)
+	public @interface ClassFilterInterfaceSelfList {
+		/**
+		 * Mark a list of self-interfaces for optional removal.
+		 * 
+		 * @return a list of self-interfaces for optional removal
+		 */
+		public ClassFilterInterfaceSelf[] value();
+	}
+
+	/**
+	 * Used to remove optional interfaces by self typeof
+	 * 
+	 * @author AfterLifeLochie
+	 * 
+	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE)
+	public @interface ClassFilterInterfaceSelf {
+		/**
+		 * The fully qualified name of the interface to be stripped
+		 * 
+		 * @return the interface name
+		 */
+		public String iface();
+	}
 
 	/**
 	 * Used to remove optional methods
