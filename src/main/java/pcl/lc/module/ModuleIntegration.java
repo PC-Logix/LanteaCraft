@@ -38,9 +38,10 @@ public class ModuleIntegration implements IModule {
 		integrationComputerCraftAgent = new ComputerCraftAgent();
 		//Lochie Kill me later... I HAD to get the mod working, and wanted OC support working.
 		//Couldn't figure out how you got CC support working without stripping interfaces so blah.
+		//fix this fuckup for me since IRSLOW, plox, kthx
 		if (Loader.isModLoaded("OpenComputers")) {
-            try { integrationOpenComputersAgent = new OpenComputersAgent();
-
+            try { 
+            	integrationOpenComputersAgent = new OpenComputersAgent();
                 LanteaCraft.getLogger().log(Level.INFO, "Loaded OpenComputers Support!");
             }
             catch (Exception e) {
