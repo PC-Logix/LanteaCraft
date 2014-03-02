@@ -1,21 +1,29 @@
 package pcl.lc.module;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 
 import cpw.mods.fml.common.Loader;
-import dan200.computer.api.ComputerCraftAPI;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.internal.Agent;
+import pcl.lc.api.internal.IIntegrationAgent;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
-import pcl.lc.module.integration.ComputerCraftAgent;
-import pcl.lc.module.integration.OpenComputersAgent;
 
 public class ModuleIntegration implements IModule {
 
-	private ComputerCraftAgent integrationComputerCraftAgent;
-	private OpenComputersAgent integrationOpenComputersAgent;
+	private static ArrayList<Class<? extends IIntegrationAgent>> clazz_integration = new ArrayList<Class<? extends IIntegrationAgent>>();
+
+	public static void registerIntegrationAgent(Class<? extends IIntegrationAgent> theAgent) {
+		if (!ModuleIntegration.clazz_integration.contains(theAgent))
+			ModuleIntegration.clazz_integration.add(theAgent);
+	}
+
+	private ArrayList<IIntegrationAgent> agents = new ArrayList<IIntegrationAgent>(clazz_integration.size());
 
 	@Override
 	public Set<Module> getDependencies() {
@@ -29,25 +37,33 @@ public class ModuleIntegration implements IModule {
 
 	@Override
 	public void preInit() {
-		// TODO Auto-generated method stub
-
+		Iterator<Class<? extends IIntegrationAgent>> agents = clazz_integration.iterator();
+		while (agents.hasNext()) {
+			Class<? extends IIntegrationAgent> agent = agents.next();
+			Annotation[] annotations = agent.getAnnotations();
+			for (int k = 0; k > annotations.length; k++) {
+				Annotation annotate = annotations[k];
+				if (annotate.annotationType().equals(Agent.class)) {
+					Agent theAgent = (Agent) annotate;
+					if (Loader.isModLoaded(theAgent.modname())) {
+						try {
+							IIntegrationAgent singleton = agent.newInstance();
+							this.agents.add(singleton);
+						} catch (Throwable t) {
+							LanteaCraft.getLogger().log(Level.WARNING, "Exception when setting up integration agent.",
+									t);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public void init() {
-		integrationComputerCraftAgent = new ComputerCraftAgent();
-		//Lochie Kill me later... I HAD to get the mod working, and wanted OC support working.
-		//Couldn't figure out how you got CC support working without stripping interfaces so blah.
-		if (Loader.isModLoaded("OpenComputers")) {
-            try {
-            	integrationOpenComputersAgent = new OpenComputersAgent();
-                LanteaCraft.getLogger().log(Level.INFO, "Loaded OpenComputers Support!");
-            }
-            catch (Exception e) {
-            	LanteaCraft.getLogger().log(Level.INFO, "OpenComputers not found!");
-                e.printStackTrace(System.err);
-            }
-        }
+		Iterator<IIntegrationAgent> agents = this.agents.iterator();
+		while (agents.hasNext())
+			agents.next().init();
 	}
 
 	@Override

@@ -9,6 +9,8 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
+import pcl.lc.api.internal.Agent;
+import pcl.lc.api.internal.IIntegrationAgent;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
@@ -16,7 +18,8 @@ import dan200.computer.api.IHostedPeripheral;
 import dan200.computer.api.IMount;
 import dan200.computer.api.IPeripheralHandler;
 
-public class ComputerCraftAgent {
+@Agent(modname = "ComputerCraft")
+public class ComputerCraftAgent implements IIntegrationAgent {
 
 	private class ComputerCraftProvider implements IPeripheralHandler {
 		@Override
@@ -38,6 +41,16 @@ public class ComputerCraftAgent {
 	private HashMap<String, IMount> mountCache;
 
 	public ComputerCraftAgent() {
+
+	}
+
+	@Override
+	public String modName() {
+		return "ComputerCraft";
+	}
+
+	@Override
+	public void init() {
 		try {
 			clazz_ComputerCraftAPI = Class.forName("dan200.computer.api.ComputerCraftAPI");
 			registerHandler = clazz_ComputerCraftAPI.getMethod("registerExternalPeripheral", new Class<?>[] {

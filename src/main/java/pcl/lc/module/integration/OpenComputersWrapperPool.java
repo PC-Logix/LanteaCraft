@@ -1,8 +1,5 @@
 package pcl.lc.module.integration;
 
-import java.lang.ref.WeakReference;
-
-import dan200.computer.api.IComputerAccess;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
@@ -27,12 +24,13 @@ public class OpenComputersWrapperPool {
 	private interface IHookManagedEnvironment extends ManagedEnvironment {
 		public String getComponentName();
 	}
-	
+
 	public static class StargateAccessWrapper implements IHookManagedEnvironment {
 
 		private final IStargateAccess access;
 		private EnumStargateState stateWatcher;
 		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
+
 		public StargateAccessWrapper(IStargateAccess access) {
 			this.access = access;
 		}
@@ -58,10 +56,10 @@ public class OpenComputersWrapperPool {
 
 		}
 
-
 		@Override
 		public void load(final NBTTagCompound nbt) {
-			if (node != null) node.load(nbt.getCompoundTag("node"));
+			if (node != null)
+				node.load(nbt.getCompoundTag("node"));
 		}
 
 		@Override
@@ -77,17 +75,14 @@ public class OpenComputersWrapperPool {
 		public boolean canUpdate() {
 			return true;
 		}
-		
-		
+
 		@Override
 		public String getComponentName() {
 			return "stargate";
 		}
-		
-		//Our Events/Signals that we push to OC when "stuff" happens
+
 		@Override
 		public void update() {
-			// TODO Auto-generated method stub
 			if (access.getState() != stateWatcher) {
 				stateWatcher = access.getState();
 				switch (stateWatcher) {
@@ -99,7 +94,7 @@ public class OpenComputersWrapperPool {
 						node.sendToVisible("sgOutgoing", new Object[] { access.getConnectionAddress() });
 					else
 						// TODO: Only reveal incoming connection chevrons to
-						// ComputerCraft as they are locked in by the Stargate
+						// OpenComputers as they are locked in by the Stargate
 						// (aesthetics).
 						node.sendToVisible("sgIncoming", new Object[] { access.getConnectionAddress() });
 					break;
@@ -116,13 +111,9 @@ public class OpenComputersWrapperPool {
 			}
 		}
 
-	
-
-		//Our callbacks, aka the methods OC can call against a stargate.
-
 		@Callback
 		public Object[] greet(Context context, Arguments args) {
-			return new Object[]{String.format("Hello, %s!", args.checkString(0))};
+			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
 		}
 
 		@Callback
@@ -134,22 +125,20 @@ public class OpenComputersWrapperPool {
 		public Object[] connect(Context context, Arguments args) throws Exception {
 			return dialTheGate(args.checkString(0).toUpperCase());
 		}
-		
-		public Object[] dialTheGate(String address) throws Exception{ 
-			{
-				if (address.length() != 7 && address.length() != 9)
-					throw new Exception("Stargate addresses must be 7 or 9 characters.");
-				else if (address.equals(access.getLocalAddress()) || address.equals(access.getLocalAddress().substring(0, 7)))
-					throw new Exception("Stargate cannot connect to itself.");
-				else if (!access.connect(address))
-					throw new Exception("Stargate cannot dial now.");
-				return new Object[] { true };
-			}
+
+		public Object[] dialTheGate(String address) throws Exception {
+			if (address.length() != 7 && address.length() != 9)
+				throw new Exception("Stargate addresses must be 7 or 9 characters.");
+			else if (address.equals(access.getLocalAddress())
+					|| address.equals(access.getLocalAddress().substring(0, 7)))
+				throw new Exception("Stargate cannot connect to itself.");
+			else if (!access.connect(address))
+				throw new Exception("Stargate cannot dial now.");
+			return new Object[] { true };
 		}
-		
-		
+
 		@Callback
-		public Object[] disconnect(Context context, Arguments args) throws Exception{
+		public Object[] disconnect(Context context, Arguments args) throws Exception {
 			if (!access.isBusy())
 				throw new Exception("Stargate is not connected");
 			if (!access.disconnect())
@@ -183,7 +172,8 @@ public class OpenComputersWrapperPool {
 			String address = args.checkString(0).toUpperCase();
 			if (address.length() != 7 && address.length() != 9)
 				throw new Exception("Stargate addresses must be 7 or 9 characters.");
-			else if (address.equals(access.getLocalAddress()) || address.equals(access.getLocalAddress().substring(0, 7)))
+			else if (address.equals(access.getLocalAddress())
+					|| address.equals(access.getLocalAddress().substring(0, 7)))
 				throw new Exception("Stargate cannot connect to itself.");
 			try {
 				TileEntityStargateBase dte = GateAddressHelper.findStargate(access.getLocation(), address);
@@ -198,19 +188,18 @@ public class OpenComputersWrapperPool {
 			return new Object[] { false };
 		}
 
-
 		@Callback
 		public Object[] hasFuel(Context context, Arguments args) {
 			return new Object[] { access.getRemainingConnectionTime() > 0 && access.getRemainingDials() > 0 };
 		}
 
-
 		@Callback
-		public Object[] isValidAddress(Context context, Arguments args) throws Exception{
+		public Object[] isValidAddress(Context context, Arguments args) throws Exception {
 			String address = args.checkString(0).toUpperCase();
 			if (address.length() != 7 && address.length() != 9)
 				throw new Exception("Stargate addresses must be 7 or 9 characters.");
-			else if (address.equals(access.getLocalAddress()) || address.equals(access.getLocalAddress().substring(0, 7)))
+			else if (address.equals(access.getLocalAddress())
+					|| address.equals(access.getLocalAddress().substring(0, 7)))
 				throw new Exception("Stargate cannot connect to itself.");
 			try {
 				if (address.equals(access.getLocalAddress()))
@@ -226,6 +215,7 @@ public class OpenComputersWrapperPool {
 			return new Object[] { true };
 		}
 	}
+
 	public static class StargateControllerAccessWrapper implements IHookManagedEnvironment {
 		private final IStargateControllerAccess access;
 
@@ -233,7 +223,9 @@ public class OpenComputersWrapperPool {
 			super();
 			this.access = access;
 		}
+
 		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
+
 		@Override
 		public boolean canUpdate() {
 			// TODO Auto-generated method stub
@@ -243,7 +235,7 @@ public class OpenComputersWrapperPool {
 		@Override
 		public void update() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -255,24 +247,25 @@ public class OpenComputersWrapperPool {
 		@Override
 		public void onConnect(Node node) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void onDisconnect(Node node) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void onMessage(Message message) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void load(final NBTTagCompound nbt) {
-			if (node != null) node.load(nbt.getCompoundTag("node"));
+			if (node != null)
+				node.load(nbt.getCompoundTag("node"));
 		}
 
 		@Override
@@ -289,32 +282,32 @@ public class OpenComputersWrapperPool {
 			return "stargate_controller";
 		}
 
-		//Callbacks
+		// Callbacks
 		@Callback
 		public Object[] greet(Context context, Arguments args) {
-			return new Object[]{String.format("Hello, %s!", args.checkString(0))};
+			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
 		}
-		
+
 		@Callback
 		public Object[] isValid(Context context, Arguments args) {
 			return new Object[] { access.isValid() };
 		}
-		
+
 		@Callback
 		public Object[] isBusy(Context context, Arguments args) {
 			return new Object[] { access.isBusy() };
 		}
-		
+
 		@Callback
 		public Object[] ownsCurrentConnection(Context context, Arguments args) {
 			return new Object[] { access.ownsCurrentConnection() };
 		}
-		
+
 		@Callback
 		public Object[] getDialledAddress(Context context, Arguments args) {
 			return new Object[] { access.getDialledAddress() };
 		}
-		
+
 		@Callback
 		public Object[] disconnect(Context context, Arguments args) throws Exception {
 			if (!access.isBusy())
@@ -330,6 +323,7 @@ public class OpenComputersWrapperPool {
 
 		private final INaquadahGeneratorAccess access;
 		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
+
 		public NaquadahGeneratorAccessWrapper(INaquadahGeneratorAccess access) {
 			this.access = access;
 		}
@@ -358,7 +352,8 @@ public class OpenComputersWrapperPool {
 
 		@Override
 		public void load(final NBTTagCompound nbt) {
-			if (node != null) node.load(nbt.getCompoundTag("node"));
+			if (node != null)
+				node.load(nbt.getCompoundTag("node"));
 		}
 
 		@Override
@@ -386,17 +381,16 @@ public class OpenComputersWrapperPool {
 			return "naquadah_generator";
 		}
 
-		//Callbacks!
 		@Callback
 		public Object[] greet(Context context, Arguments args) {
-			return new Object[]{String.format("Hello, %s!", args.checkString(0))};
+			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
 		}
-		
+
 		@Callback
 		public Object[] isEnabled(Context context, Arguments args) {
-			return new Object[]{access.isEnabled()};
+			return new Object[] { access.isEnabled() };
 		}
-		
+
 		@Callback
 		public Object[] setEnabled(Context context, Arguments args) throws Exception {
 			if (!(args.checkBoolean(0)))
@@ -406,17 +400,17 @@ public class OpenComputersWrapperPool {
 				throw new Exception("Cannot set Naquadah Generator state");
 			return new Object[] { access.isEnabled() };
 		}
-		
+
 		@Callback
 		public Object[] getStoredEnergy(Context context, Arguments args) {
 			return new Object[] { access.getStoredEnergy() };
 		}
-		
+
 		@Callback
 		public Object[] getMaximumStoredEnergy(Context context, Arguments args) {
 			return new Object[] { access.getMaximumStoredEnergy() };
 		}
-		
+
 	}
 
 }
