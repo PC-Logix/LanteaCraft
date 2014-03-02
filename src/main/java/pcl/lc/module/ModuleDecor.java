@@ -99,12 +99,6 @@ public class ModuleDecor implements IModule {
 
 	@Override
 	public void preInit() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void init() {
 		Blocks.decorBlock = RegistrationHelper.registerBlock(BlockLanteaDecor.class, ItemLanteaDecor.class,
 				"lanteaDecor");
 		Blocks.lanteaSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaSteelDecorStair", 1);
@@ -113,6 +107,12 @@ public class ModuleDecor implements IModule {
 		Blocks.goauldGoldDecorStair = RegistrationHelper.registerStairDecal("goauldGoldDecorStair", 3);
 		Blocks.goauldPatternedGoldDecorStair = RegistrationHelper
 				.registerStairDecal("goauldPatternedGoldDecorStair", 4);
+
+	}
+
+	@Override
+	public void init() {
+
 		
 	}
 

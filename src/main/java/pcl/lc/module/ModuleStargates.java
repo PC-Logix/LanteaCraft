@@ -43,12 +43,6 @@ public class ModuleStargates implements IModule {
 
 	@Override
 	public void preInit() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void init() {
 		Blocks.stargateRingBlock = RegistrationHelper.registerBlock(BlockStargateRing.class, ItemStargateRing.class,
 				"stargateRing");
 		Blocks.stargateBaseBlock = RegistrationHelper.registerBlock(BlockStargateBase.class, "stargateBase");
@@ -88,6 +82,12 @@ public class ModuleStargates implements IModule {
 
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateController.ordinal(),
 				ContainerStargateController.class);
+
+	}
+
+	@Override
+	public void init() {
+
 	}
 
 	@Override

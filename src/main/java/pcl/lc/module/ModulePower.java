@@ -27,16 +27,16 @@ public class ModulePower implements IModule {
 
 	@Override
 	public void preInit() {
-		// TODO Auto-generated method stub
+		Blocks.naquadahGenerator = (BlockNaquadahGenerator) RegistrationHelper.registerBlock(BlockNaquadahGenerator.class,
+				"naquadahGenerator");
+		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class, "tileEntityNaquadahGenerator");
+		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ContainerNaquadahGenerator.class);
 
 	}
 
 	@Override
 	public void init() {
-		Blocks.naquadahGenerator = (BlockNaquadahGenerator) RegistrationHelper.registerBlock(BlockNaquadahGenerator.class,
-				"naquadahGenerator");
-		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class, "tileEntityNaquadahGenerator");
-		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ContainerNaquadahGenerator.class);
+
 
 	}
 

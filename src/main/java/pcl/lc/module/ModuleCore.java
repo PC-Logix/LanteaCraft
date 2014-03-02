@@ -37,12 +37,6 @@ public class ModuleCore implements IModule {
 
 	@Override
 	public void preInit() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void init() {
 		Blocks.lanteaOre = RegistrationHelper.registerBlock(BlockLanteaOre.class, ItemLanteaOreBlock.class,
 				"lanteaOreBlock");
 		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem");
@@ -71,6 +65,12 @@ public class ModuleCore implements IModule {
 
 		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreItem, 1), Item.coal, Item.slimeBall,
 				Item.blazePowder);
+
+	}
+
+	@Override
+	public void init() {
+
 	}
 
 	@Override
