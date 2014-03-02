@@ -63,7 +63,11 @@ public class ModuleIntegration implements IModule {
 	public void init() {
 		Iterator<IIntegrationAgent> agents = this.agents.iterator();
 		while (agents.hasNext())
-			agents.next().init();
+			try {
+				agents.next().init();
+			} catch (Throwable t) {
+				LanteaCraft.getLogger().log(Level.WARNING, "Integration agent threw init-time exception.", t);
+			}
 	}
 
 	@Override
