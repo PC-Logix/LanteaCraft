@@ -56,7 +56,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.Player;
 
-@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "-" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:BuildCraft|Core;after:IC2;after:SGCraft")
+@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "-" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:OpenComputers;after:BuildCraft|Core;after:IC2;after:SGCraft")
 @NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { BuildInfo.modID }, packetHandler = pcl.lc.network.DefaultPacketHandler.class)
 public class LanteaCraft {
 

@@ -1,5 +1,7 @@
 package pcl.lc.module.integration;
 
+import java.util.logging.Level;
+
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
@@ -7,9 +9,20 @@ import net.minecraft.world.World;
 import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.network.ManagedEnvironment;
 
+
+
 public class OpenComputersAgent implements Block {
+	
+	private Class<?> clazz_OpenComputersAPI;
+	
 	public OpenComputersAgent() {
-		li.cil.oc.api.Driver.add(this);
+		try {
+			clazz_OpenComputersAPI = Class.forName("li.cil.oc.api.Driver");
+			li.cil.oc.api.Driver.add(this);
+		} catch (Throwable t) {
+			LanteaCraft.getLogger().log(Level.INFO, "OpenComputers not found!");
+			return;
+		}
 	}
 	@Override
 	public boolean worksWith(World world, int x, int y, int z) {
