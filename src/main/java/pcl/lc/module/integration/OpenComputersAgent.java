@@ -5,14 +5,24 @@ import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
+import pcl.lc.module.ModuleIntegration;
 import net.minecraft.world.World;
+import li.cil.oc.api.Driver;
 import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.network.ManagedEnvironment;
 
 @Agent(modname = "OpenComputers")
 public class OpenComputersAgent implements IIntegrationAgent, Block {
+
+	static {
+		/**
+		 * Elect to register self.
+		 */
+		ModuleIntegration.registerIntegrationAgent(OpenComputersAgent.class);
+	}
+
 	public OpenComputersAgent() {
-		li.cil.oc.api.Driver.add(this);
+
 	}
 
 	@Override
@@ -42,8 +52,7 @@ public class OpenComputersAgent implements IIntegrationAgent, Block {
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
+		Driver.add(this);
 	}
 
 }

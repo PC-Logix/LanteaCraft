@@ -11,6 +11,7 @@ import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
+import pcl.lc.module.ModuleIntegration;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
@@ -20,6 +21,13 @@ import dan200.computer.api.IPeripheralHandler;
 
 @Agent(modname = "ComputerCraft")
 public class ComputerCraftAgent implements IIntegrationAgent {
+
+	static {
+		/**
+		 * Elect to register self.
+		 */
+		ModuleIntegration.registerIntegrationAgent(ComputerCraftAgent.class);
+	}
 
 	private class ComputerCraftProvider implements IPeripheralHandler {
 		@Override
