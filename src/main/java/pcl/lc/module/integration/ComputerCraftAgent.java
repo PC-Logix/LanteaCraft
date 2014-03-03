@@ -22,13 +22,6 @@ import dan200.computer.api.IPeripheralHandler;
 @Agent(modname = "ComputerCraft")
 public class ComputerCraftAgent implements IIntegrationAgent {
 
-	static {
-		/**
-		 * Elect to register self.
-		 */
-		ModuleIntegration.registerIntegrationAgent(ComputerCraftAgent.class);
-	}
-
 	private class ComputerCraftProvider implements IPeripheralHandler {
 		@Override
 		public IHostedPeripheral getPeripheral(TileEntity entity) {

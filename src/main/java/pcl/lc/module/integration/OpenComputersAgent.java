@@ -14,13 +14,6 @@ import li.cil.oc.api.network.ManagedEnvironment;
 @Agent(modname = "OpenComputers")
 public class OpenComputersAgent implements IIntegrationAgent, Block {
 
-	static {
-		/**
-		 * Elect to register self.
-		 */
-		ModuleIntegration.registerIntegrationAgent(OpenComputersAgent.class);
-	}
-
 	public OpenComputersAgent() {
 
 	}
