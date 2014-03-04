@@ -20,8 +20,7 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 	/**
 	 * The logger
 	 */
-	private static final Logger log = Logger
-			.getLogger("PCLCoreTransformerPlugin");
+	private static final Logger log = Logger.getLogger("PCLCoreTransformerPlugin");
 
 	/**
 	 * Gets the logger
@@ -61,7 +60,7 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 	}
 
 	public static String[] getTransformers() {
-		return new String[] { "pcl.common.asm.ClassOptionalTransformer" };
+		return new String[] { "pcl.common.asm.ClassOptionalTransformer", "pcl.common.asm.ClassMergeTransformer" };
 	}
 
 }
