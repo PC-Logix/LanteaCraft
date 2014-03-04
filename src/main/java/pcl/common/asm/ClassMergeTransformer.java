@@ -39,8 +39,11 @@ public class ClassMergeTransformer implements IClassTransformer {
 				if (a.desc.equals("Lpcl/common/asm/ClassMerge$MergeMod;")) {
 					String sourceClass = (String) a.values.get(a.values.indexOf("fromClass") + 1);
 					String condMod = (String) a.values.get(a.values.indexOf("modName") + 1);
-					if (Loader.isModLoaded(condMod) && !merge.contains(sourceClass))
+					if (Loader.isModLoaded(condMod) && !merge.contains(sourceClass) || true)
 						merge.add(sourceClass);
+					else
+						PCLCoreTransformerPlugin.getLogger().log(Level.INFO,
+								String.format("Not merging from class %s, missing mod %s.", sourceClass, condMod));
 				}
 			}
 		}
@@ -50,6 +53,8 @@ public class ClassMergeTransformer implements IClassTransformer {
 					String.format("Performing %s merge operations.", merge.size()));
 			for (String classname : merge) {
 				try {
+					PCLCoreTransformerPlugin.getLogger().log(Level.INFO,
+							String.format("Performing merge on class %s.", classname));
 					byte[] obj = loader.getClassBytes(classname.replace('.', '/'));
 					ClassNode objNode = new ClassNode();
 					ClassReader objRead = new ClassReader(obj);
@@ -57,12 +62,21 @@ public class ClassMergeTransformer implements IClassTransformer {
 					for (String oint : objNode.interfaces)
 						if (!classNode.interfaces.contains(oint))
 							classNode.interfaces.add(oint);
+						else
+							PCLCoreTransformerPlugin.getLogger().log(Level.INFO,
+									String.format("Skipping interface %s as it already is referenced.", oint));
 					for (FieldNode field : objNode.fields)
-						if (!classNode.fields.contains(field))
+						if (!hasField(classNode, field))
 							classNode.fields.add(field);
+						else
+							PCLCoreTransformerPlugin.getLogger().log(Level.INFO,
+									String.format("Skipping field %s as it already exists.", field.name));
 					for (MethodNode method : objNode.methods)
-						if (!classNode.methods.contains(method))
+						if (!hasMethod(classNode, method))
 							classNode.methods.add(method);
+						else
+							PCLCoreTransformerPlugin.getLogger().log(Level.INFO,
+									String.format("Skipping method %s as it already exists.", method.name));
 				} catch (Throwable t) {
 					PCLCoreTransformerPlugin.getLogger().log(Level.INFO, "Class loading failure.", t);
 					merge.clear();
@@ -79,4 +93,20 @@ public class ClassMergeTransformer implements IClassTransformer {
 			return basicClass;
 		}
 	}
+
+	public boolean hasMethod(ClassNode master, MethodNode method) {
+		for (MethodNode child : master.methods)
+			if (child.name.equals(method.name))
+				return true;
+		return false;
+	}
+
+	public boolean hasField(ClassNode master, FieldNode field) {
+		for (FieldNode child : master.fields) {
+			if (child.name.equals(field.name))
+				return true;
+		}
+		return false;
+	}
+
 }
