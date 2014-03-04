@@ -28,6 +28,11 @@ public class TileEntityStargateController extends GenericTileEntity {
 	}
 
 	@Override
+	public String getInvName() {
+		return "dhd";
+	}
+	
+	@Override
 	public IInventory getInventory() {
 		return inventory;
 	}
