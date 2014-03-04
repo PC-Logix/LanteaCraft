@@ -23,8 +23,8 @@ public class OpenComputersAgent implements IIntegrationAgent, Block {
 	public boolean worksWith(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		return (id == LanteaCraft.Blocks.stargateBaseBlock.blockID)
-				|| (id == LanteaCraft.Blocks.naquadahGenerator.blockID)
-				|| (id == LanteaCraft.Blocks.stargateControllerBlock.blockID);
+				|| (id == LanteaCraft.Blocks.naquadahGenerator.blockID);
+				//|| (id == LanteaCraft.Blocks.stargateControllerBlock.blockID);
 	}
 
 	@Override
@@ -36,9 +36,9 @@ public class OpenComputersAgent implements IIntegrationAgent, Block {
 		} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
 			INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
 			return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
-		} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
-			IStargateControllerAccess generator = (IStargateControllerAccess) world.getBlockTileEntity(x, y, z);
-			return new OpenComputersWrapperPool.StargateControllerAccessWrapper(generator);
+		//} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
+			//IStargateControllerAccess dhd = (IStargateControllerAccess) world.getBlockTileEntity(x, y, z);
+			//return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
 		} else
 			throw new RuntimeException("Driver.Block handler specified invalid typeof!");
 	}
