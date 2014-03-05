@@ -166,6 +166,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 						inventory.setInventorySlotContents(i, null);
 					energy += 1.0;
 					stateChanged();
+					break;
 				}
 			}
 
