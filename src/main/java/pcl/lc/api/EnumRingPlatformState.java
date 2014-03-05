@@ -1,7 +1,7 @@
 package pcl.lc.api;
 
 public enum EnumRingPlatformState {
-	Idle, Connecting, Transmitting, Recieveing, Disconnecting;
+	Idle, Connecting, Connected, Transmitting, Disconnecting;
 
 	public static EnumRingPlatformState fromOrdinal(int ordinal) {
 		return EnumRingPlatformState.values()[ordinal];

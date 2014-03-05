@@ -18,7 +18,6 @@ import pcl.common.inventory.FilteredInventory;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.lc.LanteaCraft;
-import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.fluids.SpecialFluidTank;

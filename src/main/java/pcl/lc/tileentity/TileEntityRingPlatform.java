@@ -1,7 +1,6 @@
 package pcl.lc.tileentity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import pcl.common.base.GenericTileEntity;
@@ -28,6 +27,12 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 
 	private double ringPosition, nextRingPosition;
 
+	private ArrayList<Entity> boundingEntities;
+
+	public TileEntityRingPlatform() {
+		boundingEntities = new ArrayList<Entity>();
+	}
+
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote)
@@ -38,13 +43,12 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 					timeout--;
 				else {
 					if (state == EnumRingPlatformState.Connecting) {
-						if (isSlave)
-							updateState(EnumRingPlatformState.Recieveing, 10);
-						else {
-							updateState(EnumRingPlatformState.Transmitting, 10);
-							transportEntitiesInRings();
-						}
-					} else if (state == EnumRingPlatformState.Recieveing || state == EnumRingPlatformState.Transmitting) {
+						updateState(EnumRingPlatformState.Transmitting, 2);
+						buildTeleportingEntityList();
+					} else if (state == EnumRingPlatformState.Transmitting) {
+						updateState(EnumRingPlatformState.Connected, 8);
+						teleportEntitiesInList();
+					} else if (state == EnumRingPlatformState.Connected) {
 						updateState(EnumRingPlatformState.Disconnecting, 20);
 					} else if (state == EnumRingPlatformState.Disconnecting) {
 						clearConnection();
@@ -153,13 +157,24 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 				(int) Math.floor(connectionTo.y), (int) Math.floor(connectionTo.z));
 	}
 
-	private void transportEntitiesInRings() {
+	public void buildTeleportingEntityList() {
+
+	}
+
+	private void teleportEntitiesInList() {
+		boundingEntities.clear();
 		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(this.xCoord - 2, this.yCoord, this.zCoord - 2,
 				this.xCoord + 2, this.yCoord + 3, this.zCoord + 2);
 		List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, bounds);
 		for (Entity entity : ents)
 			if (!entity.isDead && entity.ridingEntity == null)
-				entityInPortal(entity);
+				boundingEntities.add(entity);
+	}
+
+	private void transportEntitiesInRings() {
+		for (Entity entity : boundingEntities)
+			entityInPortal(entity);
+		boundingEntities.clear();
 
 	}
 
