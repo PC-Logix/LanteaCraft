@@ -14,7 +14,7 @@
     "screenshots": [ ],
     "parent": "",
     "requiredMods": [ "Forge"],
-    "dependencies": [ "ComputerCraft" ],
+    "dependencies": [ "ComputerCraft", "OpenComputers" ],
     "dependants": [ ],
     "useDependencyInformation": "true"
   }]
