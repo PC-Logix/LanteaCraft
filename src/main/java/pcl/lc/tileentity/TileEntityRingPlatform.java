@@ -158,10 +158,6 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 	}
 
 	public void buildTeleportingEntityList() {
-
-	}
-
-	private void teleportEntitiesInList() {
 		boundingEntities.clear();
 		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(this.xCoord - 2, this.yCoord, this.zCoord - 2,
 				this.xCoord + 2, this.yCoord + 3, this.zCoord + 2);
@@ -171,11 +167,10 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 				boundingEntities.add(entity);
 	}
 
-	private void transportEntitiesInRings() {
+	private void teleportEntitiesInList() {
 		for (Entity entity : boundingEntities)
 			entityInPortal(entity);
 		boundingEntities.clear();
-
 	}
 
 	private void entityInPortal(Entity entity) {
