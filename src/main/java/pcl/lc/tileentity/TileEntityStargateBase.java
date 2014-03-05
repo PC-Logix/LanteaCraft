@@ -119,6 +119,11 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 		}
 	}
 
+	@Override
+	public String getInvName() {
+		return "stargate";
+	}
+	
 	public static void configure(ConfigurationHelper cfg) {
 		secondsToStayOpen = cfg.getInteger("stargate", "secondsToStayOpen", secondsToStayOpen);
 		oneWayTravel = cfg.getBoolean("stargate", "oneWayTravel", oneWayTravel);
