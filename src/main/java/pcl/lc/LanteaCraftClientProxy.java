@@ -65,21 +65,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	}
 
 	public void registerSounds() {
-		try {
-			SoundPool pool = Minecraft.getMinecraft().sndManager.soundPoolSounds;
-
-			for (String group : new String[] { "milkyway", "pegasus" }) {
-				for (String tag : new String[] { "abort", "chevron_incoming", "chevron_lock", "close", "dhd_button",
-						"open", "roll" }) {
-					StringBuilder label = new StringBuilder().append("pcl_lc:stargate/").append(group).append("/");
-					label.append(group).append("_").append(tag).append(".ogg");
-					pool.addSound(label.toString());
-				}
-			}
-
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		
 	}
 
 	public void registerScreens() {
