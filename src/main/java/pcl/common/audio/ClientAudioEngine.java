@@ -32,6 +32,15 @@ public class ClientAudioEngine extends AudioEngine {
 		}
 	}
 
+	private static String label() {
+		StringBuilder label = new StringBuilder();
+		label.append("asm_snd").append(sourceCounter);
+		sourceCounter++;
+		return label.toString();
+	}
+
+	private static int sourceCounter = 0;
+
 	public final float falloffDistance = 22.0F;
 	private final int maxStreamingSources = 4;
 
@@ -53,8 +62,9 @@ public class ClientAudioEngine extends AudioEngine {
 	}
 
 	@Override
-	public void playOnce(AudioSource soundObject, String file, boolean override, float volume) {
-		// Do nothing.
+	public void playOnce(AudioSource soundObject, boolean override, float volume) {
+		if (!enabled || system == null)
+			return;
 	}
 
 	@Override
@@ -63,9 +73,15 @@ public class ClientAudioEngine extends AudioEngine {
 	}
 
 	@Override
-	public AudioSource create(AudioPosition aref, String file, boolean looping, boolean override, float volume) {
-		// Do nothing.
-		return null;
+	public AudioSource create(Object owner, AudioPosition position, String file, boolean looping, boolean override,
+			float volume) {
+		String tag = ClientAudioEngine.label();
+		AudioSource source = new ClientAudioSource(system, position, file, looping, override, volume, tag);
+		SoundHostObject host = new SoundHostObject(owner);
+		if (!hostSourceList.containsKey(host))
+			hostSourceList.put(host, new ArrayList<AudioSource>());
+		hostSourceList.get(host).add(source);
+		return source;
 	}
 
 	@Override
@@ -88,18 +104,20 @@ public class ClientAudioEngine extends AudioEngine {
 					stopSounds.add(entry.getKey());
 				} else {
 					for (AudioSource audioSource : entry.getValue()) {
-						audioSource.advance(masterVolume);
+						audioSource.advance(client);
 						if (audioSource.getRealVolume() > 0.0F)
 							soundQueue.add(audioSource);
 					}
 				}
 			}
 
-			for (int k = 0; !soundQueue.isEmpty(); k++)
+			for (int k = 0; !soundQueue.isEmpty(); k++) {
+				AudioSource source = soundQueue.poll();
 				if (maxSources > k)
-					soundQueue.poll().activate();
+					source.activate();
 				else
-					soundQueue.poll().cull();
+					source.cull();
+			}
 		}
 
 		for (SoundHostObject host : stopSounds)

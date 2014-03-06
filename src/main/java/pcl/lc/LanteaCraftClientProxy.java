@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import pcl.common.audio.AudioEngine;
+import pcl.common.audio.ClientAudioEngine;
 import pcl.common.network.ModPacket;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.common.render.RotationOrientedBlockRenderer;
@@ -59,12 +61,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	@Override
 	public void init(FMLInitializationEvent e) {
 		super.init(e);
-		registerSounds();
+		audioContext = new ClientAudioEngine();
 		registerScreens();
 		registerRenderers();
-	}
-
-	public void registerSounds() {
 		
 	}
 

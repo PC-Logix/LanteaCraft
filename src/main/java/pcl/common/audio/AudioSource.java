@@ -1,5 +1,7 @@
 package pcl.common.audio;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 public class AudioSource {
 
 	/**
@@ -71,10 +73,10 @@ public class AudioSource {
 	/**
 	 * Updates the source.
 	 * 
-	 * @param sysVolume
-	 *            The system volume.
+	 * @param clientPlayer
+	 *            The player.
 	 */
-	public void advance(float sysVolume) {
+	public void advance(EntityPlayer clientPlayer) {
 	}
 
 	/**

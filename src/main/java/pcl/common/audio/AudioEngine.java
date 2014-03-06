@@ -48,7 +48,7 @@ public class AudioEngine {
 	/*
 	 * This is a shadow method implementation.
 	 */
-	public void playOnce(AudioSource soundObject, String file, boolean override, float volume) {
+	public void playOnce(AudioSource soundObject, boolean override, float volume) {
 		// Do nothing.
 	}
 
@@ -83,8 +83,7 @@ public class AudioEngine {
 	/*
 	 * This is a shadow method implementation.
 	 */
-	public Object create(AudioPosition position, String file, boolean looping, boolean override,
-			float volume) {
+	public Object create(Object owner, AudioPosition position, String file, boolean looping, boolean override, float volume) {
 		// Do nothing.
 		return null;
 	}

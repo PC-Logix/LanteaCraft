@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
+import pcl.common.audio.AudioEngine;
 import pcl.common.base.TileEntityChunkManager;
 import pcl.common.helpers.AnalyticsHelper;
 import pcl.common.helpers.ConfigValue;
@@ -70,6 +71,7 @@ public class LanteaCraftCommonProxy {
 	private UpgradeHelper upgradeHelper;
 
 	public TileEntityChunkManager chunkManager;
+	protected AudioEngine audioContext;
 	private CoreTickHandler tickHandler = new CoreTickHandler();
 
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
@@ -108,6 +110,7 @@ public class LanteaCraftCommonProxy {
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getInstance());
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getSpecialBucketHandler());
 		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
+		audioContext = new AudioEngine();
 		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
 		TickRegistry.registerTickHandler(tickHandler, Side.SERVER);
 		networkHelpers.init();
@@ -140,6 +143,10 @@ public class LanteaCraftCommonProxy {
 
 	public VersionHelper getVersionHelper() {
 		return versionHelper;
+	}
+	
+	public AudioEngine getAudioEngine() {
+		return audioContext;
 	}
 
 	public void onInitMapGen(InitMapGenEvent e) {
