@@ -1,5 +1,12 @@
 package pcl.common.audio;
 
+/**
+ * Core AudioEngine hook; can be called on either side of the game. The instance
+ * {@link ClientAudioEngine} has fillers for these methods which actually call
+ * real SoundSystem methods.
+ * 
+ * @author AfterLifeLochie
+ */
 public class AudioEngine {
 
 	/**
@@ -28,8 +35,11 @@ public class AudioEngine {
 
 	/**
 	 * Play one sound object once.
-	 * @param soundObject The sound object.
-	 * @param file The file.
+	 * 
+	 * @param soundObject
+	 *            The sound object.
+	 * @param file
+	 *            The file.
 	 */
 	/*
 	 * This is a shadow method implementation.
@@ -40,11 +50,17 @@ public class AudioEngine {
 
 	/**
 	 * Play one sound object with parameters once.
-	 * @param soundObject The sound object.
-	 * @param positionObject The position object.
-	 * @param file The file.
-	 * @param override The priority setting.
-	 * @param volume The volume.
+	 * 
+	 * @param soundObject
+	 *            The sound object.
+	 * @param positionObject
+	 *            The position object.
+	 * @param file
+	 *            The file.
+	 * @param override
+	 *            The priority setting.
+	 * @param volume
+	 *            The volume.
 	 */
 	/*
 	 * This is a shadow method implementation.
@@ -55,7 +71,9 @@ public class AudioEngine {
 
 	/**
 	 * Remove a sound object.
-	 * @param soundObject The object to remove.
+	 * 
+	 * @param soundObject
+	 *            The object to remove.
 	 */
 	/*
 	 * This is a shadow method implementation.
@@ -66,8 +84,11 @@ public class AudioEngine {
 
 	/**
 	 * Create a sound object.
-	 * @param aref The aref.
-	 * @param file The file.
+	 * 
+	 * @param aref
+	 *            The aref.
+	 * @param file
+	 *            The file.
 	 * @return A sound object.
 	 */
 	/*
@@ -80,12 +101,19 @@ public class AudioEngine {
 
 	/**
 	 * Create a sound object with parameters.
-	 * @param aref The aref.
-	 * @param positionObject The position object.
-	 * @param file The file.
-	 * @param looping The looping setting.
-	 * @param override The priority setting.
-	 * @param volume The volume.
+	 * 
+	 * @param aref
+	 *            The aref.
+	 * @param positionObject
+	 *            The position object.
+	 * @param file
+	 *            The file.
+	 * @param looping
+	 *            The looping setting.
+	 * @param override
+	 *            The priority setting.
+	 * @param volume
+	 *            The volume.
 	 * @return A sound object.
 	 */
 	/*

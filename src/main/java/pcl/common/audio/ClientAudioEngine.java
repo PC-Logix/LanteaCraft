@@ -1,10 +1,36 @@
 package pcl.common.audio;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.PriorityQueue;
+import java.util.Vector;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
 public class ClientAudioEngine extends AudioEngine {
+
+	private static class SoundHostObject extends WeakReference<Object> {
+		public SoundHostObject(Object host) {
+			super(host);
+		}
+
+		public int hashCode() {
+			if (get() != null)
+				return get().hashCode();
+			return 0;
+		}
+
+		public boolean equals(Object o) {
+			if (!(o instanceof SoundHostObject))
+				return get().equals(o);
+			return get().equals(((SoundHostObject) o).get());
+		}
+	}
 
 	public final float falloffDistance = 22.0F;
 	private final int maxStreamingSources = 4;
@@ -14,94 +40,39 @@ public class ClientAudioEngine extends AudioEngine {
 	private float masterVolume = 0.5F;
 	private SoundSystem system = null;
 
+	private HashMap<SoundHostObject, ArrayList<AudioSource>> hostSourceList = new HashMap<SoundHostObject, ArrayList<AudioSource>>();
+
 	public ClientAudioEngine() {
 		super();
 	}
 
-	/**
-	 * Initialize the sound engine.
-	 */
 	@Override
 	public void initialize() {
 		SoundSystemConfig.setNumberStreamingChannels(maxStreamingSources);
 		SoundSystemConfig.setNumberNormalChannels(maxSources - maxStreamingSources);
 	}
 
-	/**
-	 * Play one sound object once.
-	 * 
-	 * @param soundObject
-	 *            The sound object.
-	 * @param file
-	 *            The file.
-	 */
 	@Override
 	public void playOnce(Object soundObject, String file) {
 		// Do nothing.
 	}
 
-	/**
-	 * Play one sound object with parameters once.
-	 * 
-	 * @param soundObject
-	 *            The sound object.
-	 * @param positionObject
-	 *            The position object.
-	 * @param file
-	 *            The file.
-	 * @param override
-	 *            The priority setting.
-	 * @param volume
-	 *            The volume.
-	 */
 	@Override
 	public void playOnce(Object soundObject, Object positionObject, String file, boolean override, float volume) {
 		// Do nothing.
 	}
 
-	/**
-	 * Remove a sound object.
-	 * 
-	 * @param soundObject
-	 *            The object to remove.
-	 */
 	@Override
 	public void remove(Object soundObject) {
 		// Do nothing.
 	}
 
-	/**
-	 * Create a sound object.
-	 * 
-	 * @param aref
-	 *            The aref.
-	 * @param file
-	 *            The file.
-	 * @return A sound object.
-	 */
 	@Override
 	public Object create(Object aref, String file) {
 		// Do nothing.
 		return null;
 	}
 
-	/**
-	 * Create a sound object with parameters.
-	 * 
-	 * @param aref
-	 *            The aref.
-	 * @param positionObject
-	 *            The position object.
-	 * @param file
-	 *            The file.
-	 * @param looping
-	 *            The looping setting.
-	 * @param override
-	 *            The priority setting.
-	 * @param volume
-	 *            The volume.
-	 * @return A sound object.
-	 */
 	@Override
 	public Object create(Object aref, Object positionObject, String file, boolean looping, boolean override,
 			float volume) {
@@ -109,13 +80,45 @@ public class ClientAudioEngine extends AudioEngine {
 		return null;
 	}
 
-	/**
-	 * Tick the sound engine.
-	 */
 	@Override
 	public void advance() {
 		if (!enabled || system == null)
 			return;
-		
+		float vol = Minecraft.getMinecraft().gameSettings.soundVolume;
+		if (masterVolume != vol)
+			masterVolume = vol;
+
+		Vector<SoundHostObject> stopSounds = new Vector<SoundHostObject>();
+		EntityPlayer client = Minecraft.getMinecraft().thePlayer;
+		if (client == null) {
+			stopSounds.addAll(hostSourceList.keySet());
+		} else {
+			PriorityQueue<AudioSource> soundQueue = new PriorityQueue<AudioSource>();
+
+			for (Entry<SoundHostObject, ArrayList<AudioSource>> entry : hostSourceList.entrySet()) {
+				if (entry.getKey().isEnqueued()) {
+					stopSounds.add(entry.getKey());
+				} else {
+					for (AudioSource audioSource : entry.getValue()) {
+						audioSource.advance(masterVolume);
+						if (audioSource.getRealVolume() > 0.0F)
+							soundQueue.add(audioSource);
+					}
+				}
+			}
+
+			for (int k = 0; !soundQueue.isEmpty(); k++)
+				if (maxSources > k)
+					soundQueue.poll().activate();
+				else
+					soundQueue.poll().cull();
+		}
+
+		for (SoundHostObject host : stopSounds)
+			removeSources(host);
+	}
+
+	private void removeSources(SoundHostObject host) {
+
 	}
 }
