@@ -34,27 +34,10 @@ public class AudioEngine {
 	}
 
 	/**
-	 * Play one sound object once.
-	 * 
-	 * @param soundObject
-	 *            The sound object.
-	 * @param file
-	 *            The file.
-	 */
-	/*
-	 * This is a shadow method implementation.
-	 */
-	public void playOnce(Object soundObject, String file) {
-		// Do nothing.
-	}
-
-	/**
 	 * Play one sound object with parameters once.
 	 * 
 	 * @param soundObject
 	 *            The sound object.
-	 * @param positionObject
-	 *            The position object.
 	 * @param file
 	 *            The file.
 	 * @param override
@@ -65,7 +48,7 @@ public class AudioEngine {
 	/*
 	 * This is a shadow method implementation.
 	 */
-	public void playOnce(Object soundObject, Object positionObject, String file, boolean override, float volume) {
+	public void playOnce(AudioSource soundObject, String file, boolean override, float volume) {
 		// Do nothing.
 	}
 
@@ -83,29 +66,10 @@ public class AudioEngine {
 	}
 
 	/**
-	 * Create a sound object.
-	 * 
-	 * @param aref
-	 *            The aref.
-	 * @param file
-	 *            The file.
-	 * @return A sound object.
-	 */
-	/*
-	 * This is a shadow method implementation.
-	 */
-	public Object create(Object aref, String file) {
-		// Do nothing.
-		return null;
-	}
-
-	/**
 	 * Create a sound object with parameters.
 	 * 
 	 * @param aref
 	 *            The aref.
-	 * @param positionObject
-	 *            The position object.
 	 * @param file
 	 *            The file.
 	 * @param looping
@@ -119,7 +83,7 @@ public class AudioEngine {
 	/*
 	 * This is a shadow method implementation.
 	 */
-	public Object create(Object aref, Object positionObject, String file, boolean looping, boolean override,
+	public Object create(AudioPosition position, String file, boolean looping, boolean override,
 			float volume) {
 		// Do nothing.
 		return null;

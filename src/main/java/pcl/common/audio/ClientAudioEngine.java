@@ -53,12 +53,7 @@ public class ClientAudioEngine extends AudioEngine {
 	}
 
 	@Override
-	public void playOnce(Object soundObject, String file) {
-		// Do nothing.
-	}
-
-	@Override
-	public void playOnce(Object soundObject, Object positionObject, String file, boolean override, float volume) {
+	public void playOnce(AudioSource soundObject, String file, boolean override, float volume) {
 		// Do nothing.
 	}
 
@@ -68,14 +63,7 @@ public class ClientAudioEngine extends AudioEngine {
 	}
 
 	@Override
-	public Object create(Object aref, String file) {
-		// Do nothing.
-		return null;
-	}
-
-	@Override
-	public Object create(Object aref, Object positionObject, String file, boolean looping, boolean override,
-			float volume) {
+	public AudioSource create(AudioPosition aref, String file, boolean looping, boolean override, float volume) {
 		// Do nothing.
 		return null;
 	}
@@ -118,7 +106,19 @@ public class ClientAudioEngine extends AudioEngine {
 			removeSources(host);
 	}
 
-	private void removeSources(SoundHostObject host) {
-
+	private void removeSources(Object o) {
+		if (system == null)
+			return;
+		SoundHostObject host;
+		if (!(o instanceof SoundHostObject))
+			host = new SoundHostObject(o);
+		else
+			host = (SoundHostObject) o;
+		if (!hostSourceList.containsKey(host))
+			return;
+		ArrayList<AudioSource> sources = hostSourceList.get(host);
+		for (AudioSource source : sources)
+			source.remove();
+		hostSourceList.remove(host);
 	}
 }
