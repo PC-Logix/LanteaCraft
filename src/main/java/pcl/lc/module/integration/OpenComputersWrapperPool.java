@@ -87,25 +87,25 @@ public class OpenComputersWrapperPool {
 				stateWatcher = access.getState();
 				switch (stateWatcher) {
 				case Idle:
-					node.sendToVisible("sgIdle", new Object[] { true });
+					node.sendToVisible("computer.signal", new Object[] {"sgIdle", true });
 					break;
 				case Dialling:
 					if (access.isOutgoingConnection())
-						node.sendToVisible("sgOutgoing", new Object[] { access.getConnectionAddress() });
+						node.sendToVisible("computer.signal", new Object[] {"sgOutgoing", access.getConnectionAddress() });
 					else
 						// TODO: Only reveal incoming connection chevrons to
 						// OpenComputers as they are locked in by the Stargate
 						// (aesthetics).
-						node.sendToVisible("sgIncoming", new Object[] { access.getConnectionAddress() });
+						node.sendToVisible("computer.signal", new Object[] {"sgIncoming", access.getConnectionAddress() });
 					break;
 				case InterDialling:
-					node.sendToVisible("sgChevronEncode", new Object[] { access.getEncodedChevrons() });
+					node.sendToVisible("computer.signal", new Object[] {"sgChevronEncode", access.getEncodedChevrons() });
 					break;
 				case Transient:
-					node.sendToVisible("sgWormholeOpening", new Object[] { true });
+					node.sendToVisible("computer.signal", new Object[] {"sgWormholeOpening", true });
 					break;
 				case Disconnecting:
-					node.sendToVisible("sgWormholeClosing", new Object[] { true });
+					node.sendToVisible("computer.signal", new Object[] {"sgWormholeClosing", true });
 					break;
 				}
 			}
