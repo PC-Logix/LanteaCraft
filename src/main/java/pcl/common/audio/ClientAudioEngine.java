@@ -11,8 +11,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
+import pcl.lc.api.internal.ITickAgent;
 
-public class ClientAudioEngine extends AudioEngine {
+public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 
 	private static class SoundHostObject extends WeakReference<Object> {
 		public SoundHostObject(Object host) {
@@ -60,18 +61,7 @@ public class ClientAudioEngine extends AudioEngine {
 		SoundSystemConfig.setNumberStreamingChannels(maxStreamingSources);
 		SoundSystemConfig.setNumberNormalChannels(maxSources - maxStreamingSources);
 	}
-
-	@Override
-	public void playOnce(AudioSource soundObject, boolean override, float volume) {
-		if (!enabled || system == null)
-			return;
-	}
-
-	@Override
-	public void remove(Object soundObject) {
-		// Do nothing.
-	}
-
+	
 	@Override
 	public AudioSource create(Object owner, AudioPosition position, String file, boolean looping, boolean override,
 			float volume) {
@@ -86,7 +76,11 @@ public class ClientAudioEngine extends AudioEngine {
 
 	@Override
 	public void advance() {
-		if (!enabled || system == null)
+		if (!enabled)
+			return;
+		if (system == null)
+			system = Minecraft.getMinecraft().sndManager.sndSystem;
+		if (system == null)
 			return;
 		float vol = Minecraft.getMinecraft().gameSettings.soundVolume;
 		if (masterVolume != vol)

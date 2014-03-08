@@ -1,10 +1,10 @@
 package pcl.lc.core;
 
-import pcl.lc.api.internal.IWorldTickHost;
+import pcl.lc.api.internal.ITickAgent;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
-public class RemoteChunkLoading implements IWorldTickHost {
+public class RemoteChunkLoading implements ITickAgent {
 
 	private class ChunkLoadRequest {
 		private final Ticket ticket;
@@ -26,7 +26,7 @@ public class RemoteChunkLoading implements IWorldTickHost {
 	}
 
 	@Override
-	public void tick() {
+	public void advance() {
 		// TODO Auto-generated method stub
 
 	}

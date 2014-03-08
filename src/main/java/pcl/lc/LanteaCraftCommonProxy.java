@@ -26,7 +26,7 @@ import pcl.common.helpers.RegistrationHelper;
 import pcl.common.helpers.VersionHelper;
 import pcl.common.network.ModPacket;
 import pcl.lc.compat.UpgradeHelper;
-import pcl.lc.core.CoreTickHandler;
+import pcl.lc.core.ServerTickHandler;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
@@ -65,14 +65,15 @@ public class LanteaCraftCommonProxy {
 	private AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
 	private VersionHelper versionHelper = new VersionHelper();
 
-	protected ClientPacketHandler defaultClientPacketHandler;
-	protected ServerPacketHandler defaultServerPacketHandler;
+	protected ClientPacketHandler clientPacketHandler;
+	protected ServerPacketHandler serverPacketHandler;
 	private NetworkHelpers networkHelpers;
 	private UpgradeHelper upgradeHelper;
 
 	public TileEntityChunkManager chunkManager;
 	protected AudioEngine audioContext;
-	private CoreTickHandler tickHandler = new CoreTickHandler();
+	
+	private ServerTickHandler serverTickHandler = new ServerTickHandler();
 
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
@@ -92,7 +93,7 @@ public class LanteaCraftCommonProxy {
 	protected ModuleManager moduleManager;
 
 	public LanteaCraftCommonProxy() {
-		defaultServerPacketHandler = new ServerPacketHandler();
+		serverPacketHandler = new ServerPacketHandler();
 		networkHelpers = new NetworkHelpers();
 		moduleManager = new ModuleManager();
 	}
@@ -109,10 +110,12 @@ public class LanteaCraftCommonProxy {
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft setting up...");
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getInstance());
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getSpecialBucketHandler());
+		
 		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
 		audioContext = new AudioEngine();
+		
 		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
-		TickRegistry.registerTickHandler(tickHandler, Side.SERVER);
+		TickRegistry.registerTickHandler(serverTickHandler, Side.SERVER);
 		networkHelpers.init();
 		moduleManager.init();
 	}
@@ -280,7 +283,7 @@ public class LanteaCraftCommonProxy {
 
 	public void handlePacket(ModPacket modPacket, Player player) {
 		if (modPacket.getPacketIsForServer())
-			defaultServerPacketHandler.handlePacket(modPacket, player);
+			serverPacketHandler.handlePacket(modPacket, player);
 		else
 			return;
 	}

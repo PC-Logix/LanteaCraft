@@ -1,5 +1,7 @@
 package pcl.common.audio;
 
+import pcl.lc.api.internal.ITickAgent;
+
 /**
  * Core AudioEngine hook; can be called on either side of the game. The instance
  * {@link ClientAudioEngine} has fillers for these methods which actually call
@@ -7,7 +9,7 @@ package pcl.common.audio;
  * 
  * @author AfterLifeLochie
  */
-public class AudioEngine {
+public class AudioEngine implements ITickAgent {
 
 	/**
 	 * Explicit constructor
@@ -34,38 +36,6 @@ public class AudioEngine {
 	}
 
 	/**
-	 * Play one sound object with parameters once.
-	 * 
-	 * @param soundObject
-	 *            The sound object.
-	 * @param file
-	 *            The file.
-	 * @param override
-	 *            The priority setting.
-	 * @param volume
-	 *            The volume.
-	 */
-	/*
-	 * This is a shadow method implementation.
-	 */
-	public void playOnce(AudioSource soundObject, boolean override, float volume) {
-		// Do nothing.
-	}
-
-	/**
-	 * Remove a sound object.
-	 * 
-	 * @param soundObject
-	 *            The object to remove.
-	 */
-	/*
-	 * This is a shadow method implementation.
-	 */
-	public void remove(Object soundObject) {
-		// Do nothing.
-	}
-
-	/**
 	 * Create a sound object with parameters.
 	 * 
 	 * @param aref
@@ -83,7 +53,8 @@ public class AudioEngine {
 	/*
 	 * This is a shadow method implementation.
 	 */
-	public Object create(Object owner, AudioPosition position, String file, boolean looping, boolean override, float volume) {
+	public Object create(Object owner, AudioPosition position, String file, boolean looping, boolean override,
+			float volume) {
 		// Do nothing.
 		return null;
 	}

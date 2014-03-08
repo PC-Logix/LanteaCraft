@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundPool;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -12,11 +11,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import pcl.common.audio.AudioEngine;
 import pcl.common.audio.ClientAudioEngine;
 import pcl.common.network.ModPacket;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.common.render.RotationOrientedBlockRenderer;
+import pcl.lc.core.ClientTickHandler;
 import pcl.lc.guis.ScreenNaquadahGenerator;
 import pcl.lc.guis.ScreenStargateBase;
 import pcl.lc.guis.ScreenStargateController;
@@ -44,13 +43,16 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
+	private ClientTickHandler clientTickHandler = new ClientTickHandler();
+
 	public LanteaCraftClientProxy() {
 		super();
-		defaultClientPacketHandler = new ClientPacketHandler();
+		clientPacketHandler = new ClientPacketHandler();
 	}
 
 	@Override
@@ -62,9 +64,11 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	public void init(FMLInitializationEvent e) {
 		super.init(e);
 		audioContext = new ClientAudioEngine();
+		clientTickHandler.registerTickHost(audioContext);
+		TickRegistry.registerTickHandler(clientTickHandler, Side.CLIENT);
 		registerScreens();
 		registerRenderers();
-		
+
 	}
 
 	public void registerScreens() {
@@ -126,7 +130,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	void addScreen(Enum<?> id, Class<? extends GuiScreen> cls) {
 		registeredGUIs.put(id.ordinal(), cls);
 	}
-	
+
 	public void spawnEffect(EntityFX effect) {
 		Minecraft.getMinecraft().effectRenderer.addEffect(effect);
 	}
@@ -149,9 +153,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	@Override
 	public void handlePacket(ModPacket packet, Player player) {
 		if (packet.getPacketIsForServer())
-			defaultServerPacketHandler.handlePacket(packet, player);
+			serverPacketHandler.handlePacket(packet, player);
 		else
-			defaultClientPacketHandler.handlePacket(packet, player);
+			clientPacketHandler.handlePacket(packet, player);
 	}
 
 	@Override
