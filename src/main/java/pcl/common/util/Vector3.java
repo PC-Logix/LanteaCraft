@@ -1,5 +1,6 @@
 package pcl.common.util;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.Vec3;
 
 /**
@@ -103,6 +104,14 @@ public class Vector3 {
 	 */
 	public Vector3(Vec3 v) {
 		this(v.xCoord, v.yCoord, v.zCoord);
+	}
+	
+	/**
+	 * Creates a new vector from an entity position.
+	 * @param entity The entity.
+	 */
+	public Vector3(Entity entity) {
+		this(entity.posX, entity.posY, entity.posZ);
 	}
 
 	/**
