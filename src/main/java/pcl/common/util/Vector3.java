@@ -219,6 +219,18 @@ public class Vector3 {
 	}
 
 	/**
+	 * Divides the components of this Vector3 by the constant c, returns a new
+	 * Vector3 division product.
+	 * 
+	 * @param c
+	 *            The constant.
+	 * @return The Vector3 division product.
+	 */
+	public Vector3 div(double c) {
+		return new Vector3(x / c, y / c, z / c);
+	}
+
+	/**
 	 * Determine the dot-product of this Vector3 with respect to another
 	 * Vector3.
 	 * 
