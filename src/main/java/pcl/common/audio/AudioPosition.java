@@ -15,11 +15,11 @@ public class AudioPosition {
 			return (AudioPosition) o;
 		if (o instanceof Entity) {
 			Entity e = (Entity) o;
-			return new AudioPosition(e.worldObj, new Vector3(e.posX, e.posY, e.posZ));
+			return new AudioPosition(e.worldObj, new Vector3(e));
 		}
 		if (o instanceof TileEntity) {
 			TileEntity t = (TileEntity) o;
-			return new AudioPosition(t.worldObj, new Vector3(t.xCoord + 0.5f, t.yCoord + 0.5f, t.zCoord + 0.5f));
+			return new AudioPosition(t.worldObj, new Vector3(t));
 		}
 		return null;
 	}

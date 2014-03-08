@@ -79,7 +79,7 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public Vector3 getVectorLoc() {
-		return new Vector3(host.xCoord, host.yCoord, host.zCoord);
+		return new Vector3(host);
 	}
 
 }

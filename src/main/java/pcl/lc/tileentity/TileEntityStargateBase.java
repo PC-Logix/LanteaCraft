@@ -420,7 +420,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(q0.x, q0.y, q0.z, q1.x, q1.y, q1.z);
 		List<EntityLiving> ents = worldObj.getEntitiesWithinAABB(EntityLiving.class, box);
 		for (EntityLiving ent : ents) {
-			Vector3 ep = new Vector3(ent.posX, ent.posY, ent.posZ);
+			Vector3 ep = new Vector3(ent);
 			Vector3 gp = t.p(0, 2, 0.5);
 			double dist = ep.distanceTo(gp);
 			if (dist > 1.0)
@@ -468,7 +468,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 
 		public TrackedEntity(Entity entity) {
 			this.entity = entity;
-			lastPos = new Vector3(entity.posX, entity.posY, entity.posZ);
+			lastPos = new Vector3(entity);
 			lastVel = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
 		}
 	}

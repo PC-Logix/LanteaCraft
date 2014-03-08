@@ -180,9 +180,9 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 			System.out.println("Teleporting..");
 			while (entity.ridingEntity != null)
 				entity = entity.ridingEntity;
-			Vector3 host = new Vector3(xCoord, yCoord, zCoord);
-			Vector3 entPos = new Vector3(entity.posX, entity.posY, entity.posZ);
-			Vector3 dest = new Vector3(dte.xCoord, dte.yCoord, dte.zCoord);
+			Vector3 host = new Vector3(this);
+			Vector3 entPos = new Vector3(entity);
+			Vector3 dest = new Vector3(dte);
 			Vector3 output = dest.add(entPos.sub(host));
 			teleportEntityAndRider(entity, output);
 		}
