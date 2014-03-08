@@ -3,8 +3,10 @@ package pcl.common.audio;
 import java.net.URL;
 import java.util.logging.Level;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import paulscode.sound.SoundSystem;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 
 public class ClientAudioSource extends AudioSource {
@@ -113,7 +115,49 @@ public class ClientAudioSource extends AudioSource {
 
 	@Override
 	public void advance(EntityPlayer clientPlayer) {
+		if (!valid || !isPlaying) {
+			realVolume = 0;
+			return;
+		}
 
+		float md = ((ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine()).falloffDistance;
+		md *= Math.max(configuredVolume, 1.0F);
+		float rolloff = 1.0F, rd = 1.0F;
+
+		float d = 0.0F;
+
+		if (position.world.equals(clientPlayer.worldObj))
+			d = (float) position.position.sub(new Vector3(clientPlayer)).mag();
+
+		if (d > md) {
+			realVolume = 0.0F;
+			cull();
+			return;
+		}
+		
+		if (rd > d)
+			d = rd;
+		float gain = 1.0F - rolloff * (d - rd) / (md - rd);
+		float nrv = gain * configuredVolume * ((ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine()).masterVolume;
+		
+		Vector3 i = new Vector3(clientPlayer);
+		Vector3 j = position.position.sub(i).div(d);
+		if (nrv > 0.1f) {
+			for (int k = 0; k < d; k++) {
+				int b = clientPlayer.worldObj.getBlockId((int) i.x, (int) i.y, (int) i.z);
+				if (b != 0) {
+					if (Block.opaqueCubeLookup[b])
+						nrv *= 0.5F;
+					else
+						nrv *= 0.85F;
+				}
+				i.add(j);
+			}
+		}
+		
+		if (Math.abs(realVolume / nrv - 1.0F) > 0.06D)
+			system.setVolume(name, Math.min(nrv, 1.0F) * ((ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine()).masterVolume);
+		realVolume = nrv;
 	}
 
 	@Override

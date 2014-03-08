@@ -46,7 +46,7 @@ public class ClientAudioEngine extends AudioEngine {
 
 	public boolean enabled = true;
 	public int maxSources = 32;
-	private float masterVolume = 0.5F;
+	public float masterVolume = 0.5F;
 	private SoundSystem system = null;
 
 	private HashMap<SoundHostObject, ArrayList<AudioSource>> hostSourceList = new HashMap<SoundHostObject, ArrayList<AudioSource>>();
