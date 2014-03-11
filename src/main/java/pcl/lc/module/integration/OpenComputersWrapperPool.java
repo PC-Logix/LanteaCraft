@@ -1,5 +1,6 @@
 package pcl.lc.module.integration;
 
+import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
@@ -10,7 +11,9 @@ import pcl.lc.util.AddressingError;
 import pcl.lc.util.AddressingError.CoordRangeError;
 import pcl.lc.util.AddressingError.DimensionRangeError;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import li.cil.oc.api.Network;
+import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.network.Arguments;
 import li.cil.oc.api.network.Callback;
 import li.cil.oc.api.network.Context;
@@ -20,6 +23,32 @@ import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.Visibility;
 
 public class OpenComputersWrapperPool {
+
+	public static class OpenComputersDriver implements Block {
+		@Override
+		public boolean worksWith(World world, int x, int y, int z) {
+			int id = world.getBlockId(x, y, z);
+			return (id == LanteaCraft.Blocks.stargateBaseBlock.blockID)
+					|| (id == LanteaCraft.Blocks.naquadahGenerator.blockID)
+					|| (id == LanteaCraft.Blocks.stargateControllerBlock.blockID);
+		}
+
+		@Override
+		public ManagedEnvironment createEnvironment(World world, int x, int y, int z) {
+			int id = world.getBlockId(x, y, z);
+			if (id == LanteaCraft.Blocks.stargateBaseBlock.blockID) {
+				IStargateAccess base = (IStargateAccess) world.getBlockTileEntity(x, y, z);
+				return new OpenComputersWrapperPool.StargateAccessWrapper(base);
+			} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
+				INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
+				return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
+			} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
+				IStargateControllerAccess dhd = (IStargateControllerAccess) world.getBlockTileEntity(x, y, z);
+				return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
+			} else
+				throw new RuntimeException("Driver.Block handler specified invalid typeof!");
+		}
+	}
 
 	private interface IHookManagedEnvironment extends ManagedEnvironment {
 		public String getComponentName();
@@ -87,25 +116,28 @@ public class OpenComputersWrapperPool {
 				stateWatcher = access.getState();
 				switch (stateWatcher) {
 				case Idle:
-					node.sendToVisible("computer.signal", new Object[] {"sgIdle", true });
+					node.sendToVisible("computer.signal", new Object[] { "sgIdle", true });
 					break;
 				case Dialling:
 					if (access.isOutgoingConnection())
-						node.sendToVisible("computer.signal", new Object[] {"sgOutgoing", access.getConnectionAddress() });
+						node.sendToVisible("computer.signal",
+								new Object[] { "sgOutgoing", access.getConnectionAddress() });
 					else
 						// TODO: Only reveal incoming connection chevrons to
 						// OpenComputers as they are locked in by the Stargate
 						// (aesthetics).
-						node.sendToVisible("computer.signal", new Object[] {"sgIncoming", access.getConnectionAddress() });
+						node.sendToVisible("computer.signal",
+								new Object[] { "sgIncoming", access.getConnectionAddress() });
 					break;
 				case InterDialling:
-					node.sendToVisible("computer.signal", new Object[] {"sgChevronEncode", access.getEncodedChevrons() });
+					node.sendToVisible("computer.signal",
+							new Object[] { "sgChevronEncode", access.getEncodedChevrons() });
 					break;
 				case Transient:
-					node.sendToVisible("computer.signal", new Object[] {"sgWormholeOpening", true });
+					node.sendToVisible("computer.signal", new Object[] { "sgWormholeOpening", true });
 					break;
 				case Disconnecting:
-					node.sendToVisible("computer.signal", new Object[] {"sgWormholeClosing", true });
+					node.sendToVisible("computer.signal", new Object[] { "sgWormholeClosing", true });
 					break;
 				}
 			}

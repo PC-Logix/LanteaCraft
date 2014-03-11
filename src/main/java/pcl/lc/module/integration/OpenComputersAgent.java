@@ -1,46 +1,14 @@
 package pcl.lc.module.integration;
 
-import pcl.lc.LanteaCraft;
-import pcl.lc.api.INaquadahGeneratorAccess;
-import pcl.lc.api.IStargateAccess;
-import pcl.lc.api.IStargateControllerAccess;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
-import pcl.lc.module.ModuleIntegration;
-import net.minecraft.world.World;
 import li.cil.oc.api.Driver;
-import li.cil.oc.api.driver.Block;
-import li.cil.oc.api.network.ManagedEnvironment;
 
 @Agent(modname = "OpenComputers")
-public class OpenComputersAgent implements IIntegrationAgent, Block {
+public class OpenComputersAgent implements IIntegrationAgent {
 
 	public OpenComputersAgent() {
 
-	}
-
-	@Override
-	public boolean worksWith(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
-		return (id == LanteaCraft.Blocks.stargateBaseBlock.blockID)
-				|| (id == LanteaCraft.Blocks.naquadahGenerator.blockID);
-				//|| (id == LanteaCraft.Blocks.stargateControllerBlock.blockID);
-	}
-
-	@Override
-	public ManagedEnvironment createEnvironment(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
-		if (id == LanteaCraft.Blocks.stargateBaseBlock.blockID) {
-			IStargateAccess base = (IStargateAccess) world.getBlockTileEntity(x, y, z);
-			return new OpenComputersWrapperPool.StargateAccessWrapper(base);
-		} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
-			INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
-			return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
-		//} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
-			//IStargateControllerAccess dhd = (IStargateControllerAccess) world.getBlockTileEntity(x, y, z);
-			//return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
-		} else
-			throw new RuntimeException("Driver.Block handler specified invalid typeof!");
 	}
 
 	@Override
@@ -50,7 +18,7 @@ public class OpenComputersAgent implements IIntegrationAgent, Block {
 
 	@Override
 	public void init() {
-		Driver.add(this);
+		Driver.add(new OpenComputersWrapperPool.OpenComputersDriver());
 	}
 
 }

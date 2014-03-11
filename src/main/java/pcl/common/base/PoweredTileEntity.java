@@ -6,7 +6,6 @@ import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import pcl.common.asm.ClassMerge.MergeMod;
 import pcl.common.asm.ClassOptional.ClassFilterInterfaceSelf;
 import pcl.common.asm.ClassOptional.ClassFilterInterfaceSelfList;
 import pcl.common.asm.ClassOptional.ClassFilterMethod;
@@ -37,10 +36,10 @@ import cpw.mods.fml.common.Loader;
 		@ClassFilterInterfaceSelf(iface = "ic2.api.energy.tile.IEnergySink"),
 		@ClassFilterInterfaceSelf(iface = "ic2.api.energy.tile.IEnergySource"),
 		@ClassFilterInterfaceSelf(iface = "buildcraft.api.power.IPowerEmitter"),
-		@ClassFilterInterfaceSelf(iface = "buildcraft.api.power.IPowerReceptor")
-
-})
-@MergeMod(fromClass = "pcl.lc.module.integration.BuildcraftAgent$BuildcraftPowerInterop", modName = "BuildCraft|Core")
+		@ClassFilterInterfaceSelf(iface = "buildcraft.api.power.IPowerReceptor") })
+// @MergeMod(fromClass =
+// "pcl.lc.module.integration.BuildcraftAgent$BuildcraftPowerInterop", modName =
+// "BuildCraft|Core")
 public abstract class PoweredTileEntity extends GenericTileEntity implements IEnergyAcceptor, IEnergySink,
 		IEnergySource, IPowerEmitter, IPowerReceptor, IElectrical {
 
