@@ -133,6 +133,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 
 	public TileEntityStargateBase() {
 		getAsStructure().setMetadata("state", EnumStargateState.Idle);
+		getAsStructure().invalidate();
 	}
 
 	@Override
@@ -153,8 +154,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 			connectedLocation = new WorldLocation(nbt.getCompoundTag("connectedLocation"));
 		isInitiator = nbt.getBoolean("isInitiator");
 		timeout = nbt.getInteger("timeout");
-
 		clearConnection();
+		getAsStructure().invalidate();
 	}
 
 	@Override

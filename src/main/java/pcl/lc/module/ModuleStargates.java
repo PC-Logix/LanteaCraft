@@ -65,7 +65,6 @@ public class ModuleStargates implements IModule {
 
 		Items.coreCrystal = RegistrationHelper.registerItem(ItemCoreCrystal.class, "coreCrystal");
 		Items.controllerCrystal = RegistrationHelper.registerItem(ItemControllerCrystal.class, "controllerCrystal");
-		Items.energyCrystal = RegistrationHelper.registerItem(ItemEnergyCrystal.class, "energyCrystal");
 
 		Items.transportRingActivator = RegistrationHelper.registerItem(ItemTransportRingActivator.class,
 				"transportRingActivator");

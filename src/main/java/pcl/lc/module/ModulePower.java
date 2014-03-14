@@ -7,10 +7,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Blocks;
+import pcl.lc.LanteaCraft.Items;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.containers.ContainerNaquadahGenerator;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.items.ItemEnergyCrystal;
+import pcl.lc.items.ItemZPM;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 
 public class ModulePower implements IModule {
@@ -27,16 +30,18 @@ public class ModulePower implements IModule {
 
 	@Override
 	public void preInit() {
-		Blocks.naquadahGenerator = (BlockNaquadahGenerator) RegistrationHelper.registerBlock(BlockNaquadahGenerator.class,
-				"naquadahGenerator");
+		Blocks.naquadahGenerator = (BlockNaquadahGenerator) RegistrationHelper.registerBlock(
+				BlockNaquadahGenerator.class, "naquadahGenerator");
 		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class, "tileEntityNaquadahGenerator");
+
+		Items.energyCrystal = RegistrationHelper.registerItem(ItemEnergyCrystal.class, "energyCrystal");
+		Items.zpm = RegistrationHelper.registerItem(ItemZPM.class, "zpm");
 	}
 
 	@Override
 	public void init() {
-		
-		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ContainerNaquadahGenerator.class);
-
+		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(),
+				ContainerNaquadahGenerator.class);
 	}
 
 	@Override

@@ -40,9 +40,6 @@ public abstract class GenericContainerBlock extends BlockContainer {
 	}
 
 	@Override
-	public abstract void onBlockAdded(World world, int x, int y, int z);
-
-	@Override
 	public void breakBlock(World world, int x, int y, int z, int blockId, int blockMeta) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof IInventory) {
