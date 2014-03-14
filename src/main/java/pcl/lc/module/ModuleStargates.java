@@ -17,6 +17,7 @@ import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
 import pcl.lc.containers.ContainerStargateController;
+import pcl.lc.containers.ContainerStargateControllerEnergy;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.items.ItemControllerCrystal;
 import pcl.lc.items.ItemCoreCrystal;
@@ -88,6 +89,8 @@ public class ModuleStargates implements IModule {
 
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateController.ordinal(),
 				ContainerStargateController.class);
+		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(),
+				ContainerStargateControllerEnergy.class);
 	}
 
 	@Override

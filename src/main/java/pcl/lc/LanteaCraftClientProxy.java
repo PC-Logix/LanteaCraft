@@ -19,6 +19,7 @@ import pcl.lc.core.ClientTickHandler;
 import pcl.lc.guis.ScreenNaquadahGenerator;
 import pcl.lc.guis.ScreenStargateBase;
 import pcl.lc.guis.ScreenStargateController;
+import pcl.lc.guis.ScreenStargateControllerEnergy;
 import pcl.lc.network.ClientPacketHandler;
 import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
@@ -74,6 +75,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	public void registerScreens() {
 		addScreen(LanteaCraft.EnumGUIs.StargateBase, ScreenStargateBase.class);
 		addScreen(LanteaCraft.EnumGUIs.StargateController, ScreenStargateController.class);
+		addScreen(LanteaCraft.EnumGUIs.StargateControllerEnergy, ScreenStargateControllerEnergy.class);
 		addScreen(LanteaCraft.EnumGUIs.NaquadahGenerator, ScreenNaquadahGenerator.class);
 	}
 

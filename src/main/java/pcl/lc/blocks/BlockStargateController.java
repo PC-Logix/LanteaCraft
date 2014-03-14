@@ -92,7 +92,11 @@ public class BlockStargateController extends RotationOrientedBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateController.ordinal(), world, x, y, z);
+		if (player.isSneaking())
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), world,
+					x, y, z);
+		else
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateController.ordinal(), world, x, y, z);
 		return true;
 	}
 
