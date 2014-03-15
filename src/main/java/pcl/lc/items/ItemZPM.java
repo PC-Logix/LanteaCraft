@@ -31,6 +31,11 @@ public class ItemZPM extends Item implements IItemEnergyStore {
 	public double getMaximumEnergy() {
 		return 1073741824.00d;
 	}
+	
+	@Override
+	public double getMaximumIOPayload() {
+		return 1073741824.00d; 
+	}
 
 	@Override
 	public double receiveEnergy(ItemStack itemStack, double quantity, boolean isSimulated) {
@@ -39,6 +44,8 @@ public class ItemZPM extends Item implements IItemEnergyStore {
 
 	@Override
 	public double extractEnergy(ItemStack itemStack, double quantity, boolean isSimulated) {
+		if (quantity > getMaximumIOPayload())
+			quantity = getMaximumIOPayload();
 		double actualPayload = Math.min(getEnergyStored(itemStack), quantity);
 		if (!isSimulated)
 			setEnergyStored(itemStack, getEnergyStored(itemStack) - actualPayload);
@@ -66,7 +73,7 @@ public class ItemZPM extends Item implements IItemEnergyStore {
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
 		double energy = 100.0d - ((100 * getEnergyStored(par1ItemStack)) / getMaximumEnergy());
-		par3List.add(String.format("Entropy: %.2f%%", energy));
+		par3List.add(String.format("Entropy: %.8f%%", energy));
 	}
 
 	private void updateDisplay(ItemStack stack) {

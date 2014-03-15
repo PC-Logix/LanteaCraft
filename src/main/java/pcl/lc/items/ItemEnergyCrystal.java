@@ -33,7 +33,14 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 	}
 
 	@Override
+	public double getMaximumIOPayload() {
+		return 6.0d;
+	}
+
+	@Override
 	public double receiveEnergy(ItemStack itemStack, double quantity, boolean isSimulated) {
+		if (quantity > getMaximumIOPayload())
+			quantity = getMaximumIOPayload();
 		double actualPayload = Math.min(getMaximumEnergy() - getEnergyStored(itemStack), quantity);
 		if (!isSimulated)
 			setEnergyStored(itemStack, getEnergyStored(itemStack) + actualPayload);
@@ -43,6 +50,8 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 
 	@Override
 	public double extractEnergy(ItemStack itemStack, double quantity, boolean isSimulated) {
+		if (quantity > getMaximumIOPayload())
+			quantity = getMaximumIOPayload();
 		double actualPayload = Math.min(getEnergyStored(itemStack), quantity);
 		if (!isSimulated)
 			setEnergyStored(itemStack, getEnergyStored(itemStack) - actualPayload);
@@ -66,7 +75,7 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 			itemStack.setTagCompound(new NBTTagCompound());
 		itemStack.stackTagCompound.setDouble("stored-energy", value);
 	}
-	
+
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
 		double energy = ((100 * getEnergyStored(par1ItemStack)) / getMaximumEnergy());

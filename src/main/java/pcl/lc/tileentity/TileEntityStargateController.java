@@ -3,17 +3,22 @@ package pcl.lc.tileentity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
+import pcl.common.api.energy.IEnergyStore;
+import pcl.common.api.energy.IItemEnergyStore;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
+import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.blocks.BlockStargateController;
 
-public class TileEntityStargateController extends GenericTileEntity {
+public class TileEntityStargateController extends GenericTileEntity implements IEnergyStore {
 
 	public static int linkRangeX = 10;
 	public static int linkRangeY = 10;
@@ -21,6 +26,8 @@ public class TileEntityStargateController extends GenericTileEntity {
 
 	public boolean isLinkedToStargate;
 	public int linkedX, linkedY, linkedZ;
+
+	private double energy = 0.0d;
 
 	private FilteredInventory inventory = new FilteredInventory(1) {
 		@Override
@@ -94,6 +101,9 @@ public class TileEntityStargateController extends GenericTileEntity {
 		linkedX = nbt.getInteger("linkedX");
 		linkedY = nbt.getInteger("linkedY");
 		linkedZ = nbt.getInteger("linkedZ");
+		NBTTagCompound energyCompound = nbt.hasKey("energyStore") ? nbt.getCompoundTag("energyStore") : null;
+		if (energyCompound != null)
+			loadEnergyStore(energyCompound);
 	}
 
 	@Override
@@ -103,6 +113,9 @@ public class TileEntityStargateController extends GenericTileEntity {
 		nbt.setInteger("linkedX", linkedX);
 		nbt.setInteger("linkedY", linkedY);
 		nbt.setInteger("linkedZ", linkedZ);
+		NBTTagCompound energyCompound = new NBTTagCompound("energyStore");
+		saveEnergyStore(energyCompound);
+		nbt.setCompoundTag("energyStore", energyCompound);
 	}
 
 	public TileEntityStargateBase getLinkedStargateTE() {
@@ -145,5 +158,89 @@ public class TileEntityStargateController extends GenericTileEntity {
 	public void clearLinkToStargate() {
 		isLinkedToStargate = false;
 		markBlockForUpdate();
+	}
+
+	@Override
+	public void updateEntity() {
+		if (!worldObj.isRemote) {
+			if (getEnergyStored() < getMaxEnergyStored()) {
+				ItemStack stackOf = inventory.getStackInSlot(0);
+				if (stackOf != null && (stackOf.getItem() instanceof IItemEnergyStore)) {
+					IItemEnergyStore store = (IItemEnergyStore) stackOf.getItem();
+					double receive = store.extractEnergy(stackOf,
+							Math.min(store.getMaximumIOPayload(), getMaxEnergyStored() - getEnergyStored()), false);
+					energy += receive;
+				}
+			}
+		}
+	}
+	
+	public void getStateFromPacket(ModPacket packet) {
+		StandardModPacket packetOf = (StandardModPacket) packet;
+		this.energy = (Double) packetOf.getValue("energy");
+	}
+
+	public ModPacket getPacketFromState() {
+		StandardModPacket packet = new StandardModPacket();
+		packet.setIsForServer(false);
+		packet.setType("LanteaPacket.TileUpdate");
+		packet.setValue("DimensionID", worldObj.provider.dimensionId);
+		packet.setValue("WorldX", xCoord);
+		packet.setValue("WorldY", yCoord);
+		packet.setValue("WorldZ", zCoord);
+		
+		packet.setValue("energy", energy);
+		return packet;
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		LanteaCraft.getProxy().sendToAllPlayers(getPacketFromState());
+		return null;
+	}
+
+	@Override
+	public double receiveEnergy(double quantity, boolean isSimulated) {
+		double actualPayload = Math.min(getMaxEnergyStored() - getEnergyStored(), quantity);
+		if (!isSimulated) {
+			energy += actualPayload;
+			onInventoryChanged();
+			getDescriptionPacket();
+		}
+		return actualPayload;
+	}
+
+	@Override
+	public double extractEnergy(double quantity, boolean isSimulated) {
+		double actualPayload = Math.min(getEnergyStored(), quantity);
+		if (!isSimulated) {
+			energy -= actualPayload;
+			onInventoryChanged();
+			getDescriptionPacket();
+		}
+		return actualPayload;
+	}
+
+	@Override
+	public double getEnergyStored() {
+		return energy;
+	}
+
+	@Override
+	public double getMaxEnergyStored() {
+		// TODO: Come up with a better value for this when gate consumption
+		// rates are finalized.
+		return 50.0D;
+	}
+
+	@Override
+	public void saveEnergyStore(NBTTagCompound compound) {
+		compound.setDouble("energy", energy);
+	}
+
+	@Override
+	public void loadEnergyStore(NBTTagCompound compound) {
+		if (compound.hasKey("energy"))
+			energy = compound.getDouble("energy");
 	}
 }

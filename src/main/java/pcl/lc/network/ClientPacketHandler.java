@@ -12,6 +12,7 @@ import pcl.lc.render.effects.EffectBeam;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityRingPlatform;
 import pcl.lc.tileentity.TileEntityStargateBase;
+import pcl.lc.tileentity.TileEntityStargateController;
 import cpw.mods.fml.common.network.Player;
 
 public class ClientPacketHandler {
@@ -40,6 +41,10 @@ public class ClientPacketHandler {
 					} else if (tile instanceof TileEntityNaquadahGenerator) {
 						TileEntityNaquadahGenerator generator = (TileEntityNaquadahGenerator) tile;
 						generator.getStateFromPacket(packet);
+						w.markBlockForRenderUpdate(x, y, z);
+					} else if (tile instanceof TileEntityStargateController) {
+						TileEntityStargateController controller = (TileEntityStargateController) tile;
+						controller.getStateFromPacket(packet);
 						w.markBlockForRenderUpdate(x, y, z);
 					}
 				}
