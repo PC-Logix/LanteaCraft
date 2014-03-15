@@ -2,22 +2,20 @@ package pcl.lc.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.world.World;
 import pcl.common.base.GenericContainer;
+import pcl.common.inventory.FilteredInventory;
+import pcl.common.inventory.FilteredSlot;
 import pcl.lc.tileentity.TileEntityStargateController;
 
 public class ContainerStargateControllerEnergy extends GenericContainer {
 
-	public static ContainerStargateControllerEnergy create(EntityPlayer player, World world, int x, int y, int z) {
-		TileEntityStargateController te = (TileEntityStargateController) world.getBlockTileEntity(x, y, z);
-		if (te != null)
-			return new ContainerStargateControllerEnergy(te, player);
-		return null;
-	}
+	private FilteredInventory filterInventory;
 
 	public ContainerStargateControllerEnergy(TileEntityStargateController te, EntityPlayer player) {
-		super(256, 208);
-		// addPlayerSlots(player, playerSlotsX, playerSlotsY);
+		super(177, 208);
+		filterInventory = (FilteredInventory) te.getInventory();
+		addSlotToContainer(new FilteredSlot(filterInventory, 0, 8, 94, false));
+		addPlayerSlots(player, 8, 123);
 	}
 
 	@Override

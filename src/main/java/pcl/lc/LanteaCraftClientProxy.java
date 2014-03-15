@@ -139,9 +139,11 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	@Override
 	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing GUI with ordinal %s.", ID));
 		Class<? extends GuiScreen> gui = LanteaCraft.getProxy().getGUI(ID);
 		if (gui != null)
 			try {
+				LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing GUI of class %s.", gui.getName()));
 				TileEntity entity = world.getBlockTileEntity(x, y, z);
 				Constructor<?> constr = gui.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
 				Object val = constr.newInstance(entity, player);

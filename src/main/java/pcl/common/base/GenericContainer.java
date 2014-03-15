@@ -27,11 +27,12 @@ public abstract class GenericContainer extends Container {
 
 	public void addPlayerSlots(EntityPlayer player, int x, int y) {
 		InventoryPlayer inventory = player.inventory;
-		for (int var3 = 0; var3 < 3; ++var3)
-			for (int var4 = 0; var4 < 9; ++var4)
-				addSlotToContainer(new Slot(inventory, var4 + var3 * 9 + 9, x + var4 * 18, y + var3 * 18));
-		for (int var3 = 0; var3 < 9; ++var3)
-			addSlotToContainer(new Slot(inventory, var3, x + var3 * 18, y + 58));
+		for (int i = 0; i < 3; ++i)
+			for (int j = 0; j < 9; ++j)
+				this.addSlotToContainer(new Slot(inventory, j + i * 9 + 9, x + j * 18, y + i * 18));
+
+		for (int i = 0; i < 9; ++i)
+			this.addSlotToContainer(new Slot(inventory, i, x + i * 18, y + 58));
 	}
 
 	@Override

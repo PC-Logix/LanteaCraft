@@ -51,6 +51,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 
 	@Override
 	public void initGui() {
+		super.initGui();
 		dhdTop = height - dhdHeight;
 		dhdCentreX = width / 2;
 		dhdCentreY = dhdTop + dhdHeight / 2;
@@ -198,10 +199,6 @@ public class ScreenStargateController extends GenericGlyphGUI {
 			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY, 2 * (rx + d), 0.5 * ry + d, 0, 32, 64, 32);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		}
-
-		ResourceLocation slot = LanteaCraft.getResource("textures/gui/dhd_powercrystal_slot.png");
-		bindTexture(slot, 60, 60);
-		drawTexturedRect(width / 2 + 128, dhdTop, 30, 30);
 
 	}
 

@@ -1,13 +1,16 @@
 package pcl.lc.tileentity;
 
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
+import pcl.common.inventory.FilterRule;
+import pcl.common.inventory.FilteredInventory;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
+import pcl.lc.LanteaCraft;
 import pcl.lc.blocks.BlockStargateController;
 
 public class TileEntityStargateController extends GenericTileEntity {
@@ -19,7 +22,41 @@ public class TileEntityStargateController extends GenericTileEntity {
 	public boolean isLinkedToStargate;
 	public int linkedX, linkedY, linkedZ;
 
-	private IInventory inventory = new InventoryBasic("Energy", false, 1);
+	private FilteredInventory inventory = new FilteredInventory(1) {
+		@Override
+		public void onInventoryChanged() {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public boolean isInvNameLocalized() {
+			return false;
+		}
+
+		@Override
+		public String getInvName() {
+			return "stargate_energy";
+		}
+
+		@Override
+		public int[] getAccessibleSlotsFromSide(int var1) {
+			return new int[] { 0 };
+		}
+
+		@Override
+		public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+			if (0 > i || i > items.length)
+				return false;
+			return items[i] == null || ItemStack.areItemStacksEqual(items[i], itemstack);
+		}
+
+		@Override
+		public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+			if (0 > i || i > items.length)
+				return false;
+			return true;
+		}
+	};
 
 	public static void configure(ConfigurationHelper cfg) {
 		linkRangeX = cfg.getInteger("dhd", "linkRangeX", linkRangeX);
@@ -27,11 +64,16 @@ public class TileEntityStargateController extends GenericTileEntity {
 		linkRangeZ = cfg.getInteger("dhd", "linkRangeZ", linkRangeZ);
 	}
 
+	public TileEntityStargateController() {
+		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.zpm, 1) }, null,
+				true, false));
+	}
+
 	@Override
 	public String getInvName() {
 		return "dhd";
 	}
-	
+
 	@Override
 	public IInventory getInventory() {
 		return inventory;

@@ -1,6 +1,7 @@
 package pcl.common.helpers;
 
 import java.lang.reflect.Constructor;
+import java.util.logging.Level;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -13,9 +14,11 @@ public class GUIHandler implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing Container with ordinal %s.", ID));
 		Class<? extends Container> container = LanteaCraft.getProxy().getContainer(ID);
 		if (container != null)
 			try {
+				LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing Container of class %s.", container.getName()));
 				TileEntity entity = world.getBlockTileEntity(x, y, z);
 				Constructor<?> constr = container.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
 				Object val = constr.newInstance(entity, player);
