@@ -72,8 +72,8 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 	}
 
 	public TileEntityStargateController() {
-		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.zpm, 1) }, null,
-				true, false));
+		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.energyCrystal, 1),
+				new ItemStack(LanteaCraft.Items.zpm, 1) }, null, true, false));
 	}
 
 	@Override
@@ -174,7 +174,7 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 			}
 		}
 	}
-	
+
 	public void getStateFromPacket(ModPacket packet) {
 		StandardModPacket packetOf = (StandardModPacket) packet;
 		this.energy = (Double) packetOf.getValue("energy");
@@ -188,7 +188,7 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 		packet.setValue("WorldX", xCoord);
 		packet.setValue("WorldY", yCoord);
 		packet.setValue("WorldZ", zCoord);
-		
+
 		packet.setValue("energy", energy);
 		return packet;
 	}

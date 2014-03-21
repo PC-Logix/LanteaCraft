@@ -34,7 +34,7 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 
 	@Override
 	public double getMaximumIOPayload() {
-		return 6.0d;
+		return 1.0d;
 	}
 
 	@Override

@@ -39,6 +39,16 @@ public class ScreenStargateControllerEnergy extends GenericGlyphGUI {
 		if (sg.substring(sg.indexOf(".") + 1).length() != 2)
 			sg.append("0");
 		sg.append("%");
+		sg.append(" ");
+		
+		int min, sec;
+		sec = (int) Math.floor(container.getStoredEnergy() * 2.55);
+		min = (int) Math.floor(sec / 60);
+		sec = sec % 60;
+		if (min > 0)
+			sg.append(min).append("m ");
+		sg.append(sec).append("s.");
+		
 		int dw = fontRenderer.getStringWidth(sg.toString());
 		fontRenderer.drawString(sg.toString(), 49 + ((int) Math.floor((80d - dw) / 2)), 28,
 				(container.getStoredEnergy() > 0.00d) ? 0xFFFFFF : 0x9F0101, true);
