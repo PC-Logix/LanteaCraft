@@ -39,7 +39,6 @@ public class TileEntityStargateRing extends GenericTileEntity {
 			int ord = (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) & 0x1);
 			thisPart.setType((ord == 0) ? "partStargateBlock" : "partStargateChevron");
 		}
-		LanteaCraft.getLogger().log(Level.INFO, "Ring part being flagged as dirty!");
 		thisPart.devalidateHostMultiblock();
 	}
 

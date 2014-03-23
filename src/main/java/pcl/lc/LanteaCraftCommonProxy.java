@@ -1,9 +1,12 @@
 package pcl.lc;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,9 +30,9 @@ import pcl.common.helpers.VersionHelper;
 import pcl.common.network.ModPacket;
 import pcl.lc.compat.UpgradeHelper;
 import pcl.lc.core.ServerTickHandler;
-import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleWorldGenerator;
 import pcl.lc.network.ClientPacketHandler;
 import pcl.lc.network.ServerPacketHandler;
@@ -40,6 +43,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -72,7 +77,9 @@ public class LanteaCraftCommonProxy {
 
 	public TileEntityChunkManager chunkManager;
 	protected AudioEngine audioContext;
-	
+
+	protected WorldLog worldLogger;
+
 	private ServerTickHandler serverTickHandler = new ServerTickHandler();
 
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
@@ -110,10 +117,10 @@ public class LanteaCraftCommonProxy {
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft setting up...");
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getInstance());
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getSpecialBucketHandler());
-		
+
 		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
 		audioContext = new AudioEngine();
-		
+
 		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
 		TickRegistry.registerTickHandler(serverTickHandler, Side.SERVER);
 		networkHelpers.init();
@@ -147,7 +154,7 @@ public class LanteaCraftCommonProxy {
 	public VersionHelper getVersionHelper() {
 		return versionHelper;
 	}
-	
+
 	public AudioEngine getAudioEngine() {
 		return audioContext;
 	}
@@ -317,6 +324,35 @@ public class LanteaCraftCommonProxy {
 		if (!resourceCache.containsKey(resource))
 			resourceCache.put(resource, new ResourceLocation(LanteaCraft.getAssetKey(), resource));
 		return resourceCache.get(resource);
+	}
+
+	public void onServerStarting(FMLServerStartingEvent e) {
+		if (worldLogger != null) {
+			worldLogger.close();
+			worldLogger = null;
+		}
+		try {
+			File base = new File(new File(".").getCanonicalPath());
+			File datadir = new File(base, "saves/" + e.getServer().getFolderName() + "/data").getAbsoluteFile();
+			File logfile = new File(datadir, "LanteaCraft.log");
+			worldLogger = new WorldLog(logfile);
+			LanteaCraft.getLogger().log(Level.INFO, String.format("WorldLog starting: %s", logfile.toString()));
+			worldLogger.open();
+		} catch (IOException ioex) {
+			LanteaCraft.getLogger().log(Level.WARNING, "Failed to resolve paths for WorldLog.", ioex);
+		}
+	}
+
+	public void onServerStopping(FMLServerStoppingEvent e) {
+		if (worldLogger != null) {
+			LanteaCraft.getLogger().log(Level.INFO, "WorldLog shutting down...");
+			worldLogger.close();
+			worldLogger = null;
+		}
+	}
+
+	public WorldLog getWorldLog() {
+		return worldLogger;
 	}
 
 }

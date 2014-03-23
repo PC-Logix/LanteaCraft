@@ -291,13 +291,13 @@ public class LanteaCraft {
 		proxy.onInitMapGen(e);
 	}
 	
-	@ForgeSubscribe
+	@EventHandler
 	public void onServerStarting(FMLServerStartingEvent e) {
-		
+		proxy.onServerStarting(e);
 	}
 	
-	@ForgeSubscribe
+	@EventHandler
 	public void onServerStopping(FMLServerStoppingEvent e) {
-		
+		proxy.onServerStopping(e);
 	}
 }

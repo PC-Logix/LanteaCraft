@@ -15,6 +15,7 @@ import pcl.common.util.ImmutablePair;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
+import pcl.lc.core.WorldLog;
 import pcl.lc.tileentity.TileEntityStargateRing;
 
 public class StargateMultiblock extends GenericMultiblock {
@@ -35,6 +36,9 @@ public class StargateMultiblock extends GenericMultiblock {
 		if (!isClient && modified) {
 			modified = !modified;
 			host.getDescriptionPacket();
+			WorldLog log = LanteaCraft.getProxy().getWorldLog();
+			log.log(Level.INFO,
+					String.format("Stargate state changed to %s at (%s %s %s).", isValid, xCoord, yCoord, zCoord));
 		}
 	}
 
