@@ -7,10 +7,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.AddressingError.CoordRangeError;
+import pcl.lc.core.AddressingError.DimensionRangeError;
 import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.lc.util.AddressingError;
-import pcl.lc.util.AddressingError.CoordRangeError;
-import pcl.lc.util.AddressingError.DimensionRangeError;
 
 public class GateAddressHelper {
 

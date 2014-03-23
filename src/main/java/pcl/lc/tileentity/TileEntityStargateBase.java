@@ -43,16 +43,16 @@ import pcl.lc.api.EnumIrisState;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.blocks.BlockStargateBase;
+import pcl.lc.core.AddressingError;
 import pcl.lc.core.ChunkLocation;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.TeleportationAgent;
 import pcl.lc.core.WorldLocation;
+import pcl.lc.core.AddressingError.CoordRangeError;
+import pcl.lc.core.AddressingError.DimensionRangeError;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
-import pcl.lc.util.AddressingError;
-import pcl.lc.util.AddressingError.CoordRangeError;
-import pcl.lc.util.AddressingError.DimensionRangeError;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess {

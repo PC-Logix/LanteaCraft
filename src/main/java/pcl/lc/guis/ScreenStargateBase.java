@@ -14,10 +14,10 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.util.ResourceLocation;
 import pcl.common.util.ImmutablePair;
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.AddressingError;
+import pcl.lc.core.AddressingError.CoordRangeError;
+import pcl.lc.core.AddressingError.DimensionRangeError;
 import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.lc.util.AddressingError;
-import pcl.lc.util.AddressingError.CoordRangeError;
-import pcl.lc.util.AddressingError.DimensionRangeError;
 import pcl.common.base.GenericContainer;
 
 public class ScreenStargateBase extends GenericGlyphGUI {

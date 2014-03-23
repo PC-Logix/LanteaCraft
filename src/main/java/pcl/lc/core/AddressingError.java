@@ -1,4 +1,4 @@
-package pcl.lc.util;
+package pcl.lc.core;
 
 public class AddressingError extends Exception {
 	public AddressingError() {

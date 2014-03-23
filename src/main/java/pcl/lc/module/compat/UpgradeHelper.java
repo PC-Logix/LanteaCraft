@@ -1,4 +1,4 @@
-package pcl.lc.compat;
+package pcl.lc.module.compat;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
