@@ -14,7 +14,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.RotationOrientedBlock;
+import pcl.common.multiblock.MultiblockPart;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
+import pcl.lc.multiblock.StargateMultiblock;
+import pcl.lc.multiblock.StargatePart;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class BlockStargateBase extends RotationOrientedBlock {
@@ -24,7 +28,8 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	public BlockStargateBase(int id) {
 		super(id, Material.rock);
-		setHardness(1.5F);
+		setHardness(50F);
+		setResistance(2000F);
 		setCreativeTab(CreativeTabs.tabMisc);
 		setTickRandomly(true);
 	}
@@ -130,7 +135,21 @@ public class BlockStargateBase extends RotationOrientedBlock {
 		super.breakBlock(world, x, y, z, id, data);
 	}
 
-	void explode(World world, double x, double y, double z, double s) {
+	public void explode(World world, double x, double y, double z, double s) {
+		TileEntity te = getTileEntity(world, (int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
+		if (te != null && (te instanceof TileEntityStargateBase)) {
+			TileEntityStargateBase gate = (TileEntityStargateBase) te;
+			if (gate.getAsStructure() != null) {
+				StargateMultiblock struct = gate.getAsStructure();
+				for (MultiblockPart part : struct.getAllParts()) {
+					if (part instanceof StargatePart) {
+						Vector3 location = part.getVectorLoc();
+						world.setBlockToAir((int) Math.floor(location.x), (int) Math.floor(location.y),
+								(int) Math.floor(location.z));
+					}
+				}
+			}
+		}
 		world.newExplosion(null, x, y, z, (float) s, true, true);
 	}
 

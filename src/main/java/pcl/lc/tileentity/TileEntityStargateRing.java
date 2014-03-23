@@ -1,6 +1,9 @@
 package pcl.lc.tileentity;
 
+import java.util.logging.Level;
+
 import pcl.common.base.GenericTileEntity;
+import pcl.lc.LanteaCraft;
 import pcl.lc.multiblock.StargatePart;
 
 public class TileEntityStargateRing extends GenericTileEntity {
@@ -36,6 +39,7 @@ public class TileEntityStargateRing extends GenericTileEntity {
 			int ord = (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) & 0x1);
 			thisPart.setType((ord == 0) ? "partStargateBlock" : "partStargateChevron");
 		}
+		LanteaCraft.getLogger().log(Level.INFO, "Ring part being flagged as dirty!");
 		thisPart.devalidateHostMultiblock();
 	}
 

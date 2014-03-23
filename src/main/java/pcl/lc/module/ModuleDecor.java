@@ -20,8 +20,8 @@ public class ModuleDecor implements IModule {
 	 * @author AfterLifeLochie
 	 */
 	public static enum EnumDecorMaterials {
-		LANTEAN_STEEL("lantean"), LANTEAN_PATTERN_STEEL("lantean_pattern"), GOAULD_GOLD("goauld"), GOAULD_PATTERN_GOLD(
-				"goauld_pattern");
+		LANTEAN_STEEL("lantean"), LANTEAN_PATTERN_STEEL("lantean_pattern"), LANTEAN_GLASS("lantean_glass"),
+		GOAULD_GOLD("goauld"), GOAULD_PATTERN_GOLD("goauld_pattern");
 
 		public static EnumDecorMaterials fromOrdinal(int ordinal) {
 			return EnumDecorMaterials.values()[ordinal];

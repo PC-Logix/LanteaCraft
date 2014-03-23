@@ -14,6 +14,7 @@ import pcl.common.network.StandardModPacket;
 import pcl.common.util.ImmutablePair;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.EnumStargateState;
 import pcl.lc.tileentity.TileEntityStargateRing;
 
 public class StargateMultiblock extends GenericMultiblock {
@@ -89,7 +90,8 @@ public class StargateMultiblock extends GenericMultiblock {
 	 *            The y-coordinate of the base
 	 * @param baseZ
 	 *            The z-coordinate of the base
-	 * @return Any valid gate orientation, or null if no valid orientation is found
+	 * @return Any valid gate orientation, or null if no valid orientation is
+	 *         found
 	 */
 	private EnumOrientations getOrientation(World worldAccess, int baseX, int baseY, int baseZ) {
 		// Test North-South alignment along Z axis
@@ -217,10 +219,18 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public void freeStructure() {
-		LanteaCraft.getLogger().log(Level.FINE,
+		LanteaCraft.getLogger().log(Level.INFO,
 				((isClient) ? "[client]" : "[server]") + " Releasing multiblock structure.");
 		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
 			part.getValue().release();
+		EnumStargateState stateOf = (EnumStargateState) getMetadata("state");
+		if (!isClient && (stateOf == EnumStargateState.Connected || stateOf == EnumStargateState.Disconnecting)) {
+			LanteaCraft.getLogger().log(Level.INFO, "Creating explosion: gate destroyed while connected!");
+			int k = host.worldObj.getBlockId(host.xCoord, host.yCoord, host.zCoord);
+			if (k == LanteaCraft.Blocks.stargateBaseBlock.blockID)
+				LanteaCraft.Blocks.stargateBaseBlock
+						.explode(host.worldObj, host.xCoord, host.yCoord, host.zCoord, 500D);
+		}
 		structureParts.clear();
 		modified = true;
 	}
@@ -228,6 +238,11 @@ public class StargateMultiblock extends GenericMultiblock {
 	@Override
 	public MultiblockPart getPart(Object reference) {
 		return structureParts.get(reference);
+	}
+
+	@Override
+	public MultiblockPart[] getAllParts() {
+		return structureParts.values().toArray(new MultiblockPart[0]);
 	}
 
 	@Override
@@ -289,4 +304,5 @@ public class StargateMultiblock extends GenericMultiblock {
 		packet.setValue("WorldZ", host.zCoord);
 		return packet;
 	}
+
 }

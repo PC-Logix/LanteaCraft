@@ -103,6 +103,13 @@ public abstract class GenericMultiblock {
 	public abstract MultiblockPart getPart(Object reference);
 
 	/**
+	 * Called by any code to get all parts of the multi-block structure.
+	 * 
+	 * @return All MultiblockPart objects.
+	 */
+	public abstract MultiblockPart[] getAllParts();
+
+	/**
 	 * Called when the multi-block transitions from it's current state to the
 	 * new state specified.
 	 * 

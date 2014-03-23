@@ -14,10 +14,8 @@ import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.GenericContainerBlock;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
-import pcl.lc.items.ItemStargateRing;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateRing;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -30,7 +28,8 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	public BlockStargateRing(int id) {
 		super(id, Block.blocksList[4].blockMaterial);
-		setHardness(1.5F);
+		setHardness(50F);
+		setResistance(2000F);
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
@@ -115,7 +114,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 	public void breakBlock(World world, int x, int y, int z, int id, int data) {
 		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
 		if (te != null) {
-			te.getAsPart().devalidateHostMultiblock();
+			te.flagDirty();
 			if (te.getAsPart().findHostMultiblock(false) != null) {
 				TileEntity host = te.getAsPart().findHostMultiblock(false).getTileEntity();
 				if (host instanceof TileEntityStargateBase)
