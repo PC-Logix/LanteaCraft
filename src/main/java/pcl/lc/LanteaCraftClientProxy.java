@@ -169,5 +169,11 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		payload.channel = BuildInfo.modID;
 		FMLClientHandler.instance().sendPacket(payload);
 	}
+	
+	private void movePlayerToServer(String address, int port) {
+		Minecraft mc = Minecraft.getMinecraft();
+		mc.theWorld.sendQuittingDisconnectingPacket();
+		mc.setServer(address, port);
+	}
 
 }

@@ -23,6 +23,14 @@ public class TileEntityChunkManager implements ForgeChunkManager.LoadingCallback
 		return ForgeChunkManager.requestTicket(mod, world, Type.NORMAL);
 	}
 
+	/**
+	 * Called back when tickets are loaded from the world to allow the mod to
+	 * re-register the chunks associated with those tickets. The list supplied
+	 * here is truncated to length prior to use. Tickets unwanted by the mod
+	 * must be disposed of manually unless the mod is an OrderedLoadingCallback
+	 * instance in which case, they will have been disposed of by the earlier
+	 * callback.
+	 */
 	@Override
 	public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
 		for (Ticket ticket : tickets) {
