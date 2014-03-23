@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -101,6 +103,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	private static class TransientDamageSource extends DamageSource {
 		public TransientDamageSource() {
 			super("wormhole_transient");
+			setDamageBypassesArmor();
+			setDamageAllowedInCreativeMode();
 		}
 
 		public String getDeathMessage(EntityPlayer player) {
@@ -112,6 +116,8 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	private static class IrisDamageSource extends DamageSource {
 		public IrisDamageSource() {
 			super("stargate_iris");
+			setDamageBypassesArmor();
+			setDamageAllowedInCreativeMode();
 		}
 
 		public String getDeathMessage(EntityPlayer player) {
@@ -123,7 +129,7 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	public String getInvName() {
 		return "stargate";
 	}
-	
+
 	public static void configure(ConfigurationHelper cfg) {
 		secondsToStayOpen = cfg.getInteger("stargate", "secondsToStayOpen", secondsToStayOpen);
 		oneWayTravel = cfg.getBoolean("stargate", "oneWayTravel", oneWayTravel);
@@ -251,7 +257,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 				if (getState() == EnumStargateState.Connected && isInitiator)
 					if (!useEnergy(1))
 						disconnect();
-
 				if (timeout > 0) {
 					if (getState() == EnumStargateState.Transient)
 						performTransientDamage();
@@ -413,14 +418,12 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	}
 
 	private void performTransientDamage() {
+		Vector3 p0 = new Vector3(-2.5, 0.5, -3.5);
+		Vector3 p1 = new Vector3(2.5, 5.5, 3.5);
 		Trans3 t = localToGlobalTransformation();
-		Vector3 p0 = t.p(-1.5, 0.5, 0.5);
-		Vector3 p1 = t.p(1.5, 3.5, 5.5);
-		Vector3 q0 = p0.min(p1);
-		Vector3 q1 = p0.max(p1);
-		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(q0.x, q0.y, q0.z, q1.x, q1.y, q1.z);
-		List<EntityLiving> ents = worldObj.getEntitiesWithinAABB(EntityLiving.class, box);
-		for (EntityLiving ent : ents) {
+		AxisAlignedBB box = t.box(p0, p1);
+		List<EntityLiving> ents = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase ent : ents) {
 			Vector3 ep = new Vector3(ent);
 			Vector3 gp = t.p(0, 2, 0.5);
 			double dist = ep.distanceTo(gp);
