@@ -29,6 +29,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.network.ForgePacket;
 import net.minecraftforge.common.network.packet.DimensionRegisterPacket;
+import pcl.common.base.GenericTileEntity;
 import pcl.common.base.TileEntityChunkLoader;
 import pcl.common.base.TileEntityChunkManager;
 import pcl.common.helpers.ConfigurationHelper;
@@ -54,7 +55,7 @@ import pcl.lc.util.AddressingError.CoordRangeError;
 import pcl.lc.util.AddressingError.DimensionRangeError;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class TileEntityStargateBase extends TileEntityChunkLoader implements IStargateAccess {
+public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess {
 
 	public final static double transientDamageRate = 50;
 	public final static int diallingTime = 40;
@@ -73,7 +74,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	public static TransientDamageSource transientDamage = new TransientDamageSource();
 	public static IrisDamageSource irisDamange = new IrisDamageSource();
 
-	private boolean hasSetChunkZone = false;
 	public int numEngagedChevrons;
 
 	private WorldLocation connectedLocation;
@@ -208,11 +208,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 	 * Advances the Stargate by one tick.
 	 */
 	public void advance() {
-		if (!hasSetChunkZone) {
-			setForcedChunkRange(-1, -1, 1, 1);
-			hasSetChunkZone = true;
-		}
-
 		if (worldObj.isRemote) {
 			if (isValid() && lastState != getState()) {
 				lastState = getState();
@@ -804,11 +799,6 @@ public class TileEntityStargateBase extends TileEntityChunkLoader implements ISt
 			u[j][0] = u0;
 			v[j][0] = v0;
 		}
-	}
-
-	@Override
-	public TileEntityChunkManager getChunkManager() {
-		return LanteaCraft.getProxy().chunkManager;
 	}
 
 	public boolean isDialling() {

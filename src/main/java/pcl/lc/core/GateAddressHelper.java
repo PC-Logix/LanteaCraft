@@ -2,6 +2,7 @@ package pcl.lc.core;
 
 import java.util.logging.Level;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -99,6 +100,13 @@ public class GateAddressHelper {
 		WorldLocation localize = location.toWorldLocation();
 		World world = GateAddressHelper.getWorld(localize.dimension);
 		if (world != null) {
+			String name = String.format("StargateScan-%s", address);
+			NBTTagCompound metadata = new NBTTagCompound();
+			metadata.setInteger("minX", localize.x - 1);
+			metadata.setInteger("minZ", localize.z - 1);
+			metadata.setInteger("maxX", localize.x + 1);
+			metadata.setInteger("maxZ", localize.z + 1);
+			LanteaCraft.getProxy().getRemoteChunkManager().create(name, world, 240 * 20, metadata);
 			Chunk chunk = world.getChunkFromBlockCoords(localize.x, localize.z);
 			if (chunk != null)
 				for (Object o : chunk.chunkTileEntityMap.values())

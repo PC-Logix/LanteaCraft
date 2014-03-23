@@ -14,8 +14,8 @@ import net.minecraftforge.common.ForgeChunkManager.Type;
 
 public class RemoteChunkLoading implements ITickAgent {
 
-	private ArrayList<ChunkLoadRequest> requests;
-	private ArrayList<ChunkLoadRequest> expiredRequests;
+	private ArrayList<ChunkLoadRequest> requests = new ArrayList<ChunkLoadRequest>();
+	private ArrayList<ChunkLoadRequest> expiredRequests = new ArrayList<ChunkLoadRequest>();
 
 	private class ChunkLoadRequest {
 		private final String name;
@@ -59,7 +59,7 @@ public class RemoteChunkLoading implements ITickAgent {
 	 *            The metadata fields (minX, minZ, maxX, maxZ).
 	 * @return If the loading request was a success.
 	 */
-	private boolean create(String name, World world, int maxAge, NBTTagCompound metadata) {
+	public boolean create(String name, World world, int maxAge, NBTTagCompound metadata) {
 		Ticket ticket = ForgeChunkManager.requestTicket(LanteaCraft.getInstance(), world, Type.NORMAL);
 		if (ticket == null)
 			return false;
