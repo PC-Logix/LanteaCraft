@@ -54,6 +54,8 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.Player;
 
@@ -287,5 +289,15 @@ public class LanteaCraft {
 	@ForgeSubscribe
 	public void onInitMapGen(InitMapGenEvent e) {
 		proxy.onInitMapGen(e);
+	}
+	
+	@ForgeSubscribe
+	public void onServerStarting(FMLServerStartingEvent e) {
+		
+	}
+	
+	@ForgeSubscribe
+	public void onServerStopping(FMLServerStoppingEvent e) {
+		
 	}
 }
