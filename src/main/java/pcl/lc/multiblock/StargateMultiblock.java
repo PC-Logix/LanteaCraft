@@ -21,6 +21,8 @@ import pcl.lc.tileentity.TileEntityStargateRing;
 public class StargateMultiblock extends GenericMultiblock {
 
 	private int rotation;
+	private int watcher = 0;
+	private boolean watcherLast = false;
 	private boolean modified = false;
 
 	private int[][] stargateModel = { { 1, 2, 1, 3, 1, 2, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 },
@@ -40,6 +42,21 @@ public class StargateMultiblock extends GenericMultiblock {
 			log.log(Level.INFO,
 					String.format("Stargate state changed to %s at (%s %s %s).", isValid, xCoord, yCoord, zCoord));
 		}
+
+		// People keep putting blocks inside Stargates after they're formed,
+		// this
+		// isn't okay. Now we're going to watch what they do, so if they do, the
+		// gate might explode violently.
+		if (!isClient)
+			if (0 > watcher) {
+				watcher += 20;
+				boolean result = isValidStructure(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
+				if (result != watcherLast) {
+					watcherLast = result;
+					invalidate();
+				}
+			} else
+				watcher--;
 	}
 
 	/**
@@ -121,8 +138,9 @@ public class StargateMultiblock extends GenericMultiblock {
 			LanteaCraft.getLogger().log(Level.FINE, "Testing EASTWEST");
 			for (int y = 0; y < 7; y++)
 				for (int x = 0; x < 7; x++) {
+					int blockId = worldAccess.getBlockId(baseX + (x - 3), baseY + y, baseZ);
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
-					if (!testIsValidForExpected(entity, stargateModel[y][x]))
+					if (!testIsValidForExpected(entity, blockId, stargateModel[y][x]))
 						return false;
 				}
 			return true;
@@ -133,8 +151,9 @@ public class StargateMultiblock extends GenericMultiblock {
 			LanteaCraft.getLogger().log(Level.FINE, "Testing NORTHSOUTH");
 			for (int y = 0; y < 7; y++)
 				for (int z = 0; z < 7; z++) {
+					int blockId = worldAccess.getBlockId(baseX, baseY + y, baseZ + (z - 3));
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
-					if (!testIsValidForExpected(entity, stargateModel[y][z]))
+					if (!testIsValidForExpected(entity, blockId, stargateModel[y][z]))
 						return false;
 				}
 			return true;
@@ -144,9 +163,9 @@ public class StargateMultiblock extends GenericMultiblock {
 		return false;
 	}
 
-	private boolean testIsValidForExpected(TileEntity entity, int expectedType) {
+	private boolean testIsValidForExpected(TileEntity entity, int blockId, int expectedType) {
 		if (expectedType == 0)
-			if (entity != null)
+			if (blockId != 0 || entity != null)
 				return false;
 		if (expectedType == 1 || expectedType == 2) {
 			if (!(entity instanceof TileEntityStargateRing))
@@ -297,7 +316,7 @@ public class StargateMultiblock extends GenericMultiblock {
 			setLocation(host.xCoord, host.yCoord, host.zCoord);
 			collectStructure(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
 		}
-		
+
 	}
 
 	@Override
