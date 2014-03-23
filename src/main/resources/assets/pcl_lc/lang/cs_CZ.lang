@@ -35,6 +35,7 @@ item.lanteaOreIngot.2.name=Triniový ingot
 tile.lanteaOreIngotBlock.2.name=Blok trinia
 
 tile.naquadahGenerator.name=Naquadahový generator
+tile.ringPlatform.name=Transportní kruhy
 
 item.tokraSpawnEgg.name=Vejce Tokry
 item.lanteadebug.name=LanteaCraft Debugger

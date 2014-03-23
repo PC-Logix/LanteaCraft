@@ -36,6 +36,7 @@ item.lanteaOreIngot.2.name=Trinium Ingot
 tile.lanteaOreIngotBlock.2.name=Block of Trinium
 
 tile.naquadahGenerator.name=Naquadah Generator
+tile.ringPlatform.name=Transport Rings
 
 item.tokraSpawnEgg.name=Tok'ra Spawn Egg
 item.lanteadebug.name=LanteaCraft Debugger
