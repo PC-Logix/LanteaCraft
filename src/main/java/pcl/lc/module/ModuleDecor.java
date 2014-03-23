@@ -7,10 +7,12 @@ import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.blocks.BlockLanteaDecor;
 import pcl.lc.blocks.BlockLanteaDecorDoor;
+import pcl.lc.blocks.BlockLanteaDecorGlass;
 import pcl.lc.blocks.BlockLanteaDecorStair;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.items.ItemLanteaDecor;
 import pcl.lc.items.ItemLanteaDecorDoor;
+import pcl.lc.items.ItemLanteaDecorGlass;
 
 public class ModuleDecor implements IModule {
 
@@ -20,8 +22,8 @@ public class ModuleDecor implements IModule {
 	 * @author AfterLifeLochie
 	 */
 	public static enum EnumDecorMaterials {
-		LANTEAN_STEEL("lantean"), LANTEAN_PATTERN_STEEL("lantean_pattern"), LANTEAN_GLASS("lantean_glass"),
-		GOAULD_GOLD("goauld"), GOAULD_PATTERN_GOLD("goauld_pattern");
+		LANTEAN_STEEL("lantean"), LANTEAN_PATTERN_STEEL("lantean_pattern"), LANTEAN_GLASS("lantean_glass"), GOAULD_GOLD(
+				"goauld"), GOAULD_PATTERN_GOLD("goauld_pattern");
 
 		public static EnumDecorMaterials fromOrdinal(int ordinal) {
 			return EnumDecorMaterials.values()[ordinal];
@@ -73,6 +75,7 @@ public class ModuleDecor implements IModule {
 	public static class Blocks {
 
 		public static BlockLanteaDecor decorBlock;
+		public static BlockLanteaDecorGlass glassDecorBlock;
 
 		public static BlockLanteaDecorStair lanteaSteelDecorStair;
 		public static BlockLanteaDecorDoor lanteaSteelDecorDoor;
@@ -100,20 +103,21 @@ public class ModuleDecor implements IModule {
 	@Override
 	public void preInit() {
 
-
 	}
 
 	@Override
 	public void init() {
 		Blocks.decorBlock = RegistrationHelper.registerBlock(BlockLanteaDecor.class, ItemLanteaDecor.class,
 				"lanteaDecor");
+		Blocks.glassDecorBlock = RegistrationHelper.registerBlock(BlockLanteaDecorGlass.class,
+				ItemLanteaDecorGlass.class, "lanteaGlassDecor");
 		Blocks.lanteaSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaSteelDecorStair", 1);
 		Blocks.lanteaPatternedSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaPatternedSteelDecorStair",
 				2);
 		Blocks.goauldGoldDecorStair = RegistrationHelper.registerStairDecal("goauldGoldDecorStair", 3);
 		Blocks.goauldPatternedGoldDecorStair = RegistrationHelper
 				.registerStairDecal("goauldPatternedGoldDecorStair", 4);
-		
+
 	}
 
 	@Override
