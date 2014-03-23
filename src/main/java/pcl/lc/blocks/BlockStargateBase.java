@@ -1,5 +1,7 @@
 package pcl.lc.blocks;
 
+import java.util.logging.Level;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -108,12 +110,11 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		TileEntityStargateBase te = (TileEntityStargateBase) getTileEntity(world, x, y, z);
-		if (te != null)
-			if (te.getAsStructure().isValid()) {
-				player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateBase.ordinal(), world, x, y, z);
-				return true;
-			}
+		TileEntityStargateBase te = (TileEntityStargateBase) world.getBlockTileEntity(x, y, z);
+		if (te != null && te.getAsStructure().isValid()) {
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateBase.ordinal(), world, x, y, z);
+			return true;
+		}
 		return false;
 	}
 

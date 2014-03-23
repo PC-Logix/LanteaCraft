@@ -293,8 +293,11 @@ public class StargateMultiblock extends GenericMultiblock {
 		setOrientation((EnumOrientations) packetStandard.getValue("orientation"));
 		if (!isValid)
 			freeStructure();
-		else
+		else {
+			setLocation(host.xCoord, host.yCoord, host.zCoord);
 			collectStructure(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
+		}
+		
 	}
 
 	@Override

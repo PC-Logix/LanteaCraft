@@ -158,7 +158,7 @@ public abstract class GenericMultiblock {
 	 * @param z
 	 *            The z-coordinate of the finalized structure
 	 */
-	private void setLocation(int x, int y, int z) {
+	protected void setLocation(int x, int y, int z) {
 		xCoord = x;
 		yCoord = y;
 		zCoord = z;

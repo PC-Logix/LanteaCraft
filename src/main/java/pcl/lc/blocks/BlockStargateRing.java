@@ -1,6 +1,7 @@
 package pcl.lc.blocks;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -79,12 +80,13 @@ public class BlockStargateRing extends GenericContainerBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
+		TileEntityStargateRing te = (TileEntityStargateRing) world.getBlockTileEntity(x, y, z);
 		if (te.getAsPart().isMerged()) {
 			Vector3 base = te.getAsPart().findHostMultiblock(false).getLocation();
 			Block block = Block.blocksList[world.getBlockId(base.floorX(), base.floorY(), base.floorZ())];
-			if (block instanceof BlockStargateBase)
+			if (block instanceof BlockStargateBase) {
 				block.onBlockActivated(world, base.floorX(), base.floorY(), base.floorZ(), player, side, cx, cy, cz);
+			}
 			return true;
 		}
 		return false;
