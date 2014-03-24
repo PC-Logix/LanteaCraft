@@ -49,7 +49,7 @@ public class TinyModPacket extends ModPacket {
 
 	@Override
 	public WorldLocation getOriginLocation() {
-		return null;
+		return origin;
 	}
 
 	public DataInputStream getIn() {

@@ -19,6 +19,8 @@ public class ClientPacketHandler {
 
 	public void handlePacket(ModPacket packet, Player player) {
 		WorldLocation target = packet.getOriginLocation();
+		if (target == null)
+			LanteaCraft.getLogger().log(Level.WARNING, String.format("ModPacket type %s sent without OriginLocation, much bad!", packet.getClass()));
 		int currentWorld = Minecraft.getMinecraft().theWorld.provider.dimensionId;
 		if (currentWorld == target.dimension) {
 			World world = Minecraft.getMinecraft().theWorld;
