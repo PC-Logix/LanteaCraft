@@ -11,6 +11,7 @@ import pcl.common.network.StandardModPacket;
 import pcl.common.util.ImmutablePair;
 import pcl.common.util.ImmutableTuple;
 import pcl.common.util.Vector3;
+import pcl.common.util.WorldLocation;
 import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.api.EnumStargateState;
 
@@ -28,14 +29,17 @@ public class NetworkHelpers {
 	private static EnumRingPlatformStateNetworkPacker ringPlatformStateNetwork = new EnumRingPlatformStateNetworkPacker();
 	private static ImmutablePairPacker pairNetwork = new ImmutablePairPacker();
 	private static ImmutableTuplePacker tupleNetwork = new ImmutableTuplePacker();
+	private static WorldLocationNetworkPacker worldLocationPacker = new WorldLocationNetworkPacker();
 
 	public void init() {
 		Vector3NetworkPacker.packId = ModPacket.registerPackable(Vector3NetworkPacker.instance);
 		EnumOrientationsNetworkPacker.packId = ModPacket.registerPackable(EnumOrientationsNetworkPacker.instance);
 		EnumStargateStateNetworkPacker.packId = ModPacket.registerPackable(EnumStargateStateNetworkPacker.instance);
-		EnumRingPlatformStateNetworkPacker.packId = ModPacket.registerPackable(EnumRingPlatformStateNetworkPacker.instance);
+		EnumRingPlatformStateNetworkPacker.packId = ModPacket
+				.registerPackable(EnumRingPlatformStateNetworkPacker.instance);
 		ImmutablePairPacker.packId = ModPacket.registerPackable(ImmutablePairPacker.instance);
 		ImmutableTuplePacker.packId = ModPacket.registerPackable(ImmutableTuplePacker.instance);
+		WorldLocationNetworkPacker.packId = ModPacket.registerPackable(WorldLocationNetworkPacker.instance);
 	}
 
 	public static class ImmutablePairPacker extends IStreamPackable<ImmutablePair> {
@@ -198,6 +202,39 @@ public class NetworkHelpers {
 		@Override
 		public EnumRingPlatformState unpack(DataInputStream streamOf) throws IOException {
 			return EnumRingPlatformState.fromOrdinal(streamOf.readInt());
+		}
+	}
+
+	public static class WorldLocationNetworkPacker extends IStreamPackable<WorldLocation> {
+
+		private static WorldLocationNetworkPacker instance;
+		private static int packId;
+
+		public WorldLocationNetworkPacker() {
+			super(WorldLocation.class);
+			WorldLocationNetworkPacker.instance = this;
+		}
+
+		@Override
+		public int getTypeOf() {
+			return packId;
+		}
+
+		@Override
+		public void pack(WorldLocation valueOf, DataOutputStream streamOf) throws IOException {
+			streamOf.writeInt(valueOf.dimension);
+			streamOf.writeInt(valueOf.x);
+			streamOf.writeInt(valueOf.y);			
+			streamOf.writeInt(valueOf.z);
+		}
+
+		@Override
+		public WorldLocation unpack(DataInputStream streamOf) throws IOException {
+			int dim = streamOf.readInt();
+			int x = streamOf.readInt();
+			int y = streamOf.readInt();
+			int z = streamOf.readInt();
+			return new WorldLocation(dim, x, y, z);
 		}
 	}
 
