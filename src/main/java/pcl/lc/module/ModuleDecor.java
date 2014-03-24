@@ -3,6 +3,7 @@ package pcl.lc.module;
 import java.util.EnumSet;
 import java.util.Set;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.blocks.BlockLanteaDecor;
@@ -13,6 +14,8 @@ import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.items.ItemLanteaDecor;
 import pcl.lc.items.ItemLanteaDecorDoor;
 import pcl.lc.items.ItemLanteaDecorGlass;
+import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
+import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class ModuleDecor implements IModule {
 
@@ -117,6 +120,8 @@ public class ModuleDecor implements IModule {
 		Blocks.goauldGoldDecorStair = RegistrationHelper.registerStairDecal("goauldGoldDecorStair", 3);
 		Blocks.goauldPatternedGoldDecorStair = RegistrationHelper
 				.registerStairDecal("goauldPatternedGoldDecorStair", 4);
+		
+		GameRegistry.registerTileEntity(TileEntityLanteaDecorGlass.class, "tileEntityLanteaDecorGlass");
 
 	}
 

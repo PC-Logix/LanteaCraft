@@ -3,6 +3,7 @@ package pcl.common.util;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Represents a Vector in three-dimensional space.
@@ -125,6 +126,16 @@ public class Vector3 {
 	 */
 	public Vector3(TileEntity tileentity) {
 		this(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
+	}
+
+	/**
+	 * Creates a new vector from a Forge direction.
+	 * 
+	 * @param direction
+	 *            The forge direction.
+	 */
+	public Vector3(ForgeDirection direction) {
+		this(direction.offsetX, direction.offsetY, direction.offsetZ);
 	}
 
 	/**

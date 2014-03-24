@@ -306,11 +306,27 @@ public class LanteaCraftCommonProxy {
 	public void sendToAllPlayers(ModPacket packet) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		if (server != null) {
-			LanteaCraft.getLogger()
-					.log(Level.FINEST, "LanteaCraft sending packet to all players: " + packet.toString());
 			Packet250CustomPayload payload = packet.toPacket();
 			payload.channel = BuildInfo.modID;
 			server.getConfigurationManager().sendPacketToAllPlayers(payload);
+		}
+	}
+
+	public void sendToPlayersInDimension(ModPacket packet) {
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		if (server != null) {
+			Packet250CustomPayload payload = packet.toPacket();
+			payload.channel = BuildInfo.modID;
+			server.getConfigurationManager().sendPacketToAllPlayersInDimension(payload, payload.dimension);
+		}
+	}
+	
+	public void sendToPlayersNear(ModPacket packet) {
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		if (server != null) {
+			Packet250CustomPayload payload = packet.toPacket();
+			payload.channel = BuildInfo.modID;
+			server.getConfigurationManager().sendToAllNear(payload.x, payload.y, payload.z, payload.range, payload.dimension, payload);
 		}
 	}
 
@@ -358,7 +374,7 @@ public class LanteaCraftCommonProxy {
 	public WorldLog getWorldLog() {
 		return worldLogger;
 	}
-	
+
 	public RemoteChunkLoading getRemoteChunkManager() {
 		return remoteChunkManager;
 	}

@@ -30,10 +30,12 @@ import pcl.lc.render.models.NaquadahGeneratorModel;
 import pcl.lc.render.models.RingPlatformBaseModel;
 import pcl.lc.render.models.RingPlatformRingModel;
 import pcl.lc.render.models.StargateControllerModel;
+import pcl.lc.render.tileentity.TileEntityLanteaDecorGlassRenderer;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
 import pcl.lc.render.tileentity.TileEntityRingPlatformRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
+import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityRingPlatform;
 import pcl.lc.tileentity.TileEntityStargateBase;
@@ -79,6 +81,11 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		addScreen(LanteaCraft.EnumGUIs.NaquadahGenerator, ScreenNaquadahGenerator.class);
 	}
 
+	/**
+	 * TODO: We can and should probably come up with some clever way of moving
+	 * this into the sub Module init() method (maybe pass Side.SERVER/CLIENT or
+	 * something?).
+	 */
 	public void registerRenderers() {
 		LanteaCraft.Render.modelController = new StargateControllerModel("/assets/pcl_lc/models/dhd.obj");
 		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel(
@@ -99,6 +106,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 		LanteaCraft.Render.tileEntityRingPlatformRenderer = new TileEntityRingPlatformRenderer();
 		addTileEntityRenderer(TileEntityRingPlatform.class, LanteaCraft.Render.tileEntityRingPlatformRenderer);
+
+		LanteaCraft.Render.tileEntityLanteaDecorGlassRenderer = new TileEntityLanteaDecorGlassRenderer();
+		addTileEntityRenderer(TileEntityLanteaDecorGlass.class, LanteaCraft.Render.tileEntityLanteaDecorGlassRenderer);
 
 		LanteaCraft.Render.blockOrientedRenderer = new RotationOrientedBlockRenderer();
 		registerRenderer(LanteaCraft.Render.blockOrientedRenderer);
@@ -169,7 +179,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		payload.channel = BuildInfo.modID;
 		FMLClientHandler.instance().sendPacket(payload);
 	}
-	
+
 	private void movePlayerToServer(String address, int port) {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.theWorld.sendQuittingDisconnectingPacket();

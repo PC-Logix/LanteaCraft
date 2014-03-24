@@ -43,7 +43,7 @@ public class TinyModPacket extends ModPacket {
 	public DataInputStream getIn() {
 		return instream;
 	}
-
+	
 	public DataOutputStream getOut() {
 		return outstream;
 	}
@@ -69,6 +69,8 @@ public class TinyModPacket extends ModPacket {
 		bytes.write(1); // packet typeof
 		bytes.write((toServer) ? 1 : 0);
 		try {
+			outstream.flush();
+			outstream.close();
 			bytes.write(outbuff.toByteArray());
 		} catch (IOException e) {
 			Logger.getLogger("pcl.common").log(Level.WARNING, "Exception when writing packet!", e);
