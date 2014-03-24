@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import pcl.common.base.PoweredTileEntity;
 import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
+import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.WorldLocation;
@@ -24,7 +25,7 @@ import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.fluids.SpecialFluidTank;
 import pcl.lc.items.ItemEnergyCrystal;
 
-public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IFluidHandler, INaquadahGeneratorAccess {
+public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IPacketHandler, IFluidHandler, INaquadahGeneratorAccess {
 
 	public boolean simulate = false;
 
@@ -313,5 +314,11 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 		simulate = (sig > 0);
 		if (oldState != simulate)
 			getDescriptionPacket();
+	}
+	
+	@Override
+	public void handlePacket(ModPacket packetOf) {
+		getStateFromPacket(packetOf);
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 }

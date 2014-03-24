@@ -5,6 +5,7 @@ import java.util.List;
 
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ScanningHelper;
+import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.Vector3;
@@ -17,7 +18,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
-public class TileEntityRingPlatform extends GenericTileEntity {
+public class TileEntityRingPlatform extends GenericTileEntity implements IPacketHandler {
 
 	private final double ringExtended = 2.5d;
 
@@ -205,6 +206,12 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 		System.out.println("done!");
 		entity.worldObj.updateEntityWithOptionalForce(entity, false);
 		return entity;
+	}
+
+	@Override
+	public void handlePacket(ModPacket packetOf) {
+		getStateFromPacket(packetOf);
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 
 }

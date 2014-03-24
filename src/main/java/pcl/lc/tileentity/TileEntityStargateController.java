@@ -11,6 +11,7 @@ import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
+import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.Trans3;
@@ -19,7 +20,7 @@ import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.blocks.BlockStargateController;
 
-public class TileEntityStargateController extends GenericTileEntity implements IEnergyStore {
+public class TileEntityStargateController extends GenericTileEntity implements IPacketHandler, IEnergyStore {
 
 	public static int linkRangeX = 10;
 	public static int linkRangeY = 10;
@@ -238,5 +239,11 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 	public void loadEnergyStore(NBTTagCompound compound) {
 		if (compound.hasKey("energy"))
 			energy = compound.getDouble("energy");
+	}
+	
+	@Override
+	public void handlePacket(ModPacket packetOf) {
+		getStateFromPacket(packetOf);
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 }

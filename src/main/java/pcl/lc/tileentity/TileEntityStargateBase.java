@@ -34,6 +34,7 @@ import pcl.common.base.GenericTileEntity;
 import pcl.common.base.TileEntityChunkLoader;
 import pcl.common.base.TileEntityChunkManager;
 import pcl.common.helpers.ConfigurationHelper;
+import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.util.ChunkLocation;
 import pcl.common.util.Facing3;
@@ -56,7 +57,7 @@ import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess {
+public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler {
 
 	public final static double transientDamageRate = 50;
 	public final static int diallingTime = 40;
@@ -934,6 +935,12 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void handlePacket(ModPacket packetOf) {
+		getAsStructure().unpack(packetOf);
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 
 }
