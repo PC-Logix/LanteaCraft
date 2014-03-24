@@ -41,15 +41,4 @@ public class WorldLocation {
 		return new ChunkLocation(dimension, x >> 4, z >> 4);
 	}
 
-	public TileEntityStargateBase getStargateTE() {
-		World world = GateAddressHelper.getWorld(dimension);
-		if (world == null)
-			return null;
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te instanceof TileEntityStargateBase)
-			return (TileEntityStargateBase) te;
-		else
-			return null;
-	}
-
 }

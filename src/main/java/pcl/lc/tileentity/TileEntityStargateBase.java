@@ -20,6 +20,7 @@ import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -722,9 +723,16 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	private TileEntityStargateBase getConnectedStargateTE() {
-		if (connectedLocation != null)
-			return connectedLocation.getStargateTE();
-		else
+		if (connectedLocation != null) {
+			World world = GateAddressHelper.getWorld(connectedLocation.dimension);
+			if (world == null)
+				return null;
+			TileEntity te = world.getBlockTileEntity(connectedLocation.x, connectedLocation.y, connectedLocation.z);
+			if (te instanceof TileEntityStargateBase)
+				return (TileEntityStargateBase) te;
+			else
+				return null;
+		} else
 			return null;
 	}
 
@@ -819,7 +827,13 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	public void hostBlockDestroyed() {
 		if (connectedLocation != null) {
-			TileEntityStargateBase dte = (TileEntityStargateBase) connectedLocation.getStargateTE();
+			World world = GateAddressHelper.getWorld(connectedLocation.dimension);
+			if (world == null)
+				return;
+			TileEntity te = world.getBlockTileEntity(connectedLocation.x, connectedLocation.y, connectedLocation.z);
+			if (!(te instanceof TileEntityStargateBase))
+				return;
+			TileEntityStargateBase dte = (TileEntityStargateBase) te;
 			if (dte != null)
 				dte.clearConnection();
 		}
@@ -907,7 +921,13 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	@Override
 	public boolean disconnect() {
 		if (isInitiator || closeFromEitherEnd) {
-			TileEntityStargateBase dte = (TileEntityStargateBase) connectedLocation.getStargateTE();
+			World world = GateAddressHelper.getWorld(connectedLocation.dimension);
+			if (world == null)
+				return false;
+			TileEntity te = world.getBlockTileEntity(connectedLocation.x, connectedLocation.y, connectedLocation.z);
+			if (!(te instanceof TileEntityStargateBase))
+				return false;
+			TileEntityStargateBase dte = (TileEntityStargateBase) te;
 			if (dte != null)
 				dte.clearConnection();
 			clearConnection();
