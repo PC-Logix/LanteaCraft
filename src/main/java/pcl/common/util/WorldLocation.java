@@ -1,6 +1,5 @@
-package pcl.lc.core;
+package pcl.common.util;
 
-import pcl.common.util.Vector3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 

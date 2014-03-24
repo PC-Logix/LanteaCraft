@@ -4,7 +4,7 @@
  */
 package pcl.lc.api;
 
-import pcl.lc.core.ChunkLocation;
+import pcl.common.util.ChunkLocation;
 
 /**
  * Provides an interface for external code to interact with Stargate structures.

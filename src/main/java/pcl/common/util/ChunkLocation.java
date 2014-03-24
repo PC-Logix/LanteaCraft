@@ -1,4 +1,4 @@
-package pcl.lc.core;
+package pcl.common.util;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
