@@ -174,9 +174,10 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	@Override
 	public void sendToServer(ModPacket packet) {
-		LanteaCraft.getLogger().log(Level.FINEST, "LanteaCraft sending packet to server: " + packet.toString());
 		Packet250CustomPayload payload = packet.toPacket();
 		payload.channel = BuildInfo.modID;
+		LanteaCraft.getLogger().log(Level.INFO,
+				String.format("sendToServer: 250 %s %s", payload.channel, payload.length));
 		FMLClientHandler.instance().sendPacket(payload);
 	}
 

@@ -66,8 +66,9 @@ public class TileEntityLanteaDecorGlass extends TileEntity {
 			stream.writeInt(yCoord);
 			stream.writeInt(zCoord);
 			for (int i = 0; i < 6; i++)
-				stream.write((state[i]) ? 1 : 0);
-			return packet.toPacket();
+				stream.write((state[i]) ? 1 : 0);	
+			LanteaCraft.getProxy().sendToAllPlayers(packet);
+			return null;
 		} catch (IOException ioex) {
 			LanteaCraft.getLogger().log(Level.WARNING, "Error creating description packet.", ioex);
 			return null;
