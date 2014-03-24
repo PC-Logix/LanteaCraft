@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pcl.common.util.WorldLocation;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public abstract class ModPacket {
@@ -114,4 +115,6 @@ public abstract class ModPacket {
 	public abstract Packet250CustomPayload toPacket();
 
 	public abstract String getType();
+	
+	public abstract WorldLocation getOriginLocation();
 }
