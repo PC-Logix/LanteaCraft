@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import pcl.common.network.ModPacket;
 import pcl.common.network.TinyModPacket;
 import pcl.common.util.Vector3;
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
@@ -59,7 +60,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity {
 	@Override
 	public Packet getDescriptionPacket() {
 		try {
-			TinyModPacket packet = new TinyModPacket();
+			TinyModPacket packet = new TinyModPacket(new WorldLocation(this));
 			DataOutputStream stream = packet.getOut();
 			stream.writeInt(xCoord);
 			stream.writeInt(yCoord);

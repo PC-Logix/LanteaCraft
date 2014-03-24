@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.common.base.GenericContainer;
 import pcl.common.network.StandardModPacket;
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.containers.ContainerStargateController;
@@ -138,14 +139,10 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		TileEntityStargateBase te = getStargateTE();
 		if (te != null)
 			if (!connectOnly || !te.isConnected()) {
-				StandardModPacket packet = new StandardModPacket();
+				StandardModPacket packet = new StandardModPacket(new WorldLocation(te));
 				packet.setIsForServer(true);
 				packet.setType("LanteaPacket.DialRequest");
 				packet.setValue("Address", enteredAddress);
-				packet.setValue("DimensionID", te.worldObj.provider.dimensionId);
-				packet.setValue("WorldX", te.xCoord);
-				packet.setValue("WorldY", te.yCoord);
-				packet.setValue("WorldZ", te.zCoord);
 				LanteaCraft.getProxy().sendToServer(packet);
 				close();
 			}

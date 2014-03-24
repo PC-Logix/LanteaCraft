@@ -17,6 +17,7 @@ import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.api.INaquadahGeneratorAccess;
@@ -133,14 +134,9 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IF
 	}
 
 	public ModPacket getPacketFromState() {
-		StandardModPacket packet = new StandardModPacket();
+		StandardModPacket packet = new StandardModPacket(new WorldLocation(this));
 		packet.setIsForServer(false);
 		packet.setType("LanteaPacket.TileUpdate");
-		packet.setValue("DimensionID", worldObj.provider.dimensionId);
-		packet.setValue("WorldX", xCoord);
-		packet.setValue("WorldY", yCoord);
-		packet.setValue("WorldZ", zCoord);
-
 		packet.setValue("simulate", simulate);
 		packet.setValue("energy", energy);
 		return packet;

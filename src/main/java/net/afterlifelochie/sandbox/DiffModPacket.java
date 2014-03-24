@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import net.minecraft.network.packet.Packet250CustomPayload;
 import pcl.common.network.ModPacket;
+import pcl.common.util.WorldLocation;
 
 
 /**
@@ -72,6 +73,12 @@ public class DiffModPacket extends ModPacket {
 	@Override
 	public String getType() {
 		return "DiffModPacket";
+	}
+
+	@Override
+	public WorldLocation getOriginLocation() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

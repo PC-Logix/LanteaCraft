@@ -13,6 +13,7 @@ import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.ImmutablePair;
 import pcl.common.util.Vector3;
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.core.WorldLog;
@@ -287,7 +288,7 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public ModPacket pack() {
-		StandardModPacket packet = new StandardModPacket();
+		StandardModPacket packet = new StandardModPacket(new WorldLocation(host));
 		packet.setIsForServer(false);
 		packet.setType("LanteaPacket.TileUpdate");
 		packet.setValue("metadata", metadata);
@@ -297,10 +298,6 @@ public class StargateMultiblock extends GenericMultiblock {
 		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
 			gparts.put(part.getKey(), part.getValue().getVectorLoc());
 		packet.setValue("parts", gparts);
-		packet.setValue("DimensionID", host.worldObj.provider.dimensionId);
-		packet.setValue("WorldX", host.xCoord);
-		packet.setValue("WorldY", host.yCoord);
-		packet.setValue("WorldZ", host.zCoord);
 		return packet;
 	}
 
@@ -321,13 +318,9 @@ public class StargateMultiblock extends GenericMultiblock {
 
 	@Override
 	public ModPacket pollForUpdate() {
-		StandardModPacket packet = new StandardModPacket();
+		StandardModPacket packet = new StandardModPacket(new WorldLocation(host));
 		packet.setIsForServer(true);
 		packet.setType("LanteaPacket.UpdateRequest");
-		packet.setValue("DimensionID", host.worldObj.provider.dimensionId);
-		packet.setValue("WorldX", host.xCoord);
-		packet.setValue("WorldY", host.yCoord);
-		packet.setValue("WorldZ", host.zCoord);
 		return packet;
 	}
 

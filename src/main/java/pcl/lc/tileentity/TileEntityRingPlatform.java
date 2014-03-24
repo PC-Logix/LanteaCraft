@@ -8,6 +8,7 @@ import pcl.common.helpers.ScanningHelper;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.Vector3;
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumRingPlatformState;
 import net.minecraft.entity.Entity;
@@ -111,14 +112,9 @@ public class TileEntityRingPlatform extends GenericTileEntity {
 	}
 
 	public ModPacket getPacketFromState() {
-		StandardModPacket packet = new StandardModPacket();
+		StandardModPacket packet = new StandardModPacket(new WorldLocation(this));
 		packet.setIsForServer(false);
 		packet.setType("LanteaPacket.TileUpdate");
-		packet.setValue("DimensionID", worldObj.provider.dimensionId);
-		packet.setValue("WorldX", xCoord);
-		packet.setValue("WorldY", yCoord);
-		packet.setValue("WorldZ", zCoord);
-
 		packet.setValue("timeout", timeout);
 		packet.setValue("state", state);
 		return packet;

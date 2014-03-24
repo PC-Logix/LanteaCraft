@@ -15,6 +15,7 @@ import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.blocks.BlockStargateController;
 
@@ -181,14 +182,9 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 	}
 
 	public ModPacket getPacketFromState() {
-		StandardModPacket packet = new StandardModPacket();
+		StandardModPacket packet = new StandardModPacket(new WorldLocation(this));
 		packet.setIsForServer(false);
 		packet.setType("LanteaPacket.TileUpdate");
-		packet.setValue("DimensionID", worldObj.provider.dimensionId);
-		packet.setValue("WorldX", xCoord);
-		packet.setValue("WorldY", yCoord);
-		packet.setValue("WorldZ", zCoord);
-
 		packet.setValue("energy", energy);
 		return packet;
 	}

@@ -28,6 +28,7 @@ import pcl.common.helpers.NetworkHelpers;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.common.helpers.VersionHelper;
 import pcl.common.network.ModPacket;
+import pcl.common.util.WorldLocation;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.ServerTickHandler;
 import pcl.lc.core.ModuleManager;
@@ -317,16 +318,19 @@ public class LanteaCraftCommonProxy {
 		if (server != null) {
 			Packet250CustomPayload payload = packet.toPacket();
 			payload.channel = BuildInfo.modID;
-			server.getConfigurationManager().sendPacketToAllPlayersInDimension(payload, payload.dimension);
+			WorldLocation origin = packet.getOriginLocation();
+			server.getConfigurationManager().sendPacketToAllPlayersInDimension(payload, origin.dimension);
 		}
 	}
-	
-	public void sendToPlayersNear(ModPacket packet) {
+
+	public void sendToPlayersNear(ModPacket packet, double range) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		if (server != null) {
 			Packet250CustomPayload payload = packet.toPacket();
 			payload.channel = BuildInfo.modID;
-			server.getConfigurationManager().sendToAllNear(payload.x, payload.y, payload.z, payload.range, payload.dimension, payload);
+			WorldLocation origin = packet.getOriginLocation();
+			server.getConfigurationManager().sendToAllNear(origin.x, origin.y, origin.z, range, origin.dimension,
+					payload);
 		}
 	}
 

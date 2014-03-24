@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import pcl.common.util.WorldLocation;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
@@ -36,6 +37,10 @@ public class StandardModPacket extends ModPacket {
 	 */
 	private String packetType;
 	/**
+	 * The origin location of the packet
+	 */
+	private WorldLocation origin;
+	/**
 	 * The values of objects in the packet
 	 */
 	private HashMap<Object, Object> values;
@@ -47,8 +52,13 @@ public class StandardModPacket extends ModPacket {
 	/**
 	 * Generic constructor, creates a blank packet object
 	 */
-	public StandardModPacket() {
+	private StandardModPacket() {
 		values = new HashMap<Object, Object>();
+	}
+
+	public StandardModPacket(WorldLocation origin) {
+		values = new HashMap<Object, Object>();
+		this.origin = origin;
 	}
 
 	/**
@@ -59,6 +69,11 @@ public class StandardModPacket extends ModPacket {
 	@Override
 	public String getType() {
 		return packetType;
+	}
+
+	@Override
+	public WorldLocation getOriginLocation() {
+		return origin;
 	}
 
 	/**
@@ -195,6 +210,9 @@ public class StandardModPacket extends ModPacket {
 			throw new IOException("packetType exceeds maximum length!");
 		Packet.writeString(packetType, data);
 		data.writeByte((isPacketForServer) ? 1 : 0);
+		IStreamPackable<WorldLocation> packer = (IStreamPackable<WorldLocation>) ModPacket
+				.findPacker(WorldLocation.class);
+		packer.pack(origin, data);
 		synchronized (values) {
 			writeHashMap(values, data);
 		}
@@ -213,6 +231,8 @@ public class StandardModPacket extends ModPacket {
 			throw new IOException("Malformed packet!!");
 		packetType = Packet.readString(data, 512);
 		isPacketForServer = (data.readByte() == 1);
+		IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
+		origin = (WorldLocation) unpacker.unpack(data);
 		synchronized (values) {
 			values = (HashMap<Object, Object>) readHashMap(data);
 		}
