@@ -1,9 +1,8 @@
 package pcl.lc.core;
 
+import pcl.common.util.Vector3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class WorldLocation {
 
@@ -39,6 +38,10 @@ public class WorldLocation {
 
 	public ChunkLocation toChunkLocation() {
 		return new ChunkLocation(dimension, x >> 4, z >> 4);
+	}
+
+	public Vector3 toVector3() {
+		return new Vector3(x, y, z);
 	}
 
 }
