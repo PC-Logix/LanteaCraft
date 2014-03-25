@@ -21,15 +21,14 @@ public class ClientAudioSource extends AudioSource {
 			boolean override, float volume, String tag) {
 		this.system = system;
 		this.position = position;
-		this.name = tag;
-		this.configuredVolume = volume;
+		name = tag;
+		configuredVolume = volume;
 		ClientAudioEngine engine = (ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine();
 
 		URL path = ClientAudioSource.class.getClassLoader().getResource("assets/pcl_pc/sounds/" + file);
-		if (path == null) {
+		if (path == null)
 			LanteaCraft.getLogger().log(Level.WARNING,
 					String.format("Sound `%s` requested, but file doesn't exist!", file));
-		}
 
 		system.newSource(override, name, path, file, looping, (float) position.position.x, (float) position.position.y,
 				(float) position.position.z, 0, engine.falloffDistance * Math.max(volume, 1.0F));
@@ -134,29 +133,29 @@ public class ClientAudioSource extends AudioSource {
 			cull();
 			return;
 		}
-		
+
 		if (rd > d)
 			d = rd;
 		float gain = 1.0F - rolloff * (d - rd) / (md - rd);
-		float nrv = gain * configuredVolume * ((ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine()).masterVolume;
-		
+		float nrv = gain * configuredVolume
+				* ((ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine()).masterVolume;
+
 		Vector3 i = new Vector3(clientPlayer);
 		Vector3 j = position.position.sub(i).div(d);
-		if (nrv > 0.1f) {
+		if (nrv > 0.1f)
 			for (int k = 0; k < d; k++) {
 				int b = clientPlayer.worldObj.getBlockId((int) i.x, (int) i.y, (int) i.z);
-				if (b != 0) {
+				if (b != 0)
 					if (Block.opaqueCubeLookup[b])
 						nrv *= 0.5F;
 					else
 						nrv *= 0.85F;
-				}
 				i.add(j);
 			}
-		}
-		
+
 		if (Math.abs(realVolume / nrv - 1.0F) > 0.06D)
-			system.setVolume(name, Math.min(nrv, 1.0F) * ((ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine()).masterVolume);
+			system.setVolume(name, Math.min(nrv, 1.0F)
+					* ((ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine()).masterVolume);
 		realVolume = nrv;
 	}
 

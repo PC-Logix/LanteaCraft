@@ -4,7 +4,6 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.crash.CallableMinecraftVersion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -18,6 +17,7 @@ import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.worldgen.FeatureUnderDesertPyramid;
 import pcl.lc.worldgen.NaquadahOreWorldGen;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ModuleWorldGenerator implements IModule {
 
@@ -50,8 +50,8 @@ public class ModuleWorldGenerator implements IModule {
 		}
 
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft random drop items...");
-		String[] categories = { ChestGenHooks.MINESHAFT_CORRIDOR, ChestGenHooks.PYRAMID_DESERT_CHEST, ChestGenHooks.PYRAMID_JUNGLE_CHEST,
-				ChestGenHooks.STRONGHOLD_LIBRARY, ChestGenHooks.VILLAGE_BLACKSMITH };
+		String[] categories = { ChestGenHooks.MINESHAFT_CORRIDOR, ChestGenHooks.PYRAMID_DESERT_CHEST,
+				ChestGenHooks.PYRAMID_JUNGLE_CHEST, ChestGenHooks.STRONGHOLD_LIBRARY, ChestGenHooks.VILLAGE_BLACKSMITH };
 		RegistrationHelper.addRandomChestItem(new ItemStack(Blocks.stargateBaseBlock), 1, 1, 2, categories);
 		RegistrationHelper.addRandomChestItem(new ItemStack(Blocks.stargateControllerBlock), 1, 1, 1, categories);
 		RegistrationHelper.addRandomChestItem(new ItemStack(Blocks.stargateRingBlock, 1, 0), 1, 3, 8, categories);
@@ -70,7 +70,7 @@ public class ModuleWorldGenerator implements IModule {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public NaquadahOreWorldGen getNaquadahOreGenerator() {
 		return naquadahOreGenerator;
 	}

@@ -98,19 +98,19 @@ public class StandardStargateRenderer implements IStargateRenderer {
 			vertex(r4 * cos[i], r4 * sin[i], -z, 0, 16);
 			vertex(r4 * cos[i + 1], r4 * sin[i + 1], -z, 16, 16);
 			vertex(r4 * cos[i + 1], r4 * sin[i + 1], z, 16, 0);
-			
+
 			GL11.glNormal3f(0, 0, 1);
 			vertex(r1 * cos[i], r1 * sin[i], z, u + du, dv);
 			vertex(r4 * cos[i], r4 * sin[i], z, u + du, 0);
 			vertex(r4 * cos[i + 1], r4 * sin[i + 1], z, u, 0);
 			vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, u, dv);
-			
+
 			GL11.glNormal3d(-cos[i], -sin[i], 0);
 			vertex(r3 * cos[i], r3 * sin[i], z, 0, 0);
 			vertex(r3 * cos[i + 1], r3 * sin[i + 1], z, 16, 0);
 			vertex(r3 * cos[i + 1], r3 * sin[i + 1], -z, 16, 16);
 			vertex(r3 * cos[i], r3 * sin[i], -z, 0, 16);
-			
+
 			GL11.glNormal3f(0, 0, 1);
 			vertex(r3 * cos[i], r3 * sin[i], z, u + du, dv);
 			vertex(r2 * cos[i], r2 * sin[i], z, u + du, 0);

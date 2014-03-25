@@ -1,15 +1,15 @@
 package pcl.common.audio;
 
-import pcl.common.util.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import pcl.common.util.Vector3;
 
 public class AudioPosition {
-	
+
 	public World world;
 	public Vector3 position;
-	
+
 	public static AudioPosition from(Object o) {
 		if (o instanceof AudioPosition)
 			return (AudioPosition) o;
@@ -23,11 +23,10 @@ public class AudioPosition {
 		}
 		return null;
 	}
-	
+
 	public AudioPosition(World world, Vector3 position) {
 		this.world = world;
 		this.position = position;
 	}
-	
 
 }

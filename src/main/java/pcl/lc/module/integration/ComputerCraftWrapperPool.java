@@ -3,16 +3,16 @@ package pcl.lc.module.integration;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import net.minecraft.nbt.NBTTagCompound;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
 import pcl.lc.core.AddressingError;
-import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
+import pcl.lc.core.GateAddressHelper;
 import pcl.lc.tileentity.TileEntityStargateBase;
-import net.minecraft.nbt.NBTTagCompound;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IHostedPeripheral;
 import dan200.computer.api.ILuaContext;
@@ -34,7 +34,7 @@ public class ComputerCraftWrapperPool {
 		protected final ArrayList<WeakReference<IComputerAccess>> clients;
 
 		public ComputerCraftHostStub() {
-			this.clients = new ArrayList<WeakReference<IComputerAccess>>();
+			clients = new ArrayList<WeakReference<IComputerAccess>>();
 		}
 
 		@Override
@@ -155,9 +155,10 @@ public class ComputerCraftWrapperPool {
 				case Dialling:
 					if (access.isOutgoingConnection())
 						pushEvent("sgOutgoing", new Object[] { access.getConnectionAddress() });
-					else {
-						pushEvent("sgIncoming", new Object[] { access.getConnectionAddress().substring(0, access.getEncodedChevrons()) });
-					}
+					else
+						pushEvent(
+								"sgIncoming",
+								new Object[] { access.getConnectionAddress().substring(0, access.getEncodedChevrons()) });
 					break;
 				case InterDialling:
 					pushEvent("sgChevronEncode", new Object[] { access.getEncodedChevrons() });

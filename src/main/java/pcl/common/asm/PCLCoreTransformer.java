@@ -24,9 +24,9 @@ public class PCLCoreTransformer implements IClassTransformer {
 	public static boolean ASM_SUCCESS = false;
 
 	/**
-	 * Initializes the core transformer. This notifies that hooking at runtime was a success,
-	 * and sets up all transformers registered in the {@link PCLCoreTransformerPlugin}
-	 * instance.
+	 * Initializes the core transformer. This notifies that hooking at runtime
+	 * was a success, and sets up all transformers registered in the
+	 * {@link PCLCoreTransformerPlugin} instance.
 	 */
 	public PCLCoreTransformer() {
 		PCLCoreTransformer.ASM_SUCCESS = true;
@@ -45,8 +45,8 @@ public class PCLCoreTransformer implements IClassTransformer {
 	}
 
 	/**
-	 * Called when Forge is passing a class for transformation to us. We should pass this
-	 * through all our children, then return the result.
+	 * Called when Forge is passing a class for transformation to us. We should
+	 * pass this through all our children, then return the result.
 	 */
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) {

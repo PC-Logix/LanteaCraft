@@ -45,7 +45,7 @@ public class ModuleManager {
 		Set<Module> modules = EnumSet.allOf(Module.class);
 		Iterator<Module> i = modules.iterator();
 		while (i.hasNext()) {
-			Module theModule = (Module) i.next();
+			Module theModule = i.next();
 			if (!isModuleEnabled(theModule)) {
 				LanteaCraft.getLogger().log(Level.INFO,
 						"Removing module " + theModule + " because it is disabled in config.");
@@ -58,7 +58,7 @@ public class ModuleManager {
 			flag = false;
 			Iterator<Module> j = modules.iterator();
 			while (j.hasNext()) {
-				Module theModule = (Module) j.next();
+				Module theModule = j.next();
 				Set<Module> dependencies = theModule.moduleOf().getDependencies();
 				if (dependencies != null && !modules.containsAll(dependencies)) {
 					LanteaCraft.getLogger().log(Level.INFO,
@@ -77,7 +77,7 @@ public class ModuleManager {
 			Iterator<Module> k = modules.iterator();
 			p++;
 			while (k.hasNext()) {
-				Module theModule = (Module) k.next();
+				Module theModule = k.next();
 				if (theModule == Module.CORE) {
 					k.remove();
 					continue;

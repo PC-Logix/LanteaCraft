@@ -1,23 +1,23 @@
 package pcl.lc.render.blocks;
 
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
+
+import org.lwjgl.opengl.GL11;
+
 import pcl.common.render.GenericBlockRenderer;
 import pcl.lc.LanteaCraft;
 import pcl.lc.render.models.StargateControllerModel;
+import cpw.mods.fml.client.FMLClientHandler;
 
 public class BlockStargateControllerRenderer extends GenericBlockRenderer {
 
 	private ResourceLocation texture;
 
 	public BlockStargateControllerRenderer() {
-		this.texture = LanteaCraft.getResource("textures/models/dhd_off_" + LanteaCraft.getProxy().getRenderMode()
-				+ ".png");
+		texture = LanteaCraft.getResource("textures/models/dhd_off_" + LanteaCraft.getProxy().getRenderMode() + ".png");
 	}
 
 	@Override

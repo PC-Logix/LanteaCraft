@@ -3,14 +3,14 @@ package pcl.lc.core;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-import pcl.lc.LanteaCraft;
-import pcl.lc.api.internal.ITickAgent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
+import pcl.lc.LanteaCraft;
+import pcl.lc.api.internal.ITickAgent;
 
 public class RemoteChunkLoading implements ITickAgent {
 
@@ -26,7 +26,7 @@ public class RemoteChunkLoading implements ITickAgent {
 		public ChunkLoadRequest(String name, Ticket ticket, int expiry) {
 			this.name = name;
 			this.ticket = ticket;
-			this.max_age = expiry;
+			max_age = expiry;
 		}
 
 		public String name() {

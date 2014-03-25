@@ -31,8 +31,6 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.network.ForgePacket;
 import net.minecraftforge.common.network.packet.DimensionRegisterPacket;
 import pcl.common.base.GenericTileEntity;
-import pcl.common.base.TileEntityChunkLoader;
-import pcl.common.base.TileEntityChunkManager;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
@@ -48,10 +46,10 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.core.AddressingError;
-import pcl.lc.core.GateAddressHelper;
-import pcl.lc.core.TeleportationAgent;
 import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
+import pcl.lc.core.GateAddressHelper;
+import pcl.lc.core.TeleportationAgent;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
@@ -236,14 +234,13 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			renderLastRingAngle = renderRingAngle;
 			advanceRendering();
 			if (getState() == EnumStargateState.Dialling
-					|| (getState() == EnumStargateState.Disconnecting && timeout > 0)) {
+					|| (getState() == EnumStargateState.Disconnecting && timeout > 0))
 				if (timeout > 0) {
 					double da = MathUtils.diffAngle(renderRingAngle, renderNextRingAngle) / timeout;
 					setRingAngle(MathUtils.addAngle(renderRingAngle, da));
 					--timeout;
 				} else
 					setRingAngle(renderNextRingAngle);
-			}
 		} else {
 			if (getAsStructure().isValid()) {
 				if (getState() == EnumStargateState.Connected && isInitiator)
@@ -321,9 +318,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	public void connectOrDisconnect(String address, EntityPlayer player) {
-		if (getState() == EnumStargateState.Idle) {
+		if (getState() == EnumStargateState.Idle)
 			connect(address, player);
-		} else {
+		else {
 			TileEntityStargateBase dte = getConnectedStargateTE();
 			boolean validConnection = dte != null && dte.getConnectedStargateTE() == this;
 			if (!validConnection || getState() != EnumStargateState.Disconnecting)
@@ -353,15 +350,15 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			return error.getMessage();
 		}
 
-		if (dte == null) {
+		if (dte == null)
 			return "No stargate at address " + address;
-		} else if (dte == this) {
+		else if (dte == this)
 			return "Stargate cannot connect to itself";
-		} else if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle) {
+		else if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle)
 			return "Stargate at address " + address + " is busy";
-		} else if (1 > getRemainingDials()) {
+		else if (1 > getRemainingDials())
 			return "Stargate has insufficient fuel";
-		} else {
+		else {
 			startDiallingStargate(address, dte, true);
 			dte.startDiallingStargate((address.length() == 7) ? homeAddress.substring(0, 7) : homeAddress, this, false);
 			return true;

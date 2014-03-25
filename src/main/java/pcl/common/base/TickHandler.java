@@ -30,8 +30,8 @@ public abstract class TickHandler implements ITickHandler {
 	protected void updateChildren() {
 		// Only allow modification of the child stack when the child input
 		// stack is not locked; don't wait to obtain the lock either.
-		if (!childLock.isLocked()) {
-			if (newChildren.size() > 0) {
+		if (!childLock.isLocked())
+			if (newChildren.size() > 0)
 				try {
 					childLock.lock();
 					for (ITickAgent host : newChildren)
@@ -43,8 +43,6 @@ public abstract class TickHandler implements ITickHandler {
 					if (childLock.isLocked())
 						childLock.unlock();
 				}
-			}
-		}
 	}
 
 	protected void tickChildren() {

@@ -11,8 +11,8 @@ import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Fluids;
 import pcl.lc.LanteaCraft.Items;
 import pcl.lc.api.internal.IModule;
-import pcl.lc.blocks.BlockOfLanteaOre;
 import pcl.lc.blocks.BlockLanteaOre;
+import pcl.lc.blocks.BlockOfLanteaOre;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.LiquidNaquadah;
@@ -37,7 +37,6 @@ public class ModuleCore implements IModule {
 
 	@Override
 	public void preInit() {
-
 
 	}
 

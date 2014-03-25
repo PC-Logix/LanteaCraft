@@ -52,7 +52,7 @@ public final class ClassOptional {
 		 */
 		public String classname();
 	}
-	
+
 	/**
 	 * Mark a list of self- interfaces as removable
 	 * 

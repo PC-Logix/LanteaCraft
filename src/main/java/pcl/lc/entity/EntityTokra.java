@@ -23,28 +23,30 @@ public class EntityTokra extends EntityCreature implements INpc {
 
 	public EntityTokra(World par1World) {
 		super(par1World);
-		this.getNavigator().setBreakDoors(true);
-		this.getNavigator().setAvoidsWater(true);
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIAvoidEntity(this, EntityZombie.class, 8.0F, 0.6D, 0.6D));
-		this.tasks.addTask(2, new EntityAIMoveIndoors(this));
-		this.tasks.addTask(3, new EntityAIRestrictOpenDoor(this));
-		this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
-		this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
-		this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
-		this.tasks.addTask(9, new EntityAIWatchClosest2(this, EntityTokra.class, 5.0F, 0.02F));
-		this.tasks.addTask(9, new EntityAIWander(this, 0.6D));
-		this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
+		getNavigator().setBreakDoors(true);
+		getNavigator().setAvoidsWater(true);
+		tasks.addTask(0, new EntityAISwimming(this));
+		tasks.addTask(1, new EntityAIAvoidEntity(this, EntityZombie.class, 8.0F, 0.6D, 0.6D));
+		tasks.addTask(2, new EntityAIMoveIndoors(this));
+		tasks.addTask(3, new EntityAIRestrictOpenDoor(this));
+		tasks.addTask(4, new EntityAIOpenDoor(this, true));
+		tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
+		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
+		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityTokra.class, 5.0F, 0.02F));
+		tasks.addTask(9, new EntityAIWander(this, 0.6D));
+		tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
 	}
 
+	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.5D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.5D);
 	}
 
 	/**
 	 * Returns true if the newer Entity AI code should be run
 	 */
+	@Override
 	public boolean isAIEnabled() {
 		return true;
 	}
@@ -52,26 +54,31 @@ public class EntityTokra extends EntityCreature implements INpc {
 	/**
 	 * main AI tick function, replaces updateEntityActionState
 	 */
+	@Override
 	protected void updateAITick() {
 		super.updateAITick();
 	}
 
 	/**
-	 * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the
-	 * saddle on a pig.
+	 * Called when a player interacts with a mob. e.g. gets milk from a cow,
+	 * gets into the saddle on a pig.
 	 */
+	@Override
 	public boolean interact(EntityPlayer par1EntityPlayer) {
 		return true;
 	}
 
+	@Override
 	protected void entityInit() {
 		super.entityInit();
 	}
 
+	@Override
 	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeEntityToNBT(par1NBTTagCompound);
 	}
 
+	@Override
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readEntityFromNBT(par1NBTTagCompound);
 	}
@@ -79,6 +86,7 @@ public class EntityTokra extends EntityCreature implements INpc {
 	/**
 	 * Determines if an entity can be despawned, used on idle far away entities
 	 */
+	@Override
 	protected boolean canDespawn() {
 		return false;
 	}
@@ -86,6 +94,7 @@ public class EntityTokra extends EntityCreature implements INpc {
 	/**
 	 * Returns the sound this mob makes while it's alive.
 	 */
+	@Override
 	protected String getLivingSound() {
 		return "mob.villager.idle";
 	}
@@ -93,6 +102,7 @@ public class EntityTokra extends EntityCreature implements INpc {
 	/**
 	 * Returns the sound this mob makes when it is hurt.
 	 */
+	@Override
 	protected String getHurtSound() {
 		return "mob.villager.hit";
 	}
@@ -100,25 +110,28 @@ public class EntityTokra extends EntityCreature implements INpc {
 	/**
 	 * Returns the sound this mob makes on death.
 	 */
+	@Override
 	protected String getDeathSound() {
 		return "mob.villager.death";
 	}
 
 	public void setProfession(int par1) {
-		this.dataWatcher.updateObject(16, Integer.valueOf(par1));
+		dataWatcher.updateObject(16, Integer.valueOf(par1));
 	}
 
 	public int getProfession() {
-		return this.dataWatcher.getWatchableObjectInt(16);
+		return dataWatcher.getWatchableObjectInt(16);
 	}
 
 	/**
 	 * Called when the mob's health reaches 0.
 	 */
+	@Override
 	public void onDeath(DamageSource par1DamageSource) {
 		super.onDeath(par1DamageSource);
 	}
 
+	@Override
 	public boolean allowLeashing() {
 		return false;
 	}

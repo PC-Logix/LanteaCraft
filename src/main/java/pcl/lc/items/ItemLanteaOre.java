@@ -2,13 +2,13 @@ package pcl.lc.items;
 
 import java.util.List;
 
-import pcl.lc.LanteaCraft;
-import pcl.lc.core.OreTypes;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import pcl.lc.LanteaCraft;
+import pcl.lc.core.OreTypes;
 
 public class ItemLanteaOre extends Item {
 	private Icon missing;

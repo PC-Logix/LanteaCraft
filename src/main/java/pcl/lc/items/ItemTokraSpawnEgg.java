@@ -33,8 +33,7 @@ public class ItemTokraSpawnEgg extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
@@ -44,9 +43,9 @@ public class ItemTokraSpawnEgg extends Item {
 	}
 
 	/**
-	 * Callback for item usage. If the item does something special on right clicking, he will
-	 * have one of those. Return True if something happen and false if it don't. This is for
-	 * ITEMS, not BLOCKS
+	 * Callback for item usage. If the item does something special on right
+	 * clicking, he will have one of those. Return True if something happen and
+	 * false if it don't. This is for ITEMS, not BLOCKS
 	 */
 	@Override
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4,
@@ -73,8 +72,8 @@ public class ItemTokraSpawnEgg extends Item {
 	}
 
 	/**
-	 * Called whenever this item is equipped and the right mouse button is pressed. Args:
-	 * itemStack, world, entityPlayer
+	 * Called whenever this item is equipped and the right mouse button is
+	 * pressed. Args: itemStack, world, entityPlayer
 	 */
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
@@ -111,8 +110,8 @@ public class ItemTokraSpawnEgg extends Item {
 	}
 
 	/**
-	 * Spawns the creature specified by the egg's type in the location specified by the last
-	 * three parameters. Parameters: world, x, y, z.
+	 * Spawns the creature specified by the egg's type in the location specified
+	 * by the last three parameters. Parameters: world, x, y, z.
 	 */
 	public static Entity spawnCreature(World par0World, double par2, double par4, double par6) {
 		EntityVillager entity = new EntityVillager(par0World, LanteaCraft.getProxy().getVillagerID("tokra"));

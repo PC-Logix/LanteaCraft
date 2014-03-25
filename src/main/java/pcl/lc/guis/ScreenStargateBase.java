@@ -5,20 +5,21 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.util.logging.Level;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import pcl.common.base.GenericContainer;
 import pcl.common.util.ImmutablePair;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.AddressingError;
 import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
 import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.common.base.GenericContainer;
 
 public class ScreenStargateBase extends GenericGlyphGUI {
 
@@ -90,14 +91,13 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 
 	@Override
 	protected void mouseMovedOrUp(int x, int y, int which) {
-		if (which == 0 || which == 1) {
+		if (which == 0 || which == 1)
 			if (mouseDown) {
 				ImmutablePair<Integer, Integer> coord = transformMouseCoordinates(x, y);
 				if (coord.getA() >= 232 && coord.getA() <= 232 + 12 && coord.getB() >= 70 && coord.getB() <= 70 + 12)
 					addressToClipboard();
 				mouseDown = false;
 			}
-		}
 		super.mouseMovedOrUp(x, y, which);
 	}
 

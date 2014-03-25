@@ -1,10 +1,10 @@
 package pcl.lc.core;
 
+import net.minecraft.util.Icon;
 import pcl.lc.blocks.BlockLanteaOre;
 import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreBlock;
 import pcl.lc.items.ItemLanteaOreIngot;
-import net.minecraft.util.Icon;
 
 /**
  * Internal Ore registry. Contains all required textures to render each ore (see
@@ -44,7 +44,7 @@ public enum OreTypes {
 	}
 
 	public void setOreTexture(Icon texture) {
-		this.textureOreBlock = texture;
+		textureOreBlock = texture;
 	}
 
 	public Icon getItemTexture() {
@@ -52,7 +52,7 @@ public enum OreTypes {
 	}
 
 	public void setItemTexture(Icon texture) {
-		this.textureItem = texture;
+		textureItem = texture;
 	}
 
 	public Icon getIngotItemTexture() {
@@ -60,7 +60,7 @@ public enum OreTypes {
 	}
 
 	public void setIngotItemTexture(Icon texture) {
-		this.textureIngotItem = texture;
+		textureIngotItem = texture;
 	}
 
 	public Icon getItemAsBlockTexture() {
@@ -68,7 +68,7 @@ public enum OreTypes {
 	}
 
 	public void setItemAsBlockTexture(Icon texture) {
-		this.textureItemAsBlock = texture;
+		textureItemAsBlock = texture;
 	}
 
 }

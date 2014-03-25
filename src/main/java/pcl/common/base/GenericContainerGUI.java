@@ -7,8 +7,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
-import org.lwjgl.opengl.GL11;
-
 public abstract class GenericContainerGUI extends GuiContainer {
 
 	final static int defaultTextColor = 0x404040;

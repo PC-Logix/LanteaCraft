@@ -8,7 +8,6 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import pcl.common.network.ModPacket;
 import pcl.common.util.WorldLocation;
 
-
 /**
  * Packet to calculate and send Observable state changes.
  * 
@@ -16,10 +15,10 @@ import pcl.common.util.WorldLocation;
  */
 public class DiffModPacket extends ModPacket {
 
-	private enum EnumOperation { 
+	private enum EnumOperation {
 		ADD, REMOVE, MODIFY;
 	}
-	
+
 	public static DiffModPacket createPacket(DataInputStream data) throws IOException {
 		DiffModPacket pkt = new DiffModPacket();
 		pkt.unpack(data);
@@ -42,21 +41,21 @@ public class DiffModPacket extends ModPacket {
 	private void pack(WatchedList<?, ?> list) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	public void setMetadata(String key, Object value) {
-		this.metadata.put(key, value);
+		metadata.put(key, value);
 	}
-	
+
 	public Object getMetadata(String key) {
-		return this.metadata.get(key);
+		return metadata.get(key);
 	}
-	
+
 	public boolean hasMetadata() {
-		return this.metadata.size() > 0;
+		return metadata.size() > 0;
 	}
-	
+
 	public boolean hasMetadataField(String key) {
-		return this.metadata.containsKey(key);
+		return metadata.containsKey(key);
 	}
 
 	@Override

@@ -1,14 +1,15 @@
 package pcl.lc.render.tileentity;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
 import cpw.mods.fml.client.FMLClientHandler;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 
 public class TileEntityLanteaDecorGlassRenderer extends TileEntitySpecialRenderer {
 
@@ -41,7 +42,7 @@ public class TileEntityLanteaDecorGlassRenderer extends TileEntitySpecialRendere
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(glassTexture);
 		GL11.glTranslated(x, y, z);
 
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++)
 			if (glass.renderSide(i)) {
 				GL11.glPushMatrix();
 				GL11.glTranslated(0.5d, 0.5d, 0.5d);
@@ -72,7 +73,6 @@ public class TileEntityLanteaDecorGlassRenderer extends TileEntitySpecialRendere
 				pushQuad(0.0d, 0.0d, 1.0d, 1.0d, qx, qy);
 				GL11.glPopMatrix();
 			}
-		}
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -102,9 +102,9 @@ public class TileEntityLanteaDecorGlassRenderer extends TileEntitySpecialRendere
 	private void applyRotationToSide(int side, int rotationType) {
 		double[][] rotationRule = { { 180, 270, 0, 90 }, { 0, 270, 180, 90 }, { 90, 180, 270 }, { 270, 180, 90 } };
 
-		if (side == 0 || side == 1) {
+		if (side == 0 || side == 1)
 			rotateSide(side, rotationRule[side][rotationType]);
-		} else if (rotationType > 0)
+		else if (rotationType > 0)
 			if (side == 2 || side == 3)
 				rotateSide(side, rotationRule[2][rotationType - 1]);
 			else

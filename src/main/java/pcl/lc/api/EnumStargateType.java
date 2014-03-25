@@ -1,8 +1,9 @@
 package pcl.lc.api;
 
 /**
- * Enum containing all gate types, their ordinal and the name assigned to them. This file
- * includes unannounced gates, called 'RESERVED'. You'll have to wait and see what they are. ;)
+ * Enum containing all gate types, their ordinal and the name assigned to them.
+ * This file includes unannounced gates, called 'RESERVED'. You'll have to wait
+ * and see what they are. ;)
  * 
  * @author AfterLifeLochie
  * 

@@ -52,7 +52,7 @@ public class FilterRule {
 			for (ItemStack item : deny)
 				this.deny.add(new ItemStack(item.getItem(), 1));
 		this.whitelist = whitelist;
-		this.observeMetadata = metadata;
+		observeMetadata = metadata;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class FilterRule {
 			return true;
 		}
 	}
-	
+
 	private boolean isItemVirtuallyEqual(ItemStack a, ItemStack b) {
 		if (a.itemID != b.itemID)
 			return false;

@@ -55,10 +55,9 @@ public class TeleportationAgent {
 
 	private Entity teleportToOtherDimension(Entity entity, Vector3 destination, Vector3 velocity, Facing3 rotation,
 			int dimension) {
-		if (entity instanceof EntityPlayerMP) {
-			return (EntityPlayerMP) transferPlayerToDimension((EntityPlayerMP) entity, destination, velocity, rotation,
-					dimension);
-		} else
+		if (entity instanceof EntityPlayerMP)
+			return transferPlayerToDimension((EntityPlayerMP) entity, destination, velocity, rotation, dimension);
+		else
 			return teleportEntityToDimension(entity, destination, velocity, rotation, dimension);
 	}
 

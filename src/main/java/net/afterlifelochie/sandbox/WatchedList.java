@@ -100,7 +100,7 @@ public class WatchedList<A, B> extends Observable {
 	 * @see {@link HashMap#put(Object, Object)}
 	 */
 	public B set(A key, B value) {
-		this.modify();
+		modify();
 		// Operation SET(A, B) will create key A if it does not exist already;
 		// reflect this in key_add list if key_add has no such key A.
 		if (!values.containsKey(key) && !key_add.contains(key))
@@ -119,7 +119,7 @@ public class WatchedList<A, B> extends Observable {
 	 * @see {@link HashMap#remove(Object)}
 	 */
 	public B remove(A key) {
-		this.modify();
+		modify();
 		// Operation REMOVE(A) will remove key A with value B if key A exists
 		// already; reflect this in key_remove list if key_remove has no such
 		// key A.
@@ -132,7 +132,7 @@ public class WatchedList<A, B> extends Observable {
 	 * @see {@link HashMap#clear()}
 	 */
 	public void clear() {
-		this.modify();
+		modify();
 		// Operation CLEAR() will remove all key A with value B; reflect this in
 		// key_remove list if key_remove has no duplicates of each(key A).
 		Iterator<A> of = values.keySet().iterator();

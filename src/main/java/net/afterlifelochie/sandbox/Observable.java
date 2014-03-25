@@ -28,16 +28,16 @@ public class Observable {
 	 * Marks this object as modified. Only accessible to the extending object.
 	 */
 	protected void modify() {
-		this.modified = true;
-		if (this.parent != null)
-			this.parent.modify();
+		modified = true;
+		if (parent != null)
+			parent.modify();
 	}
 
 	/**
 	 * Returns the state of this Observable.
 	 */
 	public boolean modified() {
-		return this.modified;
+		return modified;
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class Observable {
 	 * about the change in the Observable state, it should also be reset.
 	 */
 	public void clearModified() {
-		this.modified = false;
+		modified = false;
 	}
 
 }

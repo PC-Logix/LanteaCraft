@@ -7,7 +7,8 @@ import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.ModMetadata;
 
 /**
- * Forge expects us to return a ModContainer when loading core-mod code. This is it.
+ * Forge expects us to return a ModContainer when loading core-mod code. This is
+ * it.
  * 
  * @author AfterLifeLochie
  */

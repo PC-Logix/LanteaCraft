@@ -3,7 +3,6 @@ package pcl.lc.module;
 import java.util.EnumSet;
 import java.util.Set;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,13 +20,13 @@ import pcl.lc.containers.ContainerStargateControllerEnergy;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.items.ItemControllerCrystal;
 import pcl.lc.items.ItemCoreCrystal;
-import pcl.lc.items.ItemEnergyCrystal;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTransportRingActivator;
 import pcl.lc.tileentity.TileEntityRingPlatform;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ModuleStargates implements IModule {
 

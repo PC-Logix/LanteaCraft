@@ -25,7 +25,7 @@ public class ConfigNode {
 	 * The object's parameter map.
 	 */
 	private HashMap<String, Object> parameters;
-	
+
 	/**
 	 * The parent node, if it exists.
 	 */
@@ -35,7 +35,7 @@ public class ConfigNode {
 	 * The modified state flag.
 	 */
 	private boolean modified;
-	
+
 	public ConfigNode() {
 	}
 
@@ -71,15 +71,15 @@ public class ConfigNode {
 	public void setParameters(HashMap<String, Object> parameters) {
 		this.parameters = parameters;
 	}
-	
+
 	public void modify() {
-		this.modified = true;
-		if (this.parent != null && this.parent.get() != null)
-			this.parent.get().modify();
+		modified = true;
+		if (parent != null && parent.get() != null)
+			parent.get().modify();
 	}
-	
+
 	public boolean modified() {
-		return this.modified;
+		return modified;
 	}
 
 }

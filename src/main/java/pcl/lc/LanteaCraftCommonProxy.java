@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,10 +28,10 @@ import pcl.common.helpers.RegistrationHelper;
 import pcl.common.helpers.VersionHelper;
 import pcl.common.network.ModPacket;
 import pcl.common.util.WorldLocation;
-import pcl.lc.core.RemoteChunkLoading;
-import pcl.lc.core.ServerTickHandler;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.core.RemoteChunkLoading;
+import pcl.lc.core.ServerTickHandler;
 import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleWorldGenerator;
 import pcl.lc.module.compat.UpgradeHelper;
@@ -95,8 +94,8 @@ public class LanteaCraftCommonProxy {
 		public final ResourceLocation villagerSkin;
 
 		public VillagerMapping(int id, ResourceLocation skin) {
-			this.villagerID = id;
-			this.villagerSkin = skin;
+			villagerID = id;
+			villagerSkin = skin;
 		}
 	};
 

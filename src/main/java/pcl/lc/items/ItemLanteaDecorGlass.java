@@ -1,9 +1,9 @@
 package pcl.lc.items;
 
-import pcl.lc.module.ModuleDecor.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import pcl.lc.module.ModuleDecor.Blocks;
 
 public class ItemLanteaDecorGlass extends ItemBlock {
 

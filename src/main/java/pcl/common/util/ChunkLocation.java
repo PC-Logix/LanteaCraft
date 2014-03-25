@@ -15,15 +15,15 @@ public class ChunkLocation {
 
 	public ChunkLocation(int dimension, int x, int z) {
 		this.dimension = dimension;
-		this.cx = x;
-		this.cz = z;
-		this.isStrongLocation = true;
+		cx = x;
+		cz = z;
+		isStrongLocation = true;
 	}
 
 	public ChunkLocation(int x, int z) {
-		this.cx = x;
-		this.cz = z;
-		this.isStrongLocation = false;
+		cx = x;
+		cz = z;
+		isStrongLocation = false;
 	}
 
 	public ChunkLocation(NBTTagCompound nbt) {
@@ -50,12 +50,12 @@ public class ChunkLocation {
 
 	public void setDimension(int dimension) {
 		this.dimension = dimension;
-		this.isStrongLocation = true;
+		isStrongLocation = true;
 	}
 
 	public void clearDimension() {
-		this.dimension = 0;
-		this.isStrongLocation = false;
+		dimension = 0;
+		isStrongLocation = false;
 	}
 
 }

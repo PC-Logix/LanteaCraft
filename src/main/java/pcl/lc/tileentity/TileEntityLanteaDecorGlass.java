@@ -5,16 +5,16 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.network.TinyModPacket;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHandler {
 
@@ -38,9 +38,8 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 	public TileEntityLanteaDecorGlass getGlassAt(int x, int y, int z) {
 		if (y >= 0 && worldObj.getHeight() > y) {
 			TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
-			if (tile instanceof TileEntityLanteaDecorGlass) {
+			if (tile instanceof TileEntityLanteaDecorGlass)
 				return (TileEntityLanteaDecorGlass) tile;
-			}
 		}
 		return null;
 	}
@@ -79,31 +78,29 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 						}
 				} else if (renderEdges == 2) {
 					int i = -1, j = -1;
-					for (int k = 0; k < 4; k++) {
+					for (int k = 0; k < 4; k++)
 						for (int l = 0; l < 4; l++)
 							if (!edges[dir][l])
 								if (i == -1)
 									i = l;
 								else
 									j = l;
-					}
-					if (i == 0 && j == 1) {
+					if (i == 0 && j == 1)
 						tile_rotation[dir] = 0;
-					} else if (i == 1 && j == 2) {
+					else if (i == 1 && j == 2)
 						tile_rotation[dir] = 1;
-					} else if (i == 2 && j == 3) {
+					else if (i == 2 && j == 3)
 						tile_rotation[dir] = 2;
-					} else if (i == 3 && j == 0) {
+					else if (i == 3 && j == 0)
 						tile_rotation[dir] = 3;
-					} else if (i == 0 && j == 2) {
+					else if (i == 0 && j == 2) {
 						tile_rotation[dir] = 1;
 						edges_count[dir] = 5;
 					} else if (i == 1 && j == 3) {
 						tile_rotation[dir] = 0;
 						edges_count[dir] = 5;
-					} else {
+					} else
 						LanteaCraft.getLogger().log(Level.INFO, "Don't know how to handle this!");
-					}
 				} else if (renderEdges == 3) {
 					for (int i = 0; i < 4; i++)
 						if (edges[dir][i]) {
@@ -124,13 +121,13 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 			return false;
 		return !state[dir];
 	}
-	
+
 	public int sideType(int dir) {
 		if (0 > dir || dir > 6)
 			return 0;
 		return edges_count[dir];
 	}
-	
+
 	public int sideRotation(int dir) {
 		if (0 > dir || dir > 6)
 			return 0;
@@ -158,7 +155,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 			DataOutputStream stream = packet.getOut();
 			for (int i = 0; i < 6; i++)
 				stream.write((state[i]) ? 1 : 0);
-			for (int i = 0; i < 6; i++) 
+			for (int i = 0; i < 6; i++)
 				stream.writeInt(edges_count[i]);
 			for (int i = 0; i < 6; i++)
 				stream.writeInt(tile_rotation[i]);
@@ -173,20 +170,19 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		if (worldObj.isRemote)
-			if (packetOf instanceof TinyModPacket) {
+			if (packetOf instanceof TinyModPacket)
 				try {
 					TinyModPacket descriptor = (TinyModPacket) packetOf;
 					DataInputStream stream = descriptor.getIn();
 					for (int i = 0; i < 6; i++)
 						state[i] = (stream.readByte() == 1);
-					for (int i = 0; i < 6; i++) 
+					for (int i = 0; i < 6; i++)
 						edges_count[i] = stream.readInt();
 					for (int i = 0; i < 6; i++)
 						tile_rotation[i] = stream.readInt();
 				} catch (IOException ioex) {
 					LanteaCraft.getLogger().log(Level.WARNING, "Error unpacking description packet.", ioex);
 				}
-			}
 	}
 
 }

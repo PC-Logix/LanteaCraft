@@ -20,12 +20,14 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 			super(host);
 		}
 
+		@Override
 		public int hashCode() {
 			if (get() != null)
 				return get().hashCode();
 			return 0;
 		}
 
+		@Override
 		public boolean equals(Object o) {
 			if (!(o instanceof SoundHostObject))
 				return get().equals(o);
@@ -61,7 +63,7 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 		SoundSystemConfig.setNumberStreamingChannels(maxStreamingSources);
 		SoundSystemConfig.setNumberNormalChannels(maxSources - maxStreamingSources);
 	}
-	
+
 	@Override
 	public AudioSource create(Object owner, AudioPosition position, String file, boolean looping, boolean override,
 			float volume) {
@@ -88,22 +90,20 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 
 		Vector<SoundHostObject> stopSounds = new Vector<SoundHostObject>();
 		EntityPlayer client = Minecraft.getMinecraft().thePlayer;
-		if (client == null) {
+		if (client == null)
 			stopSounds.addAll(hostSourceList.keySet());
-		} else {
+		else {
 			PriorityQueue<AudioSource> soundQueue = new PriorityQueue<AudioSource>();
 
-			for (Entry<SoundHostObject, ArrayList<AudioSource>> entry : hostSourceList.entrySet()) {
-				if (entry.getKey().isEnqueued()) {
+			for (Entry<SoundHostObject, ArrayList<AudioSource>> entry : hostSourceList.entrySet())
+				if (entry.getKey().isEnqueued())
 					stopSounds.add(entry.getKey());
-				} else {
+				else
 					for (AudioSource audioSource : entry.getValue()) {
 						audioSource.advance(client);
 						if (audioSource.getRealVolume() > 0.0F)
 							soundQueue.add(audioSource);
 					}
-				}
-			}
 
 			for (int k = 0; !soundQueue.isEmpty(); k++) {
 				AudioSource source = soundQueue.poll();

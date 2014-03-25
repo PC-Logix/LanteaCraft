@@ -2,17 +2,17 @@ package pcl.lc.render.effects;
 
 import java.util.logging.Level;
 
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import pcl.common.network.StandardModPacket;
-import pcl.common.util.Facing3;
-import pcl.common.util.Vector3;
-import pcl.lc.LanteaCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.World;
+
+import org.lwjgl.opengl.GL11;
+
+import pcl.common.network.StandardModPacket;
+import pcl.common.util.Facing3;
+import pcl.common.util.Vector3;
+import pcl.lc.LanteaCraft;
 
 public class EffectBeam extends EntityFX {
 
@@ -46,9 +46,9 @@ public class EffectBeam extends EntityFX {
 		super(par1World, origin.x, origin.y, origin.z);
 		this.origin = origin;
 		this.destination = destination;
-		this.delta = this.destination.sub(origin);
-		this.deltaVelocity = Vector3.zero;
-		this.length = delta.mag();
+		delta = this.destination.sub(origin);
+		deltaVelocity = Vector3.zero;
+		length = delta.mag();
 		this.duration = duration;
 		initialize();
 	}
@@ -57,8 +57,8 @@ public class EffectBeam extends EntityFX {
 		super(par1World, origin.x, origin.y, origin.z);
 		this.origin = origin;
 		this.destination = destination;
-		this.delta = this.destination.sub(origin);
-		this.deltaVelocity = new Vector3(delta.x / duration, delta.y / duration, delta.z / duration);
+		delta = this.destination.sub(origin);
+		deltaVelocity = new Vector3(delta.x / duration, delta.y / duration, delta.z / duration);
 		this.length = length;
 		this.duration = duration;
 		initialize();
@@ -96,6 +96,7 @@ public class EffectBeam extends EntityFX {
 		ticks++;
 	}
 
+	@Override
 	public void renderParticle(Tessellator tessellator, float partialTicks, float playerYawC, float playerPitchC,
 			float playerYawS, float f4, float f5) {
 		tessellator.draw();
@@ -103,8 +104,8 @@ public class EffectBeam extends EntityFX {
 		Vector3 renderOrigin = position.copy().add(deltaVelocity.mul(partialTicks));
 
 		GL11.glPushMatrix();
-		//GL11.glLoadIdentity();
-		//GL11.glTranslated(renderOrigin.x, renderOrigin.y, renderOrigin.z);
+		// GL11.glLoadIdentity();
+		// GL11.glTranslated(renderOrigin.x, renderOrigin.y, renderOrigin.z);
 		System.out.println(String.format("RenderAt: %s %s %s", renderOrigin.x, renderOrigin.y, renderOrigin.z));
 		Minecraft.getMinecraft().renderEngine.bindTexture(LanteaCraft.getResource("textures/models/transport_rings_"
 				+ LanteaCraft.getProxy().getRenderMode() + ".png"));

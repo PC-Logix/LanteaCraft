@@ -1,13 +1,13 @@
 package pcl.lc.containers;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import pcl.common.base.GenericContainer;
 import pcl.common.inventory.FilteredInventory;
 import pcl.common.inventory.FilteredSlot;
 import pcl.lc.tileentity.TileEntityStargateController;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerStargateControllerEnergy extends GenericContainer {
 
@@ -37,7 +37,7 @@ public class ContainerStargateControllerEnergy extends GenericContainer {
 		if (i == 0)
 			storedEnergy = value;
 	}
-	
+
 	public double getStoredEnergy() {
 		return storedEnergy / 100.0d;
 	}

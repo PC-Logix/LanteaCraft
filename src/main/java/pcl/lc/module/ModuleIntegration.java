@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 
-import cpw.mods.fml.common.Loader;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
@@ -16,6 +15,7 @@ import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.integration.BuildcraftAgent;
 import pcl.lc.module.integration.ComputerCraftAgent;
 import pcl.lc.module.integration.OpenComputersAgent;
+import cpw.mods.fml.common.Loader;
 
 public class ModuleIntegration implements IModule {
 
@@ -53,11 +53,10 @@ public class ModuleIntegration implements IModule {
 		while (agents.hasNext()) {
 			Class<? extends IIntegrationAgent> agent = agents.next();
 			Annotation[] annotations = agent.getAnnotations();
-			for (int k = 0; k < annotations.length; k++) {
-				Annotation annotate = annotations[k];
+			for (Annotation annotate : annotations) {
 				if (annotate.annotationType().equals(Agent.class)) {
 					Agent theAgent = (Agent) annotate;
-					if (Loader.isModLoaded(theAgent.modname())) {
+					if (Loader.isModLoaded(theAgent.modname()))
 						try {
 							LanteaCraft.getLogger().log(Level.INFO,
 									String.format("Hot-loading agent %s", agent.getName()));
@@ -68,7 +67,7 @@ public class ModuleIntegration implements IModule {
 						} catch (Throwable t) {
 							LanteaCraft.getLogger().log(Level.WARNING, "Exception in integration agent initalizer.", t);
 						}
-					} else
+					else
 						LanteaCraft.getLogger().log(
 								Level.INFO,
 								String.format("Not loading agent %s, missing mod %s.", agent.getName(),

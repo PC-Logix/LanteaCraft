@@ -1,8 +1,9 @@
 package pcl.lc.guis;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.entity.player.EntityPlayer;
 import pcl.lc.LanteaCraft;
 import pcl.lc.containers.ContainerStargateControllerEnergy;
 import pcl.lc.tileentity.TileEntityStargateController;
@@ -13,7 +14,7 @@ public class ScreenStargateControllerEnergy extends GenericGlyphGUI {
 
 	public ScreenStargateControllerEnergy(TileEntityStargateController controller, EntityPlayer actor) {
 		super(new ContainerStargateControllerEnergy(controller, actor), 177, 108);
-		this.container = (ContainerStargateControllerEnergy) inventorySlots;
+		container = (ContainerStargateControllerEnergy) inventorySlots;
 	}
 
 	@Override
@@ -40,7 +41,7 @@ public class ScreenStargateControllerEnergy extends GenericGlyphGUI {
 			sg.append("0");
 		sg.append("%");
 		sg.append(" ");
-		
+
 		int min, sec;
 		sec = (int) Math.floor(container.getStoredEnergy() * 2.55);
 		min = (int) Math.floor(sec / 60);
@@ -48,7 +49,7 @@ public class ScreenStargateControllerEnergy extends GenericGlyphGUI {
 		if (min > 0)
 			sg.append(min).append("m ");
 		sg.append(sec).append("s.");
-		
+
 		int dw = fontRenderer.getStringWidth(sg.toString());
 		fontRenderer.drawString(sg.toString(), 49 + ((int) Math.floor((80d - dw) / 2)), 28,
 				(container.getStoredEnergy() > 0.00d) ? 0xFFFFFF : 0x9F0101, true);

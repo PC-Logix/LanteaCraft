@@ -4,13 +4,13 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.entity.EntityTokra;
 import pcl.lc.worldgen.TradeHandler;
+import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class ModuleCritters implements IModule {
 
@@ -36,7 +36,8 @@ public class ModuleCritters implements IModule {
 
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft Tokra villagers...");
 		LanteaCraft.getProxy().tokraVillagerID = LanteaCraft.getProxy().addVillager(
-				LanteaCraft.getProxy().getConfig().getVillager("tokra"), "tokra", LanteaCraft.getResource("textures/skins/tokra.png"));
+				LanteaCraft.getProxy().getConfig().getVillager("tokra"), "tokra",
+				LanteaCraft.getResource("textures/skins/tokra.png"));
 		RegistrationHelper.addTradeHandler(LanteaCraft.getProxy().tokraVillagerID, new TradeHandler());
 	}
 

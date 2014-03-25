@@ -1,17 +1,5 @@
 package pcl.lc.module.integration;
 
-import pcl.lc.LanteaCraft;
-import pcl.lc.api.EnumStargateState;
-import pcl.lc.api.INaquadahGeneratorAccess;
-import pcl.lc.api.IStargateAccess;
-import pcl.lc.api.IStargateControllerAccess;
-import pcl.lc.core.AddressingError;
-import pcl.lc.core.GateAddressHelper;
-import pcl.lc.core.AddressingError.CoordRangeError;
-import pcl.lc.core.AddressingError.DimensionRangeError;
-import pcl.lc.tileentity.TileEntityStargateBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import li.cil.oc.api.Network;
 import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.network.Arguments;
@@ -21,6 +9,18 @@ import li.cil.oc.api.network.ManagedEnvironment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.Visibility;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import pcl.lc.LanteaCraft;
+import pcl.lc.api.EnumStargateState;
+import pcl.lc.api.INaquadahGeneratorAccess;
+import pcl.lc.api.IStargateAccess;
+import pcl.lc.api.IStargateControllerAccess;
+import pcl.lc.core.AddressingError;
+import pcl.lc.core.AddressingError.CoordRangeError;
+import pcl.lc.core.AddressingError.DimensionRangeError;
+import pcl.lc.core.GateAddressHelper;
+import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class OpenComputersWrapperPool {
 
@@ -424,7 +424,7 @@ public class OpenComputersWrapperPool {
 		public Object[] setEnabled(Context context, Arguments args) throws Exception {
 			if (!(args.checkBoolean(0)))
 				throw new Exception("boolean expected");
-			boolean state = (Boolean) args.checkBoolean(0);
+			boolean state = args.checkBoolean(0);
 			if (state != access.setEnabled(state))
 				throw new Exception("Cannot set Naquadah Generator state");
 			return new Object[] { access.isEnabled() };

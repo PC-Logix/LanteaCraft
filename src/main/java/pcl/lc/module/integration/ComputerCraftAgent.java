@@ -11,7 +11,6 @@ import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
-import pcl.lc.module.ModuleIntegration;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;

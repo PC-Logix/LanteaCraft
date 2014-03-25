@@ -164,7 +164,7 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 
 	@Override
 	public void updateEntity() {
-		if (!worldObj.isRemote) {
+		if (!worldObj.isRemote)
 			if (getEnergyStored() < getMaxEnergyStored()) {
 				ItemStack stackOf = inventory.getStackInSlot(0);
 				if (stackOf != null && (stackOf.getItem() instanceof IItemEnergyStore)) {
@@ -174,12 +174,11 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 					energy += receive;
 				}
 			}
-		}
 	}
 
 	public void getStateFromPacket(ModPacket packet) {
 		StandardModPacket packetOf = (StandardModPacket) packet;
-		this.energy = (Double) packetOf.getValue("energy");
+		energy = (Double) packetOf.getValue("energy");
 	}
 
 	public ModPacket getPacketFromState() {
@@ -240,7 +239,7 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 		if (compound.hasKey("energy"))
 			energy = compound.getDouble("energy");
 	}
-	
+
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		getStateFromPacket(packetOf);

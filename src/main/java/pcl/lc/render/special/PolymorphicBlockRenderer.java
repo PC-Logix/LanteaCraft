@@ -20,14 +20,12 @@ public class PolymorphicBlockRenderer extends TileEntitySpecialRenderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glTranslated(x, y, z);
 
-		for (int side = 0; side < 6; side++) {
+		for (int side = 0; side < 6; side++)
 			Icon sided = renderAs.getIcon(side, metatdata);
-			// Icons are not actually resources, they're just used in the
-			// tesslator, so we need some trickery to convert a sided icon
-			// to a resource we can mount.
-		}
+		// Icons are not actually resources, they're just used in the
+		// tesslator, so we need some trickery to convert a sided icon
+		// to a resource we can mount.
 
 		GL11.glPopMatrix();
 	}
-
 }

@@ -22,7 +22,8 @@ public class BlockRingPlatform extends GenericContainerBlock {
 		super(id, Material.rock);
 		setHardness(1.5F);
 		setTickRandomly(true);
-		LanguageRegistry.instance().addStringLocalization("tile.ringPlatform.name", "en_US", "Ring Transporter (WIP - DO NOT USE)");
+		LanguageRegistry.instance().addStringLocalization("tile.ringPlatform.name", "en_US",
+				"Ring Transporter (WIP - DO NOT USE)");
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class BlockRingPlatform extends GenericContainerBlock {
 	public void onBlockAdded(World world, int x, int y, int z) {
 
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;

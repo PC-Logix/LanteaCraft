@@ -2,9 +2,6 @@ package pcl.lc.blocks;
 
 import java.util.List;
 
-import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
-import pcl.lc.tileentity.TileEntityStargateBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -14,6 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import pcl.lc.LanteaCraft;
+import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
 
 public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider {
 

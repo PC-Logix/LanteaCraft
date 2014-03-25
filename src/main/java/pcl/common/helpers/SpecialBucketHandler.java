@@ -27,13 +27,14 @@ public class SpecialBucketHandler {
 	private HashMap<Block, ItemSpecialBucket> buckets = new HashMap<Block, ItemSpecialBucket>();
 
 	/**
-	 * Register a new mapping of {@link Block} type blockOf with an {@link ItemSpecialBucket}
-	 * itemResult.
+	 * Register a new mapping of {@link Block} type blockOf with an
+	 * {@link ItemSpecialBucket} itemResult.
 	 * 
 	 * @param blockOf
 	 *            The fluid host block type.
 	 * @param itemResult
-	 *            The resulting ItemSpecialBucket when the host block is collected in a bucket.
+	 *            The resulting ItemSpecialBucket when the host block is
+	 *            collected in a bucket.
 	 */
 	public void registerBucketMapping(Block blockOf, ItemSpecialBucket itemResult) {
 		buckets.put(blockOf, itemResult);
@@ -55,9 +56,9 @@ public class SpecialBucketHandler {
 	 *            The world object.
 	 * @param pos
 	 *            The position of the fluid source block.
-	 * @return The resulting ItemStack from collecting the target fluid in a bucket, or null if
-	 *         the fluid cannot be collected with an {@link ItemSpecialBucket} registered with
-	 *         the handler.
+	 * @return The resulting ItemStack from collecting the target fluid in a
+	 *         bucket, or null if the fluid cannot be collected with an
+	 *         {@link ItemSpecialBucket} registered with the handler.
 	 */
 	private ItemStack fillCustomBucket(World world, MovingObjectPosition pos) {
 		int blockID = world.getBlockId(pos.blockX, pos.blockY, pos.blockZ);

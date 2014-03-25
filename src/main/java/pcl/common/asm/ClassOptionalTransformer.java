@@ -39,7 +39,7 @@ public class ClassOptionalTransformer implements IClassTransformer {
 		methodQueue.clear();
 
 		// Figure out if there are any visible annotations
-		if (classNode.visibleAnnotations != null) {
+		if (classNode.visibleAnnotations != null)
 			for (AnnotationNode a : classNode.visibleAnnotations) {
 				// Annotation belongs to a ClassFilterInterfaceList, iterate
 				if (a.desc.equals("Lpcl/common/asm/ClassOptional$ClassFilterInterfaceList;")) {
@@ -92,13 +92,12 @@ public class ClassOptionalTransformer implements IClassTransformer {
 						interfaceQueue.add(classname);
 				}
 			}
-		}
 
 		// Figure out if there are any methods
 		if (classNode.methods != null)
 			for (MethodNode n : classNode.methods)
 				if (n.visibleAnnotations != null)
-					for (AnnotationNode a : n.visibleAnnotations) {
+					for (AnnotationNode a : n.visibleAnnotations)
 						// Annotation on method is a single ClassFilterMethod,
 						// queue
 						if (a.desc.equals("Lpcl/common/asm/ClassOptional$ClassFilterMethod;")) {
@@ -109,7 +108,6 @@ public class ClassOptionalTransformer implements IClassTransformer {
 							if (!classExists(classname))
 								methodQueue.add(n.name + n.desc);
 						}
-					}
 
 		// Figure out if there is anything to do
 		int ops = interfaceQueue.size() + methodQueue.size();

@@ -1,7 +1,5 @@
 package pcl.lc.core;
 
-import java.util.logging.Level;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -120,7 +118,7 @@ public class GateAddressHelper {
 	}
 
 	public GateAddressHelper() {
-		this.radixSize = radix.length;
+		radixSize = radix.length;
 		GateAddressHelper.maximumLongSize = stoi(build(radix[radixSize - 1], 3));
 		GateAddressHelper.maximumShortSize = stoi(build(radix[radixSize - 1], 2));
 	}

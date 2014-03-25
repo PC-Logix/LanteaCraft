@@ -65,7 +65,7 @@ public class WatchedValue<T extends Object> extends Observable {
 	public void set(T value) {
 		this.last = this.value.hashCode();
 		this.value = value;
-		this.modify();
+		modify();
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class WatchedValue<T extends Object> extends Observable {
 	public void reset() {
 		this.last = this.value.hashCode();
 		this.value = null;
-		this.modify();
+		modify();
 	}
 
 	/**

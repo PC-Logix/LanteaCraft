@@ -7,7 +7,6 @@ import net.minecraft.world.World;
 import pcl.common.network.ModPacket;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityStargateRing;
 
 /**
  * GenericMultiblock acts as a global declaration for all multi-block structure

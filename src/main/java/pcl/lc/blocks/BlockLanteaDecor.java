@@ -2,13 +2,13 @@ package pcl.lc.blocks;
 
 import java.util.List;
 
-import pcl.lc.LanteaCraft;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import pcl.lc.LanteaCraft;
 
 public class BlockLanteaDecor extends Block {
 
@@ -60,7 +60,7 @@ public class BlockLanteaDecor extends Block {
 		for (int i = 0; i < 4; i++)
 			list.add(new ItemStack(itemID, 1, i + 1));
 	}
-	
+
 	@Override
 	public int damageDropped(int par1) {
 		return par1;

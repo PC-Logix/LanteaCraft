@@ -25,7 +25,8 @@ import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.fluids.SpecialFluidTank;
 import pcl.lc.items.ItemEnergyCrystal;
 
-public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IPacketHandler, IFluidHandler, INaquadahGeneratorAccess {
+public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IPacketHandler, IFluidHandler,
+		INaquadahGeneratorAccess {
 
 	public boolean simulate = false;
 
@@ -130,8 +131,8 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 	public void getStateFromPacket(ModPacket packet) {
 		StandardModPacket packetOf = (StandardModPacket) packet;
-		this.simulate = (Boolean) packetOf.getValue("simulate");
-		this.energy = (Double) packetOf.getValue("energy");
+		simulate = (Boolean) packetOf.getValue("simulate");
+		energy = (Double) packetOf.getValue("energy");
 	}
 
 	public ModPacket getPacketFromState() {
@@ -315,7 +316,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 		if (oldState != simulate)
 			getDescriptionPacket();
 	}
-	
+
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		getStateFromPacket(packetOf);

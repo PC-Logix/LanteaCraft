@@ -1,9 +1,10 @@
 package pcl.lc.guis;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import pcl.common.base.GenericContainerGUI;
 import pcl.lc.LanteaCraft;
 import pcl.lc.containers.ContainerNaquadahGenerator;

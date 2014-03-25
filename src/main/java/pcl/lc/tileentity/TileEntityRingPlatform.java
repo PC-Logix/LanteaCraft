@@ -3,6 +3,11 @@ package pcl.lc.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ScanningHelper;
 import pcl.common.network.IPacketHandler;
@@ -12,11 +17,6 @@ import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumRingPlatformState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntityRingPlatform extends GenericTileEntity implements IPacketHandler {
 
@@ -39,26 +39,21 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 	public void updateEntity() {
 		if (worldObj.isRemote)
 			updateRendering();
-		else {
-			if (state != EnumRingPlatformState.Idle || timeout != 0) {
-				if (timeout > 0)
-					timeout--;
-				else {
-					if (state == EnumRingPlatformState.Connecting) {
-						updateState(EnumRingPlatformState.Transmitting, 2);
-						buildTeleportingEntityList();
-					} else if (state == EnumRingPlatformState.Transmitting) {
-						updateState(EnumRingPlatformState.Connected, 8);
-						teleportEntitiesInList();
-					} else if (state == EnumRingPlatformState.Connected) {
-						updateState(EnumRingPlatformState.Disconnecting, 20);
-					} else if (state == EnumRingPlatformState.Disconnecting) {
-						clearConnection();
-						updateState(EnumRingPlatformState.Idle, 0);
-					}
-				}
+		else if (state != EnumRingPlatformState.Idle || timeout != 0)
+			if (timeout > 0)
+				timeout--;
+			else if (state == EnumRingPlatformState.Connecting) {
+				updateState(EnumRingPlatformState.Transmitting, 2);
+				buildTeleportingEntityList();
+			} else if (state == EnumRingPlatformState.Transmitting) {
+				updateState(EnumRingPlatformState.Connected, 8);
+				teleportEntitiesInList();
+			} else if (state == EnumRingPlatformState.Connected)
+				updateState(EnumRingPlatformState.Disconnecting, 20);
+			else if (state == EnumRingPlatformState.Disconnecting) {
+				clearConnection();
+				updateState(EnumRingPlatformState.Idle, 0);
 			}
-		}
 	}
 
 	private void updateRendering() {
@@ -67,14 +62,13 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 		ringPosition += nextRingPosition;
 		if (ringPosition > ringExtended)
 			ringPosition = ringExtended;
-		if (timeout > 0) {
+		if (timeout > 0)
 			if (state == EnumRingPlatformState.Connecting)
 				nextRingPosition = (ringExtended / 20.0d);
 			else if (state == EnumRingPlatformState.Disconnecting)
 				nextRingPosition = -(ringExtended / 20.0d);
 			else
 				nextRingPosition = 0;
-		}
 	}
 
 	public double getRingPosition(float partialticks) {
@@ -85,14 +79,14 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 	}
 
 	public void performConnection(Vector3 slaveObject, boolean slave) {
-		this.connectionTo = slaveObject;
-		this.isSlave = slave;
+		connectionTo = slaveObject;
+		isSlave = slave;
 		updateState(EnumRingPlatformState.Connecting, 20);
 	}
 
 	public void clearConnection() {
-		this.connectionTo = null;
-		this.isSlave = false;
+		connectionTo = null;
+		isSlave = false;
 	}
 
 	public boolean isBusy() {
@@ -108,8 +102,8 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 
 	public void getStateFromPacket(ModPacket packet) {
 		StandardModPacket packetOf = (StandardModPacket) packet;
-		this.timeout = (Integer) packetOf.getValue("timeout");
-		this.state = (EnumRingPlatformState) packetOf.getValue("state");
+		timeout = (Integer) packetOf.getValue("timeout");
+		state = (EnumRingPlatformState) packetOf.getValue("state");
 	}
 
 	public ModPacket getPacketFromState() {
@@ -141,7 +135,7 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 			if ((at instanceof TileEntityRingPlatform) && !at.equals(this)) {
 				TileEntityRingPlatform that = (TileEntityRingPlatform) at;
 				if (!that.isBusy()) {
-					this.performConnection(other.add(xCoord, yCoord, zCoord), false);
+					performConnection(other.add(xCoord, yCoord, zCoord), false);
 					that.performConnection(null, true);
 					return;
 				}
@@ -156,8 +150,8 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 
 	public void buildTeleportingEntityList() {
 		boundingEntities.clear();
-		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(this.xCoord - 2, this.yCoord, this.zCoord - 2,
-				this.xCoord + 2, this.yCoord + 3, this.zCoord + 2);
+		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(xCoord - 2, yCoord, zCoord - 2, xCoord + 2, yCoord + 3,
+				zCoord + 2);
 		List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, bounds);
 		for (Entity entity : ents)
 			if (!entity.isDead && entity.ridingEntity == null)

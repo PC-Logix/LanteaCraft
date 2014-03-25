@@ -5,8 +5,9 @@
 package pcl.lc.api;
 
 /**
- * Provides an interface for external code to interact with Stargate Controllers. You should
- * avoid interacting with Stargate Controllers outside of this API.
+ * Provides an interface for external code to interact with Stargate
+ * Controllers. You should avoid interacting with Stargate Controllers outside
+ * of this API.
  * 
  * @author AfterLifeLochie
  */
@@ -20,36 +21,40 @@ public interface IStargateControllerAccess {
 	public boolean isValid();
 
 	/**
-	 * Fetches the busy state of the controller. If the controller is currently conducting a
-	 * dial out, this returns true. Any other condition returns false.
+	 * Fetches the busy state of the controller. If the controller is currently
+	 * conducting a dial out, this returns true. Any other condition returns
+	 * false.
 	 * 
 	 * @return If the controller is currently busy.
 	 */
 	public boolean isBusy();
 
 	/**
-	 * Determines if this controller owns the current Stargate connection. If this controller
-	 * created the connection, this returns true. If there is no connection, or if this
-	 * controller did not create this connection, this returns false. Any other condition
-	 * returns false.
+	 * Determines if this controller owns the current Stargate connection. If
+	 * this controller created the connection, this returns true. If there is no
+	 * connection, or if this controller did not create this connection, this
+	 * returns false. Any other condition returns false.
 	 * 
 	 * @return If this controller own the current Stargate connection.
 	 */
 	public boolean ownsCurrentConnection();
 
 	/**
-	 * Gets the dialled address on the controller. If this controller was not used to dial a
-	 * connection, this returns null. If the address is invalid, this will return null.
+	 * Gets the dialled address on the controller. If this controller was not
+	 * used to dial a connection, this returns null. If the address is invalid,
+	 * this will return null.
 	 * 
 	 * @return The address dialled.
 	 */
 	public String getDialledAddress();
 
 	/**
-	 * Requests this controller to instruct the Stargate to close the connection.
+	 * Requests this controller to instruct the Stargate to close the
+	 * connection.
 	 * 
-	 * @return Returns true if the connection has been closed. Returns false if the connection
-	 *         was not closed or cannot be closed, or if there is no connection.
+	 * @return Returns true if the connection has been closed. Returns false if
+	 *         the connection was not closed or cannot be closed, or if there is
+	 *         no connection.
 	 */
 	public boolean disconnect();
 }

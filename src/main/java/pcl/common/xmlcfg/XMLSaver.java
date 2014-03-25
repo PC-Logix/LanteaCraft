@@ -20,7 +20,7 @@ public class XMLSaver {
 	private final DocumentBuilderFactory factory;
 
 	public XMLSaver() {
-		this.factory = DocumentBuilderFactory.newInstance();
+		factory = DocumentBuilderFactory.newInstance();
 		factory.setValidating(false);
 
 	}
@@ -52,9 +52,9 @@ public class XMLSaver {
 	private void saveObject(Document document, ConfigNode node) throws XMLSaverException {
 		if (node instanceof ModuleConfig) {
 
-		} else if (node instanceof ConfigList) {
+		} else if (node instanceof ConfigList)
 			saveConfigList(document, (ConfigList) node);
-		} else
+		else
 			saveConfigNode(document, node);
 	}
 

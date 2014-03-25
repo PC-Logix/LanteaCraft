@@ -1,17 +1,17 @@
 package pcl.lc.items;
 
-import pcl.common.helpers.ScanningHelper;
-import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityRingPlatform;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import pcl.common.helpers.ScanningHelper;
+import pcl.lc.LanteaCraft;
+import pcl.lc.tileentity.TileEntityRingPlatform;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemTransportRingActivator extends Item {
 

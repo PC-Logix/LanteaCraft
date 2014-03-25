@@ -5,6 +5,7 @@
 package pcl.lc.api.internal;
 
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * Internal polymorphic block agent. Hook to a {@link TileEntity} only; only

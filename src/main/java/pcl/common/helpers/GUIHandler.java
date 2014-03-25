@@ -18,13 +18,16 @@ public class GUIHandler implements IGuiHandler {
 		Class<? extends Container> container = LanteaCraft.getProxy().getContainer(ID);
 		if (container != null)
 			try {
-				LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing Container of class %s.", container.getName()));
+				LanteaCraft.getLogger().log(Level.FINE,
+						String.format("Initializing Container of class %s.", container.getName()));
 				TileEntity entity = world.getBlockTileEntity(x, y, z);
-				Constructor<?> constr = container.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
+				Constructor<?> constr = container
+						.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
 				Object val = constr.newInstance(entity, player);
 				return val;
 			} catch (Throwable t) {
-				System.err.println("Could not create Container ID " + ID + ", a " + t.getClass().getName() + " exception occurred.");
+				System.err.println("Could not create Container ID " + ID + ", a " + t.getClass().getName()
+						+ " exception occurred.");
 				t.printStackTrace(System.err);
 			}
 		return null;

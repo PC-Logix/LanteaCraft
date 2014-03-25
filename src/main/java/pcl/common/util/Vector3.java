@@ -350,6 +350,6 @@ public class Vector3 {
 		if (!(o instanceof Vector3))
 			return false;
 		Vector3 that = (Vector3) o;
-		return (this.x == that.x && this.y == that.y && this.z == that.z);
+		return (x == that.x && y == that.y && z == that.z);
 	}
 }

@@ -3,8 +3,8 @@ package pcl.lc.render.effects;
 import java.util.ArrayList;
 import java.util.Random;
 
-import pcl.common.util.Vector3;
 import net.minecraft.world.World;
+import pcl.common.util.Vector3;
 
 public class EffectBolt {
 
@@ -14,7 +14,7 @@ public class EffectBolt {
 		public BoltVector3(Vector3 base, Vector3 offset) {
 			this.base = base;
 			this.offset = offset;
-			this.point = this.base.add(offset);
+			point = this.base.add(offset);
 		}
 	}
 
@@ -39,18 +39,18 @@ public class EffectBolt {
 
 	public EffectBolt(World world, Vector3 origin, Vector3 destination, Random source) {
 		this.world = world;
-		this.random = source;
+		random = source;
 		this.origin = origin;
 		this.destination = destination;
-		this.delta = this.destination.sub(this.origin);
-		this.length = this.delta.mag();
+		delta = this.destination.sub(this.origin);
+		length = delta.mag();
 
-		this.maxTicks = (2 + this.random.nextInt(2));
-		this.ticks = (int) (-length * 2.0D);
+		maxTicks = (2 + random.nextInt(2));
+		ticks = (int) (-length * 2.0D);
 	}
 
 	private void buildAndDiff() {
-		
+
 	}
 
 }

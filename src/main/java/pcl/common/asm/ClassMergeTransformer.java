@@ -3,6 +3,9 @@ package pcl.common.asm;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.launchwrapper.LaunchClassLoader;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -10,10 +13,8 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import cpw.mods.fml.common.Loader;
 import pcl.common.util.ImmutablePair;
-import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraft.launchwrapper.LaunchClassLoader;
+import cpw.mods.fml.common.Loader;
 
 public class ClassMergeTransformer implements IClassTransformer {
 
@@ -28,7 +29,7 @@ public class ClassMergeTransformer implements IClassTransformer {
 		ClassNode classNode = new ClassNode();
 		ClassReader classReader = new ClassReader(basicClass);
 		classReader.accept(classNode, 0);
-		if (classNode.visibleAnnotations != null) {
+		if (classNode.visibleAnnotations != null)
 			for (AnnotationNode a : classNode.visibleAnnotations) {
 				if (a.desc.equals("Lpcl/common/asm/ClassMerge$Merge;")) {
 					String sourceClass = (String) a.values.get(a.values.indexOf("fromClass") + 1);
@@ -46,12 +47,11 @@ public class ClassMergeTransformer implements IClassTransformer {
 								String.format("Not merging from class %s, missing mod %s.", sourceClass, condMod));
 				}
 			}
-		}
 
 		if (merge.size() > 0) {
 			PCLCoreTransformerPlugin.getLogger().log(Level.INFO,
 					String.format("Performing %s merge operations.", merge.size()));
-			for (String classname : merge) {
+			for (String classname : merge)
 				try {
 					PCLCoreTransformerPlugin.getLogger().log(Level.INFO,
 							String.format("Performing merge on class %s.", classname));
@@ -82,7 +82,6 @@ public class ClassMergeTransformer implements IClassTransformer {
 					merge.clear();
 					return basicClass;
 				}
-			}
 
 			merge.clear();
 			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -102,10 +101,9 @@ public class ClassMergeTransformer implements IClassTransformer {
 	}
 
 	public boolean hasField(ClassNode master, FieldNode field) {
-		for (FieldNode child : master.fields) {
+		for (FieldNode child : master.fields)
 			if (child.name.equals(field.name))
 				return true;
-		}
 		return false;
 	}
 

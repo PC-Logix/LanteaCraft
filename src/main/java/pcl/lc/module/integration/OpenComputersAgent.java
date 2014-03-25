@@ -1,8 +1,8 @@
 package pcl.lc.module.integration;
 
+import li.cil.oc.api.Driver;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
-import li.cil.oc.api.Driver;
 
 @Agent(modname = "OpenComputers")
 public class OpenComputersAgent implements IIntegrationAgent {

@@ -21,7 +21,7 @@ public class XMLParser {
 	private final DocumentBuilderFactory factory;
 
 	public XMLParser() {
-		this.factory = DocumentBuilderFactory.newInstance();
+		factory = DocumentBuilderFactory.newInstance();
 	}
 
 	/**
@@ -66,9 +66,8 @@ public class XMLParser {
 		NodeList childrenRoot = modRoot.getChildNodes();
 		for (int i = 0; i < childrenRoot.getLength(); i++) {
 			Node child = childrenRoot.item(i);
-			if (DOMHelper.isNodeOfType(child, "Module", false)) {
+			if (DOMHelper.isNodeOfType(child, "Module", false))
 				rootChildren.add(readModuleConfig((Element) child));
-			}
 		}
 		return root;
 	}

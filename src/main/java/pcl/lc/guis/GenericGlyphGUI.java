@@ -4,7 +4,6 @@ import net.minecraft.inventory.Container;
 import pcl.common.base.GenericContainer;
 import pcl.common.base.GenericContainerGUI;
 import pcl.lc.LanteaCraft;
-import pcl.lc.core.GateAddressHelper;
 
 public abstract class GenericGlyphGUI extends GenericContainerGUI {
 

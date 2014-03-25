@@ -224,7 +224,7 @@ public class NetworkHelpers {
 		public void pack(WorldLocation valueOf, DataOutputStream streamOf) throws IOException {
 			streamOf.writeInt(valueOf.dimension);
 			streamOf.writeInt(valueOf.x);
-			streamOf.writeInt(valueOf.y);			
+			streamOf.writeInt(valueOf.y);
 			streamOf.writeInt(valueOf.z);
 		}
 

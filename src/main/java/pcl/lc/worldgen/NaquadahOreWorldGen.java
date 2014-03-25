@@ -33,11 +33,9 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 	}
 
 	public void readChunk(ChunkData data, Chunk chunk) {
-		for (OreTypes typeof : enabledOreSpawns) {
-			if (!data.getOreGenerated(typeof)) {
+		for (OreTypes typeof : enabledOreSpawns)
+			if (!data.getOreGenerated(typeof))
 				generateChunk(typeof, chunk.worldObj, chunk);
-			}
-		}
 	}
 
 	private Random requestRandomFor(int x, int z, World world, int oreTypeof) {
@@ -49,20 +47,16 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 			IChunkProvider chunkProvider) {
 		Chunk target = world.getChunkFromChunkCoords(chunkX, chunkZ);
 		ChunkData data = ChunkData.forChunk(target);
-		for (OreTypes typeof : enabledOreSpawns) {
-			if (!data.getOreGenerated(typeof)) {
+		for (OreTypes typeof : enabledOreSpawns)
+			if (!data.getOreGenerated(typeof))
 				generateChunk(typeof, world, target);
-			}
-		}
 	}
 
 	public void regenerate(Chunk chunk) {
 		ChunkData data = ChunkData.forChunk(chunk);
-		for (OreTypes typeof : enabledOreSpawns) {
-			if (!data.getOreGenerated(typeof)) {
+		for (OreTypes typeof : enabledOreSpawns)
+			if (!data.getOreGenerated(typeof))
 				generateChunk(typeof, chunk.worldObj, chunk);
-			}
-		}
 	}
 
 	private int getBlock(Chunk chunk, int x, int y, int z) {
@@ -112,11 +106,8 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				}
 				// expand; this block is already an ore of type id so we can
 				// continue our search
-				else if (getBlock(chunk, tx, ty, tz) == id) {
+				else if (getBlock(chunk, tx, ty, tz) == id)
 					continue expand;
-				}
-				// legal; we wandered here and it's stone, so we'll place
-				// something
 				else if (getBlock(chunk, tx, ty, tz) == Block.stone.blockID) {
 					LanteaCraft.getLogger().log(Level.FINEST, "Done, can expand this way.");
 					break expand;

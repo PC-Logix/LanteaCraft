@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import pcl.common.util.WorldLocation;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import pcl.common.util.WorldLocation;
 
 public class TinyModPacket extends ModPacket {
 

@@ -1,9 +1,5 @@
 package pcl.lc.blocks;
 
-import java.util.logging.Level;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,6 +18,8 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.multiblock.StargatePart;
 import pcl.lc.tileentity.TileEntityStargateBase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStargateBase extends RotationOrientedBlock {
 	protected Icon topAndBottomTexture;
@@ -142,13 +140,12 @@ public class BlockStargateBase extends RotationOrientedBlock {
 			TileEntityStargateBase gate = (TileEntityStargateBase) te;
 			if (gate.getAsStructure() != null) {
 				StargateMultiblock struct = gate.getAsStructure();
-				for (MultiblockPart part : struct.getAllParts()) {
+				for (MultiblockPart part : struct.getAllParts())
 					if (part instanceof StargatePart) {
 						Vector3 location = part.getVectorLoc();
 						world.setBlockToAir((int) Math.floor(location.x), (int) Math.floor(location.y),
 								(int) Math.floor(location.z));
 					}
-				}
 			}
 		}
 		world.newExplosion(null, x, y, z, (float) s, true, true);
