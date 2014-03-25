@@ -886,7 +886,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	@Override
 	public String getConnectionAddress() {
 		if (isConnected()) {
-			System.out.println("FUCK " + getAsStructure().getMetadata("diallingTo"));
 			return (String) getAsStructure().getMetadata("diallingTo");
 		} else
 			return null;
