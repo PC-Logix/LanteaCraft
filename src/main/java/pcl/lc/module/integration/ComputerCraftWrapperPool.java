@@ -155,11 +155,9 @@ public class ComputerCraftWrapperPool {
 				case Dialling:
 					if (access.isOutgoingConnection())
 						pushEvent("sgOutgoing", new Object[] { access.getConnectionAddress() });
-					else
-						// TODO: Only reveal incoming connection chevrons to
-						// ComputerCraft as they are locked in by the Stargate
-						// (aesthetics).
-						pushEvent("sgIncoming", new Object[] { access.getConnectionAddress() });
+					else {
+						pushEvent("sgIncoming", new Object[] { access.getConnectionAddress().substring(0, access.getEncodedChevrons()) });
+					}
 					break;
 				case InterDialling:
 					pushEvent("sgChevronEncode", new Object[] { access.getEncodedChevrons() });

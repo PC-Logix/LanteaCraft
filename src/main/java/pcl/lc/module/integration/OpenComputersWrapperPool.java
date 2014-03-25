@@ -123,11 +123,8 @@ public class OpenComputersWrapperPool {
 						node.sendToVisible("computer.signal",
 								new Object[] { "sgOutgoing", access.getConnectionAddress() });
 					else
-						// TODO: Only reveal incoming connection chevrons to
-						// OpenComputers as they are locked in by the Stargate
-						// (aesthetics).
-						node.sendToVisible("computer.signal",
-								new Object[] { "sgIncoming", access.getConnectionAddress() });
+						node.sendToVisible("computer.signal", new Object[] { "sgIncoming",
+								access.getConnectionAddress().substring(0, access.getEncodedChevrons()) });
 					break;
 				case InterDialling:
 					node.sendToVisible("computer.signal",
