@@ -317,7 +317,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	public boolean isConnected() {
 		return getState() == EnumStargateState.Transient || getState() == EnumStargateState.Connected
-				|| getState() == EnumStargateState.Disconnecting;
+				|| getState() == EnumStargateState.Disconnecting || getState() == EnumStargateState.Dialling || getState() == EnumStargateState.InterDialling;
 	}
 
 	public void connectOrDisconnect(String address, EntityPlayer player) {
@@ -886,6 +886,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	@Override
 	public String getConnectionAddress() {
 		if (isConnected()) {
+			System.out.println("FUCK " + getAsStructure().getMetadata("diallingTo"));
 			return (String) getAsStructure().getMetadata("diallingTo");
 		} else
 			return null;
