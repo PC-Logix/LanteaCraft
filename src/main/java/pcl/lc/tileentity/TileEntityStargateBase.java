@@ -317,7 +317,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	public boolean isConnected() {
 		return getState() == EnumStargateState.Transient || getState() == EnumStargateState.Connected
-				|| getState() == EnumStargateState.Disconnecting || getState() == EnumStargateState.Dialling || getState() == EnumStargateState.InterDialling;
+				|| getState() == EnumStargateState.Disconnecting;
 	}
 
 	public void connectOrDisconnect(String address, EntityPlayer player) {
@@ -885,7 +885,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public String getConnectionAddress() {
-		if (isConnected()) {
+		if (isDialling() || isConnected()) {
 			return (String) getAsStructure().getMetadata("diallingTo");
 		} else
 			return null;
@@ -899,7 +899,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public int getEncodedChevrons() {
-		if (!isDialling() && !isConnected())
+		if (!isDialling() || !isConnected())
 			return -1;
 		return numEngagedChevrons;
 	}
