@@ -885,10 +885,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public String getConnectionAddress() {
-		if (isDialling() || isConnected()) {
+		if (isDialling() || isConnected())
 			return (String) getAsStructure().getMetadata("diallingTo");
-		} else
-			return null;
+		return null;
 	}
 
 	@Override
@@ -899,7 +898,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public int getEncodedChevrons() {
-		if (!isDialling() || !isConnected())
+		if (!isDialling() && !isConnected())
 			return -1;
 		return numEngagedChevrons;
 	}
