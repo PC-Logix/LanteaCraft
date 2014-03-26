@@ -863,7 +863,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	@Override
 	public EnumIrisState getIrisState() {
 		// TODO Auto-generated method stub
-		return null;
+		return EnumIrisState.None;
 	}
 
 	@Override

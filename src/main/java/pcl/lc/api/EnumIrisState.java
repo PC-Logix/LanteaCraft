@@ -7,7 +7,20 @@ package pcl.lc.api;
  * 
  */
 public enum EnumIrisState {
-	Error, Open, Closed, Opening, Closing, Waiting;
+	/** No iris is present. */
+	None,
+	/** Iris is in error state. */
+	Error,
+	/** Iris is open */
+	Open,
+	/** Iris is closed */
+	Closed, 
+	/** Iris is opening */
+	Opening, 
+	/** Iris is closing */
+	Closing, 
+	/** Iris is procrastinating (TODO: what even is this?) */
+	Waiting;
 
 	public static EnumIrisState fromOrdinal(int ordinal) {
 		return EnumIrisState.values()[ordinal];

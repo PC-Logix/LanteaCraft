@@ -2,10 +2,16 @@ package pcl.lc.api;
 
 public enum EnumUnits {
 
-	NaquadahUnit(new String[] { "LanteaCraft" }, 1), MinecraftJoules(new String[] { "BuildCraft", "Railcraft",
-			"Forestry" }, 4096.0), EnergyUnit(new String[] { "IndustrialCraft2" }, 8192.0), RedstoneFlux(
-			new String[] { "Thermal Expansion" }, 8192.0), UniversalAmperes(new String[] { "Universal Electricity" },
-			8192.0);
+	/** Reference unit. */
+	NaquadahUnit(new String[] { "LanteaCraft" }, 1),
+	/** Minecraft Joules (BuildCraft/Railcraft/Forestry/etc). */
+	MinecraftJoules(new String[] { "BuildCraft", "Railcraft", "Forestry" }, 4096.0),
+	/** Energy Unit (IndustrialCraft2 and derivatives). */
+	EnergyUnit(new String[] { "IndustrialCraft2" }, 8192.0),
+	/** Restone Flux (Thermal Expansion). */
+	RedstoneFlux(new String[] { "Thermal Expansion" }, 8192.0),
+	/** Univeral Amperes (Universal Electricity). */
+	UniversalAmperes(new String[] { "Universal Electricity" }, 8192.0);
 
 	private String[] modNames;
 	private double ratio;

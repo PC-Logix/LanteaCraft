@@ -10,8 +10,14 @@ package pcl.lc.api;
  */
 public enum EnumStargateType {
 
-	STANDARD("stargate.standard"), ATLANTIS("stargate.atl"), RESERVED_A("stargate.resv_a"), RESERVED_B(
-			"stargate.resv_b");
+	/** Standard Stargate type. */
+	STANDARD("stargate.standard"),
+	/** Atlantis Stargate type. */
+	ATLANTIS("stargate.atl"),
+	/** Reserved for future expansion. */
+	RESERVED_A("stargate.resv_a"),
+	/** Reserved for future expansion. */
+	RESERVED_B("stargate.resv_b");
 
 	private final String name;
 
