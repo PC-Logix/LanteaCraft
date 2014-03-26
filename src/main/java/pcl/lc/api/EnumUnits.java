@@ -31,7 +31,11 @@ public enum EnumUnits {
 	 * @param quantityFrom
 	 *            The quantity of the foreign unit.
 	 * @return The resulting quantity in terms of NaquadahUnit.
+	 * @deprecated To be replaced by a MathHelper in order to make balancing
+	 *             actually not be shit.
 	 */
+
+	@Deprecated
 	public static double convertToNaquadahUnit(EnumUnits unitFrom, double quantityFrom) {
 		return (1 / unitFrom.getRate()) * quantityFrom;
 	}
@@ -44,7 +48,10 @@ public enum EnumUnits {
 	 * @param quantityOf
 	 *            The quantity NaquadahUnit.
 	 * @return The resulting quantity in terms of the foreign unit.
+	 * @deprecated To be replaced by a MathHelper in order to make balancing
+	 *             actually not be shit.
 	 */
+	@Deprecated
 	public static double convertFromNaquadahUnit(EnumUnits unitTo, double quantityOf) {
 		return unitTo.getRate() * quantityOf;
 	}

@@ -12,17 +12,52 @@ import net.minecraftforge.common.ForgeChunkManager.Type;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.ITickAgent;
 
+/**
+ * RemoteChunkLoading is an agent to allow tile-entities to load chunks which
+ * they are not currently in, or regions of other worlds en-mass without
+ * worrying about persistence.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class RemoteChunkLoading implements ITickAgent {
 
+	/**
+	 * The container for all current requests in the agent.
+	 */
 	private ArrayList<ChunkLoadRequest> requests = new ArrayList<ChunkLoadRequest>();
+	/**
+	 * The container for all expired requests which have yet to be removed from
+	 * the agent.
+	 */
 	private ArrayList<ChunkLoadRequest> expiredRequests = new ArrayList<ChunkLoadRequest>();
 
+	/**
+	 * A chunkloading request; contains a logical name, the Forge {@link Ticket}
+	 * object, the age and the maximum lifecycle of the object.
+	 * 
+	 * @author AfterLifeLochie
+	 * 
+	 */
 	private class ChunkLoadRequest {
 		private final String name;
 		private final Ticket ticket;
 		private final int max_age;
 		private int age;
 
+		/**
+		 * Create a request
+		 * 
+		 * @param name
+		 *            The name of the request
+		 * @param ticket
+		 *            The {@link Ticket} object
+		 * @param expiry
+		 *            The number of ticks in which this object will expire, an
+		 *            approximate value. The number of ticks which may elapse
+		 *            may be more or less than this value (usually slightly
+		 *            less).
+		 */
 		public ChunkLoadRequest(String name, Ticket ticket, int expiry) {
 			this.name = name;
 			this.ticket = ticket;
@@ -95,6 +130,14 @@ public class RemoteChunkLoading implements ITickAgent {
 		}
 	}
 
+	/**
+	 * Removes a chunkload request from the agent. This also tells
+	 * ForgeChunkManager to remove the chunkloading ticket from the engine,
+	 * hence freeing other requests for us to use at a later time as needed.
+	 * 
+	 * @param request
+	 *            The request to release and dispose.
+	 */
 	private void remove(ChunkLoadRequest request) {
 		LanteaCraft.getLogger().log(Level.INFO, "Chunk loading request shutting down: " + request.name());
 		ForgeChunkManager.releaseTicket(request.ticket);

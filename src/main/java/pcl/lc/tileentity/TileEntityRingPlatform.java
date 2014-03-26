@@ -24,7 +24,6 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 
 	private EnumRingPlatformState state = EnumRingPlatformState.Idle;
 	private int timeout;
-	private boolean isSlave;
 	private Vector3 connectionTo;
 
 	private double ringPosition, nextRingPosition;
@@ -78,15 +77,13 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 		return next;
 	}
 
-	public void performConnection(Vector3 slaveObject, boolean slave) {
+	public void performConnection(Vector3 slaveObject) {
 		connectionTo = slaveObject;
-		isSlave = slave;
 		updateState(EnumRingPlatformState.Connecting, 20);
 	}
 
 	public void clearConnection() {
 		connectionTo = null;
-		isSlave = false;
 	}
 
 	public boolean isBusy() {
@@ -94,7 +91,6 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 	}
 
 	private void updateState(EnumRingPlatformState state, int timeout) {
-		System.out.println("State change: " + state + ", t: " + timeout);
 		this.state = state;
 		this.timeout = timeout;
 		markBlockForUpdate();
@@ -135,8 +131,8 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 			if ((at instanceof TileEntityRingPlatform) && !at.equals(this)) {
 				TileEntityRingPlatform that = (TileEntityRingPlatform) at;
 				if (!that.isBusy()) {
-					performConnection(other.add(xCoord, yCoord, zCoord), false);
-					that.performConnection(null, true);
+					performConnection(other.add(xCoord, yCoord, zCoord));
+					that.performConnection(null);
 					return;
 				}
 			}
@@ -165,10 +161,8 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 	}
 
 	private void entityInPortal(Entity entity) {
-		System.out.println("Transmitting : " + entity.toString());
 		TileEntityRingPlatform dte = getSlave();
 		if (dte != null) {
-			System.out.println("Teleporting..");
 			while (entity.ridingEntity != null)
 				entity = entity.ridingEntity;
 			Vector3 host = new Vector3(this);
