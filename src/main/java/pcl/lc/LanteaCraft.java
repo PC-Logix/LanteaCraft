@@ -10,7 +10,6 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import pcl.common.helpers.CreativeTabHelper;
 import pcl.common.helpers.SpecialBucketHandler;
-import pcl.common.network.ModPacket;
 import pcl.common.render.RotationOrientedBlockRenderer;
 import pcl.lc.blocks.BlockLanteaOre;
 import pcl.lc.blocks.BlockNaquadahGenerator;
@@ -219,7 +218,6 @@ public class LanteaCraft {
 	 * @return The current Proxy object for LanteaCraft
 	 */
 	public static LanteaCraftCommonProxy getProxy() {
-		LanteaCraft.getInstance();
 		return LanteaCraft.proxy;
 	}
 
@@ -249,19 +247,6 @@ public class LanteaCraft {
 	 */
 	public static SpecialBucketHandler getSpecialBucketHandler() {
 		return LanteaCraft.getInstance().bucketHandler;
-	}
-
-	/**
-	 * Handles an incoming {@link ModPacket} with respect to the provided
-	 * {@link Player}.
-	 * 
-	 * @param modPacket
-	 *            The packet object
-	 * @param player
-	 *            The respective player
-	 */
-	public static void handlePacket(ModPacket modPacket, Player player) {
-		proxy.handlePacket(modPacket, player);
 	}
 
 	@EventHandler

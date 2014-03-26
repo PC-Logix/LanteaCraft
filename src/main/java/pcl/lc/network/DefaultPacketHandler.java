@@ -12,7 +12,7 @@ public class DefaultPacketHandler implements IPacketHandler {
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		try {
-			LanteaCraft.handlePacket(ModPacket.parse(packet.data), player);
+			LanteaCraft.getProxy().handlePacket(ModPacket.parse(packet.data), player);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
