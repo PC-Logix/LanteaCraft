@@ -11,21 +11,61 @@ import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
+/**
+ * Stargate address calculation engine.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class GateAddressHelper {
 
+	/**
+	 * The singleton GateAddressHelper object.
+	 */
 	private static GateAddressHelper singleton = new GateAddressHelper();
 
+	/**
+	 * Fetches the singleton GateAddressHelper object.
+	 * 
+	 * @return The singleton {@link GateAddressHelper} object.
+	 */
 	public static GateAddressHelper singleton() {
 		return singleton;
 	}
 
+	/**
+	 * The maximum size of any value of T:SHORT.
+	 */
 	private static long maximumShortSize;
+	/**
+	 * The maximum size of any value of T:LONG.
+	 */
 	private static long maximumLongSize;
 
+	/**
+	 * Calculates an address for a world location.
+	 * 
+	 * @param position
+	 *            The world location object.
+	 * @return The resultant address of the location.
+	 * @throws AddressingError
+	 *             If the address cannot be calculated due to constraints such
+	 *             as distance or dimension, an AddressingError will be thrown.
+	 */
 	public static String addressForLocation(WorldLocation position) throws AddressingError {
 		return addressForLocation(position.toChunkLocation());
 	}
 
+	/**
+	 * Calculates an address for an absolute Chunk location.
+	 * 
+	 * @param location
+	 *            The chunk location.
+	 * @return The resultant address for the chunk.
+	 * @throws AddressingError
+	 *             If the address cannot be calculated due to constraints such
+	 *             as distance or dimension, an AddressingError will be thrown.
+	 */
 	public static String addressForLocation(ChunkLocation location) throws AddressingError {
 		try {
 			int dcx = Math.abs(location.cx), dcz = Math.abs(location.cz);
@@ -54,6 +94,17 @@ public class GateAddressHelper {
 		}
 	}
 
+	/**
+	 * Convert an address to a Chunk location.
+	 * 
+	 * @param address
+	 *            The string address literal.
+	 * @return The chunk location.
+	 * @throws AddressingError
+	 *             If the address cannot be parsed due to issues such as invalid
+	 *             characters, numbers out of range or other constraints are
+	 *             violated, an AddressingError will be thrown.
+	 */
 	public static ChunkLocation locationForAddress(String address) throws AddressingError {
 		try {
 			singleton.legal(address);
@@ -82,11 +133,31 @@ public class GateAddressHelper {
 		}
 	}
 
+	/**
+	 * Fetches a World for a Dimension ID.
+	 * 
+	 * @param dimension
+	 *            The dimension ID.
+	 * @return The World object.
+	 */
 	public static World getWorld(int dimension) {
 		MinecraftServer s = MinecraftServer.getServer();
 		return s.worldServerForDimension(dimension);
 	}
 
+	/**
+	 * Find a Stargate at a foreign location; return the Stargate if it is valid
+	 * or null if there isn't a Stargate present.
+	 * 
+	 * @param hostLocation
+	 * @param address
+	 *            The address to parse.
+	 * @return The Stargate if there is one present, or null.
+	 * @throws AddressingError
+	 *             If the address cannot be parsed due to issues such as invalid
+	 *             characters, numbers out of range or other constraints are
+	 *             violated, an AddressingError will be thrown.
+	 */
 	public static TileEntityStargateBase findStargate(ChunkLocation hostLocation, String address)
 			throws AddressingError {
 		TileEntityStargateBase dte = null;
@@ -117,7 +188,10 @@ public class GateAddressHelper {
 		return dte;
 	}
 
-	public GateAddressHelper() {
+	/**
+	 * Initializer.
+	 */
+	private GateAddressHelper() {
 		radixSize = radix.length;
 		GateAddressHelper.maximumLongSize = stoi(build(radix[radixSize - 1], 3));
 		GateAddressHelper.maximumShortSize = stoi(build(radix[radixSize - 1], 2));

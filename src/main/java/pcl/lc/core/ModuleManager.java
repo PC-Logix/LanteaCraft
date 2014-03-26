@@ -16,8 +16,20 @@ import pcl.lc.module.ModulePower;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.ModuleWorldGenerator;
 
+/**
+ * LanteaCraft module compartment manager.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class ModuleManager {
 
+	/**
+	 * The map of all Modules.
+	 * 
+	 * @author AfterLifeLochie
+	 * 
+	 */
 	public static enum Module {
 		CORE(new ModuleCore()), STARGATE(new ModuleStargates()), POWER(new ModulePower()), WORLDGEN(
 				new ModuleWorldGenerator()), CRITTERS(new ModuleCritters()), DECOR(new ModuleDecor()), INTEGRATION(
@@ -30,17 +42,35 @@ public class ModuleManager {
 			this.moduleOf = moduleOf;
 		}
 
+		/**
+		 * Get access to the Module singleton this Module item contains.
+		 * 
+		 * @return An {@link IModule} singleton.
+		 */
 		public IModule moduleOf() {
 			return moduleOf;
 		}
 
+		/**
+		 * Determines if this Module has been loaded; a Module is in a loaded
+		 * state if it meets all pre-conditions for loading and passes through
+		 * preInit, init and postInit without raising an Exception.
+		 * 
+		 * @return If the Module is currently loaded.
+		 */
 		public boolean isLoaded() {
 			return loaded;
 		}
 	}
 
+	/**
+	 * The container for all loaded Module instances in the session.
+	 */
 	private static ArrayList<Module> loadedModules = new ArrayList<Module>();
 
+	/**
+	 * Pre-initialize the ModuleManager and all child Modules.
+	 */
 	public void preInit() {
 		Set<Module> modules = EnumSet.allOf(Module.class);
 		Iterator<Module> i = modules.iterator();
@@ -105,7 +135,7 @@ public class ModuleManager {
 
 			}
 		}
-		if (p == 255)
+		if (p >= 254)
 			LanteaCraft.getLogger().log(Level.WARNING,
 					"There were issues resolving dependencies; full resolution was aborted.");
 
@@ -122,17 +152,31 @@ public class ModuleManager {
 		}
 	}
 
+	/**
+	 * Initialize all child modules.
+	 */
 	public void init() {
 		for (Module mod : loadedModules)
 			mod.moduleOf().init();
 	}
 
+	/**
+	 * Post-initialize all child modules.
+	 */
 	public void postInit() {
 		for (Module mod : loadedModules)
 			mod.moduleOf().postInit();
 	}
 
+	/**
+	 * Determine if a Module is enabled in configuration.
+	 * 
+	 * @param theModule
+	 *            The module object.
+	 * @return If the Module is enabled.
+	 */
 	private boolean isModuleEnabled(Module theModule) {
+		// TODO: Fetch this from configuration.
 		return true;
 	}
 
