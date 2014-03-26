@@ -40,14 +40,13 @@ public class StargateMultiblock extends GenericMultiblock {
 			modified = !modified;
 			host.getDescriptionPacket();
 			WorldLog log = LanteaCraft.getProxy().getWorldLog();
-			log.log(Level.INFO,
-					String.format("Stargate state changed to %s at (%s %s %s).", isValid, xCoord, yCoord, zCoord));
+			log.log(Level.INFO, String.format("Stargate state changed to %s at (%s %s %s, dim: %s).", isValid, xCoord,
+					yCoord, zCoord, host.worldObj.provider.dimensionId));
 		}
 
 		// People keep putting blocks inside Stargates after they're formed,
-		// this
-		// isn't okay. Now we're going to watch what they do, so if they do, the
-		// gate might explode violently.
+		// this isn't okay. Now we're going to watch what they do, so if they
+		// do, the gate might explode violently.
 		if (!isClient)
 			if (0 > watcher) {
 				watcher += 20;

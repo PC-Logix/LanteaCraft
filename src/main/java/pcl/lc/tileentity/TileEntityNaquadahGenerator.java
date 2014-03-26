@@ -130,12 +130,14 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	}
 
 	public void getStateFromPacket(ModPacket packet) {
+		// TODO: Convert to TinyModPacket, SMP is too clunky.
 		StandardModPacket packetOf = (StandardModPacket) packet;
 		simulate = (Boolean) packetOf.getValue("simulate");
 		energy = (Double) packetOf.getValue("energy");
 	}
 
 	public ModPacket getPacketFromState() {
+		// TODO: Convert to TinyModPacket, SMP is too clunky.
 		StandardModPacket packet = new StandardModPacket(new WorldLocation(this));
 		packet.setIsForServer(false);
 		packet.setType("LanteaPacket.TileUpdate");
