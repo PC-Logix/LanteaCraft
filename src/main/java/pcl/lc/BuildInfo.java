@@ -19,6 +19,10 @@ public class BuildInfo {
 		return Integer.parseInt(buildNumber);
 	}
 
+	public static boolean isDevelopmentEnvironment() {
+		return getBuildNumber() == 0;
+	}
+
 	public static final String webAPI = "http://lanteacraft.com/api/";
 
 }

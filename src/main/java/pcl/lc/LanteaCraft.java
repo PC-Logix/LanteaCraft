@@ -252,12 +252,9 @@ public class LanteaCraft {
 	public void preInit(FMLPreInitializationEvent e) {
 		LanteaCraft.logger = e.getModLog();
 		LanteaCraft.logger.setParent(FMLLog.getLogger());
-		if (BuildInfo.buildNumber.equals("@" + "BUILD" + "@")) {
+		LanteaCraft.logger.setLevel(Level.INFO);
+		if (BuildInfo.isDevelopmentEnvironment())
 			LanteaCraft.logger.setLevel(Level.ALL);
-			LanteaCraft.logger.log(Level.INFO,
-					"You appear to be inside a development environment, switching to all logging.");
-		} else
-			LanteaCraft.logger.setLevel(Level.INFO);
 		proxy.preInit(e);
 	}
 

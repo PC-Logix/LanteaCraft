@@ -108,8 +108,14 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
-		LanteaCraft.getLogger().log(Level.INFO,
-				"Hello there, I'm LanteaCraft " + BuildInfo.versionNumber + "-" + BuildInfo.buildNumber + "!");
+		if (BuildInfo.isDevelopmentEnvironment())
+			LanteaCraft.getLogger().log(
+					Level.WARNING,
+					"This doesn't appear to be an official build of LanteaCraft, or you are in a development context; "
+							+ "please do not report bugs to us. We do not support external builds.");
+		else
+			LanteaCraft.getLogger().log(Level.INFO,
+					"Hello there, I'm LanteaCraft " + BuildInfo.versionNumber + "-" + BuildInfo.getBuildNumber() + "!");
 		config = new ConfigurationHelper(e.getSuggestedConfigurationFile());
 		configure();
 		moduleManager.preInit();
@@ -175,7 +181,7 @@ public class LanteaCraftCommonProxy {
 				"addOresToExistingWorlds", false)));
 
 		String version = new StringBuilder().append(BuildInfo.versionNumber).append(" build ")
-				.append(BuildInfo.buildNumber).toString();
+				.append(BuildInfo.getBuildNumber()).toString();
 		Property prop = config.get("general", "currentVersion", 0);
 		prop.comment = "Version cache - do not change this!";
 		String previousVersion = prop.getString();
