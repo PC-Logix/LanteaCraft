@@ -4,26 +4,25 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
-import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
-import dan200.computer.api.IHostedPeripheral;
-import dan200.computer.api.IMount;
-import dan200.computer.api.IPeripheralHandler;
 
-@Agent(modname = "ComputerCraft")
 public class ComputerCraftAgent implements IIntegrationAgent {
 
-	private class ComputerCraftProvider implements IPeripheralHandler {
+	private class ComputerCraftProvider implements IPeripheralProvider {
 		@Override
-		public IHostedPeripheral getPeripheral(TileEntity entity) {
+		public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
+			TileEntity entity = world.getBlockTileEntity(x, y, z);
 			if (entity instanceof IStargateAccess)
 				return new ComputerCraftWrapperPool.StargateAccessWrapper((IStargateAccess) entity);
 			else if (entity instanceof IStargateControllerAccess)
@@ -38,7 +37,6 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 	private Class<?> clazz_ComputerCraftAPI;
 	private Method registerHandler;
 	private ComputerCraftProvider provider;
-	private HashMap<String, IMount> mountCache;
 
 	public ComputerCraftAgent() {
 
@@ -52,16 +50,14 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 	@Override
 	public void init() {
 		try {
-			clazz_ComputerCraftAPI = Class.forName("dan200.computer.api.ComputerCraftAPI");
-			registerHandler = clazz_ComputerCraftAPI.getMethod("registerExternalPeripheral", new Class<?>[] {
-					Class.class, IPeripheralHandler.class });
+			clazz_ComputerCraftAPI = Class.forName("dan200.computercraft.api.ComputerCraftAPI");
+			registerHandler = clazz_ComputerCraftAPI.getMethod("registerPeripheralProvider", new Class<?>[] { IPeripheralProvider.class });
 			provider = new ComputerCraftProvider();
-			registerHandler.invoke(null, TileEntityStargateBase.class, provider);
-			registerHandler.invoke(null, TileEntityStargateController.class, provider);
-			registerHandler.invoke(null, TileEntityNaquadahGenerator.class, provider);
+			registerHandler.invoke(null, provider);
 		} catch (Throwable t) {
 			LanteaCraft.getLogger().log(Level.INFO, "ComputerCraft not found!");
 			return;
 		}
 	}
+
 }

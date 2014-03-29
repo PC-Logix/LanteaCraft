@@ -13,23 +13,23 @@ import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.tileentity.TileEntityStargateBase;
-import dan200.computercraft.api.peripheral.IComputerAccess;
-import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.lua.ILuaContext;
+import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.IHostedPeripheral;
+import dan200.computer.api.ILuaContext;
 
 /**
  * ComputerCraft API access wrappers. Why am I doing this again?
  * 
  * @author AfterLifeLochie
  */
-public class ComputerCraftWrapperPool {
+public class ComputerCraftLegacyWrapperPool {
 
 	/**
 	 * Stub handler.
 	 * 
 	 * @author AfterLifeLochie
 	 */
-	private abstract static class ComputerCraftHostStub implements IPeripheral {
+	private abstract static class ComputerCraftHostStub implements IHostedPeripheral {
 
 		protected final ArrayList<WeakReference<IComputerAccess>> clients;
 
@@ -184,12 +184,6 @@ public class ComputerCraftWrapperPool {
 		public void writeToNBT(NBTTagCompound nbttagcompound) {
 			// TODO Auto-generated method stub
 
-		}
-
-		@Override
-		public boolean equals(IPeripheral other) {
-			// TODO Auto-generated method stub
-			return false;
 		}
 	}
 
