@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
@@ -137,11 +138,26 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
+		if (tag.hasKey("seamData")) {
+			NBTTagCompound root = tag.getCompoundTag("seamData");
+			for (int i = 0; i < 6; i++) {
+				state[i] = root.getBoolean(String.format("state_%s", i));
+				edges_count[i] = root.getInteger(String.format("edges_count_%s", i));
+				tile_rotation[i] = root.getInteger(String.format("tile_rotation_%s", i));
+			}
+		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
+		NBTTagCompound root = new NBTTagCompound();
+		for (int i = 0; i < 6; i++) {
+			root.setBoolean(String.format("state_%s", i), state[i]);
+			root.setInteger(String.format("edges_count_%s", i), edges_count[i]);
+			root.setInteger(String.format("tile_rotation_%s", i), tile_rotation[i]);
+		}
+		tag.setTag("seamData", root);
 	}
 
 	@Override
@@ -153,12 +169,11 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 		try {
 			TinyModPacket packet = new TinyModPacket(new WorldLocation(this));
 			DataOutputStream stream = packet.getOut();
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 6; i++) {
 				stream.write((state[i]) ? 1 : 0);
-			for (int i = 0; i < 6; i++)
 				stream.writeInt(edges_count[i]);
-			for (int i = 0; i < 6; i++)
 				stream.writeInt(tile_rotation[i]);
+			}
 			LanteaCraft.getProxy().sendToAllPlayers(packet);
 			return null;
 		} catch (IOException ioex) {
@@ -174,12 +189,11 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 				try {
 					TinyModPacket descriptor = (TinyModPacket) packetOf;
 					DataInputStream stream = descriptor.getIn();
-					for (int i = 0; i < 6; i++)
+					for (int i = 0; i < 6; i++) {
 						state[i] = (stream.readByte() == 1);
-					for (int i = 0; i < 6; i++)
 						edges_count[i] = stream.readInt();
-					for (int i = 0; i < 6; i++)
 						tile_rotation[i] = stream.readInt();
+					}
 				} catch (IOException ioex) {
 					LanteaCraft.getLogger().log(Level.WARNING, "Error unpacking description packet.", ioex);
 				}
