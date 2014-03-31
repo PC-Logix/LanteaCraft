@@ -21,7 +21,7 @@ public class ModuleIntegration implements IModule {
 
 	static {
 		ModuleIntegration.clazz_integration = new ArrayList<Class<? extends IIntegrationAgent>>();
-		ModuleIntegration.registerIntegrationAgent(ComputerCraftLegacyAgent.class);
+		// ModuleIntegration.registerIntegrationAgent(ComputerCraftLegacyAgent.class);
 		ModuleIntegration.registerIntegrationAgent(OpenComputersAgent.class);
 		ModuleIntegration.registerIntegrationAgent(BuildcraftAgent.class);
 	}

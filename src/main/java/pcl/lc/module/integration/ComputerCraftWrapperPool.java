@@ -58,6 +58,19 @@ public class ComputerCraftWrapperPool {
 					client.get().queueEvent(label, varargs);
 		}
 
+		/*
+		 * Temporary replacements because these functions existed in 1.5, but
+		 * don't in 1.6
+		 */
+
+		public abstract boolean canAttachToSide(int side);
+
+		public abstract void update();
+
+		public abstract void readFromNBT(NBTTagCompound nbttagcompound);
+
+		public abstract void writeToNBT(NBTTagCompound nbttagcompound);
+
 	}
 
 	public static class StargateAccessWrapper extends ComputerCraftHostStub {
@@ -253,6 +266,12 @@ public class ComputerCraftWrapperPool {
 		public boolean canAttachToSide(int side) {
 			return true;
 		}
+
+		@Override
+		public boolean equals(IPeripheral other) {
+			// TODO Auto-generated method stub
+			return false;
+		}
 	}
 
 	public static class NaquadahGeneratorAccessWrapper extends ComputerCraftHostStub {
@@ -314,6 +333,12 @@ public class ComputerCraftWrapperPool {
 		@Override
 		public boolean canAttachToSide(int side) {
 			return true;
+		}
+
+		@Override
+		public boolean equals(IPeripheral other) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 

@@ -1,7 +1,6 @@
 package pcl.lc.module.integration;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.logging.Level;
 
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -13,9 +12,6 @@ import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
 import pcl.lc.api.internal.IIntegrationAgent;
-import pcl.lc.tileentity.TileEntityNaquadahGenerator;
-import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.lc.tileentity.TileEntityStargateController;
 
 public class ComputerCraftAgent implements IIntegrationAgent {
 
@@ -51,7 +47,8 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 	public void init() {
 		try {
 			clazz_ComputerCraftAPI = Class.forName("dan200.computercraft.api.ComputerCraftAPI");
-			registerHandler = clazz_ComputerCraftAPI.getMethod("registerPeripheralProvider", new Class<?>[] { IPeripheralProvider.class });
+			registerHandler = clazz_ComputerCraftAPI.getMethod("registerPeripheralProvider",
+					new Class<?>[] { IPeripheralProvider.class });
 			provider = new ComputerCraftProvider();
 			registerHandler.invoke(null, provider);
 		} catch (Throwable t) {
