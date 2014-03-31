@@ -68,7 +68,7 @@ public class LanteaCraftCommonProxy {
 
 	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
 
-	private AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
+	protected AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
 	private VersionHelper versionHelper = new VersionHelper();
 
 	protected ClientPacketHandler clientPacketHandler;

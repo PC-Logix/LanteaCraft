@@ -73,6 +73,10 @@ public class AnalyticsHelper extends Thread {
 			}
 		LanteaCraft.getLogger().log(Level.WARNING, "Failed to push metrics data, maximum tries exceeded!");
 	}
+	
+	public String getReportData() {
+		return report.toString();
+	}
 
 	private String pack(String arg, String val) throws UnsupportedEncodingException {
 		StringBuilder result = new StringBuilder();

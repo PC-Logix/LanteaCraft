@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -11,11 +12,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
 import pcl.common.audio.ClientAudioEngine;
 import pcl.common.network.ModPacket;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.common.render.RotationOrientedBlockRenderer;
 import pcl.lc.core.ClientTickHandler;
+import pcl.lc.guis.GuiStatCollection;
 import pcl.lc.guis.ScreenNaquadahGenerator;
 import pcl.lc.guis.ScreenStargateBase;
 import pcl.lc.guis.ScreenStargateController;
@@ -50,8 +55,24 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
+	public static class ClientHooks {
+		private boolean shownStatGui = false;
+		private LanteaCraftClientProxy proxy;
+		public ClientHooks(LanteaCraftClientProxy proxy) {
+			this.proxy = proxy;
+		}
+
+		@ForgeSubscribe
+		public void openMainMenu(GuiOpenEvent event) {
+			if ((event.gui instanceof GuiMainMenu) && !shownStatGui) {
+				shownStatGui = true;
+				event.gui = new GuiStatCollection(event.gui, proxy.analyticsHelper);
+			}
+		}
+	}
 
 	private ClientTickHandler clientTickHandler = new ClientTickHandler();
+	private ClientHooks hooks = new ClientHooks(this);
 
 	public LanteaCraftClientProxy() {
 		super();
@@ -66,6 +87,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	@Override
 	public void init(FMLInitializationEvent e) {
 		super.init(e);
+		MinecraftForge.EVENT_BUS.register(hooks);
 		audioContext = new ClientAudioEngine();
 		clientTickHandler.registerTickHost(audioContext);
 		TickRegistry.registerTickHandler(clientTickHandler, Side.CLIENT);
