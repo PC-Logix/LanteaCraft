@@ -13,11 +13,9 @@ public interface IObserver<T> {
 	/**
 	 * Called when the Observable changes.
 	 * 
-	 * @param last
-	 *            The current (value = now) value.
 	 * @param next
 	 *            The new (value = next) value.
 	 */
-	public void modified(T last, T next);
+	public void modified(T next);
 
 }
