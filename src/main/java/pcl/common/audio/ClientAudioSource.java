@@ -25,7 +25,7 @@ public class ClientAudioSource extends AudioSource {
 		configuredVolume = volume;
 		ClientAudioEngine engine = (ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine();
 
-		URL path = ClientAudioSource.class.getClassLoader().getResource("assets/pcl_pc/sounds/" + file);
+		URL path = ClientAudioSource.class.getClassLoader().getResource("assets/pcl_pc/sound/" + file);
 		if (path == null)
 			LanteaCraft.getLogger().log(Level.WARNING,
 					String.format("Sound `%s` requested, but file doesn't exist!", file));
