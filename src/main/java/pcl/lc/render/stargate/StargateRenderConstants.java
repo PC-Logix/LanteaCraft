@@ -15,16 +15,19 @@ public class StargateRenderConstants {
 	public final static double closingTransientRandomness = 0.25;
 
 	public final static double ringInnerRadius = 3.0;
-	public final static double ringMidRadius = 3.25;
+	public final static double ringInnerMovingRadius = ringInnerRadius + 0.1;
 	public final static double ringOuterRadius = 3.5;
-	public final static double ringDepth = 0.5;
+	public final static double ringMidRadius = ringInnerMovingRadius + ((ringOuterRadius - ringInnerMovingRadius) / 2);
+	
+	
+	public final static double ringDepth = 0.15;
 
-	public final static double chevronInnerRadius = 3.25;
+	public final static double chevronInnerRadius = ringMidRadius;
 	public final static double chevronOuterRadius = ringOuterRadius + 1 / 16.0;
-	public final static double chevronWidth = (chevronOuterRadius - chevronInnerRadius) * 1.5;
-	public final static double chevronDepth = 0.125;
+	public final static double chevronWidth = 0.5;
+	public final static double chevronDepth = 0.0625d;
 	public final static double chevronBorderWidth = chevronWidth / 6;
-	public final static double chevronMotionDistance = 1 / 8.0;
+	public final static double chevronMotionDistance = 1 / 16.0d;
 
 	public final static int ringFaceTextureIndex = 0x14;
 	public final static int ringTextureIndex = 0x15;

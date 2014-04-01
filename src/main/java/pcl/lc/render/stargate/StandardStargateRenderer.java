@@ -21,7 +21,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		caller.bind(LanteaCraft.getResource("textures/tileentity/stargate_128.png"));
 		GL11.glNormal3f(0, 1, 0);
-		renderRing(StargateRenderConstants.ringInnerRadius, StargateRenderConstants.ringOuterRadius, false);
+		renderRing(te);
 		renderInnerRing(te, t);
 		renderChevrons(te);
 		if (te.isConnected())
@@ -29,93 +29,105 @@ public class StandardStargateRenderer implements IStargateRenderer {
 	}
 
 	private void renderInnerRing(TileEntityStargateBase te, float t) {
+		double radiusMidInner = StargateRenderConstants.ringInnerMovingRadius - (1 / 128d);
+		double radiusMidOuter = StargateRenderConstants.ringMidRadius + (1 / 128d);
+		double z = StargateRenderConstants.ringDepth - (1d / 128d);
 		GL11.glPushMatrix();
 		GL11.glRotatef((float) (95 + te.interpolatedRingAngle(t)), 0, 0, 1);
-		double dvt = 1d / 8d;
-		double r1 = StargateRenderConstants.ringInnerRadius + dvt, r2 = StargateRenderConstants.ringMidRadius + dvt;
 		GL11.glNormal3f(0, 0, 1);
 		GL11.glBegin(GL11.GL_QUADS);
 
 		selectTile(StargateRenderConstants.ringSymbolTextureIndex);
 		double u = 0, du = 0, dv = 0;
 		for (int i = 0; i < StargateRenderConstants.numRingSegments; i++) {
-			double z = StargateRenderConstants.ringDepth / 2 - (1d / 16d);
 			u = StargateRenderConstants.ringSymbolTextureLength - (i + 1)
 					* StargateRenderConstants.ringSymbolSegmentWidth;
 			du = StargateRenderConstants.ringSymbolSegmentWidth;
 			dv = StargateRenderConstants.ringSymbolTextureHeight;
 
-			vertex(r1 * cos[i], r1 * sin[i], z, u + du, dv);
-			vertex(r2 * cos[i], r2 * sin[i], z, u + du, 0);
-			vertex(r2 * cos[i + 1], r2 * sin[i + 1], z, u, 0);
-			vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, u, dv);
+			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], z, u + du, dv);
+			vertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], z, u + du, 0);
+			vertex(radiusMidOuter * cos[i + 1], radiusMidOuter * sin[i + 1], z, u, 0);
+			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], z, u, dv);
 		}
 
 		GL11.glEnd();
 		GL11.glPopMatrix();
 	}
 
-	private void renderRing(double r1, double r2, boolean isInnerRing) {
-		double z = StargateRenderConstants.ringDepth / 2;
-		double u = 0, du = 0, dv = 0;
+	private void renderRing(TileEntityStargateBase te) {
+		double radiusInner = StargateRenderConstants.ringInnerRadius;
+		double radiusOuter = StargateRenderConstants.ringOuterRadius;
+		double radiusMidInner = StargateRenderConstants.ringInnerMovingRadius;
+		double radiusMidOuter = StargateRenderConstants.ringMidRadius;
+
+		double ringDepth = StargateRenderConstants.ringDepth;
+		double bevelDepth = StargateRenderConstants.ringDepth - (1d / 16d);
 		GL11.glBegin(GL11.GL_QUADS);
 		for (int i = 0; i < StargateRenderConstants.numRingSegments; i++) {
 
-			// Insides & Outsides
+			// Outside surface
 			selectTile(0x4);
 			GL11.glNormal3d(-cos[i], -sin[i], 0);
-			vertex(r2 * cos[i], r2 * sin[i], z, 0, 0);
-			vertex(r2 * cos[i], r2 * sin[i], -z, 0, 16);
-			vertex(r2 * cos[i + 1], r2 * sin[i + 1], -z, 16, 16);
-			vertex(r2 * cos[i + 1], r2 * sin[i + 1], z, 16, 0);
+			vertex(radiusOuter * cos[i], radiusOuter * sin[i], ringDepth, 0, 0);
+			vertex(radiusOuter * cos[i], radiusOuter * sin[i], -ringDepth, 0, 16);
+			vertex(radiusOuter * cos[i + 1], radiusOuter * sin[i + 1], -ringDepth, 16, 16);
+			vertex(radiusOuter * cos[i + 1], radiusOuter * sin[i + 1], ringDepth, 16, 0);
 
+			// Outside ring inside filler (shear prevention chevron layer)
+			selectTile(StargateRenderConstants.ringFaceTextureIndex);
+			vertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], ringDepth, 0, 0);
+			vertex(radiusMidOuter * cos[i + 1], radiusMidOuter * sin[i + 1], ringDepth, 16, 0);
+			vertex(radiusMidOuter * cos[i + 1], radiusMidOuter * sin[i + 1], -ringDepth, 16, 16);
+			vertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], -ringDepth, 0, 16);
+
+			// Inside surface
 			selectTile(0x17);
 			GL11.glNormal3d(-cos[i], -sin[i], 0);
-			vertex(r1 * cos[i], r1 * sin[i], z, 0, 0);
-			vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, 16, 0);
-			vertex(r1 * cos[i + 1], r1 * sin[i + 1], -z, 16, 16);
-			vertex(r1 * cos[i], r1 * sin[i], -z, 0, 16);
+			vertex(radiusInner * cos[i], radiusInner * sin[i], bevelDepth, 0, 0);
+			vertex(radiusInner * cos[i + 1], radiusInner * sin[i + 1], bevelDepth, 16, 0);
+			vertex(radiusInner * cos[i + 1], radiusInner * sin[i + 1], -bevelDepth, 16, 16);
+			vertex(radiusInner * cos[i], radiusInner * sin[i], -bevelDepth, 0, 16);
+
+			// Inside ring inside filler (shear prevention chevron layer)
+			selectTile(StargateRenderConstants.ringFaceTextureIndex);
+			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], ringDepth, 0, 0);
+			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], -ringDepth, 0, 16);
+			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], -ringDepth, 16, 16);
+			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], ringDepth, 16, 0);
 
 			// Back
-			selectTile(StargateRenderConstants.ringFaceTextureIndex);
 			GL11.glNormal3f(0, 0, -1);
-			vertex(r1 * cos[i], r1 * sin[i], -z, 0, 16);
-			vertex(r1 * cos[i + 1], r1 * sin[i + 1], -z, 16, 16);
-			vertex(r2 * cos[i + 1], r2 * sin[i + 1], -z, 16, 0);
-			vertex(r2 * cos[i], r2 * sin[i], -z, 0, 0);
+			selectTile(StargateRenderConstants.ringFaceTextureIndex);
+
+			// Inner back flat outer ring
+			vertex(radiusInner * cos[i], radiusInner * sin[i], -bevelDepth, 0, 16);
+			vertex(radiusInner * cos[i + 1], radiusInner * sin[i + 1], -bevelDepth, 16, 16);
+			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], -ringDepth, 16, 0);
+			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], -ringDepth, 0, 0);
+
+			// Outer back bevel inner ring
+			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], -ringDepth, 0, 16);
+			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], -ringDepth, 16, 16);
+			vertex(radiusOuter * cos[i + 1], radiusOuter * sin[i + 1], -ringDepth, 16, 0);
+			vertex(radiusOuter * cos[i], radiusOuter * sin[i], -ringDepth, 0, 0);
 
 			// Front
 			GL11.glNormal3f(0, 0, 1);
 			selectTile(StargateRenderConstants.ringFaceTextureIndex);
-			u = 0;
-			du = 16;
-			dv = 16;
-			double dxt = 1d / 8d;
-			double r3 = r1 + dxt + 0.25, r4 = r1 + dxt;
 
-			GL11.glNormal3d(-cos[i], -sin[i], 0);
-			vertex(r4 * cos[i], r4 * sin[i], z, 0, 0);
-			vertex(r4 * cos[i], r4 * sin[i], -z, 0, 16);
-			vertex(r4 * cos[i + 1], r4 * sin[i + 1], -z, 16, 16);
-			vertex(r4 * cos[i + 1], r4 * sin[i + 1], z, 16, 0);
-
+			// Inner front flat inner ring
 			GL11.glNormal3f(0, 0, 1);
-			vertex(r1 * cos[i], r1 * sin[i], z, u + du, dv);
-			vertex(r4 * cos[i], r4 * sin[i], z, u + du, 0);
-			vertex(r4 * cos[i + 1], r4 * sin[i + 1], z, u, 0);
-			vertex(r1 * cos[i + 1], r1 * sin[i + 1], z, u, dv);
+			vertex(radiusInner * cos[i], radiusInner * sin[i], bevelDepth, 16, 16);
+			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], ringDepth, 16, 0);
+			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], ringDepth, 0, 0);
+			vertex(radiusInner * cos[i + 1], radiusInner * sin[i + 1], bevelDepth, 0, 16);
 
-			GL11.glNormal3d(-cos[i], -sin[i], 0);
-			vertex(r3 * cos[i], r3 * sin[i], z, 0, 0);
-			vertex(r3 * cos[i + 1], r3 * sin[i + 1], z, 16, 0);
-			vertex(r3 * cos[i + 1], r3 * sin[i + 1], -z, 16, 16);
-			vertex(r3 * cos[i], r3 * sin[i], -z, 0, 16);
-
-			GL11.glNormal3f(0, 0, 1);
-			vertex(r3 * cos[i], r3 * sin[i], z, u + du, dv);
-			vertex(r2 * cos[i], r2 * sin[i], z, u + du, 0);
-			vertex(r2 * cos[i + 1], r2 * sin[i + 1], z, u, 0);
-			vertex(r3 * cos[i + 1], r3 * sin[i + 1], z, u, dv);
+			// Outer front flat outer ring
+			vertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], ringDepth, 16, 16);
+			vertex(radiusOuter * cos[i], radiusOuter * sin[i], ringDepth, 16, 0);
+			vertex(radiusOuter * cos[i + 1], radiusOuter * sin[i + 1], ringDepth, 0, 0);
+			vertex(radiusMidOuter * cos[i + 1], radiusMidOuter * sin[i + 1], ringDepth, 0, 16);
 		}
 		GL11.glEnd();
 	}
@@ -145,10 +157,12 @@ public class StandardStargateRenderer implements IStargateRenderer {
 	private void chevron(boolean engaged) {
 		double r1 = StargateRenderConstants.chevronInnerRadius;
 		double r2 = StargateRenderConstants.chevronOuterRadius;
-		double z2 = StargateRenderConstants.ringDepth / 2;
+		double z2 = StargateRenderConstants.ringDepth - (1d / 32d);
+
 		double z1 = z2 + StargateRenderConstants.chevronDepth;
 		double w1 = StargateRenderConstants.chevronBorderWidth;
 		double w2 = w1 * 1.25;
+
 		double x1 = r1, y1 = StargateRenderConstants.chevronWidth / 4;
 		double x2 = r2, y2 = StargateRenderConstants.chevronWidth / 2;
 
