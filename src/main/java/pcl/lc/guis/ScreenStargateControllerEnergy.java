@@ -21,15 +21,18 @@ public class ScreenStargateControllerEnergy extends GenericGlyphGUI {
 	protected void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
-		bindTexture(LanteaCraft.getResource("textures/gui/inventory.png"), 256, 256);
-		drawTexturedRect(0, 40, 177, 108 - 30, 0, 0);
+		bindTexture(LanteaCraft.getResource(String.format("textures/gui/inventory_gui_%s.png", LanteaCraft.getProxy()
+				.getRenderMode())), 256, 256);
+		drawTexturedRect(0, 40, 177, 108, 0, 0);
 
 		bindTexture(LanteaCraft.getResource("textures/gui/dhd_powercrystal_slot.png"), 60, 60);
 		drawTexturedRect(89 - 12, 0, 24, 24);
 
-		bindTexture(LanteaCraft.getResource("textures/gui/inventory.png"), 256, 256);
-		drawTexturedRectUV(49, 26, (80.0d * container.getStoredEnergy() / 100.0d), 12, 0, 0,
-				(80.0d * container.getStoredEnergy()) / 25600.0d, 12.0d / 256.0d);
+		bindTexture(LanteaCraft.getResource(String.format("textures/gui/progressbar_gui_%s.png", LanteaCraft.getProxy()
+				.getRenderMode())), 256, 256);
+		drawTexturedRectUV(39, 26, 100, 12, 0, 0, 168 / 256d, 28 / 256d);
+		drawTexturedRectUV(42, 28, 94.0d * (container.getStoredEnergy() / 100.0d), 8, 0, 29 / 256d,
+				(160.0d * container.getStoredEnergy()) / 25600.0d, 12.0d / 256.0d);
 
 		GL11.glPopMatrix();
 	}

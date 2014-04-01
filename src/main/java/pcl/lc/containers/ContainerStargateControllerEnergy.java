@@ -20,7 +20,7 @@ public class ContainerStargateControllerEnergy extends GenericContainer {
 		this.te = te;
 		filterInventory = (FilteredInventory) te.getInventory();
 		addSlotToContainer(new FilteredSlot(filterInventory, 0, 89 - 12 + 4, 4, false));
-		addPlayerSlots(player, 8, 42);
+		addPlayerSlots(player, 8, 47);
 	}
 
 	@Override

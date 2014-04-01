@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.RotationOrientedBlock;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityStargateController;
@@ -92,7 +93,7 @@ public class BlockStargateController extends RotationOrientedBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		if (player.isSneaking())
+		if (player.isSneaking() || side != ForgeDirection.UP.ordinal())
 			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), world,
 					x, y, z);
 		else
