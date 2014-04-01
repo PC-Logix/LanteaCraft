@@ -30,6 +30,9 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.network.ForgePacket;
 import net.minecraftforge.common.network.packet.DimensionRegisterPacket;
+import pcl.common.audio.AudioEngine;
+import pcl.common.audio.AudioPosition;
+import pcl.common.audio.AudioSource;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.network.IPacketHandler;
@@ -82,6 +85,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	private EnumStargateState lastState = EnumStargateState.Idle;
 
 	private double renderRingAngle, renderLastRingAngle, renderNextRingAngle;
+	private AudioSource currentSource;
 
 	// START NEW MULTIBLOCK CODE
 
@@ -221,12 +225,24 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				} else
 					renderNextRingAngle = 0;
 				switch (getState()) {
+				case Dialling:
+					updateSound("roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F);
+					break;
+				case InterDialling:
+					updateSound("chevron_lock", new AudioPosition(worldObj, new Vector3(this)), 1.0F);
+					break;
 				case Transient:
+					updateSound("open", new AudioPosition(worldObj, new Vector3(this)), 1.0F);
 					initiateOpeningTransient();
 					break;
 				case Disconnecting:
+					updateSound("close", new AudioPosition(worldObj, new Vector3(this)), 1.0F);
 					renderNextRingAngle = 0;
 					initiateClosingTransient();
+					break;
+				case Connected:
+					break;
+				case Idle:
 					break;
 				}
 			}
@@ -310,6 +326,15 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			worldObj.notifyBlockChange(xCoord, yCoord, zCoord, blockType.blockID);
 		onInventoryChanged();
 		markBlockForUpdate();
+	}
+
+	private void updateSound(String soundName, AudioPosition position, float volume) {
+		if (currentSource != null)
+			currentSource.stop();
+		AudioEngine engine = LanteaCraft.getProxy().getAudioEngine();
+		currentSource = engine.create(this, position, String.format("stargate/milkyway/milkyway_%s.ogg", soundName),
+				false, false, volume);
+		currentSource.play();
 	}
 
 	public boolean isConnected() {

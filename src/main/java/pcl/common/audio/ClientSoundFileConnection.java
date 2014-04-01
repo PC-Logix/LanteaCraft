@@ -23,7 +23,8 @@ public class ClientSoundFileConnection extends URLConnection {
 
 	public InputStream getInputStream() {
 		try {
-			LanteaCraft.getLogger().log(Level.INFO, "Looking for resource: " + resourceName.toString());
+			if (ClientAudioEngine.SS_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO, "Looking for resource: " + resourceName.toString());
 			InputStream stream = Minecraft.getMinecraft().getResourceManager().getResource(resourceName)
 					.getInputStream();
 			if (stream == null)

@@ -33,7 +33,8 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 			ResourceLocation resourcelocation = new ResourceLocation(filename);
 			String s1 = String.format("%s:%s:%s", "soundconnectionhax", resourcelocation.getResourceDomain(),
 					resourcelocation.getResourcePath());
-			LanteaCraft.getLogger().log(Level.WARNING, "Sound file: " + s1);
+			if (ClientAudioEngine.SS_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO, "AudioSource mounting file: " + s1);
 			URL path = new URL(null, s1, new ClientSoundProtocolHandler());
 
 			system.newSource(override, name, path, file, looping, (float) position.position.x,

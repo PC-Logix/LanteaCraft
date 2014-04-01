@@ -15,6 +15,13 @@ import pcl.lc.api.internal.ITickAgent;
 
 public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 
+	/**
+	 * Enable or disable the SoundSystem debugging; often this is useful for
+	 * recording all the operations on the SoundDevice, meaning that clients
+	 * aren't slammed with logging if they don't need to be.
+	 */
+	protected static final boolean SS_DEBUGGING = false;
+
 	private static class SoundHostObject extends WeakReference<Object> {
 		public SoundHostObject(Object host) {
 			super(host);
@@ -37,8 +44,10 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 
 	private static String label() {
 		StringBuilder label = new StringBuilder();
-		label.append("asm_snd").append(sourceCounter);
+		label.append("lc_directsound_").append(sourceCounter);
 		sourceCounter++;
+		if (sourceCounter > 512)
+			sourceCounter = sourceCounter % 512;
 		return label.toString();
 	}
 

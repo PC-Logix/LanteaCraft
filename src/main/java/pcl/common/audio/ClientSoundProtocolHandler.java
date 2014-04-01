@@ -10,7 +10,8 @@ import pcl.lc.LanteaCraft;
 public class ClientSoundProtocolHandler extends URLStreamHandler {
 
 	protected URLConnection openConnection(URL par1URL) {
-		LanteaCraft.getLogger().log(Level.INFO, "SoundConnection opening: " + par1URL.toString());
+		if (ClientAudioEngine.SS_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, "SoundConnection opening: " + par1URL.toString());
 		return new ClientSoundFileConnection(par1URL, (ClientSoundProtocolHandler) null);
 	}
 
