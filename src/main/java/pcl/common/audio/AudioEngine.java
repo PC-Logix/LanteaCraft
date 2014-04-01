@@ -53,7 +53,7 @@ public class AudioEngine implements ITickAgent {
 	/*
 	 * This is a shadow method implementation.
 	 */
-	public Object create(Object owner, AudioPosition position, String file, boolean looping, boolean override,
+	public AudioSource create(Object owner, AudioPosition position, String file, boolean looping, boolean override,
 			float volume) {
 		// Do nothing.
 		return null;
