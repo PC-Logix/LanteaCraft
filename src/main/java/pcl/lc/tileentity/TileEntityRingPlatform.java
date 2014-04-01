@@ -125,14 +125,15 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 	public void connect() {
 		ArrayList<Vector3> others = ScanningHelper.findAllTileEntitesOf(worldObj, TileEntityRingPlatform.class, xCoord,
 				yCoord, zCoord, AxisAlignedBB.getBoundingBox(-10, -yCoord, -10, 10, worldObj.getHeight(), 10));
+		Vector3 vectorHere = new Vector3(this);
 		for (Vector3 other : others) {
 			TileEntity at = worldObj.getBlockTileEntity(xCoord + (int) Math.floor(other.x),
 					yCoord + (int) Math.floor(other.y), zCoord + (int) Math.floor(other.z));
 			if ((at instanceof TileEntityRingPlatform) && !at.equals(this)) {
 				TileEntityRingPlatform that = (TileEntityRingPlatform) at;
 				if (!that.isBusy()) {
-					performConnection(other.add(xCoord, yCoord, zCoord));
-					that.performConnection(null);
+					performConnection(other.add(vectorHere));
+					that.performConnection(vectorHere);
 					return;
 				}
 			}
