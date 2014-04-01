@@ -9,6 +9,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import pcl.common.audio.AudioEngine;
+import pcl.common.audio.AudioPosition;
+import pcl.common.audio.AudioSource;
+import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
@@ -44,6 +48,14 @@ public class ItemDebugTool extends Item {
 		LanteaCraft.getLogger().log(Level.INFO,
 				"Debugger used at (" + par4 + ", " + par5 + ", " + par6 + ") on " + side);
 		par2EntityPlayer.addChatMessage("Data for (" + par4 + ", " + par5 + ", " + par6 + ") side " + side + ":");
+
+		if (par3World.isRemote) {
+			AudioEngine engine = LanteaCraft.getProxy().getAudioEngine();
+			AudioSource source = engine.create(this, new AudioPosition(par3World, new Vector3(par4, par5, par6)),
+					"weapon/goauld_staff_shot.ogg", false, false, 1.0F);
+			source.activate();
+			source.play();
+		}
 
 		TileEntity entity = par3World.getBlockTileEntity(par4, par5, par6);
 		if (entity instanceof TileEntityStargateBase) {

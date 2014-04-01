@@ -1,15 +1,17 @@
 package pcl.common.audio;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import paulscode.sound.SoundSystem;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 
-public class ClientAudioSource extends AudioSource {
+public class ClientAudioSource extends AudioSource implements Comparable<ClientAudioSource> {
 
 	private SoundSystem system;
 	private AudioPosition position;
@@ -19,21 +21,29 @@ public class ClientAudioSource extends AudioSource {
 
 	public ClientAudioSource(SoundSystem system, AudioPosition position, String file, boolean looping,
 			boolean override, float volume, String tag) {
-		this.system = system;
-		this.position = position;
-		name = tag;
-		configuredVolume = volume;
-		ClientAudioEngine engine = (ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine();
+		try {
+			this.system = system;
+			this.position = position;
+			this.name = tag;
+			configuredVolume = volume;
+			ClientAudioEngine engine = (ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine();
 
-		URL path = ClientAudioSource.class.getClassLoader().getResource("assets/pcl_pc/sound/" + file);
-		if (path == null)
-			LanteaCraft.getLogger().log(Level.WARNING,
-					String.format("Sound `%s` requested, but file doesn't exist!", file));
+			String filename = LanteaCraft.getAssetKey() + ":sound/" + file;
 
-		system.newSource(override, name, path, file, looping, (float) position.position.x, (float) position.position.y,
-				(float) position.position.z, 0, engine.falloffDistance * Math.max(volume, 1.0F));
-		valid = true;
-		setVolume(volume);
+			ResourceLocation resourcelocation = new ResourceLocation(filename);
+			String s1 = String.format("%s:%s:%s", "soundconnectionhax", resourcelocation.getResourceDomain(),
+					resourcelocation.getResourcePath());
+			LanteaCraft.getLogger().log(Level.WARNING, "Sound file: " + s1);
+			URL path = new URL(null, s1, new ClientSoundProtocolHandler());
+
+			system.newSource(override, name, path, file, looping, (float) position.position.x,
+					(float) position.position.y, (float) position.position.z, 0,
+					engine.falloffDistance * Math.max(volume, 1.0F));
+			valid = true;
+			setVolume(volume);
+		} catch (MalformedURLException malurl) {
+			LanteaCraft.getLogger().log(Level.WARNING, "Could not initialize AudioSource.", malurl);
+		}
 	}
 
 	@Override
@@ -182,5 +192,12 @@ public class ClientAudioSource extends AudioSource {
 	@Override
 	public float getRealVolume() {
 		return realVolume;
+	}
+
+	@Override
+	public int compareTo(ClientAudioSource x) {
+		if (this.culled)
+			return (int) ((this.realVolume * 0.9F - x.realVolume) * 128.0F);
+		return (int) ((this.realVolume - x.realVolume) * 128.0F);
 	}
 }
