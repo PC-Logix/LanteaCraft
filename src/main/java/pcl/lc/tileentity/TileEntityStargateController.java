@@ -179,6 +179,10 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 	public void getStateFromPacket(ModPacket packet) {
 		StandardModPacket packetOf = (StandardModPacket) packet;
 		energy = (Double) packetOf.getValue("energy");
+		isLinkedToStargate = (Boolean) packetOf.getValue("isLinkedToStargate");
+		linkedX = (Integer) packetOf.getValue("linkedX");
+		linkedY = (Integer) packetOf.getValue("linkedY");
+		linkedZ = (Integer) packetOf.getValue("linkedZ");
 	}
 
 	public ModPacket getPacketFromState() {
@@ -186,6 +190,10 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 		packet.setIsForServer(false);
 		packet.setType("LanteaPacket.TileUpdate");
 		packet.setValue("energy", energy);
+		packet.setValue("isLinkedToStargate", isLinkedToStargate);
+		packet.setValue("linkedX", linkedX);
+		packet.setValue("linkedY", linkedY);
+		packet.setValue("linkedZ", linkedZ);
 		return packet;
 	}
 
