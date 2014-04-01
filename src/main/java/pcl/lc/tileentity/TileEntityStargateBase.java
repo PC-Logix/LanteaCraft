@@ -85,7 +85,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	private EnumStargateState lastState = EnumStargateState.Idle;
 
 	private double renderRingAngle, renderLastRingAngle, renderNextRingAngle;
+
 	private AudioSource currentSource;
+	private double maxSoundTicks, soundTicks;
 
 	// START NEW MULTIBLOCK CODE
 
@@ -226,17 +228,17 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					renderNextRingAngle = 0;
 				switch (getState()) {
 				case Dialling:
-					updateSound("roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F);
+					updateSound("roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
 					break;
 				case InterDialling:
-					updateSound("chevron_lock", new AudioPosition(worldObj, new Vector3(this)), 1.0F);
+					updateSound("chevron_lock", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
 					break;
 				case Transient:
-					updateSound("open", new AudioPosition(worldObj, new Vector3(this)), 1.0F);
+					updateSound("open", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 04.571D * 20D);
 					initiateOpeningTransient();
 					break;
 				case Disconnecting:
-					updateSound("close", new AudioPosition(worldObj, new Vector3(this)), 1.0F);
+					updateSound("close", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 02.482D * 20D);
 					renderNextRingAngle = 0;
 					initiateClosingTransient();
 					break;
@@ -244,6 +246,15 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					break;
 				case Idle:
 					break;
+				}
+			}
+
+			if (maxSoundTicks > 0) {
+				soundTicks++;
+				if (soundTicks > maxSoundTicks) {
+					maxSoundTicks = -1;
+					if (currentSource != null)
+						currentSource.stop();
 				}
 			}
 
@@ -328,12 +339,14 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		markBlockForUpdate();
 	}
 
-	private void updateSound(String soundName, AudioPosition position, float volume) {
+	private void updateSound(String soundName, AudioPosition position, float volume, double ticks) {
 		if (currentSource != null)
 			currentSource.stop();
 		AudioEngine engine = LanteaCraft.getProxy().getAudioEngine();
 		currentSource = engine.create(this, position, String.format("stargate/milkyway/milkyway_%s.ogg", soundName),
 				false, false, volume);
+		maxSoundTicks = ticks;
+		soundTicks = 0;
 		currentSource.play();
 	}
 
