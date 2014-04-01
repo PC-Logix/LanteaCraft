@@ -66,7 +66,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		public void openMainMenu(GuiOpenEvent event) {
 			if ((event.gui instanceof GuiMainMenu) && !shownStatGui) {
 				shownStatGui = true;
-				event.gui = new GuiStatCollection(event.gui, proxy.analyticsHelper);
+				//event.gui = new GuiStatCollection(event.gui, proxy.analyticsHelper);
 			}
 		}
 	}

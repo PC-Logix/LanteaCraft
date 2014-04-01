@@ -51,6 +51,8 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	@Override
 	public void initGui() {
 		super.initGui();
+		guiLeft = 0;
+		guiTop = 0;
 		dhdTop = height - dhdHeight;
 		dhdCentreX = width / 2;
 		dhdCentreY = dhdTop + dhdHeight / 2;

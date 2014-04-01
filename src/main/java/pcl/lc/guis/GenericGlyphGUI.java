@@ -18,13 +18,9 @@ public abstract class GenericGlyphGUI extends GenericContainerGUI {
 	protected void drawFramedSymbols(int x, int y, String address) {
 		int symbolsPerRow = 9;
 		int scale = 2;
-		int frameWidth = 472 / scale;
-		int frameHeight = 88 / scale;
-		int x0 = x - frameWidth / 2;
 		bindSGTexture("symbol_frame.png", 512 / scale, 128 / scale);
-		drawTexturedRect(x0, y, frameWidth, frameHeight, 0, 0);
-
-		GlyphRenderer.drawAddress(mc, address, x0, y, symbolsPerRow, scale, zLevel);
+		drawTexturedRect(x - (472 / scale) / 2, y, 472 / scale, 88 / scale, 0, 0);
+		GlyphRenderer.drawAddress(mc, address, x - (472 / scale) / 2, y, symbolsPerRow, scale, zLevel);
 	}
 
 	void drawAddressString(int x, int y, String address, int len, String padding, String caret) {
