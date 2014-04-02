@@ -5,6 +5,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
 
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -23,7 +24,7 @@ public class ClientSoundFileConnection extends URLConnection {
 
 	public InputStream getInputStream() {
 		try {
-			if (ClientAudioEngine.SS_DEBUGGING)
+			if (BuildInfo.SS_DEBUGGING)
 				LanteaCraft.getLogger().log(Level.INFO, "Looking for resource: " + resourceName.toString());
 			InputStream stream = Minecraft.getMinecraft().getResourceManager().getResource(resourceName)
 					.getInputStream();
