@@ -17,6 +17,15 @@ import java.lang.annotation.Target;
  * <pre>
  *     Object[] f(Context context, Arguments arguments);
  * </pre>
+ * <p/>
+ * The method may return <tt>null</tt> in case it doesn't wish return anything,
+ * which is functionally equivalent to returning an empty array.
+ * <p/>
+ * To raise an error from your callback, simply throw an exception. The
+ * convention for Lua is to return (null, "reason") for 'soft' errors, i.e.
+ * errors that are no fault of the caller. For example, passing invalid
+ * arguments will generate an exception, requesting information and the lookup
+ * of said information failing should not.
  *
  * @see Context
  * @see Arguments
@@ -79,7 +88,6 @@ public @interface Callback {
      * more importantly you should document the expected parameters and return
      * type here.
      * <p/>
-     * TODO Actually implement for this to be available to computers...
      */
     String doc() default "";
 }
