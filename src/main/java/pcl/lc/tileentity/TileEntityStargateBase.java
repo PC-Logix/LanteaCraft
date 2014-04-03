@@ -33,6 +33,7 @@ import net.minecraftforge.common.network.packet.DimensionRegisterPacket;
 import pcl.common.audio.AudioEngine;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.AudioSource;
+import pcl.common.audio.SoundHost;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.network.IPacketHandler;
@@ -86,8 +87,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	private double renderRingAngle, renderLastRingAngle, renderNextRingAngle;
 
-	private AudioSource currentSource;
-	private double maxSoundTicks, soundTicks;
+	private SoundHost soundHost;
 
 	// START NEW MULTIBLOCK CODE
 
@@ -215,8 +215,11 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	 */
 	public void advance() {
 		if (worldObj.isRemote) {
+			if (soundHost == null)
+				soundHost = new SoundHost(this);
+
 			if (isValid() && lastState != getState()) {
-				lastState = getState();
+
 				timeout = (Integer) getAsStructure().getMetadata("timeout");
 				numEngagedChevrons = (Integer) getAsStructure().getMetadata("numEngagedChevrons");
 				if (getDialledAddres() != null) {
@@ -226,19 +229,31 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 							- 45 * numEngagedChevrons);
 				} else
 					renderNextRingAngle = 0;
+
+				if (lastState == EnumStargateState.Idle && getState() == EnumStargateState.Dialling) {
+					createChannel("stargate_spin", "roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F, -1);
+					createChannel("stargate_chevron", "chevron_lock", new AudioPosition(worldObj, new Vector3(this)),
+							1.0F, 1200);
+					createChannel("stargate_transient", "open", new AudioPosition(worldObj, new Vector3(this)), 1.0F,
+							1200);
+					createChannel("stargate_close", "close", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
+				}
+
 				switch (getState()) {
 				case Dialling:
-					updateSound("roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
+					soundHost.playChannel("stargate_spin");
 					break;
 				case InterDialling:
-					updateSound("chevron_lock", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
+					soundHost.pauseChannel("stargate_spin");
+					soundHost.playChannel("stargate_chevron");
 					break;
 				case Transient:
-					updateSound("open", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 04.571D * 20D);
+					soundHost.stopChannel("stargate_spin");
+					soundHost.playChannel("stargate_transient");
 					initiateOpeningTransient();
 					break;
 				case Disconnecting:
-					updateSound("close", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 02.482D * 20D);
+					soundHost.playChannel("stargate_close");
 					renderNextRingAngle = 0;
 					initiateClosingTransient();
 					break;
@@ -247,16 +262,11 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				case Idle:
 					break;
 				}
+
+				lastState = getState();
 			}
 
-			if (maxSoundTicks > 0) {
-				soundTicks++;
-				if (soundTicks > maxSoundTicks) {
-					maxSoundTicks = -1;
-					if (currentSource != null)
-						currentSource.stop();
-				}
-			}
+			soundHost.tick();
 
 			renderLastRingAngle = renderRingAngle;
 			advanceRendering();
@@ -339,17 +349,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		markBlockForUpdate();
 	}
 
-	private void updateSound(String soundName, AudioPosition position, float volume, double ticks) {
-		if (true == true)
-			return;
-		if (currentSource != null)
-			currentSource.stop();
-		AudioEngine engine = LanteaCraft.getProxy().getAudioEngine();
-		currentSource = engine.create(this, position, String.format("stargate/milkyway/milkyway_%s.ogg", soundName),
-				false, false, volume);
-		maxSoundTicks = ticks;
-		soundTicks = 0;
-		currentSource.play();
+	private void createChannel(String name, String file, AudioPosition position, float volume, int age) {
+		soundHost.addChannel(name, String.format("stargate/milkyway/milkyway_%s.ogg", file), position, volume, age);
 	}
 
 	public boolean isConnected() {
