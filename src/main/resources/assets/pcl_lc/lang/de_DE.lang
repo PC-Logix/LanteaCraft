@@ -11,13 +11,14 @@ item.liquidNaquadahBucket.name=Eimer mit flüssiges Naquadah
 
 tile.lanteaDecor.1.name=Verzierter Antiker Stahl
 tile.lanteaDecor.2.name=Antiker Stahl
-tile.lanteaDecor.3.name=Verziertes Goa'uld Gold
-tile.lanteaDecor.4.name=Goa'uld Gold
-
-tile.goauldPatternedGoldDecorStair.name=Goauld Goldtreppe
-tile.goauldGoldDecorStair.name=Verzierte Goauld Goldtreppe
 tile.lanteaPatternedSteelDecorStair.name=Antiker Stahltreppe
 tile.lanteaSteelDecorStair.name=Verzierte Antiker Stahltreppe
+tile.lanteaGlassDecor.1.name=Antiker-Glas
+
+tile.lanteaDecor.3.name=Verziertes Goa'uld Gold
+tile.lanteaDecor.4.name=Goa'uld Gold
+tile.goauldPatternedGoldDecorStair.name=Goauld Goldtreppe
+tile.goauldGoldDecorStair.name=Verzierte Goauld Goldtreppe
 
 tile.lanteaOre.0.name=Naquadah Erz
 item.lanteaOre.0.name=Naquadah
@@ -39,3 +40,4 @@ tile.ringPlatform.name=Ring Transporter
 
 item.tokraSpawnEgg.name=Erschaffe Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
+item.zpm.name=ZPM
