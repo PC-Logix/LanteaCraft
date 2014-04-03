@@ -329,6 +329,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	private void updateSound(String soundName, AudioPosition position, float volume) {
+		if (true == true)
+			return;
 		if (currentSource != null)
 			currentSource.stop();
 		AudioEngine engine = LanteaCraft.getProxy().getAudioEngine();
