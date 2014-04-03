@@ -253,6 +253,10 @@ public class LanteaCraftCommonProxy {
 	public boolean isUsingModels() {
 		return ((ConfigValue<Boolean>) getConfigValue("renderUseModels")).getValue();
 	}
+	
+	public boolean doExplosion() {
+		return ((ConfigValue<Boolean>) getConfigValue("doGateExplosion")).getValue();
+	}
 
 	/**
 	 * @deprecated Tagged for deletion (unused locally, verify needed)
