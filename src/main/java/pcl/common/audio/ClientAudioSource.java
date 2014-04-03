@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import paulscode.sound.SoundSystem;
 import pcl.common.util.Vector3;
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 
 public class ClientAudioSource extends AudioSource implements Comparable<ClientAudioSource> {
@@ -33,7 +34,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 			ResourceLocation resourcelocation = new ResourceLocation(filename);
 			String s1 = String.format("%s:%s:%s", "soundconnectionhax", resourcelocation.getResourceDomain(),
 					resourcelocation.getResourcePath());
-			if (ClientAudioEngine.SS_DEBUGGING)
+			if (BuildInfo.SS_DEBUGGING)
 				LanteaCraft.getLogger().log(Level.INFO, "AudioSource mounting file: " + s1);
 			URL path = new URL(null, s1, new ClientSoundProtocolHandler());
 

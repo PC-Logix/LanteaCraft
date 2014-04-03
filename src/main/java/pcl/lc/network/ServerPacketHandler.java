@@ -12,7 +12,15 @@ import cpw.mods.fml.common.network.Player;
 
 public class ServerPacketHandler {
 
+	private PacketLogger logger;
+
+	public ServerPacketHandler(PacketLogger logger) {
+		this.logger = logger;
+	}
+
 	public void handlePacket(ModPacket modPacket, Player player) {
+		if (logger != null)
+			logger.logPacket(modPacket);
 		WorldLocation target = modPacket.getOriginLocation();
 		if (modPacket instanceof StandardModPacket) {
 			StandardModPacket spacket = (StandardModPacket) modPacket;

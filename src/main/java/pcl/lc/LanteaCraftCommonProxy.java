@@ -36,6 +36,7 @@ import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleWorldGenerator;
 import pcl.lc.module.compat.UpgradeHelper;
 import pcl.lc.network.ClientPacketHandler;
+import pcl.lc.network.PacketLogger;
 import pcl.lc.network.ServerPacketHandler;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
@@ -72,7 +73,10 @@ public class LanteaCraftCommonProxy {
 	private VersionHelper versionHelper = new VersionHelper();
 
 	protected ClientPacketHandler clientPacketHandler;
+	protected PacketLogger clientPacketLogger;
 	protected ServerPacketHandler serverPacketHandler;
+	protected PacketLogger serverPacketLogger;
+	
 	private NetworkHelpers networkHelpers;
 	private UpgradeHelper upgradeHelper;
 
@@ -102,7 +106,9 @@ public class LanteaCraftCommonProxy {
 	protected ModuleManager moduleManager;
 
 	public LanteaCraftCommonProxy() {
-		serverPacketHandler = new ServerPacketHandler();
+		if (BuildInfo.NET_DEBUGGING)
+			serverPacketLogger = new PacketLogger(new File("lc-network-server.dat"));
+		serverPacketHandler = new ServerPacketHandler(serverPacketLogger);
 		networkHelpers = new NetworkHelpers();
 		moduleManager = new ModuleManager();
 	}

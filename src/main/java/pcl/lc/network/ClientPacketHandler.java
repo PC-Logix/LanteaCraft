@@ -17,7 +17,15 @@ import cpw.mods.fml.common.network.Player;
 
 public class ClientPacketHandler {
 
+	private PacketLogger logger;
+
+	public ClientPacketHandler(PacketLogger logger) {
+		this.logger = logger;
+	}
+
 	public void handlePacket(ModPacket packet, Player player) {
+		if (logger != null)
+			logger.logPacket(packet);
 		WorldLocation target = packet.getOriginLocation();
 		if (target == null)
 			LanteaCraft.getLogger().log(Level.WARNING,

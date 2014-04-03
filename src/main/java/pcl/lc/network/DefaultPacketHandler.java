@@ -8,6 +8,8 @@ import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 
 public class DefaultPacketHandler implements IPacketHandler {
+	
+	public static final boolean NET_DEBUGGING = false;
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {

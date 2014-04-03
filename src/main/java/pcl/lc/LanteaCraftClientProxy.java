@@ -2,6 +2,7 @@ package pcl.lc;
 
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
+import java.io.File;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -26,6 +27,7 @@ import pcl.lc.guis.ScreenStargateBase;
 import pcl.lc.guis.ScreenStargateController;
 import pcl.lc.guis.ScreenStargateControllerEnergy;
 import pcl.lc.network.ClientPacketHandler;
+import pcl.lc.network.PacketLogger;
 import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateControllerRenderer;
@@ -58,6 +60,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	public static class ClientHooks {
 		private boolean shownStatGui = false;
 		private LanteaCraftClientProxy proxy;
+
 		public ClientHooks(LanteaCraftClientProxy proxy) {
 			this.proxy = proxy;
 		}
@@ -66,7 +69,8 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		public void openMainMenu(GuiOpenEvent event) {
 			if ((event.gui instanceof GuiMainMenu) && !shownStatGui) {
 				shownStatGui = true;
-				//event.gui = new GuiStatCollection(event.gui, proxy.analyticsHelper);
+				// event.gui = new GuiStatCollection(event.gui,
+				// proxy.analyticsHelper);
 			}
 		}
 	}
@@ -76,7 +80,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	public LanteaCraftClientProxy() {
 		super();
-		clientPacketHandler = new ClientPacketHandler();
+		if (BuildInfo.NET_DEBUGGING)
+			clientPacketLogger = new PacketLogger(new File("lc-network-client.dat"));
+		clientPacketHandler = new ClientPacketHandler(clientPacketLogger);
 	}
 
 	@Override
