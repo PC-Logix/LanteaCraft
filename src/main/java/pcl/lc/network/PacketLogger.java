@@ -44,6 +44,8 @@ public class PacketLogger {
 	}
 
 	public void logPacket(ModPacket packet) {
+		if (datastream == null)
+			return;
 		Packet250CustomPayload payload = packet.toPacket();
 		try {
 			datastream.writeLong(packetcount++);

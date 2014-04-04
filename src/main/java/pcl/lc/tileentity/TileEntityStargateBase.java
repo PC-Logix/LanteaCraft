@@ -448,8 +448,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	private void performTransientDamage() {
-		Vector3 p0 = new Vector3(-2.5, 0.5, -3.5);
-		Vector3 p1 = new Vector3(2.5, 5.5, 3.5);
+		Vector3 p0 = new Vector3(-3.5, 0.0, 0.0);
+		Vector3 p1 = new Vector3(3.5, 5.5, 2.5);
 		Trans3 t = localToGlobalTransformation();
 		AxisAlignedBB box = t.box(p0, p1);
 		List<EntityLiving> ents = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
