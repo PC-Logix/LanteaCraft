@@ -37,10 +37,14 @@ public class WorldLog {
 
 	public void close() {
 		try {
-			outwrapper.flush();
-			outwrapper.close();
-			outstream.flush();
-			outstream.close();
+			if (outwrapper != null) {
+				outwrapper.flush();
+				outwrapper.close();
+			}
+			if (outstream != null) {
+				outstream.flush();
+				outstream.close();
+			}
 		} catch (IOException ioex) {
 			LanteaCraft.getLogger().log(Level.WARNING, "Could not close WorldLog, an error occured.", ioex);
 		}
@@ -48,6 +52,8 @@ public class WorldLog {
 
 	public void log(Level level, String message) {
 		try {
+			if (outwrapper == null)
+				return;
 			StringBuilder formatter = new StringBuilder();
 			formatter.append("[").append(level).append("]");
 			formatter.append(" ").append(message);
