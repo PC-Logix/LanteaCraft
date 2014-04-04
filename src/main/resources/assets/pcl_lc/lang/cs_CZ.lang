@@ -9,15 +9,17 @@ item.energyCrystal.name=Energetický krystal
 tile.blockLiquidNaquadah.name=Tekutý naquadah
 item.liquidNaquadahBucket.name=Kbelík tekutého naquadahu
 
-tile.lanteaDecor.1.name=Kov předků s ornamenty (dekor)
-tile.lanteaDecor.2.name=Kov předků (dekor)
-tile.lanteaDecor.3.name=Goa'uldské zlato s ornamenty (dekor)
-tile.lanteaDecor.4.name=Goa'uldské zlato (dekor)
+tile.lanteaDecor.1.name=Kov předků s ornamenty
+tile.lanteaDecor.2.name=Kov předků
+tile.lanteaDecor.3.name=Goa'uldské zlato s ornamenty
+tile.lanteaDecor.4.name=Goa'uldské zlato
 
-tile.goauldPatternedGoldDecorStair.name=Goa'uldské zlaté schody (dekor)
-tile.goauldGoldDecorStair.name=Goa'uldské zlaté schody s ornamenty (dekor)
-tile.lanteaPatternedSteelDecorStair.name=Shody z kovu předků (dekor)
-tile.lanteaSteelDecorStair.name=Shody z kovu předků s ornamenty (dekor)
+tile.goauldPatternedGoldDecorStair.name=Goa'uldské zlaté schody
+tile.goauldGoldDecorStair.name=Goa'uldské zlaté schody s ornamenty
+tile.lanteaPatternedSteelDecorStair.name=Schody z kovu předků
+tile.lanteaSteelDecorStair.name=Schody z kovu předků s ornamenty
+
+tile.lanteaGlassDecor.1.name=Sklo předků
 
 tile.lanteaOre.0.name=Naquadahová ruda
 item.lanteaOre.0.name=Naquadah
@@ -34,8 +36,9 @@ item.lanteaOre.2.name=Trinium
 item.lanteaOreIngot.2.name=Triniový ingot
 tile.lanteaOreIngotBlock.2.name=Blok trinia
 
-tile.naquadahGenerator.name=Naquadahový generator
+tile.naquadahGenerator.name=Naquadahový generátor
 tile.ringPlatform.name=Transportní kruhy
+item.zpm.name=ZPM
 
 item.tokraSpawnEgg.name=Vejce Tokry
 item.lanteadebug.name=LanteaCraft Debugger
