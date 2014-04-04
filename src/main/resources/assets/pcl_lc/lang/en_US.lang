@@ -19,11 +19,12 @@ tile.goauldGoldDecorStair.name=Goa'uld Patterned Gold Stairs
 tile.lanteaPatternedSteelDecorStair.name=Lantean Steel Stairs
 tile.lanteaSteelDecorStair.name=Lantean Patterned Steel Stairs
 
+tile.lanteaGlassDecor.1.name=Lantean Glass
+
 tile.lanteaOre.0.name=Naquadah Ore
 item.lanteaOre.0.name=Naquadah
 item.lanteaOreIngot.0.name=Naquadah Ingot
 tile.lanteaOreIngotBlock.0.name=Block of Naquadah
-
 
 tile.lanteaOre.1.name=Naquadriah Ore
 item.lanteaOre.1.name=Naquadriah
@@ -37,6 +38,7 @@ tile.lanteaOreIngotBlock.2.name=Block of Trinium
 
 tile.naquadahGenerator.name=Naquadah Generator
 tile.ringPlatform.name=Transport Rings
+item.zpm.name=ZPM
 
 item.tokraSpawnEgg.name=Tok'ra Spawn Egg
 item.lanteadebug.name=LanteaCraft Debugger
