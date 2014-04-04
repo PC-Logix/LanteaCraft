@@ -135,6 +135,9 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	}
 
 	public void explode(World world, double x, double y, double z, double s) {
+		if (true == true)
+			return;
+
 		TileEntity te = getTileEntity(world, (int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
 		if (te != null && (te instanceof TileEntityStargateBase)) {
 			TileEntityStargateBase gate = (TileEntityStargateBase) te;
