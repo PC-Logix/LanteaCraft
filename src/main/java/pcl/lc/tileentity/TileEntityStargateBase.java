@@ -1,5 +1,6 @@
 package pcl.lc.tileentity;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -81,6 +82,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	public int numEngagedChevrons;
 
 	private WorldLocation connectedLocation;
+	private WeakReference<TileEntityStargateBase> connectedHost;
 	private boolean isInitiator;
 	private int timeout;
 	private EnumStargateState lastState = EnumStargateState.Idle;
@@ -219,7 +221,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				soundHost = new SoundHost(this);
 
 			if (isValid() && lastState != getState()) {
-
 				timeout = (Integer) getAsStructure().getMetadata("timeout");
 				numEngagedChevrons = (Integer) getAsStructure().getMetadata("numEngagedChevrons");
 				if (getDialledAddres() != null) {
@@ -280,9 +281,12 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					setRingAngle(renderNextRingAngle);
 		} else {
 			if (getAsStructure().isValid()) {
-				if (getState() == EnumStargateState.Connected && isInitiator)
-					if (!useEnergy(1))
+				if (getState() == EnumStargateState.Connected) {
+					if (isInitiator && !useEnergy(1))
 						disconnect();
+					if (connectedHost.get() == null)
+						disconnect();
+				}
 				if (timeout > 0) {
 					if (getState() == EnumStargateState.Transient)
 						performTransientDamage();
@@ -438,6 +442,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		getAsStructure().setMetadata("diallingTo", address);
 		getAsStructure().setMetadata("numEngagedChevrons", numEngagedChevrons);
 		connectedLocation = new WorldLocation(dte);
+		connectedHost = new WeakReference<TileEntityStargateBase>(dte);
 		isInitiator = initiator;
 		onInventoryChanged();
 		startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
