@@ -2,6 +2,7 @@ package pcl.lc.module.integration;
 
 import li.cil.oc.api.Network;
 import li.cil.oc.api.driver.Block;
+import li.cil.oc.api.driver.MethodWhitelist;
 import li.cil.oc.api.network.Arguments;
 import li.cil.oc.api.network.Callback;
 import li.cil.oc.api.network.Context;
@@ -54,7 +55,7 @@ public class OpenComputersWrapperPool {
 		public String getComponentName();
 	}
 
-	public static class StargateAccessWrapper implements IHookManagedEnvironment {
+	public static class StargateAccessWrapper implements IHookManagedEnvironment, MethodWhitelist {
 
 		private final IStargateAccess access;
 		private EnumStargateState stateWatcher;
@@ -70,20 +71,13 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public void onConnect(Node node) {
-			// TODO Auto-generated method stub
-		}
+		public void onConnect(Node node) { }
 
 		@Override
-		public void onDisconnect(Node node) {
-			// TODO Auto-generated method stub
-		}
+		public void onDisconnect(Node node) { }
 
 		@Override
-		public void onMessage(Message message) {
-			// TODO Auto-generated method stub
-
-		}
+		public void onMessage(Message message) { }
 
 		@Override
 		public void load(final NBTTagCompound nbt) {
@@ -243,9 +237,14 @@ public class OpenComputersWrapperPool {
 			}
 			return new Object[] { true };
 		}
+
+		@Override
+		public String[] whitelistedMethods(World world, int x, int y, int z) {
+			return new String[] { "greet", "dial", "connect", "isValidAddress", "disconnect", "isConnected", "getAddress", "isDialing", "isComplete", "isBusy", "hasFuel" };
+		}
 	}
 
-	public static class StargateControllerAccessWrapper implements IHookManagedEnvironment {
+	public static class StargateControllerAccessWrapper implements IHookManagedEnvironment, MethodWhitelist  {
 		private final IStargateControllerAccess access;
 
 		public StargateControllerAccessWrapper(IStargateControllerAccess access) {
@@ -257,39 +256,25 @@ public class OpenComputersWrapperPool {
 
 		@Override
 		public boolean canUpdate() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
-		public void update() {
-			// TODO Auto-generated method stub
-
-		}
+		public void update() { }
 
 		@Override
 		public Node node() {
-			// TODO Auto-generated method stub
 			return node;
 		}
 
 		@Override
-		public void onConnect(Node node) {
-			// TODO Auto-generated method stub
-
-		}
+		public void onConnect(Node node) { }
 
 		@Override
-		public void onDisconnect(Node node) {
-			// TODO Auto-generated method stub
-
-		}
+		public void onDisconnect(Node node) { }
 
 		@Override
-		public void onMessage(Message message) {
-			// TODO Auto-generated method stub
-
-		}
+		public void onMessage(Message message) { }
 
 		@Override
 		public void load(final NBTTagCompound nbt) {
@@ -345,10 +330,13 @@ public class OpenComputersWrapperPool {
 				throw new Exception("Stargate cannot be disconnected");
 			return new Object[] { true };
 		}
-
+		@Override
+		public String[] whitelistedMethods(World world, int x, int y, int z) {
+			return new String[] { "greet", "isValid", "isBusy", "ownsCurrentConnection", "getDialledAddress", "getAddress", "disconnect" };
+		}
 	}
 
-	public static class NaquadahGeneratorAccessWrapper implements IHookManagedEnvironment {
+	public static class NaquadahGeneratorAccessWrapper implements IHookManagedEnvironment, MethodWhitelist  {
 
 		private final INaquadahGeneratorAccess access;
 		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
@@ -363,21 +351,13 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public void onConnect(Node node) {
-			// TODO Auto-generated method stub
-		}
+		public void onConnect(Node node) { }
 
 		@Override
-		public void onDisconnect(Node node) {
-			// TODO Auto-generated method stub
-
-		}
+		public void onDisconnect(Node node) { }
 
 		@Override
-		public void onMessage(Message message) {
-			// TODO Auto-generated method stub
-
-		}
+		public void onMessage(Message message) { }
 
 		@Override
 		public void load(final NBTTagCompound nbt) {
@@ -400,10 +380,7 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public void update() {
-			// TODO Auto-generated method stub
-
-		}
+		public void update() { }
 
 		@Override
 		public String getComponentName() {
@@ -439,7 +416,10 @@ public class OpenComputersWrapperPool {
 		public Object[] getMaximumStoredEnergy(Context context, Arguments args) {
 			return new Object[] { access.getMaximumStoredEnergy() };
 		}
-
+		@Override
+		public String[] whitelistedMethods(World world, int x, int y, int z) {
+			return new String[] { "greet", "isEnabled", "setEnabled", "getStoredEnergy", "getMaximumStoredEnergy" };
+		}
 	}
 
 }
