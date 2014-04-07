@@ -1,5 +1,8 @@
 package pcl.lc.module.integration;
 
+import cpw.mods.fml.common.Optional.InterfaceList;
+import cpw.mods.fml.common.Optional.Interface;
+import cpw.mods.fml.common.Optional.Method;
 import li.cil.oc.api.Network;
 import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.driver.MethodWhitelist;
@@ -54,7 +57,7 @@ public class OpenComputersWrapperPool {
 	private interface IHookManagedEnvironment extends ManagedEnvironment {
 		public String getComponentName();
 	}
-
+	@InterfaceList({ @Interface(iface = "li.cil.oc.api.driver.MethodWhitelist", modid = "MethodWhitelist") })
 	public static class StargateAccessWrapper implements IHookManagedEnvironment, MethodWhitelist {
 
 		private final IStargateAccess access;
@@ -239,11 +242,11 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public String[] whitelistedMethods(World world, int x, int y, int z) {
+		public String[] whitelistedMethods() {
 			return new String[] { "greet", "dial", "connect", "isValidAddress", "disconnect", "isConnected", "getAddress", "isDialing", "isComplete", "isBusy", "hasFuel" };
 		}
 	}
-
+	@InterfaceList({ @Interface(iface = "li.cil.oc.api.driver.MethodWhitelist", modid = "MethodWhitelist") })
 	public static class StargateControllerAccessWrapper implements IHookManagedEnvironment, MethodWhitelist  {
 		private final IStargateControllerAccess access;
 
@@ -331,11 +334,11 @@ public class OpenComputersWrapperPool {
 			return new Object[] { true };
 		}
 		@Override
-		public String[] whitelistedMethods(World world, int x, int y, int z) {
+		public String[] whitelistedMethods() {
 			return new String[] { "greet", "isValid", "isBusy", "ownsCurrentConnection", "getDialledAddress", "getAddress", "disconnect" };
 		}
 	}
-
+	@InterfaceList({ @Interface(iface = "li.cil.oc.api.driver.MethodWhitelist", modid = "MethodWhitelist") })
 	public static class NaquadahGeneratorAccessWrapper implements IHookManagedEnvironment, MethodWhitelist  {
 
 		private final INaquadahGeneratorAccess access;
@@ -416,8 +419,10 @@ public class OpenComputersWrapperPool {
 		public Object[] getMaximumStoredEnergy(Context context, Arguments args) {
 			return new Object[] { access.getMaximumStoredEnergy() };
 		}
+		
+		@Method(modid = "OpenComputers")
 		@Override
-		public String[] whitelistedMethods(World world, int x, int y, int z) {
+		public String[] whitelistedMethods() {
 			return new String[] { "greet", "isEnabled", "setEnabled", "getStoredEnergy", "getMaximumStoredEnergy" };
 		}
 	}
