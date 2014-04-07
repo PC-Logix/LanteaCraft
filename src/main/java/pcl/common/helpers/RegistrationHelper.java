@@ -91,7 +91,7 @@ public class RegistrationHelper {
 				theMysteryBlock.setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerBlock(theMysteryBlock, itemClassOf, unlocalizedName);
 			return theMysteryBlock;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register block, an exception occured.", e);
 			throw new RuntimeException(e);
 		}

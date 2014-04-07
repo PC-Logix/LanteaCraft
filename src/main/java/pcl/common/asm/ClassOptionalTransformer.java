@@ -71,15 +71,15 @@ public class ClassOptionalTransformer implements IClassTransformer {
 	private void addInterface(ClassNode clazz, String iface) {
 		try {
 			Class.forName(iface);
+			iface = iface.replace(".", "/");
+			if (!clazz.interfaces.contains(iface))
+				clazz.interfaces.add(iface);
 		} catch (ClassNotFoundException notfound) {
 			PCLCoreTransformerPlugin.getLogger().log(
 					Level.WARNING,
 					String.format("Attempted to load interface %s into class %s, but it does not exist!", iface,
 							clazz.name));
 		}
-		iface = iface.replace(".", "/");
-		if (!clazz.interfaces.contains(iface))
-			clazz.interfaces.add(iface);
 	}
 
 	/**
