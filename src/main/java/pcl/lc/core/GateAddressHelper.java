@@ -113,7 +113,7 @@ public class GateAddressHelper {
 		}
 
 		try {
-			if (address.length() < 7)
+			if (address.length() != 7 && address.length() != 9)
 				throw new AddressingError("Not enough symbols.");
 			boolean[] flags = singleton.stob(address.substring(0, 1));
 			int dcx = singleton.stoi(address.substring(1, 4)), dcz = singleton.stoi(address.substring(4, 7));
