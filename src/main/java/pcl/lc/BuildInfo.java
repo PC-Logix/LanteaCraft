@@ -18,12 +18,17 @@ public class BuildInfo {
 	 * recording all the operations on the SoundDevice, meaning that clients
 	 * aren't slammed with logging if they don't need to be.
 	 */
-	public static final boolean SS_DEBUGGING = true && isDevelopmentEnvironment();
+	public static final boolean SS_DEBUGGING = false && isDevelopmentEnvironment();
 
 	/**
 	 * Enable or disable network traffic dumping mode.
 	 */
-	public static final boolean NET_DEBUGGING = true && isDevelopmentEnvironment();
+	public static final boolean NET_DEBUGGING = false && isDevelopmentEnvironment();
+	
+	/**
+	 * Enable or disable asset and configuration access dumping.
+	 */
+	public static final boolean ASSET_DEBUGGING = false && isDevelopmentEnvironment();
 
 	public static int getBuildNumber() {
 		if (buildNumber.equals("@" + "BUILD" + "@"))

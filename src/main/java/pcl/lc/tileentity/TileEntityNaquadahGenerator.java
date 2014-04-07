@@ -1,7 +1,11 @@
 package pcl.lc.tileentity;
 
+import java.util.List;
+import java.util.logging.Level;
+
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,6 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import pcl.common.base.PoweredTileEntity;
+import pcl.common.helpers.ReflectionHelper;
 import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
 import pcl.common.network.IPacketHandler;
@@ -111,8 +116,9 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	@Override
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
-			if (!addedToEnergyNet) {
-				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+			if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && !addedToEnergyNet) {
+				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) this));
 				addedToEnergyNet = true;
 				stateChanged();
 			}
@@ -188,8 +194,13 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 	@Override
 	public void invalidate() {
-		if (addedToEnergyNet) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+		StringBuilder result = new StringBuilder();
+		for (String iface : ifaces)
+			result.append(iface).append(", ");
+		LanteaCraft.getLogger().log(Level.INFO, String.format("interfaces: %s", result.toString()));
+		if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && addedToEnergyNet) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) this));
 			addedToEnergyNet = false;
 			onInventoryChanged();
 		}

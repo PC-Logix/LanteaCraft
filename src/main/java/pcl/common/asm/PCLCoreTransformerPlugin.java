@@ -60,7 +60,7 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 	}
 
 	public static String[] getTransformers() {
-		return new String[] { "pcl.common.asm.ClassOptionalTransformer", "pcl.common.asm.ClassMergeTransformer" };
+		return new String[] { "pcl.common.asm.ClassOptionalTransformer" };
 	}
 
 }

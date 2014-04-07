@@ -41,8 +41,8 @@ public class ClientPacketHandler {
 				} else
 					LanteaCraft.getLogger().log(
 							Level.WARNING,
-							String.format("Dropping packet %s because the destination wasn't a handler.",
-									packet.getType()));
+							String.format("Dropping packet %s for coords %s %s %s because the destination class %s wasn't a handler.",
+									packet.getType(), target.x, target.y, target.z, (tile != null) ? tile.getClass().getName() : "<nullptr>"));
 			} else if (packet.getType().equals("LanteaPacket.EntityFX")) {
 				StandardModPacket payload = (StandardModPacket) packet;
 				String name = (String) payload.getValue("FXType");

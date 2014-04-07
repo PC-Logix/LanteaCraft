@@ -76,7 +76,7 @@ public class LanteaCraftCommonProxy {
 	protected PacketLogger clientPacketLogger;
 	protected ServerPacketHandler serverPacketHandler;
 	protected PacketLogger serverPacketLogger;
-	
+
 	private NetworkHelpers networkHelpers;
 	private UpgradeHelper upgradeHelper;
 
@@ -232,7 +232,8 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public ConfigValue<?> getConfigValue(String name) {
-		LanteaCraft.getLogger().log(Level.FINE, "Fetching configuration value `" + name + "`");
+		if (BuildInfo.ASSET_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.FINE, "Fetching configuration value `" + name + "`");
 		for (ConfigValue<?> item : configValues)
 			if (item.getName().equalsIgnoreCase(name))
 				return item;
@@ -253,7 +254,7 @@ public class LanteaCraftCommonProxy {
 	public boolean isUsingModels() {
 		return ((ConfigValue<Boolean>) getConfigValue("renderUseModels")).getValue();
 	}
-	
+
 	public boolean doExplosion() {
 		return ((ConfigValue<Boolean>) getConfigValue("doGateExplosion")).getValue();
 	}
@@ -324,8 +325,9 @@ public class LanteaCraftCommonProxy {
 		if (server != null) {
 			Packet250CustomPayload payload = packet.toPacket();
 			payload.channel = BuildInfo.modID;
-			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("sendToAllPlayers: 250 %s %s", payload.channel, payload.length));
+			if (BuildInfo.NET_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO,
+						String.format("sendToAllPlayers: 250 %s %s", payload.channel, payload.length));
 			server.getConfigurationManager().sendPacketToAllPlayers(payload);
 		}
 	}
@@ -336,8 +338,9 @@ public class LanteaCraftCommonProxy {
 			Packet250CustomPayload payload = packet.toPacket();
 			payload.channel = BuildInfo.modID;
 			WorldLocation origin = packet.getOriginLocation();
-			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("sendToPlayersInDimension: 250 %s %s", payload.channel, payload.length));
+			if (BuildInfo.NET_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO,
+						String.format("sendToPlayersInDimension: 250 %s %s", payload.channel, payload.length));
 			server.getConfigurationManager().sendPacketToAllPlayersInDimension(payload, origin.dimension);
 		}
 	}
@@ -347,8 +350,9 @@ public class LanteaCraftCommonProxy {
 		if (server != null) {
 			Packet250CustomPayload payload = packet.toPacket();
 			payload.channel = BuildInfo.modID;
-			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("sendToPlayersNear: 250 %s %s", payload.channel, payload.length));
+			if (BuildInfo.NET_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO,
+						String.format("sendToPlayersNear: 250 %s %s", payload.channel, payload.length));
 			WorldLocation origin = packet.getOriginLocation();
 			server.getConfigurationManager().sendToAllNear(origin.x, origin.y, origin.z, range, origin.dimension,
 					payload);
@@ -358,8 +362,9 @@ public class LanteaCraftCommonProxy {
 	public void sendToPlayer(EntityPlayer player, ModPacket packet) {
 		Packet250CustomPayload payload = packet.toPacket();
 		payload.channel = BuildInfo.modID;
-		LanteaCraft.getLogger().log(Level.INFO,
-				String.format("sendToPlayer: 250 %s %s", payload.channel, payload.length));
+		if (BuildInfo.NET_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO,
+					String.format("sendToPlayer: 250 %s %s", payload.channel, payload.length));
 		PacketDispatcher.sendPacketToPlayer(payload, (Player) player);
 	}
 
