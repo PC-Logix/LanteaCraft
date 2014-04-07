@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.common.multiblock.EnumOrientations;
@@ -140,7 +141,8 @@ public class StargateMultiblock extends GenericMultiblock {
 				for (int x = 0; x < 7; x++) {
 					int blockId = worldAccess.getBlockId(baseX + (x - 3), baseY + y, baseZ);
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
-					if (!testIsValidForExpected(entity, blockId, stargateModel[y][x]))
+					if (!testIsValidForExpected(worldAccess, baseX + (x - 3), baseY + y, baseZ, entity, blockId,
+							stargateModel[y][x]))
 						return false;
 				}
 			return true;
@@ -153,7 +155,8 @@ public class StargateMultiblock extends GenericMultiblock {
 				for (int z = 0; z < 7; z++) {
 					int blockId = worldAccess.getBlockId(baseX, baseY + y, baseZ + (z - 3));
 					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
-					if (!testIsValidForExpected(entity, blockId, stargateModel[y][z]))
+					if (!testIsValidForExpected(worldAccess, baseX, baseY + y, baseZ + (z - 3), entity, blockId,
+							stargateModel[y][z]))
 						return false;
 				}
 			return true;
@@ -163,10 +166,13 @@ public class StargateMultiblock extends GenericMultiblock {
 		return false;
 	}
 
-	private boolean testIsValidForExpected(TileEntity entity, int blockId, int expectedType) {
+	private boolean testIsValidForExpected(World world, int x, int y, int z, TileEntity entity, int blockId,
+			int expectedType) {
 		if (expectedType == 0)
-			if (blockId != 0 || entity != null)
-				return false;
+			if (blockId == 0 || Block.blocksList[blockId] == null)
+				return true;
+			else
+				return Block.blocksList[blockId].isAirBlock(world, x, y, z);
 		if (expectedType == 1 || expectedType == 2) {
 			if (!(entity instanceof TileEntityStargateRing))
 				return false;
@@ -247,7 +253,8 @@ public class StargateMultiblock extends GenericMultiblock {
 		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
 			part.getValue().release();
 		EnumStargateState stateOf = (EnumStargateState) getMetadata("state");
-		if (!isClient && (stateOf == EnumStargateState.Connected || stateOf == EnumStargateState.Disconnecting) && LanteaCraft.getProxy().doExplosion()) {
+		if (!isClient && (stateOf == EnumStargateState.Connected || stateOf == EnumStargateState.Disconnecting)
+				&& LanteaCraft.getProxy().doExplosion()) {
 			LanteaCraft.getLogger().log(Level.INFO, "Creating explosion: gate destroyed while connected!");
 			int k = host.worldObj.getBlockId(host.xCoord, host.yCoord, host.zCoord);
 			if (k == LanteaCraft.Blocks.stargateBaseBlock.blockID)
