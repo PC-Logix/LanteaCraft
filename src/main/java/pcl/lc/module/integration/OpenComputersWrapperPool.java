@@ -1,8 +1,9 @@
 package pcl.lc.module.integration;
 
-import cpw.mods.fml.common.Optional.InterfaceList;
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.common.Optional.Method;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+
 import li.cil.oc.api.Network;
 import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.driver.MethodWhitelist;
@@ -58,6 +59,41 @@ public class OpenComputersWrapperPool {
 		public String getComponentName();
 	}
 
+	private abstract static class OpenComputersHostStub implements IHookManagedEnvironment, MethodWhitelist {
+
+		private String[] methodList = null;
+
+		@Override
+		public boolean canUpdate() {
+			return true;
+		}
+
+		/**
+		 * Method to get all methods with Callback annotation in the provided
+		 * class.
+		 * 
+		 * @param clazz
+		 *            Our local class.
+		 * @return List of all Callback methods (cached).
+		 */
+		private String[] getMethods(Class<? extends OpenComputersHostStub> clazz) {
+			if (methodList != null)
+				return methodList;
+			ArrayList<String> methodView = new ArrayList<String>();
+			for (Method method : clazz.getMethods()) {
+				Annotation[] annotations = method.getAnnotations();
+				if (annotations != null && annotations.length > 0) {
+					for (Annotation annotation : annotations)
+						if (annotation.annotationType().equals(Callback.class))
+							methodView.add(method.getName());
+				}
+			}
+			methodList = methodView.toArray(new String[0]);
+			return methodList;
+		}
+
+	}
+
 	public static class StargateAccessWrapper implements IHookManagedEnvironment, MethodWhitelist {
 
 		private final IStargateAccess access;
@@ -74,13 +110,16 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public void onConnect(Node node) { }
+		public void onConnect(Node node) {
+		}
 
 		@Override
-		public void onDisconnect(Node node) { }
+		public void onDisconnect(Node node) {
+		}
 
 		@Override
-		public void onMessage(Message message) { }
+		public void onMessage(Message message) {
+		}
 
 		@Override
 		public void load(final NBTTagCompound nbt) {
@@ -243,11 +282,12 @@ public class OpenComputersWrapperPool {
 
 		@Override
 		public String[] whitelistedMethods() {
-			return new String[] { "greet", "dial", "connect", "isValidAddress", "disconnect", "isConnected", "getAddress", "isDialing", "isComplete", "isBusy", "hasFuel" };
+			return new String[] { "greet", "dial", "connect", "isValidAddress", "disconnect", "isConnected",
+					"getAddress", "isDialing", "isComplete", "isBusy", "hasFuel" };
 		}
 	}
 
-	public static class StargateControllerAccessWrapper implements IHookManagedEnvironment, MethodWhitelist  {
+	public static class StargateControllerAccessWrapper implements IHookManagedEnvironment, MethodWhitelist {
 		private final IStargateControllerAccess access;
 
 		public StargateControllerAccessWrapper(IStargateControllerAccess access) {
@@ -263,7 +303,8 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public void update() { }
+		public void update() {
+		}
 
 		@Override
 		public Node node() {
@@ -271,13 +312,16 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public void onConnect(Node node) { }
+		public void onConnect(Node node) {
+		}
 
 		@Override
-		public void onDisconnect(Node node) { }
+		public void onDisconnect(Node node) {
+		}
 
 		@Override
-		public void onMessage(Message message) { }
+		public void onMessage(Message message) {
+		}
 
 		@Override
 		public void load(final NBTTagCompound nbt) {
@@ -333,13 +377,15 @@ public class OpenComputersWrapperPool {
 				throw new Exception("Stargate cannot be disconnected");
 			return new Object[] { true };
 		}
+
 		@Override
 		public String[] whitelistedMethods() {
-			return new String[] { "greet", "isValid", "isBusy", "ownsCurrentConnection", "getDialledAddress", "getAddress", "disconnect" };
+			return new String[] { "greet", "isValid", "isBusy", "ownsCurrentConnection", "getDialledAddress",
+					"getAddress", "disconnect" };
 		}
 	}
 
-	public static class NaquadahGeneratorAccessWrapper implements IHookManagedEnvironment, MethodWhitelist  {
+	public static class NaquadahGeneratorAccessWrapper implements IHookManagedEnvironment, MethodWhitelist {
 
 		private final INaquadahGeneratorAccess access;
 		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
@@ -354,13 +400,16 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public void onConnect(Node node) { }
+		public void onConnect(Node node) {
+		}
 
 		@Override
-		public void onDisconnect(Node node) { }
+		public void onDisconnect(Node node) {
+		}
 
 		@Override
-		public void onMessage(Message message) { }
+		public void onMessage(Message message) {
+		}
 
 		@Override
 		public void load(final NBTTagCompound nbt) {
@@ -383,7 +432,8 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public void update() { }
+		public void update() {
+		}
 
 		@Override
 		public String getComponentName() {
@@ -419,7 +469,7 @@ public class OpenComputersWrapperPool {
 		public Object[] getMaximumStoredEnergy(Context context, Arguments args) {
 			return new Object[] { access.getMaximumStoredEnergy() };
 		}
-		
+
 		@Override
 		public String[] whitelistedMethods() {
 			return new String[] { "greet", "isEnabled", "setEnabled", "getStoredEnergy", "getMaximumStoredEnergy" };
