@@ -3,6 +3,7 @@ package pcl.lc.module.integration;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import li.cil.oc.api.Network;
 import li.cil.oc.api.driver.Block;
@@ -41,17 +42,23 @@ public class OpenComputersWrapperPool {
 		@Override
 		public ManagedEnvironment createEnvironment(World world, int x, int y, int z) {
 			int id = world.getBlockId(x, y, z);
-			if (id == LanteaCraft.Blocks.stargateBaseBlock.blockID) {
-				IStargateAccess base = (IStargateAccess) world.getBlockTileEntity(x, y, z);
-				return new OpenComputersWrapperPool.StargateAccessWrapper(base);
-			} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
-				INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
-				return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
-			} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
-				IStargateControllerAccess dhd = (IStargateControllerAccess) world.getBlockTileEntity(x, y, z);
-				return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
-			} else
-				throw new RuntimeException("Driver.Block handler specified invalid typeof!");
+			try {
+				if (id == LanteaCraft.Blocks.stargateBaseBlock.blockID) {
+					IStargateAccess base = (IStargateAccess) world.getBlockTileEntity(x, y, z);
+					return new OpenComputersWrapperPool.StargateAccessWrapper(base);
+				} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
+					INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
+					return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
+				} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
+					IStargateControllerAccess dhd = (IStargateControllerAccess) world.getBlockTileEntity(x, y, z);
+					return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
+				} else
+					throw new RuntimeException("Driver.Block handler specified invalid typeof!");
+			} catch (Throwable t) {
+				LanteaCraft.getLogger().log(Level.WARNING,
+						"Failed when handling OpenComputers createEnvironment request.", t);
+				return null;
+			}
 		}
 	}
 
@@ -62,51 +69,31 @@ public class OpenComputersWrapperPool {
 	private abstract static class OpenComputersHostStub implements IHookManagedEnvironment, MethodWhitelist {
 
 		private String[] methodList = null;
-
-		@Override
-		public boolean canUpdate() {
-			return true;
-		}
-
-		/**
-		 * Method to get all methods with Callback annotation in the provided
-		 * class.
-		 * 
-		 * @param clazz
-		 *            Our local class.
-		 * @return List of all Callback methods (cached).
-		 */
-		private String[] getMethods(Class<? extends OpenComputersHostStub> clazz) {
-			if (methodList != null)
-				return methodList;
-			ArrayList<String> methodView = new ArrayList<String>();
-			for (Method method : clazz.getMethods()) {
-				Annotation[] annotations = method.getAnnotations();
-				if (annotations != null && annotations.length > 0) {
-					for (Annotation annotation : annotations)
-						if (annotation.annotationType().equals(Callback.class))
-							methodView.add(method.getName());
-				}
-			}
-			methodList = methodView.toArray(new String[0]);
-			return methodList;
-		}
-
-	}
-
-	public static class StargateAccessWrapper implements IHookManagedEnvironment, MethodWhitelist {
-
-		private final IStargateAccess access;
-		private EnumStargateState stateWatcher;
 		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
-
-		public StargateAccessWrapper(IStargateAccess access) {
-			this.access = access;
-		}
 
 		@Override
 		public Node node() {
 			return node;
+		}
+
+		@Override
+		public void load(final NBTTagCompound nbt) {
+			if (node != null)
+				node.load(nbt.getCompoundTag("node"));
+		}
+
+		@Override
+		public void save(final NBTTagCompound nbt) {
+			if (node != null) {
+				NBTTagCompound nodeTag = new NBTTagCompound();
+				node.save(nodeTag);
+				nbt.setCompoundTag("node", nodeTag);
+			}
+		}
+
+		@Override
+		public boolean canUpdate() {
+			return true;
 		}
 
 		@Override
@@ -121,24 +108,38 @@ public class OpenComputersWrapperPool {
 		public void onMessage(Message message) {
 		}
 
-		@Override
-		public void load(final NBTTagCompound nbt) {
-			if (node != null)
-				node.load(nbt.getCompoundTag("node"));
-		}
-
-		@Override
-		public void save(final NBTTagCompound nbt) {
-			if (node != null) {
-				final NBTTagCompound nodeTag = new NBTTagCompound();
-				node.save(nodeTag);
-				nbt.setCompoundTag("node", nodeTag);
+		/**
+		 * Method to get all methods with Callback annotation in the provided
+		 * class.
+		 * 
+		 * @param clazz
+		 *            Our local class.
+		 * @return List of all Callback methods (cached).
+		 */
+		protected String[] getMethods(Class<? extends OpenComputersHostStub> clazz) {
+			if (methodList != null)
+				return methodList;
+			ArrayList<String> methodView = new ArrayList<String>();
+			for (Method method : clazz.getMethods()) {
+				Annotation[] annotations = method.getAnnotations();
+				if (annotations != null && annotations.length > 0) {
+					for (Annotation annotation : annotations)
+						if (annotation.annotationType().equals(Callback.class))
+							methodView.add(method.getName());
+				}
 			}
+			methodList = methodView.toArray(new String[0]);
+			return methodList;
 		}
+	}
 
-		@Override
-		public boolean canUpdate() {
-			return true;
+	public static class StargateAccessWrapper extends OpenComputersHostStub {
+
+		private final IStargateAccess access;
+		private EnumStargateState stateWatcher;
+
+		public StargateAccessWrapper(IStargateAccess access) {
+			this.access = access;
 		}
 
 		@Override
@@ -282,12 +283,11 @@ public class OpenComputersWrapperPool {
 
 		@Override
 		public String[] whitelistedMethods() {
-			return new String[] { "greet", "dial", "connect", "isValidAddress", "disconnect", "isConnected",
-					"getAddress", "isDialing", "isComplete", "isBusy", "hasFuel" };
+			return getMethods(this.getClass());
 		}
 	}
 
-	public static class StargateControllerAccessWrapper implements IHookManagedEnvironment, MethodWhitelist {
+	public static class StargateControllerAccessWrapper extends OpenComputersHostStub {
 		private final IStargateControllerAccess access;
 
 		public StargateControllerAccessWrapper(IStargateControllerAccess access) {
@@ -295,47 +295,8 @@ public class OpenComputersWrapperPool {
 			this.access = access;
 		}
 
-		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
-
-		@Override
-		public boolean canUpdate() {
-			return false;
-		}
-
 		@Override
 		public void update() {
-		}
-
-		@Override
-		public Node node() {
-			return node;
-		}
-
-		@Override
-		public void onConnect(Node node) {
-		}
-
-		@Override
-		public void onDisconnect(Node node) {
-		}
-
-		@Override
-		public void onMessage(Message message) {
-		}
-
-		@Override
-		public void load(final NBTTagCompound nbt) {
-			if (node != null)
-				node.load(nbt.getCompoundTag("node"));
-		}
-
-		@Override
-		public void save(final NBTTagCompound nbt) {
-			if (node != null) {
-				final NBTTagCompound nodeTag = new NBTTagCompound();
-				node.save(nodeTag);
-				nbt.setCompoundTag("node", nodeTag);
-			}
 		}
 
 		@Override
@@ -343,7 +304,6 @@ public class OpenComputersWrapperPool {
 			return "stargate_controller";
 		}
 
-		// Callbacks
 		@Callback
 		public Object[] greet(Context context, Arguments args) {
 			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
@@ -380,55 +340,16 @@ public class OpenComputersWrapperPool {
 
 		@Override
 		public String[] whitelistedMethods() {
-			return new String[] { "greet", "isValid", "isBusy", "ownsCurrentConnection", "getDialledAddress",
-					"getAddress", "disconnect" };
+			return getMethods(this.getClass());
 		}
 	}
 
-	public static class NaquadahGeneratorAccessWrapper implements IHookManagedEnvironment, MethodWhitelist {
+	public static class NaquadahGeneratorAccessWrapper extends OpenComputersHostStub {
 
 		private final INaquadahGeneratorAccess access;
-		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
 
 		public NaquadahGeneratorAccessWrapper(INaquadahGeneratorAccess access) {
 			this.access = access;
-		}
-
-		@Override
-		public Node node() {
-			return node;
-		}
-
-		@Override
-		public void onConnect(Node node) {
-		}
-
-		@Override
-		public void onDisconnect(Node node) {
-		}
-
-		@Override
-		public void onMessage(Message message) {
-		}
-
-		@Override
-		public void load(final NBTTagCompound nbt) {
-			if (node != null)
-				node.load(nbt.getCompoundTag("node"));
-		}
-
-		@Override
-		public void save(final NBTTagCompound nbt) {
-			if (node != null) {
-				final NBTTagCompound nodeTag = new NBTTagCompound();
-				node.save(nodeTag);
-				nbt.setCompoundTag("node", nodeTag);
-			}
-		}
-
-		@Override
-		public boolean canUpdate() {
-			return true;
 		}
 
 		@Override
@@ -472,7 +393,7 @@ public class OpenComputersWrapperPool {
 
 		@Override
 		public String[] whitelistedMethods() {
-			return new String[] { "greet", "isEnabled", "setEnabled", "getStoredEnergy", "getMaximumStoredEnergy" };
+			return getMethods(this.getClass());
 		}
 	}
 
