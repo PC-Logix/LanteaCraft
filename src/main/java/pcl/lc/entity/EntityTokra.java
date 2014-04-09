@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityAIWatchClosest2;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -33,6 +34,7 @@ public class EntityTokra extends EntityCreature implements INpc {
 		tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityTokra.class, 5.0F, 0.02F));
+		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityVillager.class, 5.0F, 0.02F));
 		tasks.addTask(9, new EntityAIWander(this, 0.6D));
 		tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
 	}
@@ -113,14 +115,6 @@ public class EntityTokra extends EntityCreature implements INpc {
 	@Override
 	protected String getDeathSound() {
 		return "mob.villager.death";
-	}
-
-	public void setProfession(int par1) {
-		dataWatcher.updateObject(16, Integer.valueOf(par1));
-	}
-
-	public int getProfession() {
-		return dataWatcher.getWatchableObjectInt(16);
 	}
 
 	/**

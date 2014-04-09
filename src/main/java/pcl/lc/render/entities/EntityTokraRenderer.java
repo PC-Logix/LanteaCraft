@@ -10,7 +10,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -18,16 +17,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class EntityTokraRenderer extends RenderLiving {
 	private static final ResourceLocation villagerTextures = new ResourceLocation(
 			"textures/entity/villager/villager.png");
-	private static final ResourceLocation farmerVillagerTextures = new ResourceLocation(
-			"textures/entity/villager/farmer.png");
-	private static final ResourceLocation librarianVillagerTextures = new ResourceLocation(
-			"textures/entity/villager/librarian.png");
-	private static final ResourceLocation priestVillagerTextures = new ResourceLocation(
-			"textures/entity/villager/priest.png");
-	private static final ResourceLocation smithVillagerTextures = new ResourceLocation(
-			"textures/entity/villager/smith.png");
-	private static final ResourceLocation butcherVillagerTextures = new ResourceLocation(
-			"textures/entity/villager/butcher.png");
 
 	/** Model of the villager. */
 	protected ModelVillager villagerModel;
@@ -47,20 +36,7 @@ public class EntityTokraRenderer extends RenderLiving {
 	}
 
 	protected ResourceLocation func_110902_a(EntityVillager par1EntityVillager) {
-		switch (par1EntityVillager.getProfession()) {
-		case 0:
-			return farmerVillagerTextures;
-		case 1:
-			return librarianVillagerTextures;
-		case 2:
-			return priestVillagerTextures;
-		case 3:
-			return smithVillagerTextures;
-		case 4:
-			return butcherVillagerTextures;
-		default:
-			return VillagerRegistry.getVillagerSkin(par1EntityVillager.getProfession(), villagerTextures);
-		}
+		return villagerTextures;
 	}
 
 	protected void renderVillagerEquipedItems(EntityVillager par1EntityVillager, float par2) {
