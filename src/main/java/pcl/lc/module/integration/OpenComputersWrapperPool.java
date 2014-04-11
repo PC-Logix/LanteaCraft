@@ -153,25 +153,24 @@ public class OpenComputersWrapperPool {
 				stateWatcher = access.getState();
 				switch (stateWatcher) {
 				case Idle:
-					node.sendToVisible("computer.signal", new Object[] { "sgIdle", true });
+					node.sendToReachable("computer.signal", "sgIdle", true);
 					break;
 				case Dialling:
 					if (access.isOutgoingConnection())
-						node.sendToVisible("computer.signal",
-								new Object[] { "sgOutgoing", access.getConnectionAddress() });
+						node.sendToReachable("computer.signal", "sgOutgoing", access.getConnectionAddress());
 					else
-						node.sendToVisible("computer.signal", new Object[] { "sgIncoming",
-								access.getConnectionAddress().substring(0, access.getEncodedChevrons()) });
+						node.sendToReachable("computer.signal", "sgIncoming", access.getConnectionAddress().substring(0, access.getEncodedChevrons()+1));
+					// Do we want to switch to this system? 1 chevron per signal instead of the slowly increasing we have now?
+					//Character.toString(access.getConnectionAddress().charAt(access.getEncodedChevrons()));
 					break;
 				case InterDialling:
-					node.sendToVisible("computer.signal",
-							new Object[] { "sgChevronEncode", access.getEncodedChevrons() });
+					node.sendToReachable("computer.signal", "sgChevronEncode", access.getEncodedChevrons());
 					break;
 				case Transient:
-					node.sendToVisible("computer.signal", new Object[] { "sgWormholeOpening", true });
+					node.sendToReachable("computer.signal", "sgWormholeOpening", true);
 					break;
 				case Disconnecting:
-					node.sendToVisible("computer.signal", new Object[] { "sgWormholeClosing", true });
+					node.sendToReachable("computer.signal", "sgWormholeClosing", true );
 					break;
 				}
 			}
