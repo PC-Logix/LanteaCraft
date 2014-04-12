@@ -1,9 +1,5 @@
-package pcl.lc.module.integration;
+package pcl.lc.module.integration.computercraft;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
-import net.minecraft.nbt.NBTTagCompound;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
@@ -17,68 +13,92 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.lua.ILuaContext;
 
-/**
- * ComputerCraft API access wrappers. Why am I doing this again?
- * 
- * @author AfterLifeLochie
- */
 public class ComputerCraftWrapperPool {
 
 	/**
-	 * Stub handler.
+	 * Virtual peripheral methods, as we do not want to touch the 'official' API
+	 * because it's crap, and because we need methods which don't exist either
+	 * physically or synthetically. Instead, call via proxy to objects in
+	 * virtual peripheral implementations.
 	 * 
 	 * @author AfterLifeLochie
 	 */
-	private abstract static class ComputerCraftHostStub implements IPeripheral {
+	public static abstract class ComputerCraftVirtualPeripheral {
 
-		protected final ArrayList<WeakReference<IComputerAccess>> clients;
+		private final TileEntityComputerCraftConnector host;
 
-		public ComputerCraftHostStub() {
-			clients = new ArrayList<WeakReference<IComputerAccess>>();
+		public ComputerCraftVirtualPeripheral(TileEntityComputerCraftConnector host) {
+			this.host = host;
 		}
 
-		@Override
-		public void attach(IComputerAccess computer) {
-			clients.add(new WeakReference<IComputerAccess>(computer));
-		}
-
-		@Override
-		public void detach(IComputerAccess computer) {
-			ArrayList<WeakReference<?>> remove = new ArrayList<WeakReference<?>>();
-			for (WeakReference<IComputerAccess> ref : clients)
-				if (ref != null && ref.get() != null && ref.get().equals(computer))
-					remove.add(ref);
-			for (WeakReference<?> j : remove)
-				clients.remove(j);
-		}
-
-		public void pushEvent(String label, Object[] varargs) {
-			for (WeakReference<IComputerAccess> client : clients)
-				if (client != null && client.get() != null)
-					client.get().queueEvent(label, varargs);
-		}
-
-		/*
-		 * Temporary replacements because these functions existed in 1.5, but
-		 * don't in 1.6
+		/**
+		 * Push an event to all computers connected to the host.
+		 * 
+		 * @param label
+		 *            The name of the event.
+		 * @param varargs
+		 *            Any arguments to provide.
 		 */
+		public void pushEvent(String label, Object[] varargs) {
+			host.pushEvent(label, varargs);
+		}
 
-		public abstract boolean canAttachToSide(int side);
+		/**
+		 * Return the type of the peripheral, must not be null.
+		 * 
+		 * @return The type of the peripheral.
+		 */
+		public abstract String getType();
 
+		/**
+		 * Get a list of all visible methods.
+		 * 
+		 * @return A list of all visible methods.
+		 */
+		public abstract String[] getMethodNames();
+
+		/**
+		 * Invoke a method virtually, return the result.
+		 * 
+		 * @param computer
+		 *            The computer context.
+		 * @param context
+		 *            The Lua 'vm' context.
+		 * @param method
+		 *            The method-id to invoke.
+		 * @param arguments
+		 *            A list of varargs with the invocation.
+		 * @return The result of the invocation.
+		 * @throws Exception
+		 *             Any exception.
+		 */
+		public abstract Object[] callMethod(IComputerAccess computer, ILuaContext context, int method,
+				Object[] arguments) throws Exception;
+
+		/**
+		 * (Undocumented at 1.6:) Determine if this peripheral is identical to
+		 * another type of peripheral; classes might not be the same, so do this
+		 * top-down (clazz, typeof).
+		 * 
+		 * @param other
+		 *            The other IPeripheral.
+		 * @return If the two peripherals are the same.
+		 */
+		public abstract boolean equals(IPeripheral other);
+
+		/**
+		 * Update the peripheral (synthetic to the API).
+		 */
 		public abstract void update();
-
-		public abstract void readFromNBT(NBTTagCompound nbttagcompound);
-
-		public abstract void writeToNBT(NBTTagCompound nbttagcompound);
 
 	}
 
-	public static class StargateAccessWrapper extends ComputerCraftHostStub {
+	public static class StargateAccessWrapper extends ComputerCraftVirtualPeripheral {
 		private final IStargateAccess access;
 		private EnumStargateState stateWatcher;
 
-		public StargateAccessWrapper(IStargateAccess access) {
-			super();
+		public StargateAccessWrapper(TileEntityComputerCraftConnector host, IStargateAccess access) {
+			super(host);
 			this.access = access;
 		}
 
@@ -153,11 +173,6 @@ public class ComputerCraftWrapperPool {
 		}
 
 		@Override
-		public boolean canAttachToSide(int side) {
-			return true;
-		}
-
-		@Override
 		public void update() {
 			if (access.getState() != stateWatcher) {
 				stateWatcher = access.getState();
@@ -188,46 +203,22 @@ public class ComputerCraftWrapperPool {
 		}
 
 		@Override
-		public void readFromNBT(NBTTagCompound nbttagcompound) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound nbttagcompound) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
 		public boolean equals(IPeripheral other) {
 			// TODO Auto-generated method stub
 			return false;
 		}
 	}
 
-	public static class StargateControllerAccessWrapper extends ComputerCraftHostStub {
+	public static class StargateControllerAccessWrapper extends ComputerCraftVirtualPeripheral {
 		private final IStargateControllerAccess access;
 
-		public StargateControllerAccessWrapper(IStargateControllerAccess access) {
-			super();
+		public StargateControllerAccessWrapper(TileEntityComputerCraftConnector host, IStargateControllerAccess access) {
+			super(host);
 			this.access = access;
 		}
 
 		@Override
 		public void update() {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void readFromNBT(NBTTagCompound nbttagcompound) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound nbttagcompound) {
 			// TODO Auto-generated method stub
 
 		}
@@ -263,38 +254,22 @@ public class ComputerCraftWrapperPool {
 		}
 
 		@Override
-		public boolean canAttachToSide(int side) {
-			return true;
-		}
-
-		@Override
 		public boolean equals(IPeripheral other) {
 			// TODO Auto-generated method stub
 			return false;
 		}
 	}
 
-	public static class NaquadahGeneratorAccessWrapper extends ComputerCraftHostStub {
+	public static class NaquadahGeneratorAccessWrapper extends ComputerCraftVirtualPeripheral {
 		private final INaquadahGeneratorAccess access;
 
-		public NaquadahGeneratorAccessWrapper(INaquadahGeneratorAccess access) {
+		public NaquadahGeneratorAccessWrapper(TileEntityComputerCraftConnector host, INaquadahGeneratorAccess access) {
+			super(host);
 			this.access = access;
 		}
 
 		@Override
 		public void update() {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void readFromNBT(NBTTagCompound nbttagcompound) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound nbttagcompound) {
 			// TODO Auto-generated method stub
 
 		}
@@ -328,11 +303,6 @@ public class ComputerCraftWrapperPool {
 				return new Object[] { access.getMaximumStoredEnergy() };
 			}
 			throw new Exception(String.format("Warning, unhandled method id %s!", method));
-		}
-
-		@Override
-		public boolean canAttachToSide(int side) {
-			return true;
 		}
 
 		@Override
