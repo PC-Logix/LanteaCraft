@@ -8,10 +8,8 @@ import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
-import pcl.lc.api.INaquadahGeneratorAccess;
-import pcl.lc.api.IStargateAccess;
-import pcl.lc.api.IStargateControllerAccess;
 import pcl.lc.api.internal.IIntegrationAgent;
+import pcl.lc.module.integration.computercraft.TileEntityComputerCraftConnector;
 
 public class ComputerCraftAgent implements IIntegrationAgent {
 
@@ -19,14 +17,9 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 		@Override
 		public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
 			TileEntity entity = world.getBlockTileEntity(x, y, z);
-			if (entity instanceof IStargateAccess)
-				return new ComputerCraftWrapperPool.StargateAccessWrapper((IStargateAccess) entity);
-			else if (entity instanceof IStargateControllerAccess)
-				return new ComputerCraftWrapperPool.StargateControllerAccessWrapper((IStargateControllerAccess) entity);
-			else if (entity instanceof INaquadahGeneratorAccess)
-				return new ComputerCraftWrapperPool.NaquadahGeneratorAccessWrapper((INaquadahGeneratorAccess) entity);
-			else
-				return null;
+			if (entity instanceof TileEntityComputerCraftConnector)
+				return (TileEntityComputerCraftConnector) entity;
+			return null;
 		}
 	}
 
