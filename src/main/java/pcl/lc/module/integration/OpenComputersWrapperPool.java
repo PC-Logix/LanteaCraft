@@ -17,6 +17,7 @@ import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.Visibility;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
@@ -159,9 +160,7 @@ public class OpenComputersWrapperPool {
 					if (access.isOutgoingConnection())
 						node.sendToReachable("computer.signal", "sgOutgoing", access.getConnectionAddress());
 					else
-						node.sendToReachable("computer.signal", "sgIncoming", access.getConnectionAddress().substring(0, access.getEncodedChevrons()+1));
-					// Do we want to switch to this system? 1 chevron per signal instead of the slowly increasing we have now?
-					//Character.toString(access.getConnectionAddress().charAt(access.getEncodedChevrons()));
+						node.sendToReachable("computer.signal", "sgIncoming", Character.toString(access.getConnectionAddress().charAt(access.getEncodedChevrons())));
 					break;
 				case InterDialling:
 					node.sendToReachable("computer.signal", "sgChevronEncode", access.getEncodedChevrons());
@@ -172,6 +171,11 @@ public class OpenComputersWrapperPool {
 				case Disconnecting:
 					node.sendToReachable("computer.signal", "sgWormholeClosing", true );
 					break;
+				case Connected:
+					node.sendToReachable("computer.signal", "sgWormholeStable", true);
+					break;
+				default:
+					break;
 				}
 			}
 		}
@@ -181,6 +185,11 @@ public class OpenComputersWrapperPool {
 			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
 		}
 
+		@Callback
+		public Object[] getInterfaceVersion(Context context, Arguments args) throws Exception {
+			return new Object[] { BuildInfo.versionNumber + "." + BuildInfo.getBuildNumber() };
+		}
+		
 		@Callback
 		public Object[] dial(Context context, Arguments args) throws Exception {
 			return dialTheGate(args.checkString(0).toUpperCase());
@@ -201,7 +210,7 @@ public class OpenComputersWrapperPool {
 				throw new Exception("Stargate cannot dial now.");
 			return new Object[] { true };
 		}
-
+		
 		@Callback
 		public Object[] disconnect(Context context, Arguments args) throws Exception {
 			if (!access.isBusy())
