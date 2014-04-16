@@ -140,7 +140,8 @@ public class RemoteChunkLoading implements ITickAgent {
 	 */
 	private void remove(ChunkLoadRequest request) {
 		LanteaCraft.getLogger().log(Level.INFO, "Chunk loading request shutting down: " + request.name());
-		ForgeChunkManager.releaseTicket(request.ticket);
+		if (request.ticket != null)
+			ForgeChunkManager.releaseTicket(request.ticket);
 		synchronized (requests) {
 			requests.remove(request);
 		}
