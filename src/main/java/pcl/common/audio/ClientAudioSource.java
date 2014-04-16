@@ -17,7 +17,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 	private SoundSystem system;
 	private AudioPosition position;
 	private String name;
-	private boolean valid, culled, isPlaying;
+	private boolean valid, culled;
 	private float configuredVolume, realVolume;
 
 	public ClientAudioSource(SoundSystem system, AudioPosition position, String file, boolean looping,
@@ -52,27 +52,34 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 	public void play() {
 		if (!valid)
 			return;
-		if (isPlaying)
+		if (isPlaying()) {
+			if (BuildInfo.SS_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO,
+						String.format("Can't play sound %s because it's already playing.", name));
 			return;
-		isPlaying = true;
-		if (culled)
+		}
+		if (culled) {
+			if (BuildInfo.SS_DEBUGGING)
+				LanteaCraft.getLogger()
+						.log(Level.INFO, String.format("Can't play sound %s because it's culled.", name));
 			return;
+		}
+		if (name == null)
+			LanteaCraft.getLogger().log(Level.WARNING, "Attempt to perform audio operation on illegal label.");
 		system.play(name);
 	}
 
 	@Override
 	public void pause() {
-		if (!valid || !isPlaying || culled)
+		if (!valid || !isPlaying() || culled)
 			return;
-		isPlaying = false;
 		system.pause(name);
 	}
 
 	@Override
 	public void stop() {
-		if (!valid || !isPlaying)
+		if (!valid || !isPlaying())
 			return;
-		isPlaying = false;
 		if (culled)
 			return;
 		system.stop(name);
@@ -92,7 +99,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 
 	@Override
 	public void flush() {
-		if (!valid || !isPlaying || culled)
+		if (!valid || !isPlaying() || culled)
 			return;
 		system.flush(name);
 	}
@@ -126,7 +133,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 
 	@Override
 	public void advance(EntityPlayer clientPlayer) {
-		if (!valid || !isPlaying) {
+		if (!valid || !isPlaying()) {
 			realVolume = 0;
 			return;
 		}
@@ -177,8 +184,8 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 			return;
 		system.activate(name);
 		culled = false;
-		if (isPlaying) {
-			isPlaying = false;
+		if (isPlaying()) {
+			stop();
 			play();
 		}
 	}
@@ -201,5 +208,12 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 		if (this.culled)
 			return (int) ((this.realVolume * 0.9F - x.realVolume) * 128.0F);
 		return (int) ((this.realVolume - x.realVolume) * 128.0F);
+	}
+
+	@Override
+	public boolean isPlaying() {
+		if (!valid || name == null)
+			return false;
+		return system.playing(name);
 	}
 }

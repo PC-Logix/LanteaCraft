@@ -3,7 +3,9 @@ package pcl.common.audio;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 
 public class SoundHost {
@@ -20,7 +22,6 @@ public class SoundHost {
 		private AudioSource vsource;
 		private int maxAge;
 		private int age;
-		private boolean running;
 		private boolean stopped;
 
 		public AudioSourceWrapper(String filename, AudioPosition position, float volume, int maxAge) {
@@ -31,7 +32,7 @@ public class SoundHost {
 		}
 
 		public void tick() {
-			if (!running || stopped)
+			if (!playing() || stopped)
 				return;
 			if (maxAge > 0)
 				age++;
@@ -40,7 +41,7 @@ public class SoundHost {
 		}
 
 		public boolean alive() {
-			return ((0 > maxAge) || (maxAge > age)) && running;
+			return ((0 > maxAge) || (maxAge > age)) && playing();
 		}
 
 		public boolean canPlay() {
@@ -49,28 +50,36 @@ public class SoundHost {
 
 		public void setupSource() {
 			AudioEngine engine = LanteaCraft.getProxy().getAudioEngine();
-			vsource = engine.create(owner, position, filename, false, false, volume);
+			vsource = engine.create(owner, position, filename, 0 > age, false, volume);
 		}
 
 		public void play() {
 			if (vsource == null)
 				setupSource();
 			vsource.play();
-			running = true;
+		}
+
+		public boolean playing() {
+			return vsource != null && vsource.isPlaying();
 		}
 
 		public void pause() {
 			if (vsource != null)
 				vsource.pause();
-			running = false;
 		}
 
 		public void stop() {
 			if (vsource != null)
 				vsource.stop();
 			vsource = null;
-			running = false;
 			stopped = true;
+		}
+
+		public void shutdown() {
+			if (vsource != null) {
+				vsource.stop();
+				vsource.remove();
+			}
 		}
 	}
 
@@ -92,6 +101,9 @@ public class SoundHost {
 	}
 
 	public void addChannel(String name, String filename, AudioPosition position, float volume, int age) {
+		if (BuildInfo.SS_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO,
+					String.format("SoundHost operation: ADD %s %s %s", filename, volume, age));
 		synchronized (sources) {
 			sources.put(name, new AudioSourceWrapper(filename, position, volume, age));
 		}
@@ -102,27 +114,41 @@ public class SoundHost {
 	}
 
 	public void playChannel(String channel) {
+		if (BuildInfo.SS_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, String.format("SoundHost operation: PLAY %s", channel));
 		AudioSourceWrapper wrapper = sources.get(channel);
 		if (wrapper != null)
 			wrapper.play();
 	}
 
 	public void pauseChannel(String channel) {
+		if (BuildInfo.SS_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, String.format("SoundHost operation: PAUSE %s", channel));
 		AudioSourceWrapper wrapper = sources.get(channel);
 		if (wrapper != null)
 			wrapper.pause();
 	}
 
 	public void stopChannel(String channel) {
+		if (BuildInfo.SS_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, String.format("SoundHost operation: STOP %s", channel));
 		AudioSourceWrapper wrapper = sources.get(channel);
 		if (wrapper != null)
 			wrapper.stop();
 		sources.remove(channel);
 	}
 
-	public void shutdown() {
-		for (AudioSourceWrapper wrapper : sources.values())
+	public void shutdown(boolean force) {
+		if (!force)
+			for (AudioSourceWrapper wrapper : sources.values())
+				if (wrapper.playing())
+					return;
+		if (BuildInfo.SS_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, String.format("SoundHost operation: SHUTDOWN"));
+		for (AudioSourceWrapper wrapper : sources.values()) {
 			wrapper.stop();
+			wrapper.shutdown();
+		}
 		sources.clear();
 	}
 

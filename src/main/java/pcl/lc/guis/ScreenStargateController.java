@@ -11,6 +11,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import pcl.common.audio.AudioEngine;
+import pcl.common.audio.AudioPosition;
+import pcl.common.audio.AudioSource;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;

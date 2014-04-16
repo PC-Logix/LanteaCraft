@@ -261,6 +261,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				case Connected:
 					break;
 				case Idle:
+					soundHost.shutdown(false);
 					break;
 				}
 

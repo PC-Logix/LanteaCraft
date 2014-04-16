@@ -47,7 +47,7 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 	private static int sourceCounter = 0;
 
 	public final float falloffDistance = 22.0F;
-	private final int maxStreamingSources = 4;
+	private final int maxStreamingSources = 8;
 
 	public boolean enabled = true;
 	public int maxSources = 32;
