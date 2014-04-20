@@ -35,7 +35,7 @@ public class BlockOfLanteaOre extends BlockOreStorage {
 
 	@Override
 	public Icon getIcon(int side, int data) {
-		if (data > OreTypes.values().length)
+		if (data >= OreTypes.values().length)
 			return missing;
 		return OreTypes.values()[data].getItemAsBlockTexture();
 	}
