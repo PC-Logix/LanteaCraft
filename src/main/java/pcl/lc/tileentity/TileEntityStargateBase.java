@@ -434,7 +434,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 		// Flush any chunk loading agents, even if we aren't in a connected
 		// state.
-		if (!worldObj.isRemote && loader != null) {
+		if (worldObj != null && !worldObj.isRemote && loader != null) {
 			loader.expireNow();
 			loader = null;
 		}
