@@ -39,7 +39,7 @@ public class RemoteChunkLoading implements ITickAgent {
 	 * @author AfterLifeLochie
 	 * 
 	 */
-	private class ChunkLoadRequest {
+	public static class ChunkLoadRequest {
 		private final String name;
 		private final Ticket ticket;
 		private final int max_age;
@@ -75,6 +75,10 @@ public class RemoteChunkLoading implements ITickAgent {
 		public void tick() {
 			age++;
 		}
+		
+		public void expireNow() {
+			age = max_age + 1;
+		}
 	}
 
 	/**
@@ -94,10 +98,10 @@ public class RemoteChunkLoading implements ITickAgent {
 	 *            The metadata fields (minX, minZ, maxX, maxZ).
 	 * @return If the loading request was a success.
 	 */
-	public boolean create(String name, World world, int maxAge, NBTTagCompound metadata) {
+	public ChunkLoadRequest create(String name, World world, int maxAge, NBTTagCompound metadata) {
 		Ticket ticket = ForgeChunkManager.requestTicket(LanteaCraft.getInstance(), world, Type.NORMAL);
 		if (ticket == null)
-			return false;
+			return null;
 		int minX = metadata.getInteger("minX");
 		int minZ = metadata.getInteger("minZ");
 		int maxX = metadata.getInteger("maxX");
@@ -110,7 +114,7 @@ public class RemoteChunkLoading implements ITickAgent {
 			requests.add(request);
 		}
 		LanteaCraft.getLogger().log(Level.INFO, "Chunk loading request completed: " + name);
-		return true;
+		return request;
 	}
 
 	@Override

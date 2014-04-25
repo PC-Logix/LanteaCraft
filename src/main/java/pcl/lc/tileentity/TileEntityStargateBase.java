@@ -53,7 +53,9 @@ import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.core.AddressingError;
 import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
+import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
 import pcl.lc.core.GateAddressHelper;
+import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.TeleportationAgent;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
@@ -80,28 +82,20 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	public static IrisDamageSource irisDamange = new IrisDamageSource();
 
 	public int numEngagedChevrons;
-
 	private WorldLocation connectedLocation;
 	private WeakReference<TileEntityStargateBase> connectedHost;
 	private boolean isInitiator;
 	private int timeout;
 	private EnumStargateState lastState = EnumStargateState.Idle;
-
 	private double renderRingAngle, renderLastRingAngle, renderNextRingAngle;
-
 	private SoundHost soundHost;
-
-	// START NEW MULTIBLOCK CODE
-
 	private StargateMultiblock multiblock = new StargateMultiblock(this);
+	double ehGrid[][][];
+	private ChunkLoadRequest loader;
 
 	public StargateMultiblock getAsStructure() {
 		return multiblock;
 	}
-
-	// END SANE CODE
-
-	double ehGrid[][][];
 
 	private static class TransientDamageSource extends DamageSource {
 		public TransientDamageSource() {
@@ -437,9 +431,40 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			timeout = 15;
 			getAsStructure().removeMetadata("diallingTo");
 		}
+
+		// Flush any chunk loading agents, even if we aren't in a connected
+		// state.
+		if (!worldObj.isRemote && loader != null) {
+			loader.expireNow();
+			loader = null;
+		}
 	}
 
+	/**
+	 * Requests this Stargate start a connection to another Stargate. It should
+	 * chunk-load the other Stargate's chunks. This method should only be
+	 * invoked on the server side.
+	 * 
+	 * @param address
+	 *            The target address string
+	 * @param dte
+	 *            The target tile entity
+	 * @param initiator
+	 *            If this Stargate is responsible for this connection
+	 */
 	void startDiallingStargate(String address, TileEntityStargateBase dte, boolean initiator) {
+		// Do not initiate a chunkloading request on a client!
+		if (!worldObj.isRemote) {
+			NBTTagCompound metadata = new NBTTagCompound();
+			ChunkLocation localize = new ChunkLocation(dte);
+			metadata.setInteger("minX", localize.cx - 1);
+			metadata.setInteger("minZ", localize.cz - 1);
+			metadata.setInteger("maxX", localize.cx + 1);
+			metadata.setInteger("maxZ", localize.cz + 1);
+			RemoteChunkLoading remoteLoader = LanteaCraft.getProxy().getRemoteChunkManager();
+			loader = remoteLoader.create(String.format("StargateConnection-%s", address), dte.worldObj,
+					ticksToStayOpen, metadata);
+		}
 		getAsStructure().setMetadata("diallingTo", address);
 		getAsStructure().setMetadata("numEngagedChevrons", numEngagedChevrons);
 		connectedLocation = new WorldLocation(dte);
