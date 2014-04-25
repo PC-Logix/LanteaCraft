@@ -17,8 +17,6 @@ public class ItemTransportRingActivator extends Item {
 
 	public ItemTransportRingActivator(int id) {
 		super(id);
-		LanguageRegistry.instance().addStringLocalization("item.transportRingActivator.name", "en_US",
-				"Ring Transporter Activator (WIP - DO NOT USE)");
 	}
 
 	@Override
