@@ -296,7 +296,7 @@ public class StargateMultiblock extends GenericMultiblock {
 	public ModPacket pack() {
 		StandardModPacket packet = new StandardModPacket(new WorldLocation(host));
 		packet.setIsForServer(false);
-		packet.setType("LanteaPacket.TileUpdate");
+		packet.setType("LanteaPacket.MultiblockUpdate");
 		packet.setValue("metadata", metadata);
 		packet.setValue("isValid", isValid());
 		packet.setValue("orientation", getOrientation());
@@ -313,13 +313,6 @@ public class StargateMultiblock extends GenericMultiblock {
 		metadata = (HashMap<String, Object>) packetStandard.getValue("metadata");
 		isValid = (Boolean) packetStandard.getValue("isValid");
 		setOrientation((EnumOrientations) packetStandard.getValue("orientation"));
-		if (!isValid)
-			freeStructure();
-		else {
-			setLocation(host.xCoord, host.yCoord, host.zCoord);
-			collectStructure(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
-		}
-
 	}
 
 	@Override

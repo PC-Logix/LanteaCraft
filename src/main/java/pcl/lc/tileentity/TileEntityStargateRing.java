@@ -1,23 +1,41 @@
 package pcl.lc.tileentity;
 
+import net.minecraft.network.packet.Packet;
 import pcl.common.base.GenericTileEntity;
+import pcl.common.network.IPacketHandler;
+import pcl.common.network.ModPacket;
+import pcl.lc.LanteaCraft;
 import pcl.lc.multiblock.StargatePart;
 
-public class TileEntityStargateRing extends GenericTileEntity {
-	private StargatePart thisPart = new StargatePart(this);
+public class TileEntityStargateRing extends GenericTileEntity implements IPacketHandler {
+	private StargatePart part = new StargatePart(this);
+
+	@Override
+	public Packet getDescriptionPacket() {
+		ModPacket packet = part.pack();
+		LanteaCraft.getProxy().sendToAllPlayers(packet);
+		return null;
+	}
+
+	@Override
+	public void handlePacket(ModPacket packetOf) {
+		part.unpack(packetOf);
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+	}
 
 	public StargatePart getAsPart() {
-		return thisPart;
+		return part;
 	}
 
 	@Override
 	public boolean canUpdate() {
-		return (thisPart.getType() == null && worldObj != null && !worldObj.isRemote);
+		return true;
 	}
 
 	@Override
 	public void updateEntity() {
-		if (thisPart.getType() == null)
+		part.tick();
+		if (part.getType() == null)
 			flagDirty();
 	}
 
@@ -32,11 +50,13 @@ public class TileEntityStargateRing extends GenericTileEntity {
 	}
 
 	public void flagDirty() {
-		if (thisPart.getType() == null) {
-			int ord = (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) & 0x1);
-			thisPart.setType((ord == 0) ? "partStargateBlock" : "partStargateChevron");
+		if (!worldObj.isRemote) {
+			if (part.getType() == null) {
+				int ord = (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) & 0x1);
+				part.setType((ord == 0) ? "partStargateBlock" : "partStargateChevron");
+			}
+			part.devalidateHostMultiblock();
 		}
-		thisPart.devalidateHostMultiblock();
 	}
 
 }
