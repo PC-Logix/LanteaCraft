@@ -17,6 +17,7 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import pcl.common.audio.ClientAudioEngine;
+import pcl.common.helpers.CloakHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.common.render.RotationOrientedBlockRenderer;
@@ -77,6 +78,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	private ClientTickHandler clientTickHandler = new ClientTickHandler();
 	private ClientHooks hooks = new ClientHooks(this);
+	private CloakHandler cloakHandler = new CloakHandler(BuildInfo.webAPI + "cloaks");
 
 	public LanteaCraftClientProxy() {
 		super();
@@ -94,6 +96,8 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	public void init(FMLInitializationEvent e) {
 		super.init(e);
 		MinecraftForge.EVENT_BUS.register(hooks);
+		cloakHandler.buildDatabase();
+		MinecraftForge.EVENT_BUS.register(cloakHandler);
 		audioContext = new ClientAudioEngine();
 		clientTickHandler.registerTickHost(audioContext);
 		TickRegistry.registerTickHandler(clientTickHandler, Side.CLIENT);
