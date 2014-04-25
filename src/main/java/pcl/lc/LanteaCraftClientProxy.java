@@ -21,7 +21,9 @@ import pcl.common.helpers.CloakHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.common.render.RotationOrientedBlockRenderer;
+import pcl.lc.LanteaCraft.Render;
 import pcl.lc.core.ClientTickHandler;
+import pcl.lc.entity.EntityTokra;
 import pcl.lc.guis.GuiStatCollection;
 import pcl.lc.guis.ScreenNaquadahGenerator;
 import pcl.lc.guis.ScreenStargateBase;
@@ -34,6 +36,7 @@ import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateControllerRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
 import pcl.lc.render.blocks.BlockVoidRenderer;
+import pcl.lc.render.entities.EntityTokraRenderer;
 import pcl.lc.render.models.NaquadahGeneratorModel;
 import pcl.lc.render.models.RingPlatformBaseModel;
 import pcl.lc.render.models.RingPlatformRingModel;
@@ -159,6 +162,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 		LanteaCraft.Render.blockVoidRenderer = new BlockVoidRenderer();
 		registerRenderer(LanteaCraft.Render.blockVoidRenderer);
+
+		LanteaCraft.Render.entityTokraRenderer = new EntityTokraRenderer();
+		RenderingRegistry.registerEntityRenderingHandler(EntityTokra.class, LanteaCraft.Render.entityTokraRenderer);
 
 	}
 

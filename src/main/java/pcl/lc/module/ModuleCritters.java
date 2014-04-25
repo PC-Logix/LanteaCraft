@@ -36,8 +36,7 @@ public class ModuleCritters implements IModule {
 	@Override
 	public void init() {
 		EntityRegistry.registerModEntity(EntityTokra.class, "tokra", 0, LanteaCraft.getInstance(), 80, 1, true);
-		Render.entityTokraRenderer = new EntityTokraRenderer();
-		RenderingRegistry.registerEntityRenderingHandler(EntityTokra.class, Render.entityTokraRenderer);
+		
 
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft Tokra villagers...");
 		LanteaCraft.getProxy().tokraVillagerID = LanteaCraft.getProxy().addVillager(
