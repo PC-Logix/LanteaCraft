@@ -64,7 +64,6 @@ public class ChunkData {
 				for (int element : lcOres.intArray)
 					generatedOres.add(OreTypes.fromOrdinal(element));
 			}
-
 		}
 	}
 
@@ -77,6 +76,7 @@ public class ChunkData {
 		for (int j = 0; k.hasNext(); j++)
 			lcOres.intArray[j] = k.next().ordinal();
 		lcCompound.setTag("OreGenList", lcOres);
+		nbt.setTag("LanteaCraftMeta", lcCompound);
 	}
 
 	public void markOreGenerated(OreTypes typeof) {
