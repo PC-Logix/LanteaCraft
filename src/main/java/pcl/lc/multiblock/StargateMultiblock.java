@@ -330,4 +330,13 @@ public class StargateMultiblock extends GenericMultiblock {
 		return packet;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof StargateMultiblock))
+			return false;
+		StargateMultiblock that = (StargateMultiblock) o;
+		if (that.host == null || this.host == null)
+			return false;
+		return ((that.host.xCoord == this.host.xCoord) && (that.host.yCoord == this.host.yCoord) && (that.host.zCoord == this.host.zCoord));
+	}
 }
