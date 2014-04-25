@@ -100,25 +100,18 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				}
 
 				// catch illegal; one vector out of bounds, reset scan
-				if (tx > 15 || tz > 15 || 0 > tx || 0 > ty || 0 > tz) {
-					LanteaCraft.getLogger().log(Level.FINEST, "Can't expand, out of bounds!");
+				if (tx > 15 || tz > 15 || 0 > tx || 0 > ty || 0 > tz)
 					continue main;
-				}
 				// expand; this block is already an ore of type id so we can
 				// continue our search
 				else if (getBlock(chunk, tx, ty, tz) == id)
 					continue expand;
-				else if (getBlock(chunk, tx, ty, tz) == Block.stone.blockID) {
-					LanteaCraft.getLogger().log(Level.FINEST, "Done, can expand this way.");
+				else if (getBlock(chunk, tx, ty, tz) == Block.stone.blockID)
 					break expand;
-				}
 				// illegal; detected some other block (air, other ores, etc),
 				// so reset the scan and try again.
-				else {
-					LanteaCraft.getLogger().log(Level.FINEST,
-							"Strange case: " + getBlock(chunk, tx, tz, tz) + ", well?");
+				else
 					break main;
-				}
 			}
 
 			if (getBlock(chunk, tx, ty, tz) == Block.stone.blockID) {
@@ -141,7 +134,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 		Random random = requestRandomFor(chunk.getChunkCoordIntPair().chunkXPos,
 				chunk.getChunkCoordIntPair().chunkZPos, world, typeof.ordinal());
 		if (odds(random, genIsolatedOdds) || true) {
-			int n = 1; // random.nextInt(maxIsolatedNodes) + 1;
+			int n = random.nextInt(maxIsolatedNodes) + 1;
 			for (int i = 0; i < n; i++) {
 				int x = random.nextInt(16);
 				int y = random.nextInt(64);
