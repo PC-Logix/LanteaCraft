@@ -1,6 +1,8 @@
 package pcl.lc.entity;
 
+import pcl.common.ai.EntityAICreep;
 import pcl.common.ai.EntityAIFleeLowHealth;
+import pcl.common.ai.EntityAIHurtByTargetExcept;
 import pcl.common.ai.EntityAIRememberHome;
 import pcl.common.ai.IHomingPigeon;
 import pcl.common.util.Vector3;
@@ -51,8 +53,9 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 		getNavigator().setBreakDoors(true);
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIFleeLowHealth(this, 0.25, 1.1D));
+
 		tasks.addTask(1, new EntityAIRememberHome(this, 30.0D, 1.1D));
+		tasks.addTask(1, new EntityAIFleeLowHealth(this, 0.25, 1.1D));
 
 		tasks.addTask(2, new EntityAIArrowAttack(this, 1.0D, 15, 20.0F));
 
@@ -62,10 +65,11 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityTokra.class, 5.0F, 0.02F));
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityVillager.class, 5.0F, 0.02F));
 		tasks.addTask(9, new EntityAIWander(this, 0.6D));
+		tasks.addTask(9, new EntityAICreep(this, EntityPlayer.class, 5.0D, 5.0D, 0.6D));
 
 		tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
 
-		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
+		targetTasks.addTask(1, new EntityAIHurtByTargetExcept(this, true, this.getClass()));
 
 		for (Class<?> opponentType : opponents) {
 			tasks.addTask(2, new EntityAIAttackOnCollide(this, opponentType, 0.6D, false));
@@ -96,6 +100,10 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 		}
 		if (locationHome == null)
 			locationHome = new Vector3(this);
+		if (getRNG().nextInt(100) == 0)
+			if (getMaxHealth() > getHealth()) {
+				setHealth(getHealth() + 0.1f);
+			}
 	}
 
 	/**
