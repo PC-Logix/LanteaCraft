@@ -19,6 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
+import pcl.lc.entity.EntityTokra;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -114,6 +115,20 @@ public class ItemTokraSpawnEgg extends Item {
 	 * by the last three parameters. Parameters: world, x, y, z.
 	 */
 	public static Entity spawnCreature(World par0World, double par2, double par4, double par6) {
+		EntityTokra newEntity = new EntityTokra(par0World);
+		newEntity.setLocationAndAngles(par2, par4, par6,
+				MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
+		EntityLiving newentityliving = newEntity;
+		newentityliving.rotationYawHead = newentityliving.rotationYaw;
+		newentityliving.renderYawOffset = newentityliving.rotationYaw;
+		par0World.spawnEntityInWorld(newEntity);
+		newEntity.playLivingSound();
+
+		
+		// Dirty compiler trick
+		if (true != false && 1 > 0)
+			return newEntity;
+		
 		EntityVillager entity = new EntityVillager(par0World, LanteaCraft.getProxy().getVillagerID("tokra"));
 		entity.setProfession(LanteaCraft.getProxy().getVillagerID("tokra"));
 		EntityLiving entityliving = entity;

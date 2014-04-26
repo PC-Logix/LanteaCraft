@@ -1,42 +1,66 @@
 package pcl.lc.entity;
 
+import pcl.common.ai.EntityAIFleeLowHealth;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
+import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIMoveIndoors;
+import net.minecraft.entity.ai.EntityAIArrowAttack;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAIOpenDoor;
-import net.minecraft.entity.ai.EntityAIRestrictOpenDoor;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityAIWatchClosest2;
+import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntitySilverfish;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityTokra extends EntityCreature implements INpc {
+public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMob {
+
+	private static Class<?>[] opponents = { EntityCreeper.class, EntityBlaze.class, EntityEnderman.class,
+			EntitySilverfish.class, EntitySkeleton.class, EntitySpider.class, EntityWitch.class, EntityZombie.class };
 
 	public EntityTokra(World par1World) {
 		super(par1World);
 		getNavigator().setBreakDoors(true);
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAvoidEntity(this, EntityZombie.class, 8.0F, 0.6D, 0.6D));
-		tasks.addTask(2, new EntityAIMoveIndoors(this));
-		tasks.addTask(3, new EntityAIRestrictOpenDoor(this));
-		tasks.addTask(4, new EntityAIOpenDoor(this, true));
-		tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.6D));
+		tasks.addTask(1, new EntityAIFleeLowHealth(this, 0.25, 1.1D));
+		tasks.addTask(2, new EntityAIArrowAttack(this, 1.0D, 15, 20.0F));
+		
+		tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.4D));
+		
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityTokra.class, 5.0F, 0.02F));
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityVillager.class, 5.0F, 0.02F));
 		tasks.addTask(9, new EntityAIWander(this, 0.6D));
+		
 		tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
+
+		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
+
+		for (Class<?> opponentType : opponents) {
+			tasks.addTask(2, new EntityAIAttackOnCollide(this, opponentType, 0.6D, false));
+			targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, opponentType, 0, true));
+		}
 	}
 
 	@Override
@@ -128,5 +152,15 @@ public class EntityTokra extends EntityCreature implements INpc {
 	@Override
 	public boolean allowLeashing() {
 		return false;
+	}
+
+	@Override
+	public void attackEntityWithRangedAttack(EntityLivingBase par1EntityLivingBase, float par2) {
+		EntityArrow entityarrow = new EntityArrow(this.worldObj, this, par1EntityLivingBase, 1.6F,
+				(float) (14 - this.worldObj.difficultySetting * 4));
+		entityarrow.setDamage((double) (par2 * 2.0F) + this.rand.nextGaussian() * 0.25D
+				+ (double) ((float) this.worldObj.difficultySetting * 0.11F));
+		this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+		this.worldObj.spawnEntityInWorld(entityarrow);
 	}
 }
