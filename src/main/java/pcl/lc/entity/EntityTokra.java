@@ -19,10 +19,12 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityAIWatchClosest2;
 import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityZombie;
@@ -35,8 +37,9 @@ import net.minecraft.world.World;
 
 public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMob {
 
-	private static Class<?>[] opponents = { EntityCreeper.class, EntityBlaze.class, EntityEnderman.class,
-			EntitySilverfish.class, EntitySkeleton.class, EntitySpider.class, EntityWitch.class, EntityZombie.class };
+	private static Class<?>[] opponents = { EntitySlime.class, EntityCreeper.class, EntityBlaze.class,
+			EntityEnderman.class, EntitySilverfish.class, EntitySkeleton.class, EntityCaveSpider.class,
+			EntitySpider.class, EntityWitch.class, EntityZombie.class };
 
 	public EntityTokra(World par1World) {
 		super(par1World);
@@ -45,14 +48,14 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIFleeLowHealth(this, 0.25, 1.1D));
 		tasks.addTask(2, new EntityAIArrowAttack(this, 1.0D, 15, 20.0F));
-		
+
 		tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.4D));
-		
+
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityPlayer.class, 3.0F, 1.0F));
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityTokra.class, 5.0F, 0.02F));
 		tasks.addTask(9, new EntityAIWatchClosest2(this, EntityVillager.class, 5.0F, 0.02F));
 		tasks.addTask(9, new EntityAIWander(this, 0.6D));
-		
+
 		tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
 
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));

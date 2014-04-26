@@ -79,7 +79,7 @@ public class EntityAIFleeLowHealth extends EntityAIBase {
 		if (creature.getNavigator().noPath()) {
 			// If the creature has no path and we are still running, we
 			// will generate a new random path if the next int is lt 3.
-			if (creature.getRNG().nextInt(10) < 3) {
+			if (creature.getRNG().nextInt(25) < 3) {
 				Vec3 vec3 = RandomPositionGenerator.findRandomTarget(creature, 15, 8);
 				if (vec3 != null) {
 					flee_x = vec3.xCoord;
