@@ -1,8 +1,9 @@
 package pcl.lc.entity;
 
 import pcl.common.ai.EntityAIFleeLowHealth;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
+import pcl.common.ai.EntityAIRememberHome;
+import pcl.common.ai.IHomingPigeon;
+import pcl.common.util.Vector3;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,11 +36,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMob {
+public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMob, IHomingPigeon {
 
 	private static Class<?>[] opponents = { EntitySlime.class, EntityCreeper.class, EntityBlaze.class,
 			EntityEnderman.class, EntitySilverfish.class, EntitySkeleton.class, EntityCaveSpider.class,
 			EntitySpider.class, EntityWitch.class, EntityZombie.class };
+
+	private boolean hasHomeProperties = false;
+	private int dimensionHome;
+	private Vector3 locationHome;
 
 	public EntityTokra(World par1World) {
 		super(par1World);
@@ -47,6 +52,8 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIFleeLowHealth(this, 0.25, 1.1D));
+		tasks.addTask(1, new EntityAIRememberHome(this, 30.0D, 1.1D));
+
 		tasks.addTask(2, new EntityAIArrowAttack(this, 1.0D, 15, 20.0F));
 
 		tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 0.4D));
@@ -80,6 +87,17 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 		return true;
 	}
 
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		if (!hasHomeProperties) {
+			hasHomeProperties = !hasHomeProperties;
+			dimensionHome = dimension;
+		}
+		if (locationHome == null)
+			locationHome = new Vector3(this);
+	}
+
 	/**
 	 * main AI tick function, replaces updateEntityActionState
 	 */
@@ -105,11 +123,19 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 	@Override
 	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeEntityToNBT(par1NBTTagCompound);
+		par1NBTTagCompound.setInteger("dimensionHome", dimensionHome);
+		if (locationHome != null)
+			par1NBTTagCompound.setCompoundTag("locationHome", locationHome.toNBT());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readEntityFromNBT(par1NBTTagCompound);
+		if (par1NBTTagCompound.hasKey("dimensionHome"))
+			dimensionHome = par1NBTTagCompound.getInteger("dimensionHome");
+		hasHomeProperties = true;
+		if (par1NBTTagCompound.hasKey("locationHome"))
+			locationHome = new Vector3(par1NBTTagCompound.getCompoundTag("locationHome"));
 	}
 
 	/**
@@ -154,7 +180,7 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 
 	@Override
 	public boolean allowLeashing() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -165,5 +191,15 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 				+ (double) ((float) this.worldObj.difficultySetting * 0.11F));
 		this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 		this.worldObj.spawnEntityInWorld(entityarrow);
+	}
+
+	@Override
+	public int getHomeDimension() {
+		return dimensionHome;
+	}
+
+	@Override
+	public Vector3 getHomeLocation() {
+		return locationHome;
 	}
 }

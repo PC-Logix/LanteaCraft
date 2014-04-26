@@ -1,6 +1,7 @@
 package pcl.common.util;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
@@ -139,12 +140,37 @@ public class Vector3 {
 	}
 
 	/**
+	 * Creates a new vector from an NBT Compound.
+	 * 
+	 * @param compound
+	 *            The NBT Compound.
+	 */
+	public Vector3(NBTTagCompound compound) {
+		if (!compound.hasKey("x") || !compound.hasKey("y") || !compound.hasKey("z"))
+			throw new IllegalArgumentException("Compound is not a packed Vector3!");
+		new Vector3(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z"));
+	}
+
+	/**
 	 * Converts a Vector3 to a Minecraft Vec3 object.
 	 * 
 	 * @return A Minecraft Vec3 object.
 	 */
 	public Vec3 toVec3() {
 		return Vec3.createVectorHelper(x, y, z);
+	}
+
+	/**
+	 * Returns this Vector3 as an NBT Compound.
+	 * 
+	 * @return This Vector3 as an NBT Compound.
+	 */
+	public NBTTagCompound toNBT() {
+		NBTTagCompound comp = new NBTTagCompound();
+		comp.setDouble("x", x);
+		comp.setDouble("y", y);
+		comp.setDouble("z", z);
+		return comp;
 	}
 
 	@Override
