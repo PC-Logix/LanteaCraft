@@ -5,13 +5,21 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            name = 'Cazzar\'s Maven repo'
+            url = 'http://maven.cazzar.net/'
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
     }
+    dependencies {
+        classpath 'net.cazzar:CurseForgeUploader:1.0'
+    }
 }
 
 
+apply plugin: 'curseforge'
 apply plugin: 'forge'
 
 if (System.getenv().BUILD_NUMBER != null)
