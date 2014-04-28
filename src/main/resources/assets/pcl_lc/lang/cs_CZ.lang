@@ -42,3 +42,5 @@ item.zpm.name=ZPM
 
 item.tokraSpawnEgg.name=Vejce Tokry
 item.lanteadebug.name=LanteaCraft Debugger
+
+death.attack.wormhole_transient=%1$s byl rozložen vírem horizontu událostí.
