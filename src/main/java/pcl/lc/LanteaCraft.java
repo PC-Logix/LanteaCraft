@@ -18,6 +18,7 @@ import pcl.lc.blocks.BlockRingPlatform;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
+import pcl.lc.entity.EntityReplicator;
 import pcl.lc.entity.EntityTokra;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
@@ -36,6 +37,7 @@ import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateControllerRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
 import pcl.lc.render.blocks.BlockVoidRenderer;
+import pcl.lc.render.entities.EntityReplicatorRenderer;
 import pcl.lc.render.entities.EntityTokraRenderer;
 import pcl.lc.render.models.NaquadahGeneratorModel;
 import pcl.lc.render.models.RingPlatformBaseModel;
@@ -145,6 +147,7 @@ public class LanteaCraft {
 		public static TileEntityLanteaDecorGlassRenderer tileEntityLanteaDecorGlassRenderer;
 
 		public static EntityTokraRenderer entityTokraRenderer;
+		public static EntityReplicatorRenderer entityReplicatorRenderer;
 	}
 
 	/**
@@ -161,6 +164,7 @@ public class LanteaCraft {
 	 */
 	public static class Entities {
 		public static EntityTokra entityTokra;
+		public static EntityReplicator entityReplicator;
 	}
 
 	public static enum EnumGUIs {

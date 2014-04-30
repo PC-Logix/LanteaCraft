@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +20,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
+import pcl.lc.entity.EntityReplicator;
 import pcl.lc.entity.EntityTokra;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -115,7 +117,7 @@ public class ItemTokraSpawnEgg extends Item {
 	 * by the last three parameters. Parameters: world, x, y, z.
 	 */
 	public static Entity spawnCreature(World par0World, double par2, double par4, double par6) {
-		EntityTokra newEntity = new EntityTokra(par0World);
+		EntityCreature newEntity = new EntityReplicator(par0World);
 		newEntity.setLocationAndAngles(par2, par4, par6,
 				MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
 		EntityLiving newentityliving = newEntity;
