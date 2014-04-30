@@ -42,3 +42,5 @@ item.zpm.name=ZPM
 
 item.tokraSpawnEgg.name=Tok'ra Spawn Egg
 item.lanteadebug.name=LanteaCraft Debugger
+
+death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
