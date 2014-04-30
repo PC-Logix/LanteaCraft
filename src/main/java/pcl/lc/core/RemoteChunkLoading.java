@@ -42,7 +42,8 @@ public class RemoteChunkLoading implements ITickAgent {
 	public static class ChunkLoadRequest {
 		private final String name;
 		private final Ticket ticket;
-		private final int max_age;
+		private final NBTTagCompound metadata;
+		private int max_age;
 		private int age;
 
 		/**
@@ -52,15 +53,18 @@ public class RemoteChunkLoading implements ITickAgent {
 		 *            The name of the request
 		 * @param ticket
 		 *            The {@link Ticket} object
+		 * @param metadata
+		 *            The NBT metadata for the request
 		 * @param expiry
 		 *            The number of ticks in which this object will expire, an
 		 *            approximate value. The number of ticks which may elapse
 		 *            may be more or less than this value (usually slightly
 		 *            less).
 		 */
-		public ChunkLoadRequest(String name, Ticket ticket, int expiry) {
+		public ChunkLoadRequest(String name, Ticket ticket, NBTTagCompound metadata, int expiry) {
 			this.name = name;
 			this.ticket = ticket;
+			this.metadata = metadata;
 			max_age = expiry;
 		}
 
@@ -75,9 +79,37 @@ public class RemoteChunkLoading implements ITickAgent {
 		public void tick() {
 			age++;
 		}
-		
+
 		public void expireNow() {
 			age = max_age + 1;
+		}
+
+		public void extend(int ticks) {
+			max_age += ticks;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o instanceof ChunkLoadRequest) {
+				ChunkLoadRequest req = (ChunkLoadRequest) o;
+				return req.name.equals(name) && req.max_age == max_age && req.age == age;
+			} else if (o instanceof NBTTagCompound) {
+				NBTTagCompound compound = (NBTTagCompound) o;
+				if (!compound.hasKey("minX") || !compound.hasKey("minZ"))
+					return false;
+				if (!compound.hasKey("maxX") || !compound.hasKey("maxZ"))
+					return false;
+				if (compound.getInteger("minX") != metadata.getInteger("minX"))
+					return false;
+				if (compound.getInteger("minZ") != metadata.getInteger("minZ"))
+					return false;
+				if (compound.getInteger("maxX") != metadata.getInteger("maxX"))
+					return false;
+				if (compound.getInteger("maxZ") != metadata.getInteger("maxZ"))
+					return false;
+				return true;
+			} else
+				return false;
 		}
 	}
 
@@ -99,6 +131,14 @@ public class RemoteChunkLoading implements ITickAgent {
 	 * @return If the loading request was a success.
 	 */
 	public ChunkLoadRequest create(String name, World world, int maxAge, NBTTagCompound metadata) {
+		synchronized (requests) {
+			for (ChunkLoadRequest request : requests) {
+				if (request.equals(metadata)) {
+					request.extend(maxAge);
+					return request;
+				}
+			}
+		}
 		Ticket ticket = ForgeChunkManager.requestTicket(LanteaCraft.getInstance(), world, Type.NORMAL);
 		if (ticket == null)
 			return null;
@@ -109,7 +149,7 @@ public class RemoteChunkLoading implements ITickAgent {
 		for (int i = minX; i <= maxX; i++)
 			for (int j = minZ; j <= maxZ; j++)
 				ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(i, j));
-		ChunkLoadRequest request = new ChunkLoadRequest(name, ticket, maxAge);
+		ChunkLoadRequest request = new ChunkLoadRequest(name, ticket, metadata, maxAge);
 		synchronized (requests) {
 			requests.add(request);
 		}
