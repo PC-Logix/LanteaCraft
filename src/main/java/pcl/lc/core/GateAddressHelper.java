@@ -173,7 +173,7 @@ public class GateAddressHelper {
 		WorldLocation localize = location.toWorldLocation();
 		if (BuildInfo.CHUNK_DEBUGGING)
 			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("Attempting to fetch dimension %i", localize.dimension));
+					String.format("Attempting to fetch dimension %s", localize.dimension));
 		World world = GateAddressHelper.getWorld(localize.dimension);
 		if (world != null) {
 			String name = String.format("StargateScan-%s", address);

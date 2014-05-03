@@ -96,7 +96,7 @@ public class RemoteChunkLoading implements ITickAgent {
 		public void extend(int ticks) {
 			if (BuildInfo.CHUNK_DEBUGGING)
 				LanteaCraft.getLogger()
-						.log(Level.INFO, String.format("Request %s extending by %i ticks.", name, ticks));
+						.log(Level.INFO, String.format("Request %s extending by %s ticks.", name, ticks));
 			max_age += ticks;
 		}
 
@@ -145,7 +145,7 @@ public class RemoteChunkLoading implements ITickAgent {
 	public ChunkLoadRequest create(String name, World world, int maxAge, NBTTagCompound metadata) {
 		if (BuildInfo.CHUNK_DEBUGGING && world.provider != null)
 			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("RemoteChunkLoading CSR: %s (world: %i)", name, world.provider.dimensionId));
+					String.format("RemoteChunkLoading CSR: %s (world: %s)", name, world.provider.dimensionId));
 		if (BuildInfo.CHUNK_DEBUGGING && world.provider == null)
 			LanteaCraft.getLogger().log(Level.WARNING,
 					String.format("RemoteChunkLoading CSR: %s (no provider!!)", name));
@@ -153,6 +153,9 @@ public class RemoteChunkLoading implements ITickAgent {
 			for (ChunkLoadRequest request : requests) {
 				if (request.equals(metadata)) {
 					request.extend(maxAge);
+					if (BuildInfo.CHUNK_DEBUGGING)
+						LanteaCraft.getLogger().log(Level.INFO,
+								String.format("RemoteChunkLoading CSR: returning cached request for CSR %s", name));
 					return request;
 				}
 			}
@@ -208,8 +211,12 @@ public class RemoteChunkLoading implements ITickAgent {
 		if (BuildInfo.CHUNK_DEBUGGING)
 			LanteaCraft.getLogger().log(Level.INFO,
 					String.format("RemoteChunkLoading remove request: %s", request.name));
-		if (request.ticket != null)
+		if (request.ticket != null) {
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO,
+						String.format("Requesting FCM release ticket %s.", request.ticket.toString()));
 			ForgeChunkManager.releaseTicket(request.ticket);
+		}
 		synchronized (requests) {
 			requests.remove(request);
 		}
