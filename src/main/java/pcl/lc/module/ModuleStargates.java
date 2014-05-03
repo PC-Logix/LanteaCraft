@@ -20,6 +20,7 @@ import pcl.lc.containers.ContainerStargateControllerEnergy;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.items.ItemControllerCrystal;
 import pcl.lc.items.ItemCoreCrystal;
+import pcl.lc.items.ItemIris;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTransportRingActivator;
 import pcl.lc.tileentity.TileEntityRingPlatform;
@@ -64,6 +65,7 @@ public class ModuleStargates implements IModule {
 
 		Items.coreCrystal = RegistrationHelper.registerItem(ItemCoreCrystal.class, "coreCrystal");
 		Items.controllerCrystal = RegistrationHelper.registerItem(ItemControllerCrystal.class, "controllerCrystal");
+		// Items.iris = RegistrationHelper.registerItem(ItemIris.class, "iris");
 
 		Items.transportRingActivator = RegistrationHelper.registerItem(ItemTransportRingActivator.class,
 				"transportRingActivator");

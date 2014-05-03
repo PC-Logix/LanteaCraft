@@ -38,6 +38,7 @@ import pcl.common.audio.AudioPosition;
 import pcl.common.audio.SoundHost;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
+import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
@@ -175,6 +176,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				return true;
 			}
 		};
+
+		inventory.setFilterRule(0, new FilterRule(new ItemStack[] {}, null, true, false));
 
 		getAsStructure().setMetadata("state", EnumStargateState.Idle);
 		getAsStructure().invalidate();
