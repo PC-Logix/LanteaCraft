@@ -41,11 +41,11 @@ public class XMLSaver {
 			StreamResult result = new StreamResult(out);
 			transformer.transform(source, result);
 		} catch (ParserConfigurationException e) {
-			throw new XMLSaverException("Can't parse; configuration exception.", e);
+			throw new XMLSaverException("Can't save; configuration exception.", e);
 		} catch (TransformerConfigurationException e) {
-			throw new XMLSaverException("Can't parse; TransformerConfigurationException occured.", e);
+			throw new XMLSaverException("Can't save; TransformerConfigurationException occured.", e);
 		} catch (TransformerException e) {
-			throw new XMLSaverException("Can't parse; TransformerException occured.", e);
+			throw new XMLSaverException("Can't save; TransformerException occured.", e);
 		}
 	}
 

@@ -97,6 +97,10 @@ public class XMLParser {
 				HashMap<String, Object> parameters = new HashMap<String, Object>();
 				NamedNodeMap nodes = element.getAttributes();
 				// TOOD: handling of attributes on xml-tag
+				for (int i = 0; i < nodes.getLength(); i++) {
+					Node node = nodes.item(i);
+					System.out.println(String.format("readRecursive ConfigList, node: %s", node.toString()));
+				}
 				group.setParameters(parameters);
 			}
 			NodeList children = element.getChildNodes();
@@ -112,7 +116,10 @@ public class XMLParser {
 			if (element.hasAttributes()) {
 				HashMap<String, Object> parameters = new HashMap<String, Object>();
 				NamedNodeMap nodes = element.getAttributes();
-				// TOOD: handling of attributes on xml-tag
+				for (int i = 0; i < nodes.getLength(); i++) {
+					Node node = nodes.item(i);
+					System.out.println(String.format("readRecursive ConfigNode, node: %s", node.toString()));
+				}
 				single.setParameters(parameters);
 			}
 			return single;
