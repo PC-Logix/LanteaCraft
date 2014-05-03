@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.ITickAgent;
 
@@ -77,14 +78,25 @@ public class RemoteChunkLoading implements ITickAgent {
 		}
 
 		public void tick() {
-			age++;
+			if (max_age >= age)
+				age++;
+			if (age > max_age)
+				if (BuildInfo.CHUNK_DEBUGGING)
+					LanteaCraft.getLogger().log(Level.INFO,
+							String.format("Request %s expired, waiting for kill...", name));
 		}
 
 		public void expireNow() {
 			age = max_age + 1;
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO,
+						String.format("Request %s expired on demand, waiting for kill...", name));
 		}
 
 		public void extend(int ticks) {
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger()
+						.log(Level.INFO, String.format("Request %s extending by %i ticks.", name, ticks));
 			max_age += ticks;
 		}
 
@@ -131,6 +143,12 @@ public class RemoteChunkLoading implements ITickAgent {
 	 * @return If the loading request was a success.
 	 */
 	public ChunkLoadRequest create(String name, World world, int maxAge, NBTTagCompound metadata) {
+		if (BuildInfo.CHUNK_DEBUGGING && world.provider != null)
+			LanteaCraft.getLogger().log(Level.INFO,
+					String.format("RemoteChunkLoading CSR: %s (world: %i)", name, world.provider.dimensionId));
+		if (BuildInfo.CHUNK_DEBUGGING && world.provider == null)
+			LanteaCraft.getLogger().log(Level.WARNING,
+					String.format("RemoteChunkLoading CSR: %s (no provider!!)", name));
 		synchronized (requests) {
 			for (ChunkLoadRequest request : requests) {
 				if (request.equals(metadata)) {
@@ -140,8 +158,11 @@ public class RemoteChunkLoading implements ITickAgent {
 			}
 		}
 		Ticket ticket = ForgeChunkManager.requestTicket(LanteaCraft.getInstance(), world, Type.NORMAL);
-		if (ticket == null)
+		if (ticket == null) {
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.WARNING, String.format("Ticket request failed, null result!"));
 			return null;
+		}
 		int minX = metadata.getInteger("minX");
 		int minZ = metadata.getInteger("minZ");
 		int maxX = metadata.getInteger("maxX");
@@ -153,7 +174,8 @@ public class RemoteChunkLoading implements ITickAgent {
 		synchronized (requests) {
 			requests.add(request);
 		}
-		LanteaCraft.getLogger().log(Level.INFO, "Chunk loading request completed: " + name);
+		if (BuildInfo.CHUNK_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, String.format("RemoteChunkLoading CSR success: %s", name));
 		return request;
 	}
 
@@ -183,7 +205,9 @@ public class RemoteChunkLoading implements ITickAgent {
 	 *            The request to release and dispose.
 	 */
 	private void remove(ChunkLoadRequest request) {
-		LanteaCraft.getLogger().log(Level.INFO, "Chunk loading request shutting down: " + request.name());
+		if (BuildInfo.CHUNK_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO,
+					String.format("RemoteChunkLoading remove request: %s", request.name));
 		if (request.ticket != null)
 			ForgeChunkManager.releaseTicket(request.ticket);
 		synchronized (requests) {

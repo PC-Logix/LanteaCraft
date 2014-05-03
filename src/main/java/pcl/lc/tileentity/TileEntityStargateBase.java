@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -48,6 +49,7 @@ import pcl.common.util.MathUtils;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisState;
 import pcl.lc.api.EnumStargateState;
@@ -977,12 +979,23 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		String homeAddress = getLocalAddress();
 		TileEntityStargateBase dte = null;
 		try {
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO, String.format("Requesting GAD find gate %s.", address));
 			dte = GateAddressHelper.findStargate(getLocation(), address);
 		} catch (CoordRangeError coords) {
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.WARNING,
+						String.format("Coords range error: %s.", coords.getMessage()));
 			return coords.getMessage();
 		} catch (DimensionRangeError dimension) {
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.WARNING,
+						String.format("Dimension range error: %s", dimension.getMessage()));
 			return dimension.getMessage();
 		} catch (AddressingError error) {
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.WARNING,
+						String.format("General addressing error: %s", error.getMessage()));
 			return error.getMessage();
 		}
 

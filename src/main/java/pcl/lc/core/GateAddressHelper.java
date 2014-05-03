@@ -1,11 +1,14 @@
 package pcl.lc.core;
 
+import java.util.logging.Level;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import pcl.common.util.ChunkLocation;
 import pcl.common.util.WorldLocation;
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
@@ -168,6 +171,9 @@ public class GateAddressHelper {
 			else
 				throw new AddressingError("Cannot guess effective dimension; location and host location are both weak!");
 		WorldLocation localize = location.toWorldLocation();
+		if (BuildInfo.CHUNK_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO,
+					String.format("Attempting to fetch dimension %i", localize.dimension));
 		World world = GateAddressHelper.getWorld(localize.dimension);
 		if (world != null) {
 			String name = String.format("StargateScan-%s", address);
@@ -184,7 +190,8 @@ public class GateAddressHelper {
 						dte = (TileEntityStargateBase) o;
 						break;
 					}
-		}
+		} else if (BuildInfo.CHUNK_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.WARNING, String.format("Failed to fetch dimension!"));
 		return dte;
 	}
 

@@ -23,12 +23,18 @@ public class BuildInfo {
 	/**
 	 * Enable or disable network traffic dumping mode.
 	 */
-	public static final boolean NET_DEBUGGING = false && isDevelopmentEnvironment();
+	public static final boolean NET_DEBUGGING = true && isDevelopmentEnvironment();
 	
 	/**
 	 * Enable or disable asset and configuration access dumping.
 	 */
-	public static final boolean ASSET_DEBUGGING = false && isDevelopmentEnvironment();
+	public static final boolean ASSET_DEBUGGING = true && isDevelopmentEnvironment();
+	
+	
+	/**
+	 * Enable or disable chunk loading dumping.
+	 */
+	public static final boolean CHUNK_DEBUGGING = true && isDevelopmentEnvironment();
 
 	public static int getBuildNumber() {
 		if (buildNumber.equals("@" + "BUILD" + "@"))
