@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import pcl.common.base.GenericContainer;
 import pcl.common.util.ImmutablePair;
 import pcl.lc.LanteaCraft;
+import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.core.AddressingError;
 import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
@@ -35,11 +36,7 @@ public class ScreenStargateBase extends GenericGlyphGUI {
 	private int clipboardAction = 0;
 
 	public ScreenStargateBase(TileEntityStargateBase entity, EntityPlayer player) {
-		super(new GenericContainer(guiWidth, guiHeight) {
-			@Override
-			public void sendStateTo(ICrafting crafter) {
-			}
-		});
+		super(new ContainerStargateBase(entity, player));
 		te = entity;
 		background = LanteaCraft.getResource("textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png");
 	}
