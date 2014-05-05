@@ -70,6 +70,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
 		ISidedInventory {
 
+	/**
+	 * Used to damage players who contact with an iris.
+	 * 
+	 * @author AfterLifeLochie
+	 */
 	private static class IrisDamageSource extends DamageSource {
 		public IrisDamageSource() {
 			super("stargate_iris");
@@ -82,7 +87,12 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 	}
 
-	class TrackedEntity {
+	/**
+	 * Used to track an entity position and velocity
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	private class TrackedEntity {
 		public Entity entity;
 		public Vector3 lastPos;
 		public Vector3 lastVel;
@@ -94,6 +104,155 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 	}
 
+	/**
+	 * Used to simulate a connection on a server.
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	private class ConnectionRequest {
+		/* The local and target addresses */
+		public String hostAddress, clientAddress;
+		/* The location for the request */
+		public WorldLocation hostLocation, clientLocation;
+		/* The chunkloaders for the request */
+		public ChunkLoadRequest hostChunkLoader, clientChunkLoader;
+		/* The tiles associated with the request */
+		public TileEntityStargateBase hostTile, clientTile;
+		/* The worlds associated with the request */
+		public World hostWorld, clientWorld;
+		/* The name of the request */
+		public String name, hostName, clientName;
+
+		/* Whether the request is currently running */
+		public boolean running;
+		/* The number of total ticks the request has been running for */
+		public int ticks = 0;
+		/* The current state of the connection */
+		public EnumStargateState state;
+		/* The current symbol being dialled */
+		public char symbol;
+		/* The number of chevrons dialled */
+		public int chevrons;
+		/* The remaining number of ticks to remain in this state */
+		public int ticksRemaining = 0;
+
+		public ConnectionRequest(WorldLocation hostLocation, WorldLocation clientLocation,
+				TileEntityStargateBase hostTile, String name) {
+			this.hostLocation = hostLocation;
+			this.clientLocation = clientLocation;
+			this.hostTile = hostTile;
+			this.name = name;
+		}
+
+		public void setup() {
+			running = true;
+			RemoteChunkLoading loader = LanteaCraft.getProxy().getRemoteChunkManager();
+			/* Prevent the initiator from unloading */
+			hostName = String.format("%s-Host-%s", name, hostLocation.toString());
+			hostChunkLoader = loader.create(hostName, hostWorld, ticksToStayOpen, createRadiusOf(hostLocation, 1));
+
+			/* Load the remote target chunks */
+			clientName = String.format("%s-Client-%s", name, clientLocation.toString());
+			clientChunkLoader = loader.create(clientName, clientWorld, ticksToStayOpen,
+					createRadiusOf(clientLocation, 1));
+		}
+
+		public void advance(TileEntityStargateBase callee) {
+			/*
+			 * Do not allow tiles that are not the host tile to invoke this
+			 * method at all, in order to prevent possible desyncs.
+			 */
+			if (!callee.equals(hostTile))
+				return;
+			if (!running)
+				return;
+			ticks++;
+			/* If we have no remote tile reference, attempt to find one */
+			if (clientTile == null) {
+				/*
+				 * Scan over the tile-entity map; it's likely this will fail
+				 * while the world and chunks are being loaded (race condition)
+				 */
+				Chunk chunk = clientWorld.getChunkFromBlockCoords(clientLocation.x, clientLocation.z);
+				if (chunk != null)
+					for (Object o : chunk.chunkTileEntityMap.values())
+						if (o instanceof TileEntityStargateBase)
+							clientTile = (TileEntityStargateBase) o;
+			}
+
+			if (ticksRemaining > 0) {
+				if (state == EnumStargateState.Transient)
+					performTransientDamage();
+				--ticksRemaining;
+			} else
+				switch (state) {
+				case Idle: // Any idle_wait state -> any dial state
+				case InterDialling: // Any dial_wait state -> any dial state
+					chevrons = nextChevron();
+					runState(EnumStargateState.Dialling, diallingTime);
+					break;
+				case Dialling: // Any dial state -> any idle_wait state
+					chevrons++;
+					if (clientAddress.length() > chevrons)
+						runState(EnumStargateState.InterDialling, interDiallingTime);
+					else
+						runState(EnumStargateState.Transient, transientDuration);
+					break;
+				case Transient: // Any transient state -> any connected state
+					runState(EnumStargateState.Connected, ticksToStayOpen);
+					break;
+				case Connected: // Any connected state -> any disconnected state
+					disconnect();
+					break;
+				case Disconnecting: // Any disconnected state -> idle
+					state = EnumStargateState.Idle;
+					this.shutdown();
+					break;
+				}
+			if (getState() == EnumStargateState.Connected) {
+				if (!useEnergy(1))
+					disconnect();
+			}
+		}
+
+		public char nextChevron() {
+			return clientAddress.charAt(chevrons);
+		}
+
+		public void runState(EnumStargateState state, int timeout) {
+			this.state = state;
+			this.ticksRemaining = timeout;
+		}
+
+		public void shutdown() {
+			running = false;
+			/* Drop all worldly references! */
+			hostTile = clientTile = null;
+			hostWorld = clientWorld = null;
+			/* Flush the chunk loaders */
+			clientChunkLoader.expireNow();
+			hostChunkLoader.expireNow();
+		}
+
+		private NBTTagCompound createRadiusOf(WorldLocation location, int radius) {
+			NBTTagCompound result = new NBTTagCompound();
+			result.setInteger("minX", location.x - radius);
+			result.setInteger("minZ", location.z - radius);
+			result.setInteger("maxX", location.x + radius);
+			result.setInteger("maxZ", location.z + radius);
+			return result;
+		}
+
+		public boolean isHost(TileEntityStargateBase that) {
+			return hostTile.equals(that);
+		}
+	}
+
+	/**
+	 * Used to damage players who contact with a transient wormhole.
+	 * 
+	 * @author AfterLifeLochie
+	 */
 	private static class TransientDamageSource extends DamageSource {
 		public TransientDamageSource() {
 			super("wormhole_transient");
@@ -126,20 +285,16 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		closeFromEitherEnd = cfg.getBoolean("stargate", "closeFromEitherEnd", closeFromEitherEnd);
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
-
-	private int numEngagedChevrons;
-	private WorldLocation connectedLocation;
-	private WeakReference<TileEntityStargateBase> connectedHost;
-	private boolean isInitiator;
-	private int timeout;
-	private EnumStargateState lastState = EnumStargateState.Idle;
-	private double renderRingAngle, renderLastRingAngle, renderNextRingAngle;
-	private FilteredInventory inventory;
-	private SoundHost soundHost;
+	
 	private StargateMultiblock multiblock;
-	private ChunkLoadRequest loader;
-	private double ehGrid[][][];
+	private FilteredInventory inventory;
 	private List<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
+	private ConnectionRequest connection;
+	private SoundHost soundHost;
+	
+	private double ehGrid[][][];
+	
+	
 
 	public TileEntityStargateBase() {
 		this.multiblock = new StargateMultiblock(this);
@@ -192,9 +347,10 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		if (worldObj.isRemote) {
 			if (soundHost == null)
 				soundHost = new SoundHost(this);
+			if (connection != null) {
+
+			}
 			if (isValid() && lastState != getState()) {
-				timeout = (Integer) getAsStructure().getMetadata("timeout");
-				numEngagedChevrons = (Integer) getAsStructure().getMetadata("numEngagedChevrons");
 				if (getDialledAddres() != null) {
 					int targetpos = Character.getNumericValue(getDialledAddres().indexOf(numEngagedChevrons))
 							- Character.getNumericValue('A');
@@ -252,41 +408,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				} else
 					setRingAngle(renderNextRingAngle);
 		} else {
-			if (getAsStructure().isValid()) {
-				if (getState() == EnumStargateState.Connected) {
-					if (isInitiator && !useEnergy(1))
-						disconnect();
-					if (connectedHost.get() == null)
-						disconnect();
-				}
-				if (timeout > 0) {
-					if (getState() == EnumStargateState.Transient)
-						performTransientDamage();
-					--timeout;
-				} else
-					switch (getState()) {
-					case Idle:
-						if (undialledDigitsRemaining())
-							startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
-						break;
-					case Dialling:
-						finishDiallingSymbol();
-						break;
-					case InterDialling:
-						startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
-						break;
-					case Transient:
-						enterState(EnumStargateState.Connected, isInitiator ? ticksToStayOpen : 0);
-						break;
-					case Connected:
-						if (isInitiator)
-							disconnect();
-						break;
-					case Disconnecting:
-						enterState(EnumStargateState.Idle, 0);
-						break;
-					}
-			}
 			checkForEntitiesInPortal();
 		}
 	}
@@ -322,18 +443,12 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	private boolean canTravelFromThisEnd() {
-		return !oneWayTravel || isInitiator;
+		return !oneWayTravel || connection.isHost(this);
 	}
 
 	@Override
 	public boolean canUpdate() {
 		return true;
-	}
-
-	private void checkChunk(World world, Entity entity) {
-		int cx = MathHelper.floor_double(entity.posX / 16.0D);
-		int cy = MathHelper.floor_double(entity.posZ / 16.0D);
-		Chunk chunk = world.getChunkFromChunkCoords(cx, cy);
 	}
 
 	private void checkForEntitiesInPortal() {
@@ -349,36 +464,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			for (Entity entity : ents)
 				if (!entity.isDead && entity.ridingEntity == null)
 					trackedEntities.add(new TrackedEntity(entity));
-		}
-	}
-
-	public void clearConnection() {
-		if (getState() != EnumStargateState.Idle || connectedLocation != null) {
-			getAsStructure().removeMetadata("diallingTo");
-			getAsStructure().removeMetadata("numEngagedChevrons");
-			connectedLocation = null;
-			isInitiator = false;
-			numEngagedChevrons = 0;
-			onInventoryChanged();
-			markBlockForUpdate();
-			if (getState() == EnumStargateState.Connected) {
-				enterState(EnumStargateState.Disconnecting, disconnectTime);
-				playSoundEffect("gcewing_sg:sg1_close", 1.0F, 1.0F);
-			} else {
-				if (getState() != EnumStargateState.Idle && getState() != EnumStargateState.Disconnecting)
-					playSoundEffect("gcewing_sg:sg1_abort", 1.0F, 1.0F);
-				enterState(EnumStargateState.Idle, 0);
-			}
-			renderNextRingAngle = 0;
-			timeout = 15;
-			getAsStructure().removeMetadata("diallingTo");
-		}
-
-		// Flush any chunk loading agents, even if we aren't in a connected
-		// state.
-		if (worldObj != null && !worldObj.isRemote && loader != null) {
-			loader.expireNow();
-			loader = null;
 		}
 	}
 
@@ -409,47 +494,18 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		soundHost.addChannel(name, String.format("stargate/milkyway/milkyway_%s.ogg", file), position, volume, age);
 	}
 
-	void diallingFailure(EntityPlayer player, String mess) {
+	private void diallingFailure(EntityPlayer player, String mess) {
 		player.addChatMessage(mess);
 		playSoundEffect("sg1_abort", 1.0F, 1.0F);
 	}
 
 	@Override
 	public boolean disconnect() {
-		if (isInitiator || closeFromEitherEnd) {
-			World world = GateAddressHelper.getWorld(connectedLocation.dimension);
-			if (world == null)
-				return false;
-			TileEntity te = world.getBlockTileEntity(connectedLocation.x, connectedLocation.y, connectedLocation.z);
-			if (!(te instanceof TileEntityStargateBase))
-				return false;
-			TileEntityStargateBase dte = (TileEntityStargateBase) te;
-			if (dte != null)
-				dte.clearConnection();
-			clearConnection();
+		if (connection.isHost(this) || closeFromEitherEnd) {
+			connection.shutdown();
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Causes the Stargate to enter the specified state for the specified number
-	 * of ticks.
-	 * 
-	 * @param newState
-	 *            The state to enter
-	 * @param newTimeout
-	 *            The timeout to set
-	 */
-	private void enterState(EnumStargateState newState, int newTimeout) {
-		getAsStructure().setMetadata("state", newState);
-		getAsStructure().setMetadata("timeout", newTimeout);
-		getAsStructure().setMetadata("numEngagedChevrons", numEngagedChevrons);
-		timeout = newTimeout;
-		if (worldObj != null)
-			worldObj.notifyBlockChange(xCoord, yCoord, zCoord, blockType.blockID);
-		onInventoryChanged();
-		markBlockForUpdate();
 	}
 
 	private void entityInPortal(Entity entity, Vector3 prevPos) {
@@ -470,7 +526,10 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					Trans3 dt = dte.localToGlobalTransformation();
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
-					teleportEntityAndRider(entity, t, dt, connectedLocation.dimension);
+					if (connection.isHost(this))
+						teleportEntityAndRider(entity, t, dt, connection.clientLocation.dimension);
+					else
+						teleportEntityAndRider(entity, t, dt, connection.hostLocation.dimension);
 				}
 			}
 		}
@@ -489,24 +548,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		world.onEntityRemoved(entity);
 	}
 
-	private void finishDiallingAddress() {
-		if (!isInitiator || useEnergy(1)) {
-			enterState(EnumStargateState.Transient, transientDuration);
-			playSoundEffect("stargate/milkyway/milkyway_open", 1.0F, 1.0F);
-		} else
-			disconnect();
-	}
-
-	private void finishDiallingSymbol() {
-		++numEngagedChevrons;
-		if (numEngagedChevrons == getDialledAddres().length())
-			finishDiallingAddress();
-		else if (undialledDigitsRemaining())
-			enterState(EnumStargateState.InterDialling, interDiallingTime);
-		else
-			enterState(EnumStargateState.Idle, 0);
-	}
-
 	public StargateMultiblock getAsStructure() {
 		return multiblock;
 	}
@@ -521,17 +562,12 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	private TileEntityStargateBase getConnectedStargateTE() {
-		if (connectedLocation != null) {
-			World world = GateAddressHelper.getWorld(connectedLocation.dimension);
-			if (world == null)
-				return null;
-			TileEntity te = world.getBlockTileEntity(connectedLocation.x, connectedLocation.y, connectedLocation.z);
-			if (te instanceof TileEntityStargateBase)
-				return (TileEntityStargateBase) te;
+		if (connection != null)
+			if (connection.isHost(this))
+				return connection.clientTile;
 			else
-				return null;
-		} else
-			return null;
+				return connection.hostTile;
+		return null;
 	}
 
 	@Override
@@ -559,9 +595,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public int getEncodedChevrons() {
-		if (!isDialling() && !isConnected())
+		if (connection == null || !connection.running)
 			return -1;
-		return numEngagedChevrons;
+		return connection.chevrons;
 	}
 
 	public double[][][] getEventHorizonGrid() {
@@ -631,7 +667,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public EnumStargateState getState() {
-		return (EnumStargateState) getAsStructure().getMetadata("state");
+		if (connection == null || !connection.running)
+			return EnumStargateState.Idle;
+		return connection.state;
 	}
 
 	@Override
@@ -641,18 +679,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	public void hostBlockDestroyed() {
-		if (connectedLocation != null) {
-			World world = GateAddressHelper.getWorld(connectedLocation.dimension);
-			if (world == null)
-				return;
-			TileEntity te = world.getBlockTileEntity(connectedLocation.x, connectedLocation.y, connectedLocation.z);
-			if (!(te instanceof TileEntityStargateBase))
-				return;
-			TileEntityStargateBase dte = (TileEntityStargateBase) te;
-			if (dte != null)
-				dte.clearConnection();
-		}
-		clearConnection();
+		if (connection != null)
+			connection.shutdown();
 		if (!worldObj.isRemote)
 			getAsStructure().disband();
 	}
@@ -662,7 +690,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			getAsStructure().invalidate();
 	}
 
-	void initiateClosingTransient() {
+	private void initiateClosingTransient() {
 		if (!isIrisClosed()) {
 			double v[][] = getEventHorizonGrid()[1];
 			int m = EventHorizonRenderer.ehGridRadialSize;
@@ -673,7 +701,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 	}
 
-	void initiateOpeningTransient() {
+	private void initiateOpeningTransient() {
 		if (!isIrisClosed()) {
 			double v[][] = getEventHorizonGrid()[1];
 			int n = EventHorizonRenderer.ehGridPolarSize;
@@ -713,7 +741,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public boolean isOutgoingConnection() {
-		return isInitiator;
+		return connection != null && connection.isHost(this);
 	}
 
 	@Override
@@ -723,56 +751,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	private Trans3 localToGlobalTransformation() {
 		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord, getBlockMetadata(), this);
-	}
-
-	/**
-	 * Replacement teleportation method (wip)
-	 * 
-	 * @param entity
-	 *            The entity to move.
-	 * @param prevPos
-	 *            param2:prevPos
-	 */
-	@SuppressWarnings("unused")
-	private void moveEntityInPortal(Entity entity, Vector3 prevPos) {
-		if (!entity.isDead && getState() == EnumStargateState.Connected && canTravelFromThisEnd()) {
-			Trans3 worldTrans = localToGlobalTransformation();
-			double vx = entity.posX - prevPos.x, vy = entity.posY - prevPos.y, vz = entity.posZ - prevPos.z;
-			Vector3 p1 = worldTrans.ip(entity.posX, entity.posY, entity.posZ);
-			Vector3 p0 = worldTrans.ip(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z
-					- entity.posZ);
-			double z0 = 0.0;
-			if (p0.z >= z0 && p1.z < z0) {
-				entity.motionX = vx;
-				entity.motionY = vy;
-				entity.motionZ = vz;
-				TileEntityStargateBase dte = getConnectedStargateTE();
-				if (dte != null) {
-					Trans3 dt = dte.localToGlobalTransformation();
-					Vector3 p = worldTrans.ip(entity.posX, entity.posY, entity.posZ);
-					Vector3 v = worldTrans.iv(entity.motionX, entity.motionY, entity.motionZ);
-					Vector3 r = worldTrans.iv(yawVector(entity));
-
-					Vector3 q = dt.p(-p.x, p.y, -p.z); // new global position
-					Vector3 u = dt.v(-v.x, v.y, -v.z); // new global velocity
-					Vector3 s = dt.v(r.mul(-1)); // new global facing
-					double a = yawAngle(s); // new global yaw angle
-
-					while (entity.ridingEntity != null)
-						entity = entity.ridingEntity;
-					new TeleportationAgent().teleportEntityAndRider(entity, q, u, new Facing3(a, entity.rotationPitch),
-							connectedLocation.dimension);
-				}
-			}
-		}
-	}
-
-	public NBTTagCompound nbtWithCoords() {
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("x", xCoord);
-		nbt.setInteger("y", yCoord);
-		nbt.setInteger("z", zCoord);
-		return nbt;
 	}
 
 	private void performTransientDamage() {
@@ -788,12 +766,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		numEngagedChevrons = nbt.getInteger("numEngagedChevrons");
-		if (nbt.hasKey("connectedLocation"))
-			connectedLocation = new WorldLocation(nbt.getCompoundTag("connectedLocation"));
-		isInitiator = nbt.getBoolean("isInitiator");
-		timeout = nbt.getInteger("timeout");
-		clearConnection();
 		getAsStructure().invalidate();
 	}
 
@@ -820,30 +792,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	 *            If this Stargate is responsible for this connection
 	 */
 	private void startDiallingStargate(String address, TileEntityStargateBase dte, boolean initiator) {
-		// Do not initiate a chunkloading request on a client!
-		if (!worldObj.isRemote) {
-			NBTTagCompound metadata = new NBTTagCompound();
-			ChunkLocation localize = new ChunkLocation(dte);
-			metadata.setInteger("minX", localize.cx - 1);
-			metadata.setInteger("minZ", localize.cz - 1);
-			metadata.setInteger("maxX", localize.cx + 1);
-			metadata.setInteger("maxZ", localize.cz + 1);
-			RemoteChunkLoading remoteLoader = LanteaCraft.getProxy().getRemoteChunkManager();
-			loader = remoteLoader.create(String.format("StargateConnection-%s", address), dte.worldObj,
-					ticksToStayOpen, metadata);
-		}
-		getAsStructure().setMetadata("diallingTo", address);
-		getAsStructure().setMetadata("numEngagedChevrons", numEngagedChevrons);
-		connectedLocation = new WorldLocation(dte);
-		connectedHost = new WeakReference<TileEntityStargateBase>(dte);
-		isInitiator = initiator;
-		onInventoryChanged();
-		startDiallingSymbol(getDialledAddres().charAt(numEngagedChevrons));
-	}
-
-	private void startDiallingSymbol(char c) {
-		enterState(EnumStargateState.Dialling, diallingTime);
-		playSoundEffect("sg1_dial", 1.0F, 1.0F);
+		// TODO IMPLEMENT ME
 	}
 
 	private Entity teleportEntity(Entity entity, Trans3 t1, Trans3 t2, int dimension) {
@@ -897,7 +846,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			}
 			setVelocity(newEntity, v);
 			newEntity.setLocationAndAngles(p.x, p.y, p.z, (float) a, oldEntity.rotationPitch);
-			checkChunk(newWorld, newEntity);
 			newEntity.forceSpawn = true;
 			newWorld.spawnEntityInWorld(newEntity);
 			newEntity.setWorld(newWorld);
@@ -978,29 +926,40 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	private Object tryConnect(String address) {
 		String homeAddress = getLocalAddress();
 		TileEntityStargateBase dte = null;
+
+		// Resolve the locations
+		ChunkLocation remoteLocation, hostLocation = getLocation();
 		try {
-			if (BuildInfo.CHUNK_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.INFO, String.format("Requesting GAD find gate %s.", address));
-			dte = GateAddressHelper.findStargate(getLocation(), address);
-		} catch (CoordRangeError coords) {
-			if (BuildInfo.CHUNK_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.WARNING,
-						String.format("Coords range error: %s.", coords.getMessage()));
-			return coords.getMessage();
-		} catch (DimensionRangeError dimension) {
-			if (BuildInfo.CHUNK_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.WARNING,
-						String.format("Dimension range error: %s", dimension.getMessage()));
-			return dimension.getMessage();
+			remoteLocation = GateAddressHelper.locationForAddress(address);
 		} catch (AddressingError error) {
-			if (BuildInfo.CHUNK_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.WARNING,
-						String.format("General addressing error: %s", error.getMessage()));
 			return error.getMessage();
 		}
+		if (!remoteLocation.isStrongLocation)
+			if (hostLocation.isStrongLocation)
+				remoteLocation.setDimension(hostLocation.dimension);
+			else
+				return "Cannot guess effective dimension; location and host location are both weak!";
+		WorldLocation localize = remoteLocation.toWorldLocation();
+		World world = GateAddressHelper.getWorld(localize.dimension);
+		if (world != null) {
+			String name = String.format("StargateConnection-Remote-%s", address);
+			NBTTagCompound metadata = new NBTTagCompound();
+			metadata.setInteger("minX", localize.x - 1);
+			metadata.setInteger("minZ", localize.z - 1);
+			metadata.setInteger("maxX", localize.x + 1);
+			metadata.setInteger("maxZ", localize.z + 1);
+			remoteRequest = LanteaCraft.getProxy().getRemoteChunkManager().create(name, world, 240 * 20, metadata);
+			connection = new ConnectionRequest(localize, world);
+		}
 
-		if (dte == null)
+		if (world == null || dte == null) {
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.WARNING, String.format("Failed to fetch dimension!"));
+			remoteRequest.expireNow();
+			remoteRequest = null;
 			return "No stargate at address " + address;
+		}
+
 		else if (dte == this)
 			return "Stargate cannot connect to itself";
 		else if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle)
@@ -1008,14 +967,20 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		else if (1 > getRemainingDials())
 			return "Stargate has insufficient fuel";
 		else {
+			NBTTagCompound metadata = new NBTTagCompound();
+			ChunkLocation localize = new ChunkLocation(dte);
+			metadata.setInteger("minX", localize.cx - 1);
+			metadata.setInteger("minZ", localize.cz - 1);
+			metadata.setInteger("maxX", localize.cx + 1);
+			metadata.setInteger("maxZ", localize.cz + 1);
+			RemoteChunkLoading remoteLoader = LanteaCraft.getProxy().getRemoteChunkManager();
+			loader = remoteLoader.create(String.format("StargateConnection-%s", address), dte.worldObj,
+					ticksToStayOpen, metadata);
+
 			startDiallingStargate(address, dte, true);
 			dte.startDiallingStargate((address.length() == 7) ? homeAddress.substring(0, 7) : homeAddress, this, false);
 			return true;
 		}
-	}
-
-	private boolean undialledDigitsRemaining() {
-		return getDialledAddres() != null && numEngagedChevrons < getDialledAddres().length();
 	}
 
 	@Override
@@ -1032,11 +997,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setInteger("numEngagedChevrons", numEngagedChevrons);
-		if (connectedLocation != null)
-			nbt.setCompoundTag("connectedLocation", connectedLocation.toNBT());
-		nbt.setBoolean("isInitiator", isInitiator);
-		nbt.setInteger("timeout", timeout);
 	}
 
 	private double yawAngle(Vector3 v) {

@@ -149,53 +149,6 @@ public class GateAddressHelper {
 	}
 
 	/**
-	 * Find a Stargate at a foreign location; return the Stargate if it is valid
-	 * or null if there isn't a Stargate present.
-	 * 
-	 * @param hostLocation
-	 * @param address
-	 *            The address to parse.
-	 * @return The Stargate if there is one present, or null.
-	 * @throws AddressingError
-	 *             If the address cannot be parsed due to issues such as invalid
-	 *             characters, numbers out of range or other constraints are
-	 *             violated, an AddressingError will be thrown.
-	 */
-	public static TileEntityStargateBase findStargate(ChunkLocation hostLocation, String address)
-			throws AddressingError {
-		TileEntityStargateBase dte = null;
-		ChunkLocation location = GateAddressHelper.locationForAddress(address);
-		if (!location.isStrongLocation)
-			if (hostLocation.isStrongLocation)
-				location.setDimension(hostLocation.dimension);
-			else
-				throw new AddressingError("Cannot guess effective dimension; location and host location are both weak!");
-		WorldLocation localize = location.toWorldLocation();
-		if (BuildInfo.CHUNK_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("Attempting to fetch dimension %s", localize.dimension));
-		World world = GateAddressHelper.getWorld(localize.dimension);
-		if (world != null) {
-			String name = String.format("StargateScan-%s", address);
-			NBTTagCompound metadata = new NBTTagCompound();
-			metadata.setInteger("minX", localize.x - 1);
-			metadata.setInteger("minZ", localize.z - 1);
-			metadata.setInteger("maxX", localize.x + 1);
-			metadata.setInteger("maxZ", localize.z + 1);
-			LanteaCraft.getProxy().getRemoteChunkManager().create(name, world, 240 * 20, metadata);
-			Chunk chunk = world.getChunkFromBlockCoords(localize.x, localize.z);
-			if (chunk != null)
-				for (Object o : chunk.chunkTileEntityMap.values())
-					if (o instanceof TileEntityStargateBase) {
-						dte = (TileEntityStargateBase) o;
-						break;
-					}
-		} else if (BuildInfo.CHUNK_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.WARNING, String.format("Failed to fetch dimension!"));
-		return dte;
-	}
-
-	/**
 	 * Initializer.
 	 */
 	private GateAddressHelper() {
