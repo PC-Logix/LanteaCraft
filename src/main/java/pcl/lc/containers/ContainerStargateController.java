@@ -2,8 +2,12 @@ package pcl.lc.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import pcl.common.base.GenericContainer;
+import pcl.common.inventory.FilteredSlot;
 import pcl.lc.tileentity.TileEntityStargateController;
 
 public class ContainerStargateController extends GenericContainer {
@@ -12,6 +16,69 @@ public class ContainerStargateController extends GenericContainer {
 	static final int fuelSlotsY = 84;
 	static final int playerSlotsX = 48;
 	static final int playerSlotsY = 124;
+
+	private static final IInventory voidInventory = new IInventory() {
+		@Override
+		public void setInventorySlotContents(int i, ItemStack itemstack) {
+		}
+
+		@Override
+		public void openChest() {
+		}
+
+		@Override
+		public void onInventoryChanged() {
+		}
+
+		@Override
+		public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+			return true;
+		}
+
+		@Override
+		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+			return false;
+		}
+
+		@Override
+		public boolean isInvNameLocalized() {
+			return true;
+		}
+
+		@Override
+		public ItemStack getStackInSlotOnClosing(int i) {
+			return null;
+		}
+
+		@Override
+		public ItemStack getStackInSlot(int i) {
+			return null;
+		}
+
+		@Override
+		public int getSizeInventory() {
+			return 0;
+		}
+
+		@Override
+		public int getInventoryStackLimit() {
+			return 0;
+		}
+
+		@Override
+		public String getInvName() {
+			return "this is not an inventory";
+		}
+
+		@Override
+		public ItemStack decrStackSize(int i, int j) {
+			return null;
+		}
+
+		@Override
+		public void closeChest() {
+		}
+	};
 
 	public TileEntityStargateController te;
 
@@ -25,6 +92,8 @@ public class ContainerStargateController extends GenericContainer {
 	public ContainerStargateController(TileEntityStargateController te, EntityPlayer player) {
 		super(256, 208);
 		this.te = te;
+		for (int i = 0; i < 9; i++) 
+			addSlotToContainer(new Slot(voidInventory, i, -60, -60));
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package pcl.lc.blocks;
 
+import java.util.logging.Level;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -12,6 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.RotationOrientedBlock;
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityStargateController;
 import cpw.mods.fml.relauncher.Side;
@@ -93,11 +96,16 @@ public class BlockStargateController extends RotationOrientedBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		if (player.isSneaking() || side != ForgeDirection.UP.ordinal())
+		if (player.isSneaking() || side != ForgeDirection.UP.ordinal()) {
+			if (BuildInfo.DEBUG)
+				LanteaCraft.getLogger().log(Level.INFO, "Opening StargateControllerEnergy.");
 			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), world,
 					x, y, z);
-		else
+		} else {
+			if (BuildInfo.DEBUG)
+				LanteaCraft.getLogger().log(Level.INFO, "Opening StargateController.");
 			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateController.ordinal(), world, x, y, z);
+		}
 		return true;
 	}
 
