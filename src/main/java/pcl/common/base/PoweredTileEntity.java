@@ -340,4 +340,41 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 	public float getVoltage() {
 		return 240.0f;
 	}
+
+	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		if (!canReceiveEnergy())
+			return 0;
+		int quantity = (int) Math.floor(EnumUnits.convertToNaquadahUnit(EnumUnits.RedstoneFlux, maxReceive));
+		if (!simulate)
+			receiveEnergy(quantity);
+		return quantity;
+	}
+
+	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+		if (!canExportEnergy())
+			return 0;
+		int maxAvailQuantity = (int) EnumUnits.convertFromNaquadahUnit(EnumUnits.RedstoneFlux,
+				getAvailableExportEnergy());
+		int send = Math.min(maxExtract, maxAvailQuantity);
+		if (!simulate)
+			exportEnergy(send);
+		return send;
+	}
+
+	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
+	public boolean canInterface(ForgeDirection from) {
+		return true;
+	}
+
+	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
+	public int getEnergyStored(ForgeDirection from) {
+		return (int) EnumUnits.convertFromNaquadahUnit(EnumUnits.RedstoneFlux, getAvailableExportEnergy());
+	}
+
+	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
+	public int getMaxEnergyStored(ForgeDirection from) {
+		return (int) EnumUnits.convertFromNaquadahUnit(EnumUnits.RedstoneFlux, getMaximumExportEnergy());
+	}
 }
