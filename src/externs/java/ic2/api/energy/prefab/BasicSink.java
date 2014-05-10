@@ -1,5 +1,6 @@
 package ic2.api.energy.prefab;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -12,6 +13,8 @@ import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
+import ic2.api.info.Info;
+import ic2.api.item.ElectricItem;
 
 /**
  * BasicSink is a simple adapter to provide an ic2 energy sink.
@@ -95,14 +98,14 @@ public class BasicSink extends TileEntity implements IEnergySink {
 	/**
 	 * Constructor for a new BasicSink delegate.
 	 * 
-	 * @param parent TileEntity represented by this energy sink.
-	 * @param capacity Maximum amount of eu to store.
-	 * @param tier IC2 tier, 1=LV, 2=MV, ...
+	 * @param parent1 TileEntity represented by this energy sink.
+	 * @param capacity1 Maximum amount of eu to store.
+	 * @param tier1 IC2 tier, 1=LV, 2=MV, ...
 	 */
-	public BasicSink(TileEntity parent, int capacity, int tier) {
-		this.parent = parent;
-		this.capacity = capacity;
-		this.tier = tier;
+	public BasicSink(TileEntity parent1, int capacity1, int tier1) {
+		this.parent = parent1;
+		this.capacity = capacity1;
+		this.tier = tier1;
 	}
 
 	// in-world te forwards	>>
@@ -121,7 +124,9 @@ public class BasicSink extends TileEntity implements IEnergySink {
 	 * Either updateEntity or onLoaded have to be used.
 	 */
 	public void onLoaded() {
-		if (!addedToEnet && !FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+		if (!addedToEnet &&
+				!FMLCommonHandler.instance().getEffectiveSide().isClient() &&
+				Info.isIc2Available()) {
 			worldObj = parent.worldObj;
 			xCoord = parent.xCoord;
 			yCoord = parent.yCoord;
@@ -150,7 +155,8 @@ public class BasicSink extends TileEntity implements IEnergySink {
 	 */
 	@Override
 	public void onChunkUnload() {
-		if (addedToEnet) {
+		if (addedToEnet &&
+				Info.isIc2Available()) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 
 			addedToEnet = false;
@@ -195,6 +201,42 @@ public class BasicSink extends TileEntity implements IEnergySink {
 	// methods for using this adapter >>
 
 	/**
+	 * Get the maximum amount of energy this sink can hold in its buffer.
+	 * 
+	 * @return Capacity in EU.
+	 */
+	public int getCapacity() {
+		return capacity;
+	}
+
+	/**
+	 * Set the maximum amount of energy this sink can hold in its buffer.
+	 * 
+	 * @param capacity1 Capacity in EU.
+	 */
+	public void setCapacity(int capacity1) {
+		this.capacity = capacity1;
+	}
+
+	/**
+	 * Get the IC2 energy tier for this sink.
+	 * 
+	 * @return IC2 Tier.
+	 */
+	public int getTier() {
+		return tier;
+	}
+
+	/**
+	 * Set the IC2 energy tier for this sink.
+	 * 
+	 * @param tier1 IC2 Tier.
+	 */
+	public void setTier(int tier1) {
+		this.tier = tier1;
+	}
+
+	/**
 	 * Determine the energy stored in the sink's input buffer.
 	 * 
 	 * @return amount in EU, may be above capacity
@@ -236,9 +278,30 @@ public class BasicSink extends TileEntity implements IEnergySink {
 			energyStored -= amount;
 
 			return true;
-		} else {
-			return false;
 		}
+		return false;
+	}
+
+	/**
+	 * Discharge the supplied ItemStack into this sink's energy buffer.
+	 * 
+	 * @param stack ItemStack to discharge (null is ignored)
+	 * @param limit Transfer limit, values <= 0 will use the battery's limit
+	 * @return true if energy was transferred
+	 */
+	public boolean discharge(ItemStack stack, int limit) {
+		if (stack == null || !Info.isIc2Available()) return false;
+
+		int amount = (int) Math.floor(capacity - energyStored);
+		if (amount <= 0) return false;
+
+		if (limit > 0 && limit < amount) amount = limit;
+
+		amount = ElectricItem.manager.discharge(stack, amount, tier, limit > 0, false);
+
+		energyStored += amount;
+
+		return amount > 0;
 	}
 
 	// << methods for using this adapter
@@ -304,9 +367,9 @@ public class BasicSink extends TileEntity implements IEnergySink {
 
 
 	public final TileEntity parent;
-	public final int capacity;
-	public final int tier;
 
+	protected int capacity;
+	protected int tier;
 	protected double energyStored;
 	protected boolean addedToEnet;
 }
