@@ -7,8 +7,8 @@ Build & health service: http://lanteacraft.com/jenkins/job/LanteaCraft/ ![Screen
 
 Credits:
 ================
-* Michiyo Ravencroft: "Yes".
-* AfterLifeLochie: Head Code monkey. 
+* Michiyo Ravencroft: Coder, Founder.
+* AfterLifeLochie: Head Code monkey, Co-Founder. 
 * DrakeBD & TempusBD (DeltaStrium): Textures, sounds and models.
 * Greg Ewing: Original SGCraft sourcecode, since refactored.
 
