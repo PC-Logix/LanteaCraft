@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import pcl.common.util.WorldLocation;
+import pcl.lc.BuildInfo;
+import pcl.lc.LanteaCraft;
 
 public class StandardModPacket extends ModPacket {
 
@@ -133,6 +135,9 @@ public class StandardModPacket extends ModPacket {
 	 *            The value to assign
 	 */
 	public void setValue(String name, Object value) {
+		if (value == null)
+			LanteaCraft.getLogger().log(Level.WARNING,
+					String.format("Attempt to pack null value into key %s, this is probably bad.", name));
 		synchronized (values) {
 			values.put(name, value);
 		}
@@ -206,6 +211,10 @@ public class StandardModPacket extends ModPacket {
 	public void writeData(DataOutputStream data) throws IOException {
 		data.writeByte((byte) 0); // packet typeof
 		data.writeByte((byte) 1);
+		if (packetType == null || packetType.length() == 0)
+			throw new IOException("Cannot pack blank packetType!");
+		if (origin == null)
+			throw new IOException("Cannot pack blank originType!");
 		if (packetType.length() > 512)
 			throw new IOException("packetType exceeds maximum length!");
 		Packet.writeString(packetType, data);
@@ -227,14 +236,18 @@ public class StandardModPacket extends ModPacket {
 	 *             Any read exception
 	 */
 	public void readData(DataInputStream data) throws IOException {
-		if (data.readByte() != (byte) 1)
-			throw new IOException("Malformed packet!!");
-		packetType = Packet.readString(data, 512);
-		isPacketForServer = (data.readByte() == 1);
-		IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
-		origin = (WorldLocation) unpacker.unpack(data);
-		synchronized (values) {
-			values = (HashMap<Object, Object>) readHashMap(data);
+		try {
+			if (data.readByte() != (byte) 1)
+				throw new IOException("Malformed packet!!");
+			packetType = Packet.readString(data, 512);
+			isPacketForServer = (data.readByte() == 1);
+			IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
+			origin = (WorldLocation) unpacker.unpack(data);
+			synchronized (values) {
+				values = (HashMap<Object, Object>) readHashMap(data);
+			}
+		} catch (IOException ioex) {
+			throw new IOException(String.format("Bad packet: %s!", (packetType != null) ? packetType : "<null>"), ioex);
 		}
 	}
 
@@ -259,10 +272,19 @@ public class StandardModPacket extends ModPacket {
 			if (packer != null) {
 				data.writeInt(255);
 				data.writeInt(packer.getTypeOf());
+				if (BuildInfo.NET_DEBUGGING)
+					LanteaCraft.getLogger().log(Level.INFO,
+							String.format("Packing complex of type %s.", packer.getTypeOf()));
 				packer.pack(o, data);
-			} else
+			} else {
+				if (BuildInfo.NET_DEBUGGING)
+					LanteaCraft.getLogger()
+							.log(Level.WARNING, String.format("Cannot pack %s!", o.getClass().getName()));
 				throw new IOException("Cannot pack " + o.getClass().getName() + "; unknown value.");
+			}
 		} else {
+			if (BuildInfo.NET_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.INFO, String.format("Packing primitive of type %s.", intValueOf));
 			data.writeInt(intValueOf);
 			if (intValueOf != -1)
 				switch (intValueOf) {
@@ -283,12 +305,16 @@ public class StandardModPacket extends ModPacket {
 					data.writeFloat((Float) o);
 					break;
 				case 8:
-					Packet.writeString((String) o, data);
-					break;
 				case 9:
-					writeArrayList((ArrayList<?>) o, data);
+					data.writeChar((Character) o);
 					break;
 				case 10:
+					Packet.writeString((String) o, data);
+					break;
+				case 11:
+					writeArrayList((ArrayList<?>) o, data);
+					break;
+				case 12:
 					writeHashMap((HashMap<?, ?>) o, data);
 					break;
 				default:
@@ -308,6 +334,8 @@ public class StandardModPacket extends ModPacket {
 	 */
 	public static Object readValue(DataInputStream data) throws IOException {
 		int typeAsInt = data.readInt();
+		if (BuildInfo.NET_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, String.format("Unpacking primitive of type %s.", typeAsInt));
 		if (typeAsInt == -1)
 			return null;
 		else {
@@ -315,6 +343,9 @@ public class StandardModPacket extends ModPacket {
 			if (classValueOf == null)
 				if (typeAsInt == 255) {
 					int packerTypeAsInt = data.readInt();
+					if (BuildInfo.NET_DEBUGGING)
+						LanteaCraft.getLogger().log(Level.INFO,
+								String.format("Unpacking complex of type %s.", packerTypeAsInt));
 					IStreamPackable<?> packer = ModPacket.findPacker(packerTypeAsInt);
 					if (packer != null)
 						return packer.unpack(data);
@@ -330,6 +361,8 @@ public class StandardModPacket extends ModPacket {
 				return data.readDouble();
 			else if (classValueOf.equals(float.class) || classValueOf.equals(Float.class))
 				return data.readFloat();
+			else if (classValueOf.equals(char.class) || classValueOf.equals(Character.class))
+				return data.readChar();
 			else if (classValueOf.equals(String.class))
 				return Packet.readString(data, 8192);
 			else if (classValueOf.equals(HashMap.class))
@@ -355,16 +388,21 @@ public class StandardModPacket extends ModPacket {
 	 *             Any write exception
 	 */
 	public static void writeHashMap(HashMap<?, ?> values, DataOutputStream data) throws IOException {
-		int sign = 0;
+		int sign = 0, written = 0;
 		for (Entry<?, ?> entry : values.entrySet())
 			if (entry.getKey() != null && entry.getValue() != null)
 				sign++;
+		if (BuildInfo.NET_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, String.format("Packing %s values in HashMap to stream.", sign));
 		data.writeInt(sign);
 		for (Entry<?, ?> entry : values.entrySet())
 			if (entry.getKey() != null && entry.getValue() != null) {
 				writeValue(entry.getKey(), data);
 				writeValue(entry.getValue(), data);
+				written++;
 			}
+		if (written != sign)
+			throw new IOException(String.format("Could not pack packet, wrote %s pairs, expected %s!", written, sign));
 	}
 
 	/**
@@ -378,6 +416,8 @@ public class StandardModPacket extends ModPacket {
 	 */
 	public static HashMap<?, ?> readHashMap(DataInputStream data) throws IOException {
 		int size = data.readInt();
+		if (BuildInfo.NET_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, String.format("Unpacking %s values in HashMap from stream.", size));
 		HashMap<Object, Object> result = new HashMap<Object, Object>();
 		for (int i = 0; i < size; i++) {
 			Object key = readValue(data);
@@ -400,6 +440,9 @@ public class StandardModPacket extends ModPacket {
 	 *             Any write exception
 	 */
 	public static void writeArrayList(ArrayList<?> array, DataOutputStream data) throws IOException {
+		if (BuildInfo.NET_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO,
+					String.format("Packing %s values in ArrayList to stream.", array.size()));
 		data.writeInt(array.size());
 		for (Object o : array)
 			writeValue(o, data);
@@ -416,6 +459,9 @@ public class StandardModPacket extends ModPacket {
 	 */
 	public static ArrayList<?> readArrayList(DataInputStream data) throws IOException {
 		int size = data.readInt();
+		if (BuildInfo.NET_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO,
+					String.format("Unpacking %s values in ArrayList from stream.", size));
 		ArrayList<Object> result = new ArrayList<Object>();
 		for (int i = 0; i < size; i++)
 			result.add(readValue(data));
@@ -435,7 +481,7 @@ public class StandardModPacket extends ModPacket {
 		try {
 			writeData(data);
 		} catch (IOException e) {
-			Logger.getLogger("pcl.common").log(Level.WARNING, "Exception when writing packet!", e);
+			LanteaCraft.getLogger().log(Level.SEVERE, "Exception when writing packet!", e);
 		}
 		pkt.data = bytes.toByteArray();
 		pkt.length = pkt.data.length;

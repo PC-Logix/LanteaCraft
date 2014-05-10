@@ -178,9 +178,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 		bindTexture(dhdButtonLayer, 128, 64);
 		GL11.glEnable(GL11.GL_BLEND);
 		TileEntityStargateBase te = getStargateTE();
-		boolean connected = te != null
-				&& (EnumStargateState) te.getAsStructure().getMetadata("state") != EnumStargateState.Idle
-				&& (EnumStargateState) te.getAsStructure().getMetadata("state") != EnumStargateState.Disconnecting;
+		boolean connected = te != null && te.isConnected();
 		if (te == null || !te.getAsStructure().isValid())
 			setColor(0.2, 0.2, 0.2);
 		else if (connected)
@@ -206,7 +204,7 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	protected void drawForegroundLayer(int mouseX, int mouseY) {
 		TileEntityStargateBase te = getStargateTE();
 		if (te != null)
-			if ((EnumStargateState) te.getAsStructure().getMetadata("state") == EnumStargateState.Idle) {
+			if (te.getState() == EnumStargateState.Idle) {
 				drawEnteredSymbols();
 				drawEnteredString();
 			}

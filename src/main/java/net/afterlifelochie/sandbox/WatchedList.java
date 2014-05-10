@@ -62,8 +62,8 @@ public class WatchedList<A, B> extends Observable {
 	}
 
 	@Override
-	public void clearModified() {
-		super.clearModified();
+	public void clearModified(ObserverContext context) {
+		super.clearModified(context);
 		this.key_add.clear();
 		this.key_remove.clear();
 	}

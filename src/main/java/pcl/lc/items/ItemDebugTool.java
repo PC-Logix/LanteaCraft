@@ -68,6 +68,7 @@ public class ItemDebugTool extends Item {
 					+ ((base.getAsStructure().isValidStructure(par3World, par4, par5, par6)) ? "yes" : "no"));
 			if (base.getState() != null)
 				par2EntityPlayer.addChatMessage("mState: " + base.getState());
+			par2EntityPlayer.addChatMessage("ticks: " + base.getTicks());
 		} else if (entity instanceof TileEntityStargateRing) {
 			TileEntityStargateRing ring = (TileEntityStargateRing) entity;
 			par2EntityPlayer.addChatMessage("type: TileEntityStargateBase");

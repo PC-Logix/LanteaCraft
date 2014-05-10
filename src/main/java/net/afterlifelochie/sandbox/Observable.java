@@ -36,7 +36,7 @@ public class Observable {
 	/**
 	 * Returns the state of this Observable.
 	 */
-	public boolean modified() {
+	public boolean modified(ObserverContext context) {
 		return modified;
 	}
 
@@ -44,7 +44,7 @@ public class Observable {
 	 * Resets the state of this Observable. If the Observable has any meta-data
 	 * about the change in the Observable state, it should also be reset.
 	 */
-	public void clearModified() {
+	public void clearModified(ObserverContext context) {
 		modified = false;
 	}
 

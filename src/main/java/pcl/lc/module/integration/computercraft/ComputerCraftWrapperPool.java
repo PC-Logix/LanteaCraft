@@ -110,7 +110,7 @@ public class ComputerCraftWrapperPool {
 		@Override
 		public String[] getMethodNames() {
 			return new String[] { "dial", "connect", "disconnect", "isConnected", "getAddress", "isDialing",
-					"isComplete", "isBusy", "hasFuel", "isValidAddress" };
+					"isComplete", "hasFuel" };
 		}
 
 		@Override
@@ -141,33 +141,7 @@ public class ComputerCraftWrapperPool {
 			case 6:
 				return new Object[] { access.isValid() };
 			case 7:
-				try {
-					TileEntityStargateBase dte = GateAddressHelper.findStargate(access.getLocation(), arguments[0]
-							.toString().toUpperCase());
-					if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle)
-						return new Object[] { true };
-				} catch (Throwable thrown) {
-					if (thrown instanceof CoordRangeError || thrown instanceof DimensionRangeError)
-						throw new Exception(thrown.getMessage());
-					else if (thrown instanceof AddressingError)
-						throw new Exception("Addressing error: " + thrown.getMessage());
-				}
-				return new Object[] { false };
-			case 8:
 				return new Object[] { access.getRemainingConnectionTime() > 0 && access.getRemainingDials() > 0 };
-			case 9:
-				try {
-					if (arguments[0].toString().toUpperCase() == access.getLocalAddress())
-						throw new Exception("Stargate cannot connect to itself");
-					if (GateAddressHelper.findStargate(access.getLocation(), arguments[0].toString().toUpperCase()) == null)
-						return new Object[] { false };
-				} catch (Throwable thrown) {
-					if (thrown instanceof CoordRangeError || thrown instanceof DimensionRangeError)
-						throw new Exception(thrown.getMessage());
-					else if (thrown instanceof AddressingError)
-						throw new Exception("Addressing error: " + thrown.getMessage());
-				}
-				return new Object[] { true };
 			}
 			throw new Exception(String.format("Warning, unhandled method id %s!", method));
 		}

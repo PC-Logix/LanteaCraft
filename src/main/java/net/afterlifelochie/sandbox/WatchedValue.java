@@ -44,11 +44,19 @@ public class WatchedValue<T extends Object> extends Observable {
 		super(parent);
 		this.value = initial;
 	}
+	
+	@Override
+	public boolean modified(ObserverContext context) {
+		if (!context.states.containsKey(hashCode()))
+			return true;
+		if (context.states.get(hashCode()) != value.hashCode())
+			return true;
+		return false;
+	}
 
 	@Override
-	public void clearModified() {
-		super.clearModified();
-		this.last = 0;
+	public void clearModified(ObserverContext context) {
+		context.states.put(hashCode(), value.hashCode());
 	}
 
 	/**

@@ -1,12 +1,13 @@
 package pcl.lc.tileentity;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 
+import net.afterlifelochie.sandbox.ObserverContext;
+import net.afterlifelochie.sandbox.WatchedValue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -25,10 +26,8 @@ import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -43,8 +42,8 @@ import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
 import pcl.common.util.ChunkLocation;
-import pcl.common.util.Facing3;
 import pcl.common.util.MathUtils;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
@@ -56,12 +55,9 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.core.AddressingError;
-import pcl.lc.core.AddressingError.CoordRangeError;
-import pcl.lc.core.AddressingError.DimensionRangeError;
-import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.RemoteChunkLoading;
-import pcl.lc.core.TeleportationAgent;
+import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
@@ -105,6 +101,40 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	/**
+	 * Used to shadow a connection on a client.
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	private class ClientConnectionRequest {
+		/* Whether the request is currently running */
+		public WatchedValue<Boolean> running = new WatchedValue(false);
+		/* If this remote request is the host */
+		public final boolean isHost;
+		/* The current state of the connection */
+		public WatchedValue<EnumStargateState> state = new WatchedValue(EnumStargateState.Idle);
+		/* The current symbol being dialled */
+		public WatchedValue<Character> symbol = new WatchedValue<Character>(' ');
+		/* The number of chevrons dialled */
+		public WatchedValue<Integer> chevrons = new WatchedValue<Integer>(0);
+		/* The remaining number of ticks to remain in this state */
+		public int ticksRemaining = 0;
+		/* The name of the request */
+		public final String name, hostName, clientName;
+		/* The local and target addresses */
+		public final String hostAddress, clientAddress;
+
+		public ClientConnectionRequest(String name, String hostName, String clientName, String hostAddress,
+				String clientAddress, boolean isHost) {
+			this.name = name;
+			this.hostName = hostName;
+			this.clientName = clientName;
+			this.hostAddress = hostAddress;
+			this.clientAddress = clientAddress;
+			this.isHost = isHost;
+		}
+	}
+
+	/**
 	 * Used to simulate a connection on a server.
 	 * 
 	 * @author AfterLifeLochie
@@ -124,37 +154,44 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		public String name, hostName, clientName;
 
 		/* Whether the request is currently running */
-		public boolean running;
+		public WatchedValue<Boolean> running = new WatchedValue<Boolean>(true);
 		/* The number of total ticks the request has been running for */
 		public int ticks = 0;
 		/* The current state of the connection */
-		public EnumStargateState state;
+		public WatchedValue<EnumStargateState> state = new WatchedValue<EnumStargateState>(EnumStargateState.Idle);
 		/* The current symbol being dialled */
-		public char symbol;
+		public WatchedValue<Character> symbol = new WatchedValue<Character>(' ');
 		/* The number of chevrons dialled */
-		public int chevrons;
+		public WatchedValue<Integer> chevrons = new WatchedValue<Integer>(0);
 		/* The remaining number of ticks to remain in this state */
 		public int ticksRemaining = 0;
 
-		public ConnectionRequest(WorldLocation hostLocation, WorldLocation clientLocation,
-				TileEntityStargateBase hostTile, String name) {
+		public ConnectionRequest(String hostAddress, String clientAddress, WorldLocation hostLocation,
+				WorldLocation clientLocation, TileEntityStargateBase hostTile, String name) {
+			this.hostAddress = hostAddress;
 			this.hostLocation = hostLocation;
+			this.clientAddress = clientAddress;
 			this.clientLocation = clientLocation;
 			this.hostTile = hostTile;
 			this.name = name;
+			this.hostName = String.format("%s-Host-%s", name, hostLocation.toString());
+			this.clientName = String.format("%s-Client-%s", name, clientLocation.toString());
 		}
 
 		public void setup() {
-			running = true;
 			RemoteChunkLoading loader = LanteaCraft.getProxy().getRemoteChunkManager();
 			/* Prevent the initiator from unloading */
-			hostName = String.format("%s-Host-%s", name, hostLocation.toString());
-			hostChunkLoader = loader.create(hostName, hostWorld, ticksToStayOpen, createRadiusOf(hostLocation, 1));
+			hostWorld = GateAddressHelper.getWorld(hostLocation.dimension);
+			if (hostWorld != null)
+				hostChunkLoader = loader.create(hostName, hostWorld, ticksToStayOpen, createRadiusOf(hostLocation, 1));
 
 			/* Load the remote target chunks */
-			clientName = String.format("%s-Client-%s", name, clientLocation.toString());
-			clientChunkLoader = loader.create(clientName, clientWorld, ticksToStayOpen,
-					createRadiusOf(clientLocation, 1));
+			clientWorld = GateAddressHelper.getWorld(clientLocation.dimension);
+			if (clientWorld != null)
+				clientChunkLoader = loader.create(clientName, clientWorld, ticksToStayOpen,
+						createRadiusOf(clientLocation, 1));
+			/* Start dialling */
+			runState(EnumStargateState.Dialling, diallingTime);
 		}
 
 		public void advance(TileEntityStargateBase callee) {
@@ -164,48 +201,63 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			 */
 			if (!callee.equals(hostTile))
 				return;
-			if (!running)
+			if (!running.get())
 				return;
 			ticks++;
 			/* If we have no remote tile reference, attempt to find one */
-			if (clientTile == null) {
+			if (clientTile == null && clientWorld != null) {
 				/*
 				 * Scan over the tile-entity map; it's likely this will fail
 				 * while the world and chunks are being loaded (race condition)
 				 */
 				Chunk chunk = clientWorld.getChunkFromBlockCoords(clientLocation.x, clientLocation.z);
 				if (chunk != null)
-					for (Object o : chunk.chunkTileEntityMap.values())
-						if (o instanceof TileEntityStargateBase)
-							clientTile = (TileEntityStargateBase) o;
+					for (Object o : chunk.chunkTileEntityMap.values()) {
+						if (o instanceof TileEntityStargateBase) {
+							TileEntityStargateBase tile = (TileEntityStargateBase) o;
+							if (!tile.isBusy()) {
+								tile.setConnection(this);
+								clientTile = tile;
+								if (BuildInfo.DEBUG)
+									LanteaCraft.getLogger().log(Level.INFO,
+											"Found target tile entity, setting connection.");
+							}
+						}
+					}
 			}
 
 			if (ticksRemaining > 0) {
-				if (state == EnumStargateState.Transient)
+				if (state.get() == EnumStargateState.Transient)
 					performTransientDamage();
 				--ticksRemaining;
 			} else
-				switch (state) {
-				case Idle: // Any idle_wait state -> any dial state
+				switch (state.get()) {
 				case InterDialling: // Any dial_wait state -> any dial state
-					chevrons = nextChevron();
+					symbol.set(nextChevron());
 					runState(EnumStargateState.Dialling, diallingTime);
 					break;
 				case Dialling: // Any dial state -> any idle_wait state
-					chevrons++;
-					if (clientAddress.length() > chevrons)
+					chevrons.set(chevrons.get() + 1);
+					if (clientAddress.length() > chevrons.get())
 						runState(EnumStargateState.InterDialling, interDiallingTime);
-					else
-						runState(EnumStargateState.Transient, transientDuration);
+					else {
+						if (clientTile != null)
+							runState(EnumStargateState.Transient, transientDuration);
+						else {
+							if (BuildInfo.DEBUG)
+								LanteaCraft.getLogger().log(Level.WARNING, "Cannot find host tile, aborting!");
+							requestDisconnect();
+						}
+					}
 					break;
 				case Transient: // Any transient state -> any connected state
 					runState(EnumStargateState.Connected, ticksToStayOpen);
 					break;
 				case Connected: // Any connected state -> any disconnected state
-					disconnect();
+					requestDisconnect();
 					break;
 				case Disconnecting: // Any disconnected state -> idle
-					state = EnumStargateState.Idle;
+					state.set(EnumStargateState.Idle);
 					this.shutdown();
 					break;
 				}
@@ -216,22 +268,32 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 
 		public char nextChevron() {
-			return clientAddress.charAt(chevrons);
+			return clientAddress.charAt(chevrons.get());
 		}
 
 		public void runState(EnumStargateState state, int timeout) {
-			this.state = state;
+			if (BuildInfo.DEBUG)
+				LanteaCraft.getLogger().log(Level.INFO,
+						String.format("Stargate transitioning to state %s for %s ticks.", state, timeout));
+			this.state.set(state);
 			this.ticksRemaining = timeout;
 		}
 
-		public void shutdown() {
-			running = false;
+		public void requestDisconnect() {
+			runState(EnumStargateState.Disconnecting, disconnectTime);
+		}
+
+		private void shutdown() {
+			running.set(false);
+			state.set(EnumStargateState.Idle);
 			/* Drop all worldly references! */
 			hostTile = clientTile = null;
 			hostWorld = clientWorld = null;
 			/* Flush the chunk loaders */
-			clientChunkLoader.expireNow();
-			hostChunkLoader.expireNow();
+			if (clientChunkLoader != null)
+				clientChunkLoader.expireNow();
+			if (hostChunkLoader != null)
+				hostChunkLoader.expireNow();
 		}
 
 		private NBTTagCompound createRadiusOf(WorldLocation location, int radius) {
@@ -244,6 +306,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 
 		public boolean isHost(TileEntityStargateBase that) {
+			if (hostTile == null)
+				return false;
 			return hostTile.equals(that);
 		}
 	}
@@ -285,19 +349,21 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		closeFromEitherEnd = cfg.getBoolean("stargate", "closeFromEitherEnd", closeFromEitherEnd);
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
-	
-	private StargateMultiblock multiblock;
+
+	private final ObserverContext observerContext = new ObserverContext();
+
+	private StargateMultiblock multiblock = new StargateMultiblock(this);
 	private FilteredInventory inventory;
 	private List<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
+
 	private ConnectionRequest connection;
+	private ClientConnectionRequest connection_cli;
+	private double ring_angle, ring_last_angle, ring_dest_angle;
+
 	private SoundHost soundHost;
-	
 	private double ehGrid[][][];
-	
-	
 
 	public TileEntityStargateBase() {
-		this.multiblock = new StargateMultiblock(this);
 		this.inventory = new FilteredInventory(1) {
 
 			@Override
@@ -335,37 +401,67 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		};
 
 		inventory.setFilterRule(0, new FilterRule(new ItemStack[] {}, null, true, false));
-
-		getAsStructure().setMetadata("state", EnumStargateState.Idle);
 		getAsStructure().invalidate();
 	}
 
-	/**
-	 * Advances the Stargate by one tick.
-	 */
-	public void advance() {
-		if (worldObj.isRemote) {
-			if (soundHost == null)
-				soundHost = new SoundHost(this);
-			if (connection != null) {
-
+	public void serverThink() {
+		// Don't serverThink if on a client
+		if (worldObj.isRemote)
+			return;
+		checkForEntitiesInPortal();
+		if (connection != null) {
+			// Update the host
+			if (connection.isHost(this))
+				connection.advance(this);
+			// Synchronize the connection between this instance and the client
+			if (connection.running.modified(observerContext) || connection.chevrons.modified(observerContext)
+					|| connection.state.modified(observerContext) || connection.symbol.modified(observerContext)) {
+				if (BuildInfo.DEBUG)
+					LanteaCraft.getLogger().log(Level.INFO, "Update detected, sending update packet.");
+				StandardModPacket update = new StandardModPacket(new WorldLocation(this));
+				update.setType("LanteaPacket.ConnectionUpdate");
+				update.setIsForServer(false);
+				if (connection.running.modified(observerContext)) {
+					connection.running.clearModified(observerContext);
+					update.setValue("running", connection.running.get());
+				}
+				if (connection.chevrons.modified(observerContext)) {
+					connection.chevrons.clearModified(observerContext);
+					update.setValue("chevrons", connection.chevrons.get());
+				}
+				if (connection.state.modified(observerContext)) {
+					connection.state.clearModified(observerContext);
+					update.setValue("state", connection.state.get());
+				}
+				if (connection.symbol.modified(observerContext)) {
+					connection.symbol.clearModified(observerContext);
+					update.setValue("symbol", connection.symbol.get());
+				}
+				LanteaCraft.getProxy().sendToAllPlayers(update);
 			}
-			if (isValid() && lastState != getState()) {
-				if (getDialledAddres() != null) {
-					int targetpos = Character.getNumericValue(getDialledAddres().indexOf(numEngagedChevrons))
-							- Character.getNumericValue('A');
-					renderNextRingAngle = MathUtils.normaliseAngle(targetpos * StargateRenderConstants.ringSymbolAngle
-							- 45 * numEngagedChevrons);
-				} else
-					renderNextRingAngle = 0;
+		}
+	}
 
-				if (lastState == EnumStargateState.Idle && getState() == EnumStargateState.Dialling) {
-					createChannel("stargate_spin", "roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F, -1);
-					createChannel("stargate_chevron", "chevron_lock", new AudioPosition(worldObj, new Vector3(this)),
-							1.0F, 1200);
-					createChannel("stargate_transient", "open", new AudioPosition(worldObj, new Vector3(this)), 1.0F,
-							1200);
-					createChannel("stargate_close", "close", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
+	private void clientThink() {
+		// Don't clientThink if on a server
+		if (!worldObj.isRemote)
+			return;
+
+		if (soundHost == null)
+			soundHost = new SoundHost(this);
+		if (connection_cli != null) {
+			if (connection_cli.state.modified(observerContext)) {
+				connection_cli.state.clearModified(observerContext);
+
+				// The ring is now spinning, calculate the destination angle
+				if (connection_cli.state.get() == EnumStargateState.Dialling) {
+					char symbol = getDialledAddress().charAt(connection_cli.chevrons.get());
+					int symbolIndex = GateAddressHelper.singleton().index(symbol);
+					double chevronIndex = connection_cli.chevrons.get();
+					double symbolRotation = symbolIndex * StargateRenderConstants.ringSymbolAngle;
+					double chevronRotation = StargateRenderConstants.chevronAngleOffset
+							+ (StargateRenderConstants.chevronAngle * chevronIndex);
+					ring_dest_angle = MathUtils.normaliseAngle(chevronRotation - symbolRotation);
 				}
 
 				switch (getState()) {
@@ -383,7 +479,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					break;
 				case Disconnecting:
 					soundHost.playChannel("stargate_close");
-					renderNextRingAngle = 0;
+					ring_dest_angle = 0;
 					initiateClosingTransient();
 					break;
 				case Connected:
@@ -392,27 +488,23 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					soundHost.shutdown(false);
 					break;
 				}
-				lastState = getState();
+
+				ring_last_angle = ring_angle;
+				if (getState() == EnumStargateState.Dialling
+						|| (getState() == EnumStargateState.Disconnecting && connection_cli.ticksRemaining > 0))
+					if (connection_cli.ticksRemaining > 0) {
+						double da = MathUtils.diffAngle(ring_angle, ring_dest_angle) / connection_cli.ticksRemaining;
+						ring_angle = MathUtils.addAngle(ring_angle, da);
+						--connection_cli.ticksRemaining;
+					} else
+						ring_angle = ring_dest_angle;
 			}
-
-			soundHost.tick();
-
-			renderLastRingAngle = renderRingAngle;
-			advanceRendering();
-			if (getState() == EnumStargateState.Dialling
-					|| (getState() == EnumStargateState.Disconnecting && timeout > 0))
-				if (timeout > 0) {
-					double da = MathUtils.diffAngle(renderRingAngle, renderNextRingAngle) / timeout;
-					setRingAngle(MathUtils.addAngle(renderRingAngle, da));
-					--timeout;
-				} else
-					setRingAngle(renderNextRingAngle);
 		} else {
-			checkForEntitiesInPortal();
-		}
-	}
 
-	private void advanceRendering() {
+		}
+
+		soundHost.tick();
+
 		double grid[][][] = getEventHorizonGrid();
 		final int m = EventHorizonRenderer.ehGridRadialSize, n = EventHorizonRenderer.ehGridPolarSize;
 		double u[][] = grid[0], v[][] = grid[1];
@@ -446,6 +538,16 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return !oneWayTravel || connection.isHost(this);
 	}
 
+	private boolean canCloseFromThisEnd() {
+		return closeFromEitherEnd || connection.isHost(this);
+	}
+
+	public int getTicks() {
+		if (worldObj.isRemote || connection == null)
+			return 0;
+		return connection.ticks;
+	}
+
 	@Override
 	public boolean canUpdate() {
 		return true;
@@ -469,40 +571,40 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public boolean connect(String address) {
-		Object result = tryConnect(address);
-		return !(result instanceof Boolean) || ((Boolean) result);
-	}
-
-	private void connect(String address, EntityPlayer player) {
-		Object result = tryConnect(address);
-		if (result instanceof String)
-			diallingFailure(player, (String) result);
-	}
-
-	public void connectOrDisconnect(String address, EntityPlayer player) {
-		if (getState() == EnumStargateState.Idle)
-			connect(address, player);
-		else {
-			TileEntityStargateBase dte = getConnectedStargateTE();
-			boolean validConnection = dte != null && dte.getConnectedStargateTE() == this;
-			if (!validConnection || getState() != EnumStargateState.Disconnecting)
-				disconnect();
+		try {
+			String localAddress = (address.length() == 7) ? getLocalAddress().substring(0, 7) : getLocalAddress();
+			ChunkLocation remoteLocation, hostLocation = getLocation();
+			remoteLocation = GateAddressHelper.locationForAddress(address);
+			if (!remoteLocation.isStrongLocation)
+				if (hostLocation.isStrongLocation)
+					remoteLocation.setDimension(hostLocation.dimension);
+				else
+					return false;
+			ConnectionRequest request = new ConnectionRequest(localAddress, address, hostLocation.toWorldLocation(),
+					remoteLocation.toWorldLocation(), this, address);
+			request.setup();
+			this.setConnection(request);
+			return true;
+		} catch (AddressingError error) {
+			return false;
 		}
+	}
+
+	public void connectOrDisconnect(String address) {
+		if (connection == null || connection.state.get() == EnumStargateState.Idle)
+			connect(address);
+		else if (connection.state.get() != EnumStargateState.Disconnecting && canCloseFromThisEnd())
+			connection.requestDisconnect();
 	}
 
 	private void createChannel(String name, String file, AudioPosition position, float volume, int age) {
 		soundHost.addChannel(name, String.format("stargate/milkyway/milkyway_%s.ogg", file), position, volume, age);
 	}
 
-	private void diallingFailure(EntityPlayer player, String mess) {
-		player.addChatMessage(mess);
-		playSoundEffect("sg1_abort", 1.0F, 1.0F);
-	}
-
 	@Override
 	public boolean disconnect() {
 		if (connection.isHost(this) || closeFromEitherEnd) {
-			connection.shutdown();
+			connection.requestDisconnect();
 			return true;
 		}
 		return false;
@@ -570,34 +672,75 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return null;
 	}
 
+	public String getDialledAddress() {
+		if (!worldObj.isRemote) {
+			if (connection != null)
+				if (connection.isHost(this))
+					return connection.clientAddress;
+				else
+					return connection.hostAddress;
+			return null;
+		} else {
+			if (connection_cli != null)
+				if (connection_cli.isHost)
+					return connection_cli.clientAddress;
+				else
+					return connection_cli.hostAddress;
+			return null;
+		}
+	}
+
 	@Override
 	public String getConnectionAddress() {
-		if (isDialling() || isConnected())
-			return (String) getAsStructure().getMetadata("diallingTo");
-		return null;
+		if (!worldObj.isRemote) {
+			if (connection == null || !connection.running.get())
+				return null;
+			if (connection.isHost(this))
+				return connection.clientAddress;
+			return connection.hostAddress;
+		} else {
+			if (connection_cli == null || !connection_cli.running.get())
+				return null;
+			if (connection_cli.isHost)
+				return connection_cli.clientAddress;
+			return connection_cli.hostAddress;
+		}
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
-		ModPacket packet = getAsStructure().pack();
-		LanteaCraft.getProxy().sendToAllPlayers(packet);
-		return null;
-	}
+		LanteaCraft.getProxy().sendToAllPlayers(getAsStructure().pack());
+		if (connection != null) {
+			StandardModPacket update = new StandardModPacket(new WorldLocation(this));
+			update.setType("LanteaPacket.ConnectionSet");
+			update.setIsForServer(false);
+			update.setValue("running", connection.running.get());
+			update.setValue("chevrons", connection.chevrons.get());
+			update.setValue("state", connection.state.get());
+			update.setValue("symbol", connection.symbol.get());
 
-	/**
-	 * Get the address currently dialling to.
-	 * 
-	 * @return The address currently dialling to.
-	 */
-	public String getDialledAddres() {
-		return (String) getAsStructure().getMetadata("diallingTo");
+			update.setValue("name", connection.name);
+			update.setValue("hostName", connection.hostName);
+			update.setValue("clientName", connection.clientName);
+			update.setValue("hostAddress", connection.hostAddress);
+			update.setValue("clientAddress", connection.clientAddress);
+			update.setValue("isHost", connection.isHost(this));
+			LanteaCraft.getProxy().sendToAllPlayers(update);
+		}
+		return null;
 	}
 
 	@Override
 	public int getEncodedChevrons() {
-		if (connection == null || !connection.running)
-			return -1;
-		return connection.chevrons;
+		if (!worldObj.isRemote) {
+			if (connection == null || !connection.running.get())
+				return -1;
+			return connection.chevrons.get();
+		} else {
+			if (connection_cli == null || !connection_cli.running.get())
+				return -1;
+			return connection_cli.chevrons.get();
+		}
 	}
 
 	public double[][][] getEventHorizonGrid() {
@@ -667,14 +810,53 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public EnumStargateState getState() {
-		if (connection == null || !connection.running)
-			return EnumStargateState.Idle;
-		return connection.state;
+		if (!worldObj.isRemote) {
+			if (connection == null || !connection.running.get())
+				return EnumStargateState.Idle;
+			return connection.state.get();
+		} else {
+			if (connection_cli == null || !connection_cli.running.get())
+				return EnumStargateState.Idle;
+			return connection_cli.state.get();
+		}
 	}
 
 	@Override
 	public void handlePacket(ModPacket packetOf) {
-		getAsStructure().unpack(packetOf);
+		if (BuildInfo.DEBUG)
+			LanteaCraft.getLogger().log(Level.INFO, String.format("Handling packet type %s.", packetOf.getType()));
+		if (packetOf.getType().equals("LanteaPacket.MultiblockUpdate")) {
+			getAsStructure().unpack(packetOf);
+		} else if (packetOf.getType().equals("LanteaPacket.ConnectionUpdate")) {
+			if (BuildInfo.DEBUG)
+				LanteaCraft.getLogger().log(Level.INFO, "Accepted connection status update.");
+			if (connection_cli == null) {
+				// uhoh!
+			}
+			StandardModPacket payload = (StandardModPacket) packetOf;
+			if (payload.hasFieldWithValue("running"))
+				connection_cli.running.set((Boolean) payload.getValue("running"));
+			if (payload.hasFieldWithValue("chevrons"))
+				connection_cli.chevrons.set((Integer) payload.getValue("chevrons"));
+			if (payload.hasFieldWithValue("state"))
+				connection_cli.state.set((EnumStargateState) payload.getValue("state"));
+			if (payload.hasFieldWithValue("symbol"))
+				connection_cli.symbol.set((Character) payload.getValue("symbol"));
+		} else if (packetOf.getType().equals("LanteaPacket.ConnectionSet")) {
+			StandardModPacket payload = (StandardModPacket) packetOf;
+			ClientConnectionRequest req = new ClientConnectionRequest((String) payload.getValue("name"),
+					(String) payload.getValue("hostName"), (String) payload.getValue("clientName"),
+					(String) payload.getValue("hostAddress"), (String) payload.getValue("clientAddress"),
+					(Boolean) payload.getValue("isHost"));
+			req.running.set((Boolean) payload.getValue("running"));
+			req.chevrons.set((Integer) payload.getValue("chevrons"));
+			req.state.set((EnumStargateState) payload.getValue("state"));
+			req.symbol.set((Character) payload.getValue("symbol"));
+			setClientConnection(req);
+		} else {
+			LanteaCraft.getLogger().log(Level.WARNING, String.format("Strange packet type %s.", packetOf.getType()));
+		}
+
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 
@@ -713,7 +895,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	public double interpolatedRingAngle(double t) {
-		return MathUtils.interpolateAngle(renderLastRingAngle, renderRingAngle, t);
+		return MathUtils.interpolateAngle(ring_last_angle, ring_angle, t);
 	}
 
 	@Override
@@ -769,30 +951,10 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		getAsStructure().invalidate();
 	}
 
-	private void setRingAngle(double a) {
-		renderRingAngle = a;
-	}
-
 	private void setVelocity(Entity entity, Vector3 v) {
 		entity.motionX = v.x;
 		entity.motionY = v.y;
 		entity.motionZ = v.z;
-	}
-
-	/**
-	 * Requests this Stargate start a connection to another Stargate. It should
-	 * chunk-load the other Stargate's chunks. This method should only be
-	 * invoked on the server side.
-	 * 
-	 * @param address
-	 *            The target address string
-	 * @param dte
-	 *            The target tile entity
-	 * @param initiator
-	 *            If this Stargate is responsible for this connection
-	 */
-	private void startDiallingStargate(String address, TileEntityStargateBase dte, boolean initiator) {
-		// TODO IMPLEMENT ME
 	}
 
 	private Entity teleportEntity(Entity entity, Trans3 t1, Trans3 t2, int dimension) {
@@ -920,72 +1082,28 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		GameRegistry.onPlayerChangedDimension(player);
 	}
 
-	/**
-	 * TODO: fix this later so we can anonymize EntityPlayer/remote agent etc.
-	 */
-	private Object tryConnect(String address) {
-		String homeAddress = getLocalAddress();
-		TileEntityStargateBase dte = null;
+	private void setConnection(ConnectionRequest request) {
+		if (BuildInfo.DEBUG)
+			LanteaCraft.getLogger()
+					.log(Level.INFO, String.format("Setting ConnectionRequest: %s.", request.hashCode()));
+		this.connection = request;
+		getDescriptionPacket();
+	}
 
-		// Resolve the locations
-		ChunkLocation remoteLocation, hostLocation = getLocation();
-		try {
-			remoteLocation = GateAddressHelper.locationForAddress(address);
-		} catch (AddressingError error) {
-			return error.getMessage();
-		}
-		if (!remoteLocation.isStrongLocation)
-			if (hostLocation.isStrongLocation)
-				remoteLocation.setDimension(hostLocation.dimension);
-			else
-				return "Cannot guess effective dimension; location and host location are both weak!";
-		WorldLocation localize = remoteLocation.toWorldLocation();
-		World world = GateAddressHelper.getWorld(localize.dimension);
-		if (world != null) {
-			String name = String.format("StargateConnection-Remote-%s", address);
-			NBTTagCompound metadata = new NBTTagCompound();
-			metadata.setInteger("minX", localize.x - 1);
-			metadata.setInteger("minZ", localize.z - 1);
-			metadata.setInteger("maxX", localize.x + 1);
-			metadata.setInteger("maxZ", localize.z + 1);
-			remoteRequest = LanteaCraft.getProxy().getRemoteChunkManager().create(name, world, 240 * 20, metadata);
-			connection = new ConnectionRequest(localize, world);
-		}
-
-		if (world == null || dte == null) {
-			if (BuildInfo.CHUNK_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.WARNING, String.format("Failed to fetch dimension!"));
-			remoteRequest.expireNow();
-			remoteRequest = null;
-			return "No stargate at address " + address;
-		}
-
-		else if (dte == this)
-			return "Stargate cannot connect to itself";
-		else if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle)
-			return "Stargate at address " + address + " is busy";
-		else if (1 > getRemainingDials())
-			return "Stargate has insufficient fuel";
-		else {
-			NBTTagCompound metadata = new NBTTagCompound();
-			ChunkLocation localize = new ChunkLocation(dte);
-			metadata.setInteger("minX", localize.cx - 1);
-			metadata.setInteger("minZ", localize.cz - 1);
-			metadata.setInteger("maxX", localize.cx + 1);
-			metadata.setInteger("maxZ", localize.cz + 1);
-			RemoteChunkLoading remoteLoader = LanteaCraft.getProxy().getRemoteChunkManager();
-			loader = remoteLoader.create(String.format("StargateConnection-%s", address), dte.worldObj,
-					ticksToStayOpen, metadata);
-
-			startDiallingStargate(address, dte, true);
-			dte.startDiallingStargate((address.length() == 7) ? homeAddress.substring(0, 7) : homeAddress, this, false);
-			return true;
-		}
+	private void setClientConnection(ClientConnectionRequest request) {
+		this.connection_cli = request;
+		createChannel("stargate_spin", "roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F, -1);
+		createChannel("stargate_chevron", "chevron_lock", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
+		createChannel("stargate_transient", "open", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
+		createChannel("stargate_close", "close", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
 	}
 
 	@Override
 	public void updateEntity() {
-		advance();
+		if (!worldObj.isRemote)
+			serverThink();
+		else
+			clientThink();
 		multiblock.tick();
 	}
 

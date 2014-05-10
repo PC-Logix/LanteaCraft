@@ -143,10 +143,10 @@ public class RemoteChunkLoading implements ITickAgent {
 	 * @return If the loading request was a success.
 	 */
 	public ChunkLoadRequest create(String name, World world, int maxAge, NBTTagCompound metadata) {
-		if (BuildInfo.CHUNK_DEBUGGING && world.provider != null)
+		if (BuildInfo.CHUNK_DEBUGGING && world != null && world.provider != null)
 			LanteaCraft.getLogger().log(Level.INFO,
 					String.format("RemoteChunkLoading CSR: %s (world: %s)", name, world.provider.dimensionId));
-		if (BuildInfo.CHUNK_DEBUGGING && world.provider == null)
+		if (BuildInfo.CHUNK_DEBUGGING && (world == null || world.provider == null))
 			LanteaCraft.getLogger().log(Level.WARNING,
 					String.format("RemoteChunkLoading CSR: %s (no provider!!)", name));
 		synchronized (requests) {
@@ -170,9 +170,13 @@ public class RemoteChunkLoading implements ITickAgent {
 		int minZ = metadata.getInteger("minZ");
 		int maxX = metadata.getInteger("maxX");
 		int maxZ = metadata.getInteger("maxZ");
-		for (int i = minX; i <= maxX; i++)
-			for (int j = minZ; j <= maxZ; j++)
+		for (int i = minX; i <= maxX; i++) {
+			for (int j = minZ; j <= maxZ; j++) {
+				if (BuildInfo.CHUNK_DEBUGGING)
+					LanteaCraft.getLogger().log(Level.WARNING, String.format("Forcing chunk (%s, %s)", i, j));
 				ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(i, j));
+			}
+		}
 		ChunkLoadRequest request = new ChunkLoadRequest(name, ticket, metadata, maxAge);
 		synchronized (requests) {
 			requests.add(request);

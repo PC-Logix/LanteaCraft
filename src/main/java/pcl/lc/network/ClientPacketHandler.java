@@ -33,9 +33,15 @@ public class ClientPacketHandler {
 		int currentWorld = Minecraft.getMinecraft().theWorld.provider.dimensionId;
 		if (currentWorld == target.dimension) {
 			World world = Minecraft.getMinecraft().theWorld;
-			if (packet.getType().equals("LanteaPacket.TileUpdate")
-					|| packet.getType().equals("LanteaPacket.MultiblockUpdate")
-					|| packet.getType().equals("TinyPacket")) {
+			if (packet.getType().equals("LanteaPacket.EntityFX")) {
+				StandardModPacket payload = (StandardModPacket) packet;
+				String name = (String) payload.getValue("FXType");
+				EntityFX effect = null;
+				if (name.equals("EffectBeam"))
+					effect = EffectBeam.fromPacket(payload);
+				if (effect != null)
+					((LanteaCraftClientProxy) LanteaCraft.getProxy()).spawnEffect(effect);
+			} else {
 				TileEntity tile = world.getBlockTileEntity(target.x, target.y, target.z);
 				if (tile instanceof IPacketHandler) {
 					IPacketHandler handler = (IPacketHandler) tile;
@@ -48,14 +54,6 @@ public class ClientPacketHandler {
 											"Dropping packet %s for coords %s %s %s because the destination class %s wasn't a handler.",
 											packet.getType(), target.x, target.y, target.z, (tile != null) ? tile
 													.getClass().getName() : "<nullptr>"));
-			} else if (packet.getType().equals("LanteaPacket.EntityFX")) {
-				StandardModPacket payload = (StandardModPacket) packet;
-				String name = (String) payload.getValue("FXType");
-				EntityFX effect = null;
-				if (name.equals("EffectBeam"))
-					effect = EffectBeam.fromPacket(payload);
-				if (effect != null)
-					((LanteaCraftClientProxy) LanteaCraft.getProxy()).spawnEffect(effect);
 			}
 		}
 

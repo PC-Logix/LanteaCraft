@@ -22,6 +22,10 @@ public class StargateRenderConstants {
 	
 	public final static double ringDepth = 0.15;
 
+	
+	public final static int numChevrons = 9;
+	public final static double chevronAngle = 360.0 / numChevrons;
+	public final static double chevronAngleOffset = -90.0;
 	public final static double chevronInnerRadius = ringMidRadius;
 	public final static double chevronOuterRadius = ringOuterRadius + 1 / 16.0;
 	public final static double chevronWidth = 0.5;

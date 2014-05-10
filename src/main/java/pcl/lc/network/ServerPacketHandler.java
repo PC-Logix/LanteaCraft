@@ -37,7 +37,7 @@ public class ServerPacketHandler {
 				if (tile instanceof TileEntityStargateBase) {
 					String address = (String) spacket.getValue("Address");
 					TileEntityStargateBase base = (TileEntityStargateBase) tile;
-					base.connectOrDisconnect(address, (EntityPlayer) player);
+					base.connectOrDisconnect(address);
 				}
 			}
 		}

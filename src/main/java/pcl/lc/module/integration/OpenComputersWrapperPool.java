@@ -160,7 +160,8 @@ public class OpenComputersWrapperPool {
 					if (access.isOutgoingConnection())
 						node.sendToReachable("computer.signal", "sgOutgoing", access.getConnectionAddress());
 					else
-						node.sendToReachable("computer.signal", "sgIncoming", Character.toString(access.getConnectionAddress().charAt(access.getEncodedChevrons())));
+						node.sendToReachable("computer.signal", "sgIncoming",
+								Character.toString(access.getConnectionAddress().charAt(access.getEncodedChevrons())));
 					break;
 				case InterDialling:
 					node.sendToReachable("computer.signal", "sgChevronEncode", access.getEncodedChevrons());
@@ -169,7 +170,7 @@ public class OpenComputersWrapperPool {
 					node.sendToReachable("computer.signal", "sgWormholeOpening", true);
 					break;
 				case Disconnecting:
-					node.sendToReachable("computer.signal", "sgWormholeClosing", true );
+					node.sendToReachable("computer.signal", "sgWormholeClosing", true);
 					break;
 				case Connected:
 					node.sendToReachable("computer.signal", "sgWormholeStable", true);
@@ -189,7 +190,7 @@ public class OpenComputersWrapperPool {
 		public Object[] getInterfaceVersion(Context context, Arguments args) throws Exception {
 			return new Object[] { BuildInfo.versionNumber + "." + BuildInfo.getBuildNumber() };
 		}
-		
+
 		@Callback
 		public Object[] dial(Context context, Arguments args) throws Exception {
 			return dialTheGate(args.checkString(0).toUpperCase());
@@ -210,7 +211,7 @@ public class OpenComputersWrapperPool {
 				throw new Exception("Stargate cannot dial now.");
 			return new Object[] { true };
 		}
-		
+
 		@Callback
 		public Object[] disconnect(Context context, Arguments args) throws Exception {
 			if (!access.isBusy())
@@ -242,51 +243,8 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Callback
-		public Object[] isBusy(Context context, Arguments args) throws Exception {
-			String address = args.checkString(0).toUpperCase();
-			if (address.length() != 7 && address.length() != 9)
-				throw new Exception("Stargate addresses must be 7 or 9 characters.");
-			else if (address.equals(access.getLocalAddress())
-					|| address.equals(access.getLocalAddress().substring(0, 7)))
-				throw new Exception("Stargate cannot connect to itself.");
-			try {
-				TileEntityStargateBase dte = GateAddressHelper.findStargate(access.getLocation(), address);
-				if ((EnumStargateState) dte.getAsStructure().getMetadata("state") != EnumStargateState.Idle)
-					return new Object[] { true };
-			} catch (Throwable thrown) {
-				if (thrown instanceof CoordRangeError || thrown instanceof DimensionRangeError)
-					throw new Exception(thrown.getMessage());
-				else if (thrown instanceof AddressingError)
-					throw new Exception("Addressing error: " + thrown.getMessage());
-			}
-			return new Object[] { false };
-		}
-
-		@Callback
 		public Object[] hasFuel(Context context, Arguments args) {
 			return new Object[] { access.getRemainingConnectionTime() > 0 && access.getRemainingDials() > 0 };
-		}
-
-		@Callback
-		public Object[] isValidAddress(Context context, Arguments args) throws Exception {
-			String address = args.checkString(0).toUpperCase();
-			if (address.length() != 7 && address.length() != 9)
-				throw new Exception("Stargate addresses must be 7 or 9 characters.");
-			else if (address.equals(access.getLocalAddress())
-					|| address.equals(access.getLocalAddress().substring(0, 7)))
-				throw new Exception("Stargate cannot connect to itself.");
-			try {
-				if (address.equals(access.getLocalAddress()))
-					throw new Exception("Stargate cannot connect to itself");
-				if (GateAddressHelper.findStargate(access.getLocation(), address) == null)
-					return new Object[] { false };
-			} catch (Throwable thrown) {
-				if (thrown instanceof CoordRangeError || thrown instanceof DimensionRangeError)
-					throw new Exception(thrown.getMessage());
-				else if (thrown instanceof AddressingError)
-					throw new Exception("Addressing error: " + thrown.getMessage());
-			}
-			return new Object[] { true };
 		}
 
 		@Override
