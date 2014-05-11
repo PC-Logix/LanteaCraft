@@ -58,6 +58,8 @@ import pcl.lc.core.AddressingError;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
+import pcl.lc.core.StargateConnectionManager;
+import pcl.lc.core.StargateConnectionManager.ConnectionRequest;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
@@ -135,184 +137,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	/**
-	 * Used to simulate a connection on a server.
-	 * 
-	 * @author AfterLifeLochie
-	 */
-	private class ConnectionRequest {
-		/* The local and target addresses */
-		public String hostAddress, clientAddress;
-		/* The location for the request */
-		public WorldLocation hostLocation, clientLocation;
-		/* The chunkloaders for the request */
-		public ChunkLoadRequest hostChunkLoader, clientChunkLoader;
-		/* The tiles associated with the request */
-		public TileEntityStargateBase hostTile, clientTile;
-		/* The worlds associated with the request */
-		public World hostWorld, clientWorld;
-		/* The name of the request */
-		public String name, hostName, clientName;
-
-		/* Whether the request is currently running */
-		public WatchedValue<Boolean> running = new WatchedValue<Boolean>(true);
-		/* The number of total ticks the request has been running for */
-		public int ticks = 0;
-		/* The current state of the connection */
-		public WatchedValue<EnumStargateState> state = new WatchedValue<EnumStargateState>(EnumStargateState.Idle);
-		/* The current symbol being dialled */
-		public WatchedValue<Character> symbol = new WatchedValue<Character>(' ');
-		/* The number of chevrons dialled */
-		public WatchedValue<Integer> chevrons = new WatchedValue<Integer>(0);
-		/* The remaining number of ticks to remain in this state */
-		public int ticksRemaining = 0;
-
-		public ConnectionRequest(String hostAddress, String clientAddress, WorldLocation hostLocation,
-				WorldLocation clientLocation, TileEntityStargateBase hostTile, String name) {
-			this.hostAddress = hostAddress;
-			this.hostLocation = hostLocation;
-			this.clientAddress = clientAddress;
-			this.clientLocation = clientLocation;
-			this.hostTile = hostTile;
-			this.name = name;
-			this.hostName = String.format("%s-Host-%s", name, hostLocation.toString());
-			this.clientName = String.format("%s-Client-%s", name, clientLocation.toString());
-		}
-
-		public void setup() {
-			RemoteChunkLoading loader = LanteaCraft.getProxy().getRemoteChunkManager();
-			/* Prevent the initiator from unloading */
-			hostWorld = GateAddressHelper.getWorld(hostLocation.dimension);
-			if (hostWorld != null)
-				hostChunkLoader = loader.create(hostName, hostWorld, ticksToStayOpen, createRadiusOf(hostLocation, 1));
-
-			/* Load the remote target chunks */
-			clientWorld = GateAddressHelper.getWorld(clientLocation.dimension);
-			if (clientWorld != null)
-				clientChunkLoader = loader.create(clientName, clientWorld, ticksToStayOpen,
-						createRadiusOf(clientLocation, 1));
-			/* Start dialling */
-			runState(EnumStargateState.Dialling, diallingTime);
-		}
-
-		public void advance(TileEntityStargateBase callee) {
-			/*
-			 * Do not allow tiles that are not the host tile to invoke this
-			 * method at all, in order to prevent possible desyncs.
-			 */
-			if (!callee.equals(hostTile))
-				return;
-			if (!running.get())
-				return;
-			ticks++;
-			/* If we have no remote tile reference, attempt to find one */
-			if (clientTile == null && clientWorld != null) {
-				/*
-				 * Scan over the tile-entity map; it's likely this will fail
-				 * while the world and chunks are being loaded (race condition)
-				 */
-				Chunk chunk = clientWorld.getChunkFromBlockCoords(clientLocation.x, clientLocation.z);
-				if (chunk != null)
-					for (Object o : chunk.chunkTileEntityMap.values()) {
-						if (o instanceof TileEntityStargateBase) {
-							TileEntityStargateBase tile = (TileEntityStargateBase) o;
-							if (!tile.isBusy()) {
-								tile.setConnection(this);
-								clientTile = tile;
-								if (BuildInfo.DEBUG)
-									LanteaCraft.getLogger().log(Level.INFO,
-											"Found target tile entity, setting connection.");
-							}
-						}
-					}
-			}
-
-			if (ticksRemaining > 0) {
-				if (state.get() == EnumStargateState.Transient)
-					performTransientDamage();
-				--ticksRemaining;
-			} else
-				switch (state.get()) {
-				case InterDialling: // Any dial_wait state -> any dial state
-					symbol.set(nextChevron());
-					runState(EnumStargateState.Dialling, diallingTime);
-					break;
-				case Dialling: // Any dial state -> any idle_wait state
-					chevrons.set(chevrons.get() + 1);
-					if (clientAddress.length() > chevrons.get())
-						runState(EnumStargateState.InterDialling, interDiallingTime);
-					else {
-						if (clientTile != null)
-							runState(EnumStargateState.Transient, transientDuration);
-						else {
-							if (BuildInfo.DEBUG)
-								LanteaCraft.getLogger().log(Level.WARNING, "Cannot find host tile, aborting!");
-							requestDisconnect();
-						}
-					}
-					break;
-				case Transient: // Any transient state -> any connected state
-					runState(EnumStargateState.Connected, ticksToStayOpen);
-					break;
-				case Connected: // Any connected state -> any disconnected state
-					requestDisconnect();
-					break;
-				case Disconnecting: // Any disconnected state -> idle
-					state.set(EnumStargateState.Idle);
-					this.shutdown();
-					break;
-				}
-			if (getState() == EnumStargateState.Connected) {
-				if (!useEnergy(1))
-					disconnect();
-			}
-		}
-
-		public char nextChevron() {
-			return clientAddress.charAt(chevrons.get());
-		}
-
-		public void runState(EnumStargateState state, int timeout) {
-			if (BuildInfo.DEBUG)
-				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("Stargate transitioning to state %s for %s ticks.", state, timeout));
-			this.state.set(state);
-			this.ticksRemaining = timeout;
-		}
-
-		public void requestDisconnect() {
-			runState(EnumStargateState.Disconnecting, disconnectTime);
-		}
-
-		private void shutdown() {
-			running.set(false);
-			state.set(EnumStargateState.Idle);
-			/* Drop all worldly references! */
-			hostTile = clientTile = null;
-			hostWorld = clientWorld = null;
-			/* Flush the chunk loaders */
-			if (clientChunkLoader != null)
-				clientChunkLoader.expireNow();
-			if (hostChunkLoader != null)
-				hostChunkLoader.expireNow();
-		}
-
-		private NBTTagCompound createRadiusOf(WorldLocation location, int radius) {
-			NBTTagCompound result = new NBTTagCompound();
-			result.setInteger("minX", location.x - radius);
-			result.setInteger("minZ", location.z - radius);
-			result.setInteger("maxX", location.x + radius);
-			result.setInteger("maxZ", location.z + radius);
-			return result;
-		}
-
-		public boolean isHost(TileEntityStargateBase that) {
-			if (hostTile == null)
-				return false;
-			return hostTile.equals(that);
-		}
-	}
-
-	/**
 	 * Used to damage players who contact with a transient wormhole.
 	 * 
 	 * @author AfterLifeLochie
@@ -330,10 +154,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 	}
 
-	public final static int diallingTime = 40;
-	public final static int interDiallingTime = 10;
-	public final static int transientDuration = 20;
-	public final static int disconnectTime = 30;
 	public final static Random random = new Random();
 	public final static TransientDamageSource transientDamage = new TransientDamageSource();
 	public final static IrisDamageSource irisDamange = new IrisDamageSource();
@@ -410,9 +230,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			return;
 		checkForEntitiesInPortal();
 		if (connection != null) {
-			// Update the host
-			if (connection.isHost(this))
-				connection.advance(this);
 			// Synchronize the connection between this instance and the client
 			if (connection.running.modified(observerContext) || connection.chevrons.modified(observerContext)
 					|| connection.state.modified(observerContext) || connection.symbol.modified(observerContext)) {
@@ -580,10 +397,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					remoteLocation.setDimension(hostLocation.dimension);
 				else
 					return false;
-			ConnectionRequest request = new ConnectionRequest(localAddress, address, hostLocation.toWorldLocation(),
-					remoteLocation.toWorldLocation(), this, address);
-			request.setup();
-			this.setConnection(request);
+			StargateConnectionManager manager = LanteaCraft.getProxy().getConnectionManager();
+			manager.create(localAddress, address, hostLocation.toWorldLocation(), remoteLocation.toWorldLocation(),
+					this, address);
 			return true;
 		} catch (AddressingError error) {
 			return false;
@@ -666,9 +482,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	private TileEntityStargateBase getConnectedStargateTE() {
 		if (connection != null)
 			if (connection.isHost(this))
-				return connection.clientTile;
+				return connection.clientTile.get();
 			else
-				return connection.hostTile;
+				return connection.hostTile.get();
 		return null;
 	}
 
@@ -935,7 +751,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord, getBlockMetadata(), this);
 	}
 
-	private void performTransientDamage() {
+	public void performTransientDamage() {
 		Vector3 p0 = new Vector3(-3.5, 0.0, 0.0);
 		Vector3 p1 = new Vector3(3.5, 5.5, 2.5);
 		Trans3 t = localToGlobalTransformation();
@@ -1082,7 +898,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		GameRegistry.onPlayerChangedDimension(player);
 	}
 
-	private void setConnection(ConnectionRequest request) {
+	public void setConnection(ConnectionRequest request) {
 		if (BuildInfo.DEBUG)
 			LanteaCraft.getLogger()
 					.log(Level.INFO, String.format("Setting ConnectionRequest: %s.", request.hashCode()));
@@ -1090,7 +906,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		getDescriptionPacket();
 	}
 
-	private void setClientConnection(ClientConnectionRequest request) {
+	public void setClientConnection(ClientConnectionRequest request) {
 		this.connection_cli = request;
 		createChannel("stargate_spin", "roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F, -1);
 		createChannel("stargate_chevron", "chevron_lock", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
@@ -1107,7 +923,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		multiblock.tick();
 	}
 
-	private boolean useEnergy(int i) {
+	public boolean useEnergy(int i) {
 		// TODO Auto-generated method stub
 		return true;
 	}

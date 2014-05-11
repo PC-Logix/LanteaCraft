@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import pcl.common.helpers.CreativeTabHelper;
 import pcl.common.helpers.SpecialBucketHandler;
 import pcl.common.render.RotationOrientedBlockRenderer;
@@ -116,7 +117,7 @@ public class LanteaCraft {
 
 		public static ItemEnergyCrystal energyCrystal;
 		public static ItemZPM zpm;
-		
+
 		public static ItemIris iris;
 
 		public static ItemTransportRingActivator transportRingActivator;
@@ -288,5 +289,15 @@ public class LanteaCraft {
 	@EventHandler
 	public void onServerStopping(FMLServerStoppingEvent e) {
 		proxy.onServerStopping(e);
+	}
+
+	@ForgeSubscribe
+	public void onWorldUnload(WorldEvent.Unload evt) {
+		LanteaCraft.getLogger().log(Level.INFO, String.format("World unloading: %s", evt.world.provider.dimensionId));
+	}
+
+	@ForgeSubscribe
+	public void onWorldLoad(WorldEvent.Load evt) {
+		LanteaCraft.getLogger().log(Level.INFO, String.format("World loading: %s", evt.world.provider.dimensionId));
 	}
 }

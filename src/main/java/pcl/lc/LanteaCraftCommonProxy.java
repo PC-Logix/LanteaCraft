@@ -32,6 +32,7 @@ import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.ServerTickHandler;
+import pcl.lc.core.StargateConnectionManager;
 import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleWorldGenerator;
 import pcl.lc.module.compat.UpgradeHelper;
@@ -82,6 +83,7 @@ public class LanteaCraftCommonProxy {
 
 	public TileEntityChunkManager chunkManager;
 	protected RemoteChunkLoading remoteChunkManager;
+	protected StargateConnectionManager stargateConnectionManager;
 	protected AudioEngine audioContext;
 
 	protected WorldLog worldLogger;
@@ -134,7 +136,9 @@ public class LanteaCraftCommonProxy {
 
 		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
 		remoteChunkManager = new RemoteChunkLoading();
+		stargateConnectionManager = new StargateConnectionManager();
 		serverTickHandler.registerTickHost(remoteChunkManager);
+		serverTickHandler.registerTickHost(stargateConnectionManager);
 		audioContext = new AudioEngine();
 
 		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
@@ -409,6 +413,10 @@ public class LanteaCraftCommonProxy {
 
 	public RemoteChunkLoading getRemoteChunkManager() {
 		return remoteChunkManager;
+	}
+
+	public StargateConnectionManager getConnectionManager() {
+		return stargateConnectionManager;
 	}
 
 }

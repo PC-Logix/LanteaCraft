@@ -1,11 +1,17 @@
 package pcl.lc.core;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.PlayerInstance;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.EmptyChunk;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
@@ -22,6 +28,15 @@ import pcl.lc.api.internal.ITickAgent;
  * 
  */
 public class RemoteChunkLoading implements ITickAgent {
+
+	public static boolean arePlayersWatchingChunk(WorldServer serverWorld, ChunkCoordIntPair chunk) {
+		PlayerInstance watcher = serverWorld.getPlayerManager().getOrCreateChunkWatcher(chunk.chunkXPos,
+				chunk.chunkZPos, false);
+		if (watcher == null)
+			return false;
+		List<?> players = ReflectionHelper.<List<?>, PlayerInstance> getPrivateValue(PlayerInstance.class, watcher, 0);
+		return !players.isEmpty();
+	}
 
 	/**
 	 * The container for all current requests in the agent.
@@ -100,6 +115,18 @@ public class RemoteChunkLoading implements ITickAgent {
 			max_age += ticks;
 		}
 
+		public List<ChunkCoordIntPair> chunksIn() {
+			ArrayList<ChunkCoordIntPair> chunks = new ArrayList<ChunkCoordIntPair>();
+			int minX = metadata.getInteger("minX");
+			int minZ = metadata.getInteger("minZ");
+			int maxX = metadata.getInteger("maxX");
+			int maxZ = metadata.getInteger("maxZ");
+			for (int i = minX; i <= maxX; i++)
+				for (int j = minZ; j <= maxZ; j++)
+					chunks.add(new ChunkCoordIntPair(i, j));
+			return chunks;
+		}
+
 		@Override
 		public boolean equals(Object o) {
 			if (o instanceof ChunkLoadRequest) {
@@ -166,18 +193,18 @@ public class RemoteChunkLoading implements ITickAgent {
 				LanteaCraft.getLogger().log(Level.WARNING, String.format("Ticket request failed, null result!"));
 			return null;
 		}
-		int minX = metadata.getInteger("minX");
-		int minZ = metadata.getInteger("minZ");
-		int maxX = metadata.getInteger("maxX");
-		int maxZ = metadata.getInteger("maxZ");
-		for (int i = minX; i <= maxX; i++) {
-			for (int j = minZ; j <= maxZ; j++) {
-				if (BuildInfo.CHUNK_DEBUGGING)
-					LanteaCraft.getLogger().log(Level.WARNING, String.format("Forcing chunk (%s, %s)", i, j));
-				ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(i, j));
-			}
-		}
+
 		ChunkLoadRequest request = new ChunkLoadRequest(name, ticket, metadata, maxAge);
+		for (ChunkCoordIntPair chunk : request.chunksIn()) {
+			if (BuildInfo.CHUNK_DEBUGGING)
+				LanteaCraft.getLogger().log(Level.WARNING,
+						String.format("Forcing chunk (%s, %s)", chunk.chunkXPos, chunk.chunkZPos));
+			ForgeChunkManager.forceChunk(ticket, chunk);
+			IChunkProvider provider = world.getChunkProvider();
+			if (provider.provideChunk(chunk.chunkXPos, chunk.chunkZPos) instanceof EmptyChunk)
+				provider.loadChunk(chunk.chunkXPos, chunk.chunkZPos);
+		}
+
 		synchronized (requests) {
 			requests.add(request);
 		}
@@ -220,6 +247,11 @@ public class RemoteChunkLoading implements ITickAgent {
 				LanteaCraft.getLogger().log(Level.INFO,
 						String.format("Requesting FCM release ticket %s.", request.ticket.toString()));
 			ForgeChunkManager.releaseTicket(request.ticket);
+		}
+		WorldServer ws = (WorldServer) request.ticket.world;
+		for (ChunkCoordIntPair chunk : request.chunksIn()) {
+			if (!arePlayersWatchingChunk(ws, chunk))
+				ws.theChunkProviderServer.unloadChunksIfNotNearSpawn(chunk.chunkXPos, chunk.chunkZPos);
 		}
 		synchronized (requests) {
 			requests.remove(request);
