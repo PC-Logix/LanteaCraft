@@ -1,19 +1,41 @@
 package pcl.lc.module.integration.computercraft;
 
+import net.minecraft.tileentity.TileEntity;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
-import pcl.lc.core.AddressingError;
-import pcl.lc.core.AddressingError.CoordRangeError;
-import pcl.lc.core.AddressingError.DimensionRangeError;
-import pcl.lc.core.GateAddressHelper;
-import pcl.lc.tileentity.TileEntityStargateBase;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.lua.ILuaContext;
 
 public class ComputerCraftWrapperPool {
+
+	/**
+	 * Determines if a wrapper can wrap a tile.
+	 * @param tile The tile
+	 * @return If the tile can be wrapped
+	 */
+	public static boolean canWrap(TileEntity tile) {
+		return (tile instanceof IStargateAccess) || (tile instanceof IStargateControllerAccess)
+				|| (tile instanceof INaquadahGeneratorAccess);
+	}
+
+	/**
+	 * Wraps a tile
+	 * @param tile The target tile
+	 * @param host The host tile
+	 * @return The wrapper, or null if no wrapper exists
+	 */
+	public ComputerCraftVirtualPeripheral wrap(TileEntity tile, TileEntityComputerCraftConnector host) {
+		if (tile instanceof IStargateAccess)
+			return new StargateAccessWrapper(host, (IStargateAccess) tile);
+		if (tile instanceof IStargateControllerAccess)
+			return new StargateControllerAccessWrapper(host, (IStargateControllerAccess) tile);
+		if (tile instanceof INaquadahGeneratorAccess)
+			return new NaquadahGeneratorAccessWrapper(host, (INaquadahGeneratorAccess) tile);
+		return null;
+	}
 
 	/**
 	 * Virtual peripheral methods, as we do not want to touch the 'official' API
