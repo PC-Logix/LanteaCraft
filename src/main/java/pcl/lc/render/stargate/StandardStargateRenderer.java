@@ -140,7 +140,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		for (int i = 0; i < 9; i++) {
 			GL11.glPushMatrix();
 			GL11.glRotatef(
-					(float) (StargateRenderConstants.chevronAngleOffset + (StargateRenderConstants.chevronAngle * i)),
+					(float) ((StargateRenderConstants.chevronAngle * i) - StargateRenderConstants.chevronAngleOffset),
 					0, 0, 1);
 			chevron((sizeof != -1) && before(renderQueue, i, te.getEncodedChevrons()));
 			GL11.glPopMatrix();

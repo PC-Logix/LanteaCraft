@@ -274,8 +274,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					int symbolIndex = GateAddressHelper.singleton().index(symbol);
 					double chevronIndex = connection_cli.chevrons.get();
 					double symbolRotation = symbolIndex * StargateRenderConstants.ringSymbolAngle;
-					double chevronRotation = StargateRenderConstants.chevronAngleOffset
-							+ (StargateRenderConstants.chevronAngle * chevronIndex);
+					double chevronRotation = (StargateRenderConstants.chevronAngle * chevronIndex)
+							- StargateRenderConstants.chevronAngleOffset;
 					ring_dest_angle = MathUtils.normaliseAngle(chevronRotation - symbolRotation);
 				}
 
