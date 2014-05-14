@@ -8,12 +8,14 @@ package pcl.lc.api;
  */
 public enum EnumIrisType {
 
-	MECHANICAL("iris.mechanical"), ENERGY("iris.energy");
+	MECHANICAL("iris.mechanical", false), ENERGY("iris.energy", true);
 
 	private final String name;
+	private final boolean invulnerable;
 
-	EnumIrisType(String name) {
+	EnumIrisType(String name, boolean invulnerable) {
 		this.name = name;
+		this.invulnerable = invulnerable;
 	}
 
 	/**
@@ -23,6 +25,15 @@ public enum EnumIrisType {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Determines if this iris type is invulnerable.
+	 * 
+	 * @return If this iris type is invulnerable.
+	 */
+	public boolean getInvulnerability() {
+		return invulnerable;
 	}
 
 	public static EnumIrisType fromOrdinal(int ordinal) {

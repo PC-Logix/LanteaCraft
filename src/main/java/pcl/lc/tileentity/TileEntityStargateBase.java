@@ -30,7 +30,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.network.ForgePacket;
 import net.minecraftforge.common.network.packet.DimensionRegisterPacket;
@@ -56,8 +55,6 @@ import pcl.lc.api.IStargateAccess;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.core.AddressingError;
 import pcl.lc.core.GateAddressHelper;
-import pcl.lc.core.RemoteChunkLoading;
-import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
 import pcl.lc.core.StargateConnectionManager;
 import pcl.lc.core.StargateConnectionManager.ConnectionRequest;
 import pcl.lc.multiblock.StargateMultiblock;
@@ -156,7 +153,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	public final static Random random = new Random();
 	public final static TransientDamageSource transientDamage = new TransientDamageSource();
-	public final static IrisDamageSource irisDamange = new IrisDamageSource();
+	public final static IrisDamageSource irisDamage = new IrisDamageSource();
 
 	public static int secondsToStayOpen = 5 * 60;
 	public static boolean oneWayTravel = false;
@@ -220,7 +217,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			}
 		};
 
-		inventory.setFilterRule(0, new FilterRule(new ItemStack[] {}, null, true, false));
+		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.iris, 1) }, null,
+				true, false));
 		getAsStructure().invalidate();
 	}
 
@@ -439,16 +437,52 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				entity.motionX = vx;
 				entity.motionY = vy;
 				entity.motionZ = vz;
+				/*
+				 * TODO: Hum, getConnectedStargateTE returns the foreign gate,
+				 * but we then check again to see if this connection is the
+				 * host. Mabye we can compress this logic a bit more,
+				 * AfterLifeLochie, yes?
+				 */
 				TileEntityStargateBase dte = getConnectedStargateTE();
 				if (dte != null) {
 					Trans3 dt = dte.localToGlobalTransformation();
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
-					if (connection.isHost(this))
+					if (connection.isHost(this)) {
 						teleportEntityAndRider(entity, t, dt, connection.clientLocation.dimension);
-					else
+						dte.acceptEntity(entity);
+					} else {
 						teleportEntityAndRider(entity, t, dt, connection.hostLocation.dimension);
+						dte.acceptEntity(entity);
+					}
 				}
+			}
+		}
+	}
+
+	/**
+	 * Called on the remote gate to determine if this entity is allowed to have
+	 * arrived at the gate. This is called after the entity is teleported to
+	 * remove the chance of escape.
+	 * 
+	 * @param entity
+	 *            The entity.
+	 */
+	private void acceptEntity(Entity entity) {
+		// Determine if an iris is currently closed
+		if (getIrisState() == EnumIrisState.Closed || getIrisState() == EnumIrisState.Closing
+				|| getIrisState() == EnumIrisState.Opening) {
+			if (entity instanceof EntityPlayer) {
+				// Inflict player damage
+				EntityPlayer player = (EntityPlayer) entity;
+				player.attackEntityFrom(irisDamage, 9999999);
+			} else if (entity instanceof EntityLivingBase) {
+				// Inflict living damage
+				EntityLivingBase living = (EntityLivingBase) entity;
+				living.attackEntityFrom(irisDamage, 9999999);
+			} else {
+				// Just hard kill the entity, this is nasty
+				entity.setDead();
 			}
 		}
 	}
