@@ -216,6 +216,16 @@ public class Vector3 {
 	}
 
 	/**
+	 * Add a specified offset from a ForgeDirection.
+	 * 
+	 * @param direction
+	 *            The ForgeDirection to translate.
+	 */
+	public Vector3 add(ForgeDirection direction) {
+		return new Vector3(this.x + direction.offsetX, this.y + direction.offsetY, this.z + direction.offsetZ);
+	}
+
+	/**
 	 * Subtracts the specified components to this Vector3, returns a new Vector3
 	 * product.
 	 * 
