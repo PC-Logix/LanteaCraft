@@ -19,7 +19,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 			double y, double z, float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
-		caller.bind(LanteaCraft.getResource("textures/tileentity/stargate_128.png"));
+		caller.bind(LanteaCraft.getResource("textures/tileentity/stargate_" + LanteaCraft.getProxy().getRenderMode() + ".png"));
 		GL11.glNormal3f(0, 1, 0);
 		renderRing(te);
 		renderInnerRing(te, t);
