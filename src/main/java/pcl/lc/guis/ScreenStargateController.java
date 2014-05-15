@@ -14,7 +14,9 @@ import org.lwjgl.opengl.GL11;
 import pcl.common.audio.AudioEngine;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.AudioSource;
+import pcl.common.audio.SoundHost;
 import pcl.common.network.StandardModPacket;
+import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
@@ -39,12 +41,18 @@ public class ScreenStargateController extends GenericGlyphGUI {
 	private int dhdTop, dhdCentreX, dhdCentreY;
 	private String enteredAddress = "", warningMessage = "";
 	private int ticks = 0, ticksWarning = 0;
+	
+	private SoundHost soundHost;
+	private AudioPosition soundHostPosition;
 
 	public ScreenStargateController(TileEntityStargateController controller, EntityPlayer actor) {
 		super(new ContainerStargateController(controller, actor), dhdWidth, dhdHeight);
 		this.controller = controller;
 		dhdLayer = LanteaCraft.getResource("textures/gui/dhd_gui.png");
 		dhdButtonLayer = LanteaCraft.getResource("textures/gui/dhd_centre.png");
+		soundHost = new SoundHost(controller);
+		soundHostPosition = new AudioPosition(controller.worldObj, new Vector3(controller));
+		soundHost.addChannel("click", "stargate/milkyway/milkyway_dhd_button.ogg", soundHostPosition, 1.0f, 0);
 	}
 
 	TileEntityStargateBase getStargateTE() {
@@ -73,10 +81,10 @@ public class ScreenStargateController extends GenericGlyphGUI {
 
 	@Override
 	protected void mouseClicked(int x, int y, int mouseButton) {
-		mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 		if (mouseButton == 0) {
 			int i = findDHDButton(x, y);
 			if (i >= 0) {
+				soundHost.playChannel("click");
 				dhdButtonPressed(i);
 				return;
 			}
@@ -110,7 +118,6 @@ public class ScreenStargateController extends GenericGlyphGUI {
 
 	@Override
 	protected void keyTyped(char c, int key) {
-		mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 		if (key == Keyboard.KEY_ESCAPE)
 			close();
 		else if (key == Keyboard.KEY_BACK || key == Keyboard.KEY_DELETE)
@@ -119,8 +126,10 @@ public class ScreenStargateController extends GenericGlyphGUI {
 			orangeButtonPressed(true);
 		else {
 			String C = String.valueOf(c).toUpperCase();
-			if (GateAddressHelper.singleton().isLegal(C))
+			if (GateAddressHelper.singleton().isLegal(C)) {
+				soundHost.playChannel("click");
 				enterCharacter(C.charAt(0));
+			}
 		}
 
 		if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))
