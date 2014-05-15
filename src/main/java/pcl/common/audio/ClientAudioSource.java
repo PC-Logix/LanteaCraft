@@ -83,6 +83,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 		if (culled)
 			return;
 		system.stop(name);
+		system.rewind(name);
 	}
 
 	@Override

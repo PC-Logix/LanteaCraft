@@ -56,6 +56,8 @@ public class SoundHost {
 		public void play() {
 			if (vsource == null)
 				setupSource();
+			if (vsource.isPlaying())
+				vsource.stop();
 			vsource.play();
 		}
 
