@@ -142,7 +142,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		public TransientDamageSource() {
 			super("wormhole_transient");
 			setDamageBypassesArmor();
-			setDamageAllowedInCreativeMode();
 		}
 
 		public String getDeathMessage(EntityPlayer player) {
