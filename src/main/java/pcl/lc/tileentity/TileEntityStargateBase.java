@@ -155,7 +155,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	public final static IrisDamageSource irisDamage = new IrisDamageSource();
 
 	public static int secondsToStayOpen = 5 * 60;
-	public static boolean oneWayTravel = false;
+	public static boolean oneWayTravel = true;
 	public static boolean closeFromEitherEnd = true;
 	public static int ticksToStayOpen;
 
