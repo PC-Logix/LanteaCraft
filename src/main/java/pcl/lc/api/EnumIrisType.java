@@ -32,7 +32,7 @@ public enum EnumIrisType {
 	 * 
 	 * @return If this iris type is invulnerable.
 	 */
-	public boolean getInvulnerability() {
+	public boolean isInvulnerable() {
 		return invulnerable;
 	}
 
