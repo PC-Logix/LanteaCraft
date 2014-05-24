@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -39,6 +40,7 @@ import pcl.lc.render.blocks.BlockStargateRingRenderer;
 import pcl.lc.render.blocks.BlockVoidRenderer;
 import pcl.lc.render.entities.EntityReplicatorRenderer;
 import pcl.lc.render.entities.EntityTokraRenderer;
+import pcl.lc.render.items.HeldItemRenderer;
 import pcl.lc.render.models.NaquadahGeneratorModel;
 import pcl.lc.render.models.RingPlatformBaseModel;
 import pcl.lc.render.models.RingPlatformRingModel;
@@ -164,6 +166,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 		LanteaCraft.Render.blockVoidRenderer = new BlockVoidRenderer();
 		registerRenderer(LanteaCraft.Render.blockVoidRenderer);
+		
+		LanteaCraft.Render.heldItemRenderer = new HeldItemRenderer();
+		MinecraftForgeClient.registerItemRenderer(LanteaCraft.Items.gdo.itemID, LanteaCraft.Render.heldItemRenderer);
 
 		LanteaCraft.Render.entityTokraRenderer = new EntityTokraRenderer();
 		RenderingRegistry.registerEntityRenderingHandler(EntityTokra.class, LanteaCraft.Render.entityTokraRenderer);

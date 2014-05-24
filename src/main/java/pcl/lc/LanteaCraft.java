@@ -42,6 +42,7 @@ import pcl.lc.render.blocks.BlockStargateRingRenderer;
 import pcl.lc.render.blocks.BlockVoidRenderer;
 import pcl.lc.render.entities.EntityReplicatorRenderer;
 import pcl.lc.render.entities.EntityTokraRenderer;
+import pcl.lc.render.items.HeldItemRenderer;
 import pcl.lc.render.models.NaquadahGeneratorModel;
 import pcl.lc.render.models.RingPlatformBaseModel;
 import pcl.lc.render.models.RingPlatformRingModel;
@@ -151,6 +152,8 @@ public class LanteaCraft {
 		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
 		public static TileEntityRingPlatformRenderer tileEntityRingPlatformRenderer;
 		public static TileEntityLanteaDecorGlassRenderer tileEntityLanteaDecorGlassRenderer;
+		
+		public static HeldItemRenderer heldItemRenderer;
 
 		public static EntityTokraRenderer entityTokraRenderer;
 		public static EntityReplicatorRenderer entityReplicatorRenderer;
