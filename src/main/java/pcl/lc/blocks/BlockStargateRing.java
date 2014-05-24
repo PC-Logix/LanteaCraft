@@ -9,11 +9,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.GenericContainerBlock;
+import pcl.common.multiblock.EnumOrientations;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
+import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateRing;
 import cpw.mods.fml.relauncher.Side;
@@ -127,6 +130,37 @@ public class BlockStargateRing extends GenericContainerBlock {
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityStargateRing();
+	}
+
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
+		TileEntity tileof = block.getBlockTileEntity(x, y, z);
+		if (tileof instanceof TileEntityStargateRing) {
+			TileEntityStargateRing ring = (TileEntityStargateRing) tileof;
+			if (ring.getAsPart() != null && ring.getAsPart().isMerged()) {
+				StargateMultiblock master = (StargateMultiblock) ring.getAsPart().findHostMultiblock(false);
+				EnumOrientations orientation = master.getOrientation();
+				if (orientation != null)
+					switch (orientation) {
+					case NORTH:
+					case SOUTH:
+					case NORTH_SOUTH:
+						setBlockBounds(0.35f, 0.0f, 0.0f, 0.65f, 1.0f, 1.0f);
+						break;
+					case EAST:
+					case WEST:
+					case EAST_WEST:
+						setBlockBounds(0.0f, 0.0f, 0.35f, 1.0f, 1.0f, 0.65f);
+						break;
+					default:
+						setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+					}
+				else
+					setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+			} else
+				setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+		} else
+			setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 }

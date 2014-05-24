@@ -12,12 +12,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.RotationOrientedBlock;
+import pcl.common.multiblock.EnumOrientations;
 import pcl.common.multiblock.MultiblockPart;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.multiblock.StargatePart;
 import pcl.lc.tileentity.TileEntityStargateBase;
+import pcl.lc.tileentity.TileEntityStargateRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -171,5 +173,32 @@ public class BlockStargateBase extends RotationOrientedBlock {
 		if (te != null && te instanceof TileEntityStargateBase)
 			return ((TileEntityStargateBase) te).getAsStructure().isValid();
 		return false;
+	}
+
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
+		TileEntity tileof = block.getBlockTileEntity(x, y, z);
+		if (tileof instanceof TileEntityStargateBase) {
+			TileEntityStargateBase ring = (TileEntityStargateBase) tileof;
+			if (ring.getAsStructure().getOrientation() != null) {
+				EnumOrientations orientation = ring.getAsStructure().getOrientation();
+				switch (orientation) {
+				case NORTH:
+				case SOUTH:
+				case NORTH_SOUTH:
+					setBlockBounds(0.35f, 0.0f, 0.0f, 0.65f, 1.0f, 1.0f);
+					break;
+				case EAST:
+				case WEST:
+				case EAST_WEST:
+					setBlockBounds(0.0f, 0.0f, 0.35f, 1.0f, 1.0f, 0.65f);
+					break;
+				default:
+					setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+				}
+			} else
+				setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+		} else
+			setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
