@@ -202,7 +202,7 @@ public class StargateConnectionManager implements ITickAgent {
 		}
 
 		public boolean isHost(TileEntityStargateBase that) {
-			if (hostTile == null)
+			if (hostTile == null || hostTile.get() == null)
 				return false;
 			return hostTile.get().equals(that);
 		}
