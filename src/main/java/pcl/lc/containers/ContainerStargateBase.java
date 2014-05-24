@@ -16,8 +16,8 @@ public class ContainerStargateBase extends GenericContainer {
 		super(256, 208);
 		this.te = te;
 		filterInventory = (FilteredInventory) te.getInventory();
-		addSlotToContainer(new FilteredSlot(filterInventory, 0, 8, 94, false));
-		addPlayerSlots(player, 8, 123);
+		addSlotToContainer(new FilteredSlot(filterInventory, 0, 48, 99, false));
+		addPlayerSlots(player, 48, 123);
 	}
 
 	@Override

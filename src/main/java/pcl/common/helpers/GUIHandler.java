@@ -26,10 +26,9 @@ public class GUIHandler implements IGuiHandler {
 				Object val = constr.newInstance(entity, player);
 				return val;
 			} catch (Throwable t) {
-				System.err.println("Could not create Container ID " + ID + ", a " + t.getClass().getName()
-						+ " exception occurred.");
-				t.printStackTrace(System.err);
+				LanteaCraft.getLogger().log(Level.WARNING, "Failed to create GUI component!", t);
 			}
+		LanteaCraft.getLogger().log(Level.WARNING, String.format("Could not find component with ID %s!", ID));
 		return null;
 	}
 

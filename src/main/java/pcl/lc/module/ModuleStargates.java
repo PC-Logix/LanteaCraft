@@ -15,6 +15,7 @@ import pcl.lc.blocks.BlockRingPlatform;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
+import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.containers.ContainerStargateController;
 import pcl.lc.containers.ContainerStargateControllerEnergy;
 import pcl.lc.core.ModuleManager.Module;
@@ -87,6 +88,7 @@ public class ModuleStargates implements IModule {
 		RegistrationHelper.newRecipe(new ItemStack(Items.controllerCrystal, 1), "roo", "odr", "oor", 'o',
 				new ItemStack(Item.dyePowder, 1, 14), 'r', Item.redstone, 'd', Item.diamond);
 
+		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateController.ordinal(),
 				ContainerStargateController.class);
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(),
