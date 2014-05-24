@@ -112,7 +112,7 @@ public class RegistrationHelper {
 			LanteaCraft.getLogger()
 					.log(Level.WARNING, "Warning, registration of this item is later than was expected!");
 		try {
-			int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 31743).getInt();
+			int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 4000).getInt();
 			Constructor<? extends T> ctor = classOf.getConstructor(int.class);
 			T theMysteryItem = ctor.newInstance(id);
 			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
