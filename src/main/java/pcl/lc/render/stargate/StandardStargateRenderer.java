@@ -2,6 +2,7 @@ package pcl.lc.render.stargate;
 
 import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.cos;
 import static pcl.lc.render.tileentity.TileEntityStargateBaseRenderer.sin;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -13,13 +14,22 @@ public class StandardStargateRenderer implements IStargateRenderer {
 
 	private double u0, v0;
 	private TileEntityStargateBaseRenderer caller;
+	private ResourceLocation stargateTex;
+	private ResourceLocation chevronTex;
+
+	public StandardStargateRenderer() {
+		stargateTex = LanteaCraft.getResource("textures/tileentity/stargate_" + LanteaCraft.getProxy().getRenderMode()
+				+ ".png");
+		chevronTex = LanteaCraft.getResource("textures/tileentity/stargate_glyphs_"
+				+ LanteaCraft.getProxy().getRenderMode() + ".png");
+	}
 
 	@Override
 	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x,
 			double y, double z, float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
-		caller.bind(LanteaCraft.getResource("textures/tileentity/stargate_" + LanteaCraft.getProxy().getRenderMode() + ".png"));
+		caller.bind(stargateTex);
 		GL11.glNormal3f(0, 1, 0);
 		renderRing(te);
 		renderInnerRing(te, t);
@@ -33,26 +43,26 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		double radiusMidOuter = StargateRenderConstants.ringMidRadius + (1 / 128d);
 		double z = StargateRenderConstants.ringDepth - (1d / 128d);
 		GL11.glPushMatrix();
-		GL11.glRotatef((float) (95 + te.interpolatedRingAngle(t)), 0, 0, 1);
+		caller.bind(chevronTex);
+		GL11.glRotatef((float) (85 + te.interpolatedRingAngle(t)), 0, 0, 1);
 		GL11.glNormal3f(0, 0, 1);
 		GL11.glBegin(GL11.GL_QUADS);
 
 		selectTile(StargateRenderConstants.ringSymbolTextureIndex);
 		double u = 0, du = 0, dv = 0;
 		for (int i = 0; i < StargateRenderConstants.numRingSegments; i++) {
-			u = StargateRenderConstants.ringSymbolTextureLength - (i + 1)
-					* StargateRenderConstants.ringSymbolSegmentWidth;
-			du = StargateRenderConstants.ringSymbolSegmentWidth;
-			dv = StargateRenderConstants.ringSymbolTextureHeight;
-
-			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], z, u + du, dv);
-			vertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], z, u + du, 0);
-			vertex(radiusMidOuter * cos[i + 1], radiusMidOuter * sin[i + 1], z, u, 0);
-			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], z, u, dv);
+			u = i * (1.0d / StargateRenderConstants.numRingSegments);
+			du = 1.0d / StargateRenderConstants.numRingSegments;
+			dv = 0.66d;
+			raw_vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], z, u + du, dv);
+			raw_vertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], z, u + du, 0);
+			raw_vertex(radiusMidOuter * cos[i + 1], radiusMidOuter * sin[i + 1], z, u, 0);
+			raw_vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], z, u, dv);
 		}
 
 		GL11.glEnd();
 		GL11.glPopMatrix();
+		caller.bind(stargateTex);
 	}
 
 	private void renderRing(TileEntityStargateBase te) {
@@ -262,6 +272,11 @@ public class StandardStargateRenderer implements IStargateRenderer {
 	private void selectTile(int index) {
 		u0 = (index & 0xf) / 16.0;
 		v0 = (index >> 4) / 16.0;
+	}
+
+	private void raw_vertex(double x, double y, double z, double u, double v) {
+		GL11.glTexCoord2d(u, v);
+		GL11.glVertex3d(x, y, z);
 	}
 
 	private void vertex(double x, double y, double z, double u, double v) {
