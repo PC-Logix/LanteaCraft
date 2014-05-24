@@ -29,6 +29,7 @@ import pcl.lc.items.ItemCoreCrystal;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemEnergyCrystal;
 import pcl.lc.items.ItemIris;
+import pcl.lc.items.ItemIrisController;
 import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreIngot;
 import pcl.lc.items.ItemTokraSpawnEgg;
@@ -119,6 +120,7 @@ public class LanteaCraft {
 		public static ItemZPM zpm;
 
 		public static ItemIris iris;
+		public static ItemIrisController irisController;
 
 		public static ItemTransportRingActivator transportRingActivator;
 
