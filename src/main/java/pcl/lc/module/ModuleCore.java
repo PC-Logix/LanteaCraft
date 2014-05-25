@@ -18,6 +18,7 @@ import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.LiquidNaquadah;
 import pcl.lc.items.ItemBlockOfLanteaOre;
 import pcl.lc.items.ItemDebugTool;
+import pcl.lc.items.ItemJacksonNotebook;
 import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreBlock;
 import pcl.lc.items.ItemLanteaOreIngot;
@@ -46,6 +47,7 @@ public class ModuleCore implements IModule {
 				"lanteaOreBlock");
 		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem");
 		Items.lanteaOreIngot = RegistrationHelper.registerItem(ItemLanteaOreIngot.class, "lanteaOreIngot");
+		Items.jacksonNotebook = RegistrationHelper.registerItem(ItemJacksonNotebook.class, "jacksonNotebook");
 		Blocks.lanteaOreAsBlock = RegistrationHelper.registerBlock(BlockOfLanteaOre.class, ItemBlockOfLanteaOre.class,
 				"lanteaOreIngotBlock");
 

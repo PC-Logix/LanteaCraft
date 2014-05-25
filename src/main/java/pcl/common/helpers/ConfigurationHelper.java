@@ -74,7 +74,7 @@ public class ConfigurationHelper extends Configuration {
 		}
 		return super.getItem(name, nextid);
 	}
-	
+
 	@Override
 	public Property getBlock(String name, int desired_default) {
 		int nextid = desired_default;
@@ -86,6 +86,11 @@ public class ConfigurationHelper extends Configuration {
 				break;
 			}
 		}
-		return super.getBlock(name, nextid);
+		Property property = super.getBlock(name, nextid);
+		if (property.getInt() != nextid) {
+			defaultBlockIdsUsed.remove(nextid);
+			defaultBlockIdsUsed.add(property.getInt());
+		}
+		return property;
 	}
 }

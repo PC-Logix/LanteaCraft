@@ -30,6 +30,7 @@ import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemEnergyCrystal;
 import pcl.lc.items.ItemIris;
 import pcl.lc.items.ItemGDO;
+import pcl.lc.items.ItemJacksonNotebook;
 import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreIngot;
 import pcl.lc.items.ItemTokraSpawnEgg;
@@ -127,6 +128,7 @@ public class LanteaCraft {
 
 		public static ItemTokraSpawnEgg tokraSpawnEgg;
 
+		public static ItemJacksonNotebook jacksonNotebook;
 		public static ItemDebugTool debugger;
 	}
 
@@ -152,7 +154,7 @@ public class LanteaCraft {
 		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
 		public static TileEntityRingPlatformRenderer tileEntityRingPlatformRenderer;
 		public static TileEntityLanteaDecorGlassRenderer tileEntityLanteaDecorGlassRenderer;
-		
+
 		public static HeldItemRenderer heldItemRenderer;
 
 		public static EntityTokraRenderer entityTokraRenderer;
