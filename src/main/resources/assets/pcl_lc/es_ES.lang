@@ -1,0 +1,46 @@
+tile.stargateController.name=Controlador de Stargate
+tile.stargateBase.name=Base de Stargate
+tile.stargateRing.0.name=Segmento de anillo de Stargate
+tile.stargateRing.1.name=Bloque de chevron de Stargate
+item.coreCrystal.name=Cristal de núcleo de Stargate
+item.controllerCrystal.name=Cristal de controlador de Stargate
+item.energyCrystal.name=Cristal de energía
+ 
+tile.blockLiquidNaquadah.name=Naquadah líquido
+item.liquidNaquadahBucket.name=Cubo con Naquadah líquido
+ 
+tile.lanteaDecor.1.name=Acero Lanteano con diseños
+tile.lanteaDecor.2.name=Acero Lanteano
+tile.lanteaDecor.3.name=Oro de Goa'uld con diseños
+tile.lanteaDecor.4.name=Oro de Goa'uld
+ 
+tile.goauldPatternedGoldDecorStair.name=Escaleras de oro de Goa'uld
+tile.goauldGoldDecorStair.name=Escaleras de oro de Goa'uld con diseños
+tile.lanteaPatternedSteelDecorStair.name=Escaleras de acero Lanteano
+tile.lanteaSteelDecorStair.name=Escaleras de acero Lanteano con diseños
+ 
+tile.lanteaGlassDecor.1.name=Cristal Lanteano
+ 
+tile.lanteaOre.0.name=Mena de Naquadah
+item.lanteaOre.0.name=Naquadah
+item.lanteaOreIngot.0.name=Lingote de Naquadah
+tile.lanteaOreIngotBlock.0.name=Bloque de Naquadah
+ 
+tile.lanteaOre.1.name=Mena de Naquadriah
+item.lanteaOre.1.name=Naquadriah
+item.lanteaOreIngot.1.name=Lingote de Naquadriah
+tile.lanteaOreIngotBlock.1.name=Bloque de Naquadriah
+ 
+tile.lanteaOre.2.name=Mena de Trinium
+item.lanteaOre.2.name=Trinium
+item.lanteaOreIngot.2.name=Lingote de Trinium
+tile.lanteaOreIngotBlock.2.name=Bloque de Trinium
+ 
+tile.naquadahGenerator.name=Generador de Naquadah
+tile.ringPlatform.name=Anillos de teletransporte
+item.zpm.name=ZPM
+ 
+item.tokraSpawnEgg.name=Generar Tok'ra
+item.lanteadebug.name=LanteaCraft Debugger
+ 
+death.attack.wormhole_transient=%1$s fue desgarrado por un horizonte de eventos.
