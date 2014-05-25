@@ -1,4 +1,5 @@
 package pcl.lc.items;
+import pcl.lc.LanteaCraft;
 import pcl.lc.guis.GuiJacksonNotebook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,6 +11,11 @@ public class ItemJacksonNotebook extends Item {
 
 	public ItemJacksonNotebook(int par1) {
 		super(par1);
+	}
+	
+	@Override
+	public String getIconString() {
+		return LanteaCraft.getAssetKey() + ":notebook";
 	}
 
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
