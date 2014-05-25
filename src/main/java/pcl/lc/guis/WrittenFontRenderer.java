@@ -3,6 +3,7 @@ package pcl.lc.guis;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,12 +12,10 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import pcl.common.xmlcfg.DOMHelper;
 import pcl.lc.LanteaCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Resource;
@@ -46,8 +45,54 @@ public class WrittenFontRenderer {
 		}
 	}
 
+	/**
+	 * One formatted line with a spacing and line-height
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	public static class BoxedLine {
+		public final String line;
+		public final int space_size;
+		public final int line_height;
+
+		public BoxedLine(String line, int space_size, int line_height) {
+			this.line = line;
+			this.space_size = space_size;
+			this.line_height = line_height;
+		}
+	}
+
+	/**
+	 * One whole page containing a collection of spaced lines with line-heights
+	 * and inside a page margin (gutters).
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	public static class PageBox {
+		public final int page_width, page_height;
+		public final int margin_left, margin_right;
+		public LinkedList<BoxedLine> lines = new LinkedList<BoxedLine>();
+
+		public PageBox(int w, int h, int ml, int mr) {
+			this.page_width = w;
+			this.page_height = h;
+			this.margin_left = ml;
+			this.margin_right = mr;
+		}
+
+	}
+
+	/**
+	 * The font image
+	 */
 	private final ResourceLocation fontImageName;
+	/**
+	 * The font name
+	 */
 	private final ResourceLocation fontMetricName;
+	/**
+	 * The individual dimensions and u-v locations of each character in the set
+	 */
 	private final HashMap<Integer, GlyphMetric> char_metrics = new HashMap<Integer, GlyphMetric>();
 
 	public WrittenFontRenderer(ResourceLocation fontImageName, ResourceLocation fontMetricName) {
@@ -55,6 +100,9 @@ public class WrittenFontRenderer {
 		this.fontMetricName = fontMetricName;
 	}
 
+	/**
+	 * Attempts to build the font
+	 */
 	public void buildFont() {
 		try {
 			Resource metricResource = Minecraft.getMinecraft().getResourceManager().getResource(fontMetricName);
