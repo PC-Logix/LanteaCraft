@@ -24,6 +24,7 @@ import pcl.lc.entity.EntityTokra;
 import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
+import pcl.lc.guis.WrittenFontRenderer;
 import pcl.lc.items.ItemControllerCrystal;
 import pcl.lc.items.ItemCoreCrystal;
 import pcl.lc.items.ItemDebugTool;
@@ -156,6 +157,8 @@ public class LanteaCraft {
 		public static TileEntityLanteaDecorGlassRenderer tileEntityLanteaDecorGlassRenderer;
 
 		public static HeldItemRenderer heldItemRenderer;
+		
+		public static WrittenFontRenderer danielFontRenderer;
 
 		public static EntityTokraRenderer entityTokraRenderer;
 		public static EntityReplicatorRenderer entityReplicatorRenderer;

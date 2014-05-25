@@ -31,6 +31,7 @@ import pcl.lc.guis.ScreenNaquadahGenerator;
 import pcl.lc.guis.ScreenStargateBase;
 import pcl.lc.guis.ScreenStargateController;
 import pcl.lc.guis.ScreenStargateControllerEnergy;
+import pcl.lc.guis.WrittenFontRenderer;
 import pcl.lc.network.ClientPacketHandler;
 import pcl.lc.network.PacketLogger;
 import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
@@ -166,7 +167,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 		LanteaCraft.Render.blockVoidRenderer = new BlockVoidRenderer();
 		registerRenderer(LanteaCraft.Render.blockVoidRenderer);
-		
+
 		LanteaCraft.Render.heldItemRenderer = new HeldItemRenderer();
 		MinecraftForgeClient.registerItemRenderer(LanteaCraft.Items.gdo.itemID, LanteaCraft.Render.heldItemRenderer);
 
@@ -176,6 +177,11 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		LanteaCraft.Render.entityReplicatorRenderer = new EntityReplicatorRenderer();
 		RenderingRegistry.registerEntityRenderingHandler(EntityReplicator.class,
 				LanteaCraft.Render.entityReplicatorRenderer);
+
+		LanteaCraft.Render.danielFontRenderer = new WrittenFontRenderer(
+				LanteaCraft.getResource("textures/notebook/daniel.png"),
+				LanteaCraft.getResource("textures/notebook/daniel.metrics.xml"));
+		LanteaCraft.Render.danielFontRenderer.buildFont();
 
 	}
 
