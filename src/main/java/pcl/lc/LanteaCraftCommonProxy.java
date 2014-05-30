@@ -205,7 +205,7 @@ public class LanteaCraftCommonProxy {
 		Property textureRes = config.get("graphics_options", "textureRes", 32);
 		configValues.add(new ConfigValue<Integer>("renderQuality", config.getInteger("graphics_options", "textureRes",
 				32)));
-		textureRes.comment = "Texture resolution setting. (32 / 64 / 128)";
+		textureRes.comment = "Texture resolution setting. (16 / 32 / 64 / 128)";
 
 		Property HDModels = config.get("graphics_options", "HDModels", true);
 		configValues.add(new ConfigValue<Boolean>("renderUseModels", config.getBoolean("graphics_options", "HDModels",
@@ -246,13 +246,9 @@ public class LanteaCraftCommonProxy {
 
 	public int getRenderMode() {
 		int mode = ((ConfigValue<Integer>) getConfigValue("renderQuality")).getValue();
-		if (mode <= 32)
-			return 32;
-		if (mode > 32 && mode <= 64)
-			return 64;
-		if (mode > 64 && mode <= 128)
-			return 128;
-		return 32; // invalid value?
+		if (mode == 16 || mode == 32 || mode == 64 || mode == 128)
+			return mode;
+		return 32;
 	}
 
 	public boolean isUsingModels() {
