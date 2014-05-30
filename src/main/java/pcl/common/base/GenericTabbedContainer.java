@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.lwjgl.util.Rectangle;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.util.ResourceLocation;
 
 public abstract class GenericTabbedContainer extends GenericContainerGUI {
 
@@ -30,6 +31,20 @@ public abstract class GenericTabbedContainer extends GenericContainerGUI {
 		 *            The GenericTabbedContainer parent.
 		 */
 		protected abstract void onTabClosed(GenericTabbedContainer container);
+
+		/**
+		 * Get an un-translated tab name.
+		 * 
+		 * @return An un-translated tab name.
+		 */
+		protected abstract String getTabName();
+
+		/**
+		 * Get the tab's icon location.
+		 * 
+		 * @return An absolute resourcelocation to the tab's icon.
+		 */
+		protected abstract ResourceLocation getTabIcon();
 
 		/**
 		 * Get the dimensions of the internal panel area of this tab.
@@ -96,23 +111,58 @@ public abstract class GenericTabbedContainer extends GenericContainerGUI {
 
 	}
 
+	private HashMap<Integer, ContainerTab> tabList;
+	private ContainerTab activeTab;
+
 	public GenericTabbedContainer(Container container, int width, int height) {
 		super(container, width, height);
-		// TODO Auto-generated constructor stub
+		tabList = getTabs();
+		switchTab(0);
+	}
+
+	protected abstract HashMap<Integer, ContainerTab> getTabs();
+
+	public void switchTab(int to) {
+		ContainerTab nextTab = tabList.get(to);
+		if (nextTab == null)
+			nextTab = tabList.get(0);
+
+		if (activeTab != null)
+			activeTab.onTabClosed(this);
+		activeTab = nextTab;
+		activeTab.onTabOpened(this);
 	}
 
 	@Override
 	protected void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
-
+		if (activeTab != null)
+			activeTab.drawBackgroundLayer(partialTickCount, mouseX, mouseY);
 	}
 
 	@Override
 	protected void drawForegroundLayer(int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
-
+		if (activeTab != null)
+			activeTab.drawForegroundLayer(mouseX, mouseY);
 	}
 
-	protected abstract HashMap<Integer, ContainerTab> getTabs();
+	@Override
+	protected void keyTyped(char c, int key) {
+		if (activeTab != null)
+			activeTab.keyTyped(c, key);
+	}
+
+	@Override
+	protected void mouseClicked(int x, int y, int mouseButton) {
+		if (activeTab != null)
+			activeTab.mouseClicked(x, y, mouseButton);
+	}
+
+	@Override
+	protected void mouseMovedOrUp(int x, int y, int mouseButton) {
+		if (activeTab != null)
+			activeTab.mouseMovedOrUp(x, y, mouseButton);
+	}
 
 }
