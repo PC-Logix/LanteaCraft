@@ -19,7 +19,6 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.multiblock.StargatePart;
 import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.lc.tileentity.TileEntityStargateRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

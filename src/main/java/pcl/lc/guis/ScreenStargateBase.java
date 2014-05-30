@@ -7,13 +7,12 @@ import java.util.logging.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import pcl.common.base.GenericContainer;
+import pcl.common.base.GenericContainerGUI;
 import pcl.common.util.ImmutablePair;
 import pcl.lc.LanteaCraft;
 import pcl.lc.containers.ContainerStargateBase;
@@ -22,7 +21,7 @@ import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
-public class ScreenStargateBase extends GenericGlyphGUI {
+public class ScreenStargateBase extends GenericContainerGUI {
 
 	private static String screenTitle = "Stargate Address";
 	private static final int guiWidth = 256;

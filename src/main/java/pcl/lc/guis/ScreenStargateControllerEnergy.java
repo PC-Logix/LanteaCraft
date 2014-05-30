@@ -4,11 +4,12 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import pcl.common.base.GenericContainerGUI;
 import pcl.lc.LanteaCraft;
 import pcl.lc.containers.ContainerStargateControllerEnergy;
 import pcl.lc.tileentity.TileEntityStargateController;
 
-public class ScreenStargateControllerEnergy extends GenericGlyphGUI {
+public class ScreenStargateControllerEnergy extends GenericContainerGUI {
 
 	private ContainerStargateControllerEnergy container;
 
@@ -18,7 +19,7 @@ public class ScreenStargateControllerEnergy extends GenericGlyphGUI {
 	}
 
 	@Override
-	protected void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
+	public void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
 		bindTexture(LanteaCraft.getResource(String.format("textures/gui/inventory_gui_%s.png", LanteaCraft.getProxy()
@@ -38,7 +39,7 @@ public class ScreenStargateControllerEnergy extends GenericGlyphGUI {
 	}
 
 	@Override
-	protected void drawForegroundLayer(int mouseX, int mouseY) {
+	public void drawForegroundLayer(int mouseX, int mouseY) {
 		StringBuilder sg = new StringBuilder().append(container.getStoredEnergy());
 		if (sg.substring(sg.indexOf(".") + 1).length() != 2)
 			sg.append("0");

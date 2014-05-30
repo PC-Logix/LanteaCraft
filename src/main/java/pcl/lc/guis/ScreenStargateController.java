@@ -15,6 +15,7 @@ import pcl.common.audio.AudioEngine;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.AudioSource;
 import pcl.common.audio.SoundHost;
+import pcl.common.base.GenericContainerGUI;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
@@ -25,7 +26,7 @@ import pcl.lc.core.GateAddressHelper;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 
-public class ScreenStargateController extends GenericGlyphGUI {
+public class ScreenStargateController extends GenericContainerGUI {
 
 	final static int dhdWidth = 260;
 	final static int dhdHeight = 180;
