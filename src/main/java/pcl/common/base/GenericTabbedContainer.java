@@ -1,8 +1,100 @@
 package pcl.common.base;
 
+import java.util.HashMap;
+
+import org.lwjgl.util.Rectangle;
+
 import net.minecraft.inventory.Container;
 
-public class GenericTabbedContainer extends GenericContainerGUI {
+public abstract class GenericTabbedContainer extends GenericContainerGUI {
+
+	/**
+	 * Container tab stub
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	public abstract class ContainerTab {
+
+		/**
+		 * Called by the GenericTabbedContainer parent when the tab is selected.
+		 * 
+		 * @param container
+		 *            The GenericTabbedContainer parent.
+		 */
+		protected abstract void onTabOpened(GenericTabbedContainer container);
+
+		/**
+		 * Called by the GenericTabbedContainer when the tab is deselected.
+		 * 
+		 * @param container
+		 *            The GenericTabbedContainer parent.
+		 */
+		protected abstract void onTabClosed(GenericTabbedContainer container);
+
+		/**
+		 * Get the dimensions of the internal panel area of this tab.
+		 * 
+		 * @return The internal panel area of this tab.
+		 */
+		protected abstract Rectangle getTabDimensions();
+
+		/**
+		 * Draw the background layer of the tab.
+		 * 
+		 * @param partialTickCount
+		 *            Partial render ticks
+		 * @param mouseX
+		 *            Mouse x-coord
+		 * @param mouseY
+		 *            Mouse y-coord
+		 */
+		protected abstract void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY);
+
+		/**
+		 * Draw the foreground layer of the tab.
+		 * 
+		 * @param mouseX
+		 *            Mouse x-coord
+		 * @param mouseY
+		 *            Mouse y-coord
+		 */
+		protected abstract void drawForegroundLayer(int mouseX, int mouseY);
+
+		/**
+		 * Called when the mouse is clicked
+		 * 
+		 * @param x
+		 *            The x-coordinate of the click
+		 * @param y
+		 *            The y-coordinate of the click
+		 * @param mouseButton
+		 *            Which button was clicked
+		 */
+		protected abstract void mouseClicked(int x, int y, int mouseButton);
+
+		/**
+		 * Called when the mouse is released
+		 * 
+		 * @param x
+		 *            The x-coordinate of the release
+		 * @param y
+		 *            The y-coordinate of the release
+		 * @param mouseButton
+		 *            Which button was released
+		 */
+		protected abstract void mouseMovedOrUp(int x, int y, int mouseButton);
+
+		/**
+		 * Called when a key is typed
+		 * 
+		 * @param c
+		 *            The charcode of the key if any
+		 * @param key
+		 *            The key number
+		 */
+		protected abstract void keyTyped(char c, int key);
+
+	}
 
 	public GenericTabbedContainer(Container container, int width, int height) {
 		super(container, width, height);
@@ -20,5 +112,7 @@ public class GenericTabbedContainer extends GenericContainerGUI {
 		// TODO Auto-generated method stub
 
 	}
+
+	protected abstract HashMap<Integer, ContainerTab> getTabs();
 
 }
