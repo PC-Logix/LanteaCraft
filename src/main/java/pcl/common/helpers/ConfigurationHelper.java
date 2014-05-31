@@ -88,7 +88,7 @@ public class ConfigurationHelper extends Configuration {
 		}
 		Property property = super.getBlock(name, nextid);
 		if (property.getInt() != nextid) {
-			defaultBlockIdsUsed.remove(nextid);
+			defaultBlockIdsUsed.remove(defaultBlockIdsUsed.indexOf(nextid));
 			defaultBlockIdsUsed.add(property.getInt());
 		}
 		return property;
