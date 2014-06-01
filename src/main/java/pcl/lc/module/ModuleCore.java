@@ -55,6 +55,11 @@ public class ModuleCore implements IModule {
 		Items.debugger = RegistrationHelper.registerItem(ItemDebugTool.class, "lanteadebug");
 
 		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), "naquadah", Item.ingotIron);
+		
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4), Blocks.lanteaOre.blockID, 0, 0.1f);
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 1), Blocks.lanteaOre.blockID, 1, 0.1f);
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 2), Blocks.lanteaOre.blockID, 2, 0.1f);
+		
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1), "NNN", "NNN", "NNN", 'N',
 				"ingotNaquadahAlloy");
 		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9), "B", 'B', Blocks.lanteaOreAsBlock);
