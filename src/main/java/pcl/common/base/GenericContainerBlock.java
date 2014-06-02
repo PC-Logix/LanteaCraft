@@ -2,10 +2,10 @@ package pcl.common.base;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -59,7 +59,7 @@ public abstract class GenericContainerBlock extends BlockContainer {
 								stackSize = stack.stackSize;
 							stack.stackSize -= stackSize;
 							itemEntity = new EntityItem(world, x + objectDropX, y + objectDropY, z + objectDropHeight,
-									new ItemStack(stack.itemID, stackSize, stack.getItemDamage()));
+									new ItemStack(stack.getItem(), stackSize, stack.getItemDamage()));
 							float motionMul = 0.05F;
 							itemEntity.motionX = (float) random.nextGaussian() * motionMul;
 							itemEntity.motionY = (float) random.nextGaussian() * motionMul + 0.2F;
