@@ -59,22 +59,23 @@ public class ChunkData {
 			NBTTagIntArray lcOres = (NBTTagIntArray) lcCompound.getTag("OreGenList");
 			if (lcOres != null) {
 				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("Reading %s ore generation patterns", lcOres.intArray.length));
+						String.format("Reading %s ore generation patterns", lcOres.func_150302_c().length));
 				generatedOres.clear();
-				for (int element : lcOres.intArray)
+				for (int element : lcOres.func_150302_c())
 					generatedOres.add(OreTypes.fromOrdinal(element));
 			}
 		}
 	}
 
 	public void writeToNBT(NBTTagCompound nbt) {
-		NBTTagCompound lcCompound = new NBTTagCompound("LanteaCraftMeta");
-		NBTTagIntArray lcOres = new NBTTagIntArray("OreGenList", new int[generatedOres.size()]);
+		NBTTagCompound lcCompound = new NBTTagCompound();
 		Iterator<OreTypes> k = generatedOres.iterator();
 		LanteaCraft.getLogger().log(Level.INFO,
 				String.format("Saving %s ore generation patterns", generatedOres.size()));
+		int result[] = new int[generatedOres.size()];
 		for (int j = 0; k.hasNext(); j++)
-			lcOres.intArray[j] = k.next().ordinal();
+			result[j] = k.next().ordinal();
+		NBTTagIntArray lcOres = new NBTTagIntArray(result);
 		lcCompound.setTag("OreGenList", lcOres);
 		nbt.setTag("LanteaCraftMeta", lcCompound);
 	}

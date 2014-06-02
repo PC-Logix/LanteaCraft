@@ -63,4 +63,10 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 		return new String[] { "pcl.common.asm.ClassOptionalTransformer" };
 	}
 
+	@Override
+	public String getAccessTransformerClass() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

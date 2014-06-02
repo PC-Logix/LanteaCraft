@@ -37,7 +37,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 
 	public TileEntityLanteaDecorGlass getGlassAt(int x, int y, int z) {
 		if (y >= 0 && worldObj.getHeight() > y) {
-			TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
+			TileEntity tile = worldObj.getTileEntity(x, y, z);
 			if (tile instanceof TileEntityLanteaDecorGlass)
 				return (TileEntityLanteaDecorGlass) tile;
 		}

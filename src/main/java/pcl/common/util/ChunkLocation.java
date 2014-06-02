@@ -10,7 +10,8 @@ public class ChunkLocation {
 	public boolean isStrongLocation;
 
 	public ChunkLocation(TileEntity te) {
-		this(te.worldObj.provider.dimensionId, te.xCoord >> 4, te.zCoord >> 4);
+		this(te.getWorldObj().provider.dimensionId, te.xCoord >> 4,
+				te.zCoord >> 4);
 	}
 
 	public ChunkLocation(int dimension, int x, int z) {
@@ -44,7 +45,8 @@ public class ChunkLocation {
 
 	public WorldLocation toWorldLocation() {
 		if (!isStrongLocation)
-			throw new IllegalArgumentException("Can't make a weak location a WorldLocation!");
+			throw new IllegalArgumentException(
+					"Can't make a weak location a WorldLocation!");
 		return new WorldLocation(dimension, cx << 4, 0, cz << 4);
 	}
 

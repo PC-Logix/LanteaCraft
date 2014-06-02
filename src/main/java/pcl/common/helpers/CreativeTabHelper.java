@@ -8,7 +8,7 @@ import net.minecraft.creativetab.CreativeTabs;
  * @author AfterLifeLochie
  * 
  */
-public class CreativeTabHelper extends CreativeTabs {
+public abstract class CreativeTabHelper extends CreativeTabs {
 	public CreativeTabHelper(int par1, String par2Str) {
 		super(par1, par2Str);
 	}

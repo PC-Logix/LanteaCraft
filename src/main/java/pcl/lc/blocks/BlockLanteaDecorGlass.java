@@ -5,22 +5,23 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
 
 public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider {
 
-	private Icon missing;
-	private Icon lanteaGlassDefault;
+	private IIcon missing;
+	private IIcon lanteaGlassDefault;
 
-	public BlockLanteaDecorGlass(int id) {
-		super(id, Material.glass);
+	public BlockLanteaDecorGlass() {
+		super(Material.glass);
 	}
 
 	@Override
@@ -46,15 +47,15 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
-		lanteaGlassDefault = register.registerIcon(LanteaCraft.getAssetKey() + ":lantean_glass_"
-				+ LanteaCraft.getProxy().getRenderMode());
+	public void registerBlockIcons(IIconRegister register) {
+		lanteaGlassDefault = register.registerIcon(LanteaCraft.getAssetKey()
+				+ ":lantean_glass_" + LanteaCraft.getProxy().getRenderMode());
 
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 	}
 
 	@Override
-	public Icon getIcon(int side, int data) {
+	public IIcon getIcon(int side, int data) {
 		switch (data) {
 		case 1:
 			return lanteaGlassDefault;
@@ -64,9 +65,9 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 	}
 
 	@Override
-	public void getSubBlocks(int itemID, CreativeTabs tab, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < 1; i++)
-			list.add(new ItemStack(itemID, 1, i + 1));
+			list.add(new ItemStack(item, 1, i + 1));
 	}
 
 	@Override
@@ -75,20 +76,21 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new TileEntityLanteaDecorGlass();
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int neighbourId) {
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
+	public void onNeighborBlockChange(World world, int x, int y, int z,
+			int neighbourId) {
+		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile instanceof TileEntityLanteaDecorGlass)
 			((TileEntityLanteaDecorGlass) tile).neighbourChanged();
 	}
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile instanceof TileEntityLanteaDecorGlass)
 			((TileEntityLanteaDecorGlass) tile).neighbourChanged();
 	}

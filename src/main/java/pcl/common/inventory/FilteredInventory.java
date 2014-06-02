@@ -62,14 +62,6 @@ public abstract class FilteredInventory implements ISidedInventory {
 	}
 
 	@Override
-	public void openChest() {
-	}
-
-	@Override
-	public void closeChest() {
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (rules[i] != null && !rules[i].test(itemstack))
 			return false;

@@ -20,7 +20,7 @@ public class GUIHandler implements IGuiHandler {
 			try {
 				LanteaCraft.getLogger().log(Level.FINE,
 						String.format("Initializing Container of class %s.", container.getName()));
-				TileEntity entity = world.getBlockTileEntity(x, y, z);
+				TileEntity entity = world.getTileEntity(x, y, z);
 				Constructor<?> constr = container
 						.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
 				Object val = constr.newInstance(entity, player);

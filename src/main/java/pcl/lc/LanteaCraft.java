@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -63,10 +64,9 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "-" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:OpenComputers;after:BuildCraft|Core;after:IC2;after:SGCraft")
-@NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { BuildInfo.modID }, packetHandler = pcl.lc.network.DefaultPacketHandler.class)
+@Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber
+		+ "-" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:OpenComputers;after:BuildCraft|Core;after:IC2;after:SGCraft")
 public class LanteaCraft {
 
 	/**
@@ -188,10 +188,11 @@ public class LanteaCraft {
 	/**
 	 * Creative tab instance
 	 */
-	private static CreativeTabHelper lanteaCraftTab = new CreativeTabHelper(CreativeTabs.getNextID(), "LanteaCraft") {
+	private static CreativeTabHelper lanteaCraftTab = new CreativeTabHelper(
+			CreativeTabs.getNextID(), "LanteaCraft") {
 		@Override
-		public ItemStack getIconItemStack() {
-			return new ItemStack(LanteaCraft.Items.debugger);
+		public Item getTabIconItem() {
+			return LanteaCraft.Items.debugger;
 		}
 	};
 
@@ -303,11 +304,17 @@ public class LanteaCraft {
 
 	@ForgeSubscribe
 	public void onWorldUnload(WorldEvent.Unload evt) {
-		LanteaCraft.getLogger().log(Level.INFO, String.format("World unloading: %s", evt.world.provider.dimensionId));
+		LanteaCraft.getLogger().log(
+				Level.INFO,
+				String.format("World unloading: %s",
+						evt.world.provider.dimensionId));
 	}
 
 	@ForgeSubscribe
 	public void onWorldLoad(WorldEvent.Load evt) {
-		LanteaCraft.getLogger().log(Level.INFO, String.format("World loading: %s", evt.world.provider.dimensionId));
+		LanteaCraft.getLogger().log(
+				Level.INFO,
+				String.format("World loading: %s",
+						evt.world.provider.dimensionId));
 	}
 }

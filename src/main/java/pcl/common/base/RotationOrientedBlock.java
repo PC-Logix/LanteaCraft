@@ -11,8 +11,8 @@ public abstract class RotationOrientedBlock extends OrientedBlock {
 	int rotationShift = 0;
 	int rotationMask = 0x3;
 
-	public RotationOrientedBlock(int id, Material material) {
-		super(id, material);
+	public RotationOrientedBlock(Material material) {
+		super(material);
 	}
 
 	public void setRotation(World world, int x, int y, int z, int rotation, int flags) {

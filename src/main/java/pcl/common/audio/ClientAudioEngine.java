@@ -83,7 +83,7 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 		if (!enabled)
 			return;
 		if (system == null)
-			system = Minecraft.getMinecraft().sndManager.sndSystem;
+			system = Minecraft.getMinecraft().getSoundHandler().sndSystem;
 		if (system == null)
 			return;
 		float vol = Minecraft.getMinecraft().gameSettings.soundVolume;

@@ -5,11 +5,11 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.IconFlipped;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
@@ -22,12 +22,12 @@ public class BlockLanteaDecorDoor extends Block {
 	private EnumDecorMaterials doorMaterial;
 
 	@SideOnly(Side.CLIENT)
-	private Icon[] texTop;
+	private IIcon[] texTop;
 	@SideOnly(Side.CLIENT)
-	private Icon[] texBottom;
+	private IIcon[] texBottom;
 
-	protected BlockLanteaDecorDoor(int id, EnumDecorMaterials material) {
-		super(id, Material.ground);
+	protected BlockLanteaDecorDoor(EnumDecorMaterials material) {
+		super(Material.ground);
 		doorMaterial = material;
 		float f = 0.5F, f1 = 1.0F;
 		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
@@ -38,7 +38,7 @@ public class BlockLanteaDecorDoor extends Block {
 	/**
 	 * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
 	 */
-	public Icon getIcon(int side, int meta) {
+	public IIcon getIcon(int side, int meta) {
 		return texBottom[0];
 	}
 
@@ -47,7 +47,7 @@ public class BlockLanteaDecorDoor extends Block {
 	/**
 	 * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
 	 */
-	public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
+	public IIcon getBlockTexture(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
 		if (par5 != 1 && par5 != 0) {
 			int i1 = getFullMetadata(par1IBlockAccess, par2, par3, par4);
 			int j1 = i1 & 3;
@@ -85,13 +85,9 @@ public class BlockLanteaDecorDoor extends Block {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	/**
-	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-	 * is the only chance you get to register icons.
-	 */
-	public void registerIcons(IconRegister par1IconRegister) {
-		texTop = new Icon[2];
-		texBottom = new Icon[2];
+	public void registerBlockIcons(IIconRegister par1IconRegister) {
+		texTop = new IIcon[2];
+		texBottom = new IIcon[2];
 		texTop[0] = par1IconRegister.registerIcon(doorMaterial.label() + "_door_upper");
 		texBottom[0] = par1IconRegister.registerIcon(doorMaterial.label() + "_door_lower");
 		texTop[1] = new IconFlipped(texTop[0], true, false);

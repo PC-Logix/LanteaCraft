@@ -19,7 +19,7 @@ public class AudioPosition {
 		}
 		if (o instanceof TileEntity) {
 			TileEntity t = (TileEntity) o;
-			return new AudioPosition(t.worldObj, new Vector3(t));
+			return new AudioPosition(t.getWorldObj(), new Vector3(t));
 		}
 		return null;
 	}

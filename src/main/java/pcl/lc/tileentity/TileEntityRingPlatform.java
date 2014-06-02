@@ -127,7 +127,7 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 				yCoord, zCoord, AxisAlignedBB.getBoundingBox(-10, -yCoord, -10, 10, worldObj.getHeight(), 10));
 		Vector3 vectorHere = new Vector3(this);
 		for (Vector3 other : others) {
-			TileEntity at = worldObj.getBlockTileEntity(xCoord + (int) Math.floor(other.x),
+			TileEntity at = worldObj.getTileEntity(xCoord + (int) Math.floor(other.x),
 					yCoord + (int) Math.floor(other.y), zCoord + (int) Math.floor(other.z));
 			if ((at instanceof TileEntityRingPlatform) && !at.equals(this)) {
 				TileEntityRingPlatform that = (TileEntityRingPlatform) at;
@@ -141,7 +141,7 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 	}
 
 	private TileEntityRingPlatform getSlave() {
-		return (TileEntityRingPlatform) worldObj.getBlockTileEntity((int) Math.floor(connectionTo.x),
+		return (TileEntityRingPlatform) worldObj.getTileEntity((int) Math.floor(connectionTo.x),
 				(int) Math.floor(connectionTo.y), (int) Math.floor(connectionTo.z));
 	}
 

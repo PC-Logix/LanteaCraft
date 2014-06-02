@@ -4,43 +4,46 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft;
 
 public class BlockLanteaDecor extends Block {
 
-	private Icon missing;
+	private IIcon missing;
 
-	private Icon lanteaDecor;
-	private Icon lanteaMetal;
+	private IIcon lanteaDecor;
+	private IIcon lanteaMetal;
 
-	private Icon goauldDecor;
-	private Icon goauldMetal;
+	private IIcon goauldDecor;
+	private IIcon goauldMetal;
 
-	public BlockLanteaDecor(int id) {
-		super(id, Material.ground);
+	public BlockLanteaDecor() {
+		super(Material.ground);
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
-		lanteaDecor = register.registerIcon(LanteaCraft.getAssetKey() + ":lantean_decor_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		lanteaMetal = register.registerIcon(LanteaCraft.getAssetKey() + ":lantean_metal_"
-				+ LanteaCraft.getProxy().getRenderMode());
+	public void registerBlockIcons(IIconRegister register) {
+		lanteaDecor = register.registerIcon(LanteaCraft.getAssetKey()
+				+ ":lantean_decor_" + LanteaCraft.getProxy().getRenderMode());
+		lanteaMetal = register.registerIcon(LanteaCraft.getAssetKey()
+				+ ":lantean_metal_" + LanteaCraft.getProxy().getRenderMode());
 
-		goauldDecor = register.registerIcon(LanteaCraft.getAssetKey() + ":goauld_golddecor_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		goauldMetal = register.registerIcon(LanteaCraft.getAssetKey() + ":goauld_goldplain_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		goauldDecor = register
+				.registerIcon(LanteaCraft.getAssetKey() + ":goauld_golddecor_"
+						+ LanteaCraft.getProxy().getRenderMode());
+		goauldMetal = register
+				.registerIcon(LanteaCraft.getAssetKey() + ":goauld_goldplain_"
+						+ LanteaCraft.getProxy().getRenderMode());
 
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 	}
 
 	@Override
-	public Icon getIcon(int side, int data) {
+	public IIcon getIcon(int side, int data) {
 		switch (data) {
 		case 1:
 			return lanteaDecor;
@@ -56,9 +59,9 @@ public class BlockLanteaDecor extends Block {
 	}
 
 	@Override
-	public void getSubBlocks(int itemID, CreativeTabs tab, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < 4; i++)
-			list.add(new ItemStack(itemID, 1, i + 1));
+			list.add(new ItemStack(item, 1, i + 1));
 	}
 
 	@Override

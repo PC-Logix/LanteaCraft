@@ -117,13 +117,13 @@ public class StargateMultiblock extends GenericMultiblock {
 	 */
 	private EnumOrientations getOrientation(World worldAccess, int baseX, int baseY, int baseZ) {
 		// Test North-South alignment along Z axis
-		if (isGateTileEntity(worldAccess.getBlockTileEntity(baseX, baseY, baseZ + 1))
-				&& isGateTileEntity(worldAccess.getBlockTileEntity(baseX, baseY, baseZ - 1)))
+		if (isGateTileEntity(worldAccess.getTileEntity(baseX, baseY, baseZ + 1))
+				&& isGateTileEntity(worldAccess.getTileEntity(baseX, baseY, baseZ - 1)))
 			return EnumOrientations.NORTH_SOUTH;
 
 		// Test East-West alignment along X axis
-		if (isGateTileEntity(worldAccess.getBlockTileEntity(baseX + 1, baseY, baseZ))
-				&& isGateTileEntity(worldAccess.getBlockTileEntity(baseX - 1, baseY, baseZ)))
+		if (isGateTileEntity(worldAccess.getTileEntity(baseX + 1, baseY, baseZ))
+				&& isGateTileEntity(worldAccess.getTileEntity(baseX - 1, baseY, baseZ)))
 			return EnumOrientations.EAST_WEST;
 
 		// Likely not a valid orientation at all
@@ -204,7 +204,7 @@ public class StargateMultiblock extends GenericMultiblock {
 			LanteaCraft.getLogger().log(Level.FINE, "Globbing EASTWEST");
 			for (int x = 0; x < 7; x++)
 				for (int y = 0; y < 7; y++) {
-					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
+					TileEntity entity = worldAccess.getTileEntity(baseX + (x - 3), baseY + y, baseZ);
 					if (stargateModel[y][x] != 0 && stargateModel[y][x] != 3) {
 						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
 						StargatePart teAsPart = entityAsRing.getAsPart();
@@ -225,7 +225,7 @@ public class StargateMultiblock extends GenericMultiblock {
 			LanteaCraft.getLogger().log(Level.FINE, "Globbing NORTHSOUTH");
 			for (int z = 0; z < 7; z++)
 				for (int y = 0; y < 7; y++) {
-					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
+					TileEntity entity = worldAccess.getTileEntity(baseX, baseY + y, baseZ + (z - 3));
 					if (stargateModel[y][z] != 0 && stargateModel[y][z] != 3) {
 						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
 						StargatePart teAsPart = entityAsRing.getAsPart();

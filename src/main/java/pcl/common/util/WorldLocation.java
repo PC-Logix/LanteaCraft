@@ -9,7 +9,7 @@ public class WorldLocation {
 	public int x, y, z;
 
 	public WorldLocation(TileEntity te) {
-		this(te.worldObj.provider.dimensionId, te.xCoord, te.yCoord, te.zCoord);
+		this(te.getWorldObj().provider.dimensionId, te.xCoord, te.yCoord, te.zCoord);
 	}
 
 	public WorldLocation(int dimension, int x, int y, int z) {

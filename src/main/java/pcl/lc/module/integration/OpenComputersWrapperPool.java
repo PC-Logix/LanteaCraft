@@ -36,23 +36,34 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Override
-		public ManagedEnvironment createEnvironment(World world, int x, int y, int z) {
+		public ManagedEnvironment createEnvironment(World world, int x, int y,
+				int z) {
 			int id = world.getBlockId(x, y, z);
 			try {
 				if (id == LanteaCraft.Blocks.stargateBaseBlock.blockID) {
-					IStargateAccess base = (IStargateAccess) world.getBlockTileEntity(x, y, z);
-					return new OpenComputersWrapperPool.StargateAccessWrapper(base);
+					IStargateAccess base = (IStargateAccess) world
+							.getTileEntity(x, y, z);
+					return new OpenComputersWrapperPool.StargateAccessWrapper(
+							base);
 				} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
-					INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
-					return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
+					INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world
+							.getTileEntity(x, y, z);
+					return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(
+							generator);
 				} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
-					IStargateControllerAccess dhd = (IStargateControllerAccess) world.getBlockTileEntity(x, y, z);
-					return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
+					IStargateControllerAccess dhd = (IStargateControllerAccess) world
+							.getTileEntity(x, y, z);
+					return new OpenComputersWrapperPool.StargateControllerAccessWrapper(
+							dhd);
 				} else
-					throw new RuntimeException("Driver.Block handler specified invalid typeof!");
+					throw new RuntimeException(
+							"Driver.Block handler specified invalid typeof!");
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.WARNING,
-						"Failed when handling OpenComputers createEnvironment request.", t);
+				LanteaCraft
+						.getLogger()
+						.log(Level.WARNING,
+								"Failed when handling OpenComputers createEnvironment request.",
+								t);
 				return null;
 			}
 		}
@@ -62,10 +73,12 @@ public class OpenComputersWrapperPool {
 		public String getComponentName();
 	}
 
-	private abstract static class OpenComputersHostStub implements IHookManagedEnvironment, MethodWhitelist {
+	private abstract static class OpenComputersHostStub implements
+			IHookManagedEnvironment, MethodWhitelist {
 
 		private String[] methodList = null;
-		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
+		protected Node node = Network.newNode(this, Visibility.Network)
+				.withComponent(getComponentName()).create();
 
 		@Override
 		public Node node() {
@@ -112,7 +125,8 @@ public class OpenComputersWrapperPool {
 		 *            Our local class.
 		 * @return List of all Callback methods (cached).
 		 */
-		protected String[] getMethods(Class<? extends OpenComputersHostStub> clazz) {
+		protected String[] getMethods(
+				Class<? extends OpenComputersHostStub> clazz) {
 			if (methodList != null)
 				return methodList;
 			ArrayList<String> methodView = new ArrayList<String>();
@@ -152,22 +166,29 @@ public class OpenComputersWrapperPool {
 					break;
 				case Dialling:
 					if (access.isOutgoingConnection())
-						node.sendToReachable("computer.signal", "sgOutgoing", access.getConnectionAddress());
+						node.sendToReachable("computer.signal", "sgOutgoing",
+								access.getConnectionAddress());
 					else
 						node.sendToReachable("computer.signal", "sgIncoming",
-								Character.toString(access.getConnectionAddress().charAt(access.getEncodedChevrons())));
+								Character.toString(access
+										.getConnectionAddress().charAt(
+												access.getEncodedChevrons())));
 					break;
 				case InterDialling:
-					node.sendToReachable("computer.signal", "sgChevronEncode", access.getEncodedChevrons());
+					node.sendToReachable("computer.signal", "sgChevronEncode",
+							access.getEncodedChevrons());
 					break;
 				case Transient:
-					node.sendToReachable("computer.signal", "sgWormholeOpening", true);
+					node.sendToReachable("computer.signal",
+							"sgWormholeOpening", true);
 					break;
 				case Disconnecting:
-					node.sendToReachable("computer.signal", "sgWormholeClosing", true);
+					node.sendToReachable("computer.signal",
+							"sgWormholeClosing", true);
 					break;
 				case Connected:
-					node.sendToReachable("computer.signal", "sgWormholeStable", true);
+					node.sendToReachable("computer.signal", "sgWormholeStable",
+							true);
 					break;
 				default:
 					break;
@@ -177,12 +198,15 @@ public class OpenComputersWrapperPool {
 
 		@Callback
 		public Object[] greet(Context context, Arguments args) {
-			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
+			return new Object[] { String.format("Hello, %s!",
+					args.checkString(0)) };
 		}
 
 		@Callback
-		public Object[] getInterfaceVersion(Context context, Arguments args) throws Exception {
-			return new Object[] { BuildInfo.versionNumber + "." + BuildInfo.getBuildNumber() };
+		public Object[] getInterfaceVersion(Context context, Arguments args)
+				throws Exception {
+			return new Object[] { BuildInfo.versionNumber + "."
+					+ BuildInfo.getBuildNumber() };
 		}
 
 		@Callback
@@ -191,13 +215,15 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Callback
-		public Object[] connect(Context context, Arguments args) throws Exception {
+		public Object[] connect(Context context, Arguments args)
+				throws Exception {
 			return dialTheGate(args.checkString(0).toUpperCase());
 		}
 
 		public Object[] dialTheGate(String address) throws Exception {
 			if (address.length() != 7 && address.length() != 9)
-				throw new Exception("Stargate addresses must be 7 or 9 characters.");
+				throw new Exception(
+						"Stargate addresses must be 7 or 9 characters.");
 			else if (address.equals(access.getLocalAddress())
 					|| address.equals(access.getLocalAddress().substring(0, 7)))
 				throw new Exception("Stargate cannot connect to itself.");
@@ -207,7 +233,8 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Callback
-		public Object[] disconnect(Context context, Arguments args) throws Exception {
+		public Object[] disconnect(Context context, Arguments args)
+				throws Exception {
 			if (!access.isBusy())
 				throw new Exception("Stargate is not connected");
 			if (!access.disconnect())
@@ -228,7 +255,8 @@ public class OpenComputersWrapperPool {
 		@Callback
 		public Object[] isDialing(Context context, Arguments args) {
 			return new Object[] { (access.getState() == EnumStargateState.Dialling
-					|| access.getState() == EnumStargateState.Dialling || access.getState() == EnumStargateState.InterDialling) };
+					|| access.getState() == EnumStargateState.Dialling || access
+					.getState() == EnumStargateState.InterDialling) };
 		}
 
 		@Callback
@@ -238,7 +266,8 @@ public class OpenComputersWrapperPool {
 
 		@Callback
 		public Object[] hasFuel(Context context, Arguments args) {
-			return new Object[] { access.getRemainingConnectionTime() > 0 && access.getRemainingDials() > 0 };
+			return new Object[] { access.getRemainingConnectionTime() > 0
+					&& access.getRemainingDials() > 0 };
 		}
 
 		@Override
@@ -247,7 +276,8 @@ public class OpenComputersWrapperPool {
 		}
 	}
 
-	public static class StargateControllerAccessWrapper extends OpenComputersHostStub {
+	public static class StargateControllerAccessWrapper extends
+			OpenComputersHostStub {
 		private final IStargateControllerAccess access;
 
 		public StargateControllerAccessWrapper(IStargateControllerAccess access) {
@@ -266,7 +296,8 @@ public class OpenComputersWrapperPool {
 
 		@Callback
 		public Object[] greet(Context context, Arguments args) {
-			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
+			return new Object[] { String.format("Hello, %s!",
+					args.checkString(0)) };
 		}
 
 		@Callback
@@ -290,7 +321,8 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Callback
-		public Object[] disconnect(Context context, Arguments args) throws Exception {
+		public Object[] disconnect(Context context, Arguments args)
+				throws Exception {
 			if (!access.isBusy())
 				throw new Exception("Stargate is not connected");
 			if (!access.disconnect())
@@ -304,7 +336,8 @@ public class OpenComputersWrapperPool {
 		}
 	}
 
-	public static class NaquadahGeneratorAccessWrapper extends OpenComputersHostStub {
+	public static class NaquadahGeneratorAccessWrapper extends
+			OpenComputersHostStub {
 
 		private final INaquadahGeneratorAccess access;
 
@@ -323,7 +356,8 @@ public class OpenComputersWrapperPool {
 
 		@Callback
 		public Object[] greet(Context context, Arguments args) {
-			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
+			return new Object[] { String.format("Hello, %s!",
+					args.checkString(0)) };
 		}
 
 		@Callback
@@ -332,7 +366,8 @@ public class OpenComputersWrapperPool {
 		}
 
 		@Callback
-		public Object[] setEnabled(Context context, Arguments args) throws Exception {
+		public Object[] setEnabled(Context context, Arguments args)
+				throws Exception {
 			if (!(args.checkBoolean(0)))
 				throw new Exception("boolean expected");
 			boolean state = args.checkBoolean(0);

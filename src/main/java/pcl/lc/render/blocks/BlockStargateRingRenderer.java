@@ -14,7 +14,7 @@ public class BlockStargateRingRenderer extends GenericBlockRenderer {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks rb) {
 		BlockStargateRing ringBlock = (BlockStargateRing) block;
-		TileEntityStargateRing ringTE = (TileEntityStargateRing) world.getBlockTileEntity(x, y, z);
+		TileEntityStargateRing ringTE = (TileEntityStargateRing) world.getTileEntity(x, y, z);
 
 		StargatePart partOf = ringTE.getAsPart();
 		if (partOf == null)

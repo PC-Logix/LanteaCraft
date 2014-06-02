@@ -62,8 +62,8 @@ import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
-		ISidedInventory {
+public class TileEntityStargateBase extends GenericTileEntity implements
+		IStargateAccess, IPacketHandler, ISidedInventory {
 
 	/**
 	 * Used to damage players who contact with an iris.
@@ -78,7 +78,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 
 		public String getDeathMessage(EntityPlayer player) {
-			return new StringBuilder().append(player.username).append(" was obliterated by an iris.").toString();
+			return new StringBuilder().append(player.getDisplayName())
+					.append(" was obliterated by an iris.").toString();
 		}
 	}
 
@@ -95,7 +96,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		public TrackedEntity(Entity entity) {
 			this.entity = entity;
 			lastPos = new Vector3(entity);
-			lastVel = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
+			lastVel = new Vector3(entity.motionX, entity.motionY,
+					entity.motionZ);
 		}
 	}
 
@@ -110,7 +112,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		/* If this remote request is the host */
 		public final boolean isHost;
 		/* The current state of the connection */
-		public WatchedValue<EnumStargateState> state = new WatchedValue(EnumStargateState.Idle);
+		public WatchedValue<EnumStargateState> state = new WatchedValue(
+				EnumStargateState.Idle);
 		/* The current symbol being dialled */
 		public WatchedValue<Character> symbol = new WatchedValue<Character>(' ');
 		/* The number of chevrons dialled */
@@ -122,8 +125,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		/* The local and target addresses */
 		public final String hostAddress, clientAddress;
 
-		public ClientConnectionRequest(String name, String hostName, String clientName, String hostAddress,
-				String clientAddress, boolean isHost) {
+		public ClientConnectionRequest(String name, String hostName,
+				String clientName, String hostAddress, String clientAddress,
+				boolean isHost) {
 			this.name = name;
 			this.hostName = hostName;
 			this.clientName = clientName;
@@ -145,8 +149,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 
 		public String getDeathMessage(EntityPlayer player) {
-			return new StringBuilder().append(player.username).append(" was torn apart by an event horizon.")
-					.toString();
+			return new StringBuilder().append(player.getDisplayName())
+					.append(" was torn apart by an event horizon.").toString();
 		}
 	}
 
@@ -160,9 +164,11 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	public static int ticksToStayOpen;
 
 	public static void configure(ConfigurationHelper cfg) {
-		secondsToStayOpen = cfg.getInteger("stargate", "secondsToStayOpen", secondsToStayOpen);
+		secondsToStayOpen = cfg.getInteger("stargate", "secondsToStayOpen",
+				secondsToStayOpen);
 		oneWayTravel = cfg.getBoolean("stargate", "oneWayTravel", oneWayTravel);
-		closeFromEitherEnd = cfg.getBoolean("stargate", "closeFromEitherEnd", closeFromEitherEnd);
+		closeFromEitherEnd = cfg.getBoolean("stargate", "closeFromEitherEnd",
+				closeFromEitherEnd);
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
 
@@ -205,7 +211,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			public boolean canInsertItem(int i, ItemStack itemstack, int j) {
 				if (0 > i || i > items.length)
 					return false;
-				return items[i] == null || ItemStack.areItemStacksEqual(items[i], itemstack);
+				return items[i] == null
+						|| ItemStack.areItemStacksEqual(items[i], itemstack);
 			}
 
 			@Override
@@ -216,8 +223,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			}
 		};
 
-		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.iris, 1) }, null,
-				true, false));
+		inventory.setFilterRule(0, new FilterRule(
+				new ItemStack[] { new ItemStack(LanteaCraft.Items.iris, 1) },
+				null, true, false));
 		getAsStructure().invalidate();
 	}
 
@@ -228,11 +236,15 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		checkForEntitiesInPortal();
 		if (connection != null)
 			// Synchronize the connection between this instance and the client
-			if (connection.running.modified(observerContext) || connection.chevrons.modified(observerContext)
-					|| connection.state.modified(observerContext) || connection.symbol.modified(observerContext)) {
+			if (connection.running.modified(observerContext)
+					|| connection.chevrons.modified(observerContext)
+					|| connection.state.modified(observerContext)
+					|| connection.symbol.modified(observerContext)) {
 				if (BuildInfo.DEBUG)
-					LanteaCraft.getLogger().log(Level.INFO, "Update detected, sending update packet.");
-				StandardModPacket update = new StandardModPacket(new WorldLocation(this));
+					LanteaCraft.getLogger().log(Level.INFO,
+							"Update detected, sending update packet.");
+				StandardModPacket update = new StandardModPacket(
+						new WorldLocation(this));
 				update.setType("LanteaPacket.ConnectionUpdate");
 				update.setIsForServer(false);
 				if (connection.running.modified(observerContext)) {
@@ -268,13 +280,17 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 				// The ring is now spinning, calculate the destination angle
 				if (connection_cli.state.get() == EnumStargateState.Dialling) {
-					char symbol = getDialledAddress().charAt(connection_cli.chevrons.get());
-					int symbolIndex = GateAddressHelper.singleton().index(symbol);
+					char symbol = getDialledAddress().charAt(
+							connection_cli.chevrons.get());
+					int symbolIndex = GateAddressHelper.singleton().index(
+							symbol);
 					double chevronIndex = connection_cli.chevrons.get();
-					double symbolRotation = symbolIndex * StargateRenderConstants.ringSymbolAngle;
+					double symbolRotation = symbolIndex
+							* StargateRenderConstants.ringSymbolAngle;
 					double chevronRotation = (StargateRenderConstants.chevronAngle * chevronIndex)
 							- StargateRenderConstants.chevronAngleOffset;
-					ring_dest_angle = MathUtils.normaliseAngle(chevronRotation - symbolRotation);
+					ring_dest_angle = MathUtils.normaliseAngle(chevronRotation
+							- symbolRotation);
 				}
 
 				switch (getState()) {
@@ -306,7 +322,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				if (getState() == EnumStargateState.Dialling
 						|| (getState() == EnumStargateState.Disconnecting && connection_cli.ticksRemaining > 0))
 					if (connection_cli.ticksRemaining > 0) {
-						double da = MathUtils.diffAngle(ring_angle, ring_dest_angle) / connection_cli.ticksRemaining;
+						double da = MathUtils.diffAngle(ring_angle,
+								ring_dest_angle)
+								/ connection_cli.ticksRemaining;
 						ring_angle = MathUtils.addAngle(ring_angle, da);
 						--connection_cli.ticksRemaining;
 					} else
@@ -329,7 +347,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				double du_dr = 0.5 * (u[j][i + 1] - u[j][i - 1]);
 				double d2u_drsq = u[j][i + 1] - 2 * u[j][i] + u[j][i - 1];
 				double d2u_dthsq = u[j + 1][i] - 2 * u[j][i] + u[j - 1][i];
-				v[j][i] = d * v[j][i] + asq * dt * (d2u_drsq + du_dr / i + d2u_dthsq / (i * i));
+				v[j][i] = d * v[j][i] + asq * dt
+						* (d2u_drsq + du_dr / i + d2u_dthsq / (i * i));
 			}
 		for (int i = 1; i < m; i++)
 			for (int j = 1; j <= n; j++)
@@ -375,7 +394,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			Vector3 p1 = new Vector3(2.5, 5.5, 3.5);
 			Trans3 t = localToGlobalTransformation();
 			AxisAlignedBB box = t.box(p0, p1);
-			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
+			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class,
+					box);
 			for (Entity entity : ents)
 				if (!entity.isDead && entity.ridingEntity == null)
 					trackedEntities.add(new TrackedEntity(entity));
@@ -385,7 +405,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	@Override
 	public boolean connect(String address) {
 		try {
-			String localAddress = (address.length() == 7) ? getLocalAddress().substring(0, 7) : getLocalAddress();
+			String localAddress = (address.length() == 7) ? getLocalAddress()
+					.substring(0, 7) : getLocalAddress();
 			ChunkLocation remoteLocation, hostLocation = getLocation();
 			remoteLocation = GateAddressHelper.locationForAddress(address);
 			if (!remoteLocation.isStrongLocation)
@@ -393,9 +414,11 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					remoteLocation.setDimension(hostLocation.dimension);
 				else
 					return false;
-			StargateConnectionManager manager = LanteaCraft.getProxy().getConnectionManager();
-			manager.create(localAddress, address, hostLocation.toWorldLocation(), remoteLocation.toWorldLocation(),
-					this, address);
+			StargateConnectionManager manager = LanteaCraft.getProxy()
+					.getConnectionManager();
+			manager.create(localAddress, address,
+					hostLocation.toWorldLocation(),
+					remoteLocation.toWorldLocation(), this, address);
 			return true;
 		} catch (AddressingError error) {
 			return false;
@@ -403,14 +426,19 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	public void connectOrDisconnect(String address) {
-		if (connection == null || connection.state.get() == EnumStargateState.Idle)
+		if (connection == null
+				|| connection.state.get() == EnumStargateState.Idle)
 			connect(address);
-		else if (connection.state.get() != EnumStargateState.Disconnecting && canCloseFromThisEnd())
+		else if (connection.state.get() != EnumStargateState.Disconnecting
+				&& canCloseFromThisEnd())
 			connection.requestDisconnect();
 	}
 
-	private void createChannel(String name, String file, AudioPosition position, float volume, int age) {
-		soundHost.addChannel(name, String.format("stargate/milkyway/milkyway_%s.ogg", file), position, volume, age);
+	private void createChannel(String name, String file,
+			AudioPosition position, float volume, int age) {
+		soundHost.addChannel(name,
+				String.format("stargate/milkyway/milkyway_%s.ogg", file),
+				position, volume, age);
 	}
 
 	@Override
@@ -423,13 +451,15 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	private void entityInPortal(Entity entity, Vector3 prevPos) {
-		if (!entity.isDead && getState() == EnumStargateState.Connected && canTravelFromThisEnd()) {
+		if (!entity.isDead && getState() == EnumStargateState.Connected
+				&& canTravelFromThisEnd()) {
 			Trans3 t = localToGlobalTransformation();
 			double vx = entity.posX - prevPos.x;
 			double vy = entity.posY - prevPos.y;
 			double vz = entity.posZ - prevPos.z;
 			Vector3 p1 = t.ip(entity.posX, entity.posY, entity.posZ);
-			Vector3 p0 = t.ip(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z - entity.posZ);
+			Vector3 p0 = t.ip(2 * prevPos.x - entity.posX, 2 * prevPos.y
+					- entity.posY, 2 * prevPos.z - entity.posZ);
 			double z0 = 0.0;
 			if (p0.z >= z0 && p1.z < z0) {
 				entity.motionX = vx;
@@ -447,10 +477,12 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
 					if (connection.isHost(this)) {
-						teleportEntityAndRider(entity, t, dt, connection.clientLocation.dimension);
+						teleportEntityAndRider(entity, t, dt,
+								connection.clientLocation.dimension);
 						dte.acceptEntity(entity);
 					} else {
-						teleportEntityAndRider(entity, t, dt, connection.hostLocation.dimension);
+						teleportEntityAndRider(entity, t, dt,
+								connection.hostLocation.dimension);
 						dte.acceptEntity(entity);
 					}
 				}
@@ -468,7 +500,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	 */
 	private void acceptEntity(Entity entity) {
 		// Determine if an iris is currently closed
-		if (getIrisState() == EnumIrisState.Closed || getIrisState() == EnumIrisState.Closing
+		if (getIrisState() == EnumIrisState.Closed
+				|| getIrisState() == EnumIrisState.Closing
 				|| getIrisState() == EnumIrisState.Opening)
 			if (entity instanceof EntityPlayer) {
 				// Inflict player damage
@@ -557,7 +590,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	public Packet getDescriptionPacket() {
 		LanteaCraft.getProxy().sendToAllPlayers(getAsStructure().pack());
 		if (connection != null) {
-			StandardModPacket update = new StandardModPacket(new WorldLocation(this));
+			StandardModPacket update = new StandardModPacket(new WorldLocation(
+					this));
 			update.setType("LanteaPacket.ConnectionSet");
 			update.setIsForServer(false);
 			update.setValue("running", connection.running.get());
@@ -648,7 +682,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord - 3, yCoord, zCoord - 3, xCoord + 5, yCoord + 7, zCoord + 5);
+		return AxisAlignedBB.getAABBPool().getAABB(xCoord - 3, yCoord,
+				zCoord - 3, xCoord + 5, yCoord + 7, zCoord + 5);
 	}
 
 	public int getRotation() {
@@ -671,29 +706,40 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		if (BuildInfo.DEBUG)
-			LanteaCraft.getLogger().log(Level.INFO, String.format("Handling packet type %s.", packetOf.getType()));
+			LanteaCraft.getLogger().log(
+					Level.INFO,
+					String.format("Handling packet type %s.",
+							packetOf.getType()));
 		if (packetOf.getType().equals("LanteaPacket.MultiblockUpdate"))
 			getAsStructure().unpack(packetOf);
 		else if (packetOf.getType().equals("LanteaPacket.ConnectionUpdate")) {
 			if (BuildInfo.DEBUG)
-				LanteaCraft.getLogger().log(Level.INFO, "Accepted connection status update.");
+				LanteaCraft.getLogger().log(Level.INFO,
+						"Accepted connection status update.");
 			if (connection_cli == null) {
 				// uhoh!
 			}
 			StandardModPacket payload = (StandardModPacket) packetOf;
 			if (payload.hasFieldWithValue("running"))
-				connection_cli.running.set((Boolean) payload.getValue("running"));
+				connection_cli.running.set((Boolean) payload
+						.getValue("running"));
 			if (payload.hasFieldWithValue("chevrons"))
-				connection_cli.chevrons.set((Integer) payload.getValue("chevrons"));
+				connection_cli.chevrons.set((Integer) payload
+						.getValue("chevrons"));
 			if (payload.hasFieldWithValue("state"))
-				connection_cli.state.set((EnumStargateState) payload.getValue("state"));
+				connection_cli.state.set((EnumStargateState) payload
+						.getValue("state"));
 			if (payload.hasFieldWithValue("symbol"))
-				connection_cli.symbol.set((Character) payload.getValue("symbol"));
+				connection_cli.symbol.set((Character) payload
+						.getValue("symbol"));
 		} else if (packetOf.getType().equals("LanteaPacket.ConnectionSet")) {
 			StandardModPacket payload = (StandardModPacket) packetOf;
-			ClientConnectionRequest req = new ClientConnectionRequest((String) payload.getValue("name"),
-					(String) payload.getValue("hostName"), (String) payload.getValue("clientName"),
-					(String) payload.getValue("hostAddress"), (String) payload.getValue("clientAddress"),
+			ClientConnectionRequest req = new ClientConnectionRequest(
+					(String) payload.getValue("name"),
+					(String) payload.getValue("hostName"),
+					(String) payload.getValue("clientName"),
+					(String) payload.getValue("hostAddress"),
+					(String) payload.getValue("clientAddress"),
 					(Boolean) payload.getValue("isHost"));
 			req.running.set((Boolean) payload.getValue("running"));
 			req.chevrons.set((Integer) payload.getValue("chevrons"));
@@ -701,7 +747,10 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			req.symbol.set((Character) payload.getValue("symbol"));
 			setClientConnection(req);
 		} else
-			LanteaCraft.getLogger().log(Level.WARNING, String.format("Strange packet type %s.", packetOf.getType()));
+			LanteaCraft.getLogger()
+					.log(Level.WARNING,
+							String.format("Strange packet type %s.",
+									packetOf.getType()));
 
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
@@ -725,7 +774,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			int n = EventHorizonRenderer.ehGridPolarSize;
 			for (int i = 1; i < m; i++)
 				for (int j = 1; j <= n; j++)
-					v[j][i] += StargateRenderConstants.closingTransientRandomness * random.nextGaussian();
+					v[j][i] += StargateRenderConstants.closingTransientRandomness
+							* random.nextGaussian();
 		}
 	}
 
@@ -735,7 +785,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			int n = EventHorizonRenderer.ehGridPolarSize;
 			for (int j = 0; j <= n + 1; j++) {
 				v[j][0] = StargateRenderConstants.openingTransientIntensity;
-				v[j][1] = v[j][0] + StargateRenderConstants.openingTransientRandomness * random.nextGaussian();
+				v[j][1] = v[j][0]
+						+ StargateRenderConstants.openingTransientRandomness
+						* random.nextGaussian();
 			}
 		}
 	}
@@ -750,12 +802,14 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	public boolean isConnected() {
-		return getState() == EnumStargateState.Transient || getState() == EnumStargateState.Connected
+		return getState() == EnumStargateState.Transient
+				|| getState() == EnumStargateState.Connected
 				|| getState() == EnumStargateState.Disconnecting;
 	}
 
 	public boolean isDialling() {
-		return getState() == EnumStargateState.InterDialling || getState() == EnumStargateState.Dialling;
+		return getState() == EnumStargateState.InterDialling
+				|| getState() == EnumStargateState.Dialling;
 	}
 
 	@Override
@@ -778,7 +832,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	private Trans3 localToGlobalTransformation() {
-		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord, getBlockMetadata(), this);
+		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord,
+				getBlockMetadata(), this);
 	}
 
 	public void performTransientDamage() {
@@ -786,7 +841,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		Vector3 p1 = new Vector3(3.5, 5.5, 2.5);
 		Trans3 t = localToGlobalTransformation();
 		AxisAlignedBB box = t.box(p0, p1);
-		List<EntityLiving> ents = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		List<EntityLiving> ents = worldObj.getEntitiesWithinAABB(
+				EntityLivingBase.class, box);
 		for (EntityLivingBase ent : ents)
 			ent.attackEntityFrom(transientDamage, 9999999);
 	}
@@ -803,7 +859,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		entity.motionZ = v.z;
 	}
 
-	private Entity teleportEntity(Entity entity, Trans3 t1, Trans3 t2, int dimension) {
+	private Entity teleportEntity(Entity entity, Trans3 t1, Trans3 t2,
+			int dimension) {
 		Entity newEntity;
 		Vector3 p = t1.ip(entity.posX, entity.posY, entity.posZ);
 		Vector3 v = t1.iv(entity.motionX, entity.motionY, entity.motionZ);
@@ -821,7 +878,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return newEntity;
 	}
 
-	private Entity teleportEntityAndRider(Entity entity, Trans3 t1, Trans3 t2, int dimension) {
+	private Entity teleportEntityAndRider(Entity entity, Trans3 t1, Trans3 t2,
+			int dimension) {
 		Entity rider = entity.riddenByEntity;
 		if (rider != null)
 			rider.mountEntity(null);
@@ -834,13 +892,15 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return entity;
 	}
 
-	private Entity teleportEntityToDimension(Entity entity, Vector3 p, Vector3 v, double a, int dimension) {
+	private Entity teleportEntityToDimension(Entity entity, Vector3 p,
+			Vector3 v, double a, int dimension) {
 		MinecraftServer server = MinecraftServer.getServer();
 		WorldServer world = server.worldServerForDimension(dimension);
 		return teleportEntityToWorld(entity, p, v, a, world);
 	}
 
-	private Entity teleportEntityToWorld(Entity oldEntity, Vector3 p, Vector3 v, double a, WorldServer newWorld) {
+	private Entity teleportEntityToWorld(Entity oldEntity, Vector3 p,
+			Vector3 v, double a, WorldServer newWorld) {
 		WorldServer oldWorld = (WorldServer) oldEntity.worldObj;
 		NBTTagCompound nbt = new NBTTagCompound();
 		oldEntity.writeToNBTOptional(nbt);
@@ -853,7 +913,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					((EntityLiving) newEntity).setAIMoveSpeed(s);
 			}
 			setVelocity(newEntity, v);
-			newEntity.setLocationAndAngles(p.x, p.y, p.z, (float) a, oldEntity.rotationPitch);
+			newEntity.setLocationAndAngles(p.x, p.y, p.z, (float) a,
+					oldEntity.rotationPitch);
 			newEntity.forceSpawn = true;
 			newWorld.spawnEntityInWorld(newEntity);
 			newEntity.setWorld(newWorld);
@@ -864,14 +925,16 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return newEntity;
 	}
 
-	private Entity teleportPlayerWithinDimension(EntityPlayerMP entity, Vector3 p, Vector3 v, double a) {
+	private Entity teleportPlayerWithinDimension(EntityPlayerMP entity,
+			Vector3 p, Vector3 v, double a) {
 		entity.rotationYaw = (float) a;
 		entity.setPositionAndUpdate(p.x, p.y, p.z);
 		entity.worldObj.updateEntityWithOptionalForce(entity, false);
 		return entity;
 	}
 
-	private Entity teleportToOtherDimension(Entity entity, Vector3 p, Vector3 v, double a, int dimension) {
+	private Entity teleportToOtherDimension(Entity entity, Vector3 p,
+			Vector3 v, double a, int dimension) {
 		if (entity instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) entity;
 			Vector3 q = p.add(yawVector(a));
@@ -881,14 +944,18 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			return teleportEntityToDimension(entity, p, v, a, dimension);
 	}
 
-	private Entity teleportWithinDimension(Entity entity, Vector3 p, Vector3 v, double a) {
+	private Entity teleportWithinDimension(Entity entity, Vector3 p, Vector3 v,
+			double a) {
 		if (entity instanceof EntityPlayerMP)
-			return teleportPlayerWithinDimension((EntityPlayerMP) entity, p, v, a);
+			return teleportPlayerWithinDimension((EntityPlayerMP) entity, p, v,
+					a);
 		else
-			return teleportEntityToWorld(entity, p, v, a, (WorldServer) entity.worldObj);
+			return teleportEntityToWorld(entity, p, v, a,
+					(WorldServer) entity.worldObj);
 	}
 
-	private void transferPlayerToDimension(EntityPlayerMP player, int newDimension, Vector3 p, double a) {
+	private void transferPlayerToDimension(EntityPlayerMP player,
+			int newDimension, Vector3 p, double a) {
 		MinecraftServer server = MinecraftServer.getServer();
 		ServerConfigurationManager scm = server.getConfigurationManager();
 		int oldDimension = player.dimension;
@@ -900,48 +967,61 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		 * The following is an MCPC+ only fix which was prescribed in
 		 * #mcportcentral.
 		 */
-		Packet250CustomPayload spoof = ForgePacket.makePacketSet(new DimensionRegisterPacket(newDimension,
-				DimensionManager.getProviderType(newDimension)))[0];
+		Packet250CustomPayload spoof = ForgePacket
+				.makePacketSet(new DimensionRegisterPacket(newDimension,
+						DimensionManager.getProviderType(newDimension)))[0];
 		player.playerNetServerHandler.sendPacketToPlayer(spoof);
 
 		player.closeScreen();
-		player.playerNetServerHandler.sendPacketToPlayer(new Packet9Respawn(player.dimension,
-				(byte) player.worldObj.difficultySetting, newWorld.getWorldInfo().getTerrainType(), newWorld
-						.getHeight(), player.theItemInWorldManager.getGameType()));
+		player.playerNetServerHandler.sendPacketToPlayer(new Packet9Respawn(
+				player.dimension, (byte) player.worldObj.difficultySetting,
+				newWorld.getWorldInfo().getTerrainType(), newWorld.getHeight(),
+				player.theItemInWorldManager.getGameType()));
 		oldWorld.removePlayerEntityDangerously(player);
 		player.isDead = false;
-		player.setLocationAndAngles(p.x, p.y, p.z, (float) a, player.rotationPitch);
+		player.setLocationAndAngles(p.x, p.y, p.z, (float) a,
+				player.rotationPitch);
 		newWorld.spawnEntityInWorld(player);
 		player.setWorld(newWorld);
 		scm.func_72375_a(player, oldWorld);
-		player.playerNetServerHandler.setPlayerLocation(p.x, p.y, p.z, (float) a, player.rotationPitch);
+		player.playerNetServerHandler.setPlayerLocation(p.x, p.y, p.z,
+				(float) a, player.rotationPitch);
 		player.theItemInWorldManager.setWorld(newWorld);
 		scm.updateTimeAndWeatherForPlayer(player, newWorld);
 		scm.syncPlayerInventory(player);
 		Iterator var6 = player.getActivePotionEffects().iterator();
 		while (var6.hasNext()) {
 			PotionEffect effect = (PotionEffect) var6.next();
-			player.playerNetServerHandler.sendPacketToPlayer(new Packet41EntityEffect(player.entityId, effect));
+			player.playerNetServerHandler
+					.sendPacketToPlayer(new Packet41EntityEffect(
+							player.entityId, effect));
 		}
-		player.playerNetServerHandler.sendPacketToPlayer(new Packet43Experience(player.experience,
-				player.experienceTotal, player.experienceLevel));
+		player.playerNetServerHandler
+				.sendPacketToPlayer(new Packet43Experience(player.experience,
+						player.experienceTotal, player.experienceLevel));
 		GameRegistry.onPlayerChangedDimension(player);
 	}
 
 	public void setConnection(ConnectionRequest request) {
 		if (BuildInfo.DEBUG)
-			LanteaCraft.getLogger()
-					.log(Level.INFO, String.format("Setting ConnectionRequest: %s.", request.hashCode()));
+			LanteaCraft.getLogger().log(
+					Level.INFO,
+					String.format("Setting ConnectionRequest: %s.",
+							request.hashCode()));
 		connection = request;
 		getDescriptionPacket();
 	}
 
 	public void setClientConnection(ClientConnectionRequest request) {
 		connection_cli = request;
-		createChannel("stargate_spin", "roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F, -1);
-		createChannel("stargate_chevron", "chevron_lock", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
-		createChannel("stargate_transient", "open", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
-		createChannel("stargate_close", "close", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
+		createChannel("stargate_spin", "roll", new AudioPosition(worldObj,
+				new Vector3(this)), 1.0F, -1);
+		createChannel("stargate_chevron", "chevron_lock", new AudioPosition(
+				worldObj, new Vector3(this)), 1.0F, 1200);
+		createChannel("stargate_transient", "open", new AudioPosition(worldObj,
+				new Vector3(this)), 1.0F, 1200);
+		createChannel("stargate_close", "close", new AudioPosition(worldObj,
+				new Vector3(this)), 1.0F, 1200);
 	}
 
 	@Override
