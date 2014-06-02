@@ -22,14 +22,6 @@ public class ContainerStargateController extends GenericContainer {
 		}
 
 		@Override
-		public void openChest() {
-		}
-
-		@Override
-		public void onInventoryChanged() {
-		}
-
-		@Override
 		public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 			return true;
 		}
@@ -37,11 +29,6 @@ public class ContainerStargateController extends GenericContainer {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return false;
-		}
-
-		@Override
-		public boolean isInvNameLocalized() {
-			return true;
 		}
 
 		@Override
@@ -65,7 +52,7 @@ public class ContainerStargateController extends GenericContainer {
 		}
 
 		@Override
-		public String getInvName() {
+		public String getInventoryName() {
 			return "this is not an inventory";
 		}
 
@@ -75,20 +62,42 @@ public class ContainerStargateController extends GenericContainer {
 		}
 
 		@Override
-		public void closeChest() {
+		public boolean hasCustomInventoryName() {
+			return false;
+		}
+
+		@Override
+		public void markDirty() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void openInventory() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void closeInventory() {
+			// TODO Auto-generated method stub
+			
 		}
 	};
 
 	public TileEntityStargateController te;
 
-	public static ContainerStargateController create(EntityPlayer player, World world, int x, int y, int z) {
-		TileEntityStargateController te = (TileEntityStargateController) world.getBlockTileEntity(x, y, z);
+	public static ContainerStargateController create(EntityPlayer player,
+			World world, int x, int y, int z) {
+		TileEntityStargateController te = (TileEntityStargateController) world
+				.getTileEntity(x, y, z);
 		if (te != null)
 			return new ContainerStargateController(te, player);
 		return null;
 	}
 
-	public ContainerStargateController(TileEntityStargateController te, EntityPlayer player) {
+	public ContainerStargateController(TileEntityStargateController te,
+			EntityPlayer player) {
 		super(256, 208);
 		this.te = te;
 		for (int i = 0; i < 9; i++)

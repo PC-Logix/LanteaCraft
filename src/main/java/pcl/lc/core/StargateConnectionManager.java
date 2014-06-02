@@ -109,7 +109,7 @@ public class StargateConnectionManager implements ITickAgent {
 								tile.setConnection(this);
 							}
 					} else {
-						Object o = chunk.worldObj.getBlockTileEntity(clientTilePos.floorX(), clientTilePos.floorY(),
+						Object o = chunk.worldObj.getTileEntity(clientTilePos.floorX(), clientTilePos.floorY(),
 								clientTilePos.floorZ());
 						if (o != null && (o instanceof TileEntityStargateBase)) {
 							TileEntityStargateBase tile = (TileEntityStargateBase) o;

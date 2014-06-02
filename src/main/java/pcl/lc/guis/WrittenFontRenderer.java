@@ -12,7 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.Resource;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 
 import org.w3c.dom.Document;
@@ -116,7 +116,7 @@ public class WrittenFontRenderer {
 	 */
 	public void buildFont() {
 		try {
-			Resource metricResource = Minecraft.getMinecraft().getResourceManager().getResource(fontMetricName);
+			IResource metricResource = Minecraft.getMinecraft().getResourceManager().getResource(fontMetricName);
 			InputStream stream = metricResource.getInputStream();
 			if (stream == null)
 				throw new IOException("Could not open font metric file.");

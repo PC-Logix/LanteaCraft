@@ -1,10 +1,10 @@
 package pcl.lc.blocks;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.common.base.GenericContainerBlock;
@@ -15,17 +15,18 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockRingPlatform extends GenericContainerBlock {
 
-	private Icon defaultIcon;
+	private IIcon defaultIcon;
 
-	public BlockRingPlatform(int id) {
-		super(id, Material.rock);
+	public BlockRingPlatform() {
+		super(Material.rock);
 		setHardness(1.5F);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
+				+ LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
@@ -36,7 +37,7 @@ public class BlockRingPlatform extends GenericContainerBlock {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new TileEntityRingPlatform();
 	}
 
@@ -51,7 +52,8 @@ public class BlockRingPlatform extends GenericContainerBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z,
+			ForgeDirection side) {
 		return true;
 	}
 
@@ -61,13 +63,13 @@ public class BlockRingPlatform extends GenericContainerBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister reg) {
-		defaultIcon = reg.registerIcon(LanteaCraft.getAssetKey() + ":" + "ring_transporter_"
-				+ LanteaCraft.getProxy().getRenderMode());
+	public void registerBlockIcons(IIconRegister reg) {
+		defaultIcon = reg.registerIcon(LanteaCraft.getAssetKey() + ":"
+				+ "ring_transporter_" + LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
-	public Icon getIcon(int side, int data) {
+	public IIcon getIcon(int side, int data) {
 		return defaultIcon;
 	}
 }

@@ -47,16 +47,16 @@ public class ScreenNaquadahGenerator extends GenericContainerGUI {
 		if (sg.substring(sg.indexOf(".") + 1).length() != 2)
 			sg.append("0");
 		sg.append("%");
-		int dw = fontRenderer.getStringWidth(sg.toString());
-		fontRenderer.drawString(sg.toString(), 48 + ((int) Math.floor((80d - dw) / 2)), 98,
+		int dw = fontRendererObj.getStringWidth(sg.toString());
+		fontRendererObj.drawString(sg.toString(), 48 + ((int) Math.floor((80d - dw) / 2)), 98,
 				(tileEntity.displayEnergy > 0.00d) ? 0xFFFFFF : 0x9F0101, true);
 
 		StringBuilder st = new StringBuilder().append("Tank: ").append(tileEntity.displayTankVolume / 100d);
 		if (st.substring(st.indexOf(".") + 1).length() != 2)
 			st.append("0");
 		st.append("%");
-		int dm = fontRenderer.getStringWidth(st.toString());
-		fontRenderer.drawString(st.toString(), 48 + ((int) Math.floor((80d - dm) / 2)), 110, 0xFFFFFF);
+		int dm = fontRendererObj.getStringWidth(st.toString());
+		fontRendererObj.drawString(st.toString(), 48 + ((int) Math.floor((80d - dm) / 2)), 110, 0xFFFFFF);
 	}
 
 }

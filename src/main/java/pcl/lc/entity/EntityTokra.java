@@ -131,7 +131,7 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 		super.writeEntityToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("dimensionHome", dimensionHome);
 		if (locationHome != null)
-			par1NBTTagCompound.setCompoundTag("locationHome", locationHome.toNBT());
+			par1NBTTagCompound.setTag("locationHome", locationHome.toNBT());
 	}
 
 	@Override

@@ -3,13 +3,13 @@ package pcl.lc.blocks;
 import java.util.logging.Level;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -22,10 +22,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStargateController extends RotationOrientedBlock {
 
-	Icon topTexture, bottomTexture, sideTexture;
+	IIcon topTexture, bottomTexture, sideTexture;
 
-	public BlockStargateController(int id) {
-		super(id, Material.rock);
+	public BlockStargateController() {
+		super(Material.rock);
 		setHardness(1.5F);
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
@@ -33,21 +33,24 @@ public class BlockStargateController extends RotationOrientedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
+				+ LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
-		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_top_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		bottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_bottom_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_side_"
-				+ LanteaCraft.getProxy().getRenderMode());
+	public void registerBlockIcons(IIconRegister register) {
+		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":"
+				+ "controller_top_" + LanteaCraft.getProxy().getRenderMode());
+		bottomTexture = register
+				.registerIcon(LanteaCraft.getAssetKey() + ":"
+						+ "controller_bottom_"
+						+ LanteaCraft.getProxy().getRenderMode());
+		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":"
+				+ "controller_side_" + LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
-	public Icon getIcon(int side, int data) {
+	public IIcon getIcon(int side, int data) {
 		switch (side) {
 		case 0:
 			return bottomTexture;
@@ -76,10 +79,12 @@ public class BlockStargateController extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
+	public void onBlockPlacedBy(World world, int x, int y, int z,
+			EntityLivingBase player, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, player, stack);
 		checkForLink(world, x, y, z);
-		int dir = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
+		int dir = MathHelper
+				.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
 		world.setBlockMetadataWithNotify(x, y, z, dir, 0);
 	}
 
@@ -94,27 +99,33 @@ public class BlockStargateController extends RotationOrientedBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
-			float cy, float cz) {
+	public boolean onBlockActivated(World world, int x, int y, int z,
+			EntityPlayer player, int side, float cx, float cy, float cz) {
 		if (player.isSneaking() || side != ForgeDirection.UP.ordinal()) {
 			if (BuildInfo.DEBUG)
-				LanteaCraft.getLogger().log(Level.INFO, "Opening StargateControllerEnergy.");
-			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), world,
-					x, y, z);
+				LanteaCraft.getLogger().log(Level.INFO,
+						"Opening StargateControllerEnergy.");
+			player.openGui(LanteaCraft.getInstance(),
+					LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(),
+					world, x, y, z);
 		} else {
 			if (BuildInfo.DEBUG)
-				LanteaCraft.getLogger().log(Level.INFO, "Opening StargateController.");
-			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateController.ordinal(), world, x, y, z);
+				LanteaCraft.getLogger().log(Level.INFO,
+						"Opening StargateController.");
+			player.openGui(LanteaCraft.getInstance(),
+					LanteaCraft.EnumGUIs.StargateController.ordinal(), world,
+					x, y, z);
 		}
 		return true;
 	}
 
 	public void checkForLink(World world, int x, int y, int z) {
-		((TileEntityStargateController) getTileEntity(world, x, y, z)).checkForLink();
+		((TileEntityStargateController) getTileEntity(world, x, y, z))
+				.checkForLink();
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new TileEntityStargateController();
 	}
 

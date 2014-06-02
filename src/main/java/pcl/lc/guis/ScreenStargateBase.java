@@ -111,7 +111,6 @@ public class ScreenStargateBase extends GenericContainerGUI {
 
 	private void addressToClipboard() {
 		try {
-			mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 			Clipboard destination = Toolkit.getDefaultToolkit().getSystemClipboard();
 			destination.setContents(new StringSelection(address), null);
 			clipboardAction = 60;

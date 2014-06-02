@@ -2,13 +2,13 @@ package pcl.lc.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import pcl.common.base.RotationOrientedBlock;
@@ -19,10 +19,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockNaquadahGenerator extends RotationOrientedBlock {
 
-	Icon topTexture, bottomTexture, sideTexture;
+	IIcon topTexture, bottomTexture, sideTexture;
 
-	public BlockNaquadahGenerator(int id) {
-		super(id, Material.rock);
+	public BlockNaquadahGenerator() {
+		super(Material.rock);
 		setHardness(1.5F);
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
@@ -30,21 +30,24 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
+				+ LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
-		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_top_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		bottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_bottom_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_side_"
-				+ LanteaCraft.getProxy().getRenderMode());
+	public void registerBlockIcons(IIconRegister register) {
+		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":"
+				+ "controller_top_" + LanteaCraft.getProxy().getRenderMode());
+		bottomTexture = register
+				.registerIcon(LanteaCraft.getAssetKey() + ":"
+						+ "controller_bottom_"
+						+ LanteaCraft.getProxy().getRenderMode());
+		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":"
+				+ "controller_side_" + LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
-	public Icon getIcon(int side, int data) {
+	public IIcon getIcon(int side, int data) {
 		switch (side) {
 		case 0:
 			return bottomTexture;
@@ -73,9 +76,11 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
+	public void onBlockPlacedBy(World world, int x, int y, int z,
+			EntityLivingBase player, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, player, stack);
-		int dir = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
+		int dir = MathHelper
+				.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
 		world.setBlockMetadataWithNotify(x, y, z, dir, 0);
 	}
 
@@ -85,10 +90,11 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int id, int data) {
-		TileEntityNaquadahGenerator cte = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
+	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
+		TileEntityNaquadahGenerator cte = (TileEntityNaquadahGenerator) getTileEntity(
+				world, x, y, z);
 		cte.onHostBlockBreak();
-		super.breakBlock(world, x, y, z, id, data);
+		super.breakBlock(world, x, y, z, block, data);
 	}
 
 	@Override
@@ -97,18 +103,21 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
-			float cy, float cz) {
-		TileEntityNaquadahGenerator te = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
+	public boolean onBlockActivated(World world, int x, int y, int z,
+			EntityPlayer player, int side, float cx, float cy, float cz) {
+		TileEntityNaquadahGenerator te = (TileEntityNaquadahGenerator) getTileEntity(
+				world, x, y, z);
 		if (te != null) {
-			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), world, x, y, z);
+			player.openGui(LanteaCraft.getInstance(),
+					LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), world, x,
+					y, z);
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new TileEntityNaquadahGenerator();
 	}
 
@@ -128,19 +137,25 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 			int d = isBlockProvidingPower(world, x, y, z - 1, 2);
 			int e = isBlockProvidingPower(world, x + 1, y, z, 5);
 			int f = isBlockProvidingPower(world, x - 1, y, z, 4);
-			sig = Math.max(a, Math.max(b, Math.max(c, Math.max(d, Math.max(e, f)))));
-			TileEntityNaquadahGenerator cte = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
+			sig = Math.max(a,
+					Math.max(b, Math.max(c, Math.max(d, Math.max(e, f)))));
+			TileEntityNaquadahGenerator cte = (TileEntityNaquadahGenerator) getTileEntity(
+					world, x, y, z);
 			cte.setRedstoneInputSignal(sig);
 		}
 	}
 
-	private int isBlockProvidingPower(World world, int x, int y, int z, int direction) {
+	private int isBlockProvidingPower(World world, int x, int y, int z,
+			int direction) {
 		if (y >= 0 && y < world.getHeight()) {
-			int redstoneWireValue = (world.getBlockId(x, y, z) == Block.redstoneWire.blockID) ? world.getBlockMetadata(
-					x, y, z) : 0;
-			int indirectPowerTo = world.getIndirectPowerLevelTo(x, y, z, direction);
-			int directPowerTo = world.isBlockProvidingPowerTo(x, y, z, direction);
-			return Math.max(Math.max(redstoneWireValue, indirectPowerTo), directPowerTo);
+			int redstoneWireValue = (world.getBlockId(x, y, z) == Block.redstoneWire.blockID) ? world
+					.getBlockMetadata(x, y, z) : 0;
+			int indirectPowerTo = world.getIndirectPowerLevelTo(x, y, z,
+					direction);
+			int directPowerTo = world.isBlockProvidingPowerTo(x, y, z,
+					direction);
+			return Math.max(Math.max(redstoneWireValue, indirectPowerTo),
+					directPowerTo);
 		} else
 			return 0;
 	}
