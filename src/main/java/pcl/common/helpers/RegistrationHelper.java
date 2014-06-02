@@ -84,10 +84,9 @@ public class RegistrationHelper {
 			LanteaCraft.getLogger().log(Level.WARNING,
 					"Warning, registration of this block is later than was expected!");
 		try {
-			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 2048).getInt();
-			Constructor<? extends T> ctor = classOf.getConstructor(int.class);
-			T theMysteryBlock = ctor.newInstance(id);
-			theMysteryBlock.setUnlocalizedName(unlocalizedName);
+			Constructor<? extends T> ctor = classOf.getConstructor();
+			T theMysteryBlock = ctor.newInstance();
+			theMysteryBlock.setBlockName(unlocalizedName);
 			if (inCreativeTabs)
 				theMysteryBlock.setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerBlock(theMysteryBlock, itemClassOf, unlocalizedName);
@@ -113,9 +112,8 @@ public class RegistrationHelper {
 			LanteaCraft.getLogger()
 					.log(Level.WARNING, "Warning, registration of this item is later than was expected!");
 		try {
-			int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 4000).getInt();
-			Constructor<? extends T> ctor = classOf.getConstructor(int.class);
-			T theMysteryItem = ctor.newInstance(id);
+			Constructor<? extends T> ctor = classOf.getConstructor();
+			T theMysteryItem = ctor.newInstance();
 			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerItem(theMysteryItem, unlocalizedName);
 			return theMysteryItem;
@@ -214,24 +212,21 @@ public class RegistrationHelper {
 	}
 
 	/**
-	 * Creates a new smelting recipe.
+	 * Registers a new smelting recipe.
 	 * 
-	 * @param product
-	 *            The product ItemStack.
-	 * @param input
-	 *            The input Block ID.
-	 * @param meta
-	 *            The meta value of the block.
+	 * @param in
+	 *            The input stack
+	 * @param out
+	 *            The output result
 	 * @param xp
-	 *            The amount of XP received.
+	 *            Quantity of XP earnt
 	 */
-	public static void newSmeltingRecipe(ItemStack product, int input, int meta, float xp) {
+	public static void newSmeltingRecipe(ItemStack in, ItemStack out, float xp) {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering new smelting recipe");
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger().log(Level.WARNING,
 					"Warning, registration of this smelting is later than was expected!");
-		// GameRegistry.addSmelting(input, product, xp);
-		FurnaceRecipes.smelting().addSmelting(input, meta, product, xp);
+		FurnaceRecipes.smelting().func_151394_a(in, out, xp);
 	}
 
 	/**
@@ -277,10 +272,8 @@ public class RegistrationHelper {
 			LanteaCraft.getLogger().log(Level.WARNING,
 					"Warning, registration of this stair decal is later than was expected!");
 		try {
-			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 2048).getInt();
-			BlockLanteaDecorStair stair = new BlockLanteaDecorStair(id, targetMetadata);
-			stair.setUnlocalizedName(unlocalizedName);
-			stair.setCreativeTab(LanteaCraft.getCreativeTab());
+			BlockLanteaDecorStair stair = new BlockLanteaDecorStair(targetMetadata);
+			stair.setBlockName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerBlock(stair, unlocalizedName);
 			return stair;
 		} catch (Exception e) {
