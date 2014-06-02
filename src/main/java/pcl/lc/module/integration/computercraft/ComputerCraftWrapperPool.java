@@ -27,7 +27,7 @@ public class ComputerCraftWrapperPool {
 	 * @param host The host tile
 	 * @return The wrapper, or null if no wrapper exists
 	 */
-	public ComputerCraftVirtualPeripheral wrap(TileEntity tile, TileEntityComputerCraftConnector host) {
+	public static ComputerCraftVirtualPeripheral wrap(TileEntity tile, TileEntityComputerCraftConnector host) {
 		if (tile instanceof IStargateAccess)
 			return new StargateAccessWrapper(host, (IStargateAccess) tile);
 		if (tile instanceof IStargateControllerAccess)

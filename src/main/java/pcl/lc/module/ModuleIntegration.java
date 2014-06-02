@@ -12,6 +12,7 @@ import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.module.integration.ComputerCraftAgent;
 import pcl.lc.module.integration.OpenComputersAgent;
 import cpw.mods.fml.common.Loader;
 
@@ -19,7 +20,7 @@ public class ModuleIntegration implements IModule {
 
 	static {
 		ModuleIntegration.clazz_integration = new ArrayList<Class<? extends IIntegrationAgent>>();
-		// ModuleIntegration.registerIntegrationAgent(ComputerCraftLegacyAgent.class);
+		ModuleIntegration.registerIntegrationAgent(ComputerCraftAgent.class);
 		ModuleIntegration.registerIntegrationAgent(OpenComputersAgent.class);
 	}
 
@@ -50,6 +51,11 @@ public class ModuleIntegration implements IModule {
 		while (agents.hasNext()) {
 			Class<? extends IIntegrationAgent> agent = agents.next();
 			Annotation[] annotations = agent.getAnnotations();
+			if (annotations.length == 0)
+				LanteaCraft.getLogger()
+						.log(Level.INFO,
+								String.format("Not loading class %s because it is missing an Agent directive.",
+										agent.getName()));
 			for (Annotation annotate : annotations) {
 				if (annotate.annotationType().equals(Agent.class)) {
 					Agent theAgent = (Agent) annotate;
@@ -60,7 +66,6 @@ public class ModuleIntegration implements IModule {
 							IIntegrationAgent singleton = agent.newInstance();
 							this.agents.add(singleton);
 							LanteaCraft.getLogger().log(Level.INFO, String.format("Loaded agent %s.", agent.getName()));
-							break;
 						} catch (Throwable t) {
 							LanteaCraft.getLogger().log(Level.WARNING, "Exception in integration agent initalizer.", t);
 						}

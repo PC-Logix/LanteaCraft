@@ -4,6 +4,7 @@ import pcl.common.util.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -18,9 +19,8 @@ public class BlockComputerCraftConnector extends Block implements ITileEntityPro
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityComputerCraftConnector();
 	}
-
-	@Override
-	public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4) {
+	
+	private int countAdaptableBlocks(World par1World, int par2, int par3, int par4) {
 		/*
 		 * Because of the way ComputerCraftConnector works, we can only place
 		 * this block if there is no other LanteaCraft components around it
@@ -35,7 +35,20 @@ public class BlockComputerCraftConnector extends Block implements ITileEntityPro
 							target.floorZ())))
 				legals++;
 		}
-		return (legals == 1);
+		return legals;
+	}
+
+	@Override
+	public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4) {
+		return countAdaptableBlocks(par1World, par2, par3, par4) == 1;
+	}
+	
+	@Override
+	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
+		if (countAdaptableBlocks(par1World, par2, par3, par4) != 1) {
+			par1World.setBlockToAir(par2, par3, par4);
+			dropBlockAsItem_do(par1World, par2, par3, par4, new ItemStack(blockID, 1, 0));
+		}
 	}
 
 }

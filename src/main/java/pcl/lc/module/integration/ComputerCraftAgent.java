@@ -3,14 +3,20 @@ package pcl.lc.module.integration;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
+import pcl.lc.module.integration.computercraft.BlockComputerCraftConnector;
 import pcl.lc.module.integration.computercraft.TileEntityComputerCraftConnector;
+import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
 
+@Agent(modname = "ComputerCraft")
 public class ComputerCraftAgent implements IIntegrationAgent {
 
 	private class ComputerCraftProvider implements IPeripheralProvider {
@@ -26,6 +32,8 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 	private Class<?> clazz_ComputerCraftAPI;
 	private Method registerHandler;
 	private ComputerCraftProvider provider;
+
+	private BlockComputerCraftConnector block_connector;
 
 	public ComputerCraftAgent() {
 
@@ -48,6 +56,10 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 			LanteaCraft.getLogger().log(Level.INFO, "ComputerCraft not found!");
 			return;
 		}
+		block_connector = RegistrationHelper.registerBlock(BlockComputerCraftConnector.class,
+				"integration.computercraft");
+		GameRegistry.registerTileEntity(TileEntityComputerCraftConnector.class, "tileEntityComputercraftAdapter");
+
 	}
 
 }

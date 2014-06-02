@@ -195,10 +195,6 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	@Override
 	public void invalidate() {
 		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-		StringBuilder result = new StringBuilder();
-		for (String iface : ifaces)
-			result.append(iface).append(", ");
-		LanteaCraft.getLogger().log(Level.INFO, String.format("interfaces: %s", result.toString()));
 		if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && addedToEnergyNet) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) this));
 			addedToEnergyNet = false;

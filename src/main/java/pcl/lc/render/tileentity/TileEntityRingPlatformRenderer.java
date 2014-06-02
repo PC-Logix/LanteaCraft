@@ -15,6 +15,8 @@ public class TileEntityRingPlatformRenderer extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
 		TileEntityRingPlatform platform = (TileEntityRingPlatform) tileEntity;
+		if (true == true) return;
+		
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

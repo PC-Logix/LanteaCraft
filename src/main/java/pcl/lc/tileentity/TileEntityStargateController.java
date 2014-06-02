@@ -19,6 +19,7 @@ import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.IStargateControllerAccess;
 import pcl.lc.blocks.BlockStargateController;
 
 public class TileEntityStargateController extends GenericTileEntity implements IPacketHandler, IEnergyStore {

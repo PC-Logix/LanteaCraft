@@ -3,8 +3,10 @@ package pcl.lc.module.integration.computercraft;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import pcl.common.util.Vector3;
 import pcl.lc.module.integration.computercraft.ComputerCraftWrapperPool.ComputerCraftVirtualPeripheral;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -21,7 +23,23 @@ public class TileEntityComputerCraftConnector extends TileEntity implements IPer
 	}
 
 	public void updateEntity() {
-		iface.update();
+		if (iface != null)
+			iface.update();
+		else
+			findTarget();
+	}
+
+	private void findTarget() {
+		Vector3 origin = new Vector3(xCoord, yCoord, zCoord);
+		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+			Vector3 target = origin.add(direction);
+			if (worldObj.getBlockId(target.floorX(), target.floorY(), target.floorZ()) > 0
+					&& ComputerCraftWrapperPool.canWrap(worldObj.getBlockTileEntity(target.floorX(), target.floorY(),
+							target.floorZ()))) {
+				this.target = worldObj.getBlockTileEntity(target.floorX(), target.floorY(), target.floorZ());
+				this.iface = ComputerCraftWrapperPool.wrap(this.target, this);
+			}
+		}
 	}
 
 	@Override
@@ -47,11 +65,15 @@ public class TileEntityComputerCraftConnector extends TileEntity implements IPer
 
 	@Override
 	public String getType() {
+		if (iface == null)
+			findTarget();
 		return iface.getType();
 	}
 
 	@Override
 	public String[] getMethodNames() {
+		if (iface == null)
+			findTarget();
 		return iface.getMethodNames();
 	}
 
