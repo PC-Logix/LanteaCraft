@@ -139,10 +139,8 @@ public class RegistrationHelper {
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger().log(Level.WARNING,
 					"Warning, registration of this SpecialBucket is later than was expected!");
-		int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 31743).getInt();
-		ItemSpecialBucket bucket = new ItemSpecialBucket(id, hostOf);
-		bucket.setUnlocalizedName(unlocalizedName);
-		bucket.setCreativeTab(LanteaCraft.getCreativeTab());
+		ItemSpecialBucket bucket = new ItemSpecialBucket(hostOf);
+		bucket.setUnlocalizedName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
 		bucket.setTargetTexture(bucketTextureName);
 		GameRegistry.registerItem(bucket, unlocalizedName);
 		return bucket;
