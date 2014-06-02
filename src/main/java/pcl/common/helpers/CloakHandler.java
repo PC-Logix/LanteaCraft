@@ -2,8 +2,8 @@ package pcl.common.helpers;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.BufferedReader;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -15,16 +15,15 @@ import java.util.logging.Level;
 
 import javax.swing.ImageIcon;
 
-import pcl.lc.LanteaCraft;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.ForgeSubscribe;
-
+import pcl.lc.LanteaCraft;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CloakHandler {
 
@@ -109,14 +108,13 @@ public class CloakHandler {
 			con.setReadTimeout(1000);
 			br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String str = null;
-			while ((str = br.readLine()) != null) {
+			while ((str = br.readLine()) != null)
 				if (!str.startsWith("--") && !str.isEmpty() && str.contains(":")) {
 					String nick = str.substring(0, str.indexOf(":"));
 					String link = str.substring(str.indexOf(":") + 1);
 					new Thread(new CloakPreloadTask(link)).start();
 					playerCloaks.put(nick.toLowerCase(), link);
 				}
-			}
 			br.close();
 		} catch (MalformedURLException e) {
 			LanteaCraft.getLogger().log(Level.WARNING, "Failed to open cloaks server.", e);

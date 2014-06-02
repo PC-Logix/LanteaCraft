@@ -222,7 +222,7 @@ public class Vector3 {
 	 *            The ForgeDirection to translate.
 	 */
 	public Vector3 add(ForgeDirection direction) {
-		return new Vector3(this.x + direction.offsetX, this.y + direction.offsetY, this.z + direction.offsetZ);
+		return new Vector3(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ);
 	}
 
 	/**

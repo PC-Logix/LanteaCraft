@@ -3,9 +3,6 @@ package pcl.lc.module.integration;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.common.helpers.RegistrationHelper;
@@ -14,7 +11,9 @@ import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
 import pcl.lc.module.integration.computercraft.BlockComputerCraftConnector;
 import pcl.lc.module.integration.computercraft.TileEntityComputerCraftConnector;
-import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
+import cpw.mods.fml.common.registry.GameRegistry;
+import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.peripheral.IPeripheralProvider;
 
 @Agent(modname = "ComputerCraft")
 public class ComputerCraftAgent implements IIntegrationAgent {

@@ -1,7 +1,7 @@
 package pcl.lc.items;
 
-import pcl.lc.LanteaCraft;
 import net.minecraft.item.Item;
+import pcl.lc.LanteaCraft;
 
 public class ItemGDO extends Item {
 

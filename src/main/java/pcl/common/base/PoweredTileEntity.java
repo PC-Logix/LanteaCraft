@@ -1,15 +1,15 @@
 package pcl.common.base;
 
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import pcl.common.asm.RuntimeAnnotation.RuntimeInterface;
 import pcl.lc.api.EnumUnits;
 import universalelectricity.core.electricity.ElectricityPack;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
+import buildcraft.api.power.PowerHandler.Type;
 import cpw.mods.fml.common.Loader;
 
 /**

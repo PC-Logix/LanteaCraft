@@ -8,6 +8,7 @@ import net.afterlifelochie.sandbox.WatchedValue;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
@@ -15,7 +16,6 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.internal.ITickAgent;
 import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
 import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.common.util.Vector3;
 
 public class StargateConnectionManager implements ITickAgent {
 
@@ -68,8 +68,8 @@ public class StargateConnectionManager implements ITickAgent {
 			this.clientAddress = clientAddress;
 			this.clientLocation = clientLocation;
 			this.name = name;
-			this.hostName = String.format("%s-Host-%s", name, hostLocation.toString());
-			this.clientName = String.format("%s-Client-%s", name, clientLocation.toString());
+			hostName = String.format("%s-Host-%s", name, hostLocation.toString());
+			clientName = String.format("%s-Client-%s", name, clientLocation.toString());
 		}
 
 		public void setup(TileEntityStargateBase host) {
@@ -136,14 +136,12 @@ public class StargateConnectionManager implements ITickAgent {
 					chevrons.set(chevrons.get() + 1);
 					if (clientAddress.length() > chevrons.get())
 						runState(EnumStargateState.InterDialling, interDiallingTime);
+					else if (clientTile != null)
+						runState(EnumStargateState.Transient, transientDuration);
 					else {
-						if (clientTile != null)
-							runState(EnumStargateState.Transient, transientDuration);
-						else {
-							if (BuildInfo.DEBUG)
-								LanteaCraft.getLogger().log(Level.WARNING, "Cannot find host tile, aborting!");
-							requestDisconnect();
-						}
+						if (BuildInfo.DEBUG)
+							LanteaCraft.getLogger().log(Level.WARNING, "Cannot find host tile, aborting!");
+						requestDisconnect();
 					}
 					break;
 				case Transient: // Any transient state -> any connected state
@@ -154,13 +152,12 @@ public class StargateConnectionManager implements ITickAgent {
 					break;
 				case Disconnecting: // Any disconnected state -> idle
 					state.set(EnumStargateState.Idle);
-					this.shutdown();
+					shutdown();
 					break;
 				}
-			if (state.get() == EnumStargateState.Connected) {
+			if (state.get() == EnumStargateState.Connected)
 				if (!hostTile.get().useEnergy(1))
 					hostTile.get().disconnect();
-			}
 		}
 
 		public char nextChevron() {
@@ -172,7 +169,7 @@ public class StargateConnectionManager implements ITickAgent {
 				LanteaCraft.getLogger().log(Level.INFO,
 						String.format("Stargate transitioning to state %s for %s ticks.", state, timeout));
 			this.state.set(state);
-			this.ticksRemaining = timeout;
+			ticksRemaining = timeout;
 		}
 
 		public void requestDisconnect() {

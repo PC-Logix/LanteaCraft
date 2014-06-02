@@ -1,12 +1,11 @@
 package pcl.lc.guis;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.Tessellator;
+
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
 
 public class GuiJacksonNotebook extends GuiScreen {
 

@@ -44,7 +44,7 @@ public class WatchedValue<T extends Object> extends Observable {
 		super(parent);
 		this.value = initial;
 	}
-	
+
 	@Override
 	public boolean modified(ObserverContext context) {
 		if (!context.states.containsKey(hashCode()))

@@ -11,9 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import pcl.common.audio.AudioEngine;
 import pcl.common.audio.AudioPosition;
-import pcl.common.audio.AudioSource;
 import pcl.common.audio.SoundHost;
 import pcl.common.base.GenericContainerGUI;
 import pcl.common.network.StandardModPacket;
@@ -42,7 +40,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 	private int dhdTop, dhdCentreX, dhdCentreY;
 	private String enteredAddress = "", warningMessage = "";
 	private int ticks = 0, ticksWarning = 0;
-	
+
 	private SoundHost soundHost;
 	private AudioPosition soundHostPosition;
 

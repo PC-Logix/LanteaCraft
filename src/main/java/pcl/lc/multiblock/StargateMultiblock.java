@@ -328,8 +328,8 @@ public class StargateMultiblock extends GenericMultiblock {
 		if (!(o instanceof StargateMultiblock))
 			return false;
 		StargateMultiblock that = (StargateMultiblock) o;
-		if (that.host == null || this.host == null)
+		if (that.host == null || host == null)
 			return false;
-		return ((that.host.xCoord == this.host.xCoord) && (that.host.yCoord == this.host.yCoord) && (that.host.zCoord == this.host.zCoord));
+		return ((that.host.xCoord == host.xCoord) && (that.host.yCoord == host.yCoord) && (that.host.zCoord == host.zCoord));
 	}
 }

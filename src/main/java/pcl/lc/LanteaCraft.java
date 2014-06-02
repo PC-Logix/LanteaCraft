@@ -29,8 +29,8 @@ import pcl.lc.items.ItemControllerCrystal;
 import pcl.lc.items.ItemCoreCrystal;
 import pcl.lc.items.ItemDebugTool;
 import pcl.lc.items.ItemEnergyCrystal;
-import pcl.lc.items.ItemIris;
 import pcl.lc.items.ItemGDO;
+import pcl.lc.items.ItemIris;
 import pcl.lc.items.ItemJacksonNotebook;
 import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreIngot;
@@ -157,7 +157,7 @@ public class LanteaCraft {
 		public static TileEntityLanteaDecorGlassRenderer tileEntityLanteaDecorGlassRenderer;
 
 		public static HeldItemRenderer heldItemRenderer;
-		
+
 		public static WrittenFontRenderer danielFontRenderer;
 
 		public static EntityTokraRenderer entityTokraRenderer;

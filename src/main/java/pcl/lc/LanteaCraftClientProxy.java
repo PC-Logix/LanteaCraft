@@ -1,8 +1,8 @@
 package pcl.lc;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
-import java.io.File;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -22,11 +22,9 @@ import pcl.common.helpers.CloakHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.render.GenericBlockRenderer;
 import pcl.common.render.RotationOrientedBlockRenderer;
-import pcl.lc.LanteaCraft.Render;
 import pcl.lc.core.ClientTickHandler;
 import pcl.lc.entity.EntityReplicator;
 import pcl.lc.entity.EntityTokra;
-import pcl.lc.guis.GuiStatCollection;
 import pcl.lc.guis.ScreenNaquadahGenerator;
 import pcl.lc.guis.ScreenStargateBase;
 import pcl.lc.guis.ScreenStargateController;
@@ -76,11 +74,10 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 		@ForgeSubscribe
 		public void openMainMenu(GuiOpenEvent event) {
-			if ((event.gui instanceof GuiMainMenu) && !shownStatGui) {
+			if ((event.gui instanceof GuiMainMenu) && !shownStatGui)
 				shownStatGui = true;
-				// event.gui = new GuiStatCollection(event.gui,
-				// proxy.analyticsHelper);
-			}
+			// event.gui = new GuiStatCollection(event.gui,
+			// proxy.analyticsHelper);
 		}
 	}
 

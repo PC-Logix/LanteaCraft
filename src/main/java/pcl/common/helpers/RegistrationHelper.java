@@ -212,7 +212,7 @@ public class RegistrationHelper {
 					"Warning, registration of this shapeless recipe is later than was expected!");
 		GameRegistry.addRecipe(new ShapelessOreRecipe(product, params));
 	}
-	
+
 	/**
 	 * Creates a new smelting recipe.
 	 * 
@@ -221,16 +221,16 @@ public class RegistrationHelper {
 	 * @param input
 	 *            The input Block ID.
 	 * @param meta
-	 * 			  The meta value of the block.
+	 *            The meta value of the block.
 	 * @param xp
-	 * 			  The amount of XP received.
+	 *            The amount of XP received.
 	 */
 	public static void newSmeltingRecipe(ItemStack product, int input, int meta, float xp) {
 		LanteaCraft.getLogger().log(Level.FINE, "Registering new smelting recipe");
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger().log(Level.WARNING,
 					"Warning, registration of this smelting is later than was expected!");
-		//GameRegistry.addSmelting(input, product, xp);
+		// GameRegistry.addSmelting(input, product, xp);
 		FurnaceRecipes.smelting().addSmelting(input, meta, product, xp);
 	}
 

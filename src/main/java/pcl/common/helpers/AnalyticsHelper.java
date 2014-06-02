@@ -73,7 +73,7 @@ public class AnalyticsHelper extends Thread {
 			}
 		LanteaCraft.getLogger().log(Level.WARNING, "Failed to push metrics data, maximum tries exceeded!");
 	}
-	
+
 	public String getReportData() {
 		return report.toString();
 	}

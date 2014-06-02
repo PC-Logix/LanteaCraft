@@ -7,7 +7,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import pcl.common.base.GenericContainer;
-import pcl.common.inventory.FilteredSlot;
 import pcl.lc.tileentity.TileEntityStargateController;
 
 public class ContainerStargateController extends GenericContainer {
@@ -92,7 +91,7 @@ public class ContainerStargateController extends GenericContainer {
 	public ContainerStargateController(TileEntityStargateController te, EntityPlayer player) {
 		super(256, 208);
 		this.te = te;
-		for (int i = 0; i < 9; i++) 
+		for (int i = 0; i < 9; i++)
 			addSlotToContainer(new Slot(voidInventory, i, -60, -60));
 	}
 

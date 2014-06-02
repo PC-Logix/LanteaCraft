@@ -21,8 +21,8 @@ public class ConfigurationHelper extends Configuration {
 
 	public ConfigurationHelper(File file) {
 		super(file);
-		this.defaultItemIdsUsed = new ArrayList<Integer>();
-		this.defaultBlockIdsUsed = new ArrayList<Integer>();
+		defaultItemIdsUsed = new ArrayList<Integer>();
+		defaultBlockIdsUsed = new ArrayList<Integer>();
 	}
 
 	public boolean getBoolean(String category, String key, boolean defaultValue) {
@@ -64,28 +64,26 @@ public class ConfigurationHelper extends Configuration {
 	@Override
 	public Property getItem(String name, int desired_default) {
 		int nextid = desired_default;
-		while (true) {
+		while (true)
 			if (defaultItemIdsUsed.contains(nextid))
 				nextid++;
 			else {
 				defaultItemIdsUsed.add(nextid);
 				break;
 			}
-		}
 		return super.getItem(name, nextid);
 	}
 
 	@Override
 	public Property getBlock(String name, int desired_default) {
 		int nextid = desired_default;
-		while (true) {
+		while (true)
 			if (defaultBlockIdsUsed.contains(nextid))
 				nextid++;
 			else {
 				defaultBlockIdsUsed.add(nextid);
 				break;
 			}
-		}
 		Property property = super.getBlock(name, nextid);
 		if (property.getInt() != nextid) {
 			defaultBlockIdsUsed.remove(defaultBlockIdsUsed.indexOf(nextid));

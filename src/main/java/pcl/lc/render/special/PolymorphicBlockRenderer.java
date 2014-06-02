@@ -1,12 +1,12 @@
 package pcl.lc.render.special;
 
-import org.lwjgl.opengl.GL11;
-
-import pcl.lc.api.internal.IPolymorphicRenderHost;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+
+import org.lwjgl.opengl.GL11;
+
+import pcl.lc.api.internal.IPolymorphicRenderHost;
 
 public class PolymorphicBlockRenderer extends TileEntitySpecialRenderer {
 
@@ -19,7 +19,6 @@ public class PolymorphicBlockRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glTranslated(x, y, z);
-		
 
 		GL11.glPopMatrix();
 	}

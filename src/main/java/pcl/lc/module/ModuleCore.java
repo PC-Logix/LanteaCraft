@@ -18,7 +18,6 @@ import pcl.lc.fluids.BlockLiquidNaquadah;
 import pcl.lc.fluids.LiquidNaquadah;
 import pcl.lc.items.ItemBlockOfLanteaOre;
 import pcl.lc.items.ItemDebugTool;
-import pcl.lc.items.ItemJacksonNotebook;
 import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreBlock;
 import pcl.lc.items.ItemLanteaOreIngot;
@@ -48,7 +47,9 @@ public class ModuleCore implements IModule {
 		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem");
 		Items.lanteaOreIngot = RegistrationHelper.registerItem(ItemLanteaOreIngot.class, "lanteaOreIngot");
 		// TODO: Disabled for 1.7
-		// Items.jacksonNotebook = RegistrationHelper.registerItem(ItemJacksonNotebook.class, "jacksonNotebook");
+		// Items.jacksonNotebook =
+		// RegistrationHelper.registerItem(ItemJacksonNotebook.class,
+		// "jacksonNotebook");
 		Blocks.lanteaOreAsBlock = RegistrationHelper.registerBlock(BlockOfLanteaOre.class, ItemBlockOfLanteaOre.class,
 				"lanteaOreIngotBlock");
 
@@ -56,11 +57,13 @@ public class ModuleCore implements IModule {
 		Items.debugger = RegistrationHelper.registerItem(ItemDebugTool.class, "lanteadebug");
 
 		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), "naquadah", Item.ingotIron);
-		
+
 		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4), Blocks.lanteaOre.blockID, 0, 0.1f);
-		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 1), Blocks.lanteaOre.blockID, 1, 0.1f);
-		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 2), Blocks.lanteaOre.blockID, 2, 0.1f);
-		
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 1), Blocks.lanteaOre.blockID, 1,
+				0.1f);
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 2), Blocks.lanteaOre.blockID, 2,
+				0.1f);
+
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1), "NNN", "NNN", "NNN", 'N',
 				"ingotNaquadahAlloy");
 		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9), "B", 'B', Blocks.lanteaOreAsBlock);

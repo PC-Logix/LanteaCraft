@@ -25,7 +25,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 		try {
 			this.system = system;
 			this.position = position;
-			this.name = tag;
+			name = tag;
 			configuredVolume = volume;
 			ClientAudioEngine engine = (ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine();
 
@@ -206,9 +206,9 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 
 	@Override
 	public int compareTo(ClientAudioSource x) {
-		if (this.culled)
-			return (int) ((this.realVolume * 0.9F - x.realVolume) * 128.0F);
-		return (int) ((this.realVolume - x.realVolume) * 128.0F);
+		if (culled)
+			return (int) ((realVolume * 0.9F - x.realVolume) * 128.0F);
+		return (int) ((realVolume - x.realVolume) * 128.0F);
 	}
 
 	@Override

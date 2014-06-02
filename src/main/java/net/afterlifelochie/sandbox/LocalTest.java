@@ -48,9 +48,8 @@ public class LocalTest {
 			System.out.println(String.format("ModuleConfig: %s, %s", module.name(), module.comment()));
 			for (ConfigNode child : module.children())
 				printObject(child);
-		} else {
+		} else
 			System.out.println("");
-		}
 	}
 
 }

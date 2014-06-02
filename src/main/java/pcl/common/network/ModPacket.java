@@ -17,7 +17,7 @@ public abstract class ModPacket {
 			double.class, Double.class, // doubles
 			float.class, Float.class, // floats
 			char.class, Character.class, // chars (int)
-			
+
 			String.class, // string
 			ArrayList.class, HashMap.class // generic containers
 	};

@@ -99,7 +99,7 @@ public class AudioSource {
 	public float getRealVolume() {
 		return 0.0f;
 	}
-	
+
 	public boolean isPlaying() {
 		return false;
 	}

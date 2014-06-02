@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import net.minecraft.network.packet.Packet250CustomPayload;
-
 import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 

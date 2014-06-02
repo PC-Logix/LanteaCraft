@@ -2,10 +2,10 @@ package pcl.common.base;
 
 import java.util.HashMap;
 
-import org.lwjgl.util.Rectangle;
-
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.util.Rectangle;
 
 public abstract class GenericTabbedContainer extends GenericContainerGUI {
 

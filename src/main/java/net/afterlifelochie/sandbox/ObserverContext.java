@@ -16,7 +16,7 @@ public class ObserverContext {
 	public HashMap<Integer, Integer> states = new HashMap<Integer, Integer>();
 
 	public ObserverContext() {
-		this.id = ObserverContext.getUID();
+		id = ObserverContext.getUID();
 	}
 
 	@Override

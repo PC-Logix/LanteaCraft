@@ -14,11 +14,11 @@ public enum EnumIrisState {
 	/** Iris is open */
 	Open,
 	/** Iris is closed */
-	Closed, 
+	Closed,
 	/** Iris is opening */
-	Opening, 
+	Opening,
 	/** Iris is closing */
-	Closing, 
+	Closing,
 	/** Iris is procrastinating (TODO: what even is this?) */
 	Waiting;
 

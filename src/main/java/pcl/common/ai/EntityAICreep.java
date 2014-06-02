@@ -4,11 +4,11 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Random;
 
-import pcl.common.util.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.AxisAlignedBB;
+import pcl.common.util.Vector3;
 
 public class EntityAICreep extends EntityAIBase {
 
@@ -62,18 +62,21 @@ public class EntityAICreep extends EntityAIBase {
 		return false;
 	}
 
+	@Override
 	public boolean continueExecuting() {
 		return (creepDistance > new Vector3(creature).sub(creepStartedAt).mag() && creepTarget.get() != null);
 	}
 
+	@Override
 	public void resetTask() {
 		creepTarget = null;
 	}
 
+	@Override
 	public void updateTask() {
 		// If the creature has no path currently
 		if (creature.getNavigator().noPath()) {
-			if (creature.getRNG().nextInt(50) < 10) {
+			if (creature.getRNG().nextInt(50) < 10)
 				if (creepTarget != null && creepTarget.get() != null) {
 					Entity target = creepTarget.get();
 					Random rand = creature.getRNG();
@@ -85,14 +88,11 @@ public class EntityAICreep extends EntityAIBase {
 							break;
 					}
 				}
-			}
-		} else {
-			if (creepTarget != null && creepTarget.get() != null) {
-				// Watch the target for added creep
-				Entity target = creepTarget.get();
-				creature.getLookHelper().setLookPosition(target.posX, target.posY + (double) target.getEyeHeight(),
-						target.posZ, 10.0F, (float) creature.getVerticalFaceSpeed());
-			}
+		} else if (creepTarget != null && creepTarget.get() != null) {
+			// Watch the target for added creep
+			Entity target = creepTarget.get();
+			creature.getLookHelper().setLookPosition(target.posX, target.posY + target.getEyeHeight(), target.posZ,
+					10.0F, creature.getVerticalFaceSpeed());
 		}
 	}
 }

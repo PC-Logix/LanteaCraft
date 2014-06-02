@@ -32,7 +32,7 @@ public class EntityTokraRenderer extends RenderLiving {
 	@Override
 	public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8,
 			float par9) {
-		super.doRenderLiving((EntityTokra) par1EntityLiving, par2, par4, par6, par8, par9);
+		super.doRenderLiving(par1EntityLiving, par2, par4, par6, par8, par9);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class EntityTokraRenderer extends RenderLiving {
 
 	@Override
 	protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2) {
-		super.renderEquippedItems((EntityTokra) par1EntityLivingBase, par2);
+		super.renderEquippedItems(par1EntityLivingBase, par2);
 	}
 
 	/**

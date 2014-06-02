@@ -24,6 +24,7 @@ public class StargatePart extends MultiblockPart {
 		super(host);
 	}
 
+	@Override
 	public void tick() {
 		if (!host.worldObj.isRemote && modified) {
 			modified = !modified;
@@ -33,7 +34,7 @@ public class StargatePart extends MultiblockPart {
 
 	public void setType(String typeof) {
 		this.typeof = typeof;
-		this.modified = true;
+		modified = true;
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class StargatePart extends MultiblockPart {
 	@Override
 	public boolean mergeWith(GenericMultiblock structure) {
 		currentHost = new WeakReference<GenericMultiblock>(structure);
-		this.modified = true;
+		modified = true;
 		return true;
 	}
 
@@ -81,7 +82,7 @@ public class StargatePart extends MultiblockPart {
 	@Override
 	public void release() {
 		currentHost = null;
-		this.modified = true;
+		modified = true;
 	}
 
 	@Override
@@ -113,9 +114,8 @@ public class StargatePart extends MultiblockPart {
 				TileEntityStargateBase stargateBase = (TileEntityStargateBase) target;
 				currentHost = new WeakReference<GenericMultiblock>(stargateBase.getAsStructure());
 			}
-		} else {
+		} else
 			currentHost = null;
-		}
 		host.worldObj.markBlockForRenderUpdate(host.xCoord, host.yCoord, host.zCoord);
 	}
 

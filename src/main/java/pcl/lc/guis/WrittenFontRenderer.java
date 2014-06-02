@@ -2,7 +2,6 @@ package pcl.lc.guis;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -12,6 +11,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.Resource;
+import net.minecraft.util.ResourceLocation;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,9 +22,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import pcl.lc.LanteaCraft;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.Resource;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * Renders a written-like typeface in game using natural writing styles.
@@ -40,10 +40,10 @@ public class WrittenFontRenderer {
 		public int ux, vy;
 
 		public GlyphMetric(int w, int h, int u, int v) {
-			this.width = w;
-			this.height = h;
-			this.ux = u;
-			this.vy = v;
+			width = w;
+			height = h;
+			ux = u;
+			vy = v;
 		}
 	}
 
@@ -77,11 +77,11 @@ public class WrittenFontRenderer {
 		public LinkedList<BoxedLine> lines = new LinkedList<BoxedLine>();
 
 		public PageBox(int w, int h, int ml, int mr, int min_sp) {
-			this.page_width = w;
-			this.page_height = h;
-			this.margin_left = ml;
-			this.margin_right = mr;
-			this.min_space_size = min_sp;
+			page_width = w;
+			page_height = h;
+			margin_left = ml;
+			margin_right = mr;
+			min_space_size = min_sp;
 		}
 
 		public int getFreeHeight() {
@@ -134,7 +134,7 @@ public class WrittenFontRenderer {
 				int w = -1, h = -1, u = -1, v = -1;
 				NodeList character_properties = character.getChildNodes();
 				for (int k = 0; k < character_properties.getLength(); k++) {
-					Node property = (Node) character_properties.item(k);
+					Node property = character_properties.item(k);
 					if (!(property instanceof Element))
 						continue;
 					Element elem = (Element) property;
@@ -201,7 +201,8 @@ public class WrittenFontRenderer {
 					int new_width_nl = width_new_line + width_new_word + page.min_space_size;
 					if (realPageWidth >= new_width_nl) {
 						// Yes, there is enough space, add the word
-						width_new_line += width_new_word; // Don't add a min-space
+						width_new_line += width_new_word; // Don't add a
+															// min-space
 						words.push(String.valueOf(chars.toArray(new Character[0])));
 						width_new_word = 0;
 					} else {
@@ -218,7 +219,7 @@ public class WrittenFontRenderer {
 				}
 			}
 		}
-		
+
 		// Glue the whole line together
 		StringBuilder line = new StringBuilder();
 		for (int i = 0; i < words.size(); i++) {
@@ -226,7 +227,7 @@ public class WrittenFontRenderer {
 			if (i != words.size() - 1)
 				line.append(" ");
 		}
-		
+
 		// Find the maximum height of any characters in the line
 		int height_new_line = 0;
 		for (int i = 0; i < line.length(); i++) {
@@ -237,15 +238,15 @@ public class WrittenFontRenderer {
 					height_new_line = metric.height;
 			}
 		}
-		
+
 		// If the line doesn't fit at all, we can't do anything
 		if (height_new_line > freeHeight)
 			return text;
-		
+
 		// Figure out how much space is left over from the line
 		int space_remain = realPageWidth - width_new_line;
 		int extra_px_per_space = (int) Math.floor(space_remain / words.size());
-		
+
 		// Create the linebox
 		BoxedLine linebox = new BoxedLine(line.toString(), page.min_space_size + extra_px_per_space, height_new_line);
 

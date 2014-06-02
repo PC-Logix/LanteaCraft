@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerInstance;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -18,6 +17,7 @@ import net.minecraftforge.common.ForgeChunkManager.Type;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.ITickAgent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
  * RemoteChunkLoading is an agent to allow tile-entities to load chunks which
@@ -177,7 +177,7 @@ public class RemoteChunkLoading implements ITickAgent {
 			LanteaCraft.getLogger().log(Level.WARNING,
 					String.format("RemoteChunkLoading CSR: %s (no provider!!)", name));
 		synchronized (requests) {
-			for (ChunkLoadRequest request : requests) {
+			for (ChunkLoadRequest request : requests)
 				if (request.equals(metadata)) {
 					request.extend(maxAge);
 					if (BuildInfo.CHUNK_DEBUGGING)
@@ -185,7 +185,6 @@ public class RemoteChunkLoading implements ITickAgent {
 								String.format("RemoteChunkLoading CSR: returning cached request for CSR %s", name));
 					return request;
 				}
-			}
 		}
 		Ticket ticket = ForgeChunkManager.requestTicket(LanteaCraft.getInstance(), world, Type.NORMAL);
 		if (ticket == null) {
@@ -249,10 +248,9 @@ public class RemoteChunkLoading implements ITickAgent {
 			ForgeChunkManager.releaseTicket(request.ticket);
 		}
 		WorldServer ws = (WorldServer) request.ticket.world;
-		for (ChunkCoordIntPair chunk : request.chunksIn()) {
+		for (ChunkCoordIntPair chunk : request.chunksIn())
 			if (!arePlayersWatchingChunk(ws, chunk))
 				ws.theChunkProviderServer.unloadChunksIfNotNearSpawn(chunk.chunkXPos, chunk.chunkZPos);
-		}
 		synchronized (requests) {
 			requests.remove(request);
 		}

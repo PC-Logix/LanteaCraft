@@ -1,11 +1,5 @@
 package pcl.lc.entity;
 
-import pcl.common.ai.EntityAICreep;
-import pcl.common.ai.EntityAIFleeLowHealth;
-import pcl.common.ai.EntityAIHurtByTargetExcept;
-import pcl.common.ai.EntityAIRememberHome;
-import pcl.common.ai.IHomingPigeon;
-import pcl.common.util.Vector3;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,7 +8,6 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIArrowAttack;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -37,6 +30,12 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import pcl.common.ai.EntityAICreep;
+import pcl.common.ai.EntityAIFleeLowHealth;
+import pcl.common.ai.EntityAIHurtByTargetExcept;
+import pcl.common.ai.EntityAIRememberHome;
+import pcl.common.ai.IHomingPigeon;
+import pcl.common.util.Vector3;
 
 public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMob, IHomingPigeon {
 
@@ -101,9 +100,8 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 		if (locationHome == null)
 			locationHome = new Vector3(this);
 		if (getRNG().nextInt(100) == 0)
-			if (getMaxHealth() > getHealth()) {
+			if (getMaxHealth() > getHealth())
 				setHealth(getHealth() + 0.1f);
-			}
 	}
 
 	/**
@@ -193,12 +191,11 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase par1EntityLivingBase, float par2) {
-		EntityArrow entityarrow = new EntityArrow(this.worldObj, this, par1EntityLivingBase, 1.6F,
-				(float) (14 - this.worldObj.difficultySetting * 4));
-		entityarrow.setDamage((double) (par2 * 2.0F) + this.rand.nextGaussian() * 0.25D
-				+ (double) ((float) this.worldObj.difficultySetting * 0.11F));
-		this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-		this.worldObj.spawnEntityInWorld(entityarrow);
+		EntityArrow entityarrow = new EntityArrow(worldObj, this, par1EntityLivingBase, 1.6F,
+				14 - worldObj.difficultySetting * 4);
+		entityarrow.setDamage(par2 * 2.0F + rand.nextGaussian() * 0.25D + worldObj.difficultySetting * 0.11F);
+		playSound("random.bow", 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
+		worldObj.spawnEntityInWorld(entityarrow);
 	}
 
 	@Override

@@ -2,10 +2,6 @@ package pcl.lc.items;
 
 import java.util.List;
 
-import pcl.lc.LanteaCraft;
-import pcl.lc.api.EnumIrisType;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
+import pcl.lc.LanteaCraft;
+import pcl.lc.api.EnumIrisType;
 
 public class ItemIris extends Item {
 
@@ -40,10 +38,10 @@ public class ItemIris extends Item {
 
 	@Override
 	public void registerIcons(IconRegister reg) {
-		this.iconMissing = reg.registerIcon(LanteaCraft.getAssetKey() + ":missing");
-		this.iconMechanical = reg.registerIcon(LanteaCraft.getAssetKey() + ":energy_iris_upgrade_"
+		iconMissing = reg.registerIcon(LanteaCraft.getAssetKey() + ":missing");
+		iconMechanical = reg.registerIcon(LanteaCraft.getAssetKey() + ":energy_iris_upgrade_"
 				+ LanteaCraft.getProxy().getRenderMode());
-		this.iconEnergy = reg.registerIcon(LanteaCraft.getAssetKey() + ":iris_upgrade_"
+		iconEnergy = reg.registerIcon(LanteaCraft.getAssetKey() + ":iris_upgrade_"
 				+ LanteaCraft.getProxy().getRenderMode());
 	}
 

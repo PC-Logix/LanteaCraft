@@ -3,10 +3,10 @@ package pcl.lc.module.integration.computercraft;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import pcl.common.util.Vector3;
-import pcl.lc.module.integration.computercraft.ComputerCraftWrapperPool.ComputerCraftVirtualPeripheral;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import pcl.common.util.Vector3;
+import pcl.lc.module.integration.computercraft.ComputerCraftWrapperPool.ComputerCraftVirtualPeripheral;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -22,6 +22,7 @@ public class TileEntityComputerCraftConnector extends TileEntity implements IPer
 		clients = new ArrayList<WeakReference<IComputerAccess>>();
 	}
 
+	@Override
 	public void updateEntity() {
 		if (iface != null)
 			iface.update();
@@ -37,7 +38,7 @@ public class TileEntityComputerCraftConnector extends TileEntity implements IPer
 					&& ComputerCraftWrapperPool.canWrap(worldObj.getBlockTileEntity(target.floorX(), target.floorY(),
 							target.floorZ()))) {
 				this.target = worldObj.getBlockTileEntity(target.floorX(), target.floorY(), target.floorZ());
-				this.iface = ComputerCraftWrapperPool.wrap(this.target, this);
+				iface = ComputerCraftWrapperPool.wrap(this.target, this);
 			}
 		}
 	}

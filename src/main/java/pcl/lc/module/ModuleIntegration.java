@@ -56,7 +56,7 @@ public class ModuleIntegration implements IModule {
 						.log(Level.INFO,
 								String.format("Not loading class %s because it is missing an Agent directive.",
 										agent.getName()));
-			for (Annotation annotate : annotations) {
+			for (Annotation annotate : annotations)
 				if (annotate.annotationType().equals(Agent.class)) {
 					Agent theAgent = (Agent) annotate;
 					if (Loader.isModLoaded(theAgent.modname()))
@@ -75,7 +75,6 @@ public class ModuleIntegration implements IModule {
 								String.format("Not loading agent %s, missing mod %s.", agent.getName(),
 										theAgent.modname()));
 				}
-			}
 		}
 		LanteaCraft.getLogger().log(Level.INFO, "Done hotloading integration modules.");
 	}

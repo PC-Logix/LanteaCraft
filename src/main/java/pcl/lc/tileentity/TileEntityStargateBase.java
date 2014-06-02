@@ -180,7 +180,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	private double ehGrid[][][];
 
 	public TileEntityStargateBase() {
-		this.inventory = new FilteredInventory(1) {
+		inventory = new FilteredInventory(1) {
 
 			@Override
 			public void onInventoryChanged() {
@@ -226,7 +226,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		if (worldObj.isRemote)
 			return;
 		checkForEntitiesInPortal();
-		if (connection != null) {
+		if (connection != null)
 			// Synchronize the connection between this instance and the client
 			if (connection.running.modified(observerContext) || connection.chevrons.modified(observerContext)
 					|| connection.state.modified(observerContext) || connection.symbol.modified(observerContext)) {
@@ -253,7 +253,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				}
 				LanteaCraft.getProxy().sendToAllPlayers(update);
 			}
-		}
 	}
 
 	private void clientThink() {
@@ -470,7 +469,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	private void acceptEntity(Entity entity) {
 		// Determine if an iris is currently closed
 		if (getIrisState() == EnumIrisState.Closed || getIrisState() == EnumIrisState.Closing
-				|| getIrisState() == EnumIrisState.Opening) {
+				|| getIrisState() == EnumIrisState.Opening)
 			if (entity instanceof EntityPlayer) {
 				// Inflict player damage
 				EntityPlayer player = (EntityPlayer) entity;
@@ -479,11 +478,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				// Inflict living damage
 				EntityLivingBase living = (EntityLivingBase) entity;
 				living.attackEntityFrom(irisDamage, 9999999);
-			} else {
+			} else
 				// Just hard kill the entity, this is nasty
 				entity.setDead();
-			}
-		}
 	}
 
 	private void extractEntityFromWorld(World world, Entity entity) {
@@ -609,6 +606,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return GateAddressHelper.addressForLocation(new WorldLocation(this));
 	}
 
+	@Override
 	public IInventory getInventory() {
 		return inventory;
 	}
@@ -674,9 +672,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	public void handlePacket(ModPacket packetOf) {
 		if (BuildInfo.DEBUG)
 			LanteaCraft.getLogger().log(Level.INFO, String.format("Handling packet type %s.", packetOf.getType()));
-		if (packetOf.getType().equals("LanteaPacket.MultiblockUpdate")) {
+		if (packetOf.getType().equals("LanteaPacket.MultiblockUpdate"))
 			getAsStructure().unpack(packetOf);
-		} else if (packetOf.getType().equals("LanteaPacket.ConnectionUpdate")) {
+		else if (packetOf.getType().equals("LanteaPacket.ConnectionUpdate")) {
 			if (BuildInfo.DEBUG)
 				LanteaCraft.getLogger().log(Level.INFO, "Accepted connection status update.");
 			if (connection_cli == null) {
@@ -702,9 +700,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			req.state.set((EnumStargateState) payload.getValue("state"));
 			req.symbol.set((Character) payload.getValue("symbol"));
 			setClientConnection(req);
-		} else {
+		} else
 			LanteaCraft.getLogger().log(Level.WARNING, String.format("Strange packet type %s.", packetOf.getType()));
-		}
 
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
@@ -935,12 +932,12 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		if (BuildInfo.DEBUG)
 			LanteaCraft.getLogger()
 					.log(Level.INFO, String.format("Setting ConnectionRequest: %s.", request.hashCode()));
-		this.connection = request;
+		connection = request;
 		getDescriptionPacket();
 	}
 
 	public void setClientConnection(ClientConnectionRequest request) {
-		this.connection_cli = request;
+		connection_cli = request;
 		createChannel("stargate_spin", "roll", new AudioPosition(worldObj, new Vector3(this)), 1.0F, -1);
 		createChannel("stargate_chevron", "chevron_lock", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);
 		createChannel("stargate_transient", "open", new AudioPosition(worldObj, new Vector3(this)), 1.0F, 1200);

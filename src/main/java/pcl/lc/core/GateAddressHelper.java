@@ -1,18 +1,11 @@
 package pcl.lc.core;
 
-import java.util.logging.Level;
-
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import pcl.common.util.ChunkLocation;
 import pcl.common.util.WorldLocation;
-import pcl.lc.BuildInfo;
-import pcl.lc.LanteaCraft;
 import pcl.lc.core.AddressingError.CoordRangeError;
 import pcl.lc.core.AddressingError.DimensionRangeError;
-import pcl.lc.tileentity.TileEntityStargateBase;
 
 /**
  * Stargate address calculation engine.

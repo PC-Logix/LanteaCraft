@@ -5,15 +5,17 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
+import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.lua.ILuaContext;
 
 public class ComputerCraftWrapperPool {
 
 	/**
 	 * Determines if a wrapper can wrap a tile.
-	 * @param tile The tile
+	 * 
+	 * @param tile
+	 *            The tile
 	 * @return If the tile can be wrapped
 	 */
 	public static boolean canWrap(TileEntity tile) {
@@ -23,8 +25,11 @@ public class ComputerCraftWrapperPool {
 
 	/**
 	 * Wraps a tile
-	 * @param tile The target tile
-	 * @param host The host tile
+	 * 
+	 * @param tile
+	 *            The target tile
+	 * @param host
+	 *            The host tile
 	 * @return The wrapper, or null if no wrapper exists
 	 */
 	public static ComputerCraftVirtualPeripheral wrap(TileEntity tile, TileEntityComputerCraftConnector host) {

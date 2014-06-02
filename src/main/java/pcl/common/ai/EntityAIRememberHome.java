@@ -1,8 +1,8 @@
 package pcl.common.ai;
 
-import pcl.common.util.Vector3;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
+import pcl.common.util.Vector3;
 
 public class EntityAIRememberHome extends EntityAIBase {
 
@@ -51,7 +51,8 @@ public class EntityAIRememberHome extends EntityAIBase {
 		if (!(pigeon instanceof EntityCreature))
 			return false;
 		EntityCreature creature = (EntityCreature) pigeon;
-		return (pigeon.getHomeLocation().sub(new Vector3(creature)).mag() > maximumWanderDistance) || !creature.getNavigator().noPath();
+		return (pigeon.getHomeLocation().sub(new Vector3(creature)).mag() > maximumWanderDistance)
+				|| !creature.getNavigator().noPath();
 	}
 
 	@Override

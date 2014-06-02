@@ -1,13 +1,13 @@
 package pcl.common.base;
 
-import pcl.lc.LanteaCraft;
-import pcl.lc.guis.GlyphRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import pcl.lc.LanteaCraft;
+import pcl.lc.guis.GlyphRenderer;
 
 public abstract class GenericContainerGUI extends GuiContainer {
 
@@ -53,7 +53,6 @@ public abstract class GenericContainerGUI extends GuiContainer {
 	protected void close() {
 		mc.thePlayer.closeScreen();
 	}
-	
 
 	public void drawFramedSymbols(int x, int y, String address) {
 		int scale = 2;

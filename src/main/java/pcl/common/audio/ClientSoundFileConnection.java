@@ -5,10 +5,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
 
-import pcl.lc.BuildInfo;
-import pcl.lc.LanteaCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import pcl.lc.BuildInfo;
+import pcl.lc.LanteaCraft;
 
 public class ClientSoundFileConnection extends URLConnection {
 
@@ -16,12 +16,14 @@ public class ClientSoundFileConnection extends URLConnection {
 
 	private ClientSoundFileConnection(URL url) {
 		super(url);
-		this.resourceName = new ResourceLocation(url.getPath());
+		resourceName = new ResourceLocation(url.getPath());
 	}
 
+	@Override
 	public void connect() {
 	}
 
+	@Override
 	public InputStream getInputStream() {
 		try {
 			if (BuildInfo.SS_DEBUGGING)

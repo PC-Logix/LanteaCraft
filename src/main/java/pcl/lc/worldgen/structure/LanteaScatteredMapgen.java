@@ -19,13 +19,13 @@ public class LanteaScatteredMapgen extends MapGenStructure {
 	protected boolean canSpawnStructureAtCoords(int i, int j) {
 		int iv = i, jv = j;
 		if (i < 0)
-			i -= this.maxStructDensity - 1;
+			i -= maxStructDensity - 1;
 		if (j < 0)
-			j -= this.maxStructDensity - 1;
+			j -= maxStructDensity - 1;
 		int imul = i, jmul = j;
-		Random var7 = this.worldObj.setRandomSeed(i / this.maxStructDensity, j / this.maxStructDensity, 14357617);
-		imul += var7.nextInt(this.maxStructDensity - this.minStructDensity);
-		jmul += var7.nextInt(this.maxStructDensity - this.minStructDensity);
+		Random var7 = worldObj.setRandomSeed(i / maxStructDensity, j / maxStructDensity, 14357617);
+		imul += var7.nextInt(maxStructDensity - minStructDensity);
+		jmul += var7.nextInt(maxStructDensity - minStructDensity);
 		return (iv == imul && jv == jmul);
 	}
 

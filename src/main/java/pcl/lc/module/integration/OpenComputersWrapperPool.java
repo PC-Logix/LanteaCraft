@@ -23,11 +23,6 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
-import pcl.lc.core.AddressingError;
-import pcl.lc.core.AddressingError.CoordRangeError;
-import pcl.lc.core.AddressingError.DimensionRangeError;
-import pcl.lc.core.GateAddressHelper;
-import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class OpenComputersWrapperPool {
 
@@ -123,11 +118,10 @@ public class OpenComputersWrapperPool {
 			ArrayList<String> methodView = new ArrayList<String>();
 			for (Method method : clazz.getMethods()) {
 				Annotation[] annotations = method.getAnnotations();
-				if (annotations != null && annotations.length > 0) {
+				if (annotations != null && annotations.length > 0)
 					for (Annotation annotation : annotations)
 						if (annotation.annotationType().equals(Callback.class))
 							methodView.add(method.getName());
-				}
 			}
 			methodList = methodView.toArray(new String[0]);
 			return methodList;

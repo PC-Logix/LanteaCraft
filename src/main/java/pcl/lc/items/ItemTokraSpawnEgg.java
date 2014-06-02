@@ -21,7 +21,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
 import pcl.lc.entity.EntityReplicator;
-import pcl.lc.entity.EntityTokra;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -126,11 +125,10 @@ public class ItemTokraSpawnEgg extends Item {
 		par0World.spawnEntityInWorld(newEntity);
 		newEntity.playLivingSound();
 
-		
 		// Dirty compiler trick
 		if (true != false && 1 > 0)
 			return newEntity;
-		
+
 		EntityVillager entity = new EntityVillager(par0World, LanteaCraft.getProxy().getVillagerID("tokra"));
 		entity.setProfession(LanteaCraft.getProxy().getVillagerID("tokra"));
 		EntityLiving entityliving = entity;

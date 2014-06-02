@@ -7,7 +7,6 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 import pcl.common.api.energy.IEnergyStore;
 import pcl.common.api.energy.IItemEnergyStore;
-import pcl.common.audio.AudioSource;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.inventory.FilterRule;
@@ -19,7 +18,6 @@ import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
-import pcl.lc.api.IStargateControllerAccess;
 import pcl.lc.blocks.BlockStargateController;
 
 public class TileEntityStargateController extends GenericTileEntity implements IPacketHandler, IEnergyStore {

@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 import pcl.common.helpers.ScanningHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityRingPlatform;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

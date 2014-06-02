@@ -49,13 +49,12 @@ public class EntityAIFleeLowHealth extends EntityAIBase {
 			Vec3 vec3 = RandomPositionGenerator.findRandomTarget(creature, 15, 8);
 			if (vec3 == null)
 				return false;
-			this.flee_x = vec3.xCoord;
-			this.flee_y = vec3.yCoord;
-			this.flee_z = vec3.zCoord;
+			flee_x = vec3.xCoord;
+			flee_y = vec3.yCoord;
+			flee_z = vec3.zCoord;
 			return true;
-		} else {
+		} else
 			return false;
-		}
 	}
 
 	@Override
@@ -76,7 +75,7 @@ public class EntityAIFleeLowHealth extends EntityAIBase {
 
 	@Override
 	public void updateTask() {
-		if (creature.getNavigator().noPath()) {
+		if (creature.getNavigator().noPath())
 			// If the creature has no path and we are still running, we
 			// will generate a new random path if the next int is lt 3.
 			if (creature.getRNG().nextInt(25) < 3) {
@@ -88,7 +87,6 @@ public class EntityAIFleeLowHealth extends EntityAIBase {
 					creature.getNavigator().tryMoveToXYZ(flee_x, flee_y, flee_z, fleeSpeed);
 				}
 			}
-		}
 	}
 
 }

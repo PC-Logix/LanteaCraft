@@ -65,9 +65,8 @@ public class ClassOptionalTransformer implements IClassTransformer {
 			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			classNode.accept(writer);
 			return writer.toByteArray();
-		} else {
+		} else
 			return basicClass;
-		}
 	}
 
 	private void addInterface(ClassNode clazz, String iface) {

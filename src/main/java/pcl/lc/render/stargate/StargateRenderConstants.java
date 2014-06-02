@@ -18,11 +18,9 @@ public class StargateRenderConstants {
 	public final static double ringInnerMovingRadius = ringInnerRadius + 0.1;
 	public final static double ringOuterRadius = 3.5;
 	public final static double ringMidRadius = ringInnerMovingRadius + ((ringOuterRadius - ringInnerMovingRadius) / 2);
-	
-	
+
 	public final static double ringDepth = 0.15;
 
-	
 	public final static int numChevrons = 9;
 	public final static double chevronAngle = 360.0 / numChevrons;
 	public final static double chevronAngleOffset = -90.0;
@@ -39,7 +37,7 @@ public class StargateRenderConstants {
 	public final static int chevronTextureIndex = 0x05;
 	public final static int chevronLitTextureIndex = 0x16;
 
-	public final static int[] standardRenderQueue = { -1, 8 ,7, 6, 3, 2, 1, 0 };
-	public final static int[] extendedRenderQueue = { -1, 8 ,7, 6, 3, 2, 1, 5, 4, 0 };
+	public final static int[] standardRenderQueue = { -1, 8, 7, 6, 3, 2, 1, 0 };
+	public final static int[] extendedRenderQueue = { -1, 8, 7, 6, 3, 2, 1, 5, 4, 0 };
 
 }

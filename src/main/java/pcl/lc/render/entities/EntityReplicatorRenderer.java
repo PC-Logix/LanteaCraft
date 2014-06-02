@@ -1,12 +1,13 @@
 package pcl.lc.render.entities;
 
-import org.lwjgl.opengl.GL11;
-
-import pcl.lc.LanteaCraft;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+import pcl.lc.LanteaCraft;
 
 public class EntityReplicatorRenderer extends RenderLiving {
 
@@ -19,7 +20,7 @@ public class EntityReplicatorRenderer extends RenderLiving {
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		return LanteaCraft.getResource("textures/skins/BipedTetris.png");
 	}
-	
+
 	@Override
 	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2) {
 		float f1 = 0.9375F;
