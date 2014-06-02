@@ -42,7 +42,7 @@ public interface IWrenchable {
 
 	/**
 	 * Determine the probability to drop the block as it is.
-	 * The first entry in getBlockDropped will be replaced by blockid:meta if the drop is successful.
+	 * The first entry in getDrops will be replaced by blockid:meta if the drop is successful.
 	 * 
 	 * @return Probability from 0 to 1
 	 */

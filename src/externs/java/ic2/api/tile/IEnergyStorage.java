@@ -1,6 +1,6 @@
 package ic2.api.tile;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Interface implemented by the tile entity of energy storage blocks.

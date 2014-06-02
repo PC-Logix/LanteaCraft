@@ -1,11 +1,11 @@
 package ic2.api.crops;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -103,8 +103,8 @@ public abstract class CropCard
 	 * This method will get called by IC2, don't call it yourself.
 	 */
 	@SideOnly(Side.CLIENT)
-	public void registerSprites(IconRegister iconRegister) {
-		textures = new Icon[maxSize()];
+	public void registerSprites(IIconRegister iconRegister) {
+		textures = new IIcon[maxSize()];
 
 		for (int i = 1; i <= textures.length; i++) {
 			textures[i-1] = iconRegister.registerIcon("ic2:crop/blockCrop."+name()+"."+i);
@@ -118,7 +118,7 @@ public abstract class CropCard
 	 * @return 0-255, representing the sprite index on the crop's spritesheet.
 	 */
 	@SideOnly(Side.CLIENT)
-	public Icon getSprite(ICropTile crop) {
+	public IIcon getSprite(ICropTile crop) {
 		if (crop.getSize() <= 0 || crop.getSize() > textures.length) return null;
 
 		return textures[crop.getSize() - 1];
@@ -370,5 +370,5 @@ public abstract class CropCard
 	}
 
 	@SideOnly(Side.CLIENT)
-	protected Icon textures[];
+	protected IIcon textures[];
 }

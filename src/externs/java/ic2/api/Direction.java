@@ -1,8 +1,9 @@
 package ic2.api;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Represents the 6 possible directions along the axis of a block.
@@ -53,18 +54,32 @@ public enum Direction {
 	 * @param tileEntity tile entity to check
 	 * @return Adjacent tile entity or null if none exists
 	 */
-	public TileEntity applyToTileEntity(TileEntity tileEntity) {
-		int coords[] = { tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord };
+	public TileEntity applyToTileEntity(TileEntity te) {
+		return applyTo(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
+	}
+
+	/**
+	 * Get the tile entity next to a position following this direction.
+	 *
+	 * @param world World to check
+	 * @param x X coordinate to check from
+	 * @param y Y coordinate to check from
+	 * @param z Z coordinate to check from
+	 * @return Adjacent tile entity or null if none exists
+	 */
+	public TileEntity applyTo(World world, int x, int y, int z) {
+		int coords[] = { x, y, z };
 
 		coords[dir/2] += getSign();
 
-		if (tileEntity.worldObj != null && tileEntity.worldObj.blockExists(coords[0], coords[1], coords[2])) {
+		if (world != null && world.blockExists(coords[0], coords[1], coords[2])) {
 			try {
-				return tileEntity.worldObj.getBlockTileEntity(coords[0], coords[1], coords[2]);
+				return world.getTileEntity(coords[0], coords[1], coords[2]);
 			} catch (Exception e) {
-				throw new RuntimeException("error getting TileEntity at dim "+tileEntity.worldObj.provider.dimensionId+" "+coords[0]+"/"+coords[1]+"/"+coords[2]);
+				throw new RuntimeException("error getting TileEntity at dim "+world.provider.dimensionId+" "+coords[0]+"/"+coords[1]+"/"+coords[2]);
 			}
 		}
+
 		return null;
 	}
 

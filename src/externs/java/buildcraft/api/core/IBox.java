@@ -1,30 +1,25 @@
-/** 
- * Copyright (c) SpaceToad, 2011
+/**
+ * Copyright (c) 2011-2014, SpaceToad and the BuildCraft Team
  * http://www.mod-buildcraft.com
- * 
- * BuildCraft is distributed under the terms of the Minecraft Mod Public 
+ *
+ * BuildCraft is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
  * http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
-
 package buildcraft.api.core;
-
-import net.minecraft.world.World;
 
 public interface IBox {
 
-	public void expand(int amount);
+	IBox expand(int amount);
 
-	public void contract(int amount);
+	IBox contract(int amount);
 
-	public boolean contains(int x, int y, int z);
+	boolean contains(double x, double y, double z);
 
-	public Position pMin();
+	Position pMin();
 
-	public Position pMax();
+	Position pMax();
 
-	public void createLasers(World world, LaserKind kind);
-
-	public void deleteLasers();
+	void createLaserData();
 
 }

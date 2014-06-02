@@ -1,11 +1,13 @@
 package ic2.api.crops;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 /**
  * General management of the crop system.
@@ -23,6 +25,17 @@ public abstract class Crops {
 	 * @param nutrientsBonus Nutrient stat bonus
 	 */
 	public abstract void addBiomeBonus(BiomeGenBase biome, int humidityBonus, int nutrientsBonus);
+
+	/**
+	 * Adds a crop humidity and nutrient biome bonus.
+	 * 
+	 * 0 indicates no bonus and negative values indicate a penalty.
+	 * 
+	 * @param type Forge biome type to apply the bonus in
+	 * @param humidityBonus Humidity stat bonus
+	 * @param nutrientsBonus Nutrient stat bonus
+	 */
+	public abstract void addBiomeBonus(Type type, int humidityBonus, int nutrientsBonus);
 
 	/**
 	 * Gets the humidity bonus for a biome.
@@ -92,7 +105,7 @@ public abstract class Crops {
 	 * This method will get called by IC2, don't call it yourself.
 	 */
 	@SideOnly(Side.CLIENT)
-	public abstract void startSpriteRegistration(IconRegister iconRegister);
+	public abstract void startSpriteRegistration(IIconRegister iconRegister);
 
 	/**
 	 * Returns the ID for the given crop.

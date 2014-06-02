@@ -1,6 +1,6 @@
 package ic2.api.energy.tile;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Allows a tile entity (mostly a machine) to receive energy.
@@ -14,6 +14,8 @@ public interface IEnergySink extends IEnergyAcceptor {
 	 * This value is unrelated to getMaxSafeInput().
 	 *
 	 * Make sure that injectEnergy() does accepts energy if demandsEnergy() returns anything > 0.
+	 * 
+	 * @note Modifying the energy net from this method is disallowed.
 	 *
 	 * @return max accepted input in eu
 	 */
@@ -38,6 +40,8 @@ public interface IEnergySink extends IEnergyAcceptor {
 	 * limit.
 	 *
 	 * This value is unrelated to demandsEnergy().
+	 * 
+	 * @note Modifying the energy net from this method is disallowed.
 	 *
 	 * @return max safe input in eu
 	 */
