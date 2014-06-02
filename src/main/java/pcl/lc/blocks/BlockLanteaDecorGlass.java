@@ -81,7 +81,7 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int neighbourId) {
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile instanceof TileEntityLanteaDecorGlass)
 			((TileEntityLanteaDecorGlass) tile).neighbourChanged();

@@ -4,7 +4,6 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-import net.minecraft.crash.CallableMinecraftVersion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.ChestGenHooks;
@@ -42,12 +41,6 @@ public class ModuleWorldGenerator implements IModule {
 	@Override
 	public void init() {
 		MinecraftForge.TERRAIN_GEN_BUS.register(LanteaCraft.getInstance());
-		try {
-			if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
-				MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "LanteaCraft:DesertPyramid");
-		} catch (Throwable e) {
-			LanteaCraft.getLogger().log(Level.FINE, "Could not register structure type LanteaCraft:DesertPyramid", e);
-		}
 
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft random drop items...");
 		String[] categories = { ChestGenHooks.MINESHAFT_CORRIDOR, ChestGenHooks.PYRAMID_DESERT_CHEST,
@@ -61,8 +54,7 @@ public class ModuleWorldGenerator implements IModule {
 
 		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft NaquadahOre generator...");
 		naquadahOreGenerator = new NaquadahOreWorldGen();
-		GameRegistry.registerWorldGenerator(naquadahOreGenerator);
-
+		GameRegistry.registerWorldGenerator(naquadahOreGenerator, 0);
 	}
 
 	@Override

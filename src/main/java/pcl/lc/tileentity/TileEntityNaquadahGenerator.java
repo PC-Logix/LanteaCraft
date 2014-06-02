@@ -10,8 +10,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -46,18 +46,9 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	private boolean addedToEnergyNet = false;
 
 	private FilteredInventory inventory = new FilteredInventory(5) {
-		@Override
-		public void onInventoryChanged() {
-			// TODO Auto-generated method stub
-		}
 
 		@Override
-		public boolean isInvNameLocalized() {
-			return false;
-		}
-
-		@Override
-		public String getInvName() {
+		public String getInventoryName() {
 			return "naquadah_generator";
 		}
 
@@ -110,7 +101,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 		super.writeToNBT(nbt);
 		NBTTagCompound tankCompound = new NBTTagCompound();
 		tank.writeToNBT(tankCompound);
-		nbt.setCompoundTag("tank", tankCompound);
+		nbt.setTag("tank", tankCompound);
 	}
 
 	@Override
@@ -249,7 +240,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	}
 
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(Direction from, FluidStack resource, boolean doFill) {
 		return tank.fill(resource, doFill);
 	}
 

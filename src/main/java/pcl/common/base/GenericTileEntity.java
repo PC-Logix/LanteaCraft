@@ -9,9 +9,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import pcl.lc.LanteaCraft;
@@ -165,9 +162,9 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	 * Returns the name of the inventory.
 	 */
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		IInventory inventory = getInventory();
-		return inventory != null ? inventory.getInvName() : "";
+		return inventory != null ? inventory.getInventoryName() : "";
 	}
 
 	/**
@@ -191,33 +188,10 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	@Override
-	public void openChest() {
-		IInventory inventory = getInventory();
-		if (inventory != null)
-			inventory.openChest();
-	}
-
-	@Override
-	public void closeChest() {
-		IInventory inventory = getInventory();
-		if (inventory != null)
-			inventory.closeChest();
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		IInventory inventory = getInventory();
 		if (inventory != null)
 			return inventory.isItemValidForSlot(slot, stack);
-		else
-			return false;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		IInventory inventory = getInventory();
-		if (inventory != null)
-			return inventory.isInvNameLocalized();
 		else
 			return false;
 	}
@@ -259,6 +233,24 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 			return ((ISidedInventory) inventory).canExtractItem(slot, stack, side);
 		else
 			return true;
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void openInventory() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void closeInventory() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

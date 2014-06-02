@@ -32,18 +32,9 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 	private double energy = 0.0d;
 
 	private FilteredInventory inventory = new FilteredInventory(1) {
-		@Override
-		public void onInventoryChanged() {
-			// TODO Auto-generated method stub
-		}
 
 		@Override
-		public boolean isInvNameLocalized() {
-			return false;
-		}
-
-		@Override
-		public String getInvName() {
+		public String getInventoryName() {
 			return "stargate_energy";
 		}
 
@@ -64,6 +55,30 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 			if (0 > i || i > items.length)
 				return false;
 			return true;
+		}
+
+		@Override
+		public boolean hasCustomInventoryName() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void markDirty() {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void openInventory() {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void closeInventory() {
+			// TODO Auto-generated method stub
+
 		}
 	};
 

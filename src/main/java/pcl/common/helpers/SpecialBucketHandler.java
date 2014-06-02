@@ -3,13 +3,12 @@ package pcl.common.helpers;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.event.Event.Result;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import pcl.lc.fluids.ItemSpecialBucket;
 

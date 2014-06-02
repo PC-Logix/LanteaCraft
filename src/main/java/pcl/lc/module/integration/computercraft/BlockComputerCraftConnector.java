@@ -6,17 +6,17 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.util.Vector3;
 
 public class BlockComputerCraftConnector extends Block implements ITileEntityProvider {
 
-	public BlockComputerCraftConnector(int par1) {
-		super(par1, Material.ground);
+	public BlockComputerCraftConnector() {
+		super(Material.ground);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new TileEntityComputerCraftConnector();
 	}
 
@@ -44,10 +44,10 @@ public class BlockComputerCraftConnector extends Block implements ITileEntityPro
 	}
 
 	@Override
-	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
+	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5) {
 		if (countAdaptableBlocks(par1World, par2, par3, par4) != 1) {
 			par1World.setBlockToAir(par2, par3, par4);
-			dropBlockAsItem_do(par1World, par2, par3, par4, new ItemStack(blockID, 1, 0));
+			dropBlockAsItem(par1World, par2, par3, par4, new ItemStack(this, 1, 0));
 		}
 	}
 

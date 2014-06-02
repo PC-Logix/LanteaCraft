@@ -922,7 +922,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		Iterator var6 = player.getActivePotionEffects().iterator();
 		while (var6.hasNext()) {
 			PotionEffect effect = (PotionEffect) var6.next();
-			player.playerNetServerHandler.sendPacketToPlayer(new Packet41EntityEffect(player.entityId, effect));
+			player.playerNetServerHandler.sendPacketToPlayer(new Packet41EntityEffect(player.getEntityId(), effect));
 		}
 		player.playerNetServerHandler.sendPacketToPlayer(new Packet43Experience(player.experience,
 				player.experienceTotal, player.experienceLevel));

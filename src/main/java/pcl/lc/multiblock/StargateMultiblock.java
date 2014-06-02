@@ -42,7 +42,7 @@ public class StargateMultiblock extends GenericMultiblock {
 			host.getDescriptionPacket();
 			WorldLog log = LanteaCraft.getProxy().getWorldLog();
 			log.log(Level.INFO, String.format("Stargate state changed to %s at (%s %s %s, dim: %s).", isValid, xCoord,
-					yCoord, zCoord, host.worldObj.provider.dimensionId));
+					yCoord, zCoord, host.getWorldObj().provider.dimensionId));
 		}
 
 		// People keep putting blocks inside Stargates after they're formed,
@@ -51,7 +51,7 @@ public class StargateMultiblock extends GenericMultiblock {
 		if (!isClient)
 			if (0 > watcher) {
 				watcher += 20;
-				boolean result = isValidStructure(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
+				boolean result = isValidStructure(host.getWorldObj(), host.xCoord, host.yCoord, host.zCoord);
 				if (result != watcherLast) {
 					watcherLast = result;
 					invalidate();
@@ -256,10 +256,10 @@ public class StargateMultiblock extends GenericMultiblock {
 		if (!isClient && (stateOf == EnumStargateState.Connected || stateOf == EnumStargateState.Disconnecting)
 				&& LanteaCraft.getProxy().doExplosion()) {
 			LanteaCraft.getLogger().log(Level.INFO, "Creating explosion: gate destroyed while connected!");
-			int k = host.worldObj.getBlockId(host.xCoord, host.yCoord, host.zCoord);
+			int k = host.getWorldObj().getBlockId(host.xCoord, host.yCoord, host.zCoord);
 			if (k == LanteaCraft.Blocks.stargateBaseBlock.blockID)
 				LanteaCraft.Blocks.stargateBaseBlock
-						.explode(host.worldObj, host.xCoord, host.yCoord, host.zCoord, 500D);
+						.explode(host.getWorldObj(), host.xCoord, host.yCoord, host.zCoord, 500D);
 		}
 		structureParts.clear();
 		modified = true;

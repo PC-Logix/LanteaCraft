@@ -68,4 +68,22 @@ public abstract class FilteredInventory implements ISidedInventory {
 		return true;
 	}
 
+	@Override
+	public void markDirty() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void openInventory() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void closeInventory() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

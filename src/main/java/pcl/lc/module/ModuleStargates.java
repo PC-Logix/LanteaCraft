@@ -74,21 +74,28 @@ public class ModuleStargates implements IModule {
 				"transportRingActivator");
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN", "III", 'I',
-				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1));
+				Item.itemRegistry.getObject("ingotIron"), 'N', "ingotNaquadahAlloy", 'C', new ItemStack(
+						(Block) Block.blockRegistry.getObject("sandStone"), 1, 1));
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1, 1), "CgC", "NpN", "IrI", 'I',
-				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1), 'g',
-				Item.glowstone, 'r', Item.redstone, 'p', Item.enderPearl);
+				Item.itemRegistry.getObject("ingotIron"), 'N', "ingotNaquadahAlloy", 'C', new ItemStack(
+						(Block) Block.blockRegistry.getObject("sandStone"), 1, 1), 'g', Item.itemRegistry
+						.getObject("glowstone"), 'r', Item.itemRegistry.getObject("redstone"), 'p', Item.itemRegistry
+						.getObject("enderPearl"));
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateBaseBlock, 1), "CrC", "NeN", "IcI", 'I',
-				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1), 'r',
-				Item.redstone, 'e', Item.eyeOfEnder, 'c', Items.coreCrystal);
+				Item.itemRegistry.getObject("ingotIron"), 'N', "ingotNaquadahAlloy", 'C', new ItemStack(
+						(Block) Block.blockRegistry.getObject("sandStone"), 1, 1), 'r', Item.itemRegistry
+						.getObject("redstone"), 'e', Item.itemRegistry.getObject("eyeOfEnder"), 'c', Items.coreCrystal);
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateControllerBlock, 1), "bbb", "OpO", "OcO", 'b',
-				Block.stoneButton, 'O', Block.obsidian, 'p', Item.enderPearl, 'r', Item.redstone, 'c',
+				Block.blockRegistry.getObject("stoneButton"), 'O', Block.blockRegistry.getObject("obsidian"), 'p',
+				Item.itemRegistry.getObject("enderPearl"), 'r', Item.itemRegistry.getObject("redstone"), 'c',
 				Items.controllerCrystal);
 
 		RegistrationHelper.newRecipe(new ItemStack(Items.coreCrystal, 1), "bbr", "rdb", "brb", 'b', new ItemStack(
-				Item.dyePowder, 1, 4), 'r', Item.redstone, 'd', Item.diamond);
+				(Item) Item.itemRegistry.getObject("dyePowder"), 1, 4), 'r', Item.itemRegistry.getObject("redstone"),
+				'd', Item.itemRegistry.getObject("diamond"));
 		RegistrationHelper.newRecipe(new ItemStack(Items.controllerCrystal, 1), "roo", "odr", "oor", 'o',
-				new ItemStack(Item.dyePowder, 1, 14), 'r', Item.redstone, 'd', Item.diamond);
+				new ItemStack((Item) Item.itemRegistry.getObject("dyePowder"), 1, 14), 'r',
+				Item.itemRegistry.getObject("redstone"), 'd', Item.itemRegistry.getObject("diamond"));
 
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateController.ordinal(),

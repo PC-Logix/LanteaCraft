@@ -30,24 +30,25 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 	@Override
 	public boolean addComponentParts(World world, Random rand, StructureBoundingBox clip) {
 		StructureBoundingBox box = getBoundingBox();
-		int glowstone = Block.glowStone.blockID;
-		int sandstone = Block.sandStone.blockID;
+		Block air = (Block) Block.blockRegistry.getObject("air");
+		Block glowstone = (Block) Block.blockRegistry.getObject("glowStone");
+		Block sandstone = (Block) Block.blockRegistry.getObject("sandStone");
 		int smoothSandstone = 2;
-		int wool = Block.cloth.blockID;
+		Block wool = (Block) Block.blockRegistry.getObject("cloth");
 		int orange = 1;
-		int stairs = Block.stairsSandStone.blockID;
+		Block stairs = (Block) Block.blockRegistry.getObject("stairsSandStone");
 		int stairsWest = 0;
-		int ladder = Block.ladder.blockID;
+		Block ladder = (Block) Block.blockRegistry.getObject("ladder");
 		int ladderSouth = 2;
-		int dhd = Blocks.stargateControllerBlock.blockID;
+		Block dhd = Blocks.stargateControllerBlock;
 		int dhdNorth = 4;
-		int sgBase = Blocks.stargateBaseBlock.blockID;
+		Block sgBase = Blocks.stargateBaseBlock;
 		int sgBaseNorth = 0;
-		int sgRing = Blocks.stargateRingBlock.blockID;
+		Block sgRing = Blocks.stargateRingBlock;
 		// Main chamber
-		fillWithBlocks(world, clip, 0, 0, 0, 10, 7, 10, sandstone, 0, false);
+		fillWithBlocks(world, clip, 0, 0, 0, 10, 7, 10, sandstone, air, false);
 		// Stairwell
-		fillWithBlocks(world, clip, 4, 0, 11, 13, 7, 13, sandstone, 0, false);
+		fillWithBlocks(world, clip, 4, 0, 11, 13, 7, 13, sandstone, air, false);
 		// Stairwell entrance
 		fillWithAir(world, clip, 12, 7, 12, 12, 9, 12);
 		// Stairwell exit
@@ -59,23 +60,24 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 		for (int i = 0; i < 3; i++)
 			placeBlockAtCurrentPosition(world, ladder, ladderSouth, 12, 5 + i, 12, clip);
 		// Wall decorations
-		fillWithMetadataBlocks(world, clip, 0, 3, 0, 10, 3, 10, wool, orange, 0, 0, true);
-		fillWithMetadataBlocks(world, clip, 5, 3, 0, 5, 3, 10, glowstone, 0, 0, 0, true);
-		fillWithMetadataBlocks(world, clip, 3, 4, 10, 7, 4, 10, wool, orange, 0, 0, true);
-		fillWithMetadataBlocks(world, clip, 8, 4, 10, 8, 4, 10, glowstone, 0, 0, 0, true);
-		fillWithMetadataBlocks(world, clip, 2, 4, 10, 2, 4, 10, glowstone, 0, 0, 0, true);
+		fillWithMetadataBlocks(world, clip, 0, 3, 0, 10, 3, 10, wool, orange, air, 0, true);
+		fillWithMetadataBlocks(world, clip, 5, 3, 0, 5, 3, 10, glowstone, 0, air, 0, true);
+		fillWithMetadataBlocks(world, clip, 3, 4, 10, 7, 4, 10, wool, orange, air, 0, true);
+		fillWithMetadataBlocks(world, clip, 8, 4, 10, 8, 4, 10, glowstone, 0, air, 0, true);
+		fillWithMetadataBlocks(world, clip, 2, 4, 10, 2, 4, 10, glowstone, 0, air, 0, true);
 		// Floor decorations
-		fillWithMetadataBlocks(world, clip, 3, 0, 4, 3, 0, 6, wool, orange, 0, 0, true);
-		fillWithMetadataBlocks(world, clip, 7, 0, 4, 7, 0, 6, wool, orange, 0, 0, true);
-		fillWithMetadataBlocks(world, clip, 4, 0, 3, 6, 0, 3, wool, orange, 0, 0, true);
-		fillWithMetadataBlocks(world, clip, 4, 0, 7, 6, 0, 7, wool, orange, 0, 0, true);
+		fillWithMetadataBlocks(world, clip, 3, 0, 4, 3, 0, 6, wool, orange, air, 0, true);
+		fillWithMetadataBlocks(world, clip, 7, 0, 4, 7, 0, 6, wool, orange, air, 0, true);
+		fillWithMetadataBlocks(world, clip, 4, 0, 3, 6, 0, 3, wool, orange, air, 0, true);
+		fillWithMetadataBlocks(world, clip, 4, 0, 7, 6, 0, 7, wool, orange, air, 0, true);
 		placeBlockAtCurrentPosition(world, wool, orange, 5, 0, 5, clip);
 		// Door frame
-		fillWithMetadataBlocks(world, clip, 4, 1, 10, 6, 3, 10, sandstone, smoothSandstone, 0, 0, true);
+		fillWithMetadataBlocks(world, clip, 4, 1, 10, 6, 3, 10, sandstone, smoothSandstone, air, 0, true);
 		// Stargate
 		for (int i = -2; i <= 2; i++)
 			for (int j = 0; j <= 4; j++) {
-				int id, data;
+				Block id;
+				int data;
 				if (i == 0 && j == 0) {
 					id = sgBase;
 					data = sgBaseNorth;
@@ -83,7 +85,7 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 					id = sgRing;
 					data = i + j + 1 & 1;
 				} else {
-					id = 0;
+					id = air;
 					data = 0;
 				}
 				placeBlockAtCurrentPosition(world, id, data, 5 + i, 1 + j, 2, clip);

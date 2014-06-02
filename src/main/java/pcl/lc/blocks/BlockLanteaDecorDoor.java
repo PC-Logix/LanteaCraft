@@ -229,7 +229,7 @@ public class BlockLanteaDecorDoor extends Block {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
+	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5) {
 		int i1 = par1World.getBlockMetadata(par2, par3, par4);
 
 		if ((i1 & 8) == 0) {

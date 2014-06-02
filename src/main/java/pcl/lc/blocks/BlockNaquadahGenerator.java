@@ -119,7 +119,7 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int l) {
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		if (!world.isRemote) {
 			int sig = 0;
 			int a = isBlockProvidingPower(world, x, y + 1, z, 1);

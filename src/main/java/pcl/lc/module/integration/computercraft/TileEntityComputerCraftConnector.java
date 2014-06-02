@@ -4,7 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.util.Vector3;
 import pcl.lc.module.integration.computercraft.ComputerCraftWrapperPool.ComputerCraftVirtualPeripheral;
 import dan200.computercraft.api.lua.ILuaContext;
