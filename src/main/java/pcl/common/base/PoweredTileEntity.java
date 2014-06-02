@@ -2,6 +2,7 @@ package pcl.common.base;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.asm.RuntimeAnnotation.RuntimeInterface;
 import pcl.lc.api.EnumUnits;
 import buildcraft.api.power.IPowerReceptor;
@@ -198,7 +199,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 	 */
 	@RuntimeInterface(modid = "BuildCraft|Core", clazz = "buildcraft.api.power.IPowerReceptor")
 	public void doWork(PowerHandler workProvider) {
-		float quantity = workProvider.useEnergy(0, 100.0f, true);
+		float quantity = (float) workProvider.useEnergy(0, 100.0f, true);
 		double naqQuantity = EnumUnits.convertToNaquadahUnit(EnumUnits.MinecraftJoules, quantity);
 		receiveEnergy(naqQuantity);
 	}
@@ -289,54 +290,20 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 		int x = direction.offsetX + xCoord;
 		int y = direction.offsetY + yCoord;
 		int z = direction.offsetZ + zCoord;
-		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
+		TileEntity tile = worldObj.getTileEntity(x, y, z);
 		if (tile != null && tile instanceof IPowerReceptor
 				&& ((IPowerReceptor) tile).getPowerReceiver(direction.getOpposite()) != null) {
 			PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(direction.getOpposite());
 
-			float maxQuantity = receptor.getMaxEnergyReceived();
+			float maxQuantity = (float) receptor.getMaxEnergyReceived();
 			float maxAvailQuantity = (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.MinecraftJoules,
 					getAvailableExportEnergy());
 
 			float send = Math.min(maxQuantity, maxAvailQuantity);
-			float quantityUsed = receptor.receiveEnergy(PowerHandler.Type.MACHINE, send, direction.getOpposite());
+			float quantityUsed = (float) receptor.receiveEnergy(PowerHandler.Type.MACHINE, send,
+					direction.getOpposite());
 			exportEnergy(EnumUnits.convertToNaquadahUnit(EnumUnits.MinecraftJoules, quantityUsed));
 		}
-	}
-
-	/**
-	 * UE method to figure out if a side can be connected to.
-	 */
-	@RuntimeInterface(modid = "UniversalElectricity", clazz = "universalelectricity.core.block.IConnector")
-	public boolean canConnect(ForgeDirection direction) {
-		return canEnergyFormatConnectToSide(EnumUnits.UniversalAmperes, direction);
-	}
-
-	@RuntimeInterface(modid = "UniversalElectricity", clazz = "universalelectricity.core.block.IElectrical")
-	public float receiveElectricity(ForgeDirection from, ElectricityPack receive, boolean doReceive) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@RuntimeInterface(modid = "UniversalElectricity", clazz = "universalelectricity.core.block.IElectrical")
-	public ElectricityPack provideElectricity(ForgeDirection from, ElectricityPack request, boolean doProvide) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@RuntimeInterface(modid = "UniversalElectricity", clazz = "universalelectricity.core.block.IElectrical")
-	public float getRequest(ForgeDirection direction) {
-		return (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.UniversalAmperes, getMaximumReceiveEnergy());
-	}
-
-	@RuntimeInterface(modid = "UniversalElectricity", clazz = "universalelectricity.core.block.IElectrical")
-	public float getProvide(ForgeDirection direction) {
-		return (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.UniversalAmperes, getMaximumExportEnergy());
-	}
-
-	@RuntimeInterface(modid = "UniversalElectricity", clazz = "universalelectricity.core.block.IElectrical")
-	public float getVoltage() {
-		return 240.0f;
 	}
 
 	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
