@@ -26,15 +26,12 @@ public class BlockOfLanteaOre extends BlockOre {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
-		OreTypes.NAQUADAH.setItemAsBlockTexture(register
-				.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_block_"
-						+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.NAQUADRIAH.setItemAsBlockTexture(register
-				.registerIcon(LanteaCraft.getAssetKey() + ":naquadriah_block_"
-						+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.TRINIUM.setItemAsBlockTexture(register
-				.registerIcon(LanteaCraft.getAssetKey() + ":trinium_block_"
-						+ LanteaCraft.getProxy().getRenderMode()));
+		OreTypes.NAQUADAH.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_block_"
+				+ LanteaCraft.getProxy().getRenderMode()));
+		OreTypes.NAQUADRIAH.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey()
+				+ ":naquadriah_block_" + LanteaCraft.getProxy().getRenderMode()));
+		OreTypes.TRINIUM.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":trinium_block_"
+				+ LanteaCraft.getProxy().getRenderMode()));
 	}
 
 	@Override

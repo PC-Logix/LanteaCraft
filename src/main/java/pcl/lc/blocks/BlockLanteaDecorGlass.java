@@ -48,8 +48,8 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		lanteaGlassDefault = register.registerIcon(LanteaCraft.getAssetKey()
-				+ ":lantean_glass_" + LanteaCraft.getProxy().getRenderMode());
+		lanteaGlassDefault = register.registerIcon(LanteaCraft.getAssetKey() + ":lantean_glass_"
+				+ LanteaCraft.getProxy().getRenderMode());
 
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 	}
@@ -81,8 +81,7 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z,
-			int neighbourId) {
+	public void onNeighborBlockChange(World world, int x, int y, int z, int neighbourId) {
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile instanceof TileEntityLanteaDecorGlass)
 			((TileEntityLanteaDecorGlass) tile).neighbourChanged();

@@ -13,8 +13,8 @@ import pcl.lc.module.ModuleDecor.EnumDecorMaterials;
 public class ItemLanteaDecorDoor extends Item {
 	private EnumDecorMaterials doorMaterial;
 
-	public ItemLanteaDecorDoor(int id, EnumDecorMaterials material) {
-		super(id);
+	public ItemLanteaDecorDoor(EnumDecorMaterials material) {
+		super();
 		doorMaterial = material;
 		maxStackSize = 1;
 	}

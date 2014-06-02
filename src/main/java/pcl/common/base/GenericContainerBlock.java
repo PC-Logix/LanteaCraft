@@ -36,14 +36,12 @@ public abstract class GenericContainerBlock extends BlockContainer {
 	@Override
 	public abstract TileEntity createNewTileEntity(World world, int metadata);
 
-	public TileEntity getTileEntity(IBlockAccess blockaccess, int x, int y,
-			int z) {
+	public TileEntity getTileEntity(IBlockAccess blockaccess, int x, int y, int z) {
 		return blockaccess.getTileEntity(x, y, z);
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block,
-			int blockMeta) {
+	public void breakBlock(World world, int x, int y, int z, Block block, int blockMeta) {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof IInventory) {
 			IInventory inventory = (IInventory) te;
@@ -60,21 +58,15 @@ public abstract class GenericContainerBlock extends BlockContainer {
 							if (stackSize > stack.stackSize)
 								stackSize = stack.stackSize;
 							stack.stackSize -= stackSize;
-							itemEntity = new EntityItem(world, x + objectDropX,
-									y + objectDropY, z + objectDropHeight,
-									new ItemStack(stack.itemID, stackSize,
-											stack.getItemDamage()));
+							itemEntity = new EntityItem(world, x + objectDropX, y + objectDropY, z + objectDropHeight,
+									new ItemStack(stack.itemID, stackSize, stack.getItemDamage()));
 							float motionMul = 0.05F;
-							itemEntity.motionX = (float) random.nextGaussian()
-									* motionMul;
-							itemEntity.motionY = (float) random.nextGaussian()
-									* motionMul + 0.2F;
-							itemEntity.motionZ = (float) random.nextGaussian()
-									* motionMul;
+							itemEntity.motionX = (float) random.nextGaussian() * motionMul;
+							itemEntity.motionY = (float) random.nextGaussian() * motionMul + 0.2F;
+							itemEntity.motionZ = (float) random.nextGaussian() * motionMul;
 							if (stack.hasTagCompound())
 								itemEntity.getEntityItem().setTagCompound(
-										(NBTTagCompound) stack.getTagCompound()
-												.copy());
+										(NBTTagCompound) stack.getTagCompound().copy());
 						}
 					}
 				}

@@ -16,8 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import pcl.lc.LanteaCraft;
 
-public class GenericTileEntity extends TileEntity implements IInventory,
-		ISidedInventory {
+public class GenericTileEntity extends TileEntity implements IInventory, ISidedInventory {
 
 	@Override
 	public Packet getDescriptionPacket() {
@@ -46,24 +45,16 @@ public class GenericTileEntity extends TileEntity implements IInventory,
 
 	public void playSoundEffect(String name, float volume, float pitch) {
 		if (name.contains(":"))
-			LanteaCraft.getLogger()
-					.log(Level.WARNING,
-							"Old SoundSystem label detected, can't play label: "
-									+ name);
+			LanteaCraft.getLogger().log(Level.WARNING, "Old SoundSystem label detected, can't play label: " + name);
 		else {
-			String label = new StringBuilder()
-					.append(LanteaCraft.getAssetKey()).append(":").append(name)
-					.toString();
+			String label = new StringBuilder().append(LanteaCraft.getAssetKey()).append(":").append(name).toString();
 			try {
 				ResourceLocation location = new ResourceLocation(label);
-				if (Minecraft.getMinecraft().getResourceManager()
-						.getResource(location).getInputStream() == null)
+				if (Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream() == null)
 					return;
-				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5,
-						zCoord + 0.5, label, volume, pitch);
+				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, label, volume, pitch);
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.FINE,
-						"Couldn't play sound, doesn't exist: " + label, t);
+				LanteaCraft.getLogger().log(Level.FINE, "Couldn't play sound, doesn't exist: " + label, t);
 			}
 		}
 	}
@@ -239,8 +230,7 @@ public class GenericTileEntity extends TileEntity implements IInventory,
 	public int[] getAccessibleSlotsFromSide(int side) {
 		IInventory inventory = getInventory();
 		if (inventory instanceof ISidedInventory)
-			return ((ISidedInventory) inventory)
-					.getAccessibleSlotsFromSide(side);
+			return ((ISidedInventory) inventory).getAccessibleSlotsFromSide(side);
 		else
 			return new int[0];
 	}
@@ -253,8 +243,7 @@ public class GenericTileEntity extends TileEntity implements IInventory,
 	public boolean canInsertItem(int slot, ItemStack stack, int side) {
 		IInventory inventory = getInventory();
 		if (inventory instanceof ISidedInventory)
-			return ((ISidedInventory) inventory).canInsertItem(slot, stack,
-					side);
+			return ((ISidedInventory) inventory).canInsertItem(slot, stack, side);
 		else
 			return true;
 	}
@@ -267,8 +256,7 @@ public class GenericTileEntity extends TileEntity implements IInventory,
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
 		IInventory inventory = getInventory();
 		if (inventory instanceof ISidedInventory)
-			return ((ISidedInventory) inventory).canExtractItem(slot, stack,
-					side);
+			return ((ISidedInventory) inventory).canExtractItem(slot, stack, side);
 		else
 			return true;
 	}

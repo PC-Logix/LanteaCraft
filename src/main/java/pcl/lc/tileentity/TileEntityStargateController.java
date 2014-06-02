@@ -20,8 +20,7 @@ import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.blocks.BlockStargateController;
 
-public class TileEntityStargateController extends GenericTileEntity implements
-		IPacketHandler, IEnergyStore {
+public class TileEntityStargateController extends GenericTileEntity implements IPacketHandler, IEnergyStore {
 
 	public static int linkRangeX = 10;
 	public static int linkRangeY = 10;
@@ -57,8 +56,7 @@ public class TileEntityStargateController extends GenericTileEntity implements
 		public boolean canInsertItem(int i, ItemStack itemstack, int j) {
 			if (0 > i || i > items.length)
 				return false;
-			return items[i] == null
-					|| ItemStack.areItemStacksEqual(items[i], itemstack);
+			return items[i] == null || ItemStack.areItemStacksEqual(items[i], itemstack);
 		}
 
 		@Override
@@ -76,8 +74,7 @@ public class TileEntityStargateController extends GenericTileEntity implements
 	}
 
 	public TileEntityStargateController() {
-		inventory.setFilterRule(0, new FilterRule(new ItemStack[] {
-				new ItemStack(LanteaCraft.Items.energyCrystal, 1),
+		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.energyCrystal, 1),
 				new ItemStack(LanteaCraft.Items.zpm, 1) }, null, true, false));
 	}
 
@@ -96,8 +93,7 @@ public class TileEntityStargateController extends GenericTileEntity implements
 	}
 
 	public Trans3 localToGlobalTransformation() {
-		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord,
-				getBlockMetadata(), this);
+		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord, getBlockMetadata(), this);
 	}
 
 	@Override
@@ -107,8 +103,7 @@ public class TileEntityStargateController extends GenericTileEntity implements
 		linkedX = nbt.getInteger("linkedX");
 		linkedY = nbt.getInteger("linkedY");
 		linkedZ = nbt.getInteger("linkedZ");
-		NBTTagCompound energyCompound = nbt.hasKey("energyStore") ? nbt
-				.getCompoundTag("energyStore") : null;
+		NBTTagCompound energyCompound = nbt.hasKey("energyStore") ? nbt.getCompoundTag("energyStore") : null;
 		if (energyCompound != null)
 			loadEnergyStore(energyCompound);
 	}
@@ -141,8 +136,7 @@ public class TileEntityStargateController extends GenericTileEntity implements
 				for (int j = -linkRangeY; j <= linkRangeY; j++)
 					for (int k = 1; k <= linkRangeZ; k++) {
 						Vector3 p = t.p(i, j, -k);
-						TileEntity te = worldObj.getTileEntity(p.floorX(),
-								p.floorY(), p.floorZ());
+						TileEntity te = worldObj.getTileEntity(p.floorX(), p.floorY(), p.floorZ());
 						if (te instanceof TileEntityStargateBase)
 							if (linkToStargate((TileEntityStargateBase) te))
 								return;
@@ -173,13 +167,10 @@ public class TileEntityStargateController extends GenericTileEntity implements
 		if (!worldObj.isRemote)
 			if (getEnergyStored() < getMaxEnergyStored()) {
 				ItemStack stackOf = inventory.getStackInSlot(0);
-				if (stackOf != null
-						&& (stackOf.getItem() instanceof IItemEnergyStore)) {
-					IItemEnergyStore store = (IItemEnergyStore) stackOf
-							.getItem();
-					double receive = store.extractEnergy(stackOf, Math.min(
-							store.getMaximumIOPayload(), getMaxEnergyStored()
-									- getEnergyStored()), false);
+				if (stackOf != null && (stackOf.getItem() instanceof IItemEnergyStore)) {
+					IItemEnergyStore store = (IItemEnergyStore) stackOf.getItem();
+					double receive = store.extractEnergy(stackOf,
+							Math.min(store.getMaximumIOPayload(), getMaxEnergyStored() - getEnergyStored()), false);
 					energy += receive;
 				}
 			}
@@ -195,8 +186,7 @@ public class TileEntityStargateController extends GenericTileEntity implements
 	}
 
 	public ModPacket getPacketFromState() {
-		StandardModPacket packet = new StandardModPacket(
-				new WorldLocation(this));
+		StandardModPacket packet = new StandardModPacket(new WorldLocation(this));
 		packet.setIsForServer(false);
 		packet.setType("LanteaPacket.TileUpdate");
 		packet.setValue("energy", energy);
@@ -215,8 +205,7 @@ public class TileEntityStargateController extends GenericTileEntity implements
 
 	@Override
 	public double receiveEnergy(double quantity, boolean isSimulated) {
-		double actualPayload = Math.min(getMaxEnergyStored()
-				- getEnergyStored(), quantity);
+		double actualPayload = Math.min(getMaxEnergyStored() - getEnergyStored(), quantity);
 		if (!isSimulated) {
 			energy += actualPayload;
 			onInventoryChanged();

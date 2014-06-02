@@ -27,17 +27,15 @@ public class BlockLanteaDecor extends Block {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		lanteaDecor = register.registerIcon(LanteaCraft.getAssetKey()
-				+ ":lantean_decor_" + LanteaCraft.getProxy().getRenderMode());
-		lanteaMetal = register.registerIcon(LanteaCraft.getAssetKey()
-				+ ":lantean_metal_" + LanteaCraft.getProxy().getRenderMode());
+		lanteaDecor = register.registerIcon(LanteaCraft.getAssetKey() + ":lantean_decor_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		lanteaMetal = register.registerIcon(LanteaCraft.getAssetKey() + ":lantean_metal_"
+				+ LanteaCraft.getProxy().getRenderMode());
 
-		goauldDecor = register
-				.registerIcon(LanteaCraft.getAssetKey() + ":goauld_golddecor_"
-						+ LanteaCraft.getProxy().getRenderMode());
-		goauldMetal = register
-				.registerIcon(LanteaCraft.getAssetKey() + ":goauld_goldplain_"
-						+ LanteaCraft.getProxy().getRenderMode());
+		goauldDecor = register.registerIcon(LanteaCraft.getAssetKey() + ":goauld_golddecor_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		goauldMetal = register.registerIcon(LanteaCraft.getAssetKey() + ":goauld_goldplain_"
+				+ LanteaCraft.getProxy().getRenderMode());
 
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 	}

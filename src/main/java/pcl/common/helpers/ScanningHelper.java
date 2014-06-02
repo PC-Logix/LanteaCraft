@@ -29,9 +29,8 @@ public class ScanningHelper {
 	 * @return All matching TileEntity to the origin, or an empty ArrayList if
 	 *         no such tile entities are found in the bounds area
 	 */
-	public static ArrayList<Vector3> findAllTileEntitesOf(World world,
-			Class<? extends TileEntity> clazz, int x, int y, int z,
-			AxisAlignedBB bounds) {
+	public static ArrayList<Vector3> findAllTileEntitesOf(World world, Class<? extends TileEntity> clazz, int x, int y,
+			int z, AxisAlignedBB bounds) {
 		ArrayList<Vector3> poolMatching = new ArrayList<Vector3>();
 		for (int ix = (x + (int) Math.floor(bounds.minX)); ix < (x + bounds.maxX); ix++)
 			for (int iy = (y + (int) Math.floor(bounds.minY)); iy < (y + bounds.maxY); iy++)
@@ -63,17 +62,15 @@ public class ScanningHelper {
 	 * @return The best matching TileEntity to the origin, or null if no such
 	 *         tile entity is found in the bounds area
 	 */
-	public static TileEntity findNearestTileEntityOf(World world,
-			Class<? extends TileEntity> clazz, int x, int y, int z,
-			AxisAlignedBB bounds) {
-		ArrayList<Vector3> poolMatching = findAllTileEntitesOf(world, clazz, x,
-				y, z, bounds);
+	public static TileEntity findNearestTileEntityOf(World world, Class<? extends TileEntity> clazz, int x, int y,
+			int z, AxisAlignedBB bounds) {
+		ArrayList<Vector3> poolMatching = findAllTileEntitesOf(world, clazz, x, y, z, bounds);
 		Vector3 best = new Vector3(9999D, 9999D, 9999D);
 		for (Vector3 item : poolMatching)
 			if (best.mag() > item.mag())
 				best = item;
-		return world.getTileEntity((int) Math.floor(x + best.x),
-				(int) Math.floor(y + best.y), (int) Math.floor(z + best.z));
+		return world.getTileEntity((int) Math.floor(x + best.x), (int) Math.floor(y + best.y),
+				(int) Math.floor(z + best.z));
 	}
 
 }

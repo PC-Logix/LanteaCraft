@@ -69,35 +69,32 @@ public class ContainerStargateController extends GenericContainer {
 		@Override
 		public void markDirty() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void openInventory() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void closeInventory() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	};
 
 	public TileEntityStargateController te;
 
-	public static ContainerStargateController create(EntityPlayer player,
-			World world, int x, int y, int z) {
-		TileEntityStargateController te = (TileEntityStargateController) world
-				.getTileEntity(x, y, z);
+	public static ContainerStargateController create(EntityPlayer player, World world, int x, int y, int z) {
+		TileEntityStargateController te = (TileEntityStargateController) world.getTileEntity(x, y, z);
 		if (te != null)
 			return new ContainerStargateController(te, player);
 		return null;
 	}
 
-	public ContainerStargateController(TileEntityStargateController te,
-			EntityPlayer player) {
+	public ContainerStargateController(TileEntityStargateController te, EntityPlayer player) {
 		super(256, 208);
 		this.te = te;
 		for (int i = 0; i < 9; i++)

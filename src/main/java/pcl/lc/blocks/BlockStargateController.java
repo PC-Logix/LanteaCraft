@@ -33,20 +33,17 @@ public class BlockStargateController extends RotationOrientedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":"
-				+ "controller_top_" + LanteaCraft.getProxy().getRenderMode());
-		bottomTexture = register
-				.registerIcon(LanteaCraft.getAssetKey() + ":"
-						+ "controller_bottom_"
-						+ LanteaCraft.getProxy().getRenderMode());
-		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":"
-				+ "controller_side_" + LanteaCraft.getProxy().getRenderMode());
+		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_top_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		bottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_bottom_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_side_"
+				+ LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
@@ -79,12 +76,10 @@ public class BlockStargateController extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z,
-			EntityLivingBase player, ItemStack stack) {
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, player, stack);
 		checkForLink(world, x, y, z);
-		int dir = MathHelper
-				.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
+		int dir = MathHelper.floor_double(player.rotationYaw * 4F / 360F + 0.5D) & 3;
 		world.setBlockMetadataWithNotify(x, y, z, dir, 0);
 	}
 
@@ -99,29 +94,23 @@ public class BlockStargateController extends RotationOrientedBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer player, int side, float cx, float cy, float cz) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
+			float cy, float cz) {
 		if (player.isSneaking() || side != ForgeDirection.UP.ordinal()) {
 			if (BuildInfo.DEBUG)
-				LanteaCraft.getLogger().log(Level.INFO,
-						"Opening StargateControllerEnergy.");
-			player.openGui(LanteaCraft.getInstance(),
-					LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(),
-					world, x, y, z);
+				LanteaCraft.getLogger().log(Level.INFO, "Opening StargateControllerEnergy.");
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), world,
+					x, y, z);
 		} else {
 			if (BuildInfo.DEBUG)
-				LanteaCraft.getLogger().log(Level.INFO,
-						"Opening StargateController.");
-			player.openGui(LanteaCraft.getInstance(),
-					LanteaCraft.EnumGUIs.StargateController.ordinal(), world,
-					x, y, z);
+				LanteaCraft.getLogger().log(Level.INFO, "Opening StargateController.");
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateController.ordinal(), world, x, y, z);
 		}
 		return true;
 	}
 
 	public void checkForLink(World world, int x, int y, int z) {
-		((TileEntityStargateController) getTileEntity(world, x, y, z))
-				.checkForLink();
+		((TileEntityStargateController) getTileEntity(world, x, y, z)).checkForLink();
 	}
 
 	@Override

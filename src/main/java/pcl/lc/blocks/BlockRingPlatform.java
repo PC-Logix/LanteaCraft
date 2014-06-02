@@ -25,8 +25,7 @@ public class BlockRingPlatform extends GenericContainerBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
@@ -52,8 +51,7 @@ public class BlockRingPlatform extends GenericContainerBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z,
-			ForgeDirection side) {
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
@@ -64,8 +62,8 @@ public class BlockRingPlatform extends GenericContainerBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister reg) {
-		defaultIcon = reg.registerIcon(LanteaCraft.getAssetKey() + ":"
-				+ "ring_transporter_" + LanteaCraft.getProxy().getRenderMode());
+		defaultIcon = reg.registerIcon(LanteaCraft.getAssetKey() + ":" + "ring_transporter_"
+				+ LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override

@@ -28,15 +28,12 @@ public class GuiStatCollection extends GuiScreen {
 		buttonList.clear();
 		int dx = width / 2, dy = height / 4 + 120 + 24;
 
-		buttonList.add(new GuiButton(0, dx - 180 - 5, dy, 180, 20,
-				"Allow anonymous stats"));
-		buttonList.add(new GuiButton(1, dx + 5, dy, 180, 20,
-				"Don't allow anonymous stats"));
+		buttonList.add(new GuiButton(0, dx - 180 - 5, dy, 180, 20, "Allow anonymous stats"));
+		buttonList.add(new GuiButton(1, dx + 5, dy, 180, 20, "Don't allow anonymous stats"));
 		try {
 			label = URLDecoder.decode(analytics.getReportData(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			LanteaCraft.getLogger().log(Level.WARNING,
-					"Client doesn't support UTF-8?", e);
+			LanteaCraft.getLogger().log(Level.WARNING, "Client doesn't support UTF-8?", e);
 		}
 	}
 
@@ -68,8 +65,7 @@ public class GuiStatCollection extends GuiScreen {
 	@Override
 	public void drawScreen(int par1, int par2, float par3) {
 		drawDefaultBackground();
-		drawCenteredString(fontRendererObj, "LanteaCraft Statistics",
-				width / 2, 10, 0xF4CA16);
+		drawCenteredString(fontRendererObj, "LanteaCraft Statistics", width / 2, 10, 0xF4CA16);
 		fontRendererObj
 				.drawSplitString(
 						"LanteaCraft would like permission to send the following anonymous statistics to our Metrics server - this information allows us to "
@@ -85,8 +81,7 @@ public class GuiStatCollection extends GuiScreen {
 				drawString(fontRendererObj, value, 120, 65 + (i * 15), 0xCDFFFF);
 			}
 		}
-		drawCenteredString(fontRendererObj,
-				"More information at http://lanteacraft.com/stats", width / 2,
+		drawCenteredString(fontRendererObj, "More information at http://lanteacraft.com/stats", width / 2,
 				height / 4 + 132, 0xA0A0A0);
 
 		super.drawScreen(par1, par2, par3);

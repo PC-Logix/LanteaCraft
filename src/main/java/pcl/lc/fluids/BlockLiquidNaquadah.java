@@ -37,8 +37,7 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
-			Entity entity) {
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
 		if (!world.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer thePlayer = (EntityPlayer) entity;
 			thePlayer.addPotionEffect(new PotionEffect(9, 20 * 300));
@@ -48,24 +47,19 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 	}
 
 	@Override
-	public void randomDisplayTick(World par1World, int x, int y, int z,
-			Random par5Random) {
+	public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random) {
 		if (par1World.isRemote)
-			par1World.spawnParticle("smoke", x + par5Random.nextFloat(), y + 1,
-					z + par5Random.nextFloat(),
-					0.02 * par5Random.nextFloat() - 0.01,
-					0.01 + 0.02 * par5Random.nextFloat(),
+			par1World.spawnParticle("smoke", x + par5Random.nextFloat(), y + 1, z + par5Random.nextFloat(),
+					0.02 * par5Random.nextFloat() - 0.01, 0.01 + 0.02 * par5Random.nextFloat(),
 					0.02 * par5Random.nextFloat() - 0.01);
 	}
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		fluidIcon = new IIcon[] {
-				register.registerIcon(LanteaCraft.getAssetKey()
-						+ ":naquada_still_"
+				register.registerIcon(LanteaCraft.getAssetKey() + ":naquada_still_"
 						+ LanteaCraft.getProxy().getRenderMode()),
-				register.registerIcon(LanteaCraft.getAssetKey()
-						+ ":naquada_flow_"
+				register.registerIcon(LanteaCraft.getAssetKey() + ":naquada_flow_"
 						+ LanteaCraft.getProxy().getRenderMode()) };
 	}
 }

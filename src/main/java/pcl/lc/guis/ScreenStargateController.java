@@ -44,19 +44,14 @@ public class ScreenStargateController extends GenericContainerGUI {
 	private SoundHost soundHost;
 	private AudioPosition soundHostPosition;
 
-	public ScreenStargateController(TileEntityStargateController controller,
-			EntityPlayer actor) {
-		super(new ContainerStargateController(controller, actor), dhdWidth,
-				dhdHeight);
+	public ScreenStargateController(TileEntityStargateController controller, EntityPlayer actor) {
+		super(new ContainerStargateController(controller, actor), dhdWidth, dhdHeight);
 		this.controller = controller;
 		dhdLayer = LanteaCraft.getResource("textures/gui/dhd_gui.png");
 		dhdButtonLayer = LanteaCraft.getResource("textures/gui/dhd_centre.png");
 		soundHost = new SoundHost(controller);
-		soundHostPosition = new AudioPosition(controller.getWorldObj(),
-				new Vector3(controller));
-		soundHost.addChannel("click",
-				"stargate/milkyway/milkyway_dhd_button.ogg", soundHostPosition,
-				1.0f, 0);
+		soundHostPosition = new AudioPosition(controller.getWorldObj(), new Vector3(controller));
+		soundHost.addChannel("click", "stargate/milkyway/milkyway_dhd_button.ogg", soundHostPosition, 1.0f, 0);
 	}
 
 	TileEntityStargateBase getStargateTE() {
@@ -139,15 +134,13 @@ public class ScreenStargateController extends GenericContainerGUI {
 		if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))
 			if (key == Keyboard.KEY_V)
 				try {
-					String data = (String) Toolkit.getDefaultToolkit()
-							.getSystemClipboard()
+					String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard()
 							.getData(DataFlavor.stringFlavor);
 					for (char c1 : data.toCharArray())
 						if (GateAddressHelper.singleton().isLegal(c1))
 							enterCharacter(c1);
 				} catch (Throwable t) {
-					LanteaCraft.getLogger().log(Level.WARNING,
-							"Clipboard pull failed!", t);
+					LanteaCraft.getLogger().log(Level.WARNING, "Clipboard pull failed!", t);
 					warningMessage = "Couldn't read the clipboard!";
 					ticksWarning = 20 * 10;
 				}
@@ -157,8 +150,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 		TileEntityStargateBase te = getStargateTE();
 		if (te != null)
 			if (!connectOnly || !te.isConnected()) {
-				StandardModPacket packet = new StandardModPacket(
-						new WorldLocation(te));
+				StandardModPacket packet = new StandardModPacket(new WorldLocation(te));
 				packet.setIsForServer(true);
 				packet.setType("LanteaPacket.DialRequest");
 				packet.setValue("Address", enteredAddress);
@@ -183,16 +175,13 @@ public class ScreenStargateController extends GenericContainerGUI {
 	}
 
 	void drawEnteredString() {
-		drawAddressString(width / 2, dhdTop - 12, enteredAddress, 9, " ",
-				(ticks > 10) ? "_" : " ");
+		drawAddressString(width / 2, dhdTop - 12, enteredAddress, 9, " ", (ticks > 10) ? "_" : " ");
 	}
 
 	@Override
-	protected void drawBackgroundLayer(float partialTickCount, int mouseX,
-			int mouseY) {
+	protected void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
 		bindTexture(dhdLayer);
-		drawTexturedRect((width - dhdWidth) / 2, height - dhdHeight, dhdWidth,
-				dhdHeight);
+		drawTexturedRect((width - dhdWidth) / 2, height - dhdHeight, dhdWidth, dhdHeight);
 
 		bindTexture(dhdButtonLayer, 128, 64);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -207,16 +196,13 @@ public class ScreenStargateController extends GenericContainerGUI {
 		double rx = dhdWidth * 48 / 512.0;
 		double ry = dhdHeight * 48 / (32.0 + 256.0);
 		Tessellator.instance.disableColor();
-		drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry, 2 * rx, 1.5 * ry,
-				64, 0, 64, 48);
+		drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry, 2 * rx, 1.5 * ry, 64, 0, 64, 48);
 		resetColor();
 		if (connected) {
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 			double d = 5;
-			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY - ry - d,
-					2 * (rx + d), ry + d, 0, 0, 64, 32);
-			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY, 2 * (rx + d), 0.5
-					* ry + d, 0, 32, 64, 32);
+			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY - ry - d, 2 * (rx + d), ry + d, 0, 0, 64, 32);
+			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY, 2 * (rx + d), 0.5 * ry + d, 0, 32, 64, 32);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		}
 
@@ -231,8 +217,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 				drawEnteredString();
 			}
 		if (ticksWarning > 0 && warningMessage != null)
-			drawCenteredString(fontRendererObj, warningMessage, width / 2,
-					dhdTop - 3, 0xffaaaa);
+			drawCenteredString(fontRendererObj, warningMessage, width / 2, dhdTop - 3, 0xffaaaa);
 	}
 
 }

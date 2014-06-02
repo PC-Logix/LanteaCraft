@@ -31,17 +31,11 @@ public class BlockLanteaOre extends BlockOre {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
-		OreTypes.NAQUADAH.setOreTexture(register.registerIcon(LanteaCraft
-				.getAssetKey()
-				+ ":naquadah_ore_"
+		OreTypes.NAQUADAH.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_ore_"
 				+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.NAQUADRIAH.setOreTexture(register.registerIcon(LanteaCraft
-				.getAssetKey()
-				+ ":naquadriah_ore_"
+		OreTypes.NAQUADRIAH.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadriah_ore_"
 				+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.TRINIUM.setOreTexture(register.registerIcon(LanteaCraft
-				.getAssetKey()
-				+ ":trinium_ore_"
+		OreTypes.TRINIUM.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":trinium_ore_"
 				+ LanteaCraft.getProxy().getRenderMode()));
 	}
 
@@ -53,8 +47,7 @@ public class BlockLanteaOre extends BlockOre {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y,
-			int z, int metadata, int fortune) {
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> result = new ArrayList<ItemStack>();
 		result.add(new ItemStack(Items.lanteaOreItem, 2, metadata));
 		return result;

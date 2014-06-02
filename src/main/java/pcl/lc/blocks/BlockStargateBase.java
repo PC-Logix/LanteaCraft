@@ -37,13 +37,11 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
-	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z,
-			int blockID) {
+	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int blockID) {
 		TileEntity host = world.getTileEntity(x, y, z);
 		if (host instanceof TileEntityStargateBase) {
 			TileEntityStargateBase base = (TileEntityStargateBase) host;
@@ -53,8 +51,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	}
 
 	@Override
-	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z,
-			int blockID) {
+	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int blockID) {
 		TileEntity host = world.getTileEntity(x, y, z);
 		if (host instanceof TileEntityStargateBase) {
 			TileEntityStargateBase base = (TileEntityStargateBase) host;
@@ -77,14 +74,12 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topAndBottomTexture = register.registerIcon(LanteaCraft.getAssetKey()
-				+ ":" + "stargateBlock_"
+		topAndBottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBlock_"
 				+ LanteaCraft.getProxy().getRenderMode());
-		frontTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":"
-				+ "stargateBase_front_"
+		frontTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBase_front_"
 				+ LanteaCraft.getProxy().getRenderMode());
-		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":"
-				+ "stargateRing_" + LanteaCraft.getProxy().getRenderMode());
+		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateRing_"
+				+ LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
@@ -93,8 +88,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z,
-			ForgeDirection side) {
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
@@ -104,23 +98,19 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z,
-			EntityLivingBase player, ItemStack stack) {
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		int data = Math.round((180 - player.rotationYaw) / 90) & 3;
 		world.setBlockMetadataWithNotify(x, y, z, data, 0x3);
-		TileEntityStargateBase te = (TileEntityStargateBase) getTileEntity(
-				world, x, y, z);
+		TileEntityStargateBase te = (TileEntityStargateBase) getTileEntity(world, x, y, z);
 		te.hostBlockPlaced();
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer player, int side, float cx, float cy, float cz) {
-		TileEntityStargateBase te = (TileEntityStargateBase) world
-				.getTileEntity(x, y, z);
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
+			float cy, float cz) {
+		TileEntityStargateBase te = (TileEntityStargateBase) world.getTileEntity(x, y, z);
 		if (te != null && te.getAsStructure().isValid()) {
-			player.openGui(LanteaCraft.getInstance(),
-					LanteaCraft.EnumGUIs.StargateBase.ordinal(), world, x, y, z);
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateBase.ordinal(), world, x, y, z);
 			return true;
 		}
 		return false;
@@ -137,8 +127,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block,
-			int data) {
+	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
 		TileEntity te = getTileEntity(world, x, y, z);
 		if (te != null && te instanceof TileEntityStargateBase)
 			((TileEntityStargateBase) te).hostBlockDestroyed();
@@ -149,8 +138,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 		if (true == true)
 			return;
 
-		TileEntity te = getTileEntity(world, (int) Math.floor(x),
-				(int) Math.floor(y), (int) Math.floor(z));
+		TileEntity te = getTileEntity(world, (int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
 		if (te != null && (te instanceof TileEntityStargateBase)) {
 			TileEntityStargateBase gate = (TileEntityStargateBase) te;
 			if (gate.getAsStructure() != null) {
@@ -158,8 +146,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 				for (MultiblockPart part : struct.getAllParts())
 					if (part instanceof StargatePart) {
 						Vector3 location = part.getVectorLoc();
-						world.setBlockToAir((int) Math.floor(location.x),
-								(int) Math.floor(location.y),
+						world.setBlockToAir((int) Math.floor(location.x), (int) Math.floor(location.y),
 								(int) Math.floor(location.z));
 					}
 			}
@@ -187,14 +174,12 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y,
-			int z) {
+	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
 		TileEntity tileof = block.getTileEntity(x, y, z);
 		if (tileof instanceof TileEntityStargateBase) {
 			TileEntityStargateBase ring = (TileEntityStargateBase) tileof;
 			if (ring.getAsStructure().getOrientation() != null) {
-				EnumOrientations orientation = ring.getAsStructure()
-						.getOrientation();
+				EnumOrientations orientation = ring.getAsStructure().getOrientation();
 				switch (orientation) {
 				case NORTH:
 				case SOUTH:

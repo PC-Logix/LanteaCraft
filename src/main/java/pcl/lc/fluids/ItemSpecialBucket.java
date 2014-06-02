@@ -33,8 +33,7 @@ public class ItemSpecialBucket extends ItemBucket {
 	 */
 	public ItemSpecialBucket(Block hostBlock) {
 		super(hostBlock);
-		LanteaCraft.getSpecialBucketHandler().registerBucketMapping(hostBlock,
-				this);
+		LanteaCraft.getSpecialBucketHandler().registerBucketMapping(hostBlock, this);
 		setCreativeTab(LanteaCraft.getCreativeTab());
 		setContainerItem(Item.bucketEmpty);
 	}
@@ -48,8 +47,7 @@ public class ItemSpecialBucket extends ItemBucket {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
-		itemIcon = par1IconRegister.registerIcon(LanteaCraft.getAssetKey()
-				+ ":bucket_" + iconName + "_"
+		itemIcon = par1IconRegister.registerIcon(LanteaCraft.getAssetKey() + ":bucket_" + iconName + "_"
 				+ LanteaCraft.getProxy().getRenderMode());
 	}
 

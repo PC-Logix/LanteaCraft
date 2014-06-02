@@ -2,12 +2,12 @@ package pcl.lc.items;
 
 import java.util.logging.Level;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import pcl.common.audio.AudioEngine;
 import pcl.common.audio.AudioPosition;
@@ -23,10 +23,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemDebugTool extends Item {
 	@SideOnly(Side.CLIENT)
-	private Icon theIcon;
+	private IIcon theIcon;
 
-	public ItemDebugTool(int itemid) {
-		super(itemid);
+	public ItemDebugTool() {
+		super();
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class ItemDebugTool extends Item {
 			source.play();
 		}
 
-		TileEntity entity = par3World.getBlockTileEntity(par4, par5, par6);
+		TileEntity entity = par3World.getTileEntity(par4, par5, par6);
 		if (entity instanceof TileEntityStargateBase) {
 			TileEntityStargateBase base = (TileEntityStargateBase) entity;
 			par2EntityPlayer.addChatMessage("type: TileEntityStargateBase");
@@ -91,7 +91,7 @@ public class ItemDebugTool extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
+	public void registerIcons(IIconRegister par1IconRegister) {
 		itemIcon = par1IconRegister.registerIcon("pcl_lc:creative_icon");
 	}
 

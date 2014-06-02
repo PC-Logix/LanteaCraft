@@ -14,8 +14,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemTransportRingActivator extends Item {
 
-	public ItemTransportRingActivator(int id) {
-		super(id);
+	public ItemTransportRingActivator() {
+		super();
 	}
 
 	@Override

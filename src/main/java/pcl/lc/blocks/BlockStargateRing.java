@@ -40,8 +40,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_"
-				+ LanteaCraft.getProxy().getRenderMode();
+		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
 	}
 
 	@Override
@@ -53,13 +52,12 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topAndBottomTexture = register.registerIcon(LanteaCraft.getAssetKey()
-				+ ":" + "stargateBlock_"
+		topAndBottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBlock_"
 				+ LanteaCraft.getProxy().getRenderMode());
-		sideTextures[0] = register.registerIcon(LanteaCraft.getAssetKey() + ":"
-				+ "stargateRing_" + LanteaCraft.getProxy().getRenderMode());
-		sideTextures[1] = register.registerIcon(LanteaCraft.getAssetKey() + ":"
-				+ "stargateChevron_" + LanteaCraft.getProxy().getRenderMode());
+		sideTextures[0] = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateRing_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		sideTextures[1] = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateChevron_"
+				+ LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
@@ -68,8 +66,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z,
-			ForgeDirection side) {
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
@@ -84,18 +81,14 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer player, int side, float cx, float cy, float cz) {
-		TileEntityStargateRing te = (TileEntityStargateRing) world
-				.getTileEntity(x, y, z);
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
+			float cy, float cz) {
+		TileEntityStargateRing te = (TileEntityStargateRing) world.getTileEntity(x, y, z);
 		if (te.getAsPart().isMerged()) {
-			Vector3 base = te.getAsPart().findHostMultiblock(false)
-					.getLocation();
-			Block block = Block.blocksList[world.getBlockId(base.floorX(),
-					base.floorY(), base.floorZ())];
+			Vector3 base = te.getAsPart().findHostMultiblock(false).getLocation();
+			Block block = Block.blocksList[world.getBlockId(base.floorX(), base.floorY(), base.floorZ())];
 			if (block instanceof BlockStargateBase)
-				block.onBlockActivated(world, base.floorX(), base.floorY(),
-						base.floorZ(), player, side, cx, cy, cz);
+				block.onBlockActivated(world, base.floorX(), base.floorY(), base.floorZ(), player, side, cx, cy, cz);
 			return true;
 		}
 		return false;
@@ -117,21 +110,17 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(
-				world, x, y, z);
+		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
 		te.hostBlockPlaced();
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block,
-			int data) {
-		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(
-				world, x, y, z);
+	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
+		TileEntityStargateRing te = (TileEntityStargateRing) getTileEntity(world, x, y, z);
 		if (te != null) {
 			te.flagDirty();
 			if (te.getAsPart().findHostMultiblock(false) != null) {
-				TileEntity host = te.getAsPart().findHostMultiblock(false)
-						.getTileEntity();
+				TileEntity host = te.getAsPart().findHostMultiblock(false).getTileEntity();
 				if (host instanceof TileEntityStargateBase)
 					((TileEntityStargateBase) host).hostBlockDestroyed();
 			}
@@ -145,14 +134,12 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y,
-			int z) {
+	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
 		TileEntity tileof = block.getTileEntity(x, y, z);
 		if (tileof instanceof TileEntityStargateRing) {
 			TileEntityStargateRing ring = (TileEntityStargateRing) tileof;
 			if (ring.getAsPart() != null && ring.getAsPart().isMerged()) {
-				StargateMultiblock master = (StargateMultiblock) ring
-						.getAsPart().findHostMultiblock(false);
+				StargateMultiblock master = (StargateMultiblock) ring.getAsPart().findHostMultiblock(false);
 				EnumOrientations orientation = master.getOrientation();
 				if (orientation != null)
 					switch (orientation) {

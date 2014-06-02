@@ -13,8 +13,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemZPM extends Item implements IItemEnergyStore {
 
-	public ItemZPM(int id) {
-		super(id);
+	public ItemZPM() {
+		super();
 		setHasSubtypes(false);
 		setMaxStackSize(1);
 		setMaxDamage(101);

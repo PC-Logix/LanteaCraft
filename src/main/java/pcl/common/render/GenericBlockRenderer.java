@@ -35,8 +35,7 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID,
-			RenderBlocks rb) {
+	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks rb) {
 		world = null;
 		this.block = block;
 		blockX = 0;
@@ -55,8 +54,7 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
-			Block block, int renderID, RenderBlocks rb) {
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int renderID, RenderBlocks rb) {
 		this.world = world;
 		this.block = block;
 		blockX = x;
@@ -120,8 +118,7 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 		v1 = icon.getMaxV();
 	}
 
-	public static double cubeFaces[][] = {
-			{ -0.5, -0.5, 0.5, 0, 0, -1, 1, 0, 0, 0, -1, 0 }, // DOWN
+	public static double cubeFaces[][] = { { -0.5, -0.5, 0.5, 0, 0, -1, 1, 0, 0, 0, -1, 0 }, // DOWN
 			{ -0.5, 0.5, -0.5, 0, 0, 1, 1, 0, 0, 0, 1, 0 }, // UP
 			{ 0.5, 0.5, -0.5, 0, -1, 0, -1, 0, 0, 0, 0, -1 }, // NORTH
 			{ -0.5, 0.5, 0.5, 0, -1, 0, 1, 0, 0, 0, 0, 1 }, // SOUTH
@@ -155,8 +152,7 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 			Vector3 p = t.p(d.offsetX, d.offsetY, d.offsetZ);
 			// System.out.printf("BaseBlockRenderer.setBrightnessForSide: side %d is next to (%d,%d,%d)\n",
 			// side, p.floorX(), p.floorY(), p.floorZ());
-			tess.setBrightness(block.getMixedBrightnessForBlock(world,
-					p.floorX(), p.floorY(), p.floorZ()));
+			tess.setBrightness(block.getMixedBrightnessForBlock(world, p.floorX(), p.floorY(), p.floorZ()));
 		} else
 			tess.setBrightness(blockBrightness);
 	}
@@ -167,40 +163,33 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 
 	void setNormal(Trans3 t, double nx, double ny, double nz, double shade) {
 		Vector3 n = t.v(nx, ny, nz);
-		float bm = (float) (shade * (0.6 * n.x * n.x + 0.8 * n.z * n.z + (n.y > 0 ? 1
-				: 0.5)
-				* n.y * n.y));
+		float bm = (float) (shade * (0.6 * n.x * n.x + 0.8 * n.z * n.z + (n.y > 0 ? 1 : 0.5) * n.y * n.y));
 		tess.setNormal((float) n.x, (float) n.y, (float) n.z);
 		tess.setColorOpaque_F(bm * cmr, bm * cmg, bm * cmb);
 	}
 
 	void cubeFace(Trans3 t, double[] c) {
 		setNormal(t, c[9], c[10], c[11]);
-		face(t, c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], 0, 0, 16,
-				16);
+		face(t, c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], 0, 0, 16, 16);
 	}
 
 	void cubeBackFace(Trans3 t, double[] c, double d) {
 		double nx = -c[9], ny = -c[10], nz = -c[11];
 		setNormal(t, nx, ny, nz, 0.5);
-		backFace(t, c[0] + d * nx, c[1] + d * ny, c[2] + d * nz, c[3], c[4],
-				c[5], c[6], c[7], c[8], 0, 0, 16, 16);
+		backFace(t, c[0] + d * nx, c[1] + d * ny, c[2] + d * nz, c[3], c[4], c[5], c[6], c[7], c[8], 0, 0, 16, 16);
 	}
 
-	void face(Trans3 t, double x, double y, double z, double dx1, double dy1,
-			double dz1, double dx2, double dy2, double dz2, double u, double v,
-			double du, double dv) {
+	void face(Trans3 t, double x, double y, double z, double dx1, double dy1, double dz1, double dx2, double dy2,
+			double dz2, double u, double v, double du, double dv) {
 		vertex(t, x, y, z, u, v);
 		vertex(t, x + dx1, y + dy1, z + dz1, u, v + dv);
 		vertex(t, x + dx1 + dx2, y + dy1 + dy2, z + dz1 + dz2, u + du, v + dv);
 		vertex(t, x + dx2, y + dy2, z + dz2, u + du, v);
 	}
 
-	void backFace(Trans3 t, double x, double y, double z, double dx1,
-			double dy1, double dz1, double dx2, double dy2, double dz2,
-			double u, double v, double du, double dv) {
-		face(t, x + dx1, y + dy1, z + dz1, -dx1, -dy1, -dz1, dx2, dy2, dz2, u,
-				v + dv, du, -dv);
+	void backFace(Trans3 t, double x, double y, double z, double dx1, double dy1, double dz1, double dx2, double dy2,
+			double dz2, double u, double v, double du, double dv) {
+		face(t, x + dx1, y + dy1, z + dz1, -dx1, -dy1, -dz1, dx2, dy2, dz2, u, v + dv, du, -dv);
 	}
 
 	void vertex(Trans3 t, double x, double y, double z, double u, double v) {
@@ -209,12 +198,10 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	void renderBox(Trans3 t, AxisAlignedBB box, IIcon[] icons) {
-		renderBox(t, box.minX, box.minY, box.minZ, box.maxX - box.minX,
-				box.maxY - box.minY, box.maxZ - box.minZ, icons);
+		renderBox(t, box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ, icons);
 	}
 
-	void renderBox(Trans3 t, double x0, double y0, double z0, double dx,
-			double dy, double dz, IIcon[] icons) {
+	void renderBox(Trans3 t, double x0, double y0, double z0, double dx, double dy, double dz, IIcon[] icons) {
 		double x1 = x0 + dx, y1 = y0 + dy, z1 = z0 + dz;
 		tess.setBrightness(blockBrightness);
 		boxFace(t, x0, y0, z1, 0, 0, -dz, dx, 0, 0, 0, -1, 0, dx, dz, icons[0]); // DOWN
@@ -225,14 +212,12 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 		boxFace(t, x1, y1, z1, 0, -dy, 0, 0, 0, -dz, 1, 0, 0, dz, dy, icons[5]); // EAST
 	}
 
-	void boxFace(Trans3 t, double x, double y, double z, double dx1,
-			double dy1, double dz1, double dx2, double dy2, double dz2,
-			double nx, double ny, double nz, double du, double dv, IIcon icon) {
+	void boxFace(Trans3 t, double x, double y, double z, double dx1, double dy1, double dz1, double dx2, double dy2,
+			double dz2, double nx, double ny, double nz, double du, double dv, IIcon icon) {
 		if (icon != null) {
 			selectTile(icon);
 			setNormal(t, nx, ny, nz);
-			face(t, x, y, z, dx1, dy1, dz1, dx2, dy2, dz2, 0, 0, du * 16,
-					dv * 16);
+			face(t, x, y, z, dx1, dy1, dz1, dx2, dy2, dz2, 0, 0, du * 16, dv * 16);
 		}
 	}
 
