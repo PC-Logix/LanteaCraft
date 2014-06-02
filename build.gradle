@@ -5,11 +5,16 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
+
 
 apply plugin: 'forge'
 
@@ -23,7 +28,8 @@ group = "pcl.LanteaCraft"
 archivesBaseName = "LanteaCraft"
 
 minecraft {
-	version = "1.6.4-9.11.1.964"
+	version = "1.7.2-10.12.1.1060"
+	assetDir = "eclipse/assets"
 	replace "@VERSION@", project.version
 	replace "@BUILD@", project.ext.buildNumber
 }
