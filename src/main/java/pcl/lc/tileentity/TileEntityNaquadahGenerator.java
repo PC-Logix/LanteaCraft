@@ -240,7 +240,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	}
 
 	@Override
-	public int fill(Direction from, FluidStack resource, boolean doFill) {
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		return tank.fill(resource, doFill);
 	}
 

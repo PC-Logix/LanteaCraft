@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
 import java.util.Vector;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
@@ -83,10 +84,10 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 		if (!enabled)
 			return;
 		if (system == null)
-			system = Minecraft.getMinecraft().getSoundHandler().sndSystem;
+			system = Minecraft.getMinecraft().getSoundHandler();
 		if (system == null)
 			return;
-		float vol = Minecraft.getMinecraft().gameSettings.soundVolume;
+		float vol = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS);
 		if (masterVolume != vol)
 			masterVolume = vol;
 

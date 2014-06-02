@@ -123,7 +123,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 		IInventory inventory = getInventory();
 		if (inventory != null) {
 			ItemStack result = inventory.decrStackSize(slot, amount);
-			onInventoryChanged();
 			return result;
 		} else
 			return null;
@@ -139,7 +138,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 		IInventory inventory = getInventory();
 		if (inventory != null) {
 			ItemStack result = inventory.getStackInSlotOnClosing(slot);
-			onInventoryChanged();
 			return result;
 		} else
 			return null;
@@ -152,10 +150,8 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		IInventory inventory = getInventory();
-		if (inventory != null) {
+		if (inventory != null)
 			inventory.setInventorySlotContents(slot, stack);
-			onInventoryChanged();
-		}
 	}
 
 	/**

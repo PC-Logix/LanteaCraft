@@ -10,13 +10,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
 import pcl.common.audio.ClientAudioEngine;
 import pcl.common.helpers.CloakHandler;
 import pcl.common.network.ModPacket;
@@ -59,8 +57,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.Player;
-import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 
 public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
@@ -72,7 +69,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 			this.proxy = proxy;
 		}
 
-		@ForgeSubscribe
+		@SubscribeEvent
 		public void openMainMenu(GuiOpenEvent event) {
 			if ((event.gui instanceof GuiMainMenu) && !shownStatGui)
 				shownStatGui = true;

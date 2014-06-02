@@ -6,9 +6,8 @@ import java.util.logging.Level;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.ITickAgent;
-import cpw.mods.fml.common.ITickHandler;
 
-public abstract class TickHandler implements ITickHandler {
+public abstract class TickHandler {
 
 	protected ReentrantLock childLock = new ReentrantLock();
 	protected ArrayList<ITickAgent> children = new ArrayList<ITickAgent>();

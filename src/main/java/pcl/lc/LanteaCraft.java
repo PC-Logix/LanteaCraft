@@ -63,6 +63,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "-" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:OpenComputers;after:BuildCraft|Core;after:IC2;after:SGCraft")
 public class LanteaCraft {
@@ -284,7 +285,7 @@ public class LanteaCraft {
 		proxy.postInit(e);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onInitMapGen(InitMapGenEvent e) {
 		proxy.onInitMapGen(e);
 	}
@@ -299,12 +300,12 @@ public class LanteaCraft {
 		proxy.onServerStopping(e);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload evt) {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("World unloading: %s", evt.world.provider.dimensionId));
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load evt) {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("World loading: %s", evt.world.provider.dimensionId));
 	}

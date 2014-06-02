@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.Property;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
 /**
@@ -16,13 +16,9 @@ public class ConfigurationHelper extends Configuration {
 
 	public boolean extended = false;
 	private int nextVillagerID = 100;
-	private final ArrayList<Integer> defaultItemIdsUsed;
-	private final ArrayList<Integer> defaultBlockIdsUsed;
 
 	public ConfigurationHelper(File file) {
 		super(file);
-		defaultItemIdsUsed = new ArrayList<Integer>();
-		defaultBlockIdsUsed = new ArrayList<Integer>();
 	}
 
 	public boolean getBoolean(String category, String key, boolean defaultValue) {
@@ -59,36 +55,5 @@ public class ConfigurationHelper extends Configuration {
 		if (!hasKey(category, key))
 			extended = true;
 		return super.get(category, key, defaultValue, comment, type);
-	}
-
-	@Override
-	public Property getItem(String name, int desired_default) {
-		int nextid = desired_default;
-		while (true)
-			if (defaultItemIdsUsed.contains(nextid))
-				nextid++;
-			else {
-				defaultItemIdsUsed.add(nextid);
-				break;
-			}
-		return super.getItem(name, nextid);
-	}
-
-	@Override
-	public Property getBlock(String name, int desired_default) {
-		int nextid = desired_default;
-		while (true)
-			if (defaultBlockIdsUsed.contains(nextid))
-				nextid++;
-			else {
-				defaultBlockIdsUsed.add(nextid);
-				break;
-			}
-		Property property = super.getBlock(name, nextid);
-		if (property.getInt() != nextid) {
-			defaultBlockIdsUsed.remove(defaultBlockIdsUsed.indexOf(nextid));
-			defaultBlockIdsUsed.add(property.getInt());
-		}
-		return property;
 	}
 }

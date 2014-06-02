@@ -135,10 +135,7 @@ public abstract class GenericContainerGUI extends GuiContainer {
 	}
 
 	public static String inventoryName(IInventory inv) {
-		String name = inv.getInventoryName();
-		if (!inv.isInvNameLocalized())
-			name = StatCollector.translateToLocal(name);
-		return name;
+		return StatCollector.translateToLocal(inv.getInventoryName());
 	}
 
 	public static String playerInventoryName() {

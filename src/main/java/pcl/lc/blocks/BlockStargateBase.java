@@ -21,6 +21,7 @@ import pcl.lc.multiblock.StargatePart;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockStargateBase extends RotationOrientedBlock {
 	protected IIcon topAndBottomTexture;

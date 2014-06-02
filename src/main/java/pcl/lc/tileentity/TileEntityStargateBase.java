@@ -184,16 +184,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		inventory = new FilteredInventory(1) {
 
 			@Override
-			public void onInventoryChanged() {
-			}
-
-			@Override
-			public boolean isInvNameLocalized() {
-				return false;
-			}
-
-			@Override
-			public String getInvName() {
+			public String getInventoryName() {
 				return "stargate";
 			}
 
@@ -214,6 +205,11 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				if (0 > i || i > items.length)
 					return false;
 				return true;
+			}
+
+			@Override
+			public boolean hasCustomInventoryName() {
+				return false;
 			}
 		};
 
@@ -613,7 +609,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		return "stargate";
 	}
 
@@ -757,11 +753,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	public boolean isDialling() {
 		return getState() == EnumStargateState.InterDialling || getState() == EnumStargateState.Dialling;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
 	}
 
 	public boolean isIrisClosed() {

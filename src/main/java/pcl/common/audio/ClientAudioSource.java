@@ -164,12 +164,11 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 		Vector3 j = position.position.sub(i).div(d);
 		if (nrv > 0.1f)
 			for (int k = 0; k < d; k++) {
-				int b = clientPlayer.worldObj.getBlockId((int) i.x, (int) i.y, (int) i.z);
-				if (b != 0)
-					if (Block.opaqueCubeLookup[b])
-						nrv *= 0.5F;
-					else
-						nrv *= 0.85F;
+				Block b = clientPlayer.worldObj.getBlock((int) i.x, (int) i.y, (int) i.z);
+				if (b.isOpaqueCube())
+					nrv *= 0.5F;
+				else
+					nrv *= 0.85F;
 				i.add(j);
 			}
 

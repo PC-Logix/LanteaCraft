@@ -3,6 +3,7 @@ package pcl.common.helpers;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBucket;
@@ -39,7 +40,7 @@ public class SpecialBucketHandler {
 		buckets.put(blockOf, itemResult);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onBucketFill(FillBucketEvent event) {
 		ItemStack result = fillCustomBucket(event.world, event.target);
 		if (result == null)
