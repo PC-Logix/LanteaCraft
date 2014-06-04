@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.management.PlayerManager.PlayerInstance;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -18,7 +17,6 @@ import net.minecraftforge.common.ForgeChunkManager.Type;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.ITickAgent;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
  * RemoteChunkLoading is an agent to allow tile-entities to load chunks which
@@ -31,12 +29,9 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 public class RemoteChunkLoading implements ITickAgent {
 
 	public static boolean arePlayersWatchingChunk(WorldServer serverWorld, ChunkCoordIntPair chunk) {
-		PlayerInstance watcher = serverWorld.getPlayerManager().getOrCreateChunkWatcher(chunk.chunkXPos,
-				chunk.chunkZPos, false);
-		if (watcher == null)
-			return false;
-		List<?> players = ReflectionHelper.<List<?>, PlayerInstance> getPrivateValue(PlayerInstance.class, watcher, 0);
-		return !players.isEmpty();
+		// we need a nice way of doing this now that
+		// PlayerManager$PlayerInstance isn't public
+		return true;
 	}
 
 	/**
@@ -175,8 +170,7 @@ public class RemoteChunkLoading implements ITickAgent {
 			LanteaCraft.getLogger().log(Level.INFO,
 					String.format("RemoteChunkLoading CSR: %s (world: %s)", name, world.provider.dimensionId));
 		if (BuildInfo.CHUNK_DEBUGGING && (world == null || world.provider == null))
-			LanteaCraft.getLogger().log(Level.WARN,
-					String.format("RemoteChunkLoading CSR: %s (no provider!!)", name));
+			LanteaCraft.getLogger().log(Level.WARN, String.format("RemoteChunkLoading CSR: %s (no provider!!)", name));
 		synchronized (requests) {
 			for (ChunkLoadRequest request : requests)
 				if (request.equals(metadata)) {
