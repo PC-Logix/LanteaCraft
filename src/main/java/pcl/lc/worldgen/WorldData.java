@@ -48,7 +48,7 @@ public class WorldData extends WorldSavedData {
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setCompoundTag("chunkGenFlags", chunkGenFlags);
+		nbt.setTag("chunkGenFlags", chunkGenFlags);
 	}
 
 }

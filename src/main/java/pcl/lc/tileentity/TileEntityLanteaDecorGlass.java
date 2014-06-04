@@ -3,9 +3,11 @@ package pcl.lc.tileentity;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;

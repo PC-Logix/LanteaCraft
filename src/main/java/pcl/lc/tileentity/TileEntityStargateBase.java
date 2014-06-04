@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import org.apache.logging.log4j.Level;
 
 import net.afterlifelochie.sandbox.ObserverContext;
@@ -18,11 +19,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.network.packet.Packet41EntityEffect;
-import net.minecraft.network.packet.Packet43Experience;
-import net.minecraft.network.packet.Packet9Respawn;
+import net.minecraft.network.Packet;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
@@ -31,8 +28,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.network.ForgePacket;
-import net.minecraftforge.common.network.packet.DimensionRegisterPacket;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.SoundHost;
 import pcl.common.base.GenericTileEntity;
@@ -700,7 +695,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		} else
 			LanteaCraft.getLogger().log(Level.WARN, String.format("Strange packet type %s.", packetOf.getType()));
 
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public void hostBlockDestroyed() {

@@ -116,7 +116,7 @@ public class StargatePart extends MultiblockPart {
 			}
 		} else
 			currentHost = null;
-		host.getWorldObj().markBlockForRenderUpdate(host.xCoord, host.yCoord, host.zCoord);
+		host.getWorldObj().markBlockForUpdate(host.xCoord, host.yCoord, host.zCoord);
 	}
 
 }

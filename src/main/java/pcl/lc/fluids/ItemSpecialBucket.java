@@ -2,6 +2,7 @@ package pcl.lc.fluids;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import pcl.common.helpers.SpecialBucketHandler;
@@ -35,7 +36,7 @@ public class ItemSpecialBucket extends ItemBucket {
 		super(hostBlock);
 		LanteaCraft.getSpecialBucketHandler().registerBucketMapping(hostBlock, this);
 		setCreativeTab(LanteaCraft.getCreativeTab());
-		setContainerItem(Item.bucketEmpty);
+		setContainerItem(Items.bucket);
 	}
 
 	@Override

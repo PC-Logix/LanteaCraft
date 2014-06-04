@@ -2,6 +2,7 @@ package pcl.lc.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockOre;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -24,7 +25,7 @@ public class BlockLanteaOre extends BlockOre {
 		setHardness(5.0F);
 		setResistance(10.0F);
 		setStepSound(soundTypeStone);
-		MinecraftForge.setBlockHarvestLevel(this, "pickaxe", 3);
+		setHarvestLevel("pickaxe", 3);
 		setCreativeTab(CreativeTabs.tabBlock);
 	}
 
@@ -47,10 +48,8 @@ public class BlockLanteaOre extends BlockOre {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> result = new ArrayList<ItemStack>();
-		result.add(new ItemStack(Items.lanteaOreItem, 2, metadata));
-		return result;
+	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
+		return Items.lanteaOreItem;
 	}
 
 	@Override

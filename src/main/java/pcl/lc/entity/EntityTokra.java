@@ -79,7 +79,7 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.5D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
 	}
 
 	/**
@@ -192,8 +192,8 @@ public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMo
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase par1EntityLivingBase, float par2) {
 		EntityArrow entityarrow = new EntityArrow(worldObj, this, par1EntityLivingBase, 1.6F,
-				14 - worldObj.difficultySetting * 4);
-		entityarrow.setDamage(par2 * 2.0F + rand.nextGaussian() * 0.25D + worldObj.difficultySetting * 0.11F);
+				14 - worldObj.difficultySetting.ordinal() * 4);
+		entityarrow.setDamage(par2 * 2.0F + rand.nextGaussian() * 0.25D + worldObj.difficultySetting.ordinal() * 0.11F);
 		playSound("random.bow", 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
 		worldObj.spawnEntityInWorld(entityarrow);
 	}

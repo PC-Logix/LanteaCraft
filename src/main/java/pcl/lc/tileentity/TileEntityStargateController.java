@@ -3,7 +3,7 @@ package pcl.lc.tileentity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import pcl.common.api.energy.IEnergyStore;
 import pcl.common.api.energy.IItemEnergyStore;
@@ -218,7 +218,7 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 		double actualPayload = Math.min(getMaxEnergyStored() - getEnergyStored(), quantity);
 		if (!isSimulated) {
 			energy += actualPayload;
-			onInventoryChanged();
+			markDirty();
 			getDescriptionPacket();
 		}
 		return actualPayload;
@@ -229,7 +229,7 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 		double actualPayload = Math.min(getEnergyStored(), quantity);
 		if (!isSimulated) {
 			energy -= actualPayload;
-			onInventoryChanged();
+			markDirty();
 			getDescriptionPacket();
 		}
 		return actualPayload;
@@ -261,6 +261,6 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		getStateFromPacket(packetOf);
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 }

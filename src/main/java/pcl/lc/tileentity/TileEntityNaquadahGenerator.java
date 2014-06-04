@@ -9,7 +9,7 @@ import java.util.List;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -70,6 +70,11 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 				return false;
 			return true;
 		}
+
+		@Override
+		public boolean hasCustomInventoryName() {
+			return false;
+		}
 	};
 
 	public TileEntityNaquadahGenerator() {
@@ -122,7 +127,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	}
 
 	public void stateChanged() {
-		onInventoryChanged();
+		markDirty();
 		getDescriptionPacket();
 	}
 
@@ -189,7 +194,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 		if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && addedToEnergyNet) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) this));
 			addedToEnergyNet = false;
-			onInventoryChanged();
+			markDirty();
 		}
 		super.invalidate();
 	}
@@ -320,6 +325,6 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		getStateFromPacket(packetOf);
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 }

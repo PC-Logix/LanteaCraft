@@ -15,26 +15,6 @@ import pcl.lc.LanteaCraft;
 
 public class GenericTileEntity extends TileEntity implements IInventory, ISidedInventory {
 
-	@Override
-	public Packet getDescriptionPacket() {
-		if (syncWithClient()) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			writeToNBT(nbt);
-			return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, nbt);
-		} else
-			return null;
-	}
-
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNBT(pkt.data);
-		markBlockForUpdate();
-	}
-
-	boolean syncWithClient() {
-		return true;
-	}
-
 	public void markBlockForUpdate() {
 		if (worldObj != null)
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

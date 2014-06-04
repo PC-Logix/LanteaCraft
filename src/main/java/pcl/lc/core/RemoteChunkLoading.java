@@ -2,10 +2,11 @@ package pcl.lc.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.management.PlayerInstance;
+import net.minecraft.server.management.PlayerManager.PlayerInstance;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;

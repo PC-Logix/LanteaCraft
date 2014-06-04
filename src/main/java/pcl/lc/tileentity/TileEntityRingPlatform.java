@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import pcl.common.base.GenericTileEntity;
@@ -200,7 +200,7 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		getStateFromPacket(packetOf);
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 }

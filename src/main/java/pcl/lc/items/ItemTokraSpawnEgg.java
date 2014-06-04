@@ -13,11 +13,11 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.Facing;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
 import pcl.lc.entity.EntityReplicator;
@@ -53,13 +53,13 @@ public class ItemTokraSpawnEgg extends Item {
 		if (par3World.isRemote)
 			return true;
 		else {
-			int i1 = par3World.getBlockId(par4, par5, par6);
+			Block i1 = par3World.getBlock(par4, par5, par6);
 			par4 += Facing.offsetsXForSide[par7];
 			par5 += Facing.offsetsYForSide[par7];
 			par6 += Facing.offsetsZForSide[par7];
 			double d0 = 0.0D;
 
-			if (par7 == 1 && Block.blocksList[i1] != null && Block.blocksList[i1].getRenderType() == 11)
+			if (i1.getRenderType() == 11)
 				d0 = 0.5D;
 
 			Entity entity = spawnCreature(par3World, par4 + 0.5D, par5 + d0, par6 + 0.5D);
@@ -86,7 +86,7 @@ public class ItemTokraSpawnEgg extends Item {
 			if (movingobjectposition == null)
 				return par1ItemStack;
 			else {
-				if (movingobjectposition.typeOfHit == EnumMovingObjectType.TILE) {
+				if (movingobjectposition.typeOfHit == MovingObjectType.BLOCK) {
 					int i = movingobjectposition.blockX;
 					int j = movingobjectposition.blockY;
 					int k = movingobjectposition.blockZ;
@@ -97,7 +97,7 @@ public class ItemTokraSpawnEgg extends Item {
 					if (!par3EntityPlayer.canPlayerEdit(i, j, k, movingobjectposition.sideHit, par1ItemStack))
 						return par1ItemStack;
 
-					if (par2World.getBlockMaterial(i, j, k) == Material.water) {
+					if (par2World.getBlock(i, j, k).getMaterial() == Material.water) {
 						Entity entity = spawnCreature(par2World, i, j, k);
 						if (entity != null && !par3EntityPlayer.capabilities.isCreativeMode)
 							--par1ItemStack.stackSize;

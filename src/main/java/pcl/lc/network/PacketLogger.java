@@ -1,9 +1,22 @@
 package pcl.lc.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufProcessor;
+import io.netty.buffer.Unpooled;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.GatheringByteChannel;
+import java.nio.channels.ScatteringByteChannel;
+import java.nio.charset.Charset;
+
 import org.apache.logging.log4j.Level;
 
 import pcl.common.network.ModPacket;
@@ -44,11 +57,12 @@ public class PacketLogger {
 	public void logPacket(ModPacket packet) {
 		if (datastream == null)
 			return;
-		Packet250CustomPayload payload = packet.toPacket();
 		try {
+			ByteBuf virt_buff = Unpooled.buffer();
+			packet.encodeInto(null, virt_buff);
 			datastream.writeLong(packetcount++);
-			datastream.writeLong(payload.data.length);
-			datastream.write(payload.data);
+			datastream.writeLong(virt_buff.array().length);
+			datastream.write(virt_buff.array());
 			// Prevent unhandled overflows
 			if (packetcount >= Long.MAX_VALUE - 1L)
 				packetcount %= Long.MAX_VALUE - 1L;

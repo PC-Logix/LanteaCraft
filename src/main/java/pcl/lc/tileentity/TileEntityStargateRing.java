@@ -1,6 +1,6 @@
 package pcl.lc.tileentity;
 
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import pcl.common.base.GenericTileEntity;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
@@ -20,7 +20,7 @@ public class TileEntityStargateRing extends GenericTileEntity implements IPacket
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		part.unpack(packetOf);
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public StargatePart getAsPart() {
