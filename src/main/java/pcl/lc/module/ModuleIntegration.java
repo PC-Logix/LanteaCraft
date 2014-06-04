@@ -12,7 +12,6 @@ import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
-import pcl.lc.module.integration.ComputerCraftAgent;
 import pcl.lc.module.integration.OpenComputersAgent;
 import cpw.mods.fml.common.Loader;
 
@@ -20,7 +19,7 @@ public class ModuleIntegration implements IModule {
 
 	static {
 		ModuleIntegration.clazz_integration = new ArrayList<Class<? extends IIntegrationAgent>>();
-		ModuleIntegration.registerIntegrationAgent(ComputerCraftAgent.class);
+		// ModuleIntegration.registerIntegrationAgent(ComputerCraftAgent.class);
 		ModuleIntegration.registerIntegrationAgent(OpenComputersAgent.class);
 	}
 

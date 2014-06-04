@@ -30,8 +30,8 @@ public class BlockComputerCraftConnector extends Block implements ITileEntityPro
 		int legals = 0;
 		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
 			Vector3 target = origin.add(direction);
-			if (par1World.getBlockId(target.floorX(), target.floorY(), target.floorZ()) > 0
-					&& ComputerCraftWrapperPool.canWrap(par1World.getBlockTileEntity(target.floorX(), target.floorY(),
+			if (par1World.getBlock(target.floorX(), target.floorY(), target.floorZ()) != null
+					&& ComputerCraftWrapperPool.canWrap(par1World.getTileEntity(target.floorX(), target.floorY(),
 							target.floorZ())))
 				legals++;
 		}

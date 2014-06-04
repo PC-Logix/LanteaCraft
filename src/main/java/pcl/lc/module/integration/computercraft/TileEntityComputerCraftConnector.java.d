@@ -34,10 +34,10 @@ public class TileEntityComputerCraftConnector extends TileEntity implements IPer
 		Vector3 origin = new Vector3(xCoord, yCoord, zCoord);
 		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
 			Vector3 target = origin.add(direction);
-			if (worldObj.getBlockId(target.floorX(), target.floorY(), target.floorZ()) > 0
-					&& ComputerCraftWrapperPool.canWrap(worldObj.getBlockTileEntity(target.floorX(), target.floorY(),
+			if (worldObj.getBlock(target.floorX(), target.floorY(), target.floorZ()) != null
+					&& ComputerCraftWrapperPool.canWrap(worldObj.getTileEntity(target.floorX(), target.floorY(),
 							target.floorZ()))) {
-				this.target = worldObj.getBlockTileEntity(target.floorX(), target.floorY(), target.floorZ());
+				this.target = worldObj.getTileEntity(target.floorX(), target.floorY(), target.floorZ());
 				iface = ComputerCraftWrapperPool.wrap(this.target, this);
 			}
 		}
