@@ -38,9 +38,14 @@ tile.lanteaOreIngotBlock.2.name=Blok trinia
 
 tile.naquadahGenerator.name=Naquadahový generátor
 tile.ringPlatform.name=Transportní kruhy
-item.zpm.name=ZPM
+tile.integration.computercraft.name=Počítačový adaptér k bráně
 
-item.tokraSpawnEgg.name=Vejce Tokry
+item.zpm.name=ZPM
+item.transportRingActivator.name=Aktivátor transportních kruhů
+item.iris.name=Iris
+item.gdo.name=Zadavač kódu iris
+
+item.tokraSpawnEgg.name=Vejce, uvnitř je Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
 
 death.attack.wormhole_transient=%1$s byl rozložen vírem horizontu událostí.
