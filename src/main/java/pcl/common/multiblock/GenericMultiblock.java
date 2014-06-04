@@ -47,7 +47,7 @@ public abstract class GenericMultiblock {
 		if (isClient)
 			if (!hasUpdate) {
 				ModPacket packet = pollForUpdate();
-				LanteaCraft.getProxy().sendToServer(packet);
+				LanteaCraft.getNetPipeline().sendToServer(packet);
 				hasUpdate = true;
 			}
 		// if the structure is currently flagged as invalid, and we're not a

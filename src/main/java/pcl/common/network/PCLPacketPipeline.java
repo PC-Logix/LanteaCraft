@@ -2,6 +2,7 @@ package pcl.common.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 
@@ -24,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 
+@ChannelHandler.Sharable
 public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, ModPacket> {
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
 	private LinkedList<Class<? extends ModPacket>> packets = new LinkedList<Class<? extends ModPacket>>();

@@ -40,7 +40,7 @@ public class StandardModPacket extends ModPacket {
 	/**
 	 * Generic constructor, creates a blank packet object
 	 */
-	private StandardModPacket() {
+	public StandardModPacket() {
 		values = new HashMap<Object, Object>();
 	}
 
@@ -213,8 +213,7 @@ public class StandardModPacket extends ModPacket {
 				packer.pack(o, data);
 			} else {
 				if (BuildInfo.NET_DEBUGGING)
-					LanteaCraft.getLogger()
-							.log(Level.WARN, String.format("Cannot pack %s!", o.getClass().getName()));
+					LanteaCraft.getLogger().log(Level.WARN, String.format("Cannot pack %s!", o.getClass().getName()));
 				throw new IOException("Cannot pack " + o.getClass().getName() + "; unknown value.");
 			}
 		} else {
@@ -410,8 +409,8 @@ public class StandardModPacket extends ModPacket {
 
 	public static String readString(DataInputStream stream, int max) throws IOException {
 		int len = stream.readInt();
-		if (max > len)
-			throw new IOException("String too large!");
+		if (len > max)
+			throw new IOException(String.format("String too large: got %s, expected maximum %s!", len, max));
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < len; i++)
 			builder.append(stream.readChar());
@@ -447,7 +446,6 @@ public class StandardModPacket extends ModPacket {
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		DataOutputStream data = new DataOutputStream(output);
-		data.writeByte((byte) 1);
 		if (packetType == null || packetType.length() == 0)
 			throw new IOException("Cannot pack blank packetType!");
 		if (origin == null)
@@ -470,7 +468,9 @@ public class StandardModPacket extends ModPacket {
 
 	@Override
 	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
-		DataInputStream data = new DataInputStream(new ByteArrayInputStream(buffer.array()));
+		byte[] b = new byte[buffer.readableBytes() - buffer.readerIndex()];
+		buffer.readBytes(b);
+		DataInputStream data = new DataInputStream(new ByteArrayInputStream(b));
 		packetType = readString(data, 512);
 		isPacketForServer = (data.readByte() == 1);
 		IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);

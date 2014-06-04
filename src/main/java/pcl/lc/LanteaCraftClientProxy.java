@@ -2,6 +2,7 @@ package pcl.lc;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
+
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
@@ -55,6 +56,7 @@ import pcl.lc.tileentity.TileEntityStargateController;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -99,9 +101,11 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		super.init(e);
 		MinecraftForge.EVENT_BUS.register(hooks);
 		cloakHandler.buildDatabase();
-		MinecraftForge.EVENT_BUS.register(cloakHandler);
-		MinecraftForge.EVENT_BUS.register(clientTickHandler);
+		FMLCommonHandler.instance().bus().register(cloakHandler);
+		FMLCommonHandler.instance().bus().register(clientTickHandler);
 		audioContext = new ClientAudioEngine();
+		audioContext.initialize();
+		MinecraftForge.EVENT_BUS.register(audioContext);
 		clientTickHandler.registerTickHost(audioContext);
 		registerScreens();
 		registerRenderers();
@@ -121,14 +125,13 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	 * something?).
 	 */
 	public void registerRenderers() {
-		LanteaCraft.Render.modelController = new StargateControllerModel(
-				LanteaCraft.getResource("/assets/pcl_lc/models/dhd.obj"));
+		LanteaCraft.Render.modelController = new StargateControllerModel(LanteaCraft.getResource("models/dhd.obj"));
 		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel(
-				LanteaCraft.getResource("/assets/pcl_lc/models/naquadah_generator.obj"));
+				LanteaCraft.getResource("models/naquadah_generator.obj"));
 		LanteaCraft.Render.modelRingPlatformBase = new RingPlatformBaseModel(
-				LanteaCraft.getResource("/assets/pcl_lc/models/transport_rings_base.obj"));
+				LanteaCraft.getResource("models/transport_rings_base.obj"));
 		LanteaCraft.Render.modelRingPlatformRing = new RingPlatformRingModel(
-				LanteaCraft.getResource("/assets/pcl_lc/models/transport_rings.obj"));
+				LanteaCraft.getResource("models/transport_rings.obj"));
 
 		LanteaCraft.Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
 		addTileEntityRenderer(TileEntityStargateBase.class, LanteaCraft.Render.tileEntityBaseRenderer);

@@ -78,7 +78,9 @@ public class TinyModPacket extends ModPacket {
 	}
 
 	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
-		DataInputStream data = new DataInputStream(new ByteArrayInputStream(buffer.array()));
+		byte[] b = new byte[buffer.readableBytes() - buffer.readerIndex()];
+		buffer.readBytes(b);
+		DataInputStream data = new DataInputStream(new ByteArrayInputStream(b));
 		IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
 		toServer = data.readByte() == 1;
 		origin = (WorldLocation) unpacker.unpack(data);

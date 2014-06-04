@@ -154,7 +154,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 				packet.setIsForServer(true);
 				packet.setType("LanteaPacket.DialRequest");
 				packet.setValue("Address", enteredAddress);
-				LanteaCraft.getProxy().sendToServer(packet);
+				LanteaCraft.getNetPipeline().sendToServer(packet);
 				close();
 			}
 	}

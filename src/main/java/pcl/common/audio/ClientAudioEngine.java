@@ -177,6 +177,8 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 	@Override
 	public AudioSource create(Object owner, AudioPosition position, String file, boolean looping, boolean override,
 			float volume) {
+		if (system == null)
+			return new AudioSource();
 		String tag = ClientAudioEngine.label();
 		AudioSource source = new ClientAudioSource(system, position, file, looping, override, volume, tag);
 		SoundHostObject host = new SoundHostObject(owner);

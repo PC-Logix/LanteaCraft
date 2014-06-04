@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -39,6 +40,7 @@ import pcl.lc.network.ServerPacketHandler;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.worldgen.NaquadahOreWorldGen;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -80,7 +82,7 @@ public class LanteaCraftCommonProxy {
 
 	protected WorldLog worldLogger;
 
-	private ServerTickHandler serverTickHandler = new ServerTickHandler();
+	private ServerTickHandler serverTickHandler = new ServerTickHandler(versionHelper);
 
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
@@ -134,7 +136,7 @@ public class LanteaCraftCommonProxy {
 		audioContext = new AudioEngine();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
-		MinecraftForge.EVENT_BUS.register(serverTickHandler);
+		FMLCommonHandler.instance().bus().register(serverTickHandler);
 		networkHelpers.init();
 		moduleManager.init();
 	}
@@ -306,10 +308,6 @@ public class LanteaCraftCommonProxy {
 			serverPacketHandler.handlePacket(modPacket, player);
 		else
 			return;
-	}
-
-	public void sendToServer(ModPacket packet) {
-		throw new RuntimeException("Cannot send to server: this method was not overridden!!");
 	}
 
 	public ConfigurationHelper getConfig() {

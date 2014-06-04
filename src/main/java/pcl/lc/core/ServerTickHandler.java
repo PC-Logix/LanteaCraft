@@ -3,7 +3,6 @@ package pcl.lc.core;
 import net.minecraft.util.ChatComponentText;
 import pcl.common.base.TickHandler;
 import pcl.common.helpers.VersionHelper;
-import pcl.lc.LanteaCraft;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
@@ -13,8 +12,8 @@ public class ServerTickHandler extends TickHandler {
 	private boolean messageSent;
 	private VersionHelper versioning;
 
-	public ServerTickHandler() {
-		versioning = LanteaCraft.getProxy().getVersionHelper();
+	public ServerTickHandler(VersionHelper version) {
+		versioning = version;
 	}
 
 	@SubscribeEvent
