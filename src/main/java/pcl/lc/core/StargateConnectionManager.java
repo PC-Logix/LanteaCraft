@@ -2,7 +2,7 @@ package pcl.lc.core;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.afterlifelochie.sandbox.WatchedValue;
 import net.minecraft.nbt.NBTTagCompound;
@@ -140,7 +140,7 @@ public class StargateConnectionManager implements ITickAgent {
 						runState(EnumStargateState.Transient, transientDuration);
 					else {
 						if (BuildInfo.DEBUG)
-							LanteaCraft.getLogger().log(Level.WARNING, "Cannot find host tile, aborting!");
+							LanteaCraft.getLogger().log(Level.WARN, "Cannot find host tile, aborting!");
 						requestDisconnect();
 					}
 					break;

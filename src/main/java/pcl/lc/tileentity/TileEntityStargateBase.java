@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.afterlifelochie.sandbox.ObserverContext;
 import net.afterlifelochie.sandbox.WatchedValue;
@@ -698,7 +698,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			req.symbol.set((Character) payload.getValue("symbol"));
 			setClientConnection(req);
 		} else
-			LanteaCraft.getLogger().log(Level.WARNING, String.format("Strange packet type %s.", packetOf.getType()));
+			LanteaCraft.getLogger().log(Level.WARN, String.format("Strange packet type %s.", packetOf.getType()));
 
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}

@@ -3,7 +3,7 @@ package pcl.lc.worldgen;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.WeakHashMap;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;

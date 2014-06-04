@@ -1,6 +1,6 @@
 package pcl.common.base;
 
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,7 +42,7 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 
 	public void playSoundEffect(String name, float volume, float pitch) {
 		if (name.contains(":"))
-			LanteaCraft.getLogger().log(Level.WARNING, "Old SoundSystem label detected, can't play label: " + name);
+			LanteaCraft.getLogger().log(Level.WARN, "Old SoundSystem label detected, can't play label: " + name);
 		else {
 			String label = new StringBuilder().append(LanteaCraft.getAssetKey()).append(":").append(name).toString();
 			try {
@@ -51,7 +51,7 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 					return;
 				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, label, volume, pitch);
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.FINE, "Couldn't play sound, doesn't exist: " + label, t);
+				LanteaCraft.getLogger().log(Level.DEBUG, "Couldn't play sound, doesn't exist: " + label, t);
 			}
 		}
 	}

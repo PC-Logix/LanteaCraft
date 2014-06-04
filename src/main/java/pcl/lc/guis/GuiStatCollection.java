@@ -2,7 +2,7 @@ package pcl.lc.guis;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -33,7 +33,7 @@ public class GuiStatCollection extends GuiScreen {
 		try {
 			label = URLDecoder.decode(analytics.getReportData(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Client doesn't support UTF-8?", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Client doesn't support UTF-8?", e);
 		}
 	}
 

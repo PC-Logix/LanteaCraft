@@ -1,9 +1,10 @@
 package pcl.lc.network;
 
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.common.network.IPacketHandler;
@@ -13,7 +14,6 @@ import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraftClientProxy;
 import pcl.lc.render.effects.EffectBeam;
-import cpw.mods.fml.common.network.Player;
 
 public class ClientPacketHandler {
 
@@ -23,12 +23,12 @@ public class ClientPacketHandler {
 		this.logger = logger;
 	}
 
-	public void handlePacket(ModPacket packet, Player player) {
+	public void handlePacket(ModPacket packet, EntityPlayer player) {
 		if (logger != null)
 			logger.logPacket(packet);
 		WorldLocation target = packet.getOriginLocation();
 		if (target == null)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					String.format("ModPacket type %s sent without OriginLocation, much bad!", packet.getClass()));
 		int currentWorld = Minecraft.getMinecraft().theWorld.provider.dimensionId;
 		if (currentWorld == target.dimension) {
@@ -42,14 +42,14 @@ public class ClientPacketHandler {
 				if (effect != null)
 					((LanteaCraftClientProxy) LanteaCraft.getProxy()).spawnEffect(effect);
 			} else {
-				TileEntity tile = world.getBlockTileEntity(target.x, target.y, target.z);
+				TileEntity tile = world.getTileEntity(target.x, target.y, target.z);
 				if (tile instanceof IPacketHandler) {
 					IPacketHandler handler = (IPacketHandler) tile;
 					handler.handlePacket(packet);
 				} else
 					LanteaCraft
 							.getLogger()
-							.log(Level.WARNING,
+							.log(Level.WARN,
 									String.format(
 											"Dropping packet %s for coords %s %s %s because the destination class %s wasn't a handler.",
 											packet.getType(), target.x, target.y, target.z, (tile != null) ? tile

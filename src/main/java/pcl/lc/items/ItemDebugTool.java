@@ -1,6 +1,6 @@
 package pcl.lc.items;
 
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;

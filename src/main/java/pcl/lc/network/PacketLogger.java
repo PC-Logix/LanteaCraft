@@ -4,9 +4,8 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
-import net.minecraft.network.packet.Packet250CustomPayload;
 import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 
@@ -27,7 +26,7 @@ public class PacketLogger {
 			outstream = new FileOutputStream(file, true);
 			datastream = new DataOutputStream(outstream);
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not create PacketLogger, an error occured.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not create PacketLogger, an error occured.", ioex);
 		}
 	}
 
@@ -38,7 +37,7 @@ public class PacketLogger {
 			outstream.flush();
 			outstream.close();
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not close PacketLogger, an error occured.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not close PacketLogger, an error occured.", ioex);
 		}
 	}
 
@@ -54,7 +53,7 @@ public class PacketLogger {
 			if (packetcount >= Long.MAX_VALUE - 1L)
 				packetcount %= Long.MAX_VALUE - 1L;
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not pack ModPacket into PacketLogger stream.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not pack ModPacket into PacketLogger stream.", ioex);
 		}
 	}
 }

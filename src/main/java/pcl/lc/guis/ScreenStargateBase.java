@@ -3,7 +3,7 @@ package pcl.lc.guis;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -115,7 +115,7 @@ public class ScreenStargateBase extends GenericContainerGUI {
 			destination.setContents(new StringSelection(address), null);
 			clipboardAction = 60;
 		} catch (Throwable t) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Clipboard push failed!", t);
+			LanteaCraft.getLogger().log(Level.WARN, "Clipboard push failed!", t);
 		}
 	}
 

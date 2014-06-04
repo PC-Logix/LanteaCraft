@@ -1,13 +1,16 @@
 package pcl.common.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import java.util.logging.Logger;
 
-import net.minecraft.network.packet.Packet250CustomPayload;
 import pcl.common.util.WorldLocation;
 
 public class TinyModPacket extends ModPacket {
@@ -18,22 +21,7 @@ public class TinyModPacket extends ModPacket {
 	private WorldLocation origin;
 	private boolean toServer = false;
 
-	/**
-	 * Reads a new TinyModPacket
-	 * 
-	 * @param data
-	 *            The data stream
-	 * @return The TinyModPacket result
-	 * @throws IOException
-	 *             Any network or read exception
-	 */
-	public static TinyModPacket createPacket(DataInputStream data) throws IOException {
-		boolean isServer = (data.readByte() == 1);
-		IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
-		WorldLocation location = (WorldLocation) unpacker.unpack(data);
-		TinyModPacket pkt = new TinyModPacket(data, location);
-		pkt.setIsForServer(isServer);
-		return pkt;
+	public TinyModPacket() {
 	}
 
 	public TinyModPacket(WorldLocation creationOrigin) {
@@ -69,37 +57,31 @@ public class TinyModPacket extends ModPacket {
 		return toServer;
 	}
 
-	/**
-	 * Converts this packet instance into a Forge payload packet
-	 * 
-	 * @return A custom Packet250CustomPayload packet for Forge networking
-	 */
-	@Override
-	public Packet250CustomPayload toPacket() {
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		Packet250CustomPayload pkt = new Packet250CustomPayload();
-		try {
-			bytes.write(1);
-			bytes.write((toServer) ? 1 : 0);
-			IStreamPackable<WorldLocation> packer = (IStreamPackable<WorldLocation>) ModPacket
-					.findPacker(WorldLocation.class);
-			DataOutputStream wrapper = new DataOutputStream(bytes);
-			packer.pack(origin, wrapper);
-			wrapper.flush();
-			wrapper.close();
-			outstream.flush();
-			outstream.close();
-			bytes.write(outbuff.toByteArray());
-		} catch (IOException e) {
-			Logger.getLogger("pcl.common").log(Level.WARNING, "Exception when writing packet!", e);
-		}
-		pkt.data = bytes.toByteArray();
-		pkt.length = pkt.data.length;
-		return pkt;
-	}
-
 	@Override
 	public String getType() {
 		return "TinyPacket";
+	}
+
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+		buffer.writeByte((toServer) ? 1 : 0);
+		IStreamPackable<WorldLocation> packer = (IStreamPackable<WorldLocation>) ModPacket
+				.findPacker(WorldLocation.class);
+		ByteArrayOutputStream vec = new ByteArrayOutputStream();
+		DataOutputStream wrapper = new DataOutputStream(vec);
+		packer.pack(origin, wrapper);
+		wrapper.flush();
+		wrapper.close();
+		buffer.writeBytes(vec.toByteArray());
+		outstream.flush();
+		outstream.close();
+		buffer.writeBytes(outbuff.toByteArray());
+	}
+
+	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+		DataInputStream data = new DataInputStream(new ByteArrayInputStream(buffer.array()));
+		IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
+		toServer = data.readByte() == 1;
+		origin = (WorldLocation) unpacker.unpack(data);
+		instream = data;
 	}
 }

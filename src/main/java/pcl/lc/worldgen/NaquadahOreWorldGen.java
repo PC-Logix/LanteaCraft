@@ -2,7 +2,7 @@ package pcl.lc.worldgen;
 
 import java.util.EnumSet;
 import java.util.Random;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
@@ -69,7 +69,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 
 	void generateNode(Chunk chunk, World world, Random random, Block block, int metadata, int cx, int cy, int cz, int density) {
 		LanteaCraft.getLogger().log(
-				Level.FINEST,
+				Level.TRACE,
 				String.format("Node generator building node around %s %s %s with density %s typeof %s", cx
 						+ (16 * chunk.getChunkCoordIntPair().chunkXPos), cy, cz
 						+ (16 * chunk.getChunkCoordIntPair().chunkZPos), density, metadata));
@@ -142,7 +142,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				int y = random.nextInt(64);
 				int z = random.nextInt(16);
 				if (getBlock(chunk, x, y, z).equals(blockStone)) {
-					LanteaCraft.getLogger().log(Level.FINEST,
+					LanteaCraft.getLogger().log(Level.TRACE,
 							String.format("Attempting to place Naquadah node at %s %s %s", x, y, z));
 					generateNode(chunk, world, random, Blocks.lanteaOre, typeof.ordinal(), x, y, z, 6);
 				}

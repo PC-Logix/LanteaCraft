@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -114,7 +114,7 @@ public class LanteaCraftCommonProxy {
 	public void preInit(FMLPreInitializationEvent e) {
 		if (BuildInfo.isDevelopmentEnvironment())
 			LanteaCraft.getLogger().log(
-					Level.WARNING,
+					Level.WARN,
 					"This doesn't appear to be an official build of LanteaCraft, or you are in a development context; "
 							+ "please do not report bugs to us. We do not support external builds.");
 		else
@@ -176,7 +176,7 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public void onInitMapGen(InitMapGenEvent e) {
-		LanteaCraft.getLogger().log(Level.FINE, "InitMapGenEvent fired");
+		LanteaCraft.getLogger().log(Level.DEBUG, "InitMapGenEvent fired");
 	}
 
 	void configure() {
@@ -222,7 +222,7 @@ public class LanteaCraftCommonProxy {
 	}
 
 	void registerRecipes() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft recipes...");
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft recipes...");
 		if (config.getBoolean("options", "allowCraftingNaquadah", false)) {
 			// TODO: moved to module -> core
 		}
@@ -233,7 +233,7 @@ public class LanteaCraftCommonProxy {
 
 	public ConfigValue<?> getConfigValue(String name) {
 		if (BuildInfo.ASSET_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.FINE, "Fetching configuration value `" + name + "`");
+			LanteaCraft.getLogger().log(Level.DEBUG, "Fetching configuration value `" + name + "`");
 		for (ConfigValue<?> item : configValues)
 			if (item.getName().equalsIgnoreCase(name))
 				return item;
@@ -269,19 +269,19 @@ public class LanteaCraftCommonProxy {
 						.newInstance(player, world, x, y, z);
 			}
 		} catch (Exception e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to create GUI element, an exception occured.", e);
+			LanteaCraft.getLogger().log(Level.FATAL, "Failed to create GUI element, an exception occured.", e);
 			return null;
 		}
 	}
 
 	public int addVillager(int id, String name, ResourceLocation skin) {
-		LanteaCraft.getLogger().log(Level.FINE, "Adding villager ID " + id + " with name " + name);
+		LanteaCraft.getLogger().log(Level.DEBUG, "Adding villager ID " + id + " with name " + name);
 		registeredVillagers.put(name, new VillagerMapping(id, skin));
 		return id;
 	}
 
 	public void addContainer(int id, Class<? extends Container> cls) {
-		LanteaCraft.getLogger().log(Level.FINE,
+		LanteaCraft.getLogger().log(Level.DEBUG,
 				"Registering container with ID " + id + ", class " + cls.getCanonicalName());
 		registeredContainers.put(id, cls);
 	}
@@ -305,7 +305,7 @@ public class LanteaCraftCommonProxy {
 		return 0;
 	}
 
-	public void handlePacket(ModPacket modPacket, Player player) {
+	public void handlePacket(ModPacket modPacket, EntityPlayer player) {
 		if (modPacket.getPacketIsForServer())
 			serverPacketHandler.handlePacket(modPacket, player);
 		else
@@ -387,7 +387,7 @@ public class LanteaCraftCommonProxy {
 			LanteaCraft.getLogger().log(Level.INFO, String.format("WorldLog starting: %s", logfile.toString()));
 			worldLogger.open();
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Failed to resolve paths for WorldLog.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Failed to resolve paths for WorldLog.", ioex);
 		}
 	}
 

@@ -3,7 +3,7 @@ package pcl.lc.tileentity;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -175,7 +175,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 			LanteaCraft.getProxy().sendToAllPlayers(packet);
 			return null;
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Error creating description packet.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Error creating description packet.", ioex);
 			return null;
 		}
 	}
@@ -193,7 +193,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 						tile_rotation[i] = stream.readInt();
 					}
 				} catch (IOException ioex) {
-					LanteaCraft.getLogger().log(Level.WARNING, "Error unpacking description packet.", ioex);
+					LanteaCraft.getLogger().log(Level.WARN, "Error unpacking description packet.", ioex);
 				}
 	}
 

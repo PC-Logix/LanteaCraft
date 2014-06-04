@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
@@ -136,7 +136,7 @@ public class ModuleManager {
 			}
 		}
 		if (p >= 254)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"There were issues resolving dependencies; full resolution was aborted.");
 
 		loadedModules.addAll(loadStack);

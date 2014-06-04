@@ -1,7 +1,7 @@
 package pcl.common.asm;
 
 import java.util.Map;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import org.apache.logging.log4j.core.Logger;
 

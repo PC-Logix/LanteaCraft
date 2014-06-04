@@ -3,7 +3,7 @@ package pcl.lc.module.integration;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import li.cil.oc.api.Network;
 import li.cil.oc.api.driver.MethodWhitelist;
@@ -51,7 +51,7 @@ public class OpenComputersWrapperPool {
 				} else
 					throw new RuntimeException("Driver.Block handler specified invalid typeof!");
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.WARNING,
+				LanteaCraft.getLogger().log(Level.WARN,
 						"Failed when handling OpenComputers createEnvironment request.", t);
 				return null;
 			}

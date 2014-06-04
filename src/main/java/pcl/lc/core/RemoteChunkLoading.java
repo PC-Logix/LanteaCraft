@@ -2,7 +2,7 @@ package pcl.lc.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerInstance;
@@ -174,7 +174,7 @@ public class RemoteChunkLoading implements ITickAgent {
 			LanteaCraft.getLogger().log(Level.INFO,
 					String.format("RemoteChunkLoading CSR: %s (world: %s)", name, world.provider.dimensionId));
 		if (BuildInfo.CHUNK_DEBUGGING && (world == null || world.provider == null))
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					String.format("RemoteChunkLoading CSR: %s (no provider!!)", name));
 		synchronized (requests) {
 			for (ChunkLoadRequest request : requests)
@@ -189,14 +189,14 @@ public class RemoteChunkLoading implements ITickAgent {
 		Ticket ticket = ForgeChunkManager.requestTicket(LanteaCraft.getInstance(), world, Type.NORMAL);
 		if (ticket == null) {
 			if (BuildInfo.CHUNK_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.WARNING, String.format("Ticket request failed, null result!"));
+				LanteaCraft.getLogger().log(Level.WARN, String.format("Ticket request failed, null result!"));
 			return null;
 		}
 
 		ChunkLoadRequest request = new ChunkLoadRequest(name, ticket, metadata, maxAge);
 		for (ChunkCoordIntPair chunk : request.chunksIn()) {
 			if (BuildInfo.CHUNK_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.WARNING,
+				LanteaCraft.getLogger().log(Level.WARN,
 						String.format("Forcing chunk (%s, %s)", chunk.chunkXPos, chunk.chunkZPos));
 			ForgeChunkManager.forceChunk(ticket, chunk);
 			IChunkProvider provider = world.getChunkProvider();

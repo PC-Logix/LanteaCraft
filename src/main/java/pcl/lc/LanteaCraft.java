@@ -1,11 +1,10 @@
 package pcl.lc;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -268,10 +267,6 @@ public class LanteaCraft {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
 		LanteaCraft.logger = e.getModLog();
-		LanteaCraft.logger.setParent(FMLLog.getLogger());
-		LanteaCraft.logger.setLevel(Level.INFO);
-		if (BuildInfo.isDevelopmentEnvironment())
-			LanteaCraft.logger.setLevel(Level.ALL);
 		proxy.preInit(e);
 	}
 

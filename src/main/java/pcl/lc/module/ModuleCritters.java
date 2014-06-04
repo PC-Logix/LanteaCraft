@@ -2,7 +2,7 @@ package pcl.lc.module;
 
 import java.util.EnumSet;
 import java.util.Set;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
@@ -37,7 +37,7 @@ public class ModuleCritters implements IModule {
 		// "replicator", 1, LanteaCraft.getInstance(), 80, 1,
 		// true);
 
-		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft Tokra villagers...");
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft Tokra villagers...");
 		LanteaCraft.getProxy().tokraVillagerID = LanteaCraft.getProxy().addVillager(
 				LanteaCraft.getProxy().getConfig().getVillager("tokra"), "tokra",
 				LanteaCraft.getResource("textures/skins/tokra.png"));

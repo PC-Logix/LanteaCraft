@@ -2,7 +2,7 @@ package pcl.lc;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -199,23 +199,23 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	@Override
 	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing GUI with ordinal %s.", ID));
+		LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing GUI with ordinal %s.", ID));
 		Class<? extends GuiScreen> gui = LanteaCraft.getProxy().getGUI(ID);
 		if (gui != null)
 			try {
-				LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing GUI of class %s.", gui.getName()));
+				LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing GUI of class %s.", gui.getName()));
 				TileEntity entity = world.getTileEntity(x, y, z);
 				Constructor<?> constr = gui.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
 				Object val = constr.newInstance(entity, player);
 				return val;
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.SEVERE, String.format("Failed to create GUI with ID %s", ID), t);
+				LanteaCraft.getLogger().log(Level.FATAL, String.format("Failed to create GUI with ID %s", ID), t);
 			}
 		return null;
 	}
 
 	@Override
-	public void handlePacket(ModPacket packet, Player player) {
+	public void handlePacket(ModPacket packet, EntityPlayer player) {
 		if (packet.getPacketIsForServer())
 			serverPacketHandler.handlePacket(packet, player);
 		else

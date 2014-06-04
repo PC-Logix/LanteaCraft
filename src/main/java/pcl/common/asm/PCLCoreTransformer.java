@@ -2,7 +2,7 @@ package pcl.common.asm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -36,9 +36,9 @@ public class PCLCoreTransformer implements IClassTransformer {
 		for (String transformer : tnames)
 			try {
 				transformers.add((IClassTransformer) Class.forName(transformer).newInstance());
-				PCLCoreTransformerPlugin.getLogger().log(Level.FINE, "Instantiated transformer " + transformer);
+				PCLCoreTransformerPlugin.getLogger().log(Level.DEBUG, "Instantiated transformer " + transformer);
 			} catch (Throwable e) {
-				PCLCoreTransformerPlugin.getLogger().log(Level.WARNING,
+				PCLCoreTransformerPlugin.getLogger().log(Level.WARN,
 						"Could not instantiate transformer " + transformer);
 				e.printStackTrace();
 			}
@@ -57,10 +57,10 @@ public class PCLCoreTransformer implements IClassTransformer {
 			try {
 				bytes = transformer.transform(name, transformedName, bytes);
 				if (bytes == null)
-					PCLCoreTransformerPlugin.getLogger().log(Level.SEVERE,
+					PCLCoreTransformerPlugin.getLogger().log(Level.FATAL,
 							"Transformer " + transformer + " corrupted class " + name);
 			} catch (Throwable e) {
-				PCLCoreTransformerPlugin.getLogger().log(Level.WARNING,
+				PCLCoreTransformerPlugin.getLogger().log(Level.WARN,
 						"Could not transform class " + name + " using " + transformer);
 				e.printStackTrace();
 			}

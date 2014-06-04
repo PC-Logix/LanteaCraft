@@ -1,7 +1,7 @@
 package pcl.lc.module.integration;
 
 import java.lang.reflect.Method;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

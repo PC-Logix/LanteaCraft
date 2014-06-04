@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
@@ -35,15 +35,15 @@ public class VersionHelper extends Thread {
 		while (tries < maxTries)
 			try {
 				tries++;
-				LanteaCraft.getLogger().log(Level.FINE,
+				LanteaCraft.getLogger().log(Level.DEBUG,
 						"Querying version server (try " + tries + " of " + maxTries + ")");
 				pullAndParse();
 				finished = true;
 				return;
 			} catch (IOException ioex) {
-				LanteaCraft.getLogger().log(Level.WARNING, "The version metadata pull failed.", ioex);
+				LanteaCraft.getLogger().log(Level.WARN, "The version metadata pull failed.", ioex);
 			}
-		LanteaCraft.getLogger().log(Level.WARNING, "Failed to pull version data, maximum tries exceeded!");
+		LanteaCraft.getLogger().log(Level.WARN, "Failed to pull version data, maximum tries exceeded!");
 	}
 
 	private void pullAndParse() throws IOException {

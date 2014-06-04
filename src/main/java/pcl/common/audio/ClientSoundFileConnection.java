@@ -3,7 +3,7 @@ package pcl.common.audio;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -34,7 +34,7 @@ public class ClientSoundFileConnection extends URLConnection {
 				throw new Exception("Could not open stream!");
 			return stream;
 		} catch (Exception ex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Can't mount sound file!", ex);
+			LanteaCraft.getLogger().log(Level.WARN, "Can't mount sound file!", ex);
 			return null;
 		}
 	}

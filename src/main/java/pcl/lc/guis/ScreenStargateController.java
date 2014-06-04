@@ -2,7 +2,7 @@ package pcl.lc.guis;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -140,7 +140,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 						if (GateAddressHelper.singleton().isLegal(c1))
 							enterCharacter(c1);
 				} catch (Throwable t) {
-					LanteaCraft.getLogger().log(Level.WARNING, "Clipboard pull failed!", t);
+					LanteaCraft.getLogger().log(Level.WARN, "Clipboard pull failed!", t);
 					warningMessage = "Couldn't read the clipboard!";
 					ticksWarning = 20 * 10;
 				}

@@ -1,5 +1,9 @@
 package pcl.common.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,30 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import pcl.common.util.WorldLocation;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 
 public class StandardModPacket extends ModPacket {
-
-	/**
-	 * Reads a new StandardModPacket
-	 * 
-	 * @param data
-	 *            The data stream
-	 * @return The StandardModPacket result
-	 * @throws IOException
-	 *             Any network or read exception
-	 */
-	public static StandardModPacket createPacket(DataInputStream data) throws IOException {
-		StandardModPacket pkt = new StandardModPacket();
-		pkt.readData(data);
-		return pkt;
-	}
 
 	/**
 	 * The type of the packet
@@ -135,7 +122,7 @@ public class StandardModPacket extends ModPacket {
 	 */
 	public void setValue(String name, Object value) {
 		if (value == null)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					String.format("Attempt to pack null value into key %s, this is probably bad.", name));
 		synchronized (values) {
 			values.put(name, value);
@@ -200,57 +187,6 @@ public class StandardModPacket extends ModPacket {
 	}
 
 	/**
-	 * Writes the packet to a stream
-	 * 
-	 * @param data
-	 *            The stream to write to
-	 * @throws IOException
-	 *             Any write exception
-	 */
-	public void writeData(DataOutputStream data) throws IOException {
-		data.writeByte((byte) 0); // packet typeof
-		data.writeByte((byte) 1);
-		if (packetType == null || packetType.length() == 0)
-			throw new IOException("Cannot pack blank packetType!");
-		if (origin == null)
-			throw new IOException("Cannot pack blank originType!");
-		if (packetType.length() > 512)
-			throw new IOException("packetType exceeds maximum length!");
-		Packet.writeString(packetType, data);
-		data.writeByte((isPacketForServer) ? 1 : 0);
-		IStreamPackable<WorldLocation> packer = (IStreamPackable<WorldLocation>) ModPacket
-				.findPacker(WorldLocation.class);
-		packer.pack(origin, data);
-		synchronized (values) {
-			writeHashMap(values, data);
-		}
-	}
-
-	/**
-	 * Reads the packet from a stream
-	 * 
-	 * @param data
-	 *            A stream to read from
-	 * @throws IOException
-	 *             Any read exception
-	 */
-	public void readData(DataInputStream data) throws IOException {
-		try {
-			if (data.readByte() != (byte) 1)
-				throw new IOException("Malformed packet!!");
-			packetType = Packet.readString(data, 512);
-			isPacketForServer = (data.readByte() == 1);
-			IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
-			origin = (WorldLocation) unpacker.unpack(data);
-			synchronized (values) {
-				values = (HashMap<Object, Object>) readHashMap(data);
-			}
-		} catch (IOException ioex) {
-			throw new IOException(String.format("Bad packet: %s!", (packetType != null) ? packetType : "<null>"), ioex);
-		}
-	}
-
-	/**
 	 * Writes a generic value to a stream
 	 * 
 	 * @param o
@@ -278,7 +214,7 @@ public class StandardModPacket extends ModPacket {
 			} else {
 				if (BuildInfo.NET_DEBUGGING)
 					LanteaCraft.getLogger()
-							.log(Level.WARNING, String.format("Cannot pack %s!", o.getClass().getName()));
+							.log(Level.WARN, String.format("Cannot pack %s!", o.getClass().getName()));
 				throw new IOException("Cannot pack " + o.getClass().getName() + "; unknown value.");
 			}
 		} else {
@@ -308,7 +244,7 @@ public class StandardModPacket extends ModPacket {
 					data.writeChar((Character) o);
 					break;
 				case 10:
-					Packet.writeString((String) o, data);
+					writeString((String) o, data);
 					break;
 				case 11:
 					writeArrayList((ArrayList<?>) o, data);
@@ -363,7 +299,7 @@ public class StandardModPacket extends ModPacket {
 			else if (classValueOf.equals(char.class) || classValueOf.equals(Character.class))
 				return data.readChar();
 			else if (classValueOf.equals(String.class))
-				return Packet.readString(data, 8192);
+				return readString(data, 8192);
 			else if (classValueOf.equals(HashMap.class))
 				return readHashMap(data);
 			else if (classValueOf.equals(ArrayList.class))
@@ -467,24 +403,19 @@ public class StandardModPacket extends ModPacket {
 		return result;
 	}
 
-	/**
-	 * Converts this packet instance into a Forge payload packet
-	 * 
-	 * @return A custom Packet250CustomPayload packet for Forge networking
-	 */
-	@Override
-	public Packet250CustomPayload toPacket() {
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		DataOutputStream data = new DataOutputStream(((bytes)));
-		Packet250CustomPayload pkt = new Packet250CustomPayload();
-		try {
-			writeData(data);
-		} catch (IOException e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Exception when writing packet!", e);
-		}
-		pkt.data = bytes.toByteArray();
-		pkt.length = pkt.data.length;
-		return pkt;
+	public static void writeString(String s, DataOutputStream stream) throws IOException {
+		stream.writeInt(s.length());
+		stream.writeChars(s);
+	}
+
+	public static String readString(DataInputStream stream, int max) throws IOException {
+		int len = stream.readInt();
+		if (max > len)
+			throw new IOException("String too large!");
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < len; i++)
+			builder.append(stream.readChar());
+		return builder.toString();
 	}
 
 	/**
@@ -510,5 +441,42 @@ public class StandardModPacket extends ModPacket {
 		}
 		result.append("}.");
 		return result.toString();
+	}
+
+	@Override
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		DataOutputStream data = new DataOutputStream(output);
+		data.writeByte((byte) 1);
+		if (packetType == null || packetType.length() == 0)
+			throw new IOException("Cannot pack blank packetType!");
+		if (origin == null)
+			throw new IOException("Cannot pack blank originType!");
+		if (packetType.length() > 512)
+			throw new IOException("packetType exceeds maximum length!");
+		writeString(packetType, data);
+		data.writeByte((isPacketForServer) ? 1 : 0);
+		IStreamPackable<WorldLocation> packer = (IStreamPackable<WorldLocation>) ModPacket
+				.findPacker(WorldLocation.class);
+		packer.pack(origin, data);
+		synchronized (values) {
+			writeHashMap(values, data);
+		}
+		data.flush();
+		data.close();
+		output.flush();
+		buffer.writeBytes(output.toByteArray());
+	}
+
+	@Override
+	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+		DataInputStream data = new DataInputStream(new ByteArrayInputStream(buffer.array()));
+		packetType = readString(data, 512);
+		isPacketForServer = (data.readByte() == 1);
+		IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
+		origin = (WorldLocation) unpacker.unpack(data);
+		synchronized (values) {
+			values = (HashMap<Object, Object>) readHashMap(data);
+		}
 	}
 }

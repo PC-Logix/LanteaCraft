@@ -1,7 +1,7 @@
 package pcl.common.helpers;
 
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -14,11 +14,11 @@ public class GUIHandler implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing Container with ordinal %s.", ID));
+		LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing Container with ordinal %s.", ID));
 		Class<? extends Container> container = LanteaCraft.getProxy().getContainer(ID);
 		if (container != null)
 			try {
-				LanteaCraft.getLogger().log(Level.FINE,
+				LanteaCraft.getLogger().log(Level.DEBUG,
 						String.format("Initializing Container of class %s.", container.getName()));
 				TileEntity entity = world.getTileEntity(x, y, z);
 				Constructor<?> constr = container
@@ -26,9 +26,9 @@ public class GUIHandler implements IGuiHandler {
 				Object val = constr.newInstance(entity, player);
 				return val;
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.WARNING, "Failed to create GUI component!", t);
+				LanteaCraft.getLogger().log(Level.WARN, "Failed to create GUI component!", t);
 			}
-		LanteaCraft.getLogger().log(Level.WARNING, String.format("Could not find component with ID %s!", ID));
+		LanteaCraft.getLogger().log(Level.WARN, String.format("Could not find component with ID %s!", ID));
 		return null;
 	}
 

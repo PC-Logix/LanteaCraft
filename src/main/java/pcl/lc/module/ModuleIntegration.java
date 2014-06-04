@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.Agent;
@@ -67,7 +67,7 @@ public class ModuleIntegration implements IModule {
 							this.agents.add(singleton);
 							LanteaCraft.getLogger().log(Level.INFO, String.format("Loaded agent %s.", agent.getName()));
 						} catch (Throwable t) {
-							LanteaCraft.getLogger().log(Level.WARNING, "Exception in integration agent initalizer.", t);
+							LanteaCraft.getLogger().log(Level.WARN, "Exception in integration agent initalizer.", t);
 						}
 					else
 						LanteaCraft.getLogger().log(
@@ -86,7 +86,7 @@ public class ModuleIntegration implements IModule {
 			try {
 				agents.next().init();
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.WARNING, "Integration agent threw init-time exception.", t);
+				LanteaCraft.getLogger().log(Level.WARN, "Integration agent threw init-time exception.", t);
 			}
 	}
 

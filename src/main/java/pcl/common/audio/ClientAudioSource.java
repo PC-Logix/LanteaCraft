@@ -2,7 +2,7 @@ package pcl.common.audio;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,7 +44,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 			valid = true;
 			setVolume(volume);
 		} catch (MalformedURLException malurl) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not initialize AudioSource.", malurl);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not initialize AudioSource.", malurl);
 		}
 	}
 
@@ -65,7 +65,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 			return;
 		}
 		if (name == null)
-			LanteaCraft.getLogger().log(Level.WARNING, "Attempt to perform audio operation on illegal label.");
+			LanteaCraft.getLogger().log(Level.WARN, "Attempt to perform audio operation on illegal label.");
 		system.play(name);
 	}
 

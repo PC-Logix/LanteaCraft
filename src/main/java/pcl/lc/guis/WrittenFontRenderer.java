@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Stack;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -156,11 +156,11 @@ public class WrittenFontRenderer {
 				char_metrics.put(charcode, new GlyphMetric(w, h, u, v));
 			}
 		} catch (IOException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Cannot setup font.", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Cannot setup font.", e);
 		} catch (ParserConfigurationException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Cannot read font metric data.", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Cannot read font metric data.", e);
 		} catch (SAXException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Cannot read font metric data.", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Cannot read font metric data.", e);
 		}
 		LanteaCraft.getLogger()
 				.log(Level.INFO,

@@ -3,7 +3,7 @@ package pcl.common.audio;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
