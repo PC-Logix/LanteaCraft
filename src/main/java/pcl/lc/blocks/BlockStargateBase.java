@@ -90,7 +90,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 

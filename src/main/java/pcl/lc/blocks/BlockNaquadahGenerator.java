@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -136,8 +137,8 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 
 	private int isBlockProvidingPower(World world, int x, int y, int z, int direction) {
 		if (y >= 0 && y < world.getHeight()) {
-			int redstoneWireValue = (world.getBlockId(x, y, z) == Block.redstoneWire.blockID) ? world.getBlockMetadata(
-					x, y, z) : 0;
+			int redstoneWireValue = (world.getBlock(x, y, z).equals(Blocks.redstone_wire)) ? world.getBlockMetadata(x,
+					y, z) : 0;
 			int indirectPowerTo = world.getIndirectPowerLevelTo(x, y, z, direction);
 			int directPowerTo = world.isBlockProvidingPowerTo(x, y, z, direction);
 			return Math.max(Math.max(redstoneWireValue, indirectPowerTo), directPowerTo);

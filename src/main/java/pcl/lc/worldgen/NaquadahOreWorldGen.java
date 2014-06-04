@@ -59,20 +59,21 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				generateChunk(typeof, chunk.worldObj, chunk);
 	}
 
-	private int getBlock(Chunk chunk, int x, int y, int z) {
-		return chunk.getBlockID(x, y, z);
+	private Block getBlock(Chunk chunk, int x, int y, int z) {
+		return chunk.getBlock(x, y, z);
 	}
 
-	private void setBlock(Chunk chunk, int x, int y, int z, int id, int metadata) {
-		chunk.setBlockIDWithMetadata(x, y, z, id, metadata);
+	private void setBlock(Chunk chunk, int x, int y, int z, Block block, int metadata) {
+		chunk.func_150807_a(x, y, z, block, metadata);
 	}
 
-	void generateNode(Chunk chunk, World world, Random random, int id, int metadata, int cx, int cy, int cz, int density) {
+	void generateNode(Chunk chunk, World world, Random random, Block block, int metadata, int cx, int cy, int cz, int density) {
 		LanteaCraft.getLogger().log(
 				Level.FINEST,
 				String.format("Node generator building node around %s %s %s with density %s typeof %s", cx
 						+ (16 * chunk.getChunkCoordIntPair().chunkXPos), cy, cz
 						+ (16 * chunk.getChunkCoordIntPair().chunkZPos), density, metadata));
+		Block blockStone = (Block) Block.blockRegistry.getObject("stone");
 		int tries = 0;
 		main: while (density > 0) {
 			int tx = cx, ty = cy, tz = cz;
@@ -104,9 +105,9 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 					continue main;
 				// expand; this block is already an ore of type id so we can
 				// continue our search
-				else if (getBlock(chunk, tx, ty, tz) == id)
+				else if (getBlock(chunk, tx, ty, tz).equals(LanteaCraft.Blocks.lanteaOre))
 					continue expand;
-				else if (getBlock(chunk, tx, ty, tz) == Block.stone.blockID)
+				else if (getBlock(chunk, tx, ty, tz).equals(blockStone))
 					break expand;
 				// illegal; detected some other block (air, other ores, etc),
 				// so reset the scan and try again.
@@ -114,8 +115,8 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 					break main;
 			}
 
-			if (getBlock(chunk, tx, ty, tz) == Block.stone.blockID) {
-				setBlock(chunk, tx, ty, tz, id, metadata);
+			if (getBlock(chunk, tx, ty, tz).equals(blockStone)) {
+				setBlock(chunk, tx, ty, tz, block, metadata);
 				density--;
 				tries = 0;
 				continue main;
@@ -133,16 +134,17 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 	void generateChunk(OreTypes typeof, World world, Chunk chunk) {
 		Random random = requestRandomFor(chunk.getChunkCoordIntPair().chunkXPos,
 				chunk.getChunkCoordIntPair().chunkZPos, world, typeof.ordinal());
+		Block blockStone = (Block) Block.blockRegistry.getObject("stone");
 		if (odds(random, genIsolatedOdds) || true) {
 			int n = random.nextInt(maxIsolatedNodes) + 1;
 			for (int i = 0; i < n; i++) {
 				int x = random.nextInt(16);
 				int y = random.nextInt(64);
 				int z = random.nextInt(16);
-				if (getBlock(chunk, x, y, z) == Block.stone.blockID) {
+				if (getBlock(chunk, x, y, z).equals(blockStone)) {
 					LanteaCraft.getLogger().log(Level.FINEST,
 							String.format("Attempting to place Naquadah node at %s %s %s", x, y, z));
-					generateNode(chunk, world, random, Blocks.lanteaOre.blockID, typeof.ordinal(), x, y, z, 6);
+					generateNode(chunk, world, random, Blocks.lanteaOre, typeof.ordinal(), x, y, z, 6);
 				}
 			}
 		}

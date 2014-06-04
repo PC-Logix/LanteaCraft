@@ -19,7 +19,7 @@ public class BlockOfLanteaOre extends BlockOre {
 		super();
 		setHardness(5.0F);
 		setResistance(10.0F);
-		setStepSound(soundMetalFootstep);
+		setStepSound(soundTypeMetal);
 
 	}
 

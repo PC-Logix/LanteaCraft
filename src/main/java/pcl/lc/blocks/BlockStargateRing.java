@@ -3,12 +3,14 @@ package pcl.lc.blocks;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -30,8 +32,8 @@ public class BlockStargateRing extends GenericContainerBlock {
 	IIcon topAndBottomTexture;
 	IIcon sideTextures[] = new IIcon[numSubBlocks];
 
-	public BlockStargateRing(int id) {
-		super(id, Block.blocksList[4].blockMaterial);
+	public BlockStargateRing() {
+		super(Material.ground);
 		setHardness(50F);
 		setResistance(2000F);
 		setCreativeTab(CreativeTabs.tabMisc);
@@ -66,7 +68,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
@@ -86,7 +88,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 		TileEntityStargateRing te = (TileEntityStargateRing) world.getTileEntity(x, y, z);
 		if (te.getAsPart().isMerged()) {
 			Vector3 base = te.getAsPart().findHostMultiblock(false).getLocation();
-			Block block = Block.blocksList[world.getBlockId(base.floorX(), base.floorY(), base.floorZ())];
+			Block block = world.getBlock(base.floorX(), base.floorY(), base.floorZ());
 			if (block instanceof BlockStargateBase)
 				block.onBlockActivated(world, base.floorX(), base.floorY(), base.floorZ(), player, side, cx, cy, cz);
 			return true;

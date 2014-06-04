@@ -21,7 +21,7 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 
 	public BlockLiquidNaquadah() {
 		super(LanteaCraft.Fluids.fluidLiquidNaquadah, Material.water);
-		LanteaCraft.Fluids.fluidLiquidNaquadah.setBlockID(blockID);
+		LanteaCraft.Fluids.fluidLiquidNaquadah.setBlock(this);
 		setTickRandomly(true);
 	}
 

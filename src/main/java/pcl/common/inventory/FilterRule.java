@@ -125,7 +125,7 @@ public class FilterRule {
 	}
 
 	private boolean isItemVirtuallyEqual(ItemStack a, ItemStack b) {
-		if (a.itemID != b.itemID)
+		if (!a.getItem().equals(b.getItem()))
 			return false;
 		if (observeMetadata && a.getItemDamage() != b.getItemDamage())
 			return false;

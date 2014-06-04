@@ -61,10 +61,10 @@ public class SpecialBucketHandler {
 	 *         {@link ItemSpecialBucket} registered with the handler.
 	 */
 	private ItemStack fillCustomBucket(World world, MovingObjectPosition pos) {
-		int blockID = world.getBlockId(pos.blockX, pos.blockY, pos.blockZ);
+		Block block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
 		for (Entry<Block, ItemSpecialBucket> results : buckets.entrySet())
-			if (blockID == results.getKey().blockID) {
-				world.setBlock(pos.blockX, pos.blockY, pos.blockZ, 0);
+			if (block.equals(results.getKey())) {
+				world.setBlock(pos.blockX, pos.blockY, pos.blockZ, Block.getBlockById(0));
 				return new ItemStack(results.getValue());
 			}
 		return null;

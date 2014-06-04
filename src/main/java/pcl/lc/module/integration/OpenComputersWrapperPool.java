@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 import li.cil.oc.api.Network;
-import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.driver.MethodWhitelist;
 import li.cil.oc.api.network.Arguments;
 import li.cil.oc.api.network.Callback;
@@ -15,6 +14,7 @@ import li.cil.oc.api.network.ManagedEnvironment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.Visibility;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import pcl.lc.BuildInfo;
@@ -26,26 +26,26 @@ import pcl.lc.api.IStargateControllerAccess;
 
 public class OpenComputersWrapperPool {
 
-	public static class OpenComputersDriver implements Block {
+	public static class OpenComputersDriver implements li.cil.oc.api.driver.Block {
 		@Override
 		public boolean worksWith(World world, int x, int y, int z) {
-			int id = world.getBlockId(x, y, z);
-			return (id == LanteaCraft.Blocks.stargateBaseBlock.blockID)
-					|| (id == LanteaCraft.Blocks.naquadahGenerator.blockID)
-					|| (id == LanteaCraft.Blocks.stargateControllerBlock.blockID);
+			Block theblock = world.getBlock(x, y, z);
+			return theblock.equals(LanteaCraft.Blocks.stargateBaseBlock)
+					|| theblock.equals(LanteaCraft.Blocks.naquadahGenerator)
+					|| theblock.equals(LanteaCraft.Blocks.stargateControllerBlock);
 		}
 
 		@Override
 		public ManagedEnvironment createEnvironment(World world, int x, int y, int z) {
-			int id = world.getBlockId(x, y, z);
+			Block theblock = world.getBlock(x, y, z);
 			try {
-				if (id == LanteaCraft.Blocks.stargateBaseBlock.blockID) {
+				if (theblock.equals(LanteaCraft.Blocks.stargateBaseBlock)) {
 					IStargateAccess base = (IStargateAccess) world.getTileEntity(x, y, z);
 					return new OpenComputersWrapperPool.StargateAccessWrapper(base);
-				} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
+				} else if (theblock.equals(LanteaCraft.Blocks.naquadahGenerator)) {
 					INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getTileEntity(x, y, z);
 					return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
-				} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
+				} else if (theblock.equals(LanteaCraft.Blocks.stargateControllerBlock)) {
 					IStargateControllerAccess dhd = (IStargateControllerAccess) world.getTileEntity(x, y, z);
 					return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
 				} else
@@ -83,7 +83,7 @@ public class OpenComputersWrapperPool {
 			if (node != null) {
 				NBTTagCompound nodeTag = new NBTTagCompound();
 				node.save(nodeTag);
-				nbt.setCompoundTag("node", nodeTag);
+				nbt.setTag("node", nodeTag);
 			}
 		}
 

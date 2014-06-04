@@ -139,9 +139,9 @@ public class StargateMultiblock extends GenericMultiblock {
 			LanteaCraft.getLogger().log(Level.FINE, "Testing EASTWEST");
 			for (int y = 0; y < 7; y++)
 				for (int x = 0; x < 7; x++) {
-					int blockId = worldAccess.getBlockId(baseX + (x - 3), baseY + y, baseZ);
-					TileEntity entity = worldAccess.getBlockTileEntity(baseX + (x - 3), baseY + y, baseZ);
-					if (!testIsValidForExpected(worldAccess, baseX + (x - 3), baseY + y, baseZ, entity, blockId,
+					Block block = worldAccess.getBlock(baseX + (x - 3), baseY + y, baseZ);
+					TileEntity entity = worldAccess.getTileEntity(baseX + (x - 3), baseY + y, baseZ);
+					if (!testIsValidForExpected(worldAccess, baseX + (x - 3), baseY + y, baseZ, entity, block,
 							stargateModel[y][x]))
 						return false;
 				}
@@ -153,9 +153,9 @@ public class StargateMultiblock extends GenericMultiblock {
 			LanteaCraft.getLogger().log(Level.FINE, "Testing NORTHSOUTH");
 			for (int y = 0; y < 7; y++)
 				for (int z = 0; z < 7; z++) {
-					int blockId = worldAccess.getBlockId(baseX, baseY + y, baseZ + (z - 3));
-					TileEntity entity = worldAccess.getBlockTileEntity(baseX, baseY + y, baseZ + (z - 3));
-					if (!testIsValidForExpected(worldAccess, baseX, baseY + y, baseZ + (z - 3), entity, blockId,
+					Block block = worldAccess.getBlock(baseX, baseY + y, baseZ + (z - 3));
+					TileEntity entity = worldAccess.getTileEntity(baseX, baseY + y, baseZ + (z - 3));
+					if (!testIsValidForExpected(worldAccess, baseX, baseY + y, baseZ + (z - 3), entity, block,
 							stargateModel[y][z]))
 						return false;
 				}
@@ -166,13 +166,13 @@ public class StargateMultiblock extends GenericMultiblock {
 		return false;
 	}
 
-	private boolean testIsValidForExpected(World world, int x, int y, int z, TileEntity entity, int blockId,
+	private boolean testIsValidForExpected(World world, int x, int y, int z, TileEntity entity, Block block,
 			int expectedType) {
 		if (expectedType == 0)
-			if (blockId == 0 || Block.blocksList[blockId] == null)
+			if (block == null)
 				return true;
 			else
-				return Block.blocksList[blockId].isAirBlock(world, x, y, z);
+				return block.isAir(world, x, y, z);
 		if (expectedType == 1 || expectedType == 2) {
 			if (!(entity instanceof TileEntityStargateRing))
 				return false;
@@ -256,8 +256,8 @@ public class StargateMultiblock extends GenericMultiblock {
 		if (!isClient && (stateOf == EnumStargateState.Connected || stateOf == EnumStargateState.Disconnecting)
 				&& LanteaCraft.getProxy().doExplosion()) {
 			LanteaCraft.getLogger().log(Level.INFO, "Creating explosion: gate destroyed while connected!");
-			int k = host.getWorldObj().getBlockId(host.xCoord, host.yCoord, host.zCoord);
-			if (k == LanteaCraft.Blocks.stargateBaseBlock.blockID)
+			Block block = host.getWorldObj().getBlock(host.xCoord, host.yCoord, host.zCoord);
+			if (block.equals(LanteaCraft.Blocks.stargateBaseBlock))
 				LanteaCraft.Blocks.stargateBaseBlock
 						.explode(host.getWorldObj(), host.xCoord, host.yCoord, host.zCoord, 500D);
 		}

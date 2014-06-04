@@ -14,6 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import pcl.common.audio.AudioEngine;
 import pcl.common.base.TileEntityChunkManager;

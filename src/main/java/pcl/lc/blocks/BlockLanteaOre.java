@@ -23,7 +23,7 @@ public class BlockLanteaOre extends BlockOre {
 		super();
 		setHardness(5.0F);
 		setResistance(10.0F);
-		setStepSound(soundStoneFootstep);
+		setStepSound(soundTypeStone);
 		MinecraftForge.setBlockHarvestLevel(this, "pickaxe", 3);
 		setCreativeTab(CreativeTabs.tabBlock);
 	}

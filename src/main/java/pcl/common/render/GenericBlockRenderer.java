@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
