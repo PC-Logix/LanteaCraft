@@ -20,6 +20,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
@@ -28,6 +31,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.SoundHost;
 import pcl.common.base.GenericTileEntity;
@@ -55,6 +59,7 @@ import pcl.lc.core.StargateConnectionManager.ConnectionRequest;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
@@ -883,18 +888,10 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		WorldServer oldWorld = server.worldServerForDimension(oldDimension);
 		WorldServer newWorld = server.worldServerForDimension(newDimension);
 
-		/**
-		 * The following is an MCPC+ only fix which was prescribed in
-		 * #mcportcentral.
-		 */
-		Packet250CustomPayload spoof = ForgePacket.makePacketSet(new DimensionRegisterPacket(newDimension,
-				DimensionManager.getProviderType(newDimension)))[0];
-		player.playerNetServerHandler.sendPacketToPlayer(spoof);
-
 		player.closeScreen();
-		player.playerNetServerHandler.sendPacketToPlayer(new Packet9Respawn(player.dimension,
-				(byte) player.worldObj.difficultySetting, newWorld.getWorldInfo().getTerrainType(), newWorld
-						.getHeight(), player.theItemInWorldManager.getGameType()));
+		player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension,
+				player.worldObj.difficultySetting, newWorld.getWorldInfo().getTerrainType(),
+				player.theItemInWorldManager.getGameType()));
 		oldWorld.removePlayerEntityDangerously(player);
 		player.isDead = false;
 		player.setLocationAndAngles(p.x, p.y, p.z, (float) a, player.rotationPitch);
@@ -908,11 +905,11 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		Iterator var6 = player.getActivePotionEffects().iterator();
 		while (var6.hasNext()) {
 			PotionEffect effect = (PotionEffect) var6.next();
-			player.playerNetServerHandler.sendPacketToPlayer(new Packet41EntityEffect(player.getEntityId(), effect));
+			player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), effect));
 		}
-		player.playerNetServerHandler.sendPacketToPlayer(new Packet43Experience(player.experience,
-				player.experienceTotal, player.experienceLevel));
-		GameRegistry.onPlayerChangedDimension(player);
+		player.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(player.experience, player.experienceTotal,
+				player.experienceLevel));
+		MinecraftForge.EVENT_BUS.post(new PlayerChangedDimensionEvent(player, oldDimension, newDimension));
 	}
 
 	public void setConnection(ConnectionRequest request) {
