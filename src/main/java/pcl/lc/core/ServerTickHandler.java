@@ -5,7 +5,8 @@ import pcl.common.base.TickHandler;
 import pcl.common.helpers.VersionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 public class ServerTickHandler extends TickHandler {
 
@@ -17,7 +18,9 @@ public class ServerTickHandler extends TickHandler {
 	}
 
 	@SubscribeEvent
-	public void onWorldTick(WorldTickEvent tick) {
+	public void onWorldTick(ServerTickEvent tick) {
+		if (tick.phase != Phase.START)
+			return;
 		updateChildren();
 		tickChildren();
 	}

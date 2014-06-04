@@ -198,10 +198,9 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 
 		Vector<SoundHostObject> stopSounds = new Vector<SoundHostObject>();
 		EntityPlayer client = Minecraft.getMinecraft().thePlayer;
-		if (client == null) {
-			LanteaCraft.getLogger().log(Level.INFO, "Removing all sounds...");
+		if (client == null) 
 			stopSounds.addAll(hostSourceList.keySet());
-		} else {
+		else {
 			PriorityQueue<AudioSource> soundQueue = new PriorityQueue<AudioSource>();
 
 			for (Entry<SoundHostObject, ArrayList<AudioSource>> entry : hostSourceList.entrySet())
