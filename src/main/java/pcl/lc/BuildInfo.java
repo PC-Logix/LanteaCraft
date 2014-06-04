@@ -28,7 +28,7 @@ public class BuildInfo {
 	/**
 	 * Enable or disable network traffic dumping mode.
 	 */
-	public static final boolean NET_DEBUGGING = true && isDevelopmentEnvironment();
+	public static final boolean NET_DEBUGGING = false && isDevelopmentEnvironment();
 
 	/**
 	 * Enable or disable asset and configuration access dumping.

@@ -177,8 +177,6 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 	@Override
 	public AudioSource create(Object owner, AudioPosition position, String file, boolean looping, boolean override,
 			float volume) {
-		if (system == null)
-			return new AudioSource();
 		String tag = ClientAudioEngine.label();
 		AudioSource source = new ClientAudioSource(system, position, file, looping, override, volume, tag);
 		SoundHostObject host = new SoundHostObject(owner);
@@ -194,15 +192,16 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 			return;
 		if (system == null)
 			return;
-		float vol = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS);
+		float vol = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER);
 		if (masterVolume != vol)
 			masterVolume = vol;
 
 		Vector<SoundHostObject> stopSounds = new Vector<SoundHostObject>();
 		EntityPlayer client = Minecraft.getMinecraft().thePlayer;
-		if (client == null)
+		if (client == null) {
+			LanteaCraft.getLogger().log(Level.INFO, "Removing all sounds...");
 			stopSounds.addAll(hostSourceList.keySet());
-		else {
+		} else {
 			PriorityQueue<AudioSource> soundQueue = new PriorityQueue<AudioSource>();
 
 			for (Entry<SoundHostObject, ArrayList<AudioSource>> entry : hostSourceList.entrySet())
@@ -214,7 +213,6 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 						if (audioSource.getRealVolume() > 0.0F)
 							soundQueue.add(audioSource);
 					}
-
 			for (int k = 0; !soundQueue.isEmpty(); k++) {
 				AudioSource source = soundQueue.poll();
 				if (maxSources > k)
