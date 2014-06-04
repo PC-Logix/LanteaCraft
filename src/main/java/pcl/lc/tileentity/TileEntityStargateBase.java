@@ -407,7 +407,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	private void createChannel(String name, String file, AudioPosition position, float volume, int age) {
-		soundHost.addChannel(name, String.format("stargate/milkyway/milkyway_%s.ogg", file), position, volume, age);
+		if (soundHost != null)
+			soundHost.addChannel(name, String.format("stargate/milkyway/milkyway_%s.ogg", file), position, volume, age);
 	}
 
 	@Override
