@@ -13,7 +13,7 @@ public class TileEntityStargateRing extends GenericTileEntity implements IPacket
 	@Override
 	public Packet getDescriptionPacket() {
 		ModPacket packet = part.pack();
-		LanteaCraft.getProxy().sendToAllPlayers(packet);
+		LanteaCraft.getNetPipeline().sendToAll(packet);
 		return null;
 	}
 

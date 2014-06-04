@@ -29,17 +29,9 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 	private LinkedList<Class<? extends ModPacket>> packets = new LinkedList<Class<? extends ModPacket>>();
 
 	public boolean registerPacket(Class<? extends ModPacket> clazz) {
-		if (this.packets.size() > 256) {
-			// You should log here!!
+		if (packets.size() > 256 || packets.contains(clazz))
 			return false;
-		}
-
-		if (this.packets.contains(clazz)) {
-			// You should log here!!
-			return false;
-		}
-
-		this.packets.add(clazz);
+		packets.add(clazz);
 		return true;
 	}
 
@@ -89,6 +81,8 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 
 	public void init(String channelName) {
 		this.channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
+		registerPacket(TinyModPacket.class);
+		registerPacket(StandardModPacket.class);
 	}
 
 	@SideOnly(Side.CLIENT)

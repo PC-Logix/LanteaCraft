@@ -10,6 +10,7 @@ import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import pcl.common.helpers.CreativeTabHelper;
 import pcl.common.helpers.SpecialBucketHandler;
+import pcl.common.network.PCLPacketPipeline;
 import pcl.common.render.RotationOrientedBlockRenderer;
 import pcl.lc.blocks.BlockLanteaOre;
 import pcl.lc.blocks.BlockNaquadahGenerator;
@@ -90,6 +91,15 @@ public class LanteaCraft {
 
 	public static Logger getLogger() {
 		return LanteaCraft.logger;
+	}
+
+	/**
+	 * The network pipeline
+	 */
+	private static final PCLPacketPipeline pipeline = new PCLPacketPipeline();
+
+	public static PCLPacketPipeline getNetPipeline() {
+		return LanteaCraft.pipeline;
 	}
 
 	/**
@@ -272,6 +282,7 @@ public class LanteaCraft {
 
 	@EventHandler
 	public void init(FMLInitializationEvent e) {
+		pipeline.init(BuildInfo.modID);
 		proxy.init(e);
 	}
 

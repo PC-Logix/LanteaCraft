@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Level;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,7 +25,6 @@ import pcl.common.helpers.NetworkHelpers;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.common.helpers.VersionHelper;
 import pcl.common.network.ModPacket;
-import pcl.common.util.WorldLocation;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.core.RemoteChunkLoading;
@@ -41,14 +39,12 @@ import pcl.lc.network.ServerPacketHandler;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.worldgen.NaquadahOreWorldGen;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class LanteaCraftCommonProxy {
 
@@ -137,8 +133,8 @@ public class LanteaCraftCommonProxy {
 		serverTickHandler.registerTickHost(stargateConnectionManager);
 		audioContext = new AudioEngine();
 
-		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
-		TickRegistry.registerTickHandler(serverTickHandler, Side.SERVER);
+		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
+		MinecraftForge.EVENT_BUS.register(serverTickHandler);
 		networkHelpers.init();
 		moduleManager.init();
 	}
@@ -314,54 +310,6 @@ public class LanteaCraftCommonProxy {
 
 	public void sendToServer(ModPacket packet) {
 		throw new RuntimeException("Cannot send to server: this method was not overridden!!");
-	}
-
-	public void sendToAllPlayers(ModPacket packet) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		if (server != null) {
-			Packet250CustomPayload payload = packet.toPacket();
-			payload.channel = BuildInfo.modID;
-			if (BuildInfo.NET_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("sendToAllPlayers: 250 %s %s", payload.channel, payload.length));
-			server.getConfigurationManager().sendPacketToAllPlayers(payload);
-		}
-	}
-
-	public void sendToPlayersInDimension(ModPacket packet) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		if (server != null) {
-			Packet250CustomPayload payload = packet.toPacket();
-			payload.channel = BuildInfo.modID;
-			WorldLocation origin = packet.getOriginLocation();
-			if (BuildInfo.NET_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("sendToPlayersInDimension: 250 %s %s", payload.channel, payload.length));
-			server.getConfigurationManager().sendPacketToAllPlayersInDimension(payload, origin.dimension);
-		}
-	}
-
-	public void sendToPlayersNear(ModPacket packet, double range) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		if (server != null) {
-			Packet250CustomPayload payload = packet.toPacket();
-			payload.channel = BuildInfo.modID;
-			if (BuildInfo.NET_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("sendToPlayersNear: 250 %s %s", payload.channel, payload.length));
-			WorldLocation origin = packet.getOriginLocation();
-			server.getConfigurationManager().sendToAllNear(origin.x, origin.y, origin.z, range, origin.dimension,
-					payload);
-		}
-	}
-
-	public void sendToPlayer(EntityPlayer player, ModPacket packet) {
-		Packet250CustomPayload payload = packet.toPacket();
-		payload.channel = BuildInfo.modID;
-		if (BuildInfo.NET_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("sendToPlayer: 250 %s %s", payload.channel, payload.length));
-		PacketDispatcher.sendPacketToPlayer(payload, (Player) player);
 	}
 
 	public ConfigurationHelper getConfig() {

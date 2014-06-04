@@ -113,7 +113,7 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getProxy().sendToAllPlayers(getPacketFromState());
+		LanteaCraft.getNetPipeline().sendToAll(getPacketFromState());
 		return null;
 	}
 

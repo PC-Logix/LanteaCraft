@@ -209,7 +209,7 @@ public class TileEntityStargateController extends GenericTileEntity implements I
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getProxy().sendToAllPlayers(getPacketFromState());
+		LanteaCraft.getNetPipeline().sendToAll(getPacketFromState());
 		return null;
 	}
 

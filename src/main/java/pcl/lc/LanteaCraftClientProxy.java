@@ -100,9 +100,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		MinecraftForge.EVENT_BUS.register(hooks);
 		cloakHandler.buildDatabase();
 		MinecraftForge.EVENT_BUS.register(cloakHandler);
+		MinecraftForge.EVENT_BUS.register(clientTickHandler);
 		audioContext = new ClientAudioEngine();
 		clientTickHandler.registerTickHost(audioContext);
-		TickRegistry.registerTickHandler(clientTickHandler, Side.CLIENT);
 		registerScreens();
 		registerRenderers();
 
@@ -220,16 +220,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 			serverPacketHandler.handlePacket(packet, player);
 		else
 			clientPacketHandler.handlePacket(packet, player);
-	}
-
-	@Override
-	public void sendToServer(ModPacket packet) {
-		Packet250CustomPayload payload = packet.toPacket();
-		payload.channel = BuildInfo.modID;
-		if (BuildInfo.NET_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("sendToServer: 250 %s %s", payload.channel, payload.length));
-		FMLClientHandler.instance().sendPacket(payload);
 	}
 
 	private void movePlayerToServer(String address, int port) {

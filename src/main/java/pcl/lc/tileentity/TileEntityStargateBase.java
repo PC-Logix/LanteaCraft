@@ -243,7 +243,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					connection.symbol.clearModified(observerContext);
 					update.setValue("symbol", connection.symbol.get());
 				}
-				LanteaCraft.getProxy().sendToAllPlayers(update);
+				LanteaCraft.getNetPipeline().sendToAll(update);
 			}
 	}
 
@@ -547,7 +547,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getProxy().sendToAllPlayers(getAsStructure().pack());
+		LanteaCraft.getNetPipeline().sendToAll(getAsStructure().pack());
 		if (connection != null) {
 			StandardModPacket update = new StandardModPacket(new WorldLocation(this));
 			update.setType("LanteaPacket.ConnectionSet");
@@ -563,7 +563,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			update.setValue("hostAddress", connection.hostAddress);
 			update.setValue("clientAddress", connection.clientAddress);
 			update.setValue("isHost", connection.isHost(this));
-			LanteaCraft.getProxy().sendToAllPlayers(update);
+			LanteaCraft.getNetPipeline().sendToAll(update);
 		}
 		return null;
 	}
