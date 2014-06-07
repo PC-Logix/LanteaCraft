@@ -44,8 +44,6 @@ item.zpm.name=ZPM
 item.transportRingActivator.name=Aktivátor transportních kruhů
 item.iris.name=Obvod iris
 item.gdo.name=Zadavač kódu iris
-iris.mechanical=Mechanická iris
-iris.energy=Energetická iris
 
 item.tokraSpawnEgg.name=Vejce, uvnitř je Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
