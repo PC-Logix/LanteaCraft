@@ -43,5 +43,5 @@ item.transportRingActivator.name=Transport Ring Activator
 
 item.tokraSpawnEgg.name=Tok'ra Spawn Egg
 item.lanteadebug.name=LanteaCraft Debugger
-
+tile.integration.computercraft.name=ComputerCraft Adapter
 death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
