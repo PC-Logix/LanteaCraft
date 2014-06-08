@@ -4,7 +4,9 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyTile;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
+import java.util.logging.Level;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -12,6 +14,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.Event;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -130,15 +134,32 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	}
 
 	private void postIC2Update(boolean actionIsLoad) {
-		if (actionIsLoad) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) this));
-			addedToEnergyNet = true;
-		} else {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) this));
-			addedToEnergyNet = false;
+		try {
+			Class<?> clazz_ic2energytile = Class.forName("ic2.api.energy.tile.IEnergyTile", false, getClass()
+					.getClassLoader());
+
+			if (actionIsLoad) {
+				Class<? extends WorldEvent> clazz_loadevent = (Class<? extends WorldEvent>) Class.forName(
+						"ic2.api.energy.event.EnergyTileLoadEvent", false, getClass().getClassLoader());
+				Constructor<? extends WorldEvent> c_loadevent = clazz_loadevent
+						.getConstructor(new Class<?>[] { clazz_ic2energytile });
+				WorldEvent event = (WorldEvent) c_loadevent.newInstance(clazz_ic2energytile.cast(this));
+				MinecraftForge.EVENT_BUS.post(event);
+				addedToEnergyNet = true;
+			} else {
+				Class<? extends WorldEvent> clazz_loadevent = (Class<? extends WorldEvent>) Class.forName(
+						"ic2.api.energy.event.EnergyTileUnloadEvent", false, getClass().getClassLoader());
+				Constructor<? extends WorldEvent> c_unloadevent = clazz_loadevent
+						.getConstructor(new Class<?>[] { clazz_ic2energytile });
+				WorldEvent event = (WorldEvent) c_unloadevent.newInstance(clazz_ic2energytile.cast(this));
+				MinecraftForge.EVENT_BUS.post(event);
+				addedToEnergyNet = false;
+			}
+			onInventoryChanged();
+			stateChanged();
+		} catch (Throwable t) {
+			LanteaCraft.getLogger().log(Level.WARNING, "Could not push IC2 energy event.", t);
 		}
-		onInventoryChanged();
-		stateChanged();
 	}
 
 	public void stateChanged() {
