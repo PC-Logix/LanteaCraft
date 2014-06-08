@@ -116,11 +116,10 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	@Override
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
-			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-			if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && !addedToEnergyNet) {
-				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) this));
-				addedToEnergyNet = true;
-				stateChanged();
+			if (!addedToEnergyNet) {
+				List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+				if (ifaces.contains("ic2.api.energy.tile.IEnergyTile"))
+					postIC2Update(true);
 			}
 			if (tank.hasChanged())
 				stateChanged();
@@ -128,6 +127,18 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 			refuel();
 		}
+	}
+
+	private void postIC2Update(boolean actionIsLoad) {
+		if (actionIsLoad) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) this));
+			addedToEnergyNet = true;
+		} else {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) this));
+			addedToEnergyNet = false;
+		}
+		onInventoryChanged();
+		stateChanged();
 	}
 
 	public void stateChanged() {
@@ -194,11 +205,10 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 	@Override
 	public void invalidate() {
-		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-		if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && addedToEnergyNet) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) this));
-			addedToEnergyNet = false;
-			onInventoryChanged();
+		if (addedToEnergyNet) {
+			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+			if (ifaces.contains("ic2.api.energy.tile.IEnergyTile"))
+				postIC2Update(false);
 		}
 		super.invalidate();
 	}
