@@ -42,5 +42,9 @@ item.transportRingActivator.name=Handgerät
 item.tokraSpawnEgg.name=Erschaffe Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
 item.zpm.name=ZPM
+item.gdo.name=GDO
+
+item.iris.name=Iris-Upgrade
+tile.integration.computercraft.name=ComputerCraft Einbindung
 
 death.attack.wormhole_transient=%1$s wurde vom Ereignishorizont in Stücke gerissen.
