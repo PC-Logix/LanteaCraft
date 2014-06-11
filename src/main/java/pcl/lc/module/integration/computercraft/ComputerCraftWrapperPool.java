@@ -1,6 +1,7 @@
 package pcl.lc.module.integration.computercraft;
 
 import net.minecraft.tileentity.TileEntity;
+import pcl.lc.BuildInfo;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
@@ -137,7 +138,7 @@ public class ComputerCraftWrapperPool {
 		@Override
 		public String[] getMethodNames() {
 			return new String[] { "dial", "connect", "disconnect", "isConnected", "getAddress", "isDialing",
-					"isComplete", "hasFuel" };
+					"isComplete", "hasFuel", "getInterfaceVersion" };
 		}
 
 		@Override
@@ -169,6 +170,8 @@ public class ComputerCraftWrapperPool {
 				return new Object[] { access.isValid() };
 			case 7:
 				return new Object[] { access.getRemainingConnectionTime() > 0 && access.getRemainingDials() > 0 };
+			case 8:
+				return new Object[] { BuildInfo.versionNumber + "." + BuildInfo.getBuildNumber() };
 			}
 			throw new Exception(String.format("Warning, unhandled method id %s!", method));
 		}
@@ -187,13 +190,14 @@ public class ComputerCraftWrapperPool {
 					else
 						pushEvent(
 								"sgIncoming",
-								new Object[] { access.getConnectionAddress().substring(0, access.getEncodedChevrons()) });
-					break;
+								new Object[] { Character.toString(access.getConnectionAddress().charAt(access.getEncodedChevrons())) });
+								break;
 				case InterDialling:
 					pushEvent("sgChevronEncode", new Object[] { access.getEncodedChevrons() });
-					break;
+					break; 
 				case Transient:
-					pushEvent("sgWormholeOpening", new Object[] { true });
+					if (access.getState() != access.getState().Connected)
+						pushEvent("sgWormholeOpening", new Object[] { true });
 					break;
 				case Disconnecting:
 					pushEvent("sgWormholeClosing", new Object[] { true });
