@@ -1,145 +1,179 @@
-package pcl.lc.module.integration;
+package pcl.lc.module.integration.computercraft;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.logging.Level;
-
-import li.cil.oc.api.Network;
-import li.cil.oc.api.driver.Block;
-import li.cil.oc.api.driver.MethodWhitelist;
-import li.cil.oc.api.network.Arguments;
-import li.cil.oc.api.network.Callback;
-import li.cil.oc.api.network.Context;
-import li.cil.oc.api.network.ManagedEnvironment;
-import li.cil.oc.api.network.Message;
-import li.cil.oc.api.network.Node;
-import li.cil.oc.api.network.Visibility;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
+import net.minecraft.tileentity.TileEntity;
 import pcl.lc.BuildInfo;
-import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
+import dan200.computercraft.api.lua.ILuaContext;
+import dan200.computercraft.api.peripheral.IComputerAccess;
+import dan200.computercraft.api.peripheral.IPeripheral;
 
-public class OpenComputersWrapperPool {
+public class ComputerCraftWrapperPool {
 
-	public static class OpenComputersDriver implements Block {
-		@Override
-		public boolean worksWith(World world, int x, int y, int z) {
-			int id = world.getBlockId(x, y, z);
-			return (id == LanteaCraft.Blocks.stargateBaseBlock.blockID)
-					|| (id == LanteaCraft.Blocks.naquadahGenerator.blockID)
-					|| (id == LanteaCraft.Blocks.stargateControllerBlock.blockID);
-		}
-
-		@Override
-		public ManagedEnvironment createEnvironment(World world, int x, int y, int z) {
-			int id = world.getBlockId(x, y, z);
-			try {
-				if (id == LanteaCraft.Blocks.stargateBaseBlock.blockID) {
-					IStargateAccess base = (IStargateAccess) world.getBlockTileEntity(x, y, z);
-					return new OpenComputersWrapperPool.StargateAccessWrapper(base);
-				} else if (id == LanteaCraft.Blocks.naquadahGenerator.blockID) {
-					INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getBlockTileEntity(x, y, z);
-					return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
-				} else if (id == LanteaCraft.Blocks.stargateControllerBlock.blockID) {
-					IStargateControllerAccess dhd = (IStargateControllerAccess) world.getBlockTileEntity(x, y, z);
-					return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
-				} else
-					throw new RuntimeException("Driver.Block handler specified invalid typeof!");
-			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.WARNING,
-						"Failed when handling OpenComputers createEnvironment request.", t);
-				return null;
-			}
-		}
+	/**
+	 * Determines if a wrapper can wrap a tile.
+	 * 
+	 * @param tile
+	 *            The tile
+	 * @return If the tile can be wrapped
+	 */
+	public static boolean canWrap(TileEntity tile) {
+		return (tile instanceof IStargateAccess) || (tile instanceof IStargateControllerAccess)
+				|| (tile instanceof INaquadahGeneratorAccess);
 	}
 
-	private interface IHookManagedEnvironment extends ManagedEnvironment {
-		public String getComponentName();
+	/**
+	 * Wraps a tile
+	 * 
+	 * @param tile
+	 *            The target tile
+	 * @param host
+	 *            The host tile
+	 * @return The wrapper, or null if no wrapper exists
+	 */
+	public static ComputerCraftVirtualPeripheral wrap(TileEntity tile, TileEntityComputerCraftConnector host) {
+		if (tile instanceof IStargateAccess)
+			return new StargateAccessWrapper(host, (IStargateAccess) tile);
+		if (tile instanceof IStargateControllerAccess)
+			return new StargateControllerAccessWrapper(host, (IStargateControllerAccess) tile);
+		if (tile instanceof INaquadahGeneratorAccess)
+			return new NaquadahGeneratorAccessWrapper(host, (INaquadahGeneratorAccess) tile);
+		return null;
 	}
 
-	private abstract static class OpenComputersHostStub implements IHookManagedEnvironment, MethodWhitelist {
+	/**
+	 * Virtual peripheral methods, as we do not want to touch the 'official' API
+	 * because it's crap, and because we need methods which don't exist either
+	 * physically or synthetically. Instead, call via proxy to objects in
+	 * virtual peripheral implementations.
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	public static abstract class ComputerCraftVirtualPeripheral {
 
-		private String[] methodList = null;
-		protected Node node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
+		private final TileEntityComputerCraftConnector host;
 
-		@Override
-		public Node node() {
-			return node;
-		}
-
-		@Override
-		public void load(final NBTTagCompound nbt) {
-			if (node != null)
-				node.load(nbt.getCompoundTag("node"));
-		}
-
-		@Override
-		public void save(final NBTTagCompound nbt) {
-			if (node != null) {
-				NBTTagCompound nodeTag = new NBTTagCompound();
-				node.save(nodeTag);
-				nbt.setCompoundTag("node", nodeTag);
-			}
-		}
-
-		@Override
-		public boolean canUpdate() {
-			return true;
-		}
-
-		@Override
-		public void onConnect(Node node) {
-		}
-
-		@Override
-		public void onDisconnect(Node node) {
-		}
-
-		@Override
-		public void onMessage(Message message) {
+		public ComputerCraftVirtualPeripheral(TileEntityComputerCraftConnector host) {
+			this.host = host;
 		}
 
 		/**
-		 * Method to get all methods with Callback annotation in the provided
-		 * class.
+		 * Push an event to all computers connected to the host.
 		 * 
-		 * @param clazz
-		 *            Our local class.
-		 * @return List of all Callback methods (cached).
+		 * @param label
+		 *            The name of the event.
+		 * @param varargs
+		 *            Any arguments to provide.
 		 */
-		protected String[] getMethods(Class<? extends OpenComputersHostStub> clazz) {
-			if (methodList != null)
-				return methodList;
-			ArrayList<String> methodView = new ArrayList<String>();
-			for (Method method : clazz.getMethods()) {
-				Annotation[] annotations = method.getAnnotations();
-				if (annotations != null && annotations.length > 0)
-					for (Annotation annotation : annotations)
-						if (annotation.annotationType().equals(Callback.class))
-							methodView.add(method.getName());
-			}
-			methodList = methodView.toArray(new String[0]);
-			return methodList;
+		public void pushEvent(String label, Object[] varargs) {
+			host.pushEvent(label, varargs);
 		}
+
+		/**
+		 * Return the type of the peripheral, must not be null.
+		 * 
+		 * @return The type of the peripheral.
+		 */
+		public abstract String getType();
+
+		/**
+		 * Get a list of all visible methods.
+		 * 
+		 * @return A list of all visible methods.
+		 */
+		public abstract String[] getMethodNames();
+
+		/**
+		 * Invoke a method virtually, return the result.
+		 * 
+		 * @param computer
+		 *            The computer context.
+		 * @param context
+		 *            The Lua 'vm' context.
+		 * @param method
+		 *            The method-id to invoke.
+		 * @param arguments
+		 *            A list of varargs with the invocation.
+		 * @return The result of the invocation.
+		 * @throws Exception
+		 *             Any exception.
+		 */
+		public abstract Object[] callMethod(IComputerAccess computer, ILuaContext context, int method,
+				Object[] arguments) throws Exception;
+
+		/**
+		 * (Undocumented at 1.6:) Determine if this peripheral is identical to
+		 * another type of peripheral; classes might not be the same, so do this
+		 * top-down (clazz, typeof).
+		 * 
+		 * @param other
+		 *            The other IPeripheral.
+		 * @return If the two peripherals are the same.
+		 */
+		public abstract boolean equals(IPeripheral other);
+
+		/**
+		 * Update the peripheral (synthetic to the API).
+		 */
+		public abstract void update();
+
 	}
 
-	public static class StargateAccessWrapper extends OpenComputersHostStub {
-
+	public static class StargateAccessWrapper extends ComputerCraftVirtualPeripheral {
 		private final IStargateAccess access;
 		private EnumStargateState stateWatcher;
 
-		public StargateAccessWrapper(IStargateAccess access) {
+		public StargateAccessWrapper(TileEntityComputerCraftConnector host, IStargateAccess access) {
+			super(host);
 			this.access = access;
 		}
 
 		@Override
-		public String getComponentName() {
+		public String getType() {
 			return "stargate";
+		}
+
+		@Override
+		public String[] getMethodNames() {
+			return new String[] { "dial", "connect", "disconnect", "isConnected", "getAddress", "isDialing",
+					"isComplete", "hasFuel", "getInterfaceVersion" };
+		}
+
+		@Override
+		public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
+				throws Exception {
+			switch (method) {
+			case 0:
+			case 1:
+				String address = arguments[0].toString().toUpperCase();
+				if (address.length() != 7 && address.length() != 9)
+					throw new Exception("Stargate addresses must be 7 or 9 characters.");
+				else if (address == access.getLocalAddress() || address == access.getLocalAddress().substring(0, 7))
+					throw new Exception("Stargate cannot connect to itself.");
+				else if (!access.connect(address))
+					throw new Exception("Stargate cannot dial now.");
+				return new Object[] { true };
+			case 2:
+				if (!access.disconnect())
+					throw new Exception("Stargate cannot be closed from this end");
+				return new Object[] { true };
+			case 3:
+				return new Object[] { access.isBusy() };
+			case 4:
+				return new Object[] { access.getLocalAddress() };
+			case 5:
+				return new Object[] { (access.getState() == EnumStargateState.Dialling
+						|| access.getState() == EnumStargateState.Dialling || access.getState() == EnumStargateState.InterDialling) };
+			case 6:
+				return new Object[] { access.isValid() };
+			case 7:
+				return new Object[] { access.getRemainingConnectionTime() > 0 && access.getRemainingDials() > 0 };
+			case 8:
+				return new Object[] { BuildInfo.versionNumber + "." + BuildInfo.getBuildNumber() };
+			}
+			throw new Exception(String.format("Warning, unhandled method id %s!", method));
 		}
 
 		@Override
@@ -148,212 +182,138 @@ public class OpenComputersWrapperPool {
 				stateWatcher = access.getState();
 				switch (stateWatcher) {
 				case Idle:
-					node.sendToReachable("computer.signal", "sgIdle", true);
+					pushEvent("sgIdle", new Object[] { true });
 					break;
 				case Dialling:
 					if (access.isOutgoingConnection())
-						node.sendToReachable("computer.signal", "sgOutgoing", access.getConnectionAddress());
+						pushEvent("sgOutgoing", new Object[] { access.getConnectionAddress() });
 					else
-						node.sendToReachable("computer.signal", "sgIncoming",
-								Character.toString(access.getConnectionAddress().charAt(access.getEncodedChevrons())));
-					break;
+						pushEvent(
+								"sgIncoming",
+								new Object[] { Character.toString(access.getConnectionAddress().charAt(access.getEncodedChevrons())) });
+								break;
 				case InterDialling:
-					node.sendToReachable("computer.signal", "sgChevronEncode", access.getEncodedChevrons());
-					break;
+					pushEvent("sgChevronEncode", new Object[] { access.getEncodedChevrons() });
+					break; 
 				case Transient:
-					node.sendToReachable("computer.signal", "sgWormholeOpening", true);
+					if (access.getState() != access.getState().Connected)
+						pushEvent("sgWormholeOpening", new Object[] { true });
 					break;
 				case Disconnecting:
-					node.sendToReachable("computer.signal", "sgWormholeClosing", true);
-					break;
-				case Connected:
-					node.sendToReachable("computer.signal", "sgWormholeStable", true);
-					break;
-				default:
+					pushEvent("sgWormholeClosing", new Object[] { true });
 					break;
 				}
 			}
-		}
 
-		@Callback
-		public Object[] greet(Context context, Arguments args) {
-			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
-		}
-
-		@Callback
-		public Object[] getInterfaceVersion(Context context, Arguments args) throws Exception {
-			return new Object[] { BuildInfo.versionNumber + "." + BuildInfo.getBuildNumber() };
-		}
-
-		@Callback
-		public Object[] dial(Context context, Arguments args) throws Exception {
-			return dialTheGate(args.checkString(0).toUpperCase());
-		}
-
-		@Callback
-		public Object[] connect(Context context, Arguments args) throws Exception {
-			return dialTheGate(args.checkString(0).toUpperCase());
-		}
-
-		public Object[] dialTheGate(String address) throws Exception {
-			if (address.length() != 7 && address.length() != 9)
-				throw new Exception("Stargate addresses must be 7 or 9 characters.");
-			else if (address.equals(access.getLocalAddress())
-					|| address.equals(access.getLocalAddress().substring(0, 7)))
-				throw new Exception("Stargate cannot connect to itself.");
-			else if (!access.connect(address))
-				throw new Exception("Stargate cannot dial now.");
-			return new Object[] { true };
-		}
-
-		@Callback
-		public Object[] disconnect(Context context, Arguments args) throws Exception {
-			if (!access.isBusy())
-				throw new Exception("Stargate is not connected");
-			if (!access.disconnect())
-				throw new Exception("Stargate cannot be disconnected");
-			return new Object[] { true };
-		}
-
-		@Callback
-		public Object[] isConnected(Context context, Arguments args) {
-			return new Object[] { access.isBusy() };
-		}
-
-		@Callback
-		public Object[] getAddress(Context context, Arguments args) {
-			return new Object[] { access.getLocalAddress() };
-		}
-
-		@Callback
-		public Object[] isDialing(Context context, Arguments args) {
-			return new Object[] { (access.getState() == EnumStargateState.Dialling
-					|| access.getState() == EnumStargateState.Dialling || access.getState() == EnumStargateState.InterDialling) };
-		}
-
-		@Callback
-		public Object[] isComplete(Context context, Arguments args) {
-			return new Object[] { access.isValid() };
-		}
-
-		@Callback
-		public Object[] hasFuel(Context context, Arguments args) {
-			return new Object[] { access.getRemainingConnectionTime() > 0 && access.getRemainingDials() > 0 };
 		}
 
 		@Override
-		public String[] whitelistedMethods() {
-			return getMethods(this.getClass());
+		public boolean equals(IPeripheral other) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
-	public static class StargateControllerAccessWrapper extends OpenComputersHostStub {
+	public static class StargateControllerAccessWrapper extends ComputerCraftVirtualPeripheral {
 		private final IStargateControllerAccess access;
 
-		public StargateControllerAccessWrapper(IStargateControllerAccess access) {
-			super();
+		public StargateControllerAccessWrapper(TileEntityComputerCraftConnector host, IStargateControllerAccess access) {
+			super(host);
 			this.access = access;
 		}
 
 		@Override
 		public void update() {
+			// TODO Auto-generated method stub
+
 		}
 
 		@Override
-		public String getComponentName() {
+		public String getType() {
 			return "stargate_controller";
 		}
 
-		@Callback
-		public Object[] greet(Context context, Arguments args) {
-			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
-		}
-
-		@Callback
-		public Object[] isValid(Context context, Arguments args) {
-			return new Object[] { access.isValid() };
-		}
-
-		@Callback
-		public Object[] isBusy(Context context, Arguments args) {
-			return new Object[] { access.isBusy() };
-		}
-
-		@Callback
-		public Object[] ownsCurrentConnection(Context context, Arguments args) {
-			return new Object[] { access.ownsCurrentConnection() };
-		}
-
-		@Callback
-		public Object[] getDialledAddress(Context context, Arguments args) {
-			return new Object[] { access.getDialledAddress() };
-		}
-
-		@Callback
-		public Object[] disconnect(Context context, Arguments args) throws Exception {
-			if (!access.isBusy())
-				throw new Exception("Stargate is not connected");
-			if (!access.disconnect())
-				throw new Exception("Stargate cannot be disconnected");
-			return new Object[] { true };
+		@Override
+		public String[] getMethodNames() {
+			return new String[] { "isValid", "isBusy", "ownsCurrentConnection", "getDialledAddress", "disconnect" };
 		}
 
 		@Override
-		public String[] whitelistedMethods() {
-			return getMethods(this.getClass());
+		public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
+				throws Exception {
+			switch (method) {
+			case 0:
+				return new Object[] { access.isValid() };
+			case 1:
+				return new Object[] { access.isBusy() };
+			case 2:
+				return new Object[] { access.ownsCurrentConnection() };
+			case 3:
+				return new Object[] { access.getDialledAddress() };
+			case 4:
+				if (!access.disconnect())
+					throw new Exception("Stargate cannot be closed by this controller");
+				return new Object[] { true };
+			}
+			throw new Exception(String.format("Warning, unhandled method id %s!", method));
+		}
+
+		@Override
+		public boolean equals(IPeripheral other) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
-	public static class NaquadahGeneratorAccessWrapper extends OpenComputersHostStub {
-
+	public static class NaquadahGeneratorAccessWrapper extends ComputerCraftVirtualPeripheral {
 		private final INaquadahGeneratorAccess access;
 
-		public NaquadahGeneratorAccessWrapper(INaquadahGeneratorAccess access) {
+		public NaquadahGeneratorAccessWrapper(TileEntityComputerCraftConnector host, INaquadahGeneratorAccess access) {
+			super(host);
 			this.access = access;
 		}
 
 		@Override
 		public void update() {
+			// TODO Auto-generated method stub
+
 		}
 
 		@Override
-		public String getComponentName() {
+		public String getType() {
 			return "naquadah_generator";
 		}
 
-		@Callback
-		public Object[] greet(Context context, Arguments args) {
-			return new Object[] { String.format("Hello, %s!", args.checkString(0)) };
-		}
-
-		@Callback
-		public Object[] isEnabled(Context context, Arguments args) {
-			return new Object[] { access.isEnabled() };
-		}
-
-		@Callback
-		public Object[] setEnabled(Context context, Arguments args) throws Exception {
-			if (!(args.checkBoolean(0)))
-				throw new Exception("boolean expected");
-			boolean state = args.checkBoolean(0);
-			if (state != access.setEnabled(state))
-				throw new Exception("Cannot set Naquadah Generator state");
-			return new Object[] { access.isEnabled() };
-		}
-
-		@Callback
-		public Object[] getStoredEnergy(Context context, Arguments args) {
-			return new Object[] { access.getStoredEnergy() };
-		}
-
-		@Callback
-		public Object[] getMaximumStoredEnergy(Context context, Arguments args) {
-			return new Object[] { access.getMaximumStoredEnergy() };
+		@Override
+		public String[] getMethodNames() {
+			return new String[] { "isEnabled", "setEnabled", "getStoredEnergy", "getMaximumStoredEnergy" };
 		}
 
 		@Override
-		public String[] whitelistedMethods() {
-			return getMethods(this.getClass());
+		public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
+				throws Exception {
+			switch (method) {
+			case 0:
+				return new Object[] { access.isEnabled() };
+			case 1:
+				if (!(arguments[0] instanceof Boolean))
+					throw new Exception("boolean expected");
+				boolean state = (Boolean) arguments[0];
+				if (state != access.setEnabled(state))
+					throw new Exception("Cannot set Naquadah Generator state");
+				return new Object[] { access.isEnabled() };
+			case 2:
+				return new Object[] { access.getStoredEnergy() };
+			case 3:
+				return new Object[] { access.getMaximumStoredEnergy() };
+			}
+			throw new Exception(String.format("Warning, unhandled method id %s!", method));
+		}
+
+		@Override
+		public boolean equals(IPeripheral other) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
