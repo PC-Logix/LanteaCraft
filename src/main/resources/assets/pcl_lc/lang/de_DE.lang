@@ -43,4 +43,6 @@ item.tokraSpawnEgg.name=Erschaffe Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
 item.zpm.name=ZPM
 
+tile.integration.computercraft.name=ComputerCraft Adapter
+
 death.attack.wormhole_transient=%1$s wurde vom Ereignishorizont in Stücke gerissen.
