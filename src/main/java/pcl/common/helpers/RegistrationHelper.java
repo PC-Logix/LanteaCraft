@@ -1,6 +1,7 @@
 package pcl.common.helpers;
 
 import java.lang.reflect.Constructor;
+
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
@@ -13,6 +14,7 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.blocks.BlockLanteaDecorStair;
 import pcl.lc.fluids.ItemSpecialBucket;
@@ -174,7 +176,7 @@ public class RegistrationHelper {
 		LanteaCraft.getLogger().log(Level.DEBUG, "Registering ore with name " + name);
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger().log(Level.WARN, "Warning, registration of this ore is later than was expected!");
-		OreDictionary.registerOre(name, item);
+		OreDictionary.registerOre(String.format("%s:%s", BuildInfo.modID, name), item);
 	}
 
 	/**
