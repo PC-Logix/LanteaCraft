@@ -6,6 +6,8 @@ import ic2.api.energy.tile.IEnergyTile;
 
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -111,9 +113,12 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
 			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-			if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && !addedToEnergyNet) {
-				postIC2Update(true);
-				stateChanged();
+			if (!addedToEnergyNet) {
+				if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+						|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
+					postIC2Update(true);
+					stateChanged();
+				}
 			}
 			if (tank.hasChanged())
 				stateChanged();
@@ -188,10 +193,12 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	@Override
 	public void invalidate() {
 		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-		if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && addedToEnergyNet) {
-			postIC2Update(false);
-			markDirty();
-		}
+		if (addedToEnergyNet)
+			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+					|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
+				postIC2Update(false);
+				markDirty();
+			}
 		super.invalidate();
 	}
 

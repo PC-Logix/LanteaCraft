@@ -286,6 +286,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 	}
 	
 	protected void postIC2Update(boolean actionIsLoad) {
+		LanteaCraft.getLogger().log(Level.INFO, String.format("Sending IC2 state."));
 		try {
 			Class<?> clazz_ic2energytile = Class.forName("ic2.api.energy.tile.IEnergyTile", false, getClass()
 					.getClassLoader());
@@ -296,6 +297,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 				Constructor<? extends WorldEvent> c_loadevent = clazz_loadevent
 						.getConstructor(new Class<?>[] { clazz_ic2energytile });
 				WorldEvent event = (WorldEvent) c_loadevent.newInstance(clazz_ic2energytile.cast(this));
+				LanteaCraft.getLogger().log(Level.INFO, String.format("Sending IC2 event class %s", event.getClass().getName()));
 				MinecraftForge.EVENT_BUS.post(event);
 				addedToEnergyNet = true;
 			} else {
@@ -304,6 +306,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 				Constructor<? extends WorldEvent> c_unloadevent = clazz_loadevent
 						.getConstructor(new Class<?>[] { clazz_ic2energytile });
 				WorldEvent event = (WorldEvent) c_unloadevent.newInstance(clazz_ic2energytile.cast(this));
+				LanteaCraft.getLogger().log(Level.INFO, String.format("Sending IC2 event class %s", event.getClass().getName()));
 				MinecraftForge.EVENT_BUS.post(event);
 				addedToEnergyNet = false;
 			}
