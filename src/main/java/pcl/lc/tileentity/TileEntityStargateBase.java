@@ -30,7 +30,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.SoundHost;
@@ -60,7 +59,6 @@ import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
 		ISidedInventory {
@@ -107,11 +105,11 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	 */
 	private class ClientConnectionRequest {
 		/* Whether the request is currently running */
-		public WatchedValue<Boolean> running = new WatchedValue(false);
+		public WatchedValue<Boolean> running = new WatchedValue<Boolean>(false);
 		/* If this remote request is the host */
 		public final boolean isHost;
 		/* The current state of the connection */
-		public WatchedValue<EnumStargateState> state = new WatchedValue(EnumStargateState.Idle);
+		public WatchedValue<EnumStargateState> state = new WatchedValue<EnumStargateState>(EnumStargateState.Idle);
 		/* The current symbol being dialled */
 		public WatchedValue<Character> symbol = new WatchedValue<Character>(' ');
 		/* The number of chevrons dialled */
@@ -903,7 +901,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		player.theItemInWorldManager.setWorld(newWorld);
 		scm.updateTimeAndWeatherForPlayer(player, newWorld);
 		scm.syncPlayerInventory(player);
-		Iterator var6 = player.getActivePotionEffects().iterator();
+		Iterator<?> var6 = player.getActivePotionEffects().iterator();
 		while (var6.hasNext()) {
 			PotionEffect effect = (PotionEffect) var6.next();
 			player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), effect));
