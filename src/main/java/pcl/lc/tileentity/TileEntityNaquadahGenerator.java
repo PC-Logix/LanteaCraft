@@ -43,8 +43,6 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 	public SpecialFluidTank tank = new SpecialFluidTank(LanteaCraft.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
 
-	private boolean addedToEnergyNet = false;
-
 	private FilteredInventory inventory = new FilteredInventory(5) {
 
 		@Override
@@ -114,8 +112,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 		if (!worldObj.isRemote) {
 			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
 			if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && !addedToEnergyNet) {
-				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) this));
-				addedToEnergyNet = true;
+				postIC2Update(true);
 				stateChanged();
 			}
 			if (tank.hasChanged())
@@ -192,8 +189,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	public void invalidate() {
 		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
 		if (ifaces.contains("ic2.api.energy.tile.IEnergyTile") && addedToEnergyNet) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) this));
-			addedToEnergyNet = false;
+			postIC2Update(false);
 			markDirty();
 		}
 		super.invalidate();
