@@ -11,7 +11,7 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Items;
 import pcl.lc.api.internal.IModule;
-import pcl.lc.blocks.BlockRingPlatform;
+import pcl.lc.blocks.BlockTransporterRing;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
@@ -58,7 +58,7 @@ public class ModuleStargates implements IModule {
 		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateController.class,
 				"stargateController");
 
-		Blocks.ringPlatform = RegistrationHelper.registerBlock(BlockRingPlatform.class, "ringPlatform");
+		Blocks.ringPlatform = RegistrationHelper.registerBlock(BlockTransporterRing.class, "ringPlatform");
 
 		GameRegistry.registerTileEntity(TileEntityStargateBase.class, "tileEntityStargateBase");
 		GameRegistry.registerTileEntity(TileEntityStargateRing.class, "tileEntityStargateRing");

@@ -9,7 +9,6 @@ public class TransporterRingPart extends MultiblockPart {
 
 	public TransporterRingPart(TileEntityTransporterRing host) {
 		super(host);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

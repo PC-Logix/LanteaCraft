@@ -15,11 +15,11 @@ import pcl.lc.tileentity.TileEntityTransporterRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockRingPlatform extends GenericContainerBlock {
+public class BlockTransporterRing extends GenericContainerBlock {
 
 	private IIcon defaultIcon;
 
-	public BlockRingPlatform() {
+	public BlockTransporterRing() {
 		super(Material.rock);
 		setHardness(1.5F);
 	}

@@ -15,7 +15,7 @@ import pcl.common.render.RotationOrientedBlockRenderer;
 import pcl.lc.blocks.BlockLanteaOre;
 import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockOfLanteaOre;
-import pcl.lc.blocks.BlockRingPlatform;
+import pcl.lc.blocks.BlockTransporterRing;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
@@ -113,7 +113,7 @@ public class LanteaCraft {
 		public static BlockLanteaOre lanteaOre;
 		public static BlockOfLanteaOre lanteaOreAsBlock;
 
-		public static BlockRingPlatform ringPlatform;
+		public static BlockTransporterRing ringPlatform;
 		public static BlockNaquadahGenerator naquadahGenerator;
 	}
 
