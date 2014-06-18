@@ -25,6 +25,7 @@ import pcl.lc.items.ItemGDO;
 import pcl.lc.items.ItemIris;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTransportRingActivator;
+import pcl.lc.items.ItemTransporterRing;
 import pcl.lc.tileentity.TileEntityTransporterRing;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
@@ -58,7 +59,8 @@ public class ModuleStargates implements IModule {
 		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateController.class,
 				"stargateController");
 
-		Blocks.ringPlatform = RegistrationHelper.registerBlock(BlockTransporterRing.class, "ringPlatform");
+		Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
+				ItemTransporterRing.class, "ringPlatform");
 
 		GameRegistry.registerTileEntity(TileEntityStargateBase.class, "tileEntityStargateBase");
 		GameRegistry.registerTileEntity(TileEntityStargateRing.class, "tileEntityStargateRing");

@@ -39,8 +39,8 @@ public class BlockTransporterRing extends GenericContainerBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockVoidRenderer != null)
-			return LanteaCraft.Render.blockVoidRenderer.renderID;
+		if (LanteaCraft.Render.blockTransporterRingRenderer != null)
+			return LanteaCraft.Render.blockTransporterRingRenderer.renderID;
 		return -9001;
 	}
 
@@ -51,7 +51,13 @@ public class BlockTransporterRing extends GenericContainerBlock {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-
+		super.onBlockAdded(world, x, y, z);
+	}
+	
+	
+	@Override
+	public int damageDropped(int data) {
+		return data;
 	}
 
 	@Override

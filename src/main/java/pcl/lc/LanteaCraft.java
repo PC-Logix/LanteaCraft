@@ -41,6 +41,7 @@ import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateControllerRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
+import pcl.lc.render.blocks.BlockTransporterRingRenderer;
 import pcl.lc.render.blocks.BlockVoidRenderer;
 import pcl.lc.render.entities.EntityReplicatorRenderer;
 import pcl.lc.render.entities.EntityTokraRenderer;
@@ -113,7 +114,7 @@ public class LanteaCraft {
 		public static BlockLanteaOre lanteaOre;
 		public static BlockOfLanteaOre lanteaOreAsBlock;
 
-		public static BlockTransporterRing ringPlatform;
+		public static BlockTransporterRing transporterRing;
 		public static BlockNaquadahGenerator naquadahGenerator;
 	}
 
@@ -157,6 +158,7 @@ public class LanteaCraft {
 		public static BlockStargateRingRenderer blockStargateRingRenderer;
 		public static BlockStargateControllerRenderer blockControllerRenderer;
 		public static BlockNaquadahGeneratorRenderer blockNaquadahGeneratorRenderer;
+		public static BlockTransporterRingRenderer blockTransporterRingRenderer;
 
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;

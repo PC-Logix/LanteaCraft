@@ -35,6 +35,7 @@ import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateControllerRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
+import pcl.lc.render.blocks.BlockTransporterRingRenderer;
 import pcl.lc.render.blocks.BlockVoidRenderer;
 import pcl.lc.render.entities.EntityReplicatorRenderer;
 import pcl.lc.render.entities.EntityTokraRenderer;
@@ -162,6 +163,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 		LanteaCraft.Render.blockNaquadahGeneratorRenderer = new BlockNaquadahGeneratorRenderer();
 		registerRenderer(LanteaCraft.Render.blockNaquadahGeneratorRenderer);
+		
+		LanteaCraft.Render.blockTransporterRingRenderer = new BlockTransporterRingRenderer();
+		registerRenderer(LanteaCraft.Render.blockTransporterRingRenderer);
 
 		LanteaCraft.Render.blockVoidRenderer = new BlockVoidRenderer();
 		registerRenderer(LanteaCraft.Render.blockVoidRenderer);
