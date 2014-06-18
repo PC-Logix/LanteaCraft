@@ -1,12 +1,16 @@
 package pcl.lc.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.base.GenericContainerBlock;
@@ -18,10 +22,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockTransporterRing extends GenericContainerBlock {
 
 	private IIcon defaultIcon;
+	IIcon topTexture;
+	IIcon faceTexture;
 
 	public BlockTransporterRing() {
 		super(Material.rock);
 		setHardness(1.5F);
+
 	}
 
 	@Override
@@ -58,6 +65,12 @@ public class BlockTransporterRing extends GenericContainerBlock {
 	}
 
 	@Override
+	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+		for (int i = 0; i < 2; i++)
+			list.add(new ItemStack(item, 1, i));
+	}
+
+	@Override
 	public boolean canHarvestBlock(EntityPlayer player, int meta) {
 		return true;
 	}
@@ -66,10 +79,17 @@ public class BlockTransporterRing extends GenericContainerBlock {
 	public void registerBlockIcons(IIconRegister reg) {
 		defaultIcon = reg.registerIcon(LanteaCraft.getAssetKey() + ":" + "ring_transporter_"
 				+ LanteaCraft.getProxy().getRenderMode());
+		topTexture = reg.registerIcon(LanteaCraft.getAssetKey() + ":" + "transport_ring_base_"
+				+ LanteaCraft.getProxy().getRenderMode());
+		faceTexture = reg.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBlock_"
+				+ LanteaCraft.getProxy().getRenderMode());
 	}
 
 	@Override
 	public IIcon getIcon(int side, int data) {
-		return defaultIcon;
+		if (side == 1 && data != 0)
+			return topTexture;
+		else
+			return faceTexture;
 	}
 }
