@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.base.GenericContainerBlock;
 import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityRingPlatform;
+import pcl.lc.tileentity.TileEntityTransporterRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,7 +39,7 @@ public class BlockRingPlatform extends GenericContainerBlock {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileEntityRingPlatform();
+		return new TileEntityTransporterRing();
 	}
 
 	@Override

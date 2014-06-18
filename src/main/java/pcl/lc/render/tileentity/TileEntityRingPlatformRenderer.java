@@ -7,14 +7,14 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityRingPlatform;
+import pcl.lc.tileentity.TileEntityTransporterRing;
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class TileEntityRingPlatformRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
-		TileEntityRingPlatform platform = (TileEntityRingPlatform) tileEntity;
+		TileEntityTransporterRing platform = (TileEntityTransporterRing) tileEntity;
 		if (true == true)
 			return;
 

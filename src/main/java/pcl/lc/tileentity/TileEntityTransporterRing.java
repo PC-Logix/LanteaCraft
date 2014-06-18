@@ -18,7 +18,7 @@ import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumRingPlatformState;
 
-public class TileEntityRingPlatform extends GenericTileEntity implements IPacketHandler {
+public class TileEntityTransporterRing extends GenericTileEntity implements IPacketHandler {
 
 	private final double ringExtended = 2.5d;
 
@@ -30,7 +30,7 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 
 	private ArrayList<Entity> boundingEntities;
 
-	public TileEntityRingPlatform() {
+	public TileEntityTransporterRing() {
 		boundingEntities = new ArrayList<Entity>();
 	}
 
@@ -123,14 +123,14 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 	}
 
 	public void connect() {
-		ArrayList<Vector3> others = ScanningHelper.findAllTileEntitesOf(worldObj, TileEntityRingPlatform.class, xCoord,
+		ArrayList<Vector3> others = ScanningHelper.findAllTileEntitesOf(worldObj, TileEntityTransporterRing.class, xCoord,
 				yCoord, zCoord, AxisAlignedBB.getBoundingBox(-10, -yCoord, -10, 10, worldObj.getHeight(), 10));
 		Vector3 vectorHere = new Vector3(this);
 		for (Vector3 other : others) {
 			TileEntity at = worldObj.getTileEntity(xCoord + (int) Math.floor(other.x),
 					yCoord + (int) Math.floor(other.y), zCoord + (int) Math.floor(other.z));
-			if ((at instanceof TileEntityRingPlatform) && !at.equals(this)) {
-				TileEntityRingPlatform that = (TileEntityRingPlatform) at;
+			if ((at instanceof TileEntityTransporterRing) && !at.equals(this)) {
+				TileEntityTransporterRing that = (TileEntityTransporterRing) at;
 				if (!that.isBusy()) {
 					performConnection(other.add(vectorHere));
 					that.performConnection(vectorHere);
@@ -140,8 +140,8 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 		}
 	}
 
-	private TileEntityRingPlatform getSlave() {
-		return (TileEntityRingPlatform) worldObj.getTileEntity((int) Math.floor(connectionTo.x),
+	private TileEntityTransporterRing getSlave() {
+		return (TileEntityTransporterRing) worldObj.getTileEntity((int) Math.floor(connectionTo.x),
 				(int) Math.floor(connectionTo.y), (int) Math.floor(connectionTo.z));
 	}
 
@@ -162,7 +162,7 @@ public class TileEntityRingPlatform extends GenericTileEntity implements IPacket
 	}
 
 	private void entityInPortal(Entity entity) {
-		TileEntityRingPlatform dte = getSlave();
+		TileEntityTransporterRing dte = getSlave();
 		if (dte != null) {
 			while (entity.ridingEntity != null)
 				entity = entity.ridingEntity;

@@ -6,9 +6,9 @@ import pcl.common.multiblock.GenericMultiblock;
 import pcl.common.multiblock.MultiblockPart;
 import pcl.common.network.ModPacket;
 
-public class TransportRingMultiblock extends GenericMultiblock {
+public class TransporterRingMultiblock extends GenericMultiblock {
 
-	public TransportRingMultiblock(TileEntity host) {
+	public TransporterRingMultiblock(TileEntity host) {
 		super(host);
 		// TODO Auto-generated constructor stub
 	}
