@@ -10,7 +10,7 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.tileentity.TileEntityTransporterRing;
 import cpw.mods.fml.client.FMLClientHandler;
 
-public class TileEntityRingPlatformRenderer extends TileEntitySpecialRenderer {
+public class TileEntityTransporterRingRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {

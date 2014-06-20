@@ -46,7 +46,7 @@ import pcl.lc.render.models.RingPlatformRingModel;
 import pcl.lc.render.models.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityLanteaDecorGlassRenderer;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
-import pcl.lc.render.tileentity.TileEntityRingPlatformRenderer;
+import pcl.lc.render.tileentity.TileEntityTransporterRingRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
 import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
@@ -143,7 +143,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		LanteaCraft.Render.tileEntityNaquadahGeneratorRenderer = new TileEntityNaquadahGeneratorRenderer();
 		addTileEntityRenderer(TileEntityNaquadahGenerator.class, LanteaCraft.Render.tileEntityNaquadahGeneratorRenderer);
 
-		LanteaCraft.Render.tileEntityRingPlatformRenderer = new TileEntityRingPlatformRenderer();
+		LanteaCraft.Render.tileEntityRingPlatformRenderer = new TileEntityTransporterRingRenderer();
 		addTileEntityRenderer(TileEntityTransporterRing.class, LanteaCraft.Render.tileEntityRingPlatformRenderer);
 
 		LanteaCraft.Render.tileEntityLanteaDecorGlassRenderer = new TileEntityLanteaDecorGlassRenderer();
