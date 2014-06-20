@@ -1,23 +1,13 @@
 package pcl.lc.tileentity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import pcl.common.base.GenericTileEntity;
-import pcl.common.helpers.ScanningHelper;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
-import pcl.common.network.StandardModPacket;
-import pcl.common.util.Vector3;
-import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
-import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.multiblock.TransporterRingMultiblock;
+import pcl.lc.multiblock.TransporterRingPart;
 
 public class TileEntityTransporterRing extends GenericTileEntity implements IPacketHandler {
 
@@ -73,6 +63,11 @@ public class TileEntityTransporterRing extends GenericTileEntity implements IPac
 	public void handlePacket(ModPacket packetOf) {
 		getStateFromPacket(packetOf);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	public TransporterRingPart getAsPart() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

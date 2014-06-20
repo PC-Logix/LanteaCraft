@@ -8,6 +8,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import pcl.common.helpers.ScanningHelper;
 import pcl.lc.LanteaCraft;
+import pcl.lc.multiblock.TransporterRingMultiblock;
 import pcl.lc.tileentity.TileEntityTransporterRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -44,7 +45,15 @@ public class ItemTransportRingActivator extends Item {
 					AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5));
 			if (of != null && (of instanceof TileEntityTransporterRing)) {
 				TileEntityTransporterRing platform = (TileEntityTransporterRing) of;
-				platform.connect();
+				if (platform.isHost())
+					if (!platform.getAsStructure().isBusy())
+						platform.getAsStructure().connect();
+					else {
+						TransporterRingMultiblock mblock = (TransporterRingMultiblock) platform.getAsPart()
+								.findHostMultiblock(false);
+						if (!mblock.isBusy())
+							mblock.connect();
+					}
 			}
 		}
 	}

@@ -117,7 +117,7 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 					yCoord + (int) Math.floor(other.y), zCoord + (int) Math.floor(other.z));
 			if ((at instanceof TileEntityTransporterRing) && !at.equals(this)) {
 				TileEntityTransporterRing that = (TileEntityTransporterRing) at;
-				if (that.isHost() && !that.getAsStructure().isBusy()) {
+				if (that.isHost() && that.getAsStructure().isValid() && !that.getAsStructure().isBusy()) {
 					performConnection(other.add(vectorHere));
 					that.getAsStructure().performConnection(vectorHere);
 					return;
