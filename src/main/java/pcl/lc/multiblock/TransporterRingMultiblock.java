@@ -1,15 +1,34 @@
 package pcl.lc.multiblock;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import pcl.common.helpers.ScanningHelper;
 import pcl.common.multiblock.GenericMultiblock;
 import pcl.common.multiblock.MultiblockPart;
 import pcl.common.network.ModPacket;
+import pcl.common.network.StandardModPacket;
+import pcl.common.util.Vector3;
+import pcl.common.util.WorldLocation;
+import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.tileentity.TileEntityTransporterRing;
 
 public class TransporterRingMultiblock extends GenericMultiblock {
 
+	private final double ringExtended = 2.5d;
+
 	private boolean modified = false;
+
+	private EnumRingPlatformState state = EnumRingPlatformState.Idle;
+	private int timeout;
+	private Vector3 connectionTo;
+	private ArrayList<Entity> boundingEntities;
+	private double ringPosition, nextRingPosition;
 
 	public TransporterRingMultiblock(TileEntity host) {
 		super(host);
@@ -22,6 +41,146 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 			modified = !modified;
 			host.getDescriptionPacket();
 		}
+		
+		if (isClient)
+			updateRendering();
+		else
+			updateState();
+	}
+
+	private void updateRendering() {
+		if (0 > ringPosition)
+			ringPosition = 0;
+		ringPosition += nextRingPosition;
+		if (ringPosition > ringExtended)
+			ringPosition = ringExtended;
+		if (timeout > 0)
+			if (state == EnumRingPlatformState.Connecting)
+				nextRingPosition = (ringExtended / 20.0d);
+			else if (state == EnumRingPlatformState.Disconnecting)
+				nextRingPosition = -(ringExtended / 20.0d);
+			else
+				nextRingPosition = 0;
+	}
+
+	private void updateState() {
+		if (state != EnumRingPlatformState.Idle || timeout != 0)
+			if (timeout > 0)
+				timeout--;
+			else if (state == EnumRingPlatformState.Connecting) {
+				updateState(EnumRingPlatformState.Transmitting, 2);
+				buildTeleportingEntityList();
+			} else if (state == EnumRingPlatformState.Transmitting) {
+				updateState(EnumRingPlatformState.Connected, 8);
+				teleportEntitiesInList();
+			} else if (state == EnumRingPlatformState.Connected)
+				updateState(EnumRingPlatformState.Disconnecting, 20);
+			else if (state == EnumRingPlatformState.Disconnecting) {
+				clearConnection();
+				updateState(EnumRingPlatformState.Idle, 0);
+			}
+	}
+
+	public double getRingPosition(float partialticks) {
+		double next = ringPosition + partialticks * nextRingPosition;
+		if (next > ringExtended)
+			return ringExtended;
+		return next;
+	}
+
+	public void performConnection(Vector3 slaveObject) {
+		connectionTo = slaveObject;
+		updateState(EnumRingPlatformState.Connecting, 20);
+	}
+
+	public void clearConnection() {
+		connectionTo = null;
+	}
+
+	public boolean isBusy() {
+		return state != EnumRingPlatformState.Idle;
+	}
+
+	private void updateState(EnumRingPlatformState state, int timeout) {
+		this.state = state;
+		this.timeout = timeout;
+		((TileEntityTransporterRing) host).markBlockForUpdate();
+	}
+
+	public void connect() {
+		ArrayList<Vector3> others = ScanningHelper.findAllTileEntitesOf(host.getWorldObj(),
+				TileEntityTransporterRing.class, xCoord, yCoord, zCoord,
+				AxisAlignedBB.getBoundingBox(-10, -yCoord, -10, 10, host.getWorldObj().getHeight(), 10));
+		Vector3 vectorHere = new Vector3(host);
+		for (Vector3 other : others) {
+			TileEntity at = host.getWorldObj().getTileEntity(xCoord + (int) Math.floor(other.x),
+					yCoord + (int) Math.floor(other.y), zCoord + (int) Math.floor(other.z));
+			if ((at instanceof TileEntityTransporterRing) && !at.equals(this)) {
+				TileEntityTransporterRing that = (TileEntityTransporterRing) at;
+				if (that.isHost() && !that.getAsStructure().isBusy()) {
+					performConnection(other.add(vectorHere));
+					that.getAsStructure().performConnection(vectorHere);
+					return;
+				}
+			}
+		}
+	}
+
+	private TileEntityTransporterRing getSlave() {
+		return (TileEntityTransporterRing) host.getWorldObj().getTileEntity((int) Math.floor(connectionTo.x),
+				(int) Math.floor(connectionTo.y), (int) Math.floor(connectionTo.z));
+	}
+
+	public void buildTeleportingEntityList() {
+		boundingEntities.clear();
+		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(xCoord - 2, yCoord, zCoord - 2, xCoord + 2, yCoord + 3,
+				zCoord + 2);
+		List<Entity> ents = host.getWorldObj().getEntitiesWithinAABB(Entity.class, bounds);
+		for (Entity entity : ents)
+			if (!entity.isDead && entity.ridingEntity == null)
+				boundingEntities.add(entity);
+	}
+
+	private void teleportEntitiesInList() {
+		for (Entity entity : boundingEntities)
+			entityInPortal(entity);
+		boundingEntities.clear();
+	}
+
+	private void entityInPortal(Entity entity) {
+		TileEntityTransporterRing dte = getSlave();
+		if (dte != null) {
+			while (entity.ridingEntity != null)
+				entity = entity.ridingEntity;
+			Vector3 hostv = new Vector3(host);
+			Vector3 entPos = new Vector3(entity);
+			Vector3 dest = new Vector3(dte);
+			Vector3 output = dest.add(entPos.sub(hostv));
+			teleportEntityAndRider(entity, output);
+		}
+	}
+
+	Entity teleportEntityAndRider(Entity entity, Vector3 destination) {
+		Entity rider = entity.riddenByEntity;
+		if (rider != null)
+			rider.mountEntity(null);
+		entity = teleportWithinDimension(entity, destination);
+		if (rider != null) {
+			rider = teleportEntityAndRider(rider, destination);
+			rider.mountEntity(entity);
+			entity.forceSpawn = false;
+		}
+		return entity;
+	}
+
+	Entity teleportWithinDimension(Entity entity, Vector3 destination) {
+		if (entity instanceof EntityPlayerMP)
+			((EntityPlayerMP) entity).setPositionAndUpdate(destination.x, destination.y, destination.z);
+		else
+			entity.setPosition(destination.x, destination.y, destination.z);
+		System.out.println("done!");
+		entity.worldObj.updateEntityWithOptionalForce(entity, false);
+		return entity;
 	}
 
 	@Override
@@ -38,10 +197,10 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 
 			}
 		}
-		
+
 		if (dx == -1 || dz == -1)
 			return false;
-		for (int x = 0; x < 5; x++) 
+		for (int x = 0; x < 5; x++)
 			for (int z = 0; z < 5; z++) {
 				TileEntity tile = worldAccess.getTileEntity(dx + x, baseY, dz + z);
 				if (tile == null || !(tile instanceof TileEntityTransporterRing))
@@ -88,14 +247,19 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 
 	@Override
 	public ModPacket pack() {
-		// TODO Auto-generated method stub
-		return null;
+		StandardModPacket packet = new StandardModPacket(new WorldLocation(host));
+		packet.setIsForServer(false);
+		packet.setType("LanteaPacket.TileUpdate");
+		packet.setValue("timeout", timeout);
+		packet.setValue("state", state);
+		return packet;
 	}
 
 	@Override
 	public void unpack(ModPacket packet) {
-		// TODO Auto-generated method stub
-
+		StandardModPacket thePacket = (StandardModPacket) packet;
+		timeout = (Integer) thePacket.getValue("timeout");
+		state = (EnumRingPlatformState) thePacket.getValue("state");
 	}
 
 	@Override

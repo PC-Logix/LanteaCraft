@@ -15,7 +15,7 @@ public class TileEntityTransporterRingRenderer extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
 		TileEntityTransporterRing platform = (TileEntityTransporterRing) tileEntity;
-		if (true == true)
+		if (!platform.isHost())
 			return;
 
 		GL11.glPushMatrix();
@@ -34,7 +34,7 @@ public class TileEntityTransporterRingRenderer extends TileEntitySpecialRenderer
 				.getResource("textures/models/transport_rings_" + LanteaCraft.getProxy().getRenderMode() + ".png"));
 		GL11.glTranslated(0, -0.2, 0);
 
-		double heightOf = platform.getRingPosition(f);
+		double heightOf = platform.getAsStructure().getRingPosition(f);
 		int numRingsOf = (int) Math.floor(heightOf / 0.5d);
 		GL11.glTranslated(0, heightOf % 0.5d, 0);
 		for (int i = 0; i < numRingsOf; i++) {

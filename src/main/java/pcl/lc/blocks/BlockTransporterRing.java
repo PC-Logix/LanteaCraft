@@ -46,7 +46,9 @@ public class BlockTransporterRing extends GenericContainerBlock {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileEntityTransporterRing();
+		TileEntityTransporterRing ring = new TileEntityTransporterRing();
+		ring.setHost(metadata != 0);
+		return ring;
 	}
 
 	@Override
