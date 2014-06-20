@@ -41,11 +41,11 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 			modified = !modified;
 			host.getDescriptionPacket();
 		}
-		
-		if (isClient)
-			updateRendering();
-		else
-			updateState();
+		if (isValid())
+			if (isClient)
+				updateRendering();
+			else
+				updateState();
 	}
 
 	private void updateRendering() {
