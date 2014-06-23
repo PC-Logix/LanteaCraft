@@ -33,24 +33,29 @@ public class TileEntityTransporterRing extends GenericTileEntity implements IPac
 	public void updateEntity() {
 		if (!isHost())
 			return;
-		multiblock.tick();
+		if (multiblock != null)
+			multiblock.tick();
 	}
 
 	public void getStateFromPacket(ModPacket packet) {
 		if (isHost())
-			multiblock.unpack(packet);
+			if (multiblock != null)
+				multiblock.unpack(packet);
 
 	}
 
 	public ModPacket getPacketFromState() {
 		if (isHost())
-			return multiblock.pack();
+			if (multiblock != null)
+				return multiblock.pack();
 		return null;
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getNetPipeline().sendToAll(getPacketFromState());
+		ModPacket packet = getPacketFromState();
+		if (packet != null)
+			LanteaCraft.getNetPipeline().sendToAll(packet);
 		return null;
 	}
 

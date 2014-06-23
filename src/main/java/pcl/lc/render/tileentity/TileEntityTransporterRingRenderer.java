@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.multiblock.TransporterRingMultiblock;
 import pcl.lc.tileentity.TileEntityTransporterRing;
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -16,6 +17,9 @@ public class TileEntityTransporterRingRenderer extends TileEntitySpecialRenderer
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
 		TileEntityTransporterRing platform = (TileEntityTransporterRing) tileEntity;
 		if (!platform.isHost())
+			return;
+		TransporterRingMultiblock structure = platform.getAsStructure();
+		if (structure == null)
 			return;
 
 		GL11.glPushMatrix();
