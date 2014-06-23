@@ -71,20 +71,16 @@ public class AbydosChunkProvider implements IChunkProvider {
 	}
 
 	public void func_147424_a(int p_147424_1_, int p_147424_2_, Block[] p_147424_3_) {
-		byte b0 = 63;
-
+		byte heightWater = 42;
 		this.func_147423_a(p_147424_1_ * 4, 0, p_147424_2_ * 4);
-
 		for (int k = 0; k < 4; ++k) {
 			int l = k * 5;
 			int i1 = (k + 1) * 5;
-
 			for (int j1 = 0; j1 < 4; ++j1) {
 				int k1 = (l + j1) * 33;
 				int l1 = (l + j1 + 1) * 33;
 				int i2 = (i1 + j1) * 33;
 				int j2 = (i1 + j1 + 1) * 33;
-
 				for (int k2 = 0; k2 < 32; ++k2) {
 					double d0 = 0.125D;
 					double d1 = this.field_147434_q[k1 + k2];
@@ -114,7 +110,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 							for (int k3 = 0; k3 < 4; ++k3) {
 								if ((d15 += d16) > 0.0D) {
 									p_147424_3_[j3 += short1] = Blocks.stone;
-								} else if (k2 * 8 + l2 < b0) {
+								} else if (k2 * 8 + l2 < heightWater) {
 									p_147424_3_[j3 += short1] = Blocks.water;
 								} else {
 									p_147424_3_[j3 += short1] = null;
@@ -332,7 +328,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 	 * Converts the instance data to a readable string.
 	 */
 	public String makeString() {
-		return "RandomLevelSource";
+		return "AbydosDimensionSource";
 	}
 
 	/**

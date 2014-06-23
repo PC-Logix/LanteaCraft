@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
+import pcl.lc.LanteaCraft;
 import pcl.lc.dimension.abydos.AbydosPyramid;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.util.MathHelper;
@@ -20,7 +21,6 @@ public class MapGenFeatureStructure extends MapGenStructure {
 	private List scatteredFeatureSpawnList;
 	private int maxDistanceBetweenScatteredFeatures;
 	private int minDistanceBetweenScatteredFeatures;
-	public static String stringId = "MystLibrary";
 
 	public MapGenFeatureStructure() {
 		this.scatteredFeatureSpawnList = new ArrayList();
@@ -42,7 +42,7 @@ public class MapGenFeatureStructure extends MapGenStructure {
 	}
 
 	public String func_143025_a() {
-		return stringId;
+		return LanteaCraft.getAssetKey() + ":LanteaCraft";
 	}
 
 	protected boolean canSpawnStructureAtCoords(int par1, int par2) {

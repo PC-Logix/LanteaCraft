@@ -45,7 +45,7 @@ public class AbydosWorldProvider extends WorldProvider {
 
 	@Override
 	public boolean canRespawnHere() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -70,10 +70,10 @@ public class AbydosWorldProvider extends WorldProvider {
 
 	@Override
 	protected void generateLightBrightnessTable() {
-		float f = 12.0F;
-		for (int i = 0; i <= 15; i++) {
-			float f1 = 12.0F - i / 15.0F;
-			this.lightBrightnessTable[i] = ((1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f) + f);
+		float f = 0.0F;
+		for (int i = 0; i <= 15; ++i) {
+			float f1 = 1.0F - (float) i / 15.0F;
+			this.lightBrightnessTable[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f) + f;
 		}
 	}
 
@@ -101,9 +101,9 @@ public class AbydosWorldProvider extends WorldProvider {
 	}
 
 	@Override
-	public float calculateCelestialAngle(long par1, float par3) {
-		int j = (int) (par1 % 24000L);
-		float f1 = (j + par3) / 24000.0F - 0.25F;
+	public float calculateCelestialAngle(long worldTime, float partialTicks) {
+		int j = (int) (worldTime % 24000L);
+		float f1 = (j + partialTicks) / 24000.0F - 0.25F;
 		if (f1 < 0.0F) {
 			f1 += 1.0F;
 		}
@@ -117,15 +117,13 @@ public class AbydosWorldProvider extends WorldProvider {
 	}
 
 	@Override
-	public Vec3 getFogColor(float par1, float par2) {
+	public Vec3 getFogColor(float celestialAngle, float partialTicks) {
 		int i = 10518688;
-		float f2 = MathHelper.cos(par1 * 3.141593F * 2.0F) * 2.0F + 0.5F;
-		if (f2 < 0.0F) {
+		float f2 = MathHelper.cos(celestialAngle * 3.141593F * 2.0F) * 2.0F + 0.5F;
+		if (f2 < 0.0F)
 			f2 = 0.0F;
-		}
-		if (f2 > 1.0F) {
+		if (f2 > 1.0F)
 			f2 = 1.0F;
-		}
 		float f3 = (i >> 16 & 0xFF) / 255.0F;
 		float f4 = (i >> 8 & 0xFF) / 255.0F;
 		float f5 = (i & 0xFF) / 255.0F;

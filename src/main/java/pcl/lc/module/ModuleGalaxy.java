@@ -14,7 +14,9 @@ import pcl.lc.dimension.abydos.AbydosWorldProvider;
 
 public class ModuleGalaxy implements IModule {
 
+	// TODO: Change this to a config option
 	public static final int __TMP_ABYDOS_IDX = 5;
+	// TODO: Move the Biome ID somewhere sensible (is it even needed??)
 	public static final int __TMP_ABYDOX_BMX = 1;
 
 	@Override
