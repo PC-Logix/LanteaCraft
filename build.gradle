@@ -23,7 +23,7 @@ if (System.getenv().BUILD_NUMBER != null)
 else
 	ext.buildNumber = 0
 
-version = "RC1"
+version = "RC2"
 group = "pcl.LanteaCraft"
 archivesBaseName = "LanteaCraft"
 
