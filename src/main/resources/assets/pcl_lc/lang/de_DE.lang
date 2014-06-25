@@ -42,6 +42,12 @@ item.transportRingActivator.name=Handgerät
 item.tokraSpawnEgg.name=Erschaffe Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
 item.zpm.name=ZPM
+item.gdo.name=GDO
+
+item.iris.name=Iris-Upgrade
+iris.mechanical=Erden-Iris
+iris.energy=Atlantis-Iris
+tile.integration.comuptercraft.name=CC Einbindung
 
 tile.integration.computercraft.name=ComputerCraft Adapter
 
