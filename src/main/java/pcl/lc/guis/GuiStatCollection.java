@@ -2,7 +2,7 @@ package pcl.lc.guis;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -33,7 +33,7 @@ public class GuiStatCollection extends GuiScreen {
 		try {
 			label = URLDecoder.decode(analytics.getReportData(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Client doesn't support UTF-8?", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Client doesn't support UTF-8?", e);
 		}
 	}
 
@@ -65,8 +65,8 @@ public class GuiStatCollection extends GuiScreen {
 	@Override
 	public void drawScreen(int par1, int par2, float par3) {
 		drawDefaultBackground();
-		drawCenteredString(fontRenderer, "LanteaCraft Statistics", width / 2, 10, 0xF4CA16);
-		fontRenderer
+		drawCenteredString(fontRendererObj, "LanteaCraft Statistics", width / 2, 10, 0xF4CA16);
+		fontRendererObj
 				.drawSplitString(
 						"LanteaCraft would like permission to send the following anonymous statistics to our Metrics server - this information allows us to "
 								+ "better understand how LanteaCraft is used. You won't be asked again until you upgrade or delete your configuration files.",
@@ -77,11 +77,11 @@ public class GuiStatCollection extends GuiScreen {
 			if (chunk.length() > 0) {
 				String name = chunk.substring(0, chunk.indexOf('='));
 				String value = chunk.substring(chunk.indexOf('=') + 1);
-				drawString(fontRenderer, name, 20, 65 + (i * 15), 0xCDFFFF);
-				drawString(fontRenderer, value, 120, 65 + (i * 15), 0xCDFFFF);
+				drawString(fontRendererObj, name, 20, 65 + (i * 15), 0xCDFFFF);
+				drawString(fontRendererObj, value, 120, 65 + (i * 15), 0xCDFFFF);
 			}
 		}
-		drawCenteredString(fontRenderer, "More information at http://lanteacraft.com/stats", width / 2,
+		drawCenteredString(fontRendererObj, "More information at http://lanteacraft.com/stats", width / 2,
 				height / 4 + 132, 0xA0A0A0);
 
 		super.drawScreen(par1, par2, par3);

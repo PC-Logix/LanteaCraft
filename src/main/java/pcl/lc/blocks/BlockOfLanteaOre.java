@@ -2,28 +2,29 @@ package pcl.lc.blocks;
 
 import java.util.List;
 
-import net.minecraft.block.BlockOreStorage;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.block.BlockOre;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.OreTypes;
 
-public class BlockOfLanteaOre extends BlockOreStorage {
+public class BlockOfLanteaOre extends BlockOre {
 
-	private Icon missing;
+	private IIcon missing;
 
-	public BlockOfLanteaOre(int id) {
-		super(id);
+	public BlockOfLanteaOre() {
+		super();
 		setHardness(5.0F);
 		setResistance(10.0F);
-		setStepSound(soundMetalFootstep);
+		setStepSound(soundTypeMetal);
 
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 		OreTypes.NAQUADAH.setItemAsBlockTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_block_"
 				+ LanteaCraft.getProxy().getRenderMode()));
@@ -34,16 +35,16 @@ public class BlockOfLanteaOre extends BlockOreStorage {
 	}
 
 	@Override
-	public Icon getIcon(int side, int data) {
+	public IIcon getIcon(int side, int data) {
 		if (data >= OreTypes.values().length)
 			return missing;
 		return OreTypes.values()[data].getItemAsBlockTexture();
 	}
 
 	@Override
-	public void getSubBlocks(int itemID, CreativeTabs tab, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < OreTypes.values().length; i++)
-			list.add(new ItemStack(itemID, 1, i));
+			list.add(new ItemStack(item, 1, i));
 	}
 
 	@Override

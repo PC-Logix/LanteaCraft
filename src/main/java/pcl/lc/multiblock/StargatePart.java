@@ -26,7 +26,7 @@ public class StargatePart extends MultiblockPart {
 
 	@Override
 	public void tick() {
-		if (!host.worldObj.isRemote && modified) {
+		if (!host.getWorldObj().isRemote && modified) {
 			modified = !modified;
 			host.getDescriptionPacket();
 		}
@@ -45,7 +45,7 @@ public class StargatePart extends MultiblockPart {
 		if (!allowScanning)
 			return null;
 		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(-7, -7, -7, 7, 7, 7);
-		TileEntity entity = ScanningHelper.findNearestTileEntityOf(host.worldObj, TileEntityStargateBase.class,
+		TileEntity entity = ScanningHelper.findNearestTileEntityOf(host.getWorldObj(), TileEntityStargateBase.class,
 				host.xCoord, host.yCoord, host.zCoord, bounds);
 		if (entity == null)
 			return null;
@@ -108,7 +108,7 @@ public class StargatePart extends MultiblockPart {
 		StandardModPacket packet = (StandardModPacket) packetOf;
 		if (packet.hasFieldWithValue("currentHost")) {
 			Vector3 location = (Vector3) packet.getValue("currentHost");
-			TileEntity target = host.worldObj.getBlockTileEntity(location.floorX(), location.floorY(),
+			TileEntity target = host.getWorldObj().getTileEntity(location.floorX(), location.floorY(),
 					location.floorZ());
 			if (target != null && (target instanceof TileEntityStargateBase)) {
 				TileEntityStargateBase stargateBase = (TileEntityStargateBase) target;
@@ -116,7 +116,7 @@ public class StargatePart extends MultiblockPart {
 			}
 		} else
 			currentHost = null;
-		host.worldObj.markBlockForRenderUpdate(host.xCoord, host.yCoord, host.zCoord);
+		host.getWorldObj().markBlockForUpdate(host.xCoord, host.yCoord, host.zCoord);
 	}
 
 }

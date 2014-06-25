@@ -2,13 +2,12 @@ package pcl.common.base;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.ITickAgent;
-import cpw.mods.fml.common.ITickHandler;
 
-public abstract class TickHandler implements ITickHandler {
+public abstract class TickHandler {
 
 	protected ReentrantLock childLock = new ReentrantLock();
 	protected ArrayList<ITickAgent> children = new ArrayList<ITickAgent>();
@@ -50,7 +49,7 @@ public abstract class TickHandler implements ITickHandler {
 			try {
 				host.advance();
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.WARNING, "Unhandled exception in ITickAgent.", t);
+				LanteaCraft.getLogger().log(Level.WARN, "Unhandled exception in ITickAgent.", t);
 			}
 	}
 

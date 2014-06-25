@@ -2,7 +2,7 @@ package pcl.lc.worldgen.structure;
 
 import java.lang.reflect.Constructor;
 import java.util.Random;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureStart;
@@ -23,7 +23,7 @@ public class LanteaScatteredFeatureStart extends StructureStart {
 			LanteaScatteredFeature feature = ctr.newInstance(random, chunkX, chunkZ);
 			components.add(feature);
 		} catch (Throwable e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not add LanteaScatteredFeature.", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not add LanteaScatteredFeature.", e);
 		}
 		updateBoundingBox();
 	}

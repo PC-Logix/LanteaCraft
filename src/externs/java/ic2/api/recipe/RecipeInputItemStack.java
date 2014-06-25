@@ -13,6 +13,8 @@ public class RecipeInputItemStack implements IRecipeInput {
 	}
 
 	public RecipeInputItemStack(ItemStack aInput, int aAmount) {
+		if (aInput.getItem() == null) throw new IllegalArgumentException("Invalid item stack specfied");
+
 		input = aInput.copy(); // Never forget to copy.
 		amount = aAmount;
 	}
@@ -30,6 +32,13 @@ public class RecipeInputItemStack implements IRecipeInput {
 	@Override
 	public List<ItemStack> getInputs() {
 		return Arrays.asList(input);
+	}
+
+	@Override
+	public String toString() {
+		ItemStack stack = input.copy();
+		input.stackSize = amount;
+		return "RInputItemStack<"+stack+">";
 	}
 
 	public final ItemStack input;

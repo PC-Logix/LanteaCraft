@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.Level;
+
+import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.module.ModuleCore;
 import pcl.lc.module.ModuleCritters;
 import pcl.lc.module.ModuleDecor;
+import pcl.lc.module.ModuleGalaxy;
 import pcl.lc.module.ModuleIntegration;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.ModuleStargates;
@@ -33,7 +35,7 @@ public class ModuleManager {
 	public static enum Module {
 		CORE(new ModuleCore()), STARGATE(new ModuleStargates()), POWER(new ModulePower()), WORLDGEN(
 				new ModuleWorldGenerator()), CRITTERS(new ModuleCritters()), DECOR(new ModuleDecor()), INTEGRATION(
-				new ModuleIntegration());
+				new ModuleIntegration()), GALAXY(new ModuleGalaxy());
 
 		private final IModule moduleOf;
 		private boolean loaded = false;
@@ -136,7 +138,7 @@ public class ModuleManager {
 			}
 		}
 		if (p >= 254)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"There were issues resolving dependencies; full resolution was aborted.");
 
 		loadedModules.addAll(loadStack);

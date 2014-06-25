@@ -1,12 +1,12 @@
 package pcl.common.network;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.network.packet.Packet250CustomPayload;
 import pcl.common.util.WorldLocation;
 
 public abstract class ModPacket {
@@ -17,7 +17,6 @@ public abstract class ModPacket {
 			double.class, Double.class, // doubles
 			float.class, Float.class, // floats
 			char.class, Character.class, // chars (int)
-
 			String.class, // string
 			ArrayList.class, HashMap.class // generic containers
 	};
@@ -98,24 +97,14 @@ public abstract class ModPacket {
 		return null;
 	}
 
-	public static ModPacket parse(byte bytes[]) throws IOException {
-		DataInputStream data = new DataInputStream(new ByteArrayInputStream(bytes));
-		byte typeword = data.readByte();
-		switch (typeword) {
-		case 0:
-			return StandardModPacket.createPacket(data);
-		case 1:
-			return TinyModPacket.createPacket(data);
-		default:
-			throw new IOException("Unknown packet typeword!");
-		}
-	}
-
 	public abstract boolean getPacketIsForServer();
-
-	public abstract Packet250CustomPayload toPacket();
 
 	public abstract String getType();
 
 	public abstract WorldLocation getOriginLocation();
+
+	public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException;
+
+	public abstract void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException;
+
 }

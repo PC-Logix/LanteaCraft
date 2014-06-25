@@ -1,18 +1,18 @@
 package pcl.lc.blocks;
 
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.base.RotationOrientedBlock;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
@@ -22,10 +22,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStargateController extends RotationOrientedBlock {
 
-	Icon topTexture, bottomTexture, sideTexture;
+	IIcon topTexture, bottomTexture, sideTexture;
 
-	public BlockStargateController(int id) {
-		super(id, Material.rock);
+	public BlockStargateController() {
+		super(Material.rock);
 		setHardness(1.5F);
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
@@ -37,7 +37,7 @@ public class BlockStargateController extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_top_"
 				+ LanteaCraft.getProxy().getRenderMode());
 		bottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_bottom_"
@@ -47,7 +47,7 @@ public class BlockStargateController extends RotationOrientedBlock {
 	}
 
 	@Override
-	public Icon getIcon(int side, int data) {
+	public IIcon getIcon(int side, int data) {
 		switch (side) {
 		case 0:
 			return bottomTexture;
@@ -114,7 +114,7 @@ public class BlockStargateController extends RotationOrientedBlock {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new TileEntityStargateController();
 	}
 

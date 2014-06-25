@@ -1,7 +1,8 @@
 package pcl.lc.fluids;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import pcl.common.helpers.SpecialBucketHandler;
@@ -31,11 +32,11 @@ public class ItemSpecialBucket extends ItemBucket {
 	 * @param hostBlock
 	 *            The fluid block this Bucket is hosting.
 	 */
-	public ItemSpecialBucket(int i, Block hostBlock) {
-		super(i, hostBlock.blockID);
+	public ItemSpecialBucket(Block hostBlock) {
+		super(hostBlock);
 		LanteaCraft.getSpecialBucketHandler().registerBucketMapping(hostBlock, this);
 		setCreativeTab(LanteaCraft.getCreativeTab());
-		setContainerItem(Item.bucketEmpty);
+		setContainerItem(Items.bucket);
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class ItemSpecialBucket extends ItemBucket {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
+	public void registerIcons(IIconRegister par1IconRegister) {
 		itemIcon = par1IconRegister.registerIcon(LanteaCraft.getAssetKey() + ":bucket_" + iconName + "_"
 				+ LanteaCraft.getProxy().getRenderMode());
 	}

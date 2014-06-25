@@ -1,5 +1,6 @@
 package pcl.lc.render.models;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import cpw.mods.fml.relauncher.Side;
@@ -9,8 +10,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class RingPlatformRingModel {
 	private IModelCustom model;
 
-	public RingPlatformRingModel(String path) {
-		model = AdvancedModelLoader.loadModel(path);
+	public RingPlatformRingModel(ResourceLocation location) {
+		model = AdvancedModelLoader.loadModel(location);
 	}
 
 	public void render() {

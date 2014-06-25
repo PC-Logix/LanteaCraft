@@ -1,8 +1,10 @@
 package pcl.common.asm;
 
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
@@ -20,7 +22,7 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 	/**
 	 * The logger
 	 */
-	private static final Logger log = Logger.getLogger("PCLCoreTransformerPlugin");
+	private static final Logger log = LogManager.getFormatterLogger("PCLCoreTransformerPlugin");
 
 	/**
 	 * Gets the logger
@@ -35,7 +37,7 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 	 * Initializes the tweak plugin
 	 */
 	public PCLCoreTransformerPlugin() {
-		log.setParent(FMLLog.getLogger());
+		FMLLog.getLogger();
 		log.log(Level.INFO, "PCLCoreTransformerPlugin ready for action!");
 	}
 
@@ -61,6 +63,12 @@ public class PCLCoreTransformerPlugin implements IFMLLoadingPlugin {
 
 	public static String[] getTransformers() {
 		return new String[] { "pcl.common.asm.ClassOptionalTransformer" };
+	}
+
+	@Override
+	public String getAccessTransformerClass() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
 
@@ -31,7 +31,7 @@ public class WorldLog {
 			outstream = new FileOutputStream(file, true);
 			outwrapper = new PrintStream(outstream);
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not create WorldLog, an error occured.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not create WorldLog, an error occured.", ioex);
 		}
 	}
 
@@ -46,7 +46,7 @@ public class WorldLog {
 				outstream.close();
 			}
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not close WorldLog, an error occured.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not close WorldLog, an error occured.", ioex);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class WorldLog {
 			formatter.append(" ").append(message);
 			outwrapper.println(formatter.toString());
 		} catch (Throwable ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not write to WorldLog, an error occured.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not write to WorldLog, an error occured.", ioex);
 		}
 	}
 

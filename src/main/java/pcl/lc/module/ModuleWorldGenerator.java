@@ -2,9 +2,8 @@ package pcl.lc.module;
 
 import java.util.EnumSet;
 import java.util.Set;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
-import net.minecraft.crash.CallableMinecraftVersion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.ChestGenHooks;
@@ -42,14 +41,8 @@ public class ModuleWorldGenerator implements IModule {
 	@Override
 	public void init() {
 		MinecraftForge.TERRAIN_GEN_BUS.register(LanteaCraft.getInstance());
-		try {
-			if (new CallableMinecraftVersion(null).minecraftVersion().equals("1.6.4"))
-				MapGenStructureIO.func_143031_a(FeatureUnderDesertPyramid.class, "LanteaCraft:DesertPyramid");
-		} catch (Throwable e) {
-			LanteaCraft.getLogger().log(Level.FINE, "Could not register structure type LanteaCraft:DesertPyramid", e);
-		}
 
-		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft random drop items...");
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft random drop items...");
 		String[] categories = { ChestGenHooks.MINESHAFT_CORRIDOR, ChestGenHooks.PYRAMID_DESERT_CHEST,
 				ChestGenHooks.PYRAMID_JUNGLE_CHEST, ChestGenHooks.STRONGHOLD_LIBRARY, ChestGenHooks.VILLAGE_BLACKSMITH };
 		RegistrationHelper.addRandomChestItem(new ItemStack(Blocks.stargateBaseBlock), 1, 1, 2, categories);
@@ -59,10 +52,9 @@ public class ModuleWorldGenerator implements IModule {
 		RegistrationHelper.addRandomChestItem(new ItemStack(Items.coreCrystal, 1, 0), 1, 1, 2, categories);
 		RegistrationHelper.addRandomChestItem(new ItemStack(Items.controllerCrystal, 1, 0), 1, 1, 1, categories);
 
-		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft NaquadahOre generator...");
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft NaquadahOre generator...");
 		naquadahOreGenerator = new NaquadahOreWorldGen();
-		GameRegistry.registerWorldGenerator(naquadahOreGenerator);
-
+		GameRegistry.registerWorldGenerator(naquadahOreGenerator, 0);
 	}
 
 	@Override

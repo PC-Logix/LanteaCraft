@@ -1,10 +1,12 @@
 package net.afterlifelochie.sandbox;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import net.minecraft.network.packet.Packet250CustomPayload;
 import pcl.common.network.ModPacket;
 import pcl.common.util.WorldLocation;
 
@@ -64,12 +66,6 @@ public class DiffModPacket extends ModPacket {
 	}
 
 	@Override
-	public Packet250CustomPayload toPacket() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getType() {
 		return "DiffModPacket";
 	}
@@ -78,6 +74,18 @@ public class DiffModPacket extends ModPacket {
 	public WorldLocation getOriginLocation() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+		// TODO Auto-generated method stub
+
 	}
 
 }

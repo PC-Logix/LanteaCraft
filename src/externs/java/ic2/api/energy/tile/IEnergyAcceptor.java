@@ -2,7 +2,7 @@ package ic2.api.energy.tile;
 
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * For internal/multi-block usage only.
@@ -19,7 +19,7 @@ public interface IEnergyAcceptor extends IEnergyTile {
 	 * The TileEntity in the emitter parameter is what was originally added to the energy net,
 	 * which may be normal in-world TileEntity, a delegate or an IMetaDelegate.
 	 * 
-	 * @param emitter energy emitter
+	 * @param emitter energy emitter, may also be null or an IMetaDelegate
 	 * @param direction direction the energy is being received from
 	 */
 	boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction);

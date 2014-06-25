@@ -1,12 +1,11 @@
-/** 
- * Copyright (c) SpaceToad, 2011
+/**
+ * Copyright (c) 2011-2014, SpaceToad and the BuildCraft Team
  * http://www.mod-buildcraft.com
- * 
- * BuildCraft is distributed under the terms of the Minecraft Mod Public 
+ *
+ * BuildCraft is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
  * http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
-
 package buildcraft.api.core;
 
 /**
@@ -14,21 +13,21 @@ package buildcraft.api.core;
  */
 public interface IAreaProvider {
 
-	public int xMin();
+	int xMin();
 
-	public int yMin();
+	int yMin();
 
-	public int zMin();
+	int zMin();
 
-	public int xMax();
+	int xMax();
 
-	public int yMax();
+	int yMax();
 
-	public int zMax();
+	int zMax();
 
 	/**
 	 * Remove from the world all objects used to define the area.
 	 */
-	public void removeFromWorld();
+	void removeFromWorld();
 
 }

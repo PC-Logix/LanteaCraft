@@ -2,24 +2,24 @@ package pcl.lc.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisType;
 
 public class ItemIris extends Item {
 
-	private Icon iconMissing;
-	private Icon iconMechanical;
-	private Icon iconEnergy;
+	private IIcon iconMissing;
+	private IIcon iconMechanical;
+	private IIcon iconEnergy;
 
-	public ItemIris(int id) {
-		super(id);
+	public ItemIris() {
+		super();
 		setHasSubtypes(true);
 		setMaxStackSize(1);
 		setMaxDamage(21);
@@ -27,7 +27,7 @@ public class ItemIris extends Item {
 	}
 
 	@Override
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < EnumIrisType.values().length; i++) {
 			ItemStack stack = new ItemStack(LanteaCraft.Items.iris, 1);
 			setType(stack, EnumIrisType.fromOrdinal(i));
@@ -37,7 +37,7 @@ public class ItemIris extends Item {
 	}
 
 	@Override
-	public void registerIcons(IconRegister reg) {
+	public void registerIcons(IIconRegister reg) {
 		iconMissing = reg.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 		iconMechanical = reg.registerIcon(LanteaCraft.getAssetKey() + ":energy_iris_upgrade_"
 				+ LanteaCraft.getProxy().getRenderMode());
@@ -46,7 +46,7 @@ public class ItemIris extends Item {
 	}
 
 	@Override
-	public Icon getIconIndex(ItemStack par1ItemStack) {
+	public IIcon getIconIndex(ItemStack par1ItemStack) {
 		EnumIrisType typeof = getType(par1ItemStack);
 		if (typeof != null)
 			switch (typeof) {

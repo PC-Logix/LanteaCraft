@@ -1,19 +1,26 @@
 package pcl.lc.items;
 
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import pcl.common.audio.AudioEngine;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.AudioSource;
+import pcl.common.base.GenericTeleporter;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.module.ModuleGalaxy;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
@@ -23,10 +30,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemDebugTool extends Item {
 	@SideOnly(Side.CLIENT)
-	private Icon theIcon;
+	private IIcon theIcon;
 
-	public ItemDebugTool(int itemid) {
-		super(itemid);
+	public ItemDebugTool() {
+		super();
 	}
 
 	@Override
@@ -43,11 +50,21 @@ public class ItemDebugTool extends Item {
 	@Override
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4,
 			int par5, int par6, int par7, float par8, float par9, float par10) {
+		if (!par3World.isRemote) {
+			EntityPlayerMP player = (EntityPlayerMP) par2EntityPlayer;
+			player.mcServer.getConfigurationManager().transferPlayerToDimension((EntityPlayerMP) player,
+					((ModuleGalaxy) Module.GALAXY.moduleOf()).__TMP_ABYDOS_IDX,
+					new GenericTeleporter((WorldServer) par3World));
+		}
+
+		if (true == true)
+			return true;
+
 		String side = (par3World.isRemote) ? "client" : "server";
-		int i1 = par3World.getBlockId(par4, par5, par6);
 		LanteaCraft.getLogger().log(Level.INFO,
 				"Debugger used at (" + par4 + ", " + par5 + ", " + par6 + ") on " + side);
-		par2EntityPlayer.addChatMessage("Data for (" + par4 + ", " + par5 + ", " + par6 + ") side " + side + ":");
+		par2EntityPlayer.addChatMessage(new ChatComponentText("Data for (" + par4 + ", " + par5 + ", " + par6
+				+ ") side " + side + ":"));
 
 		if (par3World.isRemote) {
 			AudioEngine engine = LanteaCraft.getProxy().getAudioEngine();
@@ -57,41 +74,47 @@ public class ItemDebugTool extends Item {
 			source.play();
 		}
 
-		TileEntity entity = par3World.getBlockTileEntity(par4, par5, par6);
+		TileEntity entity = par3World.getTileEntity(par4, par5, par6);
 		if (entity instanceof TileEntityStargateBase) {
 			TileEntityStargateBase base = (TileEntityStargateBase) entity;
-			par2EntityPlayer.addChatMessage("type: TileEntityStargateBase");
-			par2EntityPlayer.addChatMessage("mValid: " + (base.getAsStructure().isValid() ? "yes" : "no"));
-			par2EntityPlayer.addChatMessage("mRotation: " + base.getAsStructure().getOrientation());
-			par2EntityPlayer.addChatMessage("mPartCount: " + base.getAsStructure().getPartCount());
-			par2EntityPlayer.addChatMessage("wValid: "
-					+ ((base.getAsStructure().isValidStructure(par3World, par4, par5, par6)) ? "yes" : "no"));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("type: TileEntityStargateBase"));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("mValid: "
+					+ (base.getAsStructure().isValid() ? "yes" : "no")));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("mRotation: "
+					+ base.getAsStructure().getOrientation()));
+			par2EntityPlayer
+					.addChatMessage(new ChatComponentText("mPartCount: " + base.getAsStructure().getPartCount()));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("wValid: "
+					+ ((base.getAsStructure().isValidStructure(par3World, par4, par5, par6)) ? "yes" : "no")));
 			if (base.getState() != null)
-				par2EntityPlayer.addChatMessage("mState: " + base.getState());
-			par2EntityPlayer.addChatMessage("ticks: " + base.getTicks());
+				par2EntityPlayer.addChatMessage(new ChatComponentText("mState: " + base.getState()));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("ticks: " + base.getTicks()));
 		} else if (entity instanceof TileEntityStargateRing) {
 			TileEntityStargateRing ring = (TileEntityStargateRing) entity;
-			par2EntityPlayer.addChatMessage("type: TileEntityStargateBase");
-			par2EntityPlayer.addChatMessage("isMerged: " + (ring.getAsPart().isMerged() ? "yes" : "no"));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("type: TileEntityStargateBase"));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("isMerged: "
+					+ (ring.getAsPart().isMerged() ? "yes" : "no")));
 		} else if (entity instanceof TileEntityStargateController) {
 			TileEntityStargateController controller = (TileEntityStargateController) entity;
-			par2EntityPlayer.addChatMessage("type: TileEntityStargateController");
-			par2EntityPlayer.addChatMessage("isLinkedToBase: " + (controller.isLinkedToStargate ? "yes" : "no"));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("type: TileEntityStargateController"));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("isLinkedToBase: "
+					+ (controller.isLinkedToStargate ? "yes" : "no")));
 		}
 
 		if (entity instanceof TileEntityNaquadahGenerator) {
 			TileEntityNaquadahGenerator generator = (TileEntityNaquadahGenerator) entity;
-			par2EntityPlayer.addChatMessage("type: TileEntityNaquadahGenerator");
-			par2EntityPlayer.addChatMessage("simulating: " + generator.simulate);
-			par2EntityPlayer.addChatMessage("energy: " + generator.energy);
-			par2EntityPlayer.addChatMessage("exportEnergy: " + generator.getAvailableExportEnergy());
+			par2EntityPlayer.addChatMessage(new ChatComponentText("type: TileEntityNaquadahGenerator"));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("simulating: " + generator.simulate));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("energy: " + generator.energy));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("exportEnergy: "
+					+ generator.getAvailableExportEnergy()));
 		}
 		return true;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
+	public void registerIcons(IIconRegister par1IconRegister) {
 		itemIcon = par1IconRegister.registerIcon("pcl_lc:creative_icon");
 	}
 

@@ -5,8 +5,8 @@ import pcl.lc.LanteaCraft;
 
 public class ItemGDO extends Item {
 
-	public ItemGDO(int id) {
-		super(id);
+	public ItemGDO() {
+		super();
 	}
 
 	@Override

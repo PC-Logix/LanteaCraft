@@ -42,18 +42,18 @@ public abstract class GenericMultiblock {
 	 * Called by the host tile-entity to tick this structure.
 	 */
 	public void tick() {
-		if (host.worldObj != null)
-			isClient = host.worldObj.isRemote;
+		if (host.getWorldObj() != null)
+			isClient = host.getWorldObj().isRemote;
 		if (isClient)
 			if (!hasUpdate) {
 				ModPacket packet = pollForUpdate();
-				LanteaCraft.getProxy().sendToServer(packet);
+				LanteaCraft.getNetPipeline().sendToServer(packet);
 				hasUpdate = true;
 			}
 		// if the structure is currently flagged as invalid, and we're not a
 		// client, attempt a validate
 		if (wasInvalidated() && !isClient)
-			validate(host.worldObj, host.xCoord, host.yCoord, host.zCoord);
+			validate(host.getWorldObj(), host.xCoord, host.yCoord, host.zCoord);
 	}
 
 	/**

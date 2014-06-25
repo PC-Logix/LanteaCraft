@@ -4,8 +4,8 @@ import net.minecraft.item.Item;
 
 public class ItemReplicator extends Item {
 
-	public ItemReplicator(int id) {
-		super(id);
+	public ItemReplicator() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 

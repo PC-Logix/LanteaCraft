@@ -1,8 +1,9 @@
 package pcl.lc.items;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Blocks;
 import cpw.mods.fml.relauncher.Side;
@@ -10,13 +11,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemStargateRing extends ItemBlock {
 
-	public ItemStargateRing(int id) {
-		super(id);
+	public ItemStargateRing(Block block) {
+		super(block);
 		setHasSubtypes(true);
 	}
 
 	@Override
-	public Icon getIconFromDamage(int i) {
+	public IIcon getIconFromDamage(int i) {
 		return Blocks.stargateRingBlock.getIcon(0, i);
 	}
 

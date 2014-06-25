@@ -1,19 +1,20 @@
 package pcl.lc.items;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft.Blocks;
 
 public class ItemLanteaOreBlock extends ItemBlock {
 
-	public ItemLanteaOreBlock(int id) {
-		super(id);
+	public ItemLanteaOreBlock(Block block) {
+		super(block);
 		setHasSubtypes(true);
 	}
 
 	@Override
-	public Icon getIconFromDamage(int i) {
+	public IIcon getIconFromDamage(int i) {
 		return Blocks.lanteaOre.getIcon(0, i);
 	}
 

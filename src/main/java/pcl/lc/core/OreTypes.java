@@ -1,6 +1,6 @@
 package pcl.lc.core;
 
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import pcl.lc.blocks.BlockLanteaOre;
 import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreBlock;
@@ -20,10 +20,10 @@ public enum OreTypes {
 
 	private String tex;
 
-	private Icon textureOreBlock;
-	private Icon textureItem;
-	private Icon textureIngotItem;
-	private Icon textureItemAsBlock;
+	private IIcon textureOreBlock;
+	private IIcon textureItem;
+	private IIcon textureIngotItem;
+	private IIcon textureItemAsBlock;
 
 	private OreTypes(String tex) {
 		this.tex = tex;
@@ -39,35 +39,35 @@ public enum OreTypes {
 		return tex;
 	}
 
-	public Icon getOreTexture() {
+	public IIcon getOreTexture() {
 		return textureOreBlock;
 	}
 
-	public void setOreTexture(Icon texture) {
+	public void setOreTexture(IIcon texture) {
 		textureOreBlock = texture;
 	}
 
-	public Icon getItemTexture() {
+	public IIcon getItemTexture() {
 		return textureItem;
 	}
 
-	public void setItemTexture(Icon texture) {
+	public void setItemTexture(IIcon texture) {
 		textureItem = texture;
 	}
 
-	public Icon getIngotItemTexture() {
+	public IIcon getIngotItemTexture() {
 		return textureIngotItem;
 	}
 
-	public void setIngotItemTexture(Icon texture) {
+	public void setIngotItemTexture(IIcon texture) {
 		textureIngotItem = texture;
 	}
 
-	public Icon getItemAsBlockTexture() {
+	public IIcon getItemAsBlockTexture() {
 		return textureItemAsBlock;
 	}
 
-	public void setItemAsBlockTexture(Icon texture) {
+	public void setItemAsBlockTexture(IIcon texture) {
 		textureItemAsBlock = texture;
 	}
 

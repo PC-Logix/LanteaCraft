@@ -4,30 +4,30 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 public class BlockFilter {
-	private int targetId;
+	private Block targetBlock;
 	private int targetMetadata;
 
-	public BlockFilter(int id) {
-		new BlockFilter(id, -1);
+	public BlockFilter(Block block) {
+		new BlockFilter(block, -1);
 	}
 
-	public BlockFilter(int id, int metadata) {
-		targetId = id;
+	public BlockFilter(Block block, int metadata) {
+		targetBlock = block;
 		targetMetadata = metadata;
 	}
 
 	public boolean matches(World world, Block blockOf, int x, int y, int z) {
 		// test for immediate id match, metadata ignored
-		if (blockOf.blockID == targetId && targetMetadata == -1)
+		if (blockOf.equals(targetBlock) && targetMetadata == -1)
 			return true;
 		// test for immediate id match & metadata match
-		if (blockOf.blockID == targetId && targetMetadata == world.getBlockMetadata(x, y, z))
+		if (blockOf.equals(targetBlock) && targetMetadata == world.getBlockMetadata(x, y, z))
 			return true;
 		return false;
 	}
 
-	public int getId() {
-		return targetId;
+	public Block getBlock() {
+		return targetBlock;
 	}
 
 	public int getMetadata() {

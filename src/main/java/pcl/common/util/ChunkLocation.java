@@ -10,7 +10,7 @@ public class ChunkLocation {
 	public boolean isStrongLocation;
 
 	public ChunkLocation(TileEntity te) {
-		this(te.worldObj.provider.dimensionId, te.xCoord >> 4, te.zCoord >> 4);
+		this(te.getWorldObj().provider.dimensionId, te.xCoord >> 4, te.zCoord >> 4);
 	}
 
 	public ChunkLocation(int dimension, int x, int z) {

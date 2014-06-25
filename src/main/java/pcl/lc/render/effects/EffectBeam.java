@@ -1,6 +1,6 @@
 package pcl.lc.render.effects;
 
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
@@ -67,9 +67,9 @@ public class EffectBeam extends EntityFX {
 	public void initialize() {
 		LanteaCraft.getLogger().log(Level.INFO, "Spawning EffectBeam!");
 		if (0 >= duration)
-			LanteaCraft.getLogger().log(Level.WARNING, "Spawned EffectBeam with no duration, this might end badly!");
+			LanteaCraft.getLogger().log(Level.WARN, "Spawned EffectBeam with no duration, this might end badly!");
 		if (0 >= duration && length != 0.0D)
-			LanteaCraft.getLogger().log(Level.WARNING, "Even worse, an animation was requested but with no duration.");
+			LanteaCraft.getLogger().log(Level.WARN, "Even worse, an animation was requested but with no duration.");
 		position = origin;
 		rotation = new Facing3(0, 0);
 		Vector3 d0, d1;

@@ -11,16 +11,16 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import javax.swing.ImageIcon;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.event.ForgeSubscribe;
 import pcl.lc.LanteaCraft;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,7 +41,7 @@ public class CloakHandler {
 			try {
 				RENDER_BUFFER.drawImage(new ImageIcon(new URL(cloakURL)).getImage(), 0, 0, null);
 			} catch (MalformedURLException e) {
-				LanteaCraft.getLogger().log(Level.WARNING, "Failed to preload cape.", e);
+				LanteaCraft.getLogger().log(Level.WARN, "Failed to preload cape.", e);
 			}
 		}
 	}
@@ -66,7 +66,7 @@ public class CloakHandler {
 				ReflectionHelper.setPrivateValue(ThreadDownloadImageData.class, abstractClientPlayer.getTextureCape(),
 						bo, new String[] { "bufferedImage", "field_110560_d" });
 			} catch (MalformedURLException e) {
-				LanteaCraft.getLogger().log(Level.WARNING, "Failed to load cape.", e);
+				LanteaCraft.getLogger().log(Level.WARN, "Failed to load cape.", e);
 			}
 		}
 	}
@@ -79,7 +79,7 @@ public class CloakHandler {
 		this.cloakServer = cloakServer;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onPreRenderSpecials(RenderPlayerEvent.Specials.Pre event) {
 		if (Loader.isModLoaded("shadersmod"))
@@ -117,9 +117,9 @@ public class CloakHandler {
 				}
 			br.close();
 		} catch (MalformedURLException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Failed to open cloaks server.", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Failed to open cloaks server.", e);
 		} catch (IOException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Failed to read cloaks server.", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Failed to read cloaks server.", e);
 		} finally {
 			try {
 				if (br != null)

@@ -3,13 +3,13 @@ package pcl.common.helpers;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.event.Event.Result;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import pcl.lc.fluids.ItemSpecialBucket;
 
@@ -40,7 +40,7 @@ public class SpecialBucketHandler {
 		buckets.put(blockOf, itemResult);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onBucketFill(FillBucketEvent event) {
 		ItemStack result = fillCustomBucket(event.world, event.target);
 		if (result == null)
@@ -61,10 +61,10 @@ public class SpecialBucketHandler {
 	 *         {@link ItemSpecialBucket} registered with the handler.
 	 */
 	private ItemStack fillCustomBucket(World world, MovingObjectPosition pos) {
-		int blockID = world.getBlockId(pos.blockX, pos.blockY, pos.blockZ);
+		Block block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
 		for (Entry<Block, ItemSpecialBucket> results : buckets.entrySet())
-			if (blockID == results.getKey().blockID) {
-				world.setBlock(pos.blockX, pos.blockY, pos.blockZ, 0);
+			if (block.equals(results.getKey())) {
+				world.setBlock(pos.blockX, pos.blockY, pos.blockZ, Block.getBlockById(0));
 				return new ItemStack(results.getValue());
 			}
 		return null;

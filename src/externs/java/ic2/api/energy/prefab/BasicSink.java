@@ -6,8 +6,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
@@ -127,7 +127,7 @@ public class BasicSink extends TileEntity implements IEnergySink {
 		if (!addedToEnet &&
 				!FMLCommonHandler.instance().getEffectiveSide().isClient() &&
 				Info.isIc2Available()) {
-			worldObj = parent.worldObj;
+			worldObj = parent.getWorldObj();
 			xCoord = parent.xCoord;
 			yCoord = parent.yCoord;
 			zCoord = parent.zCoord;

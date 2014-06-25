@@ -1,7 +1,7 @@
 package pcl.common.api.energy;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraft.util.Direction;
 
 public interface IEnergyHandler {
 
@@ -21,7 +21,7 @@ public interface IEnergyHandler {
 	 *         quantity specified, part of the quantity specified, or zero if no
 	 *         energy can be accepted.
 	 */
-	public abstract double receiveEnergy(ForgeDirection direction, double quantity, boolean isSimulated);
+	public abstract double receiveEnergy(Direction direction, double quantity, boolean isSimulated);
 
 	/**
 	 * Extract a quantity of energy specified to the direction provided. Return
@@ -38,7 +38,7 @@ public interface IEnergyHandler {
 	 *         quantity requested, part of the quantity requested, or zero if no
 	 *         energy can be extracted.
 	 */
-	public abstract double extractEnergy(ForgeDirection direction, double quantity, boolean isSimulated);
+	public abstract double extractEnergy(Direction direction, double quantity, boolean isSimulated);
 
 	/**
 	 * Determines if this host can connect to energy transfers on a given
@@ -49,7 +49,7 @@ public interface IEnergyHandler {
 	 * @return If this host can connect to neighbor {@link IEnergyHandler}
 	 *         instances.
 	 */
-	public abstract boolean canConnect(ForgeDirection direction);
+	public abstract boolean canConnect(Direction direction);
 
 	/**
 	 * Get the currently stored or buffered energy which can be extracted by
@@ -60,7 +60,7 @@ public interface IEnergyHandler {
 	 * @return The quantity of energy which can be extracted by neighbors on the
 	 *         given side
 	 */
-	public abstract double getAvailableEnergy(ForgeDirection direction);
+	public abstract double getAvailableEnergy(Direction direction);
 
 	/**
 	 * Get the current maximum energy which can be accepted on the given side.
@@ -69,7 +69,7 @@ public interface IEnergyHandler {
 	 *            The direction to test.
 	 * @return The quantity of energy which this side can receive.
 	 */
-	public abstract double getMaxReceiveEnergy(ForgeDirection direction);
+	public abstract double getMaxReceiveEnergy(Direction direction);
 
 	/**
 	 * Saves the energy handler to a {@link NBTTagCompound} compound for saving

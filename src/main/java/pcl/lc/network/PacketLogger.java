@@ -1,12 +1,24 @@
 package pcl.lc.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufProcessor;
+import io.netty.buffer.Unpooled;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.GatheringByteChannel;
+import java.nio.channels.ScatteringByteChannel;
+import java.nio.charset.Charset;
 
-import net.minecraft.network.packet.Packet250CustomPayload;
+import org.apache.logging.log4j.Level;
+
 import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 
@@ -27,7 +39,7 @@ public class PacketLogger {
 			outstream = new FileOutputStream(file, true);
 			datastream = new DataOutputStream(outstream);
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not create PacketLogger, an error occured.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not create PacketLogger, an error occured.", ioex);
 		}
 	}
 
@@ -38,23 +50,24 @@ public class PacketLogger {
 			outstream.flush();
 			outstream.close();
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not close PacketLogger, an error occured.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not close PacketLogger, an error occured.", ioex);
 		}
 	}
 
 	public void logPacket(ModPacket packet) {
 		if (datastream == null)
 			return;
-		Packet250CustomPayload payload = packet.toPacket();
 		try {
+			ByteBuf virt_buff = Unpooled.buffer();
+			packet.encodeInto(null, virt_buff);
 			datastream.writeLong(packetcount++);
-			datastream.writeLong(payload.data.length);
-			datastream.write(payload.data);
+			datastream.writeLong(virt_buff.array().length);
+			datastream.write(virt_buff.array());
 			// Prevent unhandled overflows
 			if (packetcount >= Long.MAX_VALUE - 1L)
 				packetcount %= Long.MAX_VALUE - 1L;
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not pack ModPacket into PacketLogger stream.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not pack ModPacket into PacketLogger stream.", ioex);
 		}
 	}
 }

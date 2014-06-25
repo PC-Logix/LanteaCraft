@@ -5,17 +5,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
+
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Property;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import pcl.common.audio.AudioEngine;
 import pcl.common.base.TileEntityChunkManager;
@@ -27,7 +26,6 @@ import pcl.common.helpers.NetworkHelpers;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.common.helpers.VersionHelper;
 import pcl.common.network.ModPacket;
-import pcl.common.util.WorldLocation;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.core.RemoteChunkLoading;
@@ -49,10 +47,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class LanteaCraftCommonProxy {
 
@@ -88,7 +82,7 @@ public class LanteaCraftCommonProxy {
 
 	protected WorldLog worldLogger;
 
-	private ServerTickHandler serverTickHandler = new ServerTickHandler();
+	private ServerTickHandler serverTickHandler = new ServerTickHandler(versionHelper);
 
 	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
@@ -118,7 +112,7 @@ public class LanteaCraftCommonProxy {
 	public void preInit(FMLPreInitializationEvent e) {
 		if (BuildInfo.isDevelopmentEnvironment())
 			LanteaCraft.getLogger().log(
-					Level.WARNING,
+					Level.WARN,
 					"This doesn't appear to be an official build of LanteaCraft, or you are in a development context; "
 							+ "please do not report bugs to us. We do not support external builds.");
 		else
@@ -141,8 +135,8 @@ public class LanteaCraftCommonProxy {
 		serverTickHandler.registerTickHost(stargateConnectionManager);
 		audioContext = new AudioEngine();
 
-		NetworkRegistry.instance().registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
-		TickRegistry.registerTickHandler(serverTickHandler, Side.SERVER);
+		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
+		FMLCommonHandler.instance().bus().register(serverTickHandler);
 		networkHelpers.init();
 		moduleManager.init();
 	}
@@ -180,7 +174,7 @@ public class LanteaCraftCommonProxy {
 	}
 
 	public void onInitMapGen(InitMapGenEvent e) {
-		LanteaCraft.getLogger().log(Level.FINE, "InitMapGenEvent fired");
+		LanteaCraft.getLogger().log(Level.DEBUG, "InitMapGenEvent fired");
 	}
 
 	void configure() {
@@ -226,7 +220,7 @@ public class LanteaCraftCommonProxy {
 	}
 
 	void registerRecipes() {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering LanteaCraft recipes...");
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft recipes...");
 		if (config.getBoolean("options", "allowCraftingNaquadah", false)) {
 			// TODO: moved to module -> core
 		}
@@ -237,7 +231,7 @@ public class LanteaCraftCommonProxy {
 
 	public ConfigValue<?> getConfigValue(String name) {
 		if (BuildInfo.ASSET_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.FINE, "Fetching configuration value `" + name + "`");
+			LanteaCraft.getLogger().log(Level.DEBUG, "Fetching configuration value `" + name + "`");
 		for (ConfigValue<?> item : configValues)
 			if (item.getName().equalsIgnoreCase(name))
 				return item;
@@ -273,19 +267,19 @@ public class LanteaCraftCommonProxy {
 						.newInstance(player, world, x, y, z);
 			}
 		} catch (Exception e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to create GUI element, an exception occured.", e);
+			LanteaCraft.getLogger().log(Level.FATAL, "Failed to create GUI element, an exception occured.", e);
 			return null;
 		}
 	}
 
 	public int addVillager(int id, String name, ResourceLocation skin) {
-		LanteaCraft.getLogger().log(Level.FINE, "Adding villager ID " + id + " with name " + name);
+		LanteaCraft.getLogger().log(Level.DEBUG, "Adding villager ID " + id + " with name " + name);
 		registeredVillagers.put(name, new VillagerMapping(id, skin));
 		return id;
 	}
 
 	public void addContainer(int id, Class<? extends Container> cls) {
-		LanteaCraft.getLogger().log(Level.FINE,
+		LanteaCraft.getLogger().log(Level.DEBUG,
 				"Registering container with ID " + id + ", class " + cls.getCanonicalName());
 		registeredContainers.put(id, cls);
 	}
@@ -309,63 +303,11 @@ public class LanteaCraftCommonProxy {
 		return 0;
 	}
 
-	public void handlePacket(ModPacket modPacket, Player player) {
+	public void handlePacket(ModPacket modPacket, EntityPlayer player) {
 		if (modPacket.getPacketIsForServer())
 			serverPacketHandler.handlePacket(modPacket, player);
 		else
 			return;
-	}
-
-	public void sendToServer(ModPacket packet) {
-		throw new RuntimeException("Cannot send to server: this method was not overridden!!");
-	}
-
-	public void sendToAllPlayers(ModPacket packet) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		if (server != null) {
-			Packet250CustomPayload payload = packet.toPacket();
-			payload.channel = BuildInfo.modID;
-			if (BuildInfo.NET_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("sendToAllPlayers: 250 %s %s", payload.channel, payload.length));
-			server.getConfigurationManager().sendPacketToAllPlayers(payload);
-		}
-	}
-
-	public void sendToPlayersInDimension(ModPacket packet) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		if (server != null) {
-			Packet250CustomPayload payload = packet.toPacket();
-			payload.channel = BuildInfo.modID;
-			WorldLocation origin = packet.getOriginLocation();
-			if (BuildInfo.NET_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("sendToPlayersInDimension: 250 %s %s", payload.channel, payload.length));
-			server.getConfigurationManager().sendPacketToAllPlayersInDimension(payload, origin.dimension);
-		}
-	}
-
-	public void sendToPlayersNear(ModPacket packet, double range) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		if (server != null) {
-			Packet250CustomPayload payload = packet.toPacket();
-			payload.channel = BuildInfo.modID;
-			if (BuildInfo.NET_DEBUGGING)
-				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("sendToPlayersNear: 250 %s %s", payload.channel, payload.length));
-			WorldLocation origin = packet.getOriginLocation();
-			server.getConfigurationManager().sendToAllNear(origin.x, origin.y, origin.z, range, origin.dimension,
-					payload);
-		}
-	}
-
-	public void sendToPlayer(EntityPlayer player, ModPacket packet) {
-		Packet250CustomPayload payload = packet.toPacket();
-		payload.channel = BuildInfo.modID;
-		if (BuildInfo.NET_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("sendToPlayer: 250 %s %s", payload.channel, payload.length));
-		PacketDispatcher.sendPacketToPlayer(payload, (Player) player);
 	}
 
 	public ConfigurationHelper getConfig() {
@@ -391,7 +333,7 @@ public class LanteaCraftCommonProxy {
 			LanteaCraft.getLogger().log(Level.INFO, String.format("WorldLog starting: %s", logfile.toString()));
 			worldLogger.open();
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Failed to resolve paths for WorldLog.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Failed to resolve paths for WorldLog.", ioex);
 		}
 	}
 

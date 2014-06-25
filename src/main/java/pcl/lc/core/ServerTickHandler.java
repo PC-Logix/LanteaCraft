@@ -1,55 +1,38 @@
 package pcl.lc.core;
 
-import java.util.EnumSet;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.ChatComponentText;
 import pcl.common.base.TickHandler;
 import pcl.common.helpers.VersionHelper;
-import pcl.lc.LanteaCraft;
-import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 public class ServerTickHandler extends TickHandler {
 
 	private boolean messageSent;
+	private VersionHelper versioning;
 
-	@Override
-	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		if (type.equals(EnumSet.of(TickType.PLAYER))) {
-			VersionHelper versioning = LanteaCraft.getProxy().getVersionHelper();
-			if (versioning.finished && !messageSent) {
-				if (versioning.requiresNotify) {
-					EntityPlayer player = (EntityPlayer) tickData[0];
-					player.sendChatToPlayer(new ChatMessageComponent().addText("LanteaCraft "
-							+ versioning.remoteVersion + "-" + versioning.remoteBuild + " is available: "
-							+ versioning.remoteLabel));
-				}
-				messageSent = true;
+	public ServerTickHandler(VersionHelper version) {
+		versioning = version;
+	}
+
+	@SubscribeEvent
+	public void onWorldTick(ServerTickEvent tick) {
+		if (tick.phase != Phase.START)
+			return;
+		updateChildren();
+		tickChildren();
+	}
+
+	@SubscribeEvent
+	public void onPlayerTick(PlayerTickEvent tick) {
+		if (versioning.finished && !messageSent) {
+			if (versioning.requiresNotify) {
+				tick.player.addChatMessage(new ChatComponentText("LanteaCraft " + versioning.remoteVersion + "-"
+						+ versioning.remoteBuild + " is available: " + versioning.remoteLabel));
 			}
+			messageSent = true;
 		}
-
-		if (type.equals(EnumSet.of(TickType.WORLD))) {
-			updateChildren();
-			tickChildren();
-		}
-	}
-
-	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public EnumSet<TickType> ticks() {
-		if (messageSent)
-			return EnumSet.of(TickType.WORLD);
-		else
-			return EnumSet.of(TickType.WORLD, TickType.PLAYER);
-	}
-
-	@Override
-	public String getLabel() {
-		return "LanteaCraft Server Worker";
 	}
 }

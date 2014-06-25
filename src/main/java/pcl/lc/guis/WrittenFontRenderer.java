@@ -5,14 +5,14 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Stack;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.Resource;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 
 import org.w3c.dom.Document;
@@ -116,7 +116,7 @@ public class WrittenFontRenderer {
 	 */
 	public void buildFont() {
 		try {
-			Resource metricResource = Minecraft.getMinecraft().getResourceManager().getResource(fontMetricName);
+			IResource metricResource = Minecraft.getMinecraft().getResourceManager().getResource(fontMetricName);
 			InputStream stream = metricResource.getInputStream();
 			if (stream == null)
 				throw new IOException("Could not open font metric file.");
@@ -156,11 +156,11 @@ public class WrittenFontRenderer {
 				char_metrics.put(charcode, new GlyphMetric(w, h, u, v));
 			}
 		} catch (IOException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Cannot setup font.", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Cannot setup font.", e);
 		} catch (ParserConfigurationException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Cannot read font metric data.", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Cannot read font metric data.", e);
 		} catch (SAXException e) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Cannot read font metric data.", e);
+			LanteaCraft.getLogger().log(Level.WARN, "Cannot read font metric data.", e);
 		}
 		LanteaCraft.getLogger()
 				.log(Level.INFO,

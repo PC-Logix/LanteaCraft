@@ -3,11 +3,11 @@ package pcl.lc.fluids;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
@@ -17,17 +17,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockLiquidNaquadah extends BlockFluidClassic {
 
-	protected Icon[] fluidIcon;
+	protected IIcon[] fluidIcon;
 
-	public BlockLiquidNaquadah(int id) {
-		super(id, LanteaCraft.Fluids.fluidLiquidNaquadah, Material.water);
-		LanteaCraft.Fluids.fluidLiquidNaquadah.setBlockID(blockID);
+	public BlockLiquidNaquadah() {
+		super(LanteaCraft.Fluids.fluidLiquidNaquadah, Material.water);
+		LanteaCraft.Fluids.fluidLiquidNaquadah.setBlock(this);
 		setTickRandomly(true);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta) {
+	public IIcon getIcon(int side, int meta) {
 		return (side != 0) && (side != 1) ? fluidIcon[1] : fluidIcon[0];
 	}
 
@@ -55,8 +55,8 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
-		fluidIcon = new Icon[] {
+	public void registerBlockIcons(IIconRegister register) {
+		fluidIcon = new IIcon[] {
 				register.registerIcon(LanteaCraft.getAssetKey() + ":naquada_still_"
 						+ LanteaCraft.getProxy().getRenderMode()),
 				register.registerIcon(LanteaCraft.getAssetKey() + ":naquada_flow_"

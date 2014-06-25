@@ -7,8 +7,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCoreCrystal extends Item {
 
-	public ItemCoreCrystal(int id) {
-		super(id);
+	public ItemCoreCrystal() {
+		super();
 	}
 
 	@Override

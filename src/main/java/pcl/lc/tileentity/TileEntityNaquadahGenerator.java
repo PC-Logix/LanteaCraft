@@ -8,14 +8,14 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraft.network.Packet;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -47,21 +47,10 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 	public SpecialFluidTank tank = new SpecialFluidTank(LanteaCraft.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
 
-	private boolean addedToEnergyNet = false;
-
 	private FilteredInventory inventory = new FilteredInventory(5) {
-		@Override
-		public void onInventoryChanged() {
-			// TODO Auto-generated method stub
-		}
 
 		@Override
-		public boolean isInvNameLocalized() {
-			return false;
-		}
-
-		@Override
-		public String getInvName() {
+		public String getInventoryName() {
 			return "naquadah_generator";
 		}
 
@@ -82,6 +71,11 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 			if (0 > i || i > items.length)
 				return false;
 			return true;
+		}
+
+		@Override
+		public boolean hasCustomInventoryName() {
+			return false;
 		}
 	};
 
@@ -114,16 +108,19 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 		super.writeToNBT(nbt);
 		NBTTagCompound tankCompound = new NBTTagCompound();
 		tank.writeToNBT(tankCompound);
-		nbt.setCompoundTag("tank", tankCompound);
+		nbt.setTag("tank", tankCompound);
 	}
 
 	@Override
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
+			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
 			if (!addedToEnergyNet) {
-				List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-				if (ifaces.contains("ic2.api.energy.tile.IEnergyTile"))
+				if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+						|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
 					postIC2Update(true);
+					stateChanged();
+				}
 			}
 			if (tank.hasChanged())
 				stateChanged();
@@ -163,7 +160,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	}
 
 	public void stateChanged() {
-		onInventoryChanged();
+		markDirty();
 		getDescriptionPacket();
 	}
 
@@ -186,7 +183,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getProxy().sendToAllPlayers(getPacketFromState());
+		LanteaCraft.getNetPipeline().sendToAll(getPacketFromState());
 		return null;
 	}
 
@@ -226,11 +223,13 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 	@Override
 	public void invalidate() {
-		if (addedToEnergyNet) {
-			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-			if (ifaces.contains("ic2.api.energy.tile.IEnergyTile"))
+		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+		if (addedToEnergyNet)
+			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+					|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
 				postIC2Update(false);
-		}
+				markDirty();
+			}
 		super.invalidate();
 	}
 
@@ -360,6 +359,6 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		getStateFromPacket(packetOf);
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 }

@@ -3,7 +3,7 @@ package pcl.common.audio;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;

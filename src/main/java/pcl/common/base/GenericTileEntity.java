@@ -1,6 +1,6 @@
 package pcl.common.base;
 
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,34 +9,11 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import pcl.lc.LanteaCraft;
 
 public class GenericTileEntity extends TileEntity implements IInventory, ISidedInventory {
-
-	@Override
-	public Packet getDescriptionPacket() {
-		if (syncWithClient()) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			writeToNBT(nbt);
-			return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, nbt);
-		} else
-			return null;
-	}
-
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNBT(pkt.data);
-		markBlockForUpdate();
-	}
-
-	boolean syncWithClient() {
-		return true;
-	}
 
 	public void markBlockForUpdate() {
 		if (worldObj != null)
@@ -45,7 +22,7 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 
 	public void playSoundEffect(String name, float volume, float pitch) {
 		if (name.contains(":"))
-			LanteaCraft.getLogger().log(Level.WARNING, "Old SoundSystem label detected, can't play label: " + name);
+			LanteaCraft.getLogger().log(Level.WARN, "Old SoundSystem label detected, can't play label: " + name);
 		else {
 			String label = new StringBuilder().append(LanteaCraft.getAssetKey()).append(":").append(name).toString();
 			try {
@@ -54,7 +31,7 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 					return;
 				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, label, volume, pitch);
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.FINE, "Couldn't play sound, doesn't exist: " + label, t);
+				LanteaCraft.getLogger().log(Level.DEBUG, "Couldn't play sound, doesn't exist: " + label, t);
 			}
 		}
 	}
@@ -68,10 +45,10 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 		super.readFromNBT(nbt);
 		IInventory inventory = getInventory();
 		if (inventory != null) {
-			NBTTagList list = nbt.getTagList("inventory");
+			NBTTagList list = (NBTTagList) nbt.getTag("inventory");
 			int n = list.tagCount();
 			for (int i = 0; i < n; i++) {
-				NBTTagCompound item = (NBTTagCompound) list.tagAt(i);
+				NBTTagCompound item = (NBTTagCompound) list.getCompoundTagAt(i);
 				int slot = item.getInteger("slot");
 				ItemStack stack = ItemStack.loadItemStackFromNBT(item);
 				inventory.setInventorySlotContents(slot, stack);
@@ -126,7 +103,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 		IInventory inventory = getInventory();
 		if (inventory != null) {
 			ItemStack result = inventory.decrStackSize(slot, amount);
-			onInventoryChanged();
 			return result;
 		} else
 			return null;
@@ -142,7 +118,6 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 		IInventory inventory = getInventory();
 		if (inventory != null) {
 			ItemStack result = inventory.getStackInSlotOnClosing(slot);
-			onInventoryChanged();
 			return result;
 		} else
 			return null;
@@ -155,19 +130,17 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		IInventory inventory = getInventory();
-		if (inventory != null) {
+		if (inventory != null)
 			inventory.setInventorySlotContents(slot, stack);
-			onInventoryChanged();
-		}
 	}
 
 	/**
 	 * Returns the name of the inventory.
 	 */
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		IInventory inventory = getInventory();
-		return inventory != null ? inventory.getInvName() : "";
+		return inventory != null ? inventory.getInventoryName() : "";
 	}
 
 	/**
@@ -191,33 +164,10 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 	}
 
 	@Override
-	public void openChest() {
-		IInventory inventory = getInventory();
-		if (inventory != null)
-			inventory.openChest();
-	}
-
-	@Override
-	public void closeChest() {
-		IInventory inventory = getInventory();
-		if (inventory != null)
-			inventory.closeChest();
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		IInventory inventory = getInventory();
 		if (inventory != null)
 			return inventory.isItemValidForSlot(slot, stack);
-		else
-			return false;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		IInventory inventory = getInventory();
-		if (inventory != null)
-			return inventory.isInvNameLocalized();
 		else
 			return false;
 	}
@@ -259,6 +209,24 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 			return ((ISidedInventory) inventory).canExtractItem(slot, stack, side);
 		else
 			return true;
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void openInventory() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void closeInventory() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

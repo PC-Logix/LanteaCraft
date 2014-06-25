@@ -3,7 +3,7 @@ package pcl.common.asm;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -45,20 +45,20 @@ public class ClassOptionalTransformer implements IClassTransformer {
 						String modname = (String) a.values.get(k + 1), iface = (String) a.values.get(l + 1);
 						if (Loader.isModLoaded(modname)) {
 							if (!interfaceList.contains(iface)) {
-								PCLCoreTransformerPlugin.getLogger().log(Level.FINE,
+								PCLCoreTransformerPlugin.getLogger().log(Level.DEBUG,
 										String.format("Adding interface %s because mod %s is loaded.", iface, modname));
 								interfaceList.add(iface);
 							}
 						} else
 							PCLCoreTransformerPlugin.getLogger()
-									.log(Level.FINE,
+									.log(Level.DEBUG,
 											String.format("Skipping interface %s because mod %s is not loaded.", iface,
 													modname));
 					}
 		}
 
 		if (interfaceList.size() > 0) {
-			PCLCoreTransformerPlugin.getLogger().log(Level.FINE,
+			PCLCoreTransformerPlugin.getLogger().log(Level.DEBUG,
 					String.format("Performing total %s ASM operations...", interfaceList.size()));
 			for (String iface : interfaceList)
 				addInterface(classNode, iface);
@@ -77,7 +77,7 @@ public class ClassOptionalTransformer implements IClassTransformer {
 				clazz.interfaces.add(iface);
 		} catch (ClassNotFoundException notfound) {
 			PCLCoreTransformerPlugin.getLogger().log(
-					Level.WARNING,
+					Level.WARN,
 					String.format("Attempted to load interface %s into class %s, but it does not exist!", iface,
 							clazz.name));
 		}

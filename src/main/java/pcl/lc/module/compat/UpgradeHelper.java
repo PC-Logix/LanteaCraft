@@ -2,7 +2,7 @@ package pcl.lc.module.compat;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -123,14 +123,14 @@ public class UpgradeHelper {
 							createBlockConversionRecipe(mapping, (Block) f1.get(null));
 					} catch (ClassCastException cast) {
 						LanteaCraft.getLogger().log(
-								Level.WARNING,
+								Level.WARN,
 								String.format("Failed to cast block field %s  to Block typeof, ignoring!",
 										mapping.getSourceName()));
 					} catch (NoSuchFieldException field) {
-						LanteaCraft.getLogger().log(Level.WARNING,
+						LanteaCraft.getLogger().log(Level.WARN,
 								String.format("Failed to find block field %s, ignoring!", mapping.getSourceName()));
 					} catch (IllegalAccessException illegal) {
-						LanteaCraft.getLogger().log(Level.WARNING,
+						LanteaCraft.getLogger().log(Level.WARN,
 								String.format("Could not access block field %s, ignoring!", mapping.getSourceName()));
 					}
 				else
@@ -140,18 +140,18 @@ public class UpgradeHelper {
 							createItemConversionRecipe(mapping, (Item) f1.get(null));
 					} catch (ClassCastException cast) {
 						LanteaCraft.getLogger().log(
-								Level.WARNING,
+								Level.WARN,
 								String.format("Failed to cast item field %s to Item typeof, ignoring!",
 										mapping.getSourceName()));
 					} catch (NoSuchFieldException field) {
-						LanteaCraft.getLogger().log(Level.WARNING,
+						LanteaCraft.getLogger().log(Level.WARN,
 								String.format("Failed to find item field %s, ignoring!", mapping.getSourceName()));
 					} catch (IllegalAccessException illegal) {
-						LanteaCraft.getLogger().log(Level.WARNING,
+						LanteaCraft.getLogger().log(Level.WARN,
 								String.format("Could not access item field %s, ignoring!", mapping.getSourceName()));
 					}
 		} catch (ClassNotFoundException notfound) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not locate a class required for upgrade!", notfound);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not locate a class required for upgrade!", notfound);
 		}
 	}
 
@@ -168,14 +168,14 @@ public class UpgradeHelper {
 							createBlockConversionRecipe(mapping, (Block) f1.get(null));
 					} catch (ClassCastException cast) {
 						LanteaCraft.getLogger().log(
-								Level.WARNING,
+								Level.WARN,
 								String.format("Failed to cast block field %s  to Block typeof, ignoring!",
 										mapping.getSourceName()));
 					} catch (NoSuchFieldException field) {
-						LanteaCraft.getLogger().log(Level.WARNING,
+						LanteaCraft.getLogger().log(Level.WARN,
 								String.format("Failed to find block field %s, ignoring!", mapping.getSourceName()));
 					} catch (IllegalAccessException illegal) {
-						LanteaCraft.getLogger().log(Level.WARNING,
+						LanteaCraft.getLogger().log(Level.WARN,
 								String.format("Could not access block field %s, ignoring!", mapping.getSourceName()));
 					}
 				else
@@ -185,19 +185,19 @@ public class UpgradeHelper {
 							createItemConversionRecipe(mapping, (Item) f1.get(null));
 					} catch (ClassCastException cast) {
 						LanteaCraft.getLogger().log(
-								Level.WARNING,
+								Level.WARN,
 								String.format("Failed to cast item field %s to Item typeof, ignoring!",
 										mapping.getSourceName()));
 					} catch (NoSuchFieldException field) {
-						LanteaCraft.getLogger().log(Level.WARNING,
+						LanteaCraft.getLogger().log(Level.WARN,
 								String.format("Failed to find item field %s, ignoring!", mapping.getSourceName()));
 					} catch (IllegalAccessException illegal) {
-						LanteaCraft.getLogger().log(Level.WARNING,
+						LanteaCraft.getLogger().log(Level.WARN,
 								String.format("Could not access item field %s, ignoring!", mapping.getSourceName()));
 					}
 
 		} catch (ClassNotFoundException notfound) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not locate a class required for upgrade!", notfound);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not locate a class required for upgrade!", notfound);
 		}
 	}
 

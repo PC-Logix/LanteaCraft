@@ -8,14 +8,15 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import pcl.common.helpers.ScanningHelper;
 import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityRingPlatform;
+import pcl.lc.multiblock.TransporterRingMultiblock;
+import pcl.lc.tileentity.TileEntityTransporterRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemTransportRingActivator extends Item {
 
-	public ItemTransportRingActivator(int id) {
-		super(id);
+	public ItemTransportRingActivator() {
+		super();
 	}
 
 	@Override
@@ -39,12 +40,20 @@ public class ItemTransportRingActivator extends Item {
 
 	private void onItemClicked(ItemStack stackOf, World world, EntityPlayer player) {
 		if (!world.isRemote) {
-			TileEntity of = ScanningHelper.findNearestTileEntityOf(world, TileEntityRingPlatform.class,
+			TileEntity of = ScanningHelper.findNearestTileEntityOf(world, TileEntityTransporterRing.class,
 					(int) Math.floor(player.posX), (int) Math.floor(player.posY), (int) Math.floor(player.posZ),
 					AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5));
-			if (of != null && (of instanceof TileEntityRingPlatform)) {
-				TileEntityRingPlatform platform = (TileEntityRingPlatform) of;
-				platform.connect();
+			if (of != null && (of instanceof TileEntityTransporterRing)) {
+				TileEntityTransporterRing platform = (TileEntityTransporterRing) of;
+				if (platform.isHost())
+					if (!platform.getAsStructure().isBusy())
+						platform.getAsStructure().connect();
+					else {
+						TransporterRingMultiblock mblock = (TransporterRingMultiblock) platform.getAsPart()
+								.findHostMultiblock(false);
+						if (!mblock.isBusy())
+							mblock.connect();
+					}
 			}
 		}
 	}

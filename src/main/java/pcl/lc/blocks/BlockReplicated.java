@@ -5,8 +5,8 @@ import net.minecraft.block.material.Material;
 
 public class BlockReplicated extends Block {
 
-	public BlockReplicated(int id) {
-		super(id, Material.ground);
+	public BlockReplicated() {
+		super(Material.ground);
 		// TODO Auto-generated constructor stub
 	}
 

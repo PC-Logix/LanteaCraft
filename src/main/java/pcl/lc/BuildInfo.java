@@ -23,7 +23,7 @@ public class BuildInfo {
 	 * recording all the operations on the SoundDevice, meaning that clients
 	 * aren't slammed with logging if they don't need to be.
 	 */
-	public static final boolean SS_DEBUGGING = false && isDevelopmentEnvironment();
+	public static final boolean SS_DEBUGGING = true && isDevelopmentEnvironment();
 
 	/**
 	 * Enable or disable network traffic dumping mode.
@@ -33,7 +33,7 @@ public class BuildInfo {
 	/**
 	 * Enable or disable asset and configuration access dumping.
 	 */
-	public static final boolean ASSET_DEBUGGING = false && isDevelopmentEnvironment();
+	public static final boolean ASSET_DEBUGGING = true && isDevelopmentEnvironment();
 
 	/**
 	 * Enable or disable chunk loading dumping.

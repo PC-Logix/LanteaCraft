@@ -68,7 +68,7 @@ public abstract class GenericContainerGUI extends GuiContainer {
 			result.append(caret);
 		while (len > result.length())
 			result.append(padding);
-		drawCenteredString(fontRenderer, result.toString(), x, y, 0xffffff);
+		drawCenteredString(fontRendererObj, result.toString(), x, y, 0xffffff);
 	}
 
 	protected void bindTexture(ResourceLocation rsrc) {
@@ -119,11 +119,11 @@ public abstract class GenericContainerGUI extends GuiContainer {
 	}
 
 	public void drawString(String s, int x, int y) {
-		fontRenderer.drawString(s, x, y, textColor, textShadow);
+		fontRendererObj.drawString(s, x, y, textColor, textShadow);
 	}
 
 	public void drawCenteredString(String s, int x, int y) {
-		fontRenderer.drawString(s, x - fontRenderer.getStringWidth(s) / 2, y, textColor, textShadow);
+		fontRendererObj.drawString(s, x - fontRendererObj.getStringWidth(s) / 2, y, textColor, textShadow);
 	}
 
 	public void drawInventoryName(IInventory inv, int x, int y) {
@@ -135,10 +135,7 @@ public abstract class GenericContainerGUI extends GuiContainer {
 	}
 
 	public static String inventoryName(IInventory inv) {
-		String name = inv.getInvName();
-		if (!inv.isInvNameLocalized())
-			name = StatCollector.translateToLocal(name);
-		return name;
+		return StatCollector.translateToLocal(inv.getInventoryName());
 	}
 
 	public static String playerInventoryName() {

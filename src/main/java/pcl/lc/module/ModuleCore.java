@@ -56,13 +56,15 @@ public class ModuleCore implements IModule {
 		Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg");
 		Items.debugger = RegistrationHelper.registerItem(ItemDebugTool.class, "lanteadebug");
 
-		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), "naquadah", Item.ingotIron);
+		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), "naquadah",
+				net.minecraft.init.Items.iron_ingot);
 
-		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4), Blocks.lanteaOre.blockID, 0, 0.1f);
-		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 1), Blocks.lanteaOre.blockID, 1,
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4), new ItemStack(Blocks.lanteaOre, 0),
 				0.1f);
-		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 2), Blocks.lanteaOre.blockID, 2,
-				0.1f);
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 1), new ItemStack(Blocks.lanteaOre,
+				1), 0.1f);
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 2), new ItemStack(Blocks.lanteaOre,
+				2), 0.1f);
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1), "NNN", "NNN", "NNN", 'N',
 				"ingotNaquadahAlloy");
@@ -79,8 +81,8 @@ public class ModuleCore implements IModule {
 		RegistrationHelper.registerOre("naquadah", new ItemStack(Items.lanteaOreItem));
 		RegistrationHelper.registerOre("ingotNaquadahAlloy", new ItemStack(Items.lanteaOreIngot));
 
-		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreItem, 1), Item.coal, Item.slimeBall,
-				Item.blazePowder);
+		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreItem, 1), net.minecraft.init.Items.coal,
+				net.minecraft.init.Items.slime_ball, net.minecraft.init.Items.blaze_powder);
 	}
 
 	@Override

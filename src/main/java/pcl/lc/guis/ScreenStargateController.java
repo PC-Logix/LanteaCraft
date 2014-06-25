@@ -2,7 +2,7 @@ package pcl.lc.guis;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,7 +50,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 		dhdLayer = LanteaCraft.getResource("textures/gui/dhd_gui.png");
 		dhdButtonLayer = LanteaCraft.getResource("textures/gui/dhd_centre.png");
 		soundHost = new SoundHost(controller);
-		soundHostPosition = new AudioPosition(controller.worldObj, new Vector3(controller));
+		soundHostPosition = new AudioPosition(controller.getWorldObj(), new Vector3(controller));
 		soundHost.addChannel("click", "stargate/milkyway/milkyway_dhd_button.ogg", soundHostPosition, 1.0f, 0);
 	}
 
@@ -140,7 +140,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 						if (GateAddressHelper.singleton().isLegal(c1))
 							enterCharacter(c1);
 				} catch (Throwable t) {
-					LanteaCraft.getLogger().log(Level.WARNING, "Clipboard pull failed!", t);
+					LanteaCraft.getLogger().log(Level.WARN, "Clipboard pull failed!", t);
 					warningMessage = "Couldn't read the clipboard!";
 					ticksWarning = 20 * 10;
 				}
@@ -154,7 +154,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 				packet.setIsForServer(true);
 				packet.setType("LanteaPacket.DialRequest");
 				packet.setValue("Address", enteredAddress);
-				LanteaCraft.getProxy().sendToServer(packet);
+				LanteaCraft.getNetPipeline().sendToServer(packet);
 				close();
 			}
 	}
@@ -217,7 +217,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 				drawEnteredString();
 			}
 		if (ticksWarning > 0 && warningMessage != null)
-			drawCenteredString(fontRenderer, warningMessage, width / 2, dhdTop - 3, 0xffaaaa);
+			drawCenteredString(fontRendererObj, warningMessage, width / 2, dhdTop - 3, 0xffaaaa);
 	}
 
 }

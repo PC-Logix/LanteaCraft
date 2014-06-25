@@ -1,18 +1,12 @@
-// ------------------------------------------------------------------------------------------------
-//
-// Greg's Mod Base - Generic Block Renderer
-//
-// ------------------------------------------------------------------------------------------------
-
 package pcl.common.render;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -37,7 +31,7 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public boolean shouldRender3DInInventory() {
+	public boolean shouldRender3DInInventory(int modelID) {
 		return true;
 	}
 
@@ -99,7 +93,7 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	void setUpTextureOverride(RenderBlocks rb) {
 		textureOverridden = false;
 		if (rb != null) {
-			Icon icon = rb.overrideBlockTexture;
+			IIcon icon = rb.overrideBlockTexture;
 			if (icon != null) {
 				useIcon(icon);
 				textureOverridden = true;
@@ -107,18 +101,18 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 		}
 	}
 
-	void selectTile(Icon icon) {
+	void selectTile(IIcon icon) {
 		selectTile(icon, 16, 16);
 	}
 
-	void selectTile(Icon icon, int width, int height) {
+	void selectTile(IIcon icon, int width, int height) {
 		if (!textureOverridden)
 			useIcon(icon);
 		us = (u1 - u0) / width;
 		vs = (v1 - v0) / height;
 	}
 
-	void useIcon(Icon icon) {
+	void useIcon(IIcon icon) {
 		u0 = icon.getMinU();
 		v0 = icon.getMinV();
 		u1 = icon.getMaxU();
@@ -204,11 +198,11 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 		tess.addVertexWithUV(p.x, p.y, p.z, u0 + u * us, v0 + v * vs);
 	}
 
-	void renderBox(Trans3 t, AxisAlignedBB box, Icon[] icons) {
+	void renderBox(Trans3 t, AxisAlignedBB box, IIcon[] icons) {
 		renderBox(t, box.minX, box.minY, box.minZ, box.maxX - box.minX, box.maxY - box.minY, box.maxZ - box.minZ, icons);
 	}
 
-	void renderBox(Trans3 t, double x0, double y0, double z0, double dx, double dy, double dz, Icon[] icons) {
+	void renderBox(Trans3 t, double x0, double y0, double z0, double dx, double dy, double dz, IIcon[] icons) {
 		double x1 = x0 + dx, y1 = y0 + dy, z1 = z0 + dz;
 		tess.setBrightness(blockBrightness);
 		boxFace(t, x0, y0, z1, 0, 0, -dz, dx, 0, 0, 0, -1, 0, dx, dz, icons[0]); // DOWN
@@ -220,7 +214,7 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	void boxFace(Trans3 t, double x, double y, double z, double dx1, double dy1, double dz1, double dx2, double dy2,
-			double dz2, double nx, double ny, double nz, double du, double dv, Icon icon) {
+			double dz2, double nx, double ny, double nz, double du, double dv, IIcon icon) {
 		if (icon != null) {
 			selectTile(icon);
 			setNormal(t, nx, ny, nz);

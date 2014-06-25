@@ -1,7 +1,8 @@
 package pcl.common.helpers;
 
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
+
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -82,19 +83,18 @@ public class RegistrationHelper {
 			String unlocalizedName, boolean inCreativeTabs) {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to register block %s", unlocalizedName));
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this block is later than was expected!");
 		try {
-			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 2048).getInt();
-			Constructor<? extends T> ctor = classOf.getConstructor(int.class);
-			T theMysteryBlock = ctor.newInstance(id);
-			theMysteryBlock.setUnlocalizedName(unlocalizedName);
+			Constructor<? extends T> ctor = classOf.getConstructor();
+			T theMysteryBlock = ctor.newInstance();
+			theMysteryBlock.setBlockName(unlocalizedName);
 			if (inCreativeTabs)
 				theMysteryBlock.setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerBlock(theMysteryBlock, itemClassOf, unlocalizedName);
 			return theMysteryBlock;
 		} catch (Throwable e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register block, an exception occured.", e);
+			LanteaCraft.getLogger().log(Level.FATAL, "Failed to register block, an exception occured.", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -109,19 +109,18 @@ public class RegistrationHelper {
 	 * @return The Item singleton.
 	 */
 	public static <T extends Item> T registerItem(Class<? extends T> classOf, String unlocalizedName) {
-		LanteaCraft.getLogger().log(Level.FINE, "Attempting to register item " + unlocalizedName);
+		LanteaCraft.getLogger().log(Level.DEBUG, "Attempting to register item " + unlocalizedName);
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger()
-					.log(Level.WARNING, "Warning, registration of this item is later than was expected!");
+					.log(Level.WARN, "Warning, registration of this item is later than was expected!");
 		try {
-			int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 4000).getInt();
-			Constructor<? extends T> ctor = classOf.getConstructor(int.class);
-			T theMysteryItem = ctor.newInstance(id);
+			Constructor<? extends T> ctor = classOf.getConstructor();
+			T theMysteryItem = ctor.newInstance();
 			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerItem(theMysteryItem, unlocalizedName);
 			return theMysteryItem;
 		} catch (Exception e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register item, an exception occured.", e);
+			LanteaCraft.getLogger().log(Level.FATAL, "Failed to register item, an exception occured.", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -138,14 +137,12 @@ public class RegistrationHelper {
 	 * @return The ItemSpecialBucket singleton for this host fluid.
 	 */
 	public static ItemSpecialBucket registerSpecialBucket(Block hostOf, String unlocalizedName, String bucketTextureName) {
-		LanteaCraft.getLogger().log(Level.FINE, "Attempting to register SpecialBucket " + unlocalizedName);
+		LanteaCraft.getLogger().log(Level.DEBUG, "Attempting to register SpecialBucket " + unlocalizedName);
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this SpecialBucket is later than was expected!");
-		int id = LanteaCraft.getProxy().getConfig().getItem(unlocalizedName, 31743).getInt();
-		ItemSpecialBucket bucket = new ItemSpecialBucket(id, hostOf);
-		bucket.setUnlocalizedName(unlocalizedName);
-		bucket.setCreativeTab(LanteaCraft.getCreativeTab());
+		ItemSpecialBucket bucket = new ItemSpecialBucket(hostOf);
+		bucket.setUnlocalizedName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
 		bucket.setTargetTexture(bucketTextureName);
 		GameRegistry.registerItem(bucket, unlocalizedName);
 		return bucket;
@@ -160,9 +157,9 @@ public class RegistrationHelper {
 	 *            The handler to register.
 	 */
 	public static void addTradeHandler(int villagerID, IVillageTradeHandler handler) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering trade handler for villager ID " + villagerID);
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering trade handler for villager ID " + villagerID);
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this trade handler is later than was expected!");
 		VillagerRegistry.instance().registerVillageTradeHandler(villagerID, handler);
 	}
@@ -176,9 +173,9 @@ public class RegistrationHelper {
 	 *            The ItemStack.
 	 */
 	public static void registerOre(String name, ItemStack item) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering ore with name " + name);
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering ore with name " + name);
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING, "Warning, registration of this ore is later than was expected!");
+			LanteaCraft.getLogger().log(Level.WARN, "Warning, registration of this ore is later than was expected!");
 		OreDictionary.registerOre(String.format("%s:%s", BuildInfo.modID, name), item);
 	}
 
@@ -191,9 +188,9 @@ public class RegistrationHelper {
 	 *            The crafting arrangement.
 	 */
 	public static void newRecipe(ItemStack product, Object... params) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering new generic recipe");
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering new generic recipe");
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this recipe is later than was expected!");
 		GameRegistry.addRecipe(new ShapedOreRecipe(product, params));
 	}
@@ -207,32 +204,29 @@ public class RegistrationHelper {
 	 *            The crafting components.
 	 */
 	public static void newShapelessRecipe(ItemStack product, Object... params) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering new generic shapeless recipe");
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering new generic shapeless recipe");
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this shapeless recipe is later than was expected!");
 		GameRegistry.addRecipe(new ShapelessOreRecipe(product, params));
 	}
 
 	/**
-	 * Creates a new smelting recipe.
+	 * Registers a new smelting recipe.
 	 * 
-	 * @param product
-	 *            The product ItemStack.
-	 * @param input
-	 *            The input Block ID.
-	 * @param meta
-	 *            The meta value of the block.
+	 * @param in
+	 *            The input stack
+	 * @param out
+	 *            The output result
 	 * @param xp
-	 *            The amount of XP received.
+	 *            Quantity of XP earnt
 	 */
-	public static void newSmeltingRecipe(ItemStack product, int input, int meta, float xp) {
-		LanteaCraft.getLogger().log(Level.FINE, "Registering new smelting recipe");
+	public static void newSmeltingRecipe(ItemStack in, ItemStack out, float xp) {
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering new smelting recipe");
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this smelting is later than was expected!");
-		// GameRegistry.addSmelting(input, product, xp);
-		FurnaceRecipes.smelting().addSmelting(input, meta, product, xp);
+		FurnaceRecipes.smelting().func_151394_a(in, out, xp);
 	}
 
 	/**
@@ -251,11 +245,11 @@ public class RegistrationHelper {
 	 */
 	public static void addRandomChestItem(ItemStack stack, int minQty, int maxQty, int weight, String... category) {
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this random chest behaviour is later than was expected!");
 		WeightedRandomChestContent item = new WeightedRandomChestContent(stack, minQty, maxQty, weight);
 		for (String element : category) {
-			LanteaCraft.getLogger().log(Level.FINE, "Adding new WeightedRandomChestContent for element " + element);
+			LanteaCraft.getLogger().log(Level.DEBUG, "Adding new WeightedRandomChestContent for element " + element);
 			ChestGenHooks.addItem(element, item);
 		}
 	}
@@ -275,17 +269,15 @@ public class RegistrationHelper {
 		LanteaCraft.getLogger()
 				.log(Level.INFO, String.format("Attempting to register stair decal %s", unlocalizedName));
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARNING,
+			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this stair decal is later than was expected!");
 		try {
-			int id = LanteaCraft.getProxy().getConfig().getBlock(unlocalizedName, 2048).getInt();
-			BlockLanteaDecorStair stair = new BlockLanteaDecorStair(id, targetMetadata);
-			stair.setUnlocalizedName(unlocalizedName);
-			stair.setCreativeTab(LanteaCraft.getCreativeTab());
+			BlockLanteaDecorStair stair = new BlockLanteaDecorStair(targetMetadata);
+			stair.setBlockName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerBlock(stair, unlocalizedName);
 			return stair;
 		} catch (Exception e) {
-			LanteaCraft.getLogger().log(Level.SEVERE, "Failed to register stair decal, an exception occured.", e);
+			LanteaCraft.getLogger().log(Level.FATAL, "Failed to register stair decal, an exception occured.", e);
 			throw new RuntimeException(e);
 		}
 	}

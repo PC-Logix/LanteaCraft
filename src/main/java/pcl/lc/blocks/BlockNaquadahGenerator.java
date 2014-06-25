@@ -2,13 +2,14 @@ package pcl.lc.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import pcl.common.base.RotationOrientedBlock;
@@ -19,10 +20,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockNaquadahGenerator extends RotationOrientedBlock {
 
-	Icon topTexture, bottomTexture, sideTexture;
+	IIcon topTexture, bottomTexture, sideTexture;
 
-	public BlockNaquadahGenerator(int id) {
-		super(id, Material.rock);
+	public BlockNaquadahGenerator() {
+		super(Material.rock);
 		setHardness(1.5F);
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
@@ -34,7 +35,7 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_top_"
 				+ LanteaCraft.getProxy().getRenderMode());
 		bottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_bottom_"
@@ -44,7 +45,7 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	}
 
 	@Override
-	public Icon getIcon(int side, int data) {
+	public IIcon getIcon(int side, int data) {
 		switch (side) {
 		case 0:
 			return bottomTexture;
@@ -85,10 +86,10 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int id, int data) {
+	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
 		TileEntityNaquadahGenerator cte = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
 		cte.onHostBlockBreak();
-		super.breakBlock(world, x, y, z, id, data);
+		super.breakBlock(world, x, y, z, block, data);
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new TileEntityNaquadahGenerator();
 	}
 
@@ -119,7 +120,7 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int l) {
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		if (!world.isRemote) {
 			int sig = 0;
 			int a = isBlockProvidingPower(world, x, y + 1, z, 1);
@@ -136,8 +137,8 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 
 	private int isBlockProvidingPower(World world, int x, int y, int z, int direction) {
 		if (y >= 0 && y < world.getHeight()) {
-			int redstoneWireValue = (world.getBlockId(x, y, z) == Block.redstoneWire.blockID) ? world.getBlockMetadata(
-					x, y, z) : 0;
+			int redstoneWireValue = (world.getBlock(x, y, z).equals(Blocks.redstone_wire)) ? world.getBlockMetadata(x,
+					y, z) : 0;
 			int indirectPowerTo = world.getIndirectPowerLevelTo(x, y, z, direction);
 			int directPowerTo = world.isBlockProvidingPowerTo(x, y, z, direction);
 			return Math.max(Math.max(redstoneWireValue, indirectPowerTo), directPowerTo);

@@ -9,8 +9,8 @@ import pcl.lc.LanteaCraft;
 
 public abstract class OrientedBlock extends GenericContainerBlock {
 
-	public OrientedBlock(int id, Material material) {
-		super(id, material);
+	public OrientedBlock(Material material) {
+		super(material);
 	}
 
 	@Override

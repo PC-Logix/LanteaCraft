@@ -6,12 +6,10 @@ import java.util.Set;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.blocks.BlockLanteaDecor;
-import pcl.lc.blocks.BlockLanteaDecorDoor;
 import pcl.lc.blocks.BlockLanteaDecorGlass;
 import pcl.lc.blocks.BlockLanteaDecorStair;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.items.ItemLanteaDecor;
-import pcl.lc.items.ItemLanteaDecorDoor;
 import pcl.lc.items.ItemLanteaDecorGlass;
 import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -80,12 +78,8 @@ public class ModuleDecor implements IModule {
 		public static BlockLanteaDecorGlass glassDecorBlock;
 
 		public static BlockLanteaDecorStair lanteaSteelDecorStair;
-		public static BlockLanteaDecorDoor lanteaSteelDecorDoor;
-		public static ItemLanteaDecorDoor lanteaSteelDecorDoorItem;
 
 		public static BlockLanteaDecorStair goauldGoldDecorStair;
-		public static BlockLanteaDecorDoor goauldGoldDecorDoor;
-		public static ItemLanteaDecorDoor goauldGoldDecorDoorItem;
 
 		public static BlockLanteaDecorStair lanteaPatternedSteelDecorStair;
 		public static BlockLanteaDecorStair goauldPatternedGoldDecorStair;

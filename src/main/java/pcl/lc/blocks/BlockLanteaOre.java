@@ -2,12 +2,14 @@ package pcl.lc.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockOre;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import pcl.lc.LanteaCraft;
@@ -16,19 +18,19 @@ import pcl.lc.core.OreTypes;
 
 public class BlockLanteaOre extends BlockOre {
 
-	private Icon missing;
+	private IIcon missing;
 
-	public BlockLanteaOre(int id) {
-		super(id);
+	public BlockLanteaOre() {
+		super();
 		setHardness(5.0F);
 		setResistance(10.0F);
-		setStepSound(soundStoneFootstep);
-		MinecraftForge.setBlockHarvestLevel(this, "pickaxe", 3);
+		setStepSound(soundTypeStone);
+		setHarvestLevel("pickaxe", 3);
 		setCreativeTab(CreativeTabs.tabBlock);
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
 		OreTypes.NAQUADAH.setOreTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_ore_"
 				+ LanteaCraft.getProxy().getRenderMode()));
@@ -39,22 +41,20 @@ public class BlockLanteaOre extends BlockOre {
 	}
 
 	@Override
-	public Icon getIcon(int side, int data) {
+	public IIcon getIcon(int side, int data) {
 		if (data > OreTypes.values().length)
 			return missing;
 		return OreTypes.values()[data].getOreTexture();
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> result = new ArrayList<ItemStack>();
-		result.add(new ItemStack(Items.lanteaOreItem, 2, metadata));
-		return result;
+	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
+		return Items.lanteaOreItem;
 	}
 
 	@Override
-	public void getSubBlocks(int itemID, CreativeTabs tab, List list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < OreTypes.values().length; i++)
-			list.add(new ItemStack(itemID, 1, i));
+			list.add(new ItemStack(item, 1, i));
 	}
 }

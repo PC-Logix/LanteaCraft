@@ -12,8 +12,8 @@ import pcl.lc.guis.GuiJacksonNotebook;
 
 public class ItemJacksonNotebook extends Item {
 
-	public ItemJacksonNotebook(int par1) {
-		super(par1);
+	public ItemJacksonNotebook() {
+		super();
 	}
 
 	@Override
@@ -30,15 +30,13 @@ public class ItemJacksonNotebook extends Item {
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
 			float hitX, float hitY, float hitZ) {
-		TileEntity theTile = world.getBlockTileEntity(x, y, z);
+		TileEntity theTile = world.getTileEntity(x, y, z);
 		if (theTile != null)
 			Minecraft.getMinecraft().displayGuiScreen(new GuiJacksonNotebook(theTile.getClass().getName()));
 		else {
-			Block theBlock = null;
-			if (world.getBlockId(x, y, z) != 0)
-				theBlock = Block.blocksList[world.getBlockId(x, y, z)];
-			if (theBlock != null)
-				Minecraft.getMinecraft().displayGuiScreen(new GuiJacksonNotebook(theBlock.getClass().getName()));
+			if (world.getBlock(x, y, z) != null)
+				Minecraft.getMinecraft().displayGuiScreen(
+						new GuiJacksonNotebook(world.getBlock(x, y, z).getClass().getName()));
 		}
 		return true;
 	}

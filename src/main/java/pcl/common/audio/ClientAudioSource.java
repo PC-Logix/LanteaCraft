@@ -2,7 +2,7 @@ package pcl.common.audio;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,7 +44,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 			valid = true;
 			setVolume(volume);
 		} catch (MalformedURLException malurl) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Could not initialize AudioSource.", malurl);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not initialize AudioSource.", malurl);
 		}
 	}
 
@@ -65,7 +65,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 			return;
 		}
 		if (name == null)
-			LanteaCraft.getLogger().log(Level.WARNING, "Attempt to perform audio operation on illegal label.");
+			LanteaCraft.getLogger().log(Level.WARN, "Attempt to perform audio operation on illegal label.");
 		system.play(name);
 	}
 
@@ -164,12 +164,11 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 		Vector3 j = position.position.sub(i).div(d);
 		if (nrv > 0.1f)
 			for (int k = 0; k < d; k++) {
-				int b = clientPlayer.worldObj.getBlockId((int) i.x, (int) i.y, (int) i.z);
-				if (b != 0)
-					if (Block.opaqueCubeLookup[b])
-						nrv *= 0.5F;
-					else
-						nrv *= 0.85F;
+				Block b = clientPlayer.worldObj.getBlock((int) i.x, (int) i.y, (int) i.z);
+				if (b.isOpaqueCube())
+					nrv *= 0.5F;
+				else
+					nrv *= 0.85F;
 				i.add(j);
 			}
 

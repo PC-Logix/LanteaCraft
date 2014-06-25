@@ -3,7 +3,7 @@ package ic2.api.energy;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Interface representing the methods provided by the global EnergyNet class.
@@ -14,7 +14,7 @@ public interface IEnergyNet {
 	/**
 	 * Get the EnergyNet-registered tile entity at the specified position.
 	 * 
-	 * This is not the same as World.getBlockTileEntity(), it's possible to register delegate tile
+	 * This is not the same as World.getTileEntity(), it's possible to register delegate tile
 	 * entities with the energy net which are different from what's actually in the world. Those
 	 * delegates allow to use separate TileEntity objects just for the EnergyNet interfaces,
 	 * simplifying cross-mod dependencies and multi-blocks.

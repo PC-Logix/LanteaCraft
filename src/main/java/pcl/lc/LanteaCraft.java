@@ -1,21 +1,21 @@
 package pcl.lc;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import pcl.common.helpers.CreativeTabHelper;
 import pcl.common.helpers.SpecialBucketHandler;
+import pcl.common.network.PCLPacketPipeline;
 import pcl.common.render.RotationOrientedBlockRenderer;
 import pcl.lc.blocks.BlockLanteaOre;
 import pcl.lc.blocks.BlockNaquadahGenerator;
 import pcl.lc.blocks.BlockOfLanteaOre;
-import pcl.lc.blocks.BlockRingPlatform;
+import pcl.lc.blocks.BlockTransporterRing;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
@@ -41,6 +41,7 @@ import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateControllerRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
+import pcl.lc.render.blocks.BlockTransporterRingRenderer;
 import pcl.lc.render.blocks.BlockVoidRenderer;
 import pcl.lc.render.entities.EntityReplicatorRenderer;
 import pcl.lc.render.entities.EntityTokraRenderer;
@@ -51,7 +52,7 @@ import pcl.lc.render.models.RingPlatformRingModel;
 import pcl.lc.render.models.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityLanteaDecorGlassRenderer;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
-import pcl.lc.render.tileentity.TileEntityRingPlatformRenderer;
+import pcl.lc.render.tileentity.TileEntityTransporterRingRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
 import cpw.mods.fml.common.FMLLog;
@@ -63,10 +64,9 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "-" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:OpenComputers;after:BuildCraft|Core;after:IC2;after:SGCraft")
-@NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { BuildInfo.modID }, packetHandler = pcl.lc.network.DefaultPacketHandler.class)
 public class LanteaCraft {
 
 	/**
@@ -95,6 +95,15 @@ public class LanteaCraft {
 	}
 
 	/**
+	 * The network pipeline
+	 */
+	private static final PCLPacketPipeline pipeline = new PCLPacketPipeline();
+
+	public static PCLPacketPipeline getNetPipeline() {
+		return LanteaCraft.pipeline;
+	}
+
+	/**
 	 * Public declaration of all Block objects
 	 */
 	public static class Blocks {
@@ -105,7 +114,7 @@ public class LanteaCraft {
 		public static BlockLanteaOre lanteaOre;
 		public static BlockOfLanteaOre lanteaOreAsBlock;
 
-		public static BlockRingPlatform ringPlatform;
+		public static BlockTransporterRing transporterRing;
 		public static BlockNaquadahGenerator naquadahGenerator;
 	}
 
@@ -149,11 +158,12 @@ public class LanteaCraft {
 		public static BlockStargateRingRenderer blockStargateRingRenderer;
 		public static BlockStargateControllerRenderer blockControllerRenderer;
 		public static BlockNaquadahGeneratorRenderer blockNaquadahGeneratorRenderer;
+		public static BlockTransporterRingRenderer blockTransporterRingRenderer;
 
 		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
 		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
 		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
-		public static TileEntityRingPlatformRenderer tileEntityRingPlatformRenderer;
+		public static TileEntityTransporterRingRenderer tileEntityRingPlatformRenderer;
 		public static TileEntityLanteaDecorGlassRenderer tileEntityLanteaDecorGlassRenderer;
 
 		public static HeldItemRenderer heldItemRenderer;
@@ -190,8 +200,8 @@ public class LanteaCraft {
 	 */
 	private static CreativeTabHelper lanteaCraftTab = new CreativeTabHelper(CreativeTabs.getNextID(), "LanteaCraft") {
 		@Override
-		public ItemStack getIconItemStack() {
-			return new ItemStack(LanteaCraft.Items.debugger);
+		public Item getTabIconItem() {
+			return LanteaCraft.Items.debugger;
 		}
 	};
 
@@ -269,15 +279,12 @@ public class LanteaCraft {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
 		LanteaCraft.logger = e.getModLog();
-		LanteaCraft.logger.setParent(FMLLog.getLogger());
-		LanteaCraft.logger.setLevel(Level.INFO);
-		if (BuildInfo.isDevelopmentEnvironment())
-			LanteaCraft.logger.setLevel(Level.ALL);
 		proxy.preInit(e);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent e) {
+		pipeline.init(BuildInfo.modID);
 		proxy.init(e);
 	}
 
@@ -286,7 +293,7 @@ public class LanteaCraft {
 		proxy.postInit(e);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onInitMapGen(InitMapGenEvent e) {
 		proxy.onInitMapGen(e);
 	}
@@ -301,12 +308,12 @@ public class LanteaCraft {
 		proxy.onServerStopping(e);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload evt) {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("World unloading: %s", evt.world.provider.dimensionId));
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load evt) {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("World loading: %s", evt.world.provider.dimensionId));
 	}

@@ -3,9 +3,9 @@ package pcl.lc.tileentity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.api.energy.IEnergyStore;
 import pcl.common.api.energy.IItemEnergyStore;
 import pcl.common.base.GenericTileEntity;
@@ -35,18 +35,9 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 	private double energy = 0.0d;
 
 	private FilteredInventory inventory = new FilteredInventory(1) {
-		@Override
-		public void onInventoryChanged() {
-			// TODO Auto-generated method stub
-		}
 
 		@Override
-		public boolean isInvNameLocalized() {
-			return false;
-		}
-
-		@Override
-		public String getInvName() {
+		public String getInventoryName() {
 			return "stargate_energy";
 		}
 
@@ -68,6 +59,30 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 				return false;
 			return true;
 		}
+
+		@Override
+		public boolean hasCustomInventoryName() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void markDirty() {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void openInventory() {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void closeInventory() {
+			// TODO Auto-generated method stub
+
+		}
 	};
 
 	public static void configure(ConfigurationHelper cfg) {
@@ -79,11 +94,6 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 	public TileEntityStargateController() {
 		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.energyCrystal, 1),
 				new ItemStack(LanteaCraft.Items.zpm, 1) }, null, true, false));
-	}
-
-	@Override
-	public String getInvName() {
-		return "dhd";
 	}
 
 	@Override
@@ -118,14 +128,14 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 		nbt.setInteger("linkedX", linkedX);
 		nbt.setInteger("linkedY", linkedY);
 		nbt.setInteger("linkedZ", linkedZ);
-		NBTTagCompound energyCompound = new NBTTagCompound("energyStore");
+		NBTTagCompound energyCompound = new NBTTagCompound();
 		saveEnergyStore(energyCompound);
-		nbt.setCompoundTag("energyStore", energyCompound);
+		nbt.setTag("energyStore", energyCompound);
 	}
 
 	public TileEntityStargateBase getLinkedStargateTE() {
 		if (isLinkedToStargate) {
-			TileEntity gte = worldObj.getBlockTileEntity(linkedX, linkedY, linkedZ);
+			TileEntity gte = worldObj.getTileEntity(linkedX, linkedY, linkedZ);
 			if (gte instanceof TileEntityStargateBase)
 				return (TileEntityStargateBase) gte;
 		}
@@ -139,7 +149,7 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 				for (int j = -linkRangeY; j <= linkRangeY; j++)
 					for (int k = 1; k <= linkRangeZ; k++) {
 						Vector3 p = t.p(i, j, -k);
-						TileEntity te = worldObj.getBlockTileEntity(p.floorX(), p.floorY(), p.floorZ());
+						TileEntity te = worldObj.getTileEntity(p.floorX(), p.floorY(), p.floorZ());
 						if (te instanceof TileEntityStargateBase)
 							if (linkToStargate((TileEntityStargateBase) te))
 								return;
@@ -202,7 +212,7 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getProxy().sendToAllPlayers(getPacketFromState());
+		LanteaCraft.getNetPipeline().sendToAll(getPacketFromState());
 		return null;
 	}
 
@@ -211,7 +221,7 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 		double actualPayload = Math.min(getMaxEnergyStored() - getEnergyStored(), quantity);
 		if (!isSimulated) {
 			energy += actualPayload;
-			onInventoryChanged();
+			markDirty();
 			getDescriptionPacket();
 		}
 		return actualPayload;
@@ -222,7 +232,7 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 		double actualPayload = Math.min(getEnergyStored(), quantity);
 		if (!isSimulated) {
 			energy -= actualPayload;
-			onInventoryChanged();
+			markDirty();
 			getDescriptionPacket();
 		}
 		return actualPayload;
@@ -254,7 +264,47 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 	@Override
 	public void handlePacket(ModPacket packetOf) {
 		getStateFromPacket(packetOf);
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public boolean canReceiveEnergy() {
+		return true;
+	}
+
+	@Override
+	public boolean canExportEnergy() {
+		return false;
+	}
+
+	@Override
+	public double getMaximumReceiveEnergy() {
+		return getMaxEnergyStored();
+	}
+
+	@Override
+	public double getMaximumExportEnergy() {
+		return 0;
+	}
+
+	@Override
+	public double getAvailableExportEnergy() {
+		return 0;
+	}
+
+	@Override
+	public void receiveEnergy(double units) {
+		energy += units;
+	}
+
+	@Override
+	public double exportEnergy(double units) {
+		return 0;
+	}
+
+	@Override
+	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
+		return true;
 	}
 
 	@Override

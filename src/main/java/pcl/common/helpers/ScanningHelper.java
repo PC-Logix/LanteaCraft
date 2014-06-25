@@ -35,7 +35,7 @@ public class ScanningHelper {
 		for (int ix = (x + (int) Math.floor(bounds.minX)); ix < (x + bounds.maxX); ix++)
 			for (int iy = (y + (int) Math.floor(bounds.minY)); iy < (y + bounds.maxY); iy++)
 				for (int iz = (z + (int) Math.floor(bounds.minZ)); iz < (z + bounds.maxZ); iz++) {
-					TileEntity object = world.getBlockTileEntity(ix, iy, iz);
+					TileEntity object = world.getTileEntity(ix, iy, iz);
 					if (object != null && object.getClass().equals(clazz))
 						poolMatching.add(new Vector3(ix - x, iy - y, iz - z));
 				}
@@ -69,7 +69,7 @@ public class ScanningHelper {
 		for (Vector3 item : poolMatching)
 			if (best.mag() > item.mag())
 				best = item;
-		return world.getBlockTileEntity((int) Math.floor(x + best.x), (int) Math.floor(y + best.y),
+		return world.getTileEntity((int) Math.floor(x + best.x), (int) Math.floor(y + best.y),
 				(int) Math.floor(z + best.z));
 	}
 

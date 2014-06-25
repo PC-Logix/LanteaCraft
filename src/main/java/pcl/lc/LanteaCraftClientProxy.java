@@ -2,7 +2,8 @@ package pcl.lc;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
+
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -10,13 +11,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
 import pcl.common.audio.ClientAudioEngine;
 import pcl.common.helpers.CloakHandler;
 import pcl.common.network.ModPacket;
@@ -36,6 +35,7 @@ import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
 import pcl.lc.render.blocks.BlockStargateBaseRenderer;
 import pcl.lc.render.blocks.BlockStargateControllerRenderer;
 import pcl.lc.render.blocks.BlockStargateRingRenderer;
+import pcl.lc.render.blocks.BlockTransporterRingRenderer;
 import pcl.lc.render.blocks.BlockVoidRenderer;
 import pcl.lc.render.entities.EntityReplicatorRenderer;
 import pcl.lc.render.entities.EntityTokraRenderer;
@@ -46,21 +46,21 @@ import pcl.lc.render.models.RingPlatformRingModel;
 import pcl.lc.render.models.StargateControllerModel;
 import pcl.lc.render.tileentity.TileEntityLanteaDecorGlassRenderer;
 import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
-import pcl.lc.render.tileentity.TileEntityRingPlatformRenderer;
+import pcl.lc.render.tileentity.TileEntityTransporterRingRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
 import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
 import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
-import pcl.lc.tileentity.TileEntityRingPlatform;
+import pcl.lc.tileentity.TileEntityTransporterRing;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.Player;
-import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 
 public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
@@ -72,7 +72,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 			this.proxy = proxy;
 		}
 
-		@ForgeSubscribe
+		@SubscribeEvent
 		public void openMainMenu(GuiOpenEvent event) {
 			if ((event.gui instanceof GuiMainMenu) && !shownStatGui)
 				shownStatGui = true;
@@ -102,10 +102,12 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		super.init(e);
 		MinecraftForge.EVENT_BUS.register(hooks);
 		cloakHandler.buildDatabase();
-		MinecraftForge.EVENT_BUS.register(cloakHandler);
+		FMLCommonHandler.instance().bus().register(cloakHandler);
+		FMLCommonHandler.instance().bus().register(clientTickHandler);
 		audioContext = new ClientAudioEngine();
+		audioContext.initialize();
+		MinecraftForge.EVENT_BUS.register(audioContext);
 		clientTickHandler.registerTickHost(audioContext);
-		TickRegistry.registerTickHandler(clientTickHandler, Side.CLIENT);
 		registerScreens();
 		registerRenderers();
 
@@ -124,13 +126,13 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	 * something?).
 	 */
 	public void registerRenderers() {
-		LanteaCraft.Render.modelController = new StargateControllerModel("/assets/pcl_lc/models/dhd.obj");
+		LanteaCraft.Render.modelController = new StargateControllerModel(LanteaCraft.getResource("models/dhd.obj"));
 		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel(
-				"/assets/pcl_lc/models/naquadah_generator.obj");
+				LanteaCraft.getResource("models/naquadah_generator.obj"));
 		LanteaCraft.Render.modelRingPlatformBase = new RingPlatformBaseModel(
-				"/assets/pcl_lc/models/transport_rings_base.obj");
+				LanteaCraft.getResource("models/transport_rings_base.obj"));
 		LanteaCraft.Render.modelRingPlatformRing = new RingPlatformRingModel(
-				"/assets/pcl_lc/models/transport_rings.obj");
+				LanteaCraft.getResource("models/transport_rings.obj"));
 
 		LanteaCraft.Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
 		addTileEntityRenderer(TileEntityStargateBase.class, LanteaCraft.Render.tileEntityBaseRenderer);
@@ -141,8 +143,8 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		LanteaCraft.Render.tileEntityNaquadahGeneratorRenderer = new TileEntityNaquadahGeneratorRenderer();
 		addTileEntityRenderer(TileEntityNaquadahGenerator.class, LanteaCraft.Render.tileEntityNaquadahGeneratorRenderer);
 
-		LanteaCraft.Render.tileEntityRingPlatformRenderer = new TileEntityRingPlatformRenderer();
-		addTileEntityRenderer(TileEntityRingPlatform.class, LanteaCraft.Render.tileEntityRingPlatformRenderer);
+		LanteaCraft.Render.tileEntityRingPlatformRenderer = new TileEntityTransporterRingRenderer();
+		addTileEntityRenderer(TileEntityTransporterRing.class, LanteaCraft.Render.tileEntityRingPlatformRenderer);
 
 		LanteaCraft.Render.tileEntityLanteaDecorGlassRenderer = new TileEntityLanteaDecorGlassRenderer();
 		addTileEntityRenderer(TileEntityLanteaDecorGlass.class, LanteaCraft.Render.tileEntityLanteaDecorGlassRenderer);
@@ -161,12 +163,15 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 		LanteaCraft.Render.blockNaquadahGeneratorRenderer = new BlockNaquadahGeneratorRenderer();
 		registerRenderer(LanteaCraft.Render.blockNaquadahGeneratorRenderer);
+		
+		LanteaCraft.Render.blockTransporterRingRenderer = new BlockTransporterRingRenderer();
+		registerRenderer(LanteaCraft.Render.blockTransporterRingRenderer);
 
 		LanteaCraft.Render.blockVoidRenderer = new BlockVoidRenderer();
 		registerRenderer(LanteaCraft.Render.blockVoidRenderer);
 
 		LanteaCraft.Render.heldItemRenderer = new HeldItemRenderer();
-		MinecraftForgeClient.registerItemRenderer(LanteaCraft.Items.gdo.itemID, LanteaCraft.Render.heldItemRenderer);
+		MinecraftForgeClient.registerItemRenderer(LanteaCraft.Items.gdo, LanteaCraft.Render.heldItemRenderer);
 
 		LanteaCraft.Render.entityTokraRenderer = new EntityTokraRenderer();
 		RenderingRegistry.registerEntityRenderingHandler(EntityTokra.class, LanteaCraft.Render.entityTokraRenderer);
@@ -201,37 +206,27 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	@Override
 	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing GUI with ordinal %s.", ID));
+		LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing GUI with ordinal %s.", ID));
 		Class<? extends GuiScreen> gui = LanteaCraft.getProxy().getGUI(ID);
 		if (gui != null)
 			try {
-				LanteaCraft.getLogger().log(Level.FINE, String.format("Initializing GUI of class %s.", gui.getName()));
-				TileEntity entity = world.getBlockTileEntity(x, y, z);
+				LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing GUI of class %s.", gui.getName()));
+				TileEntity entity = world.getTileEntity(x, y, z);
 				Constructor<?> constr = gui.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
 				Object val = constr.newInstance(entity, player);
 				return val;
 			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.SEVERE, String.format("Failed to create GUI with ID %s", ID), t);
+				LanteaCraft.getLogger().log(Level.FATAL, String.format("Failed to create GUI with ID %s", ID), t);
 			}
 		return null;
 	}
 
 	@Override
-	public void handlePacket(ModPacket packet, Player player) {
+	public void handlePacket(ModPacket packet, EntityPlayer player) {
 		if (packet.getPacketIsForServer())
 			serverPacketHandler.handlePacket(packet, player);
 		else
 			clientPacketHandler.handlePacket(packet, player);
-	}
-
-	@Override
-	public void sendToServer(ModPacket packet) {
-		Packet250CustomPayload payload = packet.toPacket();
-		payload.channel = BuildInfo.modID;
-		if (BuildInfo.NET_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("sendToServer: 250 %s %s", payload.channel, payload.length));
-		FMLClientHandler.instance().sendPacket(payload);
 	}
 
 	private void movePlayerToServer(String address, int port) {

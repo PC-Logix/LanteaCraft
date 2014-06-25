@@ -11,7 +11,7 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.LanteaCraft.Items;
 import pcl.lc.api.internal.IModule;
-import pcl.lc.blocks.BlockRingPlatform;
+import pcl.lc.blocks.BlockTransporterRing;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
@@ -25,7 +25,8 @@ import pcl.lc.items.ItemGDO;
 import pcl.lc.items.ItemIris;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTransportRingActivator;
-import pcl.lc.tileentity.TileEntityRingPlatform;
+import pcl.lc.items.ItemTransporterRing;
+import pcl.lc.tileentity.TileEntityTransporterRing;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
@@ -58,12 +59,13 @@ public class ModuleStargates implements IModule {
 		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateController.class,
 				"stargateController");
 
-		Blocks.ringPlatform = RegistrationHelper.registerBlock(BlockRingPlatform.class, "ringPlatform");
+		Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
+				ItemTransporterRing.class, "ringPlatform");
 
 		GameRegistry.registerTileEntity(TileEntityStargateBase.class, "tileEntityStargateBase");
 		GameRegistry.registerTileEntity(TileEntityStargateRing.class, "tileEntityStargateRing");
 		GameRegistry.registerTileEntity(TileEntityStargateController.class, "tileEntityStargateController");
-		GameRegistry.registerTileEntity(TileEntityRingPlatform.class, "tileEntityRingPlatform");
+		GameRegistry.registerTileEntity(TileEntityTransporterRing.class, "tileEntityRingPlatform");
 
 		Items.coreCrystal = RegistrationHelper.registerItem(ItemCoreCrystal.class, "coreCrystal");
 		Items.controllerCrystal = RegistrationHelper.registerItem(ItemControllerCrystal.class, "controllerCrystal");
@@ -74,21 +76,31 @@ public class ModuleStargates implements IModule {
 				"transportRingActivator");
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN", "III", 'I',
-				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1));
+				net.minecraft.init.Items.iron_ingot, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(
+						(Block) Block.blockRegistry.getObject("sandStone"), 1, 1));
+
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1, 1), "CgC", "NpN", "IrI", 'I',
-				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1), 'g',
-				Item.glowstone, 'r', Item.redstone, 'p', Item.enderPearl);
+				net.minecraft.init.Items.iron_ingot, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(
+						net.minecraft.init.Blocks.sandstone, 1, 1), 'g', net.minecraft.init.Blocks.glowstone, 'r',
+				net.minecraft.init.Items.redstone, 'p', net.minecraft.init.Items.ender_pearl);
+
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateBaseBlock, 1), "CrC", "NeN", "IcI", 'I',
-				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1), 'r',
-				Item.redstone, 'e', Item.eyeOfEnder, 'c', Items.coreCrystal);
+				net.minecraft.init.Items.iron_ingot, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(
+						net.minecraft.init.Blocks.sandstone, 1, 1), 'r', net.minecraft.init.Items.redstone, 'e',
+				net.minecraft.init.Items.ender_eye, 'c', Items.coreCrystal);
+
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateControllerBlock, 1), "bbb", "OpO", "OcO", 'b',
-				Block.stoneButton, 'O', Block.obsidian, 'p', Item.enderPearl, 'r', Item.redstone, 'c',
+				net.minecraft.init.Blocks.stone_button, 'O', net.minecraft.init.Blocks.obsidian, 'p',
+				net.minecraft.init.Items.ender_pearl, 'r', net.minecraft.init.Items.redstone, 'c',
 				Items.controllerCrystal);
 
 		RegistrationHelper.newRecipe(new ItemStack(Items.coreCrystal, 1), "bbr", "rdb", "brb", 'b', new ItemStack(
-				Item.dyePowder, 1, 4), 'r', Item.redstone, 'd', Item.diamond);
+				net.minecraft.init.Items.dye, 1, 4), 'r', net.minecraft.init.Items.redstone, 'd',
+				net.minecraft.init.Items.diamond);
+
 		RegistrationHelper.newRecipe(new ItemStack(Items.controllerCrystal, 1), "roo", "odr", "oor", 'o',
-				new ItemStack(Item.dyePowder, 1, 14), 'r', Item.redstone, 'd', Item.diamond);
+				new ItemStack(net.minecraft.init.Items.dye, 1, 14), 'r', net.minecraft.init.Items.redstone, 'd',
+				net.minecraft.init.Items.diamond);
 
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateController.ordinal(),

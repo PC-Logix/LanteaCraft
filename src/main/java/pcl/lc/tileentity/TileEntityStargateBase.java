@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
+
+import org.apache.logging.log4j.Level;
 
 import net.afterlifelochie.sandbox.ObserverContext;
 import net.afterlifelochie.sandbox.WatchedValue;
@@ -18,11 +19,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.network.packet.Packet41EntityEffect;
-import net.minecraft.network.packet.Packet43Experience;
-import net.minecraft.network.packet.Packet9Respawn;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
@@ -30,9 +30,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.network.ForgePacket;
-import net.minecraftforge.common.network.packet.DimensionRegisterPacket;
+import net.minecraftforge.common.MinecraftForge;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.SoundHost;
 import pcl.common.base.GenericTileEntity;
@@ -60,7 +58,7 @@ import pcl.lc.core.StargateConnectionManager.ConnectionRequest;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
-import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
 public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
 		ISidedInventory {
@@ -78,7 +76,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 
 		public String getDeathMessage(EntityPlayer player) {
-			return new StringBuilder().append(player.username).append(" was obliterated by an iris.").toString();
+			return new StringBuilder().append(player.getDisplayName()).append(" was obliterated by an iris.")
+					.toString();
 		}
 	}
 
@@ -106,11 +105,11 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	 */
 	private class ClientConnectionRequest {
 		/* Whether the request is currently running */
-		public WatchedValue<Boolean> running = new WatchedValue(false);
+		public WatchedValue<Boolean> running = new WatchedValue<Boolean>(false);
 		/* If this remote request is the host */
 		public final boolean isHost;
 		/* The current state of the connection */
-		public WatchedValue<EnumStargateState> state = new WatchedValue(EnumStargateState.Idle);
+		public WatchedValue<EnumStargateState> state = new WatchedValue<EnumStargateState>(EnumStargateState.Idle);
 		/* The current symbol being dialled */
 		public WatchedValue<Character> symbol = new WatchedValue<Character>(' ');
 		/* The number of chevrons dialled */
@@ -145,7 +144,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		}
 
 		public String getDeathMessage(EntityPlayer player) {
-			return new StringBuilder().append(player.username).append(" was torn apart by an event horizon.")
+			return new StringBuilder().append(player.getDisplayName()).append(" was torn apart by an event horizon.")
 					.toString();
 		}
 	}
@@ -183,16 +182,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		inventory = new FilteredInventory(1) {
 
 			@Override
-			public void onInventoryChanged() {
-			}
-
-			@Override
-			public boolean isInvNameLocalized() {
-				return false;
-			}
-
-			@Override
-			public String getInvName() {
+			public String getInventoryName() {
 				return "stargate";
 			}
 
@@ -213,6 +203,11 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				if (0 > i || i > items.length)
 					return false;
 				return true;
+			}
+
+			@Override
+			public boolean hasCustomInventoryName() {
+				return false;
 			}
 		};
 
@@ -251,7 +246,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					connection.symbol.clearModified(observerContext);
 					update.setValue("symbol", connection.symbol.get());
 				}
-				LanteaCraft.getProxy().sendToAllPlayers(update);
+				LanteaCraft.getNetPipeline().sendToAll(update);
 			}
 	}
 
@@ -410,7 +405,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	private void createChannel(String name, String file, AudioPosition position, float volume, int age) {
-		soundHost.addChannel(name, String.format("stargate/milkyway/milkyway_%s.ogg", file), position, volume, age);
+		if (soundHost != null)
+			soundHost.addChannel(name, String.format("stargate/milkyway/milkyway_%s.ogg", file), position, volume, age);
 	}
 
 	@Override
@@ -555,7 +551,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getProxy().sendToAllPlayers(getAsStructure().pack());
+		LanteaCraft.getNetPipeline().sendToAll(getAsStructure().pack());
 		if (connection != null) {
 			StandardModPacket update = new StandardModPacket(new WorldLocation(this));
 			update.setType("LanteaPacket.ConnectionSet");
@@ -571,7 +567,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			update.setValue("hostAddress", connection.hostAddress);
 			update.setValue("clientAddress", connection.clientAddress);
 			update.setValue("isHost", connection.isHost(this));
-			LanteaCraft.getProxy().sendToAllPlayers(update);
+			LanteaCraft.getNetPipeline().sendToAll(update);
 		}
 		return null;
 	}
@@ -612,7 +608,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	}
 
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		return "stargate";
 	}
 
@@ -701,9 +697,9 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			req.symbol.set((Character) payload.getValue("symbol"));
 			setClientConnection(req);
 		} else
-			LanteaCraft.getLogger().log(Level.WARNING, String.format("Strange packet type %s.", packetOf.getType()));
+			LanteaCraft.getLogger().log(Level.WARN, String.format("Strange packet type %s.", packetOf.getType()));
 
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public void hostBlockDestroyed() {
@@ -756,11 +752,6 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	public boolean isDialling() {
 		return getState() == EnumStargateState.InterDialling || getState() == EnumStargateState.Dialling;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
 	}
 
 	public boolean isIrisClosed() {
@@ -896,18 +887,10 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		WorldServer oldWorld = server.worldServerForDimension(oldDimension);
 		WorldServer newWorld = server.worldServerForDimension(newDimension);
 
-		/**
-		 * The following is an MCPC+ only fix which was prescribed in
-		 * #mcportcentral.
-		 */
-		Packet250CustomPayload spoof = ForgePacket.makePacketSet(new DimensionRegisterPacket(newDimension,
-				DimensionManager.getProviderType(newDimension)))[0];
-		player.playerNetServerHandler.sendPacketToPlayer(spoof);
-
 		player.closeScreen();
-		player.playerNetServerHandler.sendPacketToPlayer(new Packet9Respawn(player.dimension,
-				(byte) player.worldObj.difficultySetting, newWorld.getWorldInfo().getTerrainType(), newWorld
-						.getHeight(), player.theItemInWorldManager.getGameType()));
+		player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension,
+				player.worldObj.difficultySetting, newWorld.getWorldInfo().getTerrainType(),
+				player.theItemInWorldManager.getGameType()));
 		oldWorld.removePlayerEntityDangerously(player);
 		player.isDead = false;
 		player.setLocationAndAngles(p.x, p.y, p.z, (float) a, player.rotationPitch);
@@ -918,14 +901,14 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		player.theItemInWorldManager.setWorld(newWorld);
 		scm.updateTimeAndWeatherForPlayer(player, newWorld);
 		scm.syncPlayerInventory(player);
-		Iterator var6 = player.getActivePotionEffects().iterator();
+		Iterator<?> var6 = player.getActivePotionEffects().iterator();
 		while (var6.hasNext()) {
 			PotionEffect effect = (PotionEffect) var6.next();
-			player.playerNetServerHandler.sendPacketToPlayer(new Packet41EntityEffect(player.entityId, effect));
+			player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), effect));
 		}
-		player.playerNetServerHandler.sendPacketToPlayer(new Packet43Experience(player.experience,
-				player.experienceTotal, player.experienceLevel));
-		GameRegistry.onPlayerChangedDimension(player);
+		player.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(player.experience, player.experienceTotal,
+				player.experienceLevel));
+		MinecraftForge.EVENT_BUS.post(new PlayerChangedDimensionEvent(player, oldDimension, newDimension));
 	}
 
 	public void setConnection(ConnectionRequest request) {

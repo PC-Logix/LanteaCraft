@@ -3,18 +3,19 @@ package pcl.lc.tileentity;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
+
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.network.TinyModPacket;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHandler {
 
@@ -37,7 +38,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 
 	public TileEntityLanteaDecorGlass getGlassAt(int x, int y, int z) {
 		if (y >= 0 && worldObj.getHeight() > y) {
-			TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
+			TileEntity tile = worldObj.getTileEntity(x, y, z);
 			if (tile instanceof TileEntityLanteaDecorGlass)
 				return (TileEntityLanteaDecorGlass) tile;
 		}
@@ -173,10 +174,10 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 				stream.writeInt(edges_count[i]);
 				stream.writeInt(tile_rotation[i]);
 			}
-			LanteaCraft.getProxy().sendToAllPlayers(packet);
+			LanteaCraft.getNetPipeline().sendToAll(packet);
 			return null;
 		} catch (IOException ioex) {
-			LanteaCraft.getLogger().log(Level.WARNING, "Error creating description packet.", ioex);
+			LanteaCraft.getLogger().log(Level.WARN, "Error creating description packet.", ioex);
 			return null;
 		}
 	}
@@ -194,7 +195,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 						tile_rotation[i] = stream.readInt();
 					}
 				} catch (IOException ioex) {
-					LanteaCraft.getLogger().log(Level.WARNING, "Error unpacking description packet.", ioex);
+					LanteaCraft.getLogger().log(Level.WARN, "Error unpacking description packet.", ioex);
 				}
 	}
 

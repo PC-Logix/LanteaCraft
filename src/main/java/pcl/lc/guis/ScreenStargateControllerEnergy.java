@@ -54,8 +54,8 @@ public class ScreenStargateControllerEnergy extends GenericContainerGUI {
 			sg.append(min).append("m ");
 		sg.append(sec).append("s.");
 
-		int dw = fontRenderer.getStringWidth(sg.toString());
-		fontRenderer.drawString(sg.toString(), 49 + ((int) Math.floor((80d - dw) / 2)), 28,
+		int dw = fontRendererObj.getStringWidth(sg.toString());
+		fontRendererObj.drawString(sg.toString(), 49 + ((int) Math.floor((80d - dw) / 2)), 28,
 				(container.getStoredEnergy() > 0.00d) ? 0xFFFFFF : 0x9F0101, true);
 
 	}

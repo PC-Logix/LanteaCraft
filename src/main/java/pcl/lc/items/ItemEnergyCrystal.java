@@ -13,8 +13,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 
-	public ItemEnergyCrystal(int id) {
-		super(id);
+	public ItemEnergyCrystal() {
+		super();
 		setHasSubtypes(false);
 		setMaxStackSize(1);
 		setMaxDamage(21);
