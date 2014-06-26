@@ -269,66 +269,31 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 
 	@Override
 	public boolean canReceiveEnergy() {
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
 	public boolean canExportEnergy() {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public double getMaximumReceiveEnergy() {
-		return getMaxEnergyStored();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public double getMaximumExportEnergy() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double getAvailableExportEnergy() {
-		return 0;
-	}
-
-	@Override
-	public void receiveEnergy(double units) {
-		energy += units;
-	}
-
-	@Override
-	public double exportEnergy(double units) {
-		return 0;
-	}
-
-	@Override
-	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
-		return true;
-	}
-
-	@Override
-	public boolean canReceiveEnergy() {
-		return true;
-	}
-
-	@Override
-	public boolean canExportEnergy() {
-		return false;
-	}
-
-	@Override
-	public double getMaximumReceiveEnergy() {
-		return 1.00;
-	}
-
-	@Override
-	public double getMaximumExportEnergy() {
-		return 0;
-	}
-
-	@Override
-	public double getAvailableExportEnergy() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -346,6 +311,7 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 
 	@Override
 	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
-		return direction != ForgeDirection.DOWN;
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
