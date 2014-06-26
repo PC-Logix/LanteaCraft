@@ -24,6 +24,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraftforge.common.network.ForgeMessage;
+import net.minecraftforge.common.network.ForgeMessage.DimensionRegisterMessage;
 
 @ChannelHandler.Sharable
 public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, ModPacket> {
@@ -103,6 +105,13 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 				.set(FMLOutboundHandler.OutboundTarget.PLAYER);
 		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
 		this.channels.get(Side.SERVER).writeAndFlush(message);
+	}
+
+	public void sendForgeMessageTo(ForgeMessage message, EntityPlayerMP player) {
+		FMLEmbeddedChannel channel = NetworkRegistry.INSTANCE.getChannel("FORGE", Side.SERVER);
+		channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+		channel.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+		channel.writeAndFlush(message);
 	}
 
 	public void sendToAllAround(ModPacket message, NetworkRegistry.TargetPoint point) {
