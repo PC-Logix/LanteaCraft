@@ -30,7 +30,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.network.ForgeMessage.DimensionRegisterMessage;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.SoundHost;
 import pcl.common.base.GenericTileEntity;
@@ -59,6 +61,8 @@ import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
 		ISidedInventory {
@@ -886,6 +890,10 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		player.dimension = newDimension;
 		WorldServer oldWorld = server.worldServerForDimension(oldDimension);
 		WorldServer newWorld = server.worldServerForDimension(newDimension);
+
+		DimensionRegisterMessage packet = new DimensionRegisterMessage(newDimension,
+				DimensionManager.getProviderType(newDimension));
+		LanteaCraft.getNetPipeline().sendForgeMessageTo(packet, player);
 
 		player.closeScreen();
 		player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension,
