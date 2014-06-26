@@ -383,6 +383,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public boolean connect(String address) {
+		if (isBusy() || isConnected())
+			return false;
 		try {
 			String localAddress = (address.length() == 7) ? getLocalAddress().substring(0, 7) : getLocalAddress();
 			ChunkLocation remoteLocation, hostLocation = getLocation();
