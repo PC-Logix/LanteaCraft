@@ -17,8 +17,6 @@ import net.minecraftforge.event.terraingen.InitMapGenEvent;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.audio.AudioEngine;
-import pcl.common.base.TileEntityChunkManager;
 import pcl.common.helpers.AnalyticsHelper;
 import pcl.common.helpers.ConfigValue;
 import pcl.common.helpers.ConfigurationHelper;
@@ -27,6 +25,8 @@ import pcl.common.helpers.NetworkHelpers;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.common.helpers.VersionHelper;
 import pcl.common.network.ModPacket;
+import pcl.lc.base.TileEntityChunkManager;
+import pcl.lc.client.audio.AudioEngine;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.core.RemoteChunkLoading;

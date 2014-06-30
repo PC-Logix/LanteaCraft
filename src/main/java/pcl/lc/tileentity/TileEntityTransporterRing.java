@@ -2,10 +2,10 @@ package pcl.lc.tileentity;
 
 import net.minecraft.network.Packet;
 import net.minecraft.util.AxisAlignedBB;
-import pcl.common.base.GenericTileEntity;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.GenericTileEntity;
 import pcl.lc.multiblock.TransporterRingMultiblock;
 import pcl.lc.multiblock.TransporterRingPart;
 

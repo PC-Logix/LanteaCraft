@@ -1,10 +1,10 @@
 package pcl.lc.tileentity;
 
 import net.minecraft.network.Packet;
-import pcl.common.base.GenericTileEntity;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.GenericTileEntity;
 import pcl.lc.multiblock.StargatePart;
 
 public class TileEntityStargateRing extends GenericTileEntity implements IPacketHandler {

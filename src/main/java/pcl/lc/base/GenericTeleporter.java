@@ -1,4 +1,4 @@
-package pcl.common.base;
+package pcl.lc.base;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;

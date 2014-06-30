@@ -30,12 +30,12 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import pcl.common.ai.EntityAICreep;
-import pcl.common.ai.EntityAIFleeLowHealth;
-import pcl.common.ai.EntityAIHurtByTargetExcept;
-import pcl.common.ai.EntityAIRememberHome;
-import pcl.common.ai.IHomingPigeon;
 import pcl.common.util.Vector3;
+import pcl.lc.entity.ai.EntityAICreep;
+import pcl.lc.entity.ai.EntityAIFleeLowHealth;
+import pcl.lc.entity.ai.EntityAIHurtByTargetExcept;
+import pcl.lc.entity.ai.EntityAIRememberHome;
+import pcl.lc.entity.ai.IHomingPigeon;
 
 public class EntityTokra extends EntityCreature implements INpc, IRangedAttackMob, IHomingPigeon {
 

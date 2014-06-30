@@ -7,7 +7,6 @@ import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
 
-import pcl.common.render.GenericBlockRenderer;
 import pcl.lc.LanteaCraft;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.render.models.StargateControllerModel;

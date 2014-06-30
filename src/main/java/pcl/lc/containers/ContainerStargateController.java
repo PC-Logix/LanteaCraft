@@ -6,7 +6,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import pcl.common.base.GenericContainer;
+import pcl.lc.base.GenericContainer;
 import pcl.lc.tileentity.TileEntityStargateController;
 
 public class ContainerStargateController extends GenericContainer {

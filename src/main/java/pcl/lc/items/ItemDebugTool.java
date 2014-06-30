@@ -13,12 +13,12 @@ import net.minecraft.world.WorldServer;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.audio.AudioEngine;
-import pcl.common.audio.AudioPosition;
-import pcl.common.audio.AudioSource;
-import pcl.common.base.GenericTeleporter;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.GenericTeleporter;
+import pcl.lc.client.audio.AudioEngine;
+import pcl.lc.client.audio.AudioPosition;
+import pcl.lc.client.audio.AudioSource;
 import pcl.lc.module.ModuleGalaxy;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;

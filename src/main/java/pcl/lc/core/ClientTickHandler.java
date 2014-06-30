@@ -1,6 +1,6 @@
 package pcl.lc.core;
 
-import pcl.common.base.TickHandler;
+import pcl.lc.base.TickHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;

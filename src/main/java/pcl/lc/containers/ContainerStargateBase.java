@@ -2,9 +2,9 @@ package pcl.lc.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import pcl.common.base.GenericContainer;
 import pcl.common.inventory.FilteredInventory;
 import pcl.common.inventory.FilteredSlot;
+import pcl.lc.base.GenericContainer;
 import pcl.lc.tileentity.TileEntityStargateBase;
 
 public class ContainerStargateBase extends GenericContainer {

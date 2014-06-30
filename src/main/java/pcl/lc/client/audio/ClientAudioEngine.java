@@ -1,4 +1,4 @@
-package pcl.common.audio;
+package pcl.lc.client.audio;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;

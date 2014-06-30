@@ -1,4 +1,4 @@
-package pcl.common.ai;
+package pcl.lc.entity.ai;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

@@ -1,4 +1,4 @@
-package pcl.common.render;
+package pcl.lc.render.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

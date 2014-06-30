@@ -34,9 +34,6 @@ import net.minecraftforge.common.network.ForgeMessage.DimensionRegisterMessage;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.audio.AudioPosition;
-import pcl.common.audio.SoundHost;
-import pcl.common.base.GenericTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.inventory.FilterRule;
 import pcl.common.inventory.FilteredInventory;
@@ -53,7 +50,10 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisState;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.IStargateAccess;
+import pcl.lc.base.GenericTileEntity;
 import pcl.lc.blocks.BlockStargateBase;
+import pcl.lc.client.audio.AudioPosition;
+import pcl.lc.client.audio.SoundHost;
 import pcl.lc.core.AddressingError;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.StargateConnectionManager;

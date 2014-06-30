@@ -14,9 +14,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.base.RotationOrientedBlock;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.RotationOrientedBlock;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.tileentity.TileEntityStargateController;
 import cpw.mods.fml.relauncher.Side;

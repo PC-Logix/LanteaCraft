@@ -1,4 +1,4 @@
-package pcl.common.ai;
+package pcl.lc.entity.ai;
 
 import pcl.common.util.Vector3;
 

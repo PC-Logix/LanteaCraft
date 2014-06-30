@@ -1,4 +1,4 @@
-package pcl.common.base;
+package pcl.lc.base;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;

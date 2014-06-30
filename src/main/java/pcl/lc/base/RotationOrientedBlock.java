@@ -1,4 +1,4 @@
-package pcl.common.base;
+package pcl.lc.base;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;

@@ -1,4 +1,4 @@
-package pcl.common.audio;
+package pcl.lc.client.audio;
 
 import java.net.URL;
 import java.net.URLConnection;

@@ -12,9 +12,9 @@ import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import pcl.common.base.GenericContainerGUI;
 import pcl.common.util.ImmutablePair;
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.GenericContainerGUI;
 import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.core.AddressingError;
 import pcl.lc.core.AddressingError.CoordRangeError;

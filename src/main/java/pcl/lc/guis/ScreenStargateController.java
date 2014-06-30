@@ -11,14 +11,14 @@ import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import pcl.common.audio.AudioPosition;
-import pcl.common.audio.SoundHost;
-import pcl.common.base.GenericContainerGUI;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
+import pcl.lc.base.GenericContainerGUI;
+import pcl.lc.client.audio.AudioPosition;
+import pcl.lc.client.audio.SoundHost;
 import pcl.lc.containers.ContainerStargateController;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.tileentity.TileEntityStargateBase;

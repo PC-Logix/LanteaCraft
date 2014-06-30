@@ -15,9 +15,9 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.audio.ClientAudioEngine;
 import pcl.common.helpers.CloakHandler;
 import pcl.common.network.ModPacket;
+import pcl.lc.client.audio.ClientAudioEngine;
 import pcl.lc.core.ClientTickHandler;
 import pcl.lc.guis.ScreenNaquadahGenerator;
 import pcl.lc.guis.ScreenStargateBase;

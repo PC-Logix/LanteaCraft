@@ -1,4 +1,4 @@
-package pcl.common.ai;
+package pcl.lc.entity.ai;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;

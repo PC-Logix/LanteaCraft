@@ -1,4 +1,4 @@
-package pcl.common.base;
+package pcl.lc.base;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;

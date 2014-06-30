@@ -1,4 +1,4 @@
-package pcl.common.audio;
+package pcl.lc.client.audio;
 
 import pcl.lc.api.internal.ITickAgent;
 
