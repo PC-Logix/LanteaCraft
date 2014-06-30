@@ -149,12 +149,9 @@ public class LanteaCraftCommonProxy {
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft done setting up!");
 
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft looking for other versions of SGCraft...");
-		if (UpgradeHelper.detectSGCraftInstall() || UpgradeHelper.detectSGCraftReloadedInstall()) {
+		if (UpgradeHelper.detectSGCraftInstall()) {
 			upgradeHelper = new UpgradeHelper();
-			if (UpgradeHelper.detectSGCraftInstall())
-				upgradeHelper.hookSGCraft();
-			if (UpgradeHelper.detectSGCraftReloadedInstall())
-				upgradeHelper.hookSGCraftReloaded();
+			upgradeHelper.hookSGCraft();
 		}
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft done looking for other versions.");
 		moduleManager.postInit(e);

@@ -98,24 +98,6 @@ public class UpgradeHelper {
 		}
 	}
 
-	/**
-	 * Attempt to guess if there is an SGCraft-Reloaded (PCL) build currently
-	 * running. We added GCESGCompatHelper in the first few releases to maintain
-	 * backwards compat, then removed it (in favor of this file) in LC RC1.
-	 * 
-	 * @return If SGCraft-Reloaded is present.
-	 */
-	public static boolean detectSGCraftReloadedInstall() {
-		try {
-			Class<?> clazz = Class.forName("gcewing.sg.GCESGCompatHelper");
-			if (clazz != null)
-				return true;
-			return false;
-		} catch (ClassNotFoundException notfound) {
-			return false;
-		}
-	}
-
 	public void hookSGCraft() {
 		try {
 			Class<?> clazz = Class.forName("gcewing.sg.SGCraft");
@@ -155,52 +137,6 @@ public class UpgradeHelper {
 						LanteaCraft.getLogger().log(Level.WARN,
 								String.format("Could not access item field %s, ignoring!", mapping.getSourceName()));
 					}
-		} catch (ClassNotFoundException notfound) {
-			LanteaCraft.getLogger().log(Level.WARN, "Could not locate a class required for upgrade!", notfound);
-		}
-	}
-
-	public void hookSGCraftReloaded() {
-		try {
-			Class<?> clazz_blocks = Class.forName("gcewing.sg.SGCraft$Blocks");
-			Class<?> clazz_items = Class.forName("gcewing.sg.SGCraft$Items");
-
-			for (UpgradeMapping mapping : upgrades)
-				if (!mapping.isItemSource())
-					try {
-						Field f1 = clazz_blocks.getField(mapping.getSourceName());
-						if (f1 != null && (Block) f1.get(null) != null)
-							createBlockConversionRecipe(mapping, (Block) f1.get(null));
-					} catch (ClassCastException cast) {
-						LanteaCraft.getLogger().log(
-								Level.WARN,
-								String.format("Failed to cast block field %s  to Block typeof, ignoring!",
-										mapping.getSourceName()));
-					} catch (NoSuchFieldException field) {
-						LanteaCraft.getLogger().log(Level.WARN,
-								String.format("Failed to find block field %s, ignoring!", mapping.getSourceName()));
-					} catch (IllegalAccessException illegal) {
-						LanteaCraft.getLogger().log(Level.WARN,
-								String.format("Could not access block field %s, ignoring!", mapping.getSourceName()));
-					}
-				else
-					try {
-						Field f1 = clazz_items.getField(mapping.getSourceName());
-						if (f1 != null && (Item) f1.get(null) != null)
-							createItemConversionRecipe(mapping, (Item) f1.get(null));
-					} catch (ClassCastException cast) {
-						LanteaCraft.getLogger().log(
-								Level.WARN,
-								String.format("Failed to cast item field %s to Item typeof, ignoring!",
-										mapping.getSourceName()));
-					} catch (NoSuchFieldException field) {
-						LanteaCraft.getLogger().log(Level.WARN,
-								String.format("Failed to find item field %s, ignoring!", mapping.getSourceName()));
-					} catch (IllegalAccessException illegal) {
-						LanteaCraft.getLogger().log(Level.WARN,
-								String.format("Could not access item field %s, ignoring!", mapping.getSourceName()));
-					}
-
 		} catch (ClassNotFoundException notfound) {
 			LanteaCraft.getLogger().log(Level.WARN, "Could not locate a class required for upgrade!", notfound);
 		}
