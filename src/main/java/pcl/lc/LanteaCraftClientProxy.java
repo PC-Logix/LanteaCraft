@@ -4,13 +4,11 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.Level;
@@ -28,28 +26,10 @@ import pcl.lc.module.stargate.gui.ScreenStargateControllerEnergy;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
-	public static class ClientHooks {
-		private boolean shownStatGui = false;
-		private LanteaCraftClientProxy proxy;
-
-		public ClientHooks(LanteaCraftClientProxy proxy) {
-			this.proxy = proxy;
-		}
-
-		@SubscribeEvent
-		public void openMainMenu(GuiOpenEvent event) {
-			if ((event.gui instanceof GuiMainMenu) && !shownStatGui)
-				shownStatGui = true;
-			// event.gui = new GuiStatCollection(event.gui,
-			// proxy.analyticsHelper);
-		}
-	}
 
 	private ClientTickHandler clientTickHandler = new ClientTickHandler();
-	private ClientHooks hooks = new ClientHooks(this);
 	private CloakHandler cloakHandler = new CloakHandler(BuildInfo.webAPI + "cloaks");
 
 	public LanteaCraftClientProxy() {
@@ -67,7 +47,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	@Override
 	public void init(FMLInitializationEvent e) {
 		super.init(e);
-		MinecraftForge.EVENT_BUS.register(hooks);
 		cloakHandler.buildDatabase();
 		FMLCommonHandler.instance().bus().register(cloakHandler);
 		FMLCommonHandler.instance().bus().register(clientTickHandler);
@@ -76,7 +55,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		MinecraftForge.EVENT_BUS.register(audioContext);
 		clientTickHandler.registerTickHost(audioContext);
 		registerScreens();
-
 	}
 
 	public void registerScreens() {

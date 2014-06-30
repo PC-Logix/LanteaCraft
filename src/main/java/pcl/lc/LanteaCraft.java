@@ -33,36 +33,13 @@ public class LanteaCraft {
 	private static LanteaCraft mod;
 
 	/**
-	 * Returns the current instance singleton of the LanteaCraft mod object
+	 * Sided proxy.
 	 * 
-	 * @return The current, if any, instance of the LanteaCraft mod
+	 * @see pcl.lc.LanteaCraftCommonProxy
+	 * @see pcl.lc.LanteaCraftClientProxy
 	 */
-	public static LanteaCraft getInstance() {
-		return LanteaCraft.mod;
-	}
-
-	/**
-	 * The private instance of the logger used. Use {@link #getLogger()} to
-	 * access this object safely
-	 */
-	private static Logger logger;
-
-	public static Logger getLogger() {
-		return LanteaCraft.logger;
-	}
-
-	/**
-	 * The network pipeline
-	 */
-	private static final PCLPacketPipeline pipeline = new PCLPacketPipeline();
-
-	public static PCLPacketPipeline getNetPipeline() {
-		return LanteaCraft.pipeline;
-	}
-
-	public static enum EnumGUIs {
-		StargateBase, StargateController, StargateControllerEnergy, NaquadahGenerator;
-	}
+	@SidedProxy(clientSide = "pcl.lc.LanteaCraftClientProxy", serverSide = "pcl.lc.LanteaCraftCommonProxy")
+	public static LanteaCraftCommonProxy proxy;
 
 	/**
 	 * Creative tab instance
@@ -75,26 +52,41 @@ public class LanteaCraft {
 	};
 
 	/**
-	 * Sided proxy.
+	 * The private instance of the logger used. Use {@link #getLogger()} to
+	 * access this object safely
+	 */
+	private static Logger logger;
+
+	/**
+	 * The network pipeline
+	 */
+	private static final PCLPacketPipeline pipeline = new PCLPacketPipeline();
+
+	/**
+	 * Returns the current instance singleton of the LanteaCraft mod object
 	 * 
-	 * @see pcl.lc.LanteaCraftCommonProxy
-	 * @see pcl.lc.LanteaCraftClientProxy
+	 * @return The current, if any, instance of the LanteaCraft mod
 	 */
-	@SidedProxy(clientSide = "pcl.lc.LanteaCraftClientProxy", serverSide = "pcl.lc.LanteaCraftCommonProxy")
-	public static LanteaCraftCommonProxy proxy;
+	public static LanteaCraft getInstance() {
+		return LanteaCraft.mod;
+	}
 
 	/**
-	 * ItemSpecialBucket bucket collection handler object - Forge eventbus only.
+	 * Gets the global logger.
+	 * 
+	 * @return The current global logger.
 	 */
-	private SpecialBucketHandler bucketHandler = new SpecialBucketHandler();
+	public static Logger getLogger() {
+		return LanteaCraft.logger;
+	}
 
 	/**
-	 * Declaration of asset key.
+	 * Gets the global network pipeline.
+	 * 
+	 * @return The current network pipeline.
 	 */
-	private String assetKey = "pcl_lc";
-
-	public LanteaCraft() {
-		LanteaCraft.mod = this;
+	public static PCLPacketPipeline getNetPipeline() {
+		return LanteaCraft.pipeline;
 	}
 
 	/**
@@ -143,6 +135,24 @@ public class LanteaCraft {
 	 */
 	public static SpecialBucketHandler getSpecialBucketHandler() {
 		return LanteaCraft.getInstance().bucketHandler;
+	}
+
+	public static enum EnumGUIs {
+		StargateBase, StargateController, StargateControllerEnergy, NaquadahGenerator;
+	}
+
+	/**
+	 * ItemSpecialBucket bucket collection handler object - Forge eventbus only.
+	 */
+	private SpecialBucketHandler bucketHandler = new SpecialBucketHandler();
+
+	/**
+	 * Declaration of asset key.
+	 */
+	private String assetKey = "pcl_lc";
+
+	public LanteaCraft() {
+		LanteaCraft.mod = this;
 	}
 
 	@EventHandler
