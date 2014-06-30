@@ -60,6 +60,7 @@ public class TinyModPacket extends ModPacket {
 		return "TinyPacket";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
 		buffer.writeByte((toServer) ? 1 : 0);

@@ -57,8 +57,8 @@ import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.AddressingError;
 import pcl.lc.module.stargate.GateAddressHelper;
 import pcl.lc.module.stargate.StargateConnectionManager;
-import pcl.lc.module.stargate.StargateMultiblock;
 import pcl.lc.module.stargate.StargateConnectionManager.ConnectionRequest;
+import pcl.lc.module.stargate.StargateMultiblock;
 import pcl.lc.module.stargate.block.BlockStargateBase;
 import pcl.lc.module.stargate.render.EventHorizonRenderer;
 import pcl.lc.module.stargate.render.StargateRenderConstants;
@@ -365,6 +365,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void checkForEntitiesInPortal() {
 		if (getState() == EnumStargateState.Connected) {
 			for (TrackedEntity trk : trackedEntities)
@@ -778,6 +779,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord, getBlockMetadata(), this);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void performTransientDamage() {
 		Vector3 p0 = new Vector3(-3.5, 0.0, 0.0);
 		Vector3 p1 = new Vector3(3.5, 5.5, 2.5);

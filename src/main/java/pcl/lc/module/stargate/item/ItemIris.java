@@ -27,6 +27,7 @@ public class ItemIris extends Item {
 		setNoRepair();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < EnumIrisType.values().length; i++) {
@@ -105,6 +106,7 @@ public class ItemIris extends Item {
 		updateDisplay(stack);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wat) {
 		double damage = ((100 * getIrisDamage(stack)) / getMaximumDamage(getType(stack)));

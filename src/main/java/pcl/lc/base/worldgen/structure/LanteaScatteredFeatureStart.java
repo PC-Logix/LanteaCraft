@@ -16,6 +16,7 @@ public class LanteaScatteredFeatureStart extends StructureStart {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public LanteaScatteredFeatureStart(Class<? extends LanteaScatteredFeature> clazz, World worldObj, Random random,
 			int chunkX, int chunkZ) {
 

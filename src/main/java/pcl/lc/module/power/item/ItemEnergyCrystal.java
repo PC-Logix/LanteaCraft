@@ -76,6 +76,7 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 		itemStack.stackTagCompound.setDouble("stored-energy", value);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
 		double energy = ((100 * getEnergyStored(par1ItemStack)) / getMaximumEnergy());

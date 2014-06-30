@@ -1,8 +1,6 @@
 package pcl.lc.module.galaxy;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -12,16 +10,15 @@ import net.minecraft.world.gen.structure.StructureStart;
 import pcl.lc.LanteaCraft;
 
 public class MapGenFeatureStructure extends MapGenStructure {
-	private List scatteredFeatureSpawnList;
 	private int maxDistanceBetweenScatteredFeatures;
 	private int minDistanceBetweenScatteredFeatures;
 
 	public MapGenFeatureStructure() {
-		scatteredFeatureSpawnList = new ArrayList();
 		maxDistanceBetweenScatteredFeatures = 32;
 		minDistanceBetweenScatteredFeatures = 8;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public MapGenFeatureStructure(Map par1Map) {
 		this();
 		Iterator var2 = par1Map.entrySet().iterator();
@@ -66,9 +63,5 @@ public class MapGenFeatureStructure extends MapGenStructure {
 	@Override
 	protected StructureStart getStructureStart(int par1, int par2) {
 		return new MapGenFeatureStructureStart(worldObj, rand, par1, par2);
-	}
-
-	public List getScatteredFeatureSpawnList() {
-		return scatteredFeatureSpawnList;
 	}
 }

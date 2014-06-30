@@ -13,6 +13,7 @@ import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 public class TradeHandler implements IVillageTradeHandler {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipes, Random random) {
 		if (Module.STARGATE.isLoaded()) {

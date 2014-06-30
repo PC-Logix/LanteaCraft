@@ -36,6 +36,7 @@ public class ItemLanteaOre extends Item {
 		return OreTypes.values()[data].getItemTexture();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < OreTypes.values().length; i++)

@@ -14,6 +14,7 @@ public class MapGenFeatureStructureStart extends StructureStart {
 	public MapGenFeatureStructureStart() {
 	}
 
+	@SuppressWarnings("unchecked")
 	public MapGenFeatureStructureStart(World worldObj, Random random, int chunkX, int chunkZ) {
 		/*
 		 * TODO: Need to make a way to make MapGenFeatureStructureStart abstract

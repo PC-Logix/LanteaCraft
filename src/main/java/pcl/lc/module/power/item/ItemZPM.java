@@ -70,6 +70,7 @@ public class ItemZPM extends Item implements IItemEnergyStore {
 		itemStack.stackTagCompound.setDouble("stored-energy", value);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
 		double energy = 100.0d - ((100 * getEnergyStored(par1ItemStack)) / getMaximumEnergy());

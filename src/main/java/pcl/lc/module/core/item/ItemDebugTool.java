@@ -2,24 +2,20 @@ package pcl.lc.module.core.item;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 import org.apache.logging.log4j.Level;
 
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.GenericTeleporter;
 import pcl.lc.client.audio.AudioEngine;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.AudioSource;
-import pcl.lc.module.ModuleGalaxy;
 import pcl.lc.module.power.tile.TileEntityNaquadahGenerator;
 import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 import pcl.lc.module.stargate.tile.TileEntityStargateController;
@@ -49,14 +45,6 @@ public class ItemDebugTool extends Item {
 	@Override
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4,
 			int par5, int par6, int par7, float par8, float par9, float par10) {
-		if (!par3World.isRemote) {
-			EntityPlayerMP player = (EntityPlayerMP) par2EntityPlayer;
-			player.mcServer.getConfigurationManager().transferPlayerToDimension(player, ModuleGalaxy.__TMP_ABYDOS_IDX,
-					new GenericTeleporter((WorldServer) par3World));
-		}
-
-		if (true == true)
-			return true;
 
 		String side = (par3World.isRemote) ? "client" : "server";
 		LanteaCraft.getLogger().log(Level.INFO,

@@ -42,6 +42,7 @@ public class NetworkHelpers {
 		WorldLocationNetworkPacker.packId = ModPacket.registerPackable(WorldLocationNetworkPacker.instance);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static class ImmutablePairPacker extends IStreamPackable<ImmutablePair> {
 		private static ImmutablePairPacker instance;
 		private static int packId;
@@ -70,6 +71,7 @@ public class NetworkHelpers {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static class ImmutableTuplePacker extends IStreamPackable<ImmutableTuple> {
 		private static ImmutableTuplePacker instance;
 		private static int packId;

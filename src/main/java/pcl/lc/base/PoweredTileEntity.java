@@ -286,6 +286,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 		return Integer.MAX_VALUE;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void postIC2Update(boolean actionIsLoad) {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("Sending IC2 state."));
 		try {

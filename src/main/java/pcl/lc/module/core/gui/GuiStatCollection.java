@@ -22,6 +22,7 @@ public class GuiStatCollection extends GuiScreen {
 		this.analytics = analytics;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
 		Keyboard.enableRepeatEvents(true);

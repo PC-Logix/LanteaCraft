@@ -310,6 +310,7 @@ public class StargateMultiblock extends GenericMultiblock {
 		return packet;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void unpack(ModPacket packet) {
 		StandardModPacket packetStandard = (StandardModPacket) packet;

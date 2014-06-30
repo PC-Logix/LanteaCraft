@@ -131,6 +131,7 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 				(int) Math.floor(connectionTo.y), (int) Math.floor(connectionTo.z));
 	}
 
+	@SuppressWarnings("unchecked")
 	public void buildTeleportingEntityList() {
 		boundingEntities.clear();
 		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(xCoord - 2, yCoord, zCoord - 2, xCoord + 2, yCoord + 3,

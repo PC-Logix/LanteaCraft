@@ -72,6 +72,7 @@ public class AbydosChunkManager extends WorldChunkManager {
 		return loadBlockGeneratorData(par1ArrayOfBiomeGenBase, par2, par3, par4, par5);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public ChunkPosition findBiomePosition(int p_150795_1_, int p_150795_2_, int p_150795_3_, List p_150795_4_,
 			Random p_150795_5_) {
@@ -83,6 +84,7 @@ public class AbydosChunkManager extends WorldChunkManager {
 	/**
 	 * checks given Chunk's Biomes against List of allowed ones
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean areBiomesViable(int par1, int par2, int par3, List par4List) {
 		return par4List.contains(biomeGenerator);

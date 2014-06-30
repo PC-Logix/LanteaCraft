@@ -49,6 +49,7 @@ public class BlockLanteaOre extends BlockOre {
 		return ModuleCore.Items.lanteaOreItem;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < OreTypes.values().length; i++)

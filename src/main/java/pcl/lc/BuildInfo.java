@@ -6,6 +6,7 @@ package pcl.lc;
  * 
  * @author AfterLifeLochie
  */
+@SuppressWarnings("unused")
 public class BuildInfo {
 	public static final String modName = "LanteaCraft";
 	public static final String modID = "LanteaCraft";

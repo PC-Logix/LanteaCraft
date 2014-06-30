@@ -65,6 +65,7 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < 1; i++)

@@ -239,6 +239,7 @@ public class LanteaCraftCommonProxy {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public int getRenderMode() {
 		int mode = ((ConfigValue<Integer>) getConfigValue("renderQuality")).getValue();
 		if (mode == 16 || mode == 32 || mode == 64 || mode == 128)
@@ -246,31 +247,14 @@ public class LanteaCraftCommonProxy {
 		return 32;
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean isUsingModels() {
 		return ((ConfigValue<Boolean>) getConfigValue("renderUseModels")).getValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean doExplosion() {
 		return ((ConfigValue<Boolean>) getConfigValue("doGateExplosion")).getValue();
-	}
-
-	/**
-	 * @deprecated Tagged for deletion (unused locally, verify needed)
-	 */
-	@Deprecated
-	private Object createGuiElement(Class<?> cls, EntityPlayer player, World world, int x, int y, int z) {
-		try {
-			try {
-				return cls.getMethod("create", EntityPlayer.class, World.class, int.class, int.class, int.class)
-						.invoke(null, player, world, x, y, z);
-			} catch (NoSuchMethodException e) {
-				return cls.getConstructor(EntityPlayer.class, World.class, int.class, int.class, int.class)
-						.newInstance(player, world, x, y, z);
-			}
-		} catch (Exception e) {
-			LanteaCraft.getLogger().log(Level.FATAL, "Failed to create GUI element, an exception occured.", e);
-			return null;
-		}
 	}
 
 	public int addVillager(int id, String name, ResourceLocation skin) {

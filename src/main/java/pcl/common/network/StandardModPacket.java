@@ -197,6 +197,7 @@ public class StandardModPacket extends ModPacket {
 	 * @throws IOException
 	 *             Any write exception
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void writeValue(Object o, DataOutputStream data) throws IOException {
 		int intValueOf = ModPacket.getGenericID(o.getClass());
 		if (intValueOf == -1) {
@@ -443,6 +444,7 @@ public class StandardModPacket extends ModPacket {
 		return result.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -467,6 +469,7 @@ public class StandardModPacket extends ModPacket {
 		buffer.writeBytes(output.toByteArray());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
 		byte[] b = new byte[buffer.readableBytes() - buffer.readerIndex()];

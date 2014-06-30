@@ -173,7 +173,7 @@ public class OpenComputersWrapperPool {
 					node.sendToReachable("computer.signal", "sgChevronEncode", access.getEncodedChevrons());
 					break;
 				case Transient:
-					if (access.getState() != access.getState().Connected) {
+					if (access.getState() != EnumStargateState.Connected) {
 						node.sendToReachable("computer.signal", "sgChevronEncode", access.getEncodedChevrons());
 						node.sendToReachable("computer.signal", "sgWormholeOpening", true);
 					}

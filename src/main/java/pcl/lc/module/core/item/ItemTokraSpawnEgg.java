@@ -146,20 +146,23 @@ public class ItemTokraSpawnEgg extends Item {
 		return true;
 	}
 
+	/**
+	 * Gets an icon index based on an item's damage value and the given render
+	 * pass
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	/**
-	 * Gets an icon index based on an item's damage value and the given render pass
-	 */
 	public IIcon getIconFromDamageForRenderPass(int par1, int par2) {
 		return par2 > 0 ? theIcon : super.getIconFromDamageForRenderPass(par1, par2);
 	}
 
+	/**
+	 * returns a list of items with the same ID, but different meta (eg: dye
+	 * returns 16 items)
+	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	@SideOnly(Side.CLIENT)
-	/**
-	 * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
-	 */
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List par3List) {
 		super.getSubItems(item, par2CreativeTabs, par3List);
 	}

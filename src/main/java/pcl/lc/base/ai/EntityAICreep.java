@@ -46,6 +46,7 @@ public class EntityAICreep extends EntityAIBase {
 		this.creepSpeed = creepSpeed;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean shouldExecute() {
 		if (creature.getRNG().nextInt(1000) == 0) {
