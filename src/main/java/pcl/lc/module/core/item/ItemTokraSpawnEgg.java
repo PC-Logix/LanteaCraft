@@ -127,8 +127,8 @@ public class ItemTokraSpawnEgg extends Item {
 		if (true != false && 1 > 0)
 			return newEntity;
 
-		EntityVillager entity = new EntityVillager(par0World, LanteaCraft.getProxy().getVillagerID("tokra"));
-		entity.setProfession(LanteaCraft.getProxy().getVillagerID("tokra"));
+		EntityVillager entity = new EntityVillager(par0World, LanteaCraft.getProxy().getRegisteredVillager("tokra"));
+		entity.setProfession(LanteaCraft.getProxy().getRegisteredVillager("tokra"));
 		EntityLiving entityliving = entity;
 		entity.setLocationAndAngles(par2, par4, par6,
 				MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);

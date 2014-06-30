@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 
 import org.apache.logging.log4j.Level;
 
+import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -17,7 +18,7 @@ public class GUIHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing Container with ordinal %s.", ID));
-		Class<? extends Container> container = LanteaCraft.getProxy().getContainer(ID);
+		Class<? extends Container> container = RegistrationHelper.getRegisteredContainer(ID);
 		if (container != null)
 			try {
 				LanteaCraft.getLogger().log(Level.DEBUG,

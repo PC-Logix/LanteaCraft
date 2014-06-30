@@ -60,7 +60,7 @@ public class ModulePower implements IModule {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
-		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(),
+		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(),
 				ContainerNaquadahGenerator.class);
 
 		if (event.getSide() == Side.CLIENT) {

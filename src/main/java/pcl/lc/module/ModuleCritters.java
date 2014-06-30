@@ -58,7 +58,7 @@ public class ModuleCritters implements IModule {
 		// true);
 
 		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft Tokra villagers...");
-		LanteaCraft.getProxy().tokraVillagerID = LanteaCraft.getProxy().addVillager(
+		LanteaCraft.getProxy().tokraVillagerID = RegistrationHelper.registerVillager(
 				LanteaCraft.getProxy().getConfig().getVillager("tokra"), "tokra",
 				LanteaCraft.getResource("textures/skins/tokra.png"));
 		RegistrationHelper.addTradeHandler(LanteaCraft.getProxy().tokraVillagerID, new TradeHandler());

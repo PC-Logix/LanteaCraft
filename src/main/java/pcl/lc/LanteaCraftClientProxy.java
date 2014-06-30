@@ -14,6 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Level;
 
 import pcl.common.helpers.CloakHandler;
+import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.base.network.ClientPacketHandler;
 import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.PacketLogger;
@@ -60,13 +61,9 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	}
 
 	public void registerScreens() {
-		addScreen(LanteaCraft.EnumGUIs.StargateBase, ScreenStargateBase.class);
-		addScreen(LanteaCraft.EnumGUIs.StargateControllerEnergy, ScreenStargateControllerEnergy.class);
-		addScreen(LanteaCraft.EnumGUIs.NaquadahGenerator, ScreenNaquadahGenerator.class);
-	}
-
-	void addScreen(Enum<?> id, Class<? extends GuiScreen> cls) {
-		registeredGUIs.put(id.ordinal(), cls);
+		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ScreenStargateBase.class);
+		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), ScreenStargateControllerEnergy.class);
+		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ScreenNaquadahGenerator.class);
 	}
 
 	public void spawnEffect(EntityFX effect) {

@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.GUIHandler;
 
@@ -16,7 +17,7 @@ public class GUIHandlerClient extends GUIHandler {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing GUI with ordinal %s.", ID));
-		Class<? extends GuiScreen> gui = LanteaCraft.getProxy().getGUI(ID);
+		Class<? extends GuiScreen> gui = RegistrationHelper.getRegisteredGui(ID);
 		if (gui != null)
 			try {
 				LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing GUI of class %s.", gui.getName()));

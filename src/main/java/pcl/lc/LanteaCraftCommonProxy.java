@@ -10,7 +10,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
@@ -85,21 +84,9 @@ public class LanteaCraftCommonProxy {
 	protected WorldLog worldLogger;
 
 	private ServerTickHandler serverTickHandler = new ServerTickHandler(versionHelper);
-
-	protected Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
-	protected Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
-	protected Map<String, VillagerMapping> registeredVillagers = new HashMap<String, VillagerMapping>();
 	public int tokraVillagerID;
 
-	protected class VillagerMapping {
-		public final int villagerID;
-		public final ResourceLocation villagerSkin;
-
-		public VillagerMapping(int id, ResourceLocation skin) {
-			villagerID = id;
-			villagerSkin = skin;
-		}
-	};
+	
 
 	protected ModuleManager moduleManager;
 
@@ -254,33 +241,6 @@ public class LanteaCraftCommonProxy {
 	@SuppressWarnings("unchecked")
 	public boolean doExplosion() {
 		return ((ConfigValue<Boolean>) getConfigValue("doGateExplosion")).getValue();
-	}
-
-	public int addVillager(int id, String name, ResourceLocation skin) {
-		LanteaCraft.getLogger().log(Level.DEBUG, "Adding villager ID " + id + " with name " + name);
-		registeredVillagers.put(name, new VillagerMapping(id, skin));
-		return id;
-	}
-
-	public void addContainer(int id, Class<? extends Container> cls) {
-		LanteaCraft.getLogger().log(Level.DEBUG,
-				"Registering container with ID " + id + ", class " + cls.getCanonicalName());
-		registeredContainers.put(id, cls);
-	}
-
-	public Class<? extends Container> getContainer(int id) {
-		return registeredContainers.get(id);
-	}
-
-	public Class<? extends GuiScreen> getGUI(int id) {
-		return registeredGUIs.get(id);
-	}
-
-	public int getVillagerID(String name) {
-		VillagerMapping villager = registeredVillagers.get(name);
-		if (villager != null)
-			return villager.villagerID;
-		return 0;
 	}
 
 	public void handlePacket(ModPacket modPacket, EntityPlayer player) {

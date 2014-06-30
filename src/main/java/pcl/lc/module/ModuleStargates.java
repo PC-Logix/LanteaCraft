@@ -147,8 +147,8 @@ public class ModuleStargates implements IModule {
 				new ItemStack(net.minecraft.init.Items.dye, 1, 14), 'r', net.minecraft.init.Items.redstone, 'd',
 				net.minecraft.init.Items.diamond);
 
-		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
-		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(),
+		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
+		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(),
 				ContainerStargateControllerEnergy.class);
 
 		if (event.getSide() == Side.CLIENT) {

@@ -1,14 +1,19 @@
 package pcl.common.helpers;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.oredict.OreDictionary;
@@ -31,6 +36,18 @@ import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 public class RegistrationHelper {
 
 	private static boolean isLateRegistrationZone = false;
+	private static class VillagerMapping {
+		public final int villagerID;
+		public final ResourceLocation villagerSkin;
+
+		public VillagerMapping(int id, ResourceLocation skin) {
+			villagerID = id;
+			villagerSkin = skin;
+		}
+	};
+	private static Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
+	private static Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
+	private static Map<String, VillagerMapping> registeredVillagers = new HashMap<String, VillagerMapping>();
 
 	/**
 	 * Marks the RegistrationHelper in the PostInit phase. If any registration
@@ -312,5 +329,38 @@ public class RegistrationHelper {
 			LanteaCraft.getLogger().log(Level.FATAL, "Failed to register stair decal, an exception occured.", e);
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static int registerVillager(int id, String name, ResourceLocation skin) {
+		LanteaCraft.getLogger().log(Level.DEBUG, "Adding villager ID " + id + " with name " + name);
+		registeredVillagers.put(name, new VillagerMapping(id, skin));
+		return id;
+	}
+
+	public static void registerContainer(int id, Class<? extends Container> cls) {
+		LanteaCraft.getLogger().log(Level.DEBUG,
+				"Registering container with ID " + id + ", class " + cls.getCanonicalName());
+		registeredContainers.put(id, cls);
+	}
+	
+	public static void registerGui(int id, Class<? extends GuiScreen> cls) {
+		LanteaCraft.getLogger().log(Level.DEBUG,
+				"Registering GUI with ID " + id + ", class " + cls.getCanonicalName());
+		registeredGUIs.put(id, cls);
+	}
+
+	public static Class<? extends Container> getRegisteredContainer(int id) {
+		return registeredContainers.get(id);
+	}
+
+	public static Class<? extends GuiScreen> getRegisteredGui(int id) {
+		return registeredGUIs.get(id);
+	}
+
+	public static int getRegisteredVillager(String name) {
+		VillagerMapping villager = registeredVillagers.get(name);
+		if (villager != null)
+			return villager.villagerID;
+		return 0;
 	}
 }
