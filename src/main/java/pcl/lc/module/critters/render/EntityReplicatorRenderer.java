@@ -1,4 +1,4 @@
-package pcl.lc.render.entities;
+package pcl.lc.module.critters.render;
 
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;

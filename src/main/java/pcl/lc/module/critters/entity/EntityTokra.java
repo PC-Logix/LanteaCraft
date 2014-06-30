@@ -1,4 +1,4 @@
-package pcl.lc.entity;
+package pcl.lc.module.critters.entity;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;

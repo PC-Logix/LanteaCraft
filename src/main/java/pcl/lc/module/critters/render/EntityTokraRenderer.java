@@ -1,4 +1,4 @@
-package pcl.lc.render.entities;
+package pcl.lc.module.critters.render;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
-import pcl.lc.entity.EntityTokra;
+import pcl.lc.module.critters.entity.EntityTokra;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

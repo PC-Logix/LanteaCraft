@@ -1,4 +1,4 @@
-package pcl.lc.render.entities;
+package pcl.lc.module.critters.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;

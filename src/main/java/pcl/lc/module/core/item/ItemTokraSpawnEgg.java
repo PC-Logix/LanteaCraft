@@ -20,7 +20,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
-import pcl.lc.entity.EntityReplicator;
+import pcl.lc.module.critters.entity.EntityReplicator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
