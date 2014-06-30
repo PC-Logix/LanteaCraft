@@ -1,4 +1,4 @@
-package pcl.lc.render.tileentity;
+package pcl.lc.module.decor.render;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
-import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
+import pcl.lc.module.decor.tile.TileEntityLanteaDecorGlass;
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class TileEntityLanteaDecorGlassRenderer extends TileEntitySpecialRenderer {

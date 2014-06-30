@@ -1,4 +1,4 @@
-package pcl.lc.blocks;
+package pcl.lc.module.decor.block;
 
 import java.util.List;
 

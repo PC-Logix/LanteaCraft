@@ -1,4 +1,4 @@
-package pcl.lc.render.special;
+package pcl.lc.base;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

@@ -1,4 +1,4 @@
-package pcl.lc.tileentity;
+package pcl.lc.module.decor.tile;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

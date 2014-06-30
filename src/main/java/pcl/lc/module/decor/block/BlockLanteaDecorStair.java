@@ -1,4 +1,4 @@
-package pcl.lc.blocks;
+package pcl.lc.module.decor.block;
 
 import net.minecraft.block.BlockStairs;
 import pcl.lc.LanteaCraft;

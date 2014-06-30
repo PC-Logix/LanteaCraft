@@ -1,4 +1,4 @@
-package pcl.lc.blocks;
+package pcl.lc.module.decor.block;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
 import pcl.lc.module.ModuleCore;
-import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
+import pcl.lc.module.decor.tile.TileEntityLanteaDecorGlass;
 
 public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider {
 
