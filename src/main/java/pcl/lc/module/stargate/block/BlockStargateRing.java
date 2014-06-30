@@ -14,14 +14,14 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import pcl.common.multiblock.EnumOrientations;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerBlock;
+import pcl.lc.base.multiblock.EnumOrientations;
 import pcl.lc.module.ModuleStargates;
+import pcl.lc.module.stargate.StargateMultiblock;
 import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 import pcl.lc.module.stargate.tile.TileEntityStargateRing;
-import pcl.lc.multiblock.StargateMultiblock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

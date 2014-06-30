@@ -1,6 +1,6 @@
 package pcl.lc.module.stargate.render;
 
-import pcl.lc.core.GateAddressHelper;
+import pcl.lc.module.stargate.GateAddressHelper;
 
 public class StargateRenderConstants {
 

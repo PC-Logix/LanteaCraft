@@ -17,14 +17,14 @@ import org.apache.logging.log4j.Level;
 
 import pcl.common.helpers.CloakHandler;
 import pcl.common.network.ModPacket;
+import pcl.lc.base.network.ClientPacketHandler;
+import pcl.lc.base.network.PacketLogger;
 import pcl.lc.client.audio.ClientAudioEngine;
 import pcl.lc.core.ClientTickHandler;
-import pcl.lc.guis.ScreenNaquadahGenerator;
+import pcl.lc.module.power.gui.ScreenNaquadahGenerator;
 import pcl.lc.module.stargate.gui.ScreenStargateBase;
 import pcl.lc.module.stargate.gui.ScreenStargateController;
 import pcl.lc.module.stargate.gui.ScreenStargateControllerEnergy;
-import pcl.lc.network.ClientPacketHandler;
-import pcl.lc.network.PacketLogger;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

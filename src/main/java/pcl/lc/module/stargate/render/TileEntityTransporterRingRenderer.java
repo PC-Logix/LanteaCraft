@@ -8,8 +8,8 @@ import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.module.ModuleStargates;
+import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
-import pcl.lc.multiblock.TransporterRingMultiblock;
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class TileEntityTransporterRingRenderer extends TileEntitySpecialRenderer {

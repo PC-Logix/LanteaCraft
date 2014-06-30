@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import pcl.common.multiblock.EnumOrientations;
 import pcl.common.network.IStreamPackable;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
@@ -14,6 +13,7 @@ import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.api.EnumStargateState;
+import pcl.lc.base.multiblock.EnumOrientations;
 
 /**
  * Generic network helper registry, this is where I chose to dump them as I

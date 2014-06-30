@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
-import pcl.lc.guis.GuiJacksonNotebook;
+import pcl.lc.module.core.gui.GuiJacksonNotebook;
 
 public class ItemJacksonNotebook extends Item {
 

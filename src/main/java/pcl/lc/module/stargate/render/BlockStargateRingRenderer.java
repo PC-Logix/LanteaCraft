@@ -4,10 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import pcl.lc.base.GenericBlockRenderer;
+import pcl.lc.module.stargate.StargateMultiblock;
+import pcl.lc.module.stargate.StargatePart;
 import pcl.lc.module.stargate.block.BlockStargateRing;
 import pcl.lc.module.stargate.tile.TileEntityStargateRing;
-import pcl.lc.multiblock.StargateMultiblock;
-import pcl.lc.multiblock.StargatePart;
 
 public class BlockStargateRingRenderer extends GenericBlockRenderer {
 

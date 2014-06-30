@@ -19,7 +19,7 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.base.GenericContainerGUI;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
-import pcl.lc.core.GateAddressHelper;
+import pcl.lc.module.stargate.GateAddressHelper;
 import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 import pcl.lc.module.stargate.tile.TileEntityStargateController;
 

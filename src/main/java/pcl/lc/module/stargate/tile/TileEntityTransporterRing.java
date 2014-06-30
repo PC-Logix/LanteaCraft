@@ -6,8 +6,8 @@ import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericTileEntity;
-import pcl.lc.multiblock.TransporterRingMultiblock;
-import pcl.lc.multiblock.TransporterRingPart;
+import pcl.lc.module.stargate.TransporterRingMultiblock;
+import pcl.lc.module.stargate.TransporterRingPart;
 
 public class TileEntityTransporterRing extends GenericTileEntity implements IPacketHandler {
 

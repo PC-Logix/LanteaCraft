@@ -5,7 +5,7 @@ import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericTileEntity;
-import pcl.lc.multiblock.StargatePart;
+import pcl.lc.module.stargate.StargatePart;
 
 public class TileEntityStargateRing extends GenericTileEntity implements IPacketHandler {
 	private StargatePart part = new StargatePart(this);

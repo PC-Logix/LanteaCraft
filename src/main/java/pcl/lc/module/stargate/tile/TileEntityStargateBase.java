@@ -35,8 +35,6 @@ import net.minecraftforge.common.network.ForgeMessage.DimensionRegisterMessage;
 import org.apache.logging.log4j.Level;
 
 import pcl.common.helpers.ConfigurationHelper;
-import pcl.common.inventory.FilterRule;
-import pcl.common.inventory.FilteredInventory;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
@@ -51,17 +49,19 @@ import pcl.lc.api.EnumIrisState;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.base.GenericTileEntity;
+import pcl.lc.base.inventory.FilterRule;
+import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
-import pcl.lc.core.AddressingError;
-import pcl.lc.core.GateAddressHelper;
-import pcl.lc.core.StargateConnectionManager;
-import pcl.lc.core.StargateConnectionManager.ConnectionRequest;
 import pcl.lc.module.ModuleStargates;
+import pcl.lc.module.stargate.AddressingError;
+import pcl.lc.module.stargate.GateAddressHelper;
+import pcl.lc.module.stargate.StargateConnectionManager;
+import pcl.lc.module.stargate.StargateMultiblock;
+import pcl.lc.module.stargate.StargateConnectionManager.ConnectionRequest;
 import pcl.lc.module.stargate.block.BlockStargateBase;
 import pcl.lc.module.stargate.render.EventHorizonRenderer;
 import pcl.lc.module.stargate.render.StargateRenderConstants;
-import pcl.lc.multiblock.StargateMultiblock;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
 public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,

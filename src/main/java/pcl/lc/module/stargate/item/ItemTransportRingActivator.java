@@ -8,8 +8,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import pcl.common.helpers.ScanningHelper;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
-import pcl.lc.multiblock.TransporterRingMultiblock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

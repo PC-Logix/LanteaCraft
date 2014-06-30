@@ -9,8 +9,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.api.energy.IEnergyStore;
 import pcl.common.api.energy.IItemEnergyStore;
 import pcl.common.helpers.ConfigurationHelper;
-import pcl.common.inventory.FilterRule;
-import pcl.common.inventory.FilteredInventory;
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
@@ -20,6 +18,8 @@ import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.base.PoweredTileEntity;
+import pcl.lc.base.inventory.FilterRule;
+import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.stargate.block.BlockStargateController;
 

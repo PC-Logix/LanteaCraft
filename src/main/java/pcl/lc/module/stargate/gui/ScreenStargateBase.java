@@ -15,10 +15,10 @@ import org.lwjgl.opengl.GL11;
 import pcl.common.util.ImmutablePair;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerGUI;
-import pcl.lc.core.AddressingError;
-import pcl.lc.core.AddressingError.CoordRangeError;
-import pcl.lc.core.AddressingError.DimensionRangeError;
-import pcl.lc.guis.IconButtonRenderer;
+import pcl.lc.base.render.IconButtonRenderer;
+import pcl.lc.module.stargate.AddressingError;
+import pcl.lc.module.stargate.AddressingError.CoordRangeError;
+import pcl.lc.module.stargate.AddressingError.DimensionRangeError;
 import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 
 public class ScreenStargateBase extends GenericContainerGUI {

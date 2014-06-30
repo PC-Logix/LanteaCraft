@@ -7,7 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import pcl.lc.LanteaCraft;
-import pcl.lc.guis.GlyphRenderer;
+import pcl.lc.base.render.GlyphRenderer;
 
 public abstract class GenericContainerGUI extends GuiContainer {
 
