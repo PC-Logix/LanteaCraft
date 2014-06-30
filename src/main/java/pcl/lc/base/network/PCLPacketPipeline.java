@@ -1,4 +1,4 @@
-package pcl.common.network;
+package pcl.lc.base.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

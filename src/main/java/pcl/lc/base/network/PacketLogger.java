@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 
 public class PacketLogger {

@@ -1,6 +1,5 @@
-package pcl.common.api.energy;
+package pcl.lc.base.energy;
 
-import pcl.lc.base.energy.EnergyGrid;
 
 public interface IEnergyGridNode extends IEnergyHandler {
 

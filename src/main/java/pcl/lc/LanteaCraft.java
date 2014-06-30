@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import pcl.common.helpers.CreativeTabHelper;
 import pcl.common.helpers.SpecialBucketHandler;
-import pcl.common.network.PCLPacketPipeline;
+import pcl.lc.base.network.PCLPacketPipeline;
 import pcl.lc.module.ModuleCore;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;

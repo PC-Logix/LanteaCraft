@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import pcl.common.helpers.ScanningHelper;
-import pcl.common.network.ModPacket;
-import pcl.common.network.StandardModPacket;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.base.multiblock.GenericMultiblock;
 import pcl.lc.base.multiblock.MultiblockPart;
+import pcl.lc.base.network.ModPacket;
+import pcl.lc.base.network.StandardModPacket;
 import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
 
 public class TransporterRingPart extends MultiblockPart {

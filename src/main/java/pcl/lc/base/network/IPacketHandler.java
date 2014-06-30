@@ -1,4 +1,4 @@
-package pcl.common.network;
+package pcl.lc.base.network;
 
 /**
  * Handles an incoming packet for which the destination is this location

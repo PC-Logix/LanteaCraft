@@ -1,4 +1,4 @@
-package pcl.common.network;
+package pcl.lc.base.network;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

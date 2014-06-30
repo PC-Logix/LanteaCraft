@@ -4,8 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-import pcl.common.network.ModPacket;
-import pcl.common.network.StandardModPacket;
 import pcl.common.util.WorldLocation;
 import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 

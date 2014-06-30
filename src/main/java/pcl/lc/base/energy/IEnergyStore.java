@@ -1,4 +1,4 @@
-package pcl.common.api.energy;
+package pcl.lc.base.energy;
 
 import net.minecraft.nbt.NBTTagCompound;
 

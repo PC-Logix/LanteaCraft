@@ -16,8 +16,8 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Level;
 
 import pcl.common.helpers.CloakHandler;
-import pcl.common.network.ModPacket;
 import pcl.lc.base.network.ClientPacketHandler;
+import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.PacketLogger;
 import pcl.lc.client.audio.ClientAudioEngine;
 import pcl.lc.core.ClientTickHandler;

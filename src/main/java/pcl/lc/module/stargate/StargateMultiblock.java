@@ -9,8 +9,6 @@ import net.minecraft.world.World;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.network.ModPacket;
-import pcl.common.network.StandardModPacket;
 import pcl.common.util.ImmutablePair;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
@@ -19,6 +17,8 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.base.multiblock.EnumOrientations;
 import pcl.lc.base.multiblock.GenericMultiblock;
 import pcl.lc.base.multiblock.MultiblockPart;
+import pcl.lc.base.network.ModPacket;
+import pcl.lc.base.network.StandardModPacket;
 import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.tile.TileEntityStargateRing;

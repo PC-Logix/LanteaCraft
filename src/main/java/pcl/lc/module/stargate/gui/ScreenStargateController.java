@@ -11,12 +11,12 @@ import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import pcl.common.network.StandardModPacket;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.base.GenericContainerGUI;
+import pcl.lc.base.network.StandardModPacket;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
 import pcl.lc.module.stargate.GateAddressHelper;

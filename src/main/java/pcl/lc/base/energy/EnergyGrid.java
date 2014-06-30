@@ -4,8 +4,6 @@ import java.util.LinkedHashSet;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import pcl.common.api.energy.IEnergyGridNode;
-import pcl.common.api.energy.IEnergyStore;
 
 public class EnergyGrid {
 	private class GridStorage implements IEnergyStore {

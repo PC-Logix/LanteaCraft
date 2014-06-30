@@ -2,10 +2,10 @@ package pcl.lc.module.stargate.tile;
 
 import net.minecraft.network.Packet;
 import net.minecraft.util.AxisAlignedBB;
-import pcl.common.network.IPacketHandler;
-import pcl.common.network.ModPacket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericTileEntity;
+import pcl.lc.base.network.IPacketHandler;
+import pcl.lc.base.network.ModPacket;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.TransporterRingPart;
 

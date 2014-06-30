@@ -7,8 +7,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import pcl.common.network.ModPacket;
 import pcl.common.util.WorldLocation;
+import pcl.lc.base.network.ModPacket;
 
 /**
  * Packet to calculate and send Observable state changes.
