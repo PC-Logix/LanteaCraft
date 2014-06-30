@@ -1,4 +1,4 @@
-package pcl.common.helpers;
+package pcl.lc.core;
 
 import java.lang.reflect.Constructor;
 
@@ -36,7 +36,7 @@ public class GUIHandler implements IGuiHandler {
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		return LanteaCraft.getProxy().getGuiElement(ID, player, world, x, y, z);
+		return null;
 	}
 
 }

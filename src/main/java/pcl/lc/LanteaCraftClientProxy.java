@@ -17,6 +17,7 @@ import pcl.common.helpers.CloakHandler;
 import pcl.lc.base.network.ClientPacketHandler;
 import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.PacketLogger;
+import pcl.lc.client.GUIHandlerClient;
 import pcl.lc.client.audio.ClientAudioEngine;
 import pcl.lc.core.ClientTickHandler;
 import pcl.lc.module.power.gui.ScreenNaquadahGenerator;
@@ -52,6 +53,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		FMLCommonHandler.instance().bus().register(clientTickHandler);
 		audioContext = new ClientAudioEngine();
 		audioContext.initialize();
+		guiHandler = new GUIHandlerClient();
 		MinecraftForge.EVENT_BUS.register(audioContext);
 		clientTickHandler.registerTickHost(audioContext);
 		registerScreens();
@@ -69,23 +71,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	public void spawnEffect(EntityFX effect) {
 		Minecraft.getMinecraft().effectRenderer.addEffect(effect);
-	}
-
-	@Override
-	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing GUI with ordinal %s.", ID));
-		Class<? extends GuiScreen> gui = LanteaCraft.getProxy().getGUI(ID);
-		if (gui != null)
-			try {
-				LanteaCraft.getLogger().log(Level.DEBUG, String.format("Initializing GUI of class %s.", gui.getName()));
-				TileEntity entity = world.getTileEntity(x, y, z);
-				Constructor<?> constr = gui.getConstructor(new Class<?>[] { entity.getClass(), EntityPlayer.class });
-				Object val = constr.newInstance(entity, player);
-				return val;
-			} catch (Throwable t) {
-				LanteaCraft.getLogger().log(Level.FATAL, String.format("Failed to create GUI with ID %s", ID), t);
-			}
-		return null;
 	}
 
 	@Override

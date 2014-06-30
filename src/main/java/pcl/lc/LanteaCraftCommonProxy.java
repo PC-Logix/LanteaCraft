@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Level;
 import pcl.common.helpers.AnalyticsHelper;
 import pcl.common.helpers.ConfigValue;
 import pcl.common.helpers.ConfigurationHelper;
-import pcl.common.helpers.GUIHandler;
 import pcl.common.helpers.NetworkHelpers;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.common.helpers.VersionHelper;
@@ -33,6 +32,7 @@ import pcl.lc.base.worldgen.NaquadahOreWorldGen;
 import pcl.lc.client.audio.AudioEngine;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.core.GUIHandler;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.ServerTickHandler;
 import pcl.lc.core.WorldLog;
@@ -72,6 +72,7 @@ public class LanteaCraftCommonProxy {
 	protected PacketLogger clientPacketLogger;
 	protected ServerPacketHandler serverPacketHandler;
 	protected PacketLogger serverPacketLogger;
+	protected GUIHandler guiHandler;
 
 	private NetworkHelpers networkHelpers;
 	private UpgradeHelper upgradeHelper;
@@ -135,8 +136,8 @@ public class LanteaCraftCommonProxy {
 		serverTickHandler.registerTickHost(remoteChunkManager);
 		serverTickHandler.registerTickHost(stargateConnectionManager);
 		audioContext = new AudioEngine();
+		guiHandler = new GUIHandler();
 
-		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
 		FMLCommonHandler.instance().bus().register(serverTickHandler);
 		networkHelpers.init();
 		moduleManager.init(e);
@@ -146,6 +147,7 @@ public class LanteaCraftCommonProxy {
 		RegistrationHelper.flagLateRegistrationZone();
 		if (config.extended)
 			config.save();
+		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.getInstance(), guiHandler);
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft done setting up!");
 
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft looking for other versions of SGCraft...");
@@ -268,10 +270,6 @@ public class LanteaCraftCommonProxy {
 
 	public Class<? extends Container> getContainer(int id) {
 		return registeredContainers.get(id);
-	}
-
-	public Object getGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		return null;
 	}
 
 	public Class<? extends GuiScreen> getGUI(int id) {

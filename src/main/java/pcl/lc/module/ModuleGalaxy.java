@@ -39,11 +39,17 @@ public class ModuleGalaxy implements IModule {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
-		DimensionManager.registerProviderType(__TMP_ABYDOS_IDX, AbydosWorldProvider.class, false);
-		DimensionManager.registerDimension(__TMP_ABYDOS_IDX, __TMP_ABYDOS_IDX);
-		MapGenStructureIO.registerStructure(MapGenFeatureStructureStart.class, LanteaCraft.getAssetKey()
-				+ ":LanteaCraft");
-		MapGenStructureIO.func_143031_a(AbydosPyramid.class, LanteaCraft.getAssetKey() + ":AbydosPyramid");
+		/**
+		 * TODO: Move to GalaxyProvider after configs.
+		 * DimensionManager.registerProviderType(__TMP_ABYDOS_IDX,
+		 * AbydosWorldProvider.class, false);
+		 * DimensionManager.registerDimension(__TMP_ABYDOS_IDX,
+		 * __TMP_ABYDOS_IDX);
+		 * MapGenStructureIO.registerStructure(MapGenFeatureStructureStart
+		 * .class, LanteaCraft.getAssetKey() + ":LanteaCraft");
+		 * MapGenStructureIO.func_143031_a(AbydosPyramid.class,
+		 * LanteaCraft.getAssetKey() + ":AbydosPyramid");
+		 */
 	}
 
 	@Override
