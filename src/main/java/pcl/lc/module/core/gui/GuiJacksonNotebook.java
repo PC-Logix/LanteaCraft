@@ -26,6 +26,11 @@ public class GuiJacksonNotebook extends GuiScreen {
 	}
 
 	@Override
+	public boolean doesGuiPauseGame() {
+		return false;
+	}
+
+	@Override
 	public void drawScreen(int par1, int par2, float par3) {
 		super.drawScreen(par1, par2, par3);
 		GL11.glPushMatrix();

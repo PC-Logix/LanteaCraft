@@ -52,14 +52,6 @@ public class ItemDebugTool extends Item {
 		par2EntityPlayer.addChatMessage(new ChatComponentText("Data for (" + par4 + ", " + par5 + ", " + par6
 				+ ") side " + side + ":"));
 
-		if (par3World.isRemote) {
-			AudioEngine engine = LanteaCraft.getProxy().getAudioEngine();
-			AudioSource source = engine.create(this, new AudioPosition(par3World, new Vector3(par4, par5, par6)),
-					"weapon/goauld_staff_shot.ogg", false, false, 1.0F);
-			source.activate();
-			source.play();
-		}
-
 		TileEntity entity = par3World.getTileEntity(par4, par5, par6);
 		if (entity instanceof TileEntityStargateBase) {
 			TileEntityStargateBase base = (TileEntityStargateBase) entity;
