@@ -12,6 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleCore;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -20,8 +21,8 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 	protected IIcon[] fluidIcon;
 
 	public BlockLiquidNaquadah() {
-		super(LanteaCraft.Fluids.fluidLiquidNaquadah, Material.water);
-		LanteaCraft.Fluids.fluidLiquidNaquadah.setBlock(this);
+		super(ModuleCore.Fluids.fluidLiquidNaquadah, Material.water);
+		ModuleCore.Fluids.fluidLiquidNaquadah.setBlock(this);
 		setTickRandomly(true);
 	}
 

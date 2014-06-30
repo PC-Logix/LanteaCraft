@@ -8,9 +8,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import org.apache.logging.log4j.Level;
 
 import net.minecraftforge.common.ForgeVersion;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
@@ -64,7 +66,8 @@ public class AnalyticsHelper extends Thread {
 		while (tries < maxTries)
 			try {
 				tries++;
-				LanteaCraft.getLogger().log(Level.DEBUG, "Pushing metrics data (try " + tries + " of " + maxTries + ")");
+				LanteaCraft.getLogger()
+						.log(Level.DEBUG, "Pushing metrics data (try " + tries + " of " + maxTries + ")");
 				push();
 				LanteaCraft.getLogger().log(Level.DEBUG, "Done submitting anonymous data.");
 				return;

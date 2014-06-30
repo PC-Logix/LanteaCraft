@@ -13,6 +13,7 @@ public class GenericTeleporter extends Teleporter {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8) {
 		EntityPlayerMP player = (EntityPlayerMP) par1Entity;
 		WorldServer worldServer = player.mcServer.worldServerForDimension(par1Entity.dimension);

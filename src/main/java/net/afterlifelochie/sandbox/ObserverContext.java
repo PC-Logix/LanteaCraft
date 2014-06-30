@@ -18,6 +18,7 @@ public class ObserverContext {
 
 	/**
 	 * Get a new observer UID
+	 * 
 	 * @return A new Observer UID
 	 */
 	private static int getUID() {

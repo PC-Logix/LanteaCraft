@@ -3,6 +3,7 @@ package pcl.lc.module.integration;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
 import org.apache.logging.log4j.Level;
 
 import li.cil.oc.api.Network;
@@ -23,6 +24,9 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.api.IStargateControllerAccess;
+import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.module.ModulePower;
+import pcl.lc.module.ModuleStargates;
 
 public class OpenComputersWrapperPool {
 
@@ -30,26 +34,34 @@ public class OpenComputersWrapperPool {
 		@Override
 		public boolean worksWith(World world, int x, int y, int z) {
 			Block theblock = world.getBlock(x, y, z);
-			return theblock.equals(LanteaCraft.Blocks.stargateBaseBlock)
-					|| theblock.equals(LanteaCraft.Blocks.naquadahGenerator)
-					|| theblock.equals(LanteaCraft.Blocks.stargateControllerBlock);
+			boolean flag = false;
+			if (!flag && Module.STARGATE.isLoaded())
+				flag = theblock.equals(ModuleStargates.Blocks.stargateBaseBlock)
+						|| theblock.equals(ModuleStargates.Blocks.stargateControllerBlock);
+			if (!flag && Module.POWER.isLoaded())
+				flag = theblock.equals(ModulePower.Blocks.naquadahGenerator);
+			return flag;
 		}
 
 		@Override
 		public ManagedEnvironment createEnvironment(World world, int x, int y, int z) {
 			Block theblock = world.getBlock(x, y, z);
 			try {
-				if (theblock.equals(LanteaCraft.Blocks.stargateBaseBlock)) {
-					IStargateAccess base = (IStargateAccess) world.getTileEntity(x, y, z);
-					return new OpenComputersWrapperPool.StargateAccessWrapper(base);
-				} else if (theblock.equals(LanteaCraft.Blocks.naquadahGenerator)) {
-					INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getTileEntity(x, y, z);
-					return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
-				} else if (theblock.equals(LanteaCraft.Blocks.stargateControllerBlock)) {
-					IStargateControllerAccess dhd = (IStargateControllerAccess) world.getTileEntity(x, y, z);
-					return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
-				} else
-					throw new RuntimeException("Driver.Block handler specified invalid typeof!");
+				if (Module.STARGATE.isLoaded())
+					if (theblock.equals(ModuleStargates.Blocks.stargateBaseBlock)) {
+						IStargateAccess base = (IStargateAccess) world.getTileEntity(x, y, z);
+						return new OpenComputersWrapperPool.StargateAccessWrapper(base);
+					} else if (theblock.equals(ModuleStargates.Blocks.stargateControllerBlock)) {
+						IStargateControllerAccess dhd = (IStargateControllerAccess) world.getTileEntity(x, y, z);
+						return new OpenComputersWrapperPool.StargateControllerAccessWrapper(dhd);
+					}
+				if (Module.POWER.isLoaded())
+					if (theblock.equals(ModulePower.Blocks.naquadahGenerator)) {
+						INaquadahGeneratorAccess generator = (INaquadahGeneratorAccess) world.getTileEntity(x, y, z);
+						return new OpenComputersWrapperPool.NaquadahGeneratorAccessWrapper(generator);
+					}
+
+				throw new RuntimeException("Driver.Block handler specified invalid typeof!");
 			} catch (Throwable t) {
 				LanteaCraft.getLogger().log(Level.WARN,
 						"Failed when handling OpenComputers createEnvironment request.", t);

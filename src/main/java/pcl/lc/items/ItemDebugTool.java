@@ -1,7 +1,5 @@
 package pcl.lc.items;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -10,16 +8,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.audio.AudioEngine;
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.AudioSource;
 import pcl.common.base.GenericTeleporter;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
-import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.ModuleGalaxy;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import pcl.lc.tileentity.TileEntityStargateBase;
@@ -52,8 +51,7 @@ public class ItemDebugTool extends Item {
 			int par5, int par6, int par7, float par8, float par9, float par10) {
 		if (!par3World.isRemote) {
 			EntityPlayerMP player = (EntityPlayerMP) par2EntityPlayer;
-			player.mcServer.getConfigurationManager().transferPlayerToDimension((EntityPlayerMP) player,
-					((ModuleGalaxy) Module.GALAXY.moduleOf()).__TMP_ABYDOS_IDX,
+			player.mcServer.getConfigurationManager().transferPlayerToDimension(player, ModuleGalaxy.__TMP_ABYDOS_IDX,
 					new GenericTeleporter((WorldServer) par3World));
 		}
 

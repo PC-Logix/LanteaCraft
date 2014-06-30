@@ -2,11 +2,13 @@ package pcl.common.audio;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import org.apache.logging.log4j.Level;
+
 import paulscode.sound.SoundSystem;
 import pcl.common.util.Vector3;
 import pcl.lc.BuildInfo;

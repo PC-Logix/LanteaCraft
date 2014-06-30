@@ -2,10 +2,12 @@ package pcl.lc.worldgen.structure;
 
 import java.lang.reflect.Constructor;
 import java.util.Random;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureStart;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.lc.LanteaCraft;
 
 public class LanteaScatteredFeatureStart extends StructureStart {

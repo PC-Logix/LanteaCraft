@@ -3,12 +3,14 @@ package pcl.lc.worldgen;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.WeakHashMap;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkDataEvent;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.helpers.ConfigValue;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.OreTypes;

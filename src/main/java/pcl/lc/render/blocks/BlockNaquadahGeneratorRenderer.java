@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.common.render.GenericBlockRenderer;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModulePower;
 import pcl.lc.render.models.NaquadahGeneratorModel;
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -33,7 +34,7 @@ public class BlockNaquadahGeneratorRenderer extends GenericBlockRenderer {
 		if (!LanteaCraft.getProxy().isUsingModels())
 			super.renderInventoryBlock(block, metadata, modelID, rb);
 		else {
-			NaquadahGeneratorModel model = LanteaCraft.Render.modelNaquadahGenerator;
+			NaquadahGeneratorModel model = ModulePower.Render.modelNaquadahGenerator;
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glTranslatef(0.5f, 0.5f, 0.0f);

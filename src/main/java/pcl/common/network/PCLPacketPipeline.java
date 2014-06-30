@@ -11,6 +11,12 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraftforge.common.network.ForgeMessage;
 import pcl.lc.LanteaCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
@@ -19,13 +25,6 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraftforge.common.network.ForgeMessage;
-import net.minecraftforge.common.network.ForgeMessage.DimensionRegisterMessage;
 
 @ChannelHandler.Sharable
 public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, ModPacket> {
@@ -43,11 +42,10 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 	protected void encode(ChannelHandlerContext ctx, ModPacket msg, List<Object> out) throws Exception {
 		ByteBuf buffer = Unpooled.buffer();
 		Class<? extends ModPacket> clazz = msg.getClass();
-		if (!this.packets.contains(msg.getClass())) {
+		if (!packets.contains(msg.getClass()))
 			throw new NullPointerException("No Packet Registered for: " + msg.getClass().getCanonicalName());
-		}
 
-		byte discriminator = (byte) this.packets.indexOf(clazz);
+		byte discriminator = (byte) packets.indexOf(clazz);
 		buffer.writeByte(discriminator);
 		msg.encodeInto(ctx, buffer);
 		FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer.copy(), ctx.channel().attr(NetworkRegistry.FML_CHANNEL)
@@ -59,10 +57,9 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 	protected void decode(ChannelHandlerContext ctx, FMLProxyPacket msg, List<Object> out) throws Exception {
 		ByteBuf payload = msg.payload();
 		byte discriminator = payload.readByte();
-		Class<? extends ModPacket> clazz = this.packets.get(discriminator);
-		if (clazz == null) {
+		Class<? extends ModPacket> clazz = packets.get(discriminator);
+		if (clazz == null)
 			throw new NullPointerException("No packet registered for discriminator: " + discriminator);
-		}
 
 		ModPacket pkt = clazz.newInstance();
 		pkt.decodeFrom(ctx, payload.slice());
@@ -70,7 +67,7 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 		EntityPlayer player;
 		switch (FMLCommonHandler.instance().getEffectiveSide()) {
 		case CLIENT:
-			player = this.getClientPlayer();
+			player = getClientPlayer();
 			break;
 		case SERVER:
 			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
@@ -84,7 +81,7 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 	}
 
 	public void init(String channelName) {
-		this.channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
+		channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
 		registerPacket(TinyModPacket.class);
 		registerPacket(StandardModPacket.class);
 	}
@@ -95,16 +92,15 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 	}
 
 	public void sendToAll(ModPacket message) {
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.ALL);
-		this.channels.get(Side.SERVER).writeAndFlush(message);
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public void sendTo(ModPacket message, EntityPlayerMP player) {
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
 				.set(FMLOutboundHandler.OutboundTarget.PLAYER);
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-		this.channels.get(Side.SERVER).writeAndFlush(message);
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public void sendForgeMessageTo(ForgeMessage message, EntityPlayerMP player) {
@@ -115,22 +111,22 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 	}
 
 	public void sendToAllAround(ModPacket message, NetworkRegistry.TargetPoint point) {
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
 				.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
-		this.channels.get(Side.SERVER).writeAndFlush(message);
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
+		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public void sendToDimension(ModPacket message, int dimensionId) {
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
 				.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
-		this.channels.get(Side.SERVER).writeAndFlush(message);
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
+		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public void sendToServer(ModPacket message) {
-		this.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET)
+		channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET)
 				.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-		this.channels.get(Side.CLIENT).writeAndFlush(message);
+		channels.get(Side.CLIENT).writeAndFlush(message);
 	}
 }

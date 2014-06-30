@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.logging.log4j.Level;
-
 import net.afterlifelochie.sandbox.ObserverContext;
 import net.afterlifelochie.sandbox.WatchedValue;
 import net.minecraft.entity.Entity;
@@ -33,6 +31,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.network.ForgeMessage.DimensionRegisterMessage;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.audio.AudioPosition;
 import pcl.common.audio.SoundHost;
 import pcl.common.base.GenericTileEntity;
@@ -57,12 +58,11 @@ import pcl.lc.core.AddressingError;
 import pcl.lc.core.GateAddressHelper;
 import pcl.lc.core.StargateConnectionManager;
 import pcl.lc.core.StargateConnectionManager.ConnectionRequest;
+import pcl.lc.module.ModuleStargates;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.render.stargate.EventHorizonRenderer;
 import pcl.lc.render.stargate.StargateRenderConstants;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
 		ISidedInventory {
@@ -215,8 +215,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			}
 		};
 
-		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.iris, 1) }, null,
-				true, false));
+		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(ModuleStargates.Items.iris, 1) },
+				null, true, false));
 		getAsStructure().invalidate();
 	}
 

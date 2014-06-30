@@ -11,6 +11,9 @@ import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.dimension.MapGenFeatureStructureStart;
 import pcl.lc.dimension.abydos.AbydosPyramid;
 import pcl.lc.dimension.abydos.AbydosWorldProvider;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ModuleGalaxy implements IModule {
 
@@ -30,12 +33,12 @@ public class ModuleGalaxy implements IModule {
 	}
 
 	@Override
-	public void preInit() {
+	public void preInit(FMLPreInitializationEvent event) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void init() {
+	public void init(FMLInitializationEvent event) {
 		DimensionManager.registerProviderType(__TMP_ABYDOS_IDX, AbydosWorldProvider.class, false);
 		DimensionManager.registerDimension(__TMP_ABYDOS_IDX, __TMP_ABYDOS_IDX);
 		MapGenStructureIO.registerStructure(MapGenFeatureStructureStart.class, LanteaCraft.getAssetKey()
@@ -44,7 +47,7 @@ public class ModuleGalaxy implements IModule {
 	}
 
 	@Override
-	public void postInit() {
+	public void postInit(FMLPostInitializationEvent event) {
 		// TODO Auto-generated method stub
 
 	}

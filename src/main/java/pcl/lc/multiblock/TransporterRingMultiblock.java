@@ -186,7 +186,7 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 	@Override
 	public boolean isValidStructure(World worldAccess, int baseX, int baseY, int baseZ) {
 		int dx = -1, dz = -1;
-		for (int x = 0; x < 10; x++) {
+		for (int x = 0; x < 10; x++)
 			for (int z = 0; z < 10; z++) {
 				TileEntity tile = worldAccess.getTileEntity(x - 4, baseY, z - 4);
 				if (tile != null && tile instanceof TileEntityTransporterRing) {
@@ -196,7 +196,6 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 				}
 
 			}
-		}
 
 		if (dx == -1 || dz == -1)
 			return false;

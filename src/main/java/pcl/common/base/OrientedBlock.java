@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import pcl.common.util.Trans3;
-import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleCore;
 
 public abstract class OrientedBlock extends GenericContainerBlock {
 
@@ -15,8 +15,8 @@ public abstract class OrientedBlock extends GenericContainerBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockOrientedRenderer != null)
-			return LanteaCraft.Render.blockOrientedRenderer.renderID;
+		if (ModuleCore.Render.blockOrientedRenderer != null)
+			return ModuleCore.Render.blockOrientedRenderer.renderID;
 		return -9001;
 	}
 

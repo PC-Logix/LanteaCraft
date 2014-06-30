@@ -11,17 +11,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.base.RotationOrientedBlock;
 import pcl.common.multiblock.EnumOrientations;
 import pcl.common.multiblock.MultiblockPart;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleStargates;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.multiblock.StargatePart;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockStargateBase extends RotationOrientedBlock {
 	protected IIcon topAndBottomTexture;
@@ -69,8 +70,8 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockStargateBaseRenderer != null)
-			return LanteaCraft.Render.blockStargateBaseRenderer.renderID;
+		if (ModuleStargates.Render.blockStargateBaseRenderer != null)
+			return ModuleStargates.Render.blockStargateBaseRenderer.renderID;
 		return -9001;
 	}
 

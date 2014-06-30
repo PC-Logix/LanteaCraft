@@ -17,6 +17,9 @@ import pcl.lc.module.ModuleIntegration;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.ModuleWorldGenerator;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 /**
  * LanteaCraft module compartment manager.
@@ -73,7 +76,7 @@ public class ModuleManager {
 	/**
 	 * Pre-initialize the ModuleManager and all child Modules.
 	 */
-	public void preInit() {
+	public void preInit(FMLPreInitializationEvent event) {
 		Set<Module> modules = EnumSet.allOf(Module.class);
 		Iterator<Module> i = modules.iterator();
 		while (i.hasNext()) {
@@ -150,24 +153,24 @@ public class ModuleManager {
 
 		for (Module mod : loadedModules) {
 			mod.loaded = true;
-			mod.moduleOf().preInit();
+			mod.moduleOf().preInit(event);
 		}
 	}
 
 	/**
 	 * Initialize all child modules.
 	 */
-	public void init() {
+	public void init(FMLInitializationEvent event) {
 		for (Module mod : loadedModules)
-			mod.moduleOf().init();
+			mod.moduleOf().init(event);
 	}
 
 	/**
 	 * Post-initialize all child modules.
 	 */
-	public void postInit() {
+	public void postInit(FMLPostInitializationEvent event) {
 		for (Module mod : loadedModules)
-			mod.moduleOf().postInit();
+			mod.moduleOf().postInit(event);
 	}
 
 	/**

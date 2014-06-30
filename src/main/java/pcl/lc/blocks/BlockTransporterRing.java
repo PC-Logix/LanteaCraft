@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.base.GenericContainerBlock;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleStargates;
 import pcl.lc.tileentity.TileEntityTransporterRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,8 +40,8 @@ public class BlockTransporterRing extends GenericContainerBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockTransporterRingRenderer != null)
-			return LanteaCraft.Render.blockTransporterRingRenderer.renderID;
+		if (ModuleStargates.Render.blockTransporterRingRenderer != null)
+			return ModuleStargates.Render.blockTransporterRingRenderer.renderID;
 		return -9001;
 	}
 
@@ -55,8 +56,7 @@ public class BlockTransporterRing extends GenericContainerBlock {
 	public void onBlockAdded(World world, int x, int y, int z) {
 		super.onBlockAdded(world, x, y, z);
 	}
-	
-	
+
 	@Override
 	public int damageDropped(int data) {
 		return data;

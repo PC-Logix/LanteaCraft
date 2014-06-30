@@ -2,11 +2,11 @@ package pcl.lc.guis;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
+import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 
 import pcl.common.helpers.AnalyticsHelper;

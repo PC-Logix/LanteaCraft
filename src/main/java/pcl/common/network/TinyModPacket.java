@@ -8,8 +8,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.apache.logging.log4j.Level;
-import java.util.logging.Logger;
 
 import pcl.common.util.WorldLocation;
 
@@ -62,6 +60,7 @@ public class TinyModPacket extends ModPacket {
 		return "TinyPacket";
 	}
 
+	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
 		buffer.writeByte((toServer) ? 1 : 0);
 		IStreamPackable<WorldLocation> packer = (IStreamPackable<WorldLocation>) ModPacket
@@ -77,6 +76,7 @@ public class TinyModPacket extends ModPacket {
 		buffer.writeBytes(outbuff.toByteArray());
 	}
 
+	@Override
 	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
 		byte[] b = new byte[buffer.readableBytes() - buffer.readerIndex()];
 		buffer.readBytes(b);

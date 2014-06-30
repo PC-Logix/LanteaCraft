@@ -2,28 +2,59 @@ package pcl.lc.module;
 
 import java.util.Set;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import pcl.common.helpers.RegistrationHelper;
-import pcl.lc.LanteaCraft.Blocks;
-import pcl.lc.LanteaCraft.Fluids;
-import pcl.lc.LanteaCraft.Items;
+import pcl.common.render.RotationOrientedBlockRenderer;
+import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.blocks.BlockLanteaOre;
 import pcl.lc.blocks.BlockOfLanteaOre;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.fluids.BlockLiquidNaquadah;
+import pcl.lc.fluids.ItemSpecialBucket;
 import pcl.lc.fluids.LiquidNaquadah;
+import pcl.lc.guis.WrittenFontRenderer;
 import pcl.lc.items.ItemBlockOfLanteaOre;
 import pcl.lc.items.ItemDebugTool;
+import pcl.lc.items.ItemJacksonNotebook;
 import pcl.lc.items.ItemLanteaOre;
 import pcl.lc.items.ItemLanteaOreBlock;
 import pcl.lc.items.ItemLanteaOreIngot;
 import pcl.lc.items.ItemTokraSpawnEgg;
+import pcl.lc.render.blocks.BlockVoidRenderer;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
 
 public class ModuleCore implements IModule {
+
+	public static class Blocks {
+		public static BlockLanteaOre lanteaOre;
+		public static BlockOfLanteaOre lanteaOreAsBlock;
+	}
+
+	public static class Items {
+		public static ItemLanteaOre lanteaOreItem;
+		public static ItemLanteaOreIngot lanteaOreIngot;
+		public static ItemJacksonNotebook jacksonNotebook;
+		public static ItemDebugTool debugger;
+		public static ItemTokraSpawnEgg tokraSpawnEgg;
+	}
+
+	public static class Fluids {
+		public static LiquidNaquadah fluidLiquidNaquadah;
+		public static BlockLiquidNaquadah fluidLiquidNaquadahHost;
+		public static ItemSpecialBucket fluidLiquidNaquadahBucket;
+	}
+
+	public static class Render {
+		public static RotationOrientedBlockRenderer blockOrientedRenderer;
+		public static BlockVoidRenderer blockVoidRenderer;
+		public static WrittenFontRenderer danielFontRenderer;
+	}
 
 	@Override
 	public Set<Module> getDependencies() {
@@ -36,12 +67,12 @@ public class ModuleCore implements IModule {
 	}
 
 	@Override
-	public void preInit() {
+	public void preInit(FMLPreInitializationEvent event) {
 
 	}
 
 	@Override
-	public void init() {
+	public void init(FMLInitializationEvent event) {
 		Blocks.lanteaOre = RegistrationHelper.registerBlock(BlockLanteaOre.class, ItemLanteaOreBlock.class,
 				"lanteaOreBlock");
 		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem");
@@ -83,10 +114,23 @@ public class ModuleCore implements IModule {
 
 		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreItem, 1), net.minecraft.init.Items.coal,
 				net.minecraft.init.Items.slime_ball, net.minecraft.init.Items.blaze_powder);
+
+		if (event.getSide() == Side.CLIENT) {
+			Render.blockOrientedRenderer = new RotationOrientedBlockRenderer();
+			RegistrationHelper.registerRenderer(Render.blockOrientedRenderer);
+
+			Render.blockVoidRenderer = new BlockVoidRenderer();
+			RegistrationHelper.registerRenderer(Render.blockVoidRenderer);
+
+			Render.danielFontRenderer = new WrittenFontRenderer(
+					LanteaCraft.getResource("textures/notebook/daniel.png"),
+					LanteaCraft.getResource("textures/notebook/daniel.metrics.xml"));
+			Render.danielFontRenderer.buildFont();
+		}
 	}
 
 	@Override
-	public void postInit() {
+	public void postInit(FMLPostInitializationEvent event) {
 
 	}
 

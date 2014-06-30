@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.common.render.GenericBlockRenderer;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleStargates;
 import pcl.lc.render.models.StargateControllerModel;
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -32,7 +33,7 @@ public class BlockStargateControllerRenderer extends GenericBlockRenderer {
 		if (!LanteaCraft.getProxy().isUsingModels())
 			super.renderInventoryBlock(block, metadata, modelID, rb);
 		else {
-			StargateControllerModel model = LanteaCraft.Render.modelController;
+			StargateControllerModel model = ModuleStargates.Render.modelController;
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glTranslatef(0.5f, 0.5f, 0.0f);

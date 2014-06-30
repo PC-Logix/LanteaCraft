@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModulePower;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -40,7 +41,7 @@ public class TileEntityNaquadahGeneratorRenderer extends TileEntitySpecialRender
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 			FMLClientHandler.instance().getClient().renderEngine.bindTexture(((TileEntityNaquadahGenerator) tileEntity)
 					.isActive() ? activeTexture : inactiveTexture);
-			LanteaCraft.Render.modelNaquadahGenerator.renderAll();
+			ModulePower.Render.modelNaquadahGenerator.renderAll();
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glPopMatrix();
 		}

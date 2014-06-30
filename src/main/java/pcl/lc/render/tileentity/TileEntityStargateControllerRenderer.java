@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleStargates;
 import cpw.mods.fml.client.FMLClientHandler;
 
 public class TileEntityStargateControllerRenderer extends TileEntitySpecialRenderer {
@@ -35,7 +36,7 @@ public class TileEntityStargateControllerRenderer extends TileEntitySpecialRende
 				GL11.glRotatef(dir * 180F, 0F, 1F, 0F);
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 			FMLClientHandler.instance().getClient().renderEngine.bindTexture(theTexture);
-			LanteaCraft.Render.modelController.renderAll();
+			ModuleStargates.Render.modelController.renderAll();
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glPopMatrix();
 		}

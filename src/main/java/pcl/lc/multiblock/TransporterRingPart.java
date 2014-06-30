@@ -12,7 +12,6 @@ import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
-import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityTransporterRing;
 
 public class TransporterRingPart extends MultiblockPart {
@@ -47,8 +46,8 @@ public class TransporterRingPart extends MultiblockPart {
 		if (!allowScanning)
 			return null;
 		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(-5, 0, -5, 5, 1, 5);
-		ArrayList<Vector3> entities = ScanningHelper.findAllTileEntitesOf(host.getWorldObj(), TileEntityTransporterRing.class,
-				host.xCoord, host.yCoord, host.zCoord, bounds);
+		ArrayList<Vector3> entities = ScanningHelper.findAllTileEntitesOf(host.getWorldObj(),
+				TileEntityTransporterRing.class, host.xCoord, host.yCoord, host.zCoord, bounds);
 		if (entities == null || entities.size() == 0)
 			return null;
 		Vector3 origin = new Vector3(host);
@@ -57,9 +56,8 @@ public class TransporterRingPart extends MultiblockPart {
 			TileEntity tile = host.getWorldObj().getTileEntity(apath.floorX(), apath.floorY(), apath.floorZ());
 			if (tile instanceof TileEntityTransporterRing) {
 				TileEntityTransporterRing ring = (TileEntityTransporterRing) tile;
-				if (ring.isHost()) {
+				if (ring.isHost())
 					return ring.getAsStructure();
-				}
 			}
 		}
 		return null;

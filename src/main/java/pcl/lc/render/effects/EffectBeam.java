@@ -1,12 +1,11 @@
 package pcl.lc.render.effects;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.World;
 
+import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
 import pcl.common.network.StandardModPacket;

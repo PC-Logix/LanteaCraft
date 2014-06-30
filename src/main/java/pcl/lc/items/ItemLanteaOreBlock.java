@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import pcl.lc.LanteaCraft.Blocks;
+import pcl.lc.module.ModuleCore;
 
 public class ItemLanteaOreBlock extends ItemBlock {
 
@@ -15,7 +15,7 @@ public class ItemLanteaOreBlock extends ItemBlock {
 
 	@Override
 	public IIcon getIconFromDamage(int i) {
-		return Blocks.lanteaOre.getIcon(0, i);
+		return ModuleCore.Blocks.lanteaOre.getIcon(0, i);
 	}
 
 	@Override

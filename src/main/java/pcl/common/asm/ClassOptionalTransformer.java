@@ -3,10 +3,10 @@ package pcl.common.asm;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
+import org.apache.logging.log4j.Level;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;

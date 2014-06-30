@@ -2,13 +2,14 @@ package pcl.common.base;
 
 import java.lang.reflect.Constructor;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.WorldEvent;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.asm.RuntimeAnnotation.RuntimeInterface;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
@@ -284,7 +285,7 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 	public int getMaxSafeInput() {
 		return Integer.MAX_VALUE;
 	}
-	
+
 	protected void postIC2Update(boolean actionIsLoad) {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("Sending IC2 state."));
 		try {
@@ -296,8 +297,9 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 						"ic2.api.energy.event.EnergyTileLoadEvent", false, getClass().getClassLoader());
 				Constructor<? extends WorldEvent> c_loadevent = clazz_loadevent
 						.getConstructor(new Class<?>[] { clazz_ic2energytile });
-				WorldEvent event = (WorldEvent) c_loadevent.newInstance(clazz_ic2energytile.cast(this));
-				LanteaCraft.getLogger().log(Level.INFO, String.format("Sending IC2 event class %s", event.getClass().getName()));
+				WorldEvent event = c_loadevent.newInstance(clazz_ic2energytile.cast(this));
+				LanteaCraft.getLogger().log(Level.INFO,
+						String.format("Sending IC2 event class %s", event.getClass().getName()));
 				MinecraftForge.EVENT_BUS.post(event);
 				addedToEnergyNet = true;
 			} else {
@@ -305,8 +307,9 @@ public abstract class PoweredTileEntity extends GenericTileEntity {
 						"ic2.api.energy.event.EnergyTileUnloadEvent", false, getClass().getClassLoader());
 				Constructor<? extends WorldEvent> c_unloadevent = clazz_loadevent
 						.getConstructor(new Class<?>[] { clazz_ic2energytile });
-				WorldEvent event = (WorldEvent) c_unloadevent.newInstance(clazz_ic2energytile.cast(this));
-				LanteaCraft.getLogger().log(Level.INFO, String.format("Sending IC2 event class %s", event.getClass().getName()));
+				WorldEvent event = c_unloadevent.newInstance(clazz_ic2energytile.cast(this));
+				LanteaCraft.getLogger().log(Level.INFO,
+						String.format("Sending IC2 event class %s", event.getClass().getName()));
 				MinecraftForge.EVENT_BUS.post(event);
 				addedToEnergyNet = false;
 			}

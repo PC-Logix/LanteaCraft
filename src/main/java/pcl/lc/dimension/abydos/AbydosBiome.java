@@ -8,20 +8,21 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenDesertWells;
 
 public class AbydosBiome extends BiomeGenBase {
-	
+
 	public AbydosBiome(int par1) {
 		super(par1);
-		this.topBlock = Blocks.sand;
-		this.biomeName = "AbydosSurface";
-		this.fillerBlock = Blocks.sand;
-		this.theBiomeDecorator.generateLakes = false;
-		this.theBiomeDecorator.treesPerChunk = -999;
-		this.theBiomeDecorator.deadBushPerChunk = -999;
-		this.theBiomeDecorator.reedsPerChunk = -999;
-		this.theBiomeDecorator.cactiPerChunk = -999;
-		this.spawnableCreatureList.clear();
+		topBlock = Blocks.sand;
+		biomeName = "AbydosSurface";
+		fillerBlock = Blocks.sand;
+		theBiomeDecorator.generateLakes = false;
+		theBiomeDecorator.treesPerChunk = -999;
+		theBiomeDecorator.deadBushPerChunk = -999;
+		theBiomeDecorator.reedsPerChunk = -999;
+		theBiomeDecorator.cactiPerChunk = -999;
+		spawnableCreatureList.clear();
 	}
 
+	@Override
 	public void decorate(World par1World, Random par2Random, int par3, int par4) {
 		super.decorate(par1World, par2Random, par3, par4);
 		if (par2Random.nextInt(1000) == 0) {

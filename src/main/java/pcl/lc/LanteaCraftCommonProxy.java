@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -16,6 +14,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.audio.AudioEngine;
 import pcl.common.base.TileEntityChunkManager;
 import pcl.common.helpers.AnalyticsHelper;
@@ -120,7 +121,7 @@ public class LanteaCraftCommonProxy {
 					"Hello there, I'm LanteaCraft " + BuildInfo.versionNumber + "-" + BuildInfo.getBuildNumber() + "!");
 		config = new ConfigurationHelper(e.getSuggestedConfigurationFile());
 		configure();
-		moduleManager.preInit();
+		moduleManager.preInit(e);
 	}
 
 	public void init(FMLInitializationEvent e) {
@@ -138,7 +139,7 @@ public class LanteaCraftCommonProxy {
 		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.getInstance(), new GUIHandler());
 		FMLCommonHandler.instance().bus().register(serverTickHandler);
 		networkHelpers.init();
-		moduleManager.init();
+		moduleManager.init(e);
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
@@ -156,7 +157,7 @@ public class LanteaCraftCommonProxy {
 				upgradeHelper.hookSGCraftReloaded();
 		}
 		LanteaCraft.getLogger().log(Level.INFO, "[COMPAT] LanteaCraft done looking for other versions.");
-		moduleManager.postInit();
+		moduleManager.postInit(e);
 	}
 
 	public NaquadahOreWorldGen getOreGenerator() {

@@ -2,11 +2,13 @@ package pcl.lc.multiblock;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.multiblock.EnumOrientations;
 import pcl.common.multiblock.GenericMultiblock;
 import pcl.common.multiblock.MultiblockPart;
@@ -18,6 +20,7 @@ import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.core.WorldLog;
+import pcl.lc.module.ModuleStargates;
 import pcl.lc.tileentity.TileEntityStargateRing;
 
 public class StargateMultiblock extends GenericMultiblock {
@@ -257,9 +260,9 @@ public class StargateMultiblock extends GenericMultiblock {
 				&& LanteaCraft.getProxy().doExplosion()) {
 			LanteaCraft.getLogger().log(Level.INFO, "Creating explosion: gate destroyed while connected!");
 			Block block = host.getWorldObj().getBlock(host.xCoord, host.yCoord, host.zCoord);
-			if (block.equals(LanteaCraft.Blocks.stargateBaseBlock))
-				LanteaCraft.Blocks.stargateBaseBlock
-						.explode(host.getWorldObj(), host.xCoord, host.yCoord, host.zCoord, 500D);
+			if (block.equals(ModuleStargates.Blocks.stargateBaseBlock))
+				ModuleStargates.Blocks.stargateBaseBlock.explode(host.getWorldObj(), host.xCoord, host.yCoord,
+						host.zCoord, 500D);
 		}
 		structureParts.clear();
 		modified = true;

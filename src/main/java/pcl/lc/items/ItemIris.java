@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisType;
+import pcl.lc.module.ModuleStargates;
 
 public class ItemIris extends Item {
 
@@ -29,7 +30,7 @@ public class ItemIris extends Item {
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < EnumIrisType.values().length; i++) {
-			ItemStack stack = new ItemStack(LanteaCraft.Items.iris, 1);
+			ItemStack stack = new ItemStack(ModuleStargates.Items.iris, 1);
 			setType(stack, EnumIrisType.fromOrdinal(i));
 			setIrisDamage(stack, 0.0d);
 			par3List.add(stack);

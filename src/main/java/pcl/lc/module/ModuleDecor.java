@@ -11,8 +11,13 @@ import pcl.lc.blocks.BlockLanteaDecorStair;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.items.ItemLanteaDecor;
 import pcl.lc.items.ItemLanteaDecorGlass;
+import pcl.lc.render.tileentity.TileEntityLanteaDecorGlassRenderer;
 import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class ModuleDecor implements IModule {
 
@@ -86,6 +91,10 @@ public class ModuleDecor implements IModule {
 
 	}
 
+	public static class Render {
+		public static TileEntityLanteaDecorGlassRenderer tileEntityLanteaDecorGlassRenderer;
+	}
+
 	@Override
 	public Set<Module> getDependencies() {
 		return EnumSet.of(Module.CORE);
@@ -97,12 +106,12 @@ public class ModuleDecor implements IModule {
 	}
 
 	@Override
-	public void preInit() {
+	public void preInit(FMLPreInitializationEvent event) {
 
 	}
 
 	@Override
-	public void init() {
+	public void init(FMLInitializationEvent event) {
 		Blocks.decorBlock = RegistrationHelper.registerBlock(BlockLanteaDecor.class, ItemLanteaDecor.class,
 				"lanteaDecor");
 		Blocks.glassDecorBlock = RegistrationHelper.registerBlock(BlockLanteaDecorGlass.class,
@@ -115,11 +124,16 @@ public class ModuleDecor implements IModule {
 				.registerStairDecal("goauldPatternedGoldDecorStair", 4);
 
 		GameRegistry.registerTileEntity(TileEntityLanteaDecorGlass.class, "tileEntityLanteaDecorGlass");
+		if (event.getSide() == Side.CLIENT) {
+			Render.tileEntityLanteaDecorGlassRenderer = new TileEntityLanteaDecorGlassRenderer();
+			RegistrationHelper.addTileEntityRenderer(TileEntityLanteaDecorGlass.class,
+					Render.tileEntityLanteaDecorGlassRenderer);
+		}
 
 	}
 
 	@Override
-	public void postInit() {
+	public void postInit(FMLPostInitializationEvent event) {
 		// TODO Auto-generated method stub
 
 	}

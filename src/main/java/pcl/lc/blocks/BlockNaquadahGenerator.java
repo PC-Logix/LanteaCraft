@@ -14,6 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import pcl.common.base.RotationOrientedBlock;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModulePower;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -58,8 +59,8 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockNaquadahGeneratorRenderer != null)
-			return LanteaCraft.Render.blockNaquadahGeneratorRenderer.renderID;
+		if (ModulePower.Render.blockNaquadahGeneratorRenderer != null)
+			return ModulePower.Render.blockNaquadahGeneratorRenderer.renderID;
 		return 0;
 	}
 

@@ -1,19 +1,11 @@
 package pcl.lc.tileentity;
 
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergyTile;
-
-import java.lang.reflect.Constructor;
 import java.util.List;
-
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -32,6 +24,8 @@ import pcl.lc.api.EnumUnits;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.fluids.SpecialFluidTank;
 import pcl.lc.items.ItemEnergyCrystal;
+import pcl.lc.module.ModuleCore;
+import pcl.lc.module.ModulePower;
 
 public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IPacketHandler, IFluidHandler,
 		INaquadahGeneratorAccess {
@@ -44,7 +38,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	public double displayEnergy = 0;
 	public double displayTankVolume = 0;
 
-	public SpecialFluidTank tank = new SpecialFluidTank(LanteaCraft.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
+	public SpecialFluidTank tank = new SpecialFluidTank(ModuleCore.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
 
 	private FilteredInventory inventory = new FilteredInventory(5) {
 
@@ -80,10 +74,10 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 	public TileEntityNaquadahGenerator() {
 		super();
-		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.lanteaOreItem, 1) },
+		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(ModuleCore.Items.lanteaOreItem, 1) },
 				null, true, true);
 		FilterRule energyCrystal = new FilterRule(
-				new ItemStack[] { new ItemStack(LanteaCraft.Items.energyCrystal, 1) }, null, true, false);
+				new ItemStack[] { new ItemStack(ModulePower.Items.energyCrystal, 1) }, null, true, false);
 		for (int i = 0; i < 4; i++)
 			inventory.setFilterRule(i, naquadah);
 		inventory.setFilterRule(4, energyCrystal);
@@ -114,13 +108,12 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
 			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-			if (!addedToEnergyNet) {
+			if (!addedToEnergyNet)
 				if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
 						|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
 					postIC2Update(true);
 					stateChanged();
 				}
-			}
 			if (tank.hasChanged())
 				stateChanged();
 			super.updateEntity();

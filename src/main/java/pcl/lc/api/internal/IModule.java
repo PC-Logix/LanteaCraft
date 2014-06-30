@@ -4,6 +4,9 @@ import java.util.Set;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.ModuleManager;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 /**
  * LanteaCraft internal module code.
@@ -31,18 +34,24 @@ public interface IModule {
 	public abstract Set<ModuleManager.Module> getLoadDependenciesAfter();
 
 	/**
-	 * Module pre-init event handler. Called as if from {@link LanteaCraft#preInit(cpw.mods.fml.common.event.FMLPreInitializationEvent)}.
+	 * Module pre-init event handler. Called as if from
+	 * {@link LanteaCraft#preInit(cpw.mods.fml.common.event.FMLPreInitializationEvent)}
+	 * .
 	 */
-	public abstract void preInit();
+	public abstract void preInit(FMLPreInitializationEvent event);
 
 	/**
-	 * Module init event handler. Called as if from {@link LanteaCraft#init(cpw.mods.fml.common.event.FMLInitializationEvent)}.
+	 * Module init event handler. Called as if from
+	 * {@link LanteaCraft#init(cpw.mods.fml.common.event.FMLInitializationEvent)}
+	 * .
 	 */
-	public abstract void init();
+	public abstract void init(FMLInitializationEvent event);
 
 	/**
-	 * Module post-init event handler. Called as if from {@link LanteaCraft#postInit(cpw.mods.fml.common.event.FMLPostInitializationEvent)}.
+	 * Module post-init event handler. Called as if from
+	 * {@link LanteaCraft#postInit(cpw.mods.fml.common.event.FMLPostInitializationEvent)}
+	 * .
 	 */
-	public abstract void postInit();
+	public abstract void postInit(FMLPostInitializationEvent event);
 
 }

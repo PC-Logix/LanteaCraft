@@ -2,12 +2,13 @@ package pcl.lc.dimension;
 
 import java.util.Random;
 
+import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.StructureStart;
+
 import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.dimension.abydos.AbydosPyramid;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureStart;
 
 public class MapGenFeatureStructureStart extends StructureStart {
 	public MapGenFeatureStructureStart() {
@@ -21,7 +22,7 @@ public class MapGenFeatureStructureStart extends StructureStart {
 		AbydosPyramid pyramid = new AbydosPyramid(random, chunkX * 16, chunkZ * 16);
 		LanteaCraft.getLogger().log(Level.INFO,
 				String.format("Placing pyramid at (%s, %s)", (chunkX * 16), (chunkZ * 16)));
-		this.components.add(pyramid);
+		components.add(pyramid);
 		updateBoundingBox();
 	}
 }

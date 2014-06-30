@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
+
 import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
@@ -14,6 +15,9 @@ import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.integration.OpenComputersAgent;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ModuleIntegration implements IModule {
 
@@ -21,7 +25,7 @@ public class ModuleIntegration implements IModule {
 		ModuleIntegration.clazz_integration = new ArrayList<Class<? extends IIntegrationAgent>>();
 		// ModuleIntegration.registerIntegrationAgent(ComputerCraftAgent.class);
 		ModuleIntegration.registerIntegrationAgent(OpenComputersAgent.class);
-		//ModuleIntegration.registerIntegrationAgent(WailaAgent.class);
+		// ModuleIntegration.registerIntegrationAgent(WailaAgent.class);
 	}
 
 	private static ArrayList<Class<? extends IIntegrationAgent>> clazz_integration;
@@ -45,7 +49,7 @@ public class ModuleIntegration implements IModule {
 	}
 
 	@Override
-	public void preInit() {
+	public void preInit(FMLPreInitializationEvent event) {
 		LanteaCraft.getLogger().log(Level.INFO, "Preparing integration module loading.");
 		Iterator<Class<? extends IIntegrationAgent>> agents = clazz_integration.iterator();
 		while (agents.hasNext()) {
@@ -80,7 +84,7 @@ public class ModuleIntegration implements IModule {
 	}
 
 	@Override
-	public void init() {
+	public void init(FMLInitializationEvent event) {
 		Iterator<IIntegrationAgent> agents = this.agents.iterator();
 		while (agents.hasNext())
 			try {
@@ -91,7 +95,7 @@ public class ModuleIntegration implements IModule {
 	}
 
 	@Override
-	public void postInit() {
+	public void postInit(FMLPostInitializationEvent event) {
 		// Agents don't really need a postInit (for now).
 	}
 

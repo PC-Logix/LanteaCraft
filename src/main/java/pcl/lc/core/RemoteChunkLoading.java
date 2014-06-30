@@ -3,8 +3,6 @@ package pcl.lc.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -14,6 +12,9 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.ITickAgent;

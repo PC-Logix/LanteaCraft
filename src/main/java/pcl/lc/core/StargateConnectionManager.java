@@ -2,12 +2,14 @@ package pcl.lc.core;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import org.apache.logging.log4j.Level;
 
 import net.afterlifelochie.sandbox.WatchedValue;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.BuildInfo;

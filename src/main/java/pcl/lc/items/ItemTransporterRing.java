@@ -5,7 +5,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft;
-import pcl.lc.LanteaCraft.Blocks;
+import pcl.lc.module.ModuleStargates;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -18,7 +18,7 @@ public class ItemTransporterRing extends ItemBlock {
 
 	@Override
 	public IIcon getIconFromDamage(int i) {
-		return Blocks.transporterRing.getIcon(0, i);
+		return ModuleStargates.Blocks.transporterRing.getIcon(0, i);
 	}
 
 	@Override

@@ -2,22 +2,28 @@ package pcl.common.helpers;
 
 import java.lang.reflect.Constructor;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import org.apache.logging.log4j.Level;
+
+import pcl.common.render.GenericBlockRenderer;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.blocks.BlockLanteaDecorStair;
 import pcl.lc.fluids.ItemSpecialBucket;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
@@ -83,8 +89,7 @@ public class RegistrationHelper {
 			String unlocalizedName, boolean inCreativeTabs) {
 		LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to register block %s", unlocalizedName));
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARN,
-					"Warning, registration of this block is later than was expected!");
+			LanteaCraft.getLogger().log(Level.WARN, "Warning, registration of this block is later than was expected!");
 		try {
 			Constructor<? extends T> ctor = classOf.getConstructor();
 			T theMysteryBlock = ctor.newInstance();
@@ -111,8 +116,7 @@ public class RegistrationHelper {
 	public static <T extends Item> T registerItem(Class<? extends T> classOf, String unlocalizedName) {
 		LanteaCraft.getLogger().log(Level.DEBUG, "Attempting to register item " + unlocalizedName);
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger()
-					.log(Level.WARN, "Warning, registration of this item is later than was expected!");
+			LanteaCraft.getLogger().log(Level.WARN, "Warning, registration of this item is later than was expected!");
 		try {
 			Constructor<? extends T> ctor = classOf.getConstructor();
 			T theMysteryItem = ctor.newInstance();
@@ -190,8 +194,7 @@ public class RegistrationHelper {
 	public static void newRecipe(ItemStack product, Object... params) {
 		LanteaCraft.getLogger().log(Level.DEBUG, "Registering new generic recipe");
 		if (isLateRegistrationZone)
-			LanteaCraft.getLogger().log(Level.WARN,
-					"Warning, registration of this recipe is later than was expected!");
+			LanteaCraft.getLogger().log(Level.WARN, "Warning, registration of this recipe is later than was expected!");
 		GameRegistry.addRecipe(new ShapedOreRecipe(product, params));
 	}
 
@@ -252,6 +255,35 @@ public class RegistrationHelper {
 			LanteaCraft.getLogger().log(Level.DEBUG, "Adding new WeightedRandomChestContent for element " + element);
 			ChestGenHooks.addItem(element, item);
 		}
+	}
+
+	/**
+	 * Register a block renderer
+	 * 
+	 * @param renderer
+	 *            A block renderer
+	 */
+	public static void registerRenderer(GenericBlockRenderer renderer) {
+		if (isLateRegistrationZone)
+			LanteaCraft.getLogger().log(Level.WARN,
+					"Warning, registration of this block renderer is later than was expected!");
+		renderer.renderID = RenderingRegistry.getNextAvailableRenderId();
+		RenderingRegistry.registerBlockHandler(renderer);
+	}
+
+	/**
+	 * Registers a tile entity renderer
+	 * 
+	 * @param teClass
+	 *            The tile entity class
+	 * @param renderer
+	 *            The renderer object
+	 */
+	public static void addTileEntityRenderer(Class<? extends TileEntity> teClass, TileEntitySpecialRenderer renderer) {
+		if (isLateRegistrationZone)
+			LanteaCraft.getLogger().log(Level.WARN,
+					"Warning, registration of this tile-entity renderer is later than was expected!");
+		ClientRegistry.bindTileEntitySpecialRenderer(teClass, renderer);
 	}
 
 	/**

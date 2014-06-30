@@ -2,13 +2,17 @@ package pcl.lc.module.compat;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.OreTypes;
+import pcl.lc.module.ModuleCore;
+import pcl.lc.module.ModuleStargates;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class UpgradeHelper {
@@ -53,25 +57,26 @@ public class UpgradeHelper {
 	private static ArrayList<UpgradeMapping> upgrades = new ArrayList<UpgradeMapping>();
 
 	static {
-		upgrades.add(new UpgradeMapping("sgBaseBlock", new ItemStack(LanteaCraft.Blocks.stargateBaseBlock, 1), false));
-		upgrades.add(new UpgradeMapping("sgRingBlock", new ItemStack(LanteaCraft.Blocks.stargateRingBlock, 1, 0),
+		upgrades.add(new UpgradeMapping("sgBaseBlock", new ItemStack(ModuleStargates.Blocks.stargateBaseBlock, 1),
+				false));
+		upgrades.add(new UpgradeMapping("sgRingBlock", new ItemStack(ModuleStargates.Blocks.stargateRingBlock, 1, 0),
 				false, 0));
-		upgrades.add(new UpgradeMapping("sgRingBlock", new ItemStack(LanteaCraft.Blocks.stargateRingBlock, 1, 1),
+		upgrades.add(new UpgradeMapping("sgRingBlock", new ItemStack(ModuleStargates.Blocks.stargateRingBlock, 1, 1),
 				false, 1));
-		upgrades.add(new UpgradeMapping("sgControllerBlock", new ItemStack(LanteaCraft.Blocks.stargateControllerBlock,
-				1), false));
-		upgrades.add(new UpgradeMapping("naquadahBlock", new ItemStack(LanteaCraft.Blocks.lanteaOreAsBlock, 1,
+		upgrades.add(new UpgradeMapping("sgControllerBlock", new ItemStack(
+				ModuleStargates.Blocks.stargateControllerBlock, 1), false));
+		upgrades.add(new UpgradeMapping("naquadahBlock", new ItemStack(ModuleCore.Blocks.lanteaOreAsBlock, 1,
 				OreTypes.NAQUADAH.ordinal()), false));
-		upgrades.add(new UpgradeMapping("naquadahOre", new ItemStack(LanteaCraft.Blocks.lanteaOre, 1, OreTypes.NAQUADAH
+		upgrades.add(new UpgradeMapping("naquadahOre", new ItemStack(ModuleCore.Blocks.lanteaOre, 1, OreTypes.NAQUADAH
 				.ordinal()), false));
 
-		upgrades.add(new UpgradeMapping("naquadah", new ItemStack(LanteaCraft.Items.lanteaOreItem, 1, OreTypes.NAQUADAH
+		upgrades.add(new UpgradeMapping("naquadah", new ItemStack(ModuleCore.Items.lanteaOreItem, 1, OreTypes.NAQUADAH
 				.ordinal()), true));
-		upgrades.add(new UpgradeMapping("naquadahIngot", new ItemStack(LanteaCraft.Items.lanteaOreIngot, 1,
+		upgrades.add(new UpgradeMapping("naquadahIngot", new ItemStack(ModuleCore.Items.lanteaOreIngot, 1,
 				OreTypes.NAQUADAH.ordinal()), true));
-		upgrades.add(new UpgradeMapping("sgCoreCrystal", new ItemStack(LanteaCraft.Items.coreCrystal, 1), true));
-		upgrades.add(new UpgradeMapping("sgControllerCrystal", new ItemStack(LanteaCraft.Items.controllerCrystal, 1),
-				true));
+		upgrades.add(new UpgradeMapping("sgCoreCrystal", new ItemStack(ModuleStargates.Items.coreCrystal, 1), true));
+		upgrades.add(new UpgradeMapping("sgControllerCrystal",
+				new ItemStack(ModuleStargates.Items.controllerCrystal, 1), true));
 	}
 
 	/**

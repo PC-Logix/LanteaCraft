@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
-import pcl.lc.LanteaCraft.Blocks;
+import pcl.lc.module.ModuleStargates;
 
 public class FeatureUnderDesertPyramid extends StructureComponent {
 
@@ -40,11 +40,11 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 		int stairsWest = 0;
 		Block ladder = (Block) Block.blockRegistry.getObject("ladder");
 		int ladderSouth = 2;
-		Block dhd = Blocks.stargateControllerBlock;
+		Block dhd = ModuleStargates.Blocks.stargateControllerBlock;
 		int dhdNorth = 4;
-		Block sgBase = Blocks.stargateBaseBlock;
+		Block sgBase = ModuleStargates.Blocks.stargateBaseBlock;
 		int sgBaseNorth = 0;
-		Block sgRing = Blocks.stargateRingBlock;
+		Block sgRing = ModuleStargates.Blocks.stargateRingBlock;
 		// Main chamber
 		fillWithBlocks(world, clip, 0, 0, 0, 10, 7, 10, sandstone, air, false);
 		// Stairwell

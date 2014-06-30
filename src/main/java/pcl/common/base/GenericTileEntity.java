@@ -1,7 +1,5 @@
 package pcl.common.base;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -11,6 +9,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.lc.LanteaCraft;
 
 public class GenericTileEntity extends TileEntity implements IInventory, ISidedInventory {
@@ -48,7 +49,7 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 			NBTTagList list = (NBTTagList) nbt.getTag("inventory");
 			int n = list.tagCount();
 			for (int i = 0; i < n; i++) {
-				NBTTagCompound item = (NBTTagCompound) list.getCompoundTagAt(i);
+				NBTTagCompound item = list.getCompoundTagAt(i);
 				int slot = item.getInteger("slot");
 				ItemStack stack = ItemStack.loadItemStackFromNBT(item);
 				inventory.setInventorySlotContents(slot, stack);

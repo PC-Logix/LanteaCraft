@@ -8,9 +8,6 @@ import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
-import org.apache.logging.log4j.Level;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.audio.SoundHandler;
@@ -18,10 +15,14 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.common.MinecraftForge;
+
+import org.apache.logging.log4j.Level;
+
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.ITickAgent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 
@@ -77,12 +78,11 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 	@Override
 	public void initialize() {
 		int k = 0;
-		for (Field field : SoundManager.class.getDeclaredFields()) {
+		for (Field field : SoundManager.class.getDeclaredFields())
 			if (field.getType().isAssignableFrom(Boolean.TYPE)) {
 				soundman_state = field;
 				k++;
 			}
-		}
 		if (k != 1) {
 			enabled = false;
 			return;
@@ -94,7 +94,7 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 	}
 
 	private static SoundSystem getSoundSystem(SoundManager soundManager) {
-		for (Field field : SoundManager.class.getDeclaredFields()) {
+		for (Field field : SoundManager.class.getDeclaredFields())
 			if (SoundSystem.class.isAssignableFrom(field.getType())) {
 				field.setAccessible(true);
 				try {
@@ -103,13 +103,12 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 					throw new RuntimeException(e);
 				}
 			}
-		}
 		return null;
 	}
 
 	private static SoundManager getSoundManager() {
 		SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-		for (Field field : SoundHandler.class.getDeclaredFields()) {
+		for (Field field : SoundHandler.class.getDeclaredFields())
 			if (SoundManager.class.isAssignableFrom(field.getType())) {
 				field.setAccessible(true);
 				try {
@@ -118,13 +117,12 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 					throw new RuntimeException(e);
 				}
 			}
-		}
 		return null;
 	}
 
 	@SubscribeEvent
 	public void onSoundSetup(SoundLoadEvent event) {
-		if (!this.enabled)
+		if (!enabled)
 			return;
 		hostSourceList.clear();
 		system = null;
@@ -140,7 +138,8 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft audio task starting.");
 		manager = getSoundManager();
 
-		this.initThread = new Thread(new Runnable() {
+		initThread = new Thread(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					while (!Thread.currentThread().isInterrupted()) {
@@ -171,7 +170,7 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 			}
 		}, "LanteaCraft audio hook task");
 
-		this.initThread.start();
+		initThread.start();
 	}
 
 	@Override
@@ -198,7 +197,7 @@ public class ClientAudioEngine extends AudioEngine implements ITickAgent {
 
 		Vector<SoundHostObject> stopSounds = new Vector<SoundHostObject>();
 		EntityPlayer client = Minecraft.getMinecraft().thePlayer;
-		if (client == null) 
+		if (client == null)
 			stopSounds.addAll(hostSourceList.keySet());
 		else {
 			PriorityQueue<AudioSource> soundQueue = new PriorityQueue<AudioSource>();

@@ -1,12 +1,13 @@
 package pcl.lc.network;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.network.IPacketHandler;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
@@ -30,7 +31,7 @@ public class ClientPacketHandler {
 		if (target == null)
 			LanteaCraft.getLogger().log(Level.WARN,
 					String.format("ModPacket type %s sent without OriginLocation, much bad!", packet.getClass()));
-		if (Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().theWorld.provider == null) 
+		if (Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().theWorld.provider == null)
 			return; // TODO: Return to queue
 		int currentWorld = Minecraft.getMinecraft().theWorld.provider.dimensionId;
 		if (currentWorld == target.dimension) {

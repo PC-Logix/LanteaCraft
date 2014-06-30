@@ -1,6 +1,5 @@
 package pcl.lc.blocks;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -10,11 +9,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import pcl.lc.LanteaCraft;
-import pcl.lc.LanteaCraft.Items;
 import pcl.lc.core.OreTypes;
+import pcl.lc.module.ModuleCore;
 
 public class BlockLanteaOre extends BlockOre {
 
@@ -49,7 +46,7 @@ public class BlockLanteaOre extends BlockOre {
 
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return Items.lanteaOreItem;
+		return ModuleCore.Items.lanteaOreItem;
 	}
 
 	@Override

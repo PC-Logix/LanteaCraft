@@ -3,10 +3,12 @@ package pcl.common.audio;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 

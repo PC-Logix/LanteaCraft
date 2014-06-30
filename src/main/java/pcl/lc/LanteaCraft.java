@@ -1,61 +1,18 @@
 package pcl.lc;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Logger;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.WorldEvent;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
+
 import pcl.common.helpers.CreativeTabHelper;
 import pcl.common.helpers.SpecialBucketHandler;
 import pcl.common.network.PCLPacketPipeline;
-import pcl.common.render.RotationOrientedBlockRenderer;
-import pcl.lc.blocks.BlockLanteaOre;
-import pcl.lc.blocks.BlockNaquadahGenerator;
-import pcl.lc.blocks.BlockOfLanteaOre;
-import pcl.lc.blocks.BlockTransporterRing;
-import pcl.lc.blocks.BlockStargateBase;
-import pcl.lc.blocks.BlockStargateController;
-import pcl.lc.blocks.BlockStargateRing;
-import pcl.lc.entity.EntityReplicator;
-import pcl.lc.entity.EntityTokra;
-import pcl.lc.fluids.BlockLiquidNaquadah;
-import pcl.lc.fluids.ItemSpecialBucket;
-import pcl.lc.fluids.LiquidNaquadah;
-import pcl.lc.guis.WrittenFontRenderer;
-import pcl.lc.items.ItemControllerCrystal;
-import pcl.lc.items.ItemCoreCrystal;
-import pcl.lc.items.ItemDebugTool;
-import pcl.lc.items.ItemEnergyCrystal;
-import pcl.lc.items.ItemGDO;
-import pcl.lc.items.ItemIris;
-import pcl.lc.items.ItemJacksonNotebook;
-import pcl.lc.items.ItemLanteaOre;
-import pcl.lc.items.ItemLanteaOreIngot;
-import pcl.lc.items.ItemTokraSpawnEgg;
-import pcl.lc.items.ItemTransportRingActivator;
-import pcl.lc.items.ItemZPM;
-import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
-import pcl.lc.render.blocks.BlockStargateBaseRenderer;
-import pcl.lc.render.blocks.BlockStargateControllerRenderer;
-import pcl.lc.render.blocks.BlockStargateRingRenderer;
-import pcl.lc.render.blocks.BlockTransporterRingRenderer;
-import pcl.lc.render.blocks.BlockVoidRenderer;
-import pcl.lc.render.entities.EntityReplicatorRenderer;
-import pcl.lc.render.entities.EntityTokraRenderer;
-import pcl.lc.render.items.HeldItemRenderer;
-import pcl.lc.render.models.NaquadahGeneratorModel;
-import pcl.lc.render.models.RingPlatformBaseModel;
-import pcl.lc.render.models.RingPlatformRingModel;
-import pcl.lc.render.models.StargateControllerModel;
-import pcl.lc.render.tileentity.TileEntityLanteaDecorGlassRenderer;
-import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
-import pcl.lc.render.tileentity.TileEntityTransporterRingRenderer;
-import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
-import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
-import cpw.mods.fml.common.FMLLog;
+import pcl.lc.module.ModuleCore;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -103,94 +60,6 @@ public class LanteaCraft {
 		return LanteaCraft.pipeline;
 	}
 
-	/**
-	 * Public declaration of all Block objects
-	 */
-	public static class Blocks {
-		public static BlockStargateBase stargateBaseBlock;
-		public static BlockStargateRing stargateRingBlock;
-		public static BlockStargateController stargateControllerBlock;
-
-		public static BlockLanteaOre lanteaOre;
-		public static BlockOfLanteaOre lanteaOreAsBlock;
-
-		public static BlockTransporterRing transporterRing;
-		public static BlockNaquadahGenerator naquadahGenerator;
-	}
-
-	/**
-	 * Public declaration of all Item objects
-	 */
-	public static class Items {
-		public static ItemLanteaOre lanteaOreItem;
-		public static ItemLanteaOreIngot lanteaOreIngot;
-
-		public static ItemCoreCrystal coreCrystal;
-		public static ItemControllerCrystal controllerCrystal;
-
-		public static ItemEnergyCrystal energyCrystal;
-		public static ItemZPM zpm;
-
-		public static ItemIris iris;
-		public static ItemGDO gdo;
-
-		public static ItemTransportRingActivator transportRingActivator;
-
-		public static ItemTokraSpawnEgg tokraSpawnEgg;
-
-		public static ItemJacksonNotebook jacksonNotebook;
-		public static ItemDebugTool debugger;
-	}
-
-	/**
-	 * Public declaration of all render objects
-	 */
-	public static class Render {
-		public static StargateControllerModel modelController;
-		public static NaquadahGeneratorModel modelNaquadahGenerator;
-		public static RingPlatformBaseModel modelRingPlatformBase;
-		public static RingPlatformRingModel modelRingPlatformRing;
-
-		public static RotationOrientedBlockRenderer blockOrientedRenderer;
-		public static BlockVoidRenderer blockVoidRenderer;
-
-		public static BlockStargateBaseRenderer blockStargateBaseRenderer;
-		public static BlockStargateRingRenderer blockStargateRingRenderer;
-		public static BlockStargateControllerRenderer blockControllerRenderer;
-		public static BlockNaquadahGeneratorRenderer blockNaquadahGeneratorRenderer;
-		public static BlockTransporterRingRenderer blockTransporterRingRenderer;
-
-		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
-		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
-		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
-		public static TileEntityTransporterRingRenderer tileEntityRingPlatformRenderer;
-		public static TileEntityLanteaDecorGlassRenderer tileEntityLanteaDecorGlassRenderer;
-
-		public static HeldItemRenderer heldItemRenderer;
-
-		public static WrittenFontRenderer danielFontRenderer;
-
-		public static EntityTokraRenderer entityTokraRenderer;
-		public static EntityReplicatorRenderer entityReplicatorRenderer;
-	}
-
-	/**
-	 * Public declaration of all fluids
-	 */
-	public static class Fluids {
-		public static LiquidNaquadah fluidLiquidNaquadah;
-		public static BlockLiquidNaquadah fluidLiquidNaquadahHost;
-		public static ItemSpecialBucket fluidLiquidNaquadahBucket;
-	}
-
-	/**
-	 * Public declaration of all entities
-	 */
-	public static class Entities {
-		public static EntityTokra entityTokra;
-		public static EntityReplicator entityReplicator;
-	}
-
 	public static enum EnumGUIs {
 		StargateBase, StargateController, StargateControllerEnergy, NaquadahGenerator;
 	}
@@ -201,7 +70,7 @@ public class LanteaCraft {
 	private static CreativeTabHelper lanteaCraftTab = new CreativeTabHelper(CreativeTabs.getNextID(), "LanteaCraft") {
 		@Override
 		public Item getTabIconItem() {
-			return LanteaCraft.Items.debugger;
+			return ModuleCore.Items.debugger;
 		}
 	};
 

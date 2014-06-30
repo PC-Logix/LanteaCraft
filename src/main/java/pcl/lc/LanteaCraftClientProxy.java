@@ -3,65 +3,32 @@ package pcl.lc;
 import java.io.File;
 import java.lang.reflect.Constructor;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.audio.ClientAudioEngine;
 import pcl.common.helpers.CloakHandler;
 import pcl.common.network.ModPacket;
-import pcl.common.render.GenericBlockRenderer;
-import pcl.common.render.RotationOrientedBlockRenderer;
 import pcl.lc.core.ClientTickHandler;
-import pcl.lc.entity.EntityReplicator;
-import pcl.lc.entity.EntityTokra;
 import pcl.lc.guis.ScreenNaquadahGenerator;
 import pcl.lc.guis.ScreenStargateBase;
 import pcl.lc.guis.ScreenStargateController;
 import pcl.lc.guis.ScreenStargateControllerEnergy;
-import pcl.lc.guis.WrittenFontRenderer;
 import pcl.lc.network.ClientPacketHandler;
 import pcl.lc.network.PacketLogger;
-import pcl.lc.render.blocks.BlockNaquadahGeneratorRenderer;
-import pcl.lc.render.blocks.BlockStargateBaseRenderer;
-import pcl.lc.render.blocks.BlockStargateControllerRenderer;
-import pcl.lc.render.blocks.BlockStargateRingRenderer;
-import pcl.lc.render.blocks.BlockTransporterRingRenderer;
-import pcl.lc.render.blocks.BlockVoidRenderer;
-import pcl.lc.render.entities.EntityReplicatorRenderer;
-import pcl.lc.render.entities.EntityTokraRenderer;
-import pcl.lc.render.items.HeldItemRenderer;
-import pcl.lc.render.models.NaquadahGeneratorModel;
-import pcl.lc.render.models.RingPlatformBaseModel;
-import pcl.lc.render.models.RingPlatformRingModel;
-import pcl.lc.render.models.StargateControllerModel;
-import pcl.lc.render.tileentity.TileEntityLanteaDecorGlassRenderer;
-import pcl.lc.render.tileentity.TileEntityNaquadahGeneratorRenderer;
-import pcl.lc.render.tileentity.TileEntityTransporterRingRenderer;
-import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
-import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
-import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
-import pcl.lc.tileentity.TileEntityNaquadahGenerator;
-import pcl.lc.tileentity.TileEntityTransporterRing;
-import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.lc.tileentity.TileEntityStargateController;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 
 public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	public static class ClientHooks {
@@ -109,7 +76,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		MinecraftForge.EVENT_BUS.register(audioContext);
 		clientTickHandler.registerTickHost(audioContext);
 		registerScreens();
-		registerRenderers();
 
 	}
 
@@ -118,82 +84,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		addScreen(LanteaCraft.EnumGUIs.StargateController, ScreenStargateController.class);
 		addScreen(LanteaCraft.EnumGUIs.StargateControllerEnergy, ScreenStargateControllerEnergy.class);
 		addScreen(LanteaCraft.EnumGUIs.NaquadahGenerator, ScreenNaquadahGenerator.class);
-	}
-
-	/**
-	 * TODO: We can and should probably come up with some clever way of moving
-	 * this into the sub Module init() method (maybe pass Side.SERVER/CLIENT or
-	 * something?).
-	 */
-	public void registerRenderers() {
-		LanteaCraft.Render.modelController = new StargateControllerModel(LanteaCraft.getResource("models/dhd.obj"));
-		LanteaCraft.Render.modelNaquadahGenerator = new NaquadahGeneratorModel(
-				LanteaCraft.getResource("models/naquadah_generator.obj"));
-		LanteaCraft.Render.modelRingPlatformBase = new RingPlatformBaseModel(
-				LanteaCraft.getResource("models/transport_rings_base.obj"));
-		LanteaCraft.Render.modelRingPlatformRing = new RingPlatformRingModel(
-				LanteaCraft.getResource("models/transport_rings.obj"));
-
-		LanteaCraft.Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
-		addTileEntityRenderer(TileEntityStargateBase.class, LanteaCraft.Render.tileEntityBaseRenderer);
-
-		LanteaCraft.Render.tileEntityControllerRenderer = new TileEntityStargateControllerRenderer();
-		addTileEntityRenderer(TileEntityStargateController.class, LanteaCraft.Render.tileEntityControllerRenderer);
-
-		LanteaCraft.Render.tileEntityNaquadahGeneratorRenderer = new TileEntityNaquadahGeneratorRenderer();
-		addTileEntityRenderer(TileEntityNaquadahGenerator.class, LanteaCraft.Render.tileEntityNaquadahGeneratorRenderer);
-
-		LanteaCraft.Render.tileEntityRingPlatformRenderer = new TileEntityTransporterRingRenderer();
-		addTileEntityRenderer(TileEntityTransporterRing.class, LanteaCraft.Render.tileEntityRingPlatformRenderer);
-
-		LanteaCraft.Render.tileEntityLanteaDecorGlassRenderer = new TileEntityLanteaDecorGlassRenderer();
-		addTileEntityRenderer(TileEntityLanteaDecorGlass.class, LanteaCraft.Render.tileEntityLanteaDecorGlassRenderer);
-
-		LanteaCraft.Render.blockOrientedRenderer = new RotationOrientedBlockRenderer();
-		registerRenderer(LanteaCraft.Render.blockOrientedRenderer);
-
-		LanteaCraft.Render.blockStargateBaseRenderer = new BlockStargateBaseRenderer();
-		registerRenderer(LanteaCraft.Render.blockStargateBaseRenderer);
-
-		LanteaCraft.Render.blockStargateRingRenderer = new BlockStargateRingRenderer();
-		registerRenderer(LanteaCraft.Render.blockStargateRingRenderer);
-
-		LanteaCraft.Render.blockControllerRenderer = new BlockStargateControllerRenderer();
-		registerRenderer(LanteaCraft.Render.blockControllerRenderer);
-
-		LanteaCraft.Render.blockNaquadahGeneratorRenderer = new BlockNaquadahGeneratorRenderer();
-		registerRenderer(LanteaCraft.Render.blockNaquadahGeneratorRenderer);
-		
-		LanteaCraft.Render.blockTransporterRingRenderer = new BlockTransporterRingRenderer();
-		registerRenderer(LanteaCraft.Render.blockTransporterRingRenderer);
-
-		LanteaCraft.Render.blockVoidRenderer = new BlockVoidRenderer();
-		registerRenderer(LanteaCraft.Render.blockVoidRenderer);
-
-		LanteaCraft.Render.heldItemRenderer = new HeldItemRenderer();
-		MinecraftForgeClient.registerItemRenderer(LanteaCraft.Items.gdo, LanteaCraft.Render.heldItemRenderer);
-
-		LanteaCraft.Render.entityTokraRenderer = new EntityTokraRenderer();
-		RenderingRegistry.registerEntityRenderingHandler(EntityTokra.class, LanteaCraft.Render.entityTokraRenderer);
-
-		LanteaCraft.Render.entityReplicatorRenderer = new EntityReplicatorRenderer();
-		RenderingRegistry.registerEntityRenderingHandler(EntityReplicator.class,
-				LanteaCraft.Render.entityReplicatorRenderer);
-
-		LanteaCraft.Render.danielFontRenderer = new WrittenFontRenderer(
-				LanteaCraft.getResource("textures/notebook/daniel.png"),
-				LanteaCraft.getResource("textures/notebook/daniel.metrics.xml"));
-		LanteaCraft.Render.danielFontRenderer.buildFont();
-
-	}
-
-	void addTileEntityRenderer(Class<? extends TileEntity> teClass, TileEntitySpecialRenderer renderer) {
-		ClientRegistry.bindTileEntitySpecialRenderer(teClass, renderer);
-	}
-
-	void registerRenderer(GenericBlockRenderer renderer) {
-		renderer.renderID = RenderingRegistry.getNextAvailableRenderId();
-		RenderingRegistry.registerBlockHandler(renderer);
 	}
 
 	void addScreen(Enum<?> id, Class<? extends GuiScreen> cls) {

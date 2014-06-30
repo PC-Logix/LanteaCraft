@@ -8,7 +8,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.api.energy.IEnergyStore;
 import pcl.common.api.energy.IItemEnergyStore;
-import pcl.common.base.GenericTileEntity;
 import pcl.common.base.PoweredTileEntity;
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.inventory.FilterRule;
@@ -22,6 +21,7 @@ import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.blocks.BlockStargateController;
+import pcl.lc.module.ModulePower;
 
 public class TileEntityStargateController extends PoweredTileEntity implements IPacketHandler, IEnergyStore {
 
@@ -92,8 +92,8 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 	}
 
 	public TileEntityStargateController() {
-		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(LanteaCraft.Items.energyCrystal, 1),
-				new ItemStack(LanteaCraft.Items.zpm, 1) }, null, true, false));
+		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(ModulePower.Items.energyCrystal, 1),
+				new ItemStack(ModulePower.Items.zpm, 1) }, null, true, false));
 	}
 
 	@Override
@@ -300,7 +300,7 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 	@Override
 	public void receiveEnergy(double units) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

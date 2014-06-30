@@ -1,7 +1,5 @@
 package pcl.lc.blocks;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,9 +11,13 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.base.RotationOrientedBlock;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleStargates;
 import pcl.lc.tileentity.TileEntityStargateController;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -60,8 +62,8 @@ public class BlockStargateController extends RotationOrientedBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockStargateBaseRenderer != null)
-			return LanteaCraft.Render.blockControllerRenderer.renderID;
+		if (ModuleStargates.Render.blockStargateBaseRenderer != null)
+			return ModuleStargates.Render.blockControllerRenderer.renderID;
 		return 0;
 	}
 

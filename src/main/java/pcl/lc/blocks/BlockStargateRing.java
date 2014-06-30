@@ -18,6 +18,7 @@ import pcl.common.base.GenericContainerBlock;
 import pcl.common.multiblock.EnumOrientations;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleStargates;
 import pcl.lc.multiblock.StargateMultiblock;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateRing;
@@ -46,8 +47,8 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockStargateRingRenderer != null)
-			return LanteaCraft.Render.blockStargateRingRenderer.renderID;
+		if (ModuleStargates.Render.blockStargateRingRenderer != null)
+			return ModuleStargates.Render.blockStargateRingRenderer.renderID;
 		return -9001;
 	}
 

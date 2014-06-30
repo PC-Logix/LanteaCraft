@@ -2,9 +2,10 @@ package pcl.common.asm;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.launchwrapper.IClassTransformer;
+
+import org.apache.logging.log4j.Level;
 
 /**
  * {@link PCLCoreTransformer} acts as a proxy for children transformers in the
@@ -38,8 +39,8 @@ public class PCLCoreTransformer implements IClassTransformer {
 				transformers.add((IClassTransformer) Class.forName(transformer).newInstance());
 				PCLCoreTransformerPlugin.getLogger().log(Level.DEBUG, "Instantiated transformer " + transformer);
 			} catch (Throwable e) {
-				PCLCoreTransformerPlugin.getLogger().log(Level.WARN,
-						"Could not instantiate transformer " + transformer);
+				PCLCoreTransformerPlugin.getLogger()
+						.log(Level.WARN, "Could not instantiate transformer " + transformer);
 				e.printStackTrace();
 			}
 	}

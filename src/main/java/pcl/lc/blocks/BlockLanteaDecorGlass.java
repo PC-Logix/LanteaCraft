@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleCore;
 import pcl.lc.tileentity.TileEntityLanteaDecorGlass;
 
 public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider {
@@ -41,8 +42,8 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 
 	@Override
 	public int getRenderType() {
-		if (LanteaCraft.Render.blockVoidRenderer != null)
-			return LanteaCraft.Render.blockVoidRenderer.renderID;
+		if (ModuleCore.Render.blockVoidRenderer != null)
+			return ModuleCore.Render.blockVoidRenderer.renderID;
 		return -9001;
 	}
 

@@ -2,16 +2,18 @@ package pcl.lc.worldgen;
 
 import java.util.EnumSet;
 import java.util.Random;
-import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.common.helpers.ConfigurationHelper;
 import pcl.lc.LanteaCraft;
-import pcl.lc.LanteaCraft.Blocks;
 import pcl.lc.core.OreTypes;
+import pcl.lc.module.ModuleCore;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class NaquadahOreWorldGen implements IWorldGenerator {
@@ -67,7 +69,8 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 		chunk.func_150807_a(x, y, z, block, metadata);
 	}
 
-	void generateNode(Chunk chunk, World world, Random random, Block block, int metadata, int cx, int cy, int cz, int density) {
+	void generateNode(Chunk chunk, World world, Random random, Block block, int metadata, int cx, int cy, int cz,
+			int density) {
 		LanteaCraft.getLogger().log(
 				Level.TRACE,
 				String.format("Node generator building node around %s %s %s with density %s typeof %s", cx
@@ -105,7 +108,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 					continue main;
 				// expand; this block is already an ore of type id so we can
 				// continue our search
-				else if (getBlock(chunk, tx, ty, tz).equals(LanteaCraft.Blocks.lanteaOre))
+				else if (getBlock(chunk, tx, ty, tz).equals(ModuleCore.Blocks.lanteaOre))
 					continue expand;
 				else if (getBlock(chunk, tx, ty, tz).equals(blockStone))
 					break expand;
@@ -144,7 +147,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				if (getBlock(chunk, x, y, z).equals(blockStone)) {
 					LanteaCraft.getLogger().log(Level.TRACE,
 							String.format("Attempting to place Naquadah node at %s %s %s", x, y, z));
-					generateNode(chunk, world, random, Blocks.lanteaOre, typeof.ordinal(), x, y, z, 6);
+					generateNode(chunk, world, random, ModuleCore.Blocks.lanteaOre, typeof.ordinal(), x, y, z, 6);
 				}
 			}
 		}

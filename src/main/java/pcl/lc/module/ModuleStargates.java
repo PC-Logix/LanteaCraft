@@ -4,17 +4,15 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.MinecraftForgeClient;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
-import pcl.lc.LanteaCraft.Blocks;
-import pcl.lc.LanteaCraft.Items;
 import pcl.lc.api.internal.IModule;
-import pcl.lc.blocks.BlockTransporterRing;
 import pcl.lc.blocks.BlockStargateBase;
 import pcl.lc.blocks.BlockStargateController;
 import pcl.lc.blocks.BlockStargateRing;
+import pcl.lc.blocks.BlockTransporterRing;
 import pcl.lc.containers.ContainerStargateBase;
 import pcl.lc.containers.ContainerStargateController;
 import pcl.lc.containers.ContainerStargateControllerEnergy;
@@ -26,13 +24,60 @@ import pcl.lc.items.ItemIris;
 import pcl.lc.items.ItemStargateRing;
 import pcl.lc.items.ItemTransportRingActivator;
 import pcl.lc.items.ItemTransporterRing;
-import pcl.lc.tileentity.TileEntityTransporterRing;
+import pcl.lc.render.blocks.BlockStargateBaseRenderer;
+import pcl.lc.render.blocks.BlockStargateControllerRenderer;
+import pcl.lc.render.blocks.BlockStargateRingRenderer;
+import pcl.lc.render.blocks.BlockTransporterRingRenderer;
+import pcl.lc.render.items.HeldItemRenderer;
+import pcl.lc.render.models.RingPlatformBaseModel;
+import pcl.lc.render.models.RingPlatformRingModel;
+import pcl.lc.render.models.StargateControllerModel;
+import pcl.lc.render.tileentity.TileEntityStargateBaseRenderer;
+import pcl.lc.render.tileentity.TileEntityStargateControllerRenderer;
+import pcl.lc.render.tileentity.TileEntityTransporterRingRenderer;
 import pcl.lc.tileentity.TileEntityStargateBase;
 import pcl.lc.tileentity.TileEntityStargateController;
 import pcl.lc.tileentity.TileEntityStargateRing;
+import pcl.lc.tileentity.TileEntityTransporterRing;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class ModuleStargates implements IModule {
+
+	public static class Blocks {
+		public static BlockStargateBase stargateBaseBlock;
+		public static BlockStargateRing stargateRingBlock;
+		public static BlockStargateController stargateControllerBlock;
+		public static BlockTransporterRing transporterRing;
+	}
+
+	public static class Items {
+		public static ItemCoreCrystal coreCrystal;
+		public static ItemControllerCrystal controllerCrystal;
+		public static ItemIris iris;
+		public static ItemGDO gdo;
+		public static ItemTransportRingActivator transportRingActivator;
+	}
+
+	public static class Render {
+		public static StargateControllerModel modelController;
+		public static RingPlatformBaseModel modelRingPlatformBase;
+		public static RingPlatformRingModel modelRingPlatformRing;
+
+		public static BlockStargateBaseRenderer blockStargateBaseRenderer;
+		public static BlockStargateRingRenderer blockStargateRingRenderer;
+		public static BlockStargateControllerRenderer blockControllerRenderer;
+		public static BlockTransporterRingRenderer blockTransporterRingRenderer;
+
+		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
+		public static TileEntityStargateControllerRenderer tileEntityControllerRenderer;
+		public static TileEntityTransporterRingRenderer tileEntityRingPlatformRenderer;
+
+		public static HeldItemRenderer heldItemRenderer;
+	}
 
 	@Override
 	public Set<Module> getDependencies() {
@@ -46,13 +91,13 @@ public class ModuleStargates implements IModule {
 	}
 
 	@Override
-	public void preInit() {
+	public void preInit(FMLPreInitializationEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void init() {
+	public void init(FMLInitializationEvent event) {
 		Blocks.stargateRingBlock = RegistrationHelper.registerBlock(BlockStargateRing.class, ItemStargateRing.class,
 				"stargateRing");
 		Blocks.stargateBaseBlock = RegistrationHelper.registerBlock(BlockStargateBase.class, "stargateBase");
@@ -107,10 +152,46 @@ public class ModuleStargates implements IModule {
 				ContainerStargateController.class);
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(),
 				ContainerStargateControllerEnergy.class);
+
+		if (event.getSide() == Side.CLIENT) {
+			Render.modelController = new StargateControllerModel(LanteaCraft.getResource("models/dhd.obj"));
+
+			Render.modelRingPlatformBase = new RingPlatformBaseModel(
+					LanteaCraft.getResource("models/transport_rings_base.obj"));
+			Render.modelRingPlatformRing = new RingPlatformRingModel(
+					LanteaCraft.getResource("models/transport_rings.obj"));
+
+			Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
+			RegistrationHelper.addTileEntityRenderer(TileEntityStargateBase.class, Render.tileEntityBaseRenderer);
+
+			Render.tileEntityControllerRenderer = new TileEntityStargateControllerRenderer();
+			RegistrationHelper.addTileEntityRenderer(TileEntityStargateController.class,
+					Render.tileEntityControllerRenderer);
+
+			Render.tileEntityRingPlatformRenderer = new TileEntityTransporterRingRenderer();
+			RegistrationHelper.addTileEntityRenderer(TileEntityTransporterRing.class,
+					Render.tileEntityRingPlatformRenderer);
+
+			Render.blockStargateBaseRenderer = new BlockStargateBaseRenderer();
+			RegistrationHelper.registerRenderer(Render.blockStargateBaseRenderer);
+
+			Render.blockStargateRingRenderer = new BlockStargateRingRenderer();
+			RegistrationHelper.registerRenderer(Render.blockStargateRingRenderer);
+
+			Render.blockControllerRenderer = new BlockStargateControllerRenderer();
+			RegistrationHelper.registerRenderer(Render.blockControllerRenderer);
+
+			Render.blockTransporterRingRenderer = new BlockTransporterRingRenderer();
+			RegistrationHelper.registerRenderer(Render.blockTransporterRingRenderer);
+
+			Render.heldItemRenderer = new HeldItemRenderer();
+			MinecraftForgeClient.registerItemRenderer(Items.gdo, Render.heldItemRenderer);
+		}
+
 	}
 
 	@Override
-	public void postInit() {
+	public void postInit(FMLPostInitializationEvent event) {
 		// TODO Auto-generated method stub
 
 	}

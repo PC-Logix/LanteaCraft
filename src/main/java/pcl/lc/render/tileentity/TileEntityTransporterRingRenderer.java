@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.module.ModuleStargates;
 import pcl.lc.multiblock.TransporterRingMultiblock;
 import pcl.lc.tileentity.TileEntityTransporterRing;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -32,7 +33,7 @@ public class TileEntityTransporterRingRenderer extends TileEntitySpecialRenderer
 				.bindTexture(LanteaCraft.getResource("textures/models/transport_rings_base_"
 						+ LanteaCraft.getProxy().getRenderMode() + ".png"));
 		GL11.glTranslated(x, y + 1.0d, z);
-		LanteaCraft.Render.modelRingPlatformBase.renderAll();
+		ModuleStargates.Render.modelRingPlatformBase.renderAll();
 
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(LanteaCraft
 				.getResource("textures/models/transport_rings_" + LanteaCraft.getProxy().getRenderMode() + ".png"));
@@ -43,7 +44,7 @@ public class TileEntityTransporterRingRenderer extends TileEntitySpecialRenderer
 		GL11.glTranslated(0, heightOf % 0.5d, 0);
 		for (int i = 0; i < numRingsOf; i++) {
 			GL11.glTranslated(0.d, 0.5d, 0d);
-			LanteaCraft.Render.modelRingPlatformRing.renderAll();
+			ModuleStargates.Render.modelRingPlatformRing.renderAll();
 		}
 
 		GL11.glEnable(GL11.GL_LIGHTING);

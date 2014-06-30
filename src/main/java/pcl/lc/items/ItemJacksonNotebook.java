@@ -1,6 +1,5 @@
 package pcl.lc.items;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -33,11 +32,9 @@ public class ItemJacksonNotebook extends Item {
 		TileEntity theTile = world.getTileEntity(x, y, z);
 		if (theTile != null)
 			Minecraft.getMinecraft().displayGuiScreen(new GuiJacksonNotebook(theTile.getClass().getName()));
-		else {
-			if (world.getBlock(x, y, z) != null)
-				Minecraft.getMinecraft().displayGuiScreen(
-						new GuiJacksonNotebook(world.getBlock(x, y, z).getClass().getName()));
-		}
+		else if (world.getBlock(x, y, z) != null)
+			Minecraft.getMinecraft().displayGuiScreen(
+					new GuiJacksonNotebook(world.getBlock(x, y, z).getClass().getName()));
 		return true;
 	}
 
