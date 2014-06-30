@@ -8,6 +8,7 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.GenericBlockRenderer;
 import pcl.lc.module.ModulePower;
 import pcl.lc.render.models.NaquadahGeneratorModel;
 import cpw.mods.fml.client.FMLClientHandler;

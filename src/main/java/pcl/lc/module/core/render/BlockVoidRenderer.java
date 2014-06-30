@@ -1,5 +1,6 @@
-package pcl.lc.render.blocks;
+package pcl.lc.module.core.render;
 
+import pcl.lc.base.GenericBlockRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;

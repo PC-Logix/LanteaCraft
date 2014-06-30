@@ -1,4 +1,4 @@
-package pcl.lc.items;
+package pcl.lc.module.core.item;
 
 import java.util.List;
 

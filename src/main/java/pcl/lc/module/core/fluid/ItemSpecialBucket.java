@@ -1,4 +1,4 @@
-package pcl.lc.fluids;
+package pcl.lc.module.core.fluid;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;

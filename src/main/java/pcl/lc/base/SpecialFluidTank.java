@@ -1,4 +1,4 @@
-package pcl.lc.fluids;
+package pcl.lc.base;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;

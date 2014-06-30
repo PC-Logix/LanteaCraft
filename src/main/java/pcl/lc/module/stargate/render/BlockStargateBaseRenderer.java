@@ -3,8 +3,8 @@ package pcl.lc.module.stargate.render;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
+import pcl.lc.module.core.render.RotationOrientedBlockRenderer;
 import pcl.lc.module.stargate.block.BlockStargateBase;
-import pcl.lc.render.blocks.RotationOrientedBlockRenderer;
 
 public class BlockStargateBaseRenderer extends RotationOrientedBlockRenderer {
 

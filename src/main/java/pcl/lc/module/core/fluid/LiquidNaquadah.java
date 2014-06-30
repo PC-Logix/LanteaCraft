@@ -1,4 +1,4 @@
-package pcl.lc.fluids;
+package pcl.lc.module.core.fluid;
 
 import net.minecraftforge.fluids.Fluid;
 

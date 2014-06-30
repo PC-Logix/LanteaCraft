@@ -19,9 +19,9 @@ import org.apache.logging.log4j.Level;
 
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.GenericBlockRenderer;
 import pcl.lc.blocks.BlockLanteaDecorStair;
-import pcl.lc.fluids.ItemSpecialBucket;
-import pcl.lc.render.blocks.GenericBlockRenderer;
+import pcl.lc.module.core.fluid.ItemSpecialBucket;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
