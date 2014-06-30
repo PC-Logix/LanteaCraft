@@ -16,7 +16,7 @@ import pcl.common.network.StandardModPacket;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.api.EnumRingPlatformState;
-import pcl.lc.tileentity.TileEntityTransporterRing;
+import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
 
 public class TransporterRingMultiblock extends GenericMultiblock {
 

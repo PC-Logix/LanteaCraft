@@ -11,7 +11,7 @@ import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
-import pcl.lc.tileentity.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 
 public class StargatePart extends MultiblockPart {
 

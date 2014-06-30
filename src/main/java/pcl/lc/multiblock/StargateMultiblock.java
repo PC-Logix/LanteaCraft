@@ -21,7 +21,7 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleStargates;
-import pcl.lc.tileentity.TileEntityStargateRing;
+import pcl.lc.module.stargate.tile.TileEntityStargateRing;
 
 public class StargateMultiblock extends GenericMultiblock {
 

@@ -7,7 +7,7 @@ import net.minecraftforge.common.DimensionManager;
 import pcl.common.network.ModPacket;
 import pcl.common.network.StandardModPacket;
 import pcl.common.util.WorldLocation;
-import pcl.lc.tileentity.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 
 public class ServerPacketHandler {
 

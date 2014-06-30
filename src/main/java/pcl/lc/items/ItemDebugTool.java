@@ -20,10 +20,10 @@ import pcl.lc.client.audio.AudioEngine;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.AudioSource;
 import pcl.lc.module.ModuleGalaxy;
+import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileEntityStargateController;
+import pcl.lc.module.stargate.tile.TileEntityStargateRing;
 import pcl.lc.tileentity.TileEntityNaquadahGenerator;
-import pcl.lc.tileentity.TileEntityStargateBase;
-import pcl.lc.tileentity.TileEntityStargateController;
-import pcl.lc.tileentity.TileEntityStargateRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

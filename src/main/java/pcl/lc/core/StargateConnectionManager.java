@@ -17,7 +17,7 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.internal.ITickAgent;
 import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
-import pcl.lc.tileentity.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 
 public class StargateConnectionManager implements ITickAgent {
 
