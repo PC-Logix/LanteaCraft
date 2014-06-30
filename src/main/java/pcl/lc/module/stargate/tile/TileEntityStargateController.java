@@ -116,9 +116,8 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 		linkedX = nbt.getInteger("linkedX");
 		linkedY = nbt.getInteger("linkedY");
 		linkedZ = nbt.getInteger("linkedZ");
-		NBTTagCompound energyCompound = nbt.hasKey("energyStore") ? nbt.getCompoundTag("energyStore") : null;
-		if (energyCompound != null)
-			loadEnergyStore(energyCompound);
+		if (nbt.hasKey("energyStore"))
+			loadEnergyStore(nbt.getCompoundTag("energyStore"));
 	}
 
 	@Override

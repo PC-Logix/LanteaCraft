@@ -18,6 +18,7 @@ import pcl.lc.api.EnumUnits;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.base.PoweredTileEntity;
 import pcl.lc.base.SpecialFluidTank;
+import pcl.lc.base.energy.IEnergyStore;
 import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.network.IPacketHandler;
@@ -94,6 +95,8 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 		NBTTagCompound tankCompound = nbt.getCompoundTag("tank");
 		if (tankCompound != null)
 			tank.readFromNBT(tankCompound);
+		if (nbt.hasKey("energy"))
+			energy = nbt.getDouble("energy");
 	}
 
 	@Override
@@ -102,6 +105,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 		NBTTagCompound tankCompound = new NBTTagCompound();
 		tank.writeToNBT(tankCompound);
 		nbt.setTag("tank", tankCompound);
+		nbt.setDouble("energy", energy);
 	}
 
 	@Override
