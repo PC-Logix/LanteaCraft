@@ -57,5 +57,13 @@ public class ChunkLocation {
 		dimension = 0;
 		isStrongLocation = false;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof ChunkLocation))
+			return false;
+		ChunkLocation location = (ChunkLocation) o;
+		return (location.dimension == dimension && location.cx == cx && location.cz == cz);
+	}
 
 }

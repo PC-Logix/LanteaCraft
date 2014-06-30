@@ -395,6 +395,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 					remoteLocation.setDimension(hostLocation.dimension);
 				else
 					return false;
+			if (hostLocation.equals(remoteLocation))
+				return false;
 			StargateConnectionManager manager = LanteaCraft.getProxy().getConnectionManager();
 			manager.create(localAddress, address, hostLocation.toWorldLocation(), remoteLocation.toWorldLocation(),
 					this, address);
