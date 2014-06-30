@@ -59,7 +59,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	public void registerScreens() {
 		addScreen(LanteaCraft.EnumGUIs.StargateBase, ScreenStargateBase.class);
-		addScreen(LanteaCraft.EnumGUIs.StargateController, ScreenStargateController.class);
 		addScreen(LanteaCraft.EnumGUIs.StargateControllerEnergy, ScreenStargateControllerEnergy.class);
 		addScreen(LanteaCraft.EnumGUIs.NaquadahGenerator, ScreenNaquadahGenerator.class);
 	}

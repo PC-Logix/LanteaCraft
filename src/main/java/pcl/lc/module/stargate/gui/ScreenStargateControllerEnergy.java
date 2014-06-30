@@ -13,7 +13,7 @@ public class ScreenStargateControllerEnergy extends GenericContainerGUI {
 	private ContainerStargateControllerEnergy container;
 
 	public ScreenStargateControllerEnergy(TileEntityStargateController controller, EntityPlayer actor) {
-		super(new ContainerStargateControllerEnergy(controller, actor), 177, 108);
+		super(new ContainerStargateControllerEnergy(controller, actor), 177, 148);
 		container = (ContainerStargateControllerEnergy) inventorySlots;
 	}
 

@@ -1,5 +1,8 @@
 package pcl.lc.base;
 
+import org.apache.logging.log4j.Level;
+
+import pcl.lc.LanteaCraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,6 +15,7 @@ public abstract class GenericContainer extends Container {
 	protected int xSize, ySize;
 
 	public GenericContainer(int width, int height) {
+		super();
 		xSize = width;
 		ySize = height;
 	}
@@ -33,6 +37,17 @@ public abstract class GenericContainer extends Container {
 
 		for (int i = 0; i < 9; ++i)
 			addSlotToContainer(new Slot(inventory, i, x + i * 18, y + 58));
+	}
+
+	@Override
+	public Slot addSlotToContainer(Slot slot) {
+		if (0 > slot.xDisplayPosition || 0 > slot.yDisplayPosition || slot.xDisplayPosition + 16 > xSize
+				|| slot.yDisplayPosition + 16 > ySize)
+			LanteaCraft.getLogger().log(
+					Level.WARN,
+					String.format("Slot index %s in inventory %s is offscreen. Problems may occur!", slot.getSlotIndex(),
+							slot.inventory.getClass().getName()));
+		return super.addSlotToContainer(slot);
 	}
 
 	@Override

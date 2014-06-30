@@ -87,7 +87,7 @@ public class RegistrationHelper {
 	 */
 	public static <T extends Block> T registerBlock(Class<? extends T> classOf, Class<? extends ItemBlock> itemClassOf,
 			String unlocalizedName, boolean inCreativeTabs) {
-		LanteaCraft.getLogger().log(Level.INFO, String.format("Attempting to register block %s", unlocalizedName));
+		LanteaCraft.getLogger().log(Level.DEBUG, String.format("Attempting to register block %s", unlocalizedName));
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger().log(Level.WARN, "Warning, registration of this block is later than was expected!");
 		try {
@@ -299,7 +299,7 @@ public class RegistrationHelper {
 	@Deprecated
 	public static BlockLanteaDecorStair registerStairDecal(String unlocalizedName, int targetMetadata) {
 		LanteaCraft.getLogger()
-				.log(Level.INFO, String.format("Attempting to register stair decal %s", unlocalizedName));
+				.log(Level.DEBUG, String.format("Attempting to register stair decal %s", unlocalizedName));
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this stair decal is later than was expected!");

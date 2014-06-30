@@ -3,6 +3,7 @@ package pcl.lc.module.stargate.gui;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -16,6 +17,7 @@ import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.base.GenericContainerGUI;
+import pcl.lc.base.GenericScreen;
 import pcl.lc.base.network.StandardModPacket;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
@@ -23,7 +25,7 @@ import pcl.lc.module.stargate.GateAddressHelper;
 import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 import pcl.lc.module.stargate.tile.TileEntityStargateController;
 
-public class ScreenStargateController extends GenericContainerGUI {
+public class ScreenStargateController extends GenericScreen {
 
 	final static int dhdWidth = 260;
 	final static int dhdHeight = 180;
@@ -44,7 +46,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 	private AudioPosition soundHostPosition;
 
 	public ScreenStargateController(TileEntityStargateController controller, EntityPlayer actor) {
-		super(new ContainerStargateController(controller, actor), dhdWidth, dhdHeight);
+		super();
 		this.controller = controller;
 		dhdLayer = LanteaCraft.getResource("textures/gui/dhd_gui.png");
 		dhdButtonLayer = LanteaCraft.getResource("textures/gui/dhd_centre.png");
@@ -60,8 +62,6 @@ public class ScreenStargateController extends GenericContainerGUI {
 	@Override
 	public void initGui() {
 		super.initGui();
-		guiLeft = 0;
-		guiTop = 0;
 		dhdTop = height - dhdHeight;
 		dhdCentreX = width / 2;
 		dhdCentreY = dhdTop + dhdHeight / 2;
@@ -116,9 +116,10 @@ public class ScreenStargateController extends GenericContainerGUI {
 
 	@Override
 	protected void keyTyped(char c, int key) {
-		if (key == Keyboard.KEY_ESCAPE)
-			close();
-		else if (key == Keyboard.KEY_BACK || key == Keyboard.KEY_DELETE)
+		if (key == Keyboard.KEY_ESCAPE) {
+			this.mc.displayGuiScreen((GuiScreen) null);
+			this.mc.setIngameFocus();
+		} else if (key == Keyboard.KEY_BACK || key == Keyboard.KEY_DELETE)
 			backspace();
 		else if (key == Keyboard.KEY_RETURN || key == Keyboard.KEY_NUMPADENTER)
 			orangeButtonPressed(true);
@@ -154,7 +155,8 @@ public class ScreenStargateController extends GenericContainerGUI {
 				packet.setType("LanteaPacket.DialRequest");
 				packet.setValue("Address", enteredAddress);
 				LanteaCraft.getNetPipeline().sendToServer(packet);
-				close();
+				mc.displayGuiScreen((GuiScreen)null);
+	            mc.setIngameFocus();
 			}
 	}
 
@@ -178,7 +180,7 @@ public class ScreenStargateController extends GenericContainerGUI {
 	}
 
 	@Override
-	protected void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
+	public void drawScreen(int mouseX, int mouseY, float partialTickCount) {
 		bindTexture(dhdLayer);
 		drawTexturedRect((width - dhdWidth) / 2, height - dhdHeight, dhdWidth, dhdHeight);
 
@@ -204,10 +206,9 @@ public class ScreenStargateController extends GenericContainerGUI {
 			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY, 2 * (rx + d), 0.5 * ry + d, 0, 32, 64, 32);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		}
-
+		drawForegroundLayer(mouseX, mouseY);
 	}
 
-	@Override
 	protected void drawForegroundLayer(int mouseX, int mouseY) {
 		TileEntityStargateBase te = getStargateTE();
 		if (te != null)

@@ -148,8 +148,6 @@ public class ModuleStargates implements IModule {
 				net.minecraft.init.Items.diamond);
 
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
-		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateController.ordinal(),
-				ContainerStargateController.class);
 		LanteaCraft.getProxy().addContainer(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(),
 				ContainerStargateControllerEnergy.class);
 

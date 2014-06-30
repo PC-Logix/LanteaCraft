@@ -16,7 +16,7 @@ public class ContainerStargateControllerEnergy extends GenericContainer {
 	private double storedEnergy;
 
 	public ContainerStargateControllerEnergy(TileEntityStargateController te, EntityPlayer player) {
-		super(177, 108);
+		super(177, 148);
 		this.te = te;
 		filterInventory = (FilteredInventory) te.getInventory();
 		addSlotToContainer(new FilteredSlot(filterInventory, 0, 89 - 12 + 4, 4, false));
@@ -34,6 +34,7 @@ public class ContainerStargateControllerEnergy extends GenericContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int i, int value) {
+		super.updateProgressBar(i, value);
 		if (i == 0)
 			storedEnergy = value;
 	}
