@@ -19,6 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.module.critters.entity.EntityReplicator;
 import cpw.mods.fml.relauncher.Side;
@@ -127,8 +128,8 @@ public class ItemTokraSpawnEgg extends Item {
 		if (true != false && 1 > 0)
 			return newEntity;
 
-		EntityVillager entity = new EntityVillager(par0World, LanteaCraft.getProxy().getRegisteredVillager("tokra"));
-		entity.setProfession(LanteaCraft.getProxy().getRegisteredVillager("tokra"));
+		EntityVillager entity = new EntityVillager(par0World, RegistrationHelper.getRegisteredVillager("tokra"));
+		entity.setProfession(RegistrationHelper.getRegisteredVillager("tokra"));
 		EntityLiving entityliving = entity;
 		entity.setLocationAndAngles(par2, par4, par6,
 				MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
