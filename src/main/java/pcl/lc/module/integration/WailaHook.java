@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 public class WailaHook implements IWailaDataProvider {
 
 	public static void callbackRegister(IWailaRegistrar registrar) {
-		// TODO Auto-generated method stub
+		
 	}
 
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
