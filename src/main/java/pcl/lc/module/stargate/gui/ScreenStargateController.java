@@ -16,7 +16,6 @@ import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
-import pcl.lc.base.GenericContainerGUI;
 import pcl.lc.base.GenericScreen;
 import pcl.lc.base.network.StandardModPacket;
 import pcl.lc.client.audio.AudioPosition;
@@ -26,9 +25,10 @@ import pcl.lc.module.stargate.tile.TileEntityStargateBase;
 import pcl.lc.module.stargate.tile.TileEntityStargateController;
 
 public class ScreenStargateController extends GenericScreen {
-
+	
 	final static int dhdWidth = 260;
 	final static int dhdHeight = 180;
+	
 	final static double dhdRadius1 = dhdWidth * 0.1;
 	final static double dhdRadius2 = dhdWidth * 0.275;
 	final static double dhdRadius3 = dhdWidth * 0.45;
@@ -91,8 +91,8 @@ public class ScreenStargateController extends GenericScreen {
 	}
 
 	int findDHDButton(int mx, int my) {
-		int x = -(mx - dhdCentreX);
-		int y = -(my - dhdCentreY) * dhdWidth / dhdHeight;
+		double x = -(mx - dhdCentreX);
+		double y = -(my - dhdCentreY) * dhdWidth / dhdHeight;
 		double r = Math.hypot(x, y);
 		if (r > dhdRadius3)
 			return -1;
@@ -101,14 +101,15 @@ public class ScreenStargateController extends GenericScreen {
 		double a = Math.toDegrees(Math.atan2(y, x));
 		if (a < 0)
 			a += 360;
-		int i0 = r > dhdRadius2 ? 1 : 15;
-		return i0 + (int) Math.floor(a * 14 / 360);
+		int i0 = (r <= dhdRadius2) ? 20 : 1;
+		int i = i0 + (int) Math.floor(a * 19.0d / 360.0d);
+		return i;
 	}
 
 	private void dhdButtonPressed(int i) {
 		if (i == 0)
 			orangeButtonPressed(false);
-		else if (i >= 27)
+		else if (i > 38)
 			backspace();
 		else
 			enterCharacter(GateAddressHelper.singleton().index(i - 1));
@@ -155,8 +156,8 @@ public class ScreenStargateController extends GenericScreen {
 				packet.setType("LanteaPacket.DialRequest");
 				packet.setValue("Address", enteredAddress);
 				LanteaCraft.getNetPipeline().sendToServer(packet);
-				mc.displayGuiScreen((GuiScreen)null);
-	            mc.setIngameFocus();
+				mc.displayGuiScreen((GuiScreen) null);
+				mc.setIngameFocus();
 			}
 	}
 
@@ -197,7 +198,7 @@ public class ScreenStargateController extends GenericScreen {
 		double rx = dhdWidth * 48 / 512.0;
 		double ry = dhdHeight * 48 / (32.0 + 256.0);
 		Tessellator.instance.disableColor();
-		drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry, 2 * rx, 1.5 * ry, 64, 0, 64, 48);
+		//drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry, 2 * rx, 1.5 * ry, 64, 0, 64, 48);
 		resetColor();
 		if (connected) {
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
