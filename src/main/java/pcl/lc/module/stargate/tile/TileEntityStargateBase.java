@@ -560,7 +560,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getNetPipeline().sendToAll(getAsStructure().pack());
+		LanteaCraft.getNetPipeline().sendToAllAround(getAsStructure().pack(), new WorldLocation(this), 128.0d);
 		if (connection != null) {
 			StandardModPacket update = new StandardModPacket(new WorldLocation(this));
 			update.setType("LanteaPacket.ConnectionSet");
@@ -576,7 +576,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 			update.setValue("hostAddress", connection.hostAddress);
 			update.setValue("clientAddress", connection.clientAddress);
 			update.setValue("isHost", connection.isHost(this));
-			LanteaCraft.getNetPipeline().sendToAll(update);
+			LanteaCraft.getNetPipeline().sendToAllAround(update, new WorldLocation(this), 128.0d);
 		}
 		return null;
 	}

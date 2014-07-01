@@ -2,6 +2,7 @@ package pcl.lc.module.stargate.tile;
 
 import net.minecraft.network.Packet;
 import net.minecraft.util.AxisAlignedBB;
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericTileEntity;
 import pcl.lc.base.network.IPacketHandler;
@@ -55,7 +56,7 @@ public class TileEntityTransporterRing extends GenericTileEntity implements IPac
 	public Packet getDescriptionPacket() {
 		ModPacket packet = getPacketFromState();
 		if (packet != null)
-			LanteaCraft.getNetPipeline().sendToAll(packet);
+			LanteaCraft.getNetPipeline().sendToAllAround(packet, new WorldLocation(this), 128.0d);
 		return null;
 	}
 

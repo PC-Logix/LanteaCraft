@@ -17,11 +17,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.common.network.ForgeMessage;
+import pcl.common.util.Vector3;
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -110,7 +113,8 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 		channel.writeAndFlush(message);
 	}
 
-	public void sendToAllAround(ModPacket message, NetworkRegistry.TargetPoint point) {
+	public void sendToAllAround(ModPacket message, WorldLocation location, double range) {
+		TargetPoint point = new TargetPoint(location.dimension, location.x, location.y, location.z, range);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
 				.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);

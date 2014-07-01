@@ -175,7 +175,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 				stream.writeInt(edges_count[i]);
 				stream.writeInt(tile_rotation[i]);
 			}
-			LanteaCraft.getNetPipeline().sendToAll(packet);
+			LanteaCraft.getNetPipeline().sendToAllAround(packet, new WorldLocation(this), 128.0d);
 			return null;
 		} catch (IOException ioex) {
 			LanteaCraft.getLogger().log(Level.WARN, "Error creating description packet.", ioex);

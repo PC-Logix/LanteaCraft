@@ -1,6 +1,7 @@
 package pcl.lc.module.stargate.tile;
 
 import net.minecraft.network.Packet;
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericTileEntity;
 import pcl.lc.base.network.IPacketHandler;
@@ -13,7 +14,7 @@ public class TileEntityStargateRing extends GenericTileEntity implements IPacket
 	@Override
 	public Packet getDescriptionPacket() {
 		ModPacket packet = part.pack();
-		LanteaCraft.getNetPipeline().sendToAll(packet);
+		LanteaCraft.getNetPipeline().sendToAllAround(packet, new WorldLocation(this), 128.0d);
 		return null;
 	}
 

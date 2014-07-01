@@ -211,7 +211,7 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getNetPipeline().sendToAll(getPacketFromState());
+		LanteaCraft.getNetPipeline().sendToAllAround(getPacketFromState(), new WorldLocation(this), 128.0d);
 		return null;
 	}
 

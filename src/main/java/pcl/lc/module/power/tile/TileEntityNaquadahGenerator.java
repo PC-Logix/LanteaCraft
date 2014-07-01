@@ -150,7 +150,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 
 	@Override
 	public Packet getDescriptionPacket() {
-		LanteaCraft.getNetPipeline().sendToAll(getPacketFromState());
+		LanteaCraft.getNetPipeline().sendToAllAround(getPacketFromState(), new WorldLocation(this), 128.0d);
 		return null;
 	}
 
