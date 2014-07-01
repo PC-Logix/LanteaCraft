@@ -18,7 +18,7 @@ import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.AudioSource;
 import pcl.lc.module.power.tile.TileEntityNaquadahGenerator;
 import pcl.lc.module.stargate.tile.TileEntityStargateBase;
-import pcl.lc.module.stargate.tile.TileEntityStargateController;
+import pcl.lc.module.stargate.tile.TileEntityStargateDHD;
 import pcl.lc.module.stargate.tile.TileEntityStargateRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -72,9 +72,9 @@ public class ItemDebugTool extends Item {
 			par2EntityPlayer.addChatMessage(new ChatComponentText("type: TileEntityStargateBase"));
 			par2EntityPlayer.addChatMessage(new ChatComponentText("isMerged: "
 					+ (ring.getAsPart().isMerged() ? "yes" : "no")));
-		} else if (entity instanceof TileEntityStargateController) {
-			TileEntityStargateController controller = (TileEntityStargateController) entity;
-			par2EntityPlayer.addChatMessage(new ChatComponentText("type: TileEntityStargateController"));
+		} else if (entity instanceof TileEntityStargateDHD) {
+			TileEntityStargateDHD controller = (TileEntityStargateDHD) entity;
+			par2EntityPlayer.addChatMessage(new ChatComponentText("type: TileEntityStargateDHD"));
 			par2EntityPlayer.addChatMessage(new ChatComponentText("isLinkedToBase: "
 					+ (controller.isLinkedToStargate ? "yes" : "no")));
 		}

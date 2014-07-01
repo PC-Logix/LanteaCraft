@@ -39,7 +39,7 @@ import pcl.lc.module.ModuleWorldGenerator;
 import pcl.lc.module.compat.UpgradeHelper;
 import pcl.lc.module.stargate.StargateConnectionManager;
 import pcl.lc.module.stargate.tile.TileEntityStargateBase;
-import pcl.lc.module.stargate.tile.TileEntityStargateController;
+import pcl.lc.module.stargate.tile.TileEntityStargateDHD;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -165,7 +165,7 @@ public class LanteaCraftCommonProxy {
 	}
 
 	void configure() {
-		TileEntityStargateController.configure(config);
+		TileEntityStargateDHD.configure(config);
 		NaquadahOreWorldGen.configure(config);
 		TileEntityStargateBase.configure(config);
 		configValues.add(new ConfigValue<Boolean>("addOresToExistingWorlds", config.getBoolean("options",

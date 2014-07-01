@@ -21,9 +21,9 @@ import pcl.lc.base.network.IPacketHandler;
 import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.StandardModPacket;
 import pcl.lc.module.ModulePower;
-import pcl.lc.module.stargate.block.BlockStargateController;
+import pcl.lc.module.stargate.block.BlockStargateDHD;
 
-public class TileEntityStargateController extends PoweredTileEntity implements IPacketHandler, IEnergyStore {
+public class TileEntityStargateDHD extends PoweredTileEntity implements IPacketHandler, IEnergyStore {
 
 	public static int linkRangeX = 10;
 	public static int linkRangeY = 10;
@@ -91,7 +91,7 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 		linkRangeZ = cfg.getInteger("dhd", "linkRangeZ", linkRangeZ);
 	}
 
-	public TileEntityStargateController() {
+	public TileEntityStargateDHD() {
 		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(ModulePower.Items.energyCrystal, 1),
 				new ItemStack(ModulePower.Items.zpm, 1) }, null, true, false));
 	}
@@ -101,8 +101,8 @@ public class TileEntityStargateController extends PoweredTileEntity implements I
 		return inventory;
 	}
 
-	public BlockStargateController getBlock() {
-		return (BlockStargateController) getBlockType();
+	public BlockStargateDHD getBlock() {
+		return (BlockStargateDHD) getBlockType();
 	}
 
 	public Trans3 localToGlobalTransformation() {

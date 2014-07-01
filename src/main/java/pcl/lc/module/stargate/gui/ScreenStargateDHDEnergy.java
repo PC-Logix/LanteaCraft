@@ -6,15 +6,15 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerGUI;
-import pcl.lc.module.stargate.tile.TileEntityStargateController;
+import pcl.lc.module.stargate.tile.TileEntityStargateDHD;
 
-public class ScreenStargateControllerEnergy extends GenericContainerGUI {
+public class ScreenStargateDHDEnergy extends GenericContainerGUI {
 
-	private ContainerStargateControllerEnergy container;
+	private ContainerStargateDHDEnergy container;
 
-	public ScreenStargateControllerEnergy(TileEntityStargateController controller, EntityPlayer actor) {
-		super(new ContainerStargateControllerEnergy(controller, actor), 177, 148);
-		container = (ContainerStargateControllerEnergy) inventorySlots;
+	public ScreenStargateDHDEnergy(TileEntityStargateDHD controller, EntityPlayer actor) {
+		super(new ContainerStargateDHDEnergy(controller, actor), 177, 148);
+		container = (ContainerStargateDHDEnergy) inventorySlots;
 	}
 
 	@Override

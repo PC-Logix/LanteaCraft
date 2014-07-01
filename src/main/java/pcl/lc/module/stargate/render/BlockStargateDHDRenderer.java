@@ -12,11 +12,11 @@ import pcl.lc.base.GenericBlockRenderer;
 import pcl.lc.module.ModuleStargates;
 import cpw.mods.fml.client.FMLClientHandler;
 
-public class BlockStargateControllerRenderer extends GenericBlockRenderer {
+public class BlockStargateDHDRenderer extends GenericBlockRenderer {
 
 	private ResourceLocation texture;
 
-	public BlockStargateControllerRenderer() {
+	public BlockStargateDHDRenderer() {
 		texture = LanteaCraft.getResource("textures/models/dhd_off_" + LanteaCraft.getProxy().getRenderMode() + ".png");
 	}
 
@@ -32,7 +32,7 @@ public class BlockStargateControllerRenderer extends GenericBlockRenderer {
 		if (!LanteaCraft.getProxy().isUsingModels())
 			super.renderInventoryBlock(block, metadata, modelID, rb);
 		else {
-			StargateControllerModel model = ModuleStargates.Render.modelController;
+			ModelStargateDHD model = ModuleStargates.Render.modelController;
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glTranslatef(0.5f, 0.5f, 0.0f);

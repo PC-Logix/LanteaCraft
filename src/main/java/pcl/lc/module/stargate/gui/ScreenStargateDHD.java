@@ -22,9 +22,9 @@ import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
 import pcl.lc.module.stargate.GateAddressHelper;
 import pcl.lc.module.stargate.tile.TileEntityStargateBase;
-import pcl.lc.module.stargate.tile.TileEntityStargateController;
+import pcl.lc.module.stargate.tile.TileEntityStargateDHD;
 
-public class ScreenStargateController extends GenericScreen {
+public class ScreenStargateDHD extends GenericScreen {
 	
 	final static int dhdWidth = 260;
 	final static int dhdHeight = 180;
@@ -33,7 +33,7 @@ public class ScreenStargateController extends GenericScreen {
 	final static double dhdRadius2 = dhdWidth * 0.275;
 	final static double dhdRadius3 = dhdWidth * 0.45;
 
-	private TileEntityStargateController controller;
+	private TileEntityStargateDHD controller;
 
 	private ResourceLocation dhdLayer;
 	private ResourceLocation dhdButtonLayer;
@@ -45,7 +45,7 @@ public class ScreenStargateController extends GenericScreen {
 	private SoundHost soundHost;
 	private AudioPosition soundHostPosition;
 
-	public ScreenStargateController(TileEntityStargateController controller, EntityPlayer actor) {
+	public ScreenStargateDHD(TileEntityStargateDHD controller, EntityPlayer actor) {
 		super();
 		this.controller = controller;
 		dhdLayer = LanteaCraft.getResource("textures/gui/dhd_gui.png");

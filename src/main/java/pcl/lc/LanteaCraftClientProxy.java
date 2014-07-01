@@ -23,8 +23,8 @@ import pcl.lc.client.audio.ClientAudioEngine;
 import pcl.lc.core.ClientTickHandler;
 import pcl.lc.module.power.gui.ScreenNaquadahGenerator;
 import pcl.lc.module.stargate.gui.ScreenStargateBase;
-import pcl.lc.module.stargate.gui.ScreenStargateController;
-import pcl.lc.module.stargate.gui.ScreenStargateControllerEnergy;
+import pcl.lc.module.stargate.gui.ScreenStargateDHD;
+import pcl.lc.module.stargate.gui.ScreenStargateDHDEnergy;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -62,7 +62,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	public void registerScreens() {
 		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ScreenStargateBase.class);
-		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), ScreenStargateControllerEnergy.class);
+		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), ScreenStargateDHDEnergy.class);
 		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ScreenNaquadahGenerator.class);
 	}
 
