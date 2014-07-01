@@ -5,15 +5,15 @@ import java.util.List;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
-import mcp.mobius.waila.api.IWailaRegistrar;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
-public class WailaHook implements IWailaDataProvider {
-
-	public static void callbackRegister(IWailaRegistrar registrar) {
-		
+public class WailaHook implements IWailaDataProvider { 
+	
+	public WailaHook(Class<? extends Block> blockClass) {
+		// TODO: Something useful?
 	}
-
+	
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
 		// TODO Auto-generated method stub
 		return null;
