@@ -7,23 +7,23 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 
-public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
+public class TileStargateBaseRenderer extends TileEntitySpecialRenderer {
 
 	public static double sin[] = new double[StargateRenderConstants.numRingSegments + 1];
 	public static double cos[] = new double[StargateRenderConstants.numRingSegments + 1];
 
-	public final static StandardStargateRenderer standardRenderer;
-	public final static AtlantisStargateRenderer atlantisRenderer;
+	public final static StargateStandardRenderer standardRenderer;
+	public final static StargateAtlantisRenderer atlantisRenderer;
 
-	public final static EventHorizonRenderer horizonRenderer;
+	public final static StargateEventHorizonRenderer horizonRenderer;
 
 	static {
-		standardRenderer = new StandardStargateRenderer();
-		atlantisRenderer = new AtlantisStargateRenderer();
+		standardRenderer = new StargateStandardRenderer();
+		atlantisRenderer = new StargateAtlantisRenderer();
 
-		horizonRenderer = new EventHorizonRenderer();
+		horizonRenderer = new StargateEventHorizonRenderer();
 
 		for (int i = 0; i <= StargateRenderConstants.numRingSegments; i++) {
 			double a = 2 * Math.PI * i / StargateRenderConstants.numRingSegments;
@@ -32,13 +32,13 @@ public class TileEntityStargateBaseRenderer extends TileEntitySpecialRenderer {
 		}
 	}
 
-	public TileEntityStargateBaseRenderer() {
+	public TileStargateBaseRenderer() {
 
 	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float t) {
-		TileEntityStargateBase tesg = (TileEntityStargateBase) te;
+		TileStargateBase tesg = (TileStargateBase) te;
 		if (tesg.getAsStructure().isValid()) {
 			GL11.glPushMatrix();
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);

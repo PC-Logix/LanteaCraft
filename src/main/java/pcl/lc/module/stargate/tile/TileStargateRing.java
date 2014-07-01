@@ -8,7 +8,7 @@ import pcl.lc.base.network.IPacketHandler;
 import pcl.lc.base.network.ModPacket;
 import pcl.lc.module.stargate.StargatePart;
 
-public class TileEntityStargateRing extends GenericTileEntity implements IPacketHandler {
+public class TileStargateRing extends GenericTileEntity implements IPacketHandler {
 	private StargatePart part = new StargatePart(this);
 
 	@Override

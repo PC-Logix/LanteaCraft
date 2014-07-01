@@ -23,7 +23,7 @@ import pcl.lc.module.core.item.ItemLanteaOreBlock;
 import pcl.lc.module.core.item.ItemLanteaOreIngot;
 import pcl.lc.module.core.item.ItemTokraSpawnEgg;
 import pcl.lc.module.core.render.BlockVoidRenderer;
-import pcl.lc.module.core.render.RotationOrientedBlockRenderer;
+import pcl.lc.module.core.render.BlockRotationOrientedRenderer;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -51,7 +51,7 @@ public class ModuleCore implements IModule {
 	}
 
 	public static class Render {
-		public static RotationOrientedBlockRenderer blockOrientedRenderer;
+		public static BlockRotationOrientedRenderer blockOrientedRenderer;
 		public static BlockVoidRenderer blockVoidRenderer;
 		public static WrittenFontRenderer danielFontRenderer;
 	}
@@ -116,7 +116,7 @@ public class ModuleCore implements IModule {
 				net.minecraft.init.Items.slime_ball, net.minecraft.init.Items.blaze_powder);
 
 		if (event.getSide() == Side.CLIENT) {
-			Render.blockOrientedRenderer = new RotationOrientedBlockRenderer();
+			Render.blockOrientedRenderer = new BlockRotationOrientedRenderer();
 			RegistrationHelper.registerRenderer(Render.blockOrientedRenderer);
 
 			Render.blockVoidRenderer = new BlockVoidRenderer();

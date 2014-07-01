@@ -5,17 +5,17 @@ import net.minecraft.inventory.ICrafting;
 import pcl.lc.base.GenericContainer;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.inventory.FilteredSlot;
-import pcl.lc.module.stargate.tile.TileEntityStargateDHD;
+import pcl.lc.module.stargate.tile.TileStargateDHD;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerStargateDHDEnergy extends GenericContainer {
 
-	private TileEntityStargateDHD te;
+	private TileStargateDHD te;
 	private FilteredInventory filterInventory;
 	private double storedEnergy;
 
-	public ContainerStargateDHDEnergy(TileEntityStargateDHD te, EntityPlayer player) {
+	public ContainerStargateDHDEnergy(TileStargateDHD te, EntityPlayer player) {
 		super(177, 148);
 		this.te = te;
 		filterInventory = (FilteredInventory) te.getInventory();

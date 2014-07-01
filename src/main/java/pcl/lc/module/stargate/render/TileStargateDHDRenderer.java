@@ -10,11 +10,11 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.module.ModuleStargates;
 import cpw.mods.fml.client.FMLClientHandler;
 
-public class TileEntityStargateDHDRenderer extends TileEntitySpecialRenderer {
+public class TileStargateDHDRenderer extends TileEntitySpecialRenderer {
 	private ResourceLocation theTexture;
 	private float scale = 1;
 
-	public TileEntityStargateDHDRenderer() {
+	public TileStargateDHDRenderer() {
 		theTexture = LanteaCraft.getResource("textures/models/dhd_off_" + LanteaCraft.getProxy().getRenderMode()
 				+ ".png");
 	}

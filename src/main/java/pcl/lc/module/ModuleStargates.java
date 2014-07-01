@@ -27,17 +27,17 @@ import pcl.lc.module.stargate.render.BlockStargateBaseRenderer;
 import pcl.lc.module.stargate.render.BlockStargateDHDRenderer;
 import pcl.lc.module.stargate.render.BlockStargateRingRenderer;
 import pcl.lc.module.stargate.render.BlockTransporterRingRenderer;
-import pcl.lc.module.stargate.render.HeldItemRenderer;
-import pcl.lc.module.stargate.render.RingPlatformBaseModel;
-import pcl.lc.module.stargate.render.RingPlatformRingModel;
+import pcl.lc.module.stargate.render.ItemHeldRenderer;
+import pcl.lc.module.stargate.render.ModelRingPlatformBase;
+import pcl.lc.module.stargate.render.ModelRingPlatformRing;
 import pcl.lc.module.stargate.render.ModelStargateDHD;
-import pcl.lc.module.stargate.render.TileEntityStargateBaseRenderer;
-import pcl.lc.module.stargate.render.TileEntityStargateDHDRenderer;
-import pcl.lc.module.stargate.render.TileEntityTransporterRingRenderer;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
-import pcl.lc.module.stargate.tile.TileEntityStargateDHD;
-import pcl.lc.module.stargate.tile.TileEntityStargateRing;
-import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
+import pcl.lc.module.stargate.render.TileStargateBaseRenderer;
+import pcl.lc.module.stargate.render.TileStargateDHDRenderer;
+import pcl.lc.module.stargate.render.TileTransporterRingRenderer;
+import pcl.lc.module.stargate.tile.TileStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateDHD;
+import pcl.lc.module.stargate.tile.TileStargateRing;
+import pcl.lc.module.stargate.tile.TileTransporterRing;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -63,19 +63,19 @@ public class ModuleStargates implements IModule {
 
 	public static class Render {
 		public static ModelStargateDHD modelController;
-		public static RingPlatformBaseModel modelRingPlatformBase;
-		public static RingPlatformRingModel modelRingPlatformRing;
+		public static ModelRingPlatformBase modelRingPlatformBase;
+		public static ModelRingPlatformRing modelRingPlatformRing;
 
 		public static BlockStargateBaseRenderer blockStargateBaseRenderer;
 		public static BlockStargateRingRenderer blockStargateRingRenderer;
 		public static BlockStargateDHDRenderer blockControllerRenderer;
 		public static BlockTransporterRingRenderer blockTransporterRingRenderer;
 
-		public static TileEntityStargateBaseRenderer tileEntityBaseRenderer;
-		public static TileEntityStargateDHDRenderer tileEntityControllerRenderer;
-		public static TileEntityTransporterRingRenderer tileEntityRingPlatformRenderer;
+		public static TileStargateBaseRenderer tileEntityBaseRenderer;
+		public static TileStargateDHDRenderer tileEntityControllerRenderer;
+		public static TileTransporterRingRenderer tileEntityRingPlatformRenderer;
 
-		public static HeldItemRenderer heldItemRenderer;
+		public static ItemHeldRenderer heldItemRenderer;
 	}
 
 	@Override
@@ -106,10 +106,10 @@ public class ModuleStargates implements IModule {
 		Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
 				ItemTransporterRing.class, "ringPlatform");
 
-		GameRegistry.registerTileEntity(TileEntityStargateBase.class, "tileEntityStargateBase");
-		GameRegistry.registerTileEntity(TileEntityStargateRing.class, "tileEntityStargateRing");
-		GameRegistry.registerTileEntity(TileEntityStargateDHD.class, "tileEntityStargateDHD");
-		GameRegistry.registerTileEntity(TileEntityTransporterRing.class, "tileEntityRingPlatform");
+		GameRegistry.registerTileEntity(TileStargateBase.class, "tileEntityStargateBase");
+		GameRegistry.registerTileEntity(TileStargateRing.class, "tileEntityStargateRing");
+		GameRegistry.registerTileEntity(TileStargateDHD.class, "tileEntityStargateDHD");
+		GameRegistry.registerTileEntity(TileTransporterRing.class, "tileEntityRingPlatform");
 
 		Items.coreCrystal = RegistrationHelper.registerItem(ItemCoreCrystal.class, "coreCrystal");
 		Items.controllerCrystal = RegistrationHelper.registerItem(ItemControllerCrystal.class, "controllerCrystal");
@@ -153,20 +153,20 @@ public class ModuleStargates implements IModule {
 		if (event.getSide() == Side.CLIENT) {
 			Render.modelController = new ModelStargateDHD(LanteaCraft.getResource("models/dhd.obj"));
 
-			Render.modelRingPlatformBase = new RingPlatformBaseModel(
+			Render.modelRingPlatformBase = new ModelRingPlatformBase(
 					LanteaCraft.getResource("models/transport_rings_base.obj"));
-			Render.modelRingPlatformRing = new RingPlatformRingModel(
+			Render.modelRingPlatformRing = new ModelRingPlatformRing(
 					LanteaCraft.getResource("models/transport_rings.obj"));
 
-			Render.tileEntityBaseRenderer = new TileEntityStargateBaseRenderer();
-			RegistrationHelper.addTileEntityRenderer(TileEntityStargateBase.class, Render.tileEntityBaseRenderer);
+			Render.tileEntityBaseRenderer = new TileStargateBaseRenderer();
+			RegistrationHelper.addTileEntityRenderer(TileStargateBase.class, Render.tileEntityBaseRenderer);
 
-			Render.tileEntityControllerRenderer = new TileEntityStargateDHDRenderer();
-			RegistrationHelper.addTileEntityRenderer(TileEntityStargateDHD.class,
+			Render.tileEntityControllerRenderer = new TileStargateDHDRenderer();
+			RegistrationHelper.addTileEntityRenderer(TileStargateDHD.class,
 					Render.tileEntityControllerRenderer);
 
-			Render.tileEntityRingPlatformRenderer = new TileEntityTransporterRingRenderer();
-			RegistrationHelper.addTileEntityRenderer(TileEntityTransporterRing.class,
+			Render.tileEntityRingPlatformRenderer = new TileTransporterRingRenderer();
+			RegistrationHelper.addTileEntityRenderer(TileTransporterRing.class,
 					Render.tileEntityRingPlatformRenderer);
 
 			Render.blockStargateBaseRenderer = new BlockStargateBaseRenderer();
@@ -181,7 +181,7 @@ public class ModuleStargates implements IModule {
 			Render.blockTransporterRingRenderer = new BlockTransporterRingRenderer();
 			RegistrationHelper.registerRenderer(Render.blockTransporterRingRenderer);
 
-			Render.heldItemRenderer = new HeldItemRenderer();
+			Render.heldItemRenderer = new ItemHeldRenderer();
 			MinecraftForgeClient.registerItemRenderer(Items.gdo, Render.heldItemRenderer);
 		}
 

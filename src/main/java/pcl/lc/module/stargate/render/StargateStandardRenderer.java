@@ -1,22 +1,22 @@
 package pcl.lc.module.stargate.render;
 
-import static pcl.lc.module.stargate.render.TileEntityStargateBaseRenderer.cos;
-import static pcl.lc.module.stargate.render.TileEntityStargateBaseRenderer.sin;
+import static pcl.lc.module.stargate.render.TileStargateBaseRenderer.cos;
+import static pcl.lc.module.stargate.render.TileStargateBaseRenderer.sin;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 
-public class StandardStargateRenderer implements IStargateRenderer {
+public class StargateStandardRenderer implements IStargateRenderer {
 
 	private double u0, v0;
-	private TileEntityStargateBaseRenderer caller;
+	private TileStargateBaseRenderer caller;
 	private ResourceLocation stargateTex;
 	private ResourceLocation chevronTex;
 
-	public StandardStargateRenderer() {
+	public StargateStandardRenderer() {
 		stargateTex = LanteaCraft.getResource("textures/tileentity/stargate_" + LanteaCraft.getProxy().getRenderMode()
 				+ ".png");
 		chevronTex = LanteaCraft.getResource("textures/tileentity/stargate_glyphs_"
@@ -24,7 +24,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 	}
 
 	@Override
-	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x,
+	public void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x,
 			double y, double z, float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
@@ -34,10 +34,10 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		renderInnerRing(te, t);
 		renderChevrons(te);
 		if (te.isConnected())
-			TileEntityStargateBaseRenderer.horizonRenderer.renderStargateAt(renderer, te, x, y, z, t);
+			TileStargateBaseRenderer.horizonRenderer.renderStargateAt(renderer, te, x, y, z, t);
 	}
 
-	private void renderInnerRing(TileEntityStargateBase te, float t) {
+	private void renderInnerRing(TileStargateBase te, float t) {
 		double radiusMidInner = StargateRenderConstants.ringInnerMovingRadius - (1 / 128d);
 		double radiusMidOuter = StargateRenderConstants.ringMidRadius + (1 / 128d);
 		double z = StargateRenderConstants.ringDepth - (1d / 128d);
@@ -64,7 +64,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		caller.bind(stargateTex);
 	}
 
-	private void renderRing(TileEntityStargateBase te) {
+	private void renderRing(TileStargateBase te) {
 		double radiusInner = StargateRenderConstants.ringInnerRadius;
 		double radiusOuter = StargateRenderConstants.ringOuterRadius;
 		double radiusMidInner = StargateRenderConstants.ringInnerMovingRadius;
@@ -141,7 +141,7 @@ public class StandardStargateRenderer implements IStargateRenderer {
 		GL11.glEnd();
 	}
 
-	private void renderChevrons(TileEntityStargateBase te) {
+	private void renderChevrons(TileStargateBase te) {
 		GL11.glNormal3f(0, 0, 1);
 		int sizeof = (te.getDialledAddress() != null) ? te.getDialledAddress().length() : -1;
 		int[] renderQueue = (sizeof == 7) ? StargateRenderConstants.standardRenderQueue

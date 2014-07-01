@@ -18,7 +18,7 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.internal.ITickAgent;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 
 public class StargateConnectionManager implements ITickAgent {
 
@@ -40,7 +40,7 @@ public class StargateConnectionManager implements ITickAgent {
 		/* The chunkloaders for the request */
 		public ChunkLoadRequest hostChunkLoader, clientChunkLoader;
 		/* The tiles associated with the request */
-		public WeakReference<TileEntityStargateBase> hostTile, clientTile;
+		public WeakReference<TileStargateBase> hostTile, clientTile;
 		/*
 		 * The absolute location of each tile once found, so that we can yank
 		 * them back in the event we lose a reference.
@@ -75,21 +75,21 @@ public class StargateConnectionManager implements ITickAgent {
 			clientName = String.format("%s-Client-%s", name, clientLocation.toString());
 		}
 
-		public void setup(TileEntityStargateBase host) {
+		public void setup(TileStargateBase host) {
 			RemoteChunkLoading loader = LanteaCraft.getProxy().getRemoteChunkManager();
-			hostTile = new WeakReference<TileEntityStargateBase>(host);
+			hostTile = new WeakReference<TileStargateBase>(host);
 			hostTilePos = new Vector3(host);
 			host.setConnection(this);
 			/* Prevent the initiator from unloading */
 			hostWorld = GateAddressHelper.getWorld(hostLocation.dimension);
 			if (hostWorld != null)
-				hostChunkLoader = loader.create(hostName, hostWorld, TileEntityStargateBase.ticksToStayOpen,
+				hostChunkLoader = loader.create(hostName, hostWorld, TileStargateBase.ticksToStayOpen,
 						createRadiusOf(hostLocation, 1));
 
 			/* Load the remote target chunks */
 			clientWorld = GateAddressHelper.getWorld(clientLocation.dimension);
 			if (clientWorld != null)
-				clientChunkLoader = loader.create(clientName, clientWorld, TileEntityStargateBase.ticksToStayOpen,
+				clientChunkLoader = loader.create(clientName, clientWorld, TileStargateBase.ticksToStayOpen,
 						createRadiusOf(clientLocation, 1));
 			/* Start dialling */
 			runState(EnumStargateState.Dialling, diallingTime);
@@ -105,18 +105,18 @@ public class StargateConnectionManager implements ITickAgent {
 				if (chunk != null)
 					if (clientTilePos == null) {
 						for (Object o : chunk.chunkTileEntityMap.values())
-							if (o instanceof TileEntityStargateBase) {
-								TileEntityStargateBase tile = (TileEntityStargateBase) o;
-								clientTile = new WeakReference<TileEntityStargateBase>(tile);
+							if (o instanceof TileStargateBase) {
+								TileStargateBase tile = (TileStargateBase) o;
+								clientTile = new WeakReference<TileStargateBase>(tile);
 								clientTilePos = new Vector3(tile);
 								tile.setConnection(this);
 							}
 					} else {
 						Object o = chunk.worldObj.getTileEntity(clientTilePos.floorX(), clientTilePos.floorY(),
 								clientTilePos.floorZ());
-						if (o != null && (o instanceof TileEntityStargateBase)) {
-							TileEntityStargateBase tile = (TileEntityStargateBase) o;
-							clientTile = new WeakReference<TileEntityStargateBase>(tile);
+						if (o != null && (o instanceof TileStargateBase)) {
+							TileStargateBase tile = (TileStargateBase) o;
+							clientTile = new WeakReference<TileStargateBase>(tile);
 							clientTilePos = new Vector3(tile);
 							tile.setConnection(this);
 						}
@@ -148,7 +148,7 @@ public class StargateConnectionManager implements ITickAgent {
 					}
 					break;
 				case Transient: // Any transient state -> any connected state
-					runState(EnumStargateState.Connected, TileEntityStargateBase.ticksToStayOpen);
+					runState(EnumStargateState.Connected, TileStargateBase.ticksToStayOpen);
 					break;
 				case Connected: // Any connected state -> any disconnected state
 					requestDisconnect();
@@ -201,7 +201,7 @@ public class StargateConnectionManager implements ITickAgent {
 			return result;
 		}
 
-		public boolean isHost(TileEntityStargateBase that) {
+		public boolean isHost(TileStargateBase that) {
 			if (hostTile == null || hostTile.get() == null)
 				return false;
 			return hostTile.get().equals(that);
@@ -219,7 +219,7 @@ public class StargateConnectionManager implements ITickAgent {
 	private ArrayList<ConnectionRequest> expiredRequests = new ArrayList<ConnectionRequest>();
 
 	public ConnectionRequest create(String hostAddress, String clientAddress, WorldLocation hostLocation,
-			WorldLocation clientLocation, TileEntityStargateBase hostTile, String name) {
+			WorldLocation clientLocation, TileStargateBase hostTile, String name) {
 		ConnectionRequest request = new ConnectionRequest(hostAddress, clientAddress, hostLocation, clientLocation,
 				name);
 		request.setup(hostTile);

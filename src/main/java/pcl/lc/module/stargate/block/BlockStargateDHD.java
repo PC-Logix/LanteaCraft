@@ -20,7 +20,7 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.base.RotationOrientedBlock;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.gui.ScreenStargateDHD;
-import pcl.lc.module.stargate.tile.TileEntityStargateDHD;
+import pcl.lc.module.stargate.tile.TileStargateDHD;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -104,19 +104,19 @@ public class BlockStargateDHD extends RotationOrientedBlock {
 			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(), world,
 					x, y, z);
 		else {
-			TileEntityStargateDHD tile = (TileEntityStargateDHD) world.getTileEntity(x, y, z);
+			TileStargateDHD tile = (TileStargateDHD) world.getTileEntity(x, y, z);
 			Minecraft.getMinecraft().displayGuiScreen(new ScreenStargateDHD(tile, player));
 		}
 		return true;
 	}
 
 	public void checkForLink(World world, int x, int y, int z) {
-		((TileEntityStargateDHD) getTileEntity(world, x, y, z)).checkForLink();
+		((TileStargateDHD) getTileEntity(world, x, y, z)).checkForLink();
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileEntityStargateDHD();
+		return new TileStargateDHD();
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
 import pcl.lc.module.ModuleCore;
-import pcl.lc.module.decor.tile.TileEntityLanteaDecorGlass;
+import pcl.lc.module.decor.tile.TileLanteaDecorGlass;
 
 public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider {
 
@@ -79,21 +79,21 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileEntityLanteaDecorGlass();
+		return new TileLanteaDecorGlass();
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile instanceof TileEntityLanteaDecorGlass)
-			((TileEntityLanteaDecorGlass) tile).neighbourChanged();
+		if (tile instanceof TileLanteaDecorGlass)
+			((TileLanteaDecorGlass) tile).neighbourChanged();
 	}
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile instanceof TileEntityLanteaDecorGlass)
-			((TileEntityLanteaDecorGlass) tile).neighbourChanged();
+		if (tile instanceof TileLanteaDecorGlass)
+			((TileLanteaDecorGlass) tile).neighbourChanged();
 	}
 
 }

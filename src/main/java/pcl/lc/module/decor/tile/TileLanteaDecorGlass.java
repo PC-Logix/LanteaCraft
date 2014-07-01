@@ -18,7 +18,7 @@ import pcl.lc.base.network.IPacketHandler;
 import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.TinyModPacket;
 
-public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHandler {
+public class TileLanteaDecorGlass extends TileEntity implements IPacketHandler {
 
 	private final static int[][] rotation_matrix = { // 0 DOWN, 1 UP, 2 NORTH, 3
 														// SOUTH, 4 WEST, 5 EAST
@@ -37,11 +37,11 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 	private int[] edges_count = new int[6];
 	private int[] tile_rotation = new int[6];
 
-	public TileEntityLanteaDecorGlass getGlassAt(int x, int y, int z) {
+	public TileLanteaDecorGlass getGlassAt(int x, int y, int z) {
 		if (y >= 0 && worldObj.getHeight() > y) {
 			TileEntity tile = worldObj.getTileEntity(x, y, z);
-			if (tile instanceof TileEntityLanteaDecorGlass)
-				return (TileEntityLanteaDecorGlass) tile;
+			if (tile instanceof TileLanteaDecorGlass)
+				return (TileLanteaDecorGlass) tile;
 		}
 		return null;
 	}
@@ -52,7 +52,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 
 			for (int dir = 0; dir < 6; dir++) {
 				Vector3 fd = location.add(new Vector3(ForgeDirection.getOrientation(dir)));
-				TileEntityLanteaDecorGlass that = getGlassAt(fd.floorX(), fd.floorY(), fd.floorZ());
+				TileLanteaDecorGlass that = getGlassAt(fd.floorX(), fd.floorY(), fd.floorZ());
 				state[dir] = (that != null);
 			}
 
@@ -62,7 +62,7 @@ public class TileEntityLanteaDecorGlass extends TileEntity implements IPacketHan
 				for (int perp = 0; perp < 4; perp++) {
 					int vd = matrix[perp];
 					Vector3 fd = location.add(new Vector3(ForgeDirection.getOrientation(vd)));
-					TileEntityLanteaDecorGlass that = getGlassAt(fd.floorX(), fd.floorY(), fd.floorZ());
+					TileLanteaDecorGlass that = getGlassAt(fd.floorX(), fd.floorY(), fd.floorZ());
 					edges[dir][perp] = (that != null);
 					if (that == null)
 						edges_count[dir] += 1;

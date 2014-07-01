@@ -1,10 +1,10 @@
 package pcl.lc.module.stargate.render;
 
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 
 public interface IStargateRenderer {
 
-	public abstract void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x,
+	public abstract void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x,
 			double y, double z, float t);
 
 }

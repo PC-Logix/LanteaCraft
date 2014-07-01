@@ -11,7 +11,7 @@ import pcl.lc.base.multiblock.GenericMultiblock;
 import pcl.lc.base.multiblock.MultiblockPart;
 import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.StandardModPacket;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 
 public class StargatePart extends MultiblockPart {
 
@@ -45,11 +45,11 @@ public class StargatePart extends MultiblockPart {
 		if (!allowScanning)
 			return null;
 		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(-7, -7, -7, 7, 7, 7);
-		TileEntity entity = ScanningHelper.findNearestTileEntityOf(host.getWorldObj(), TileEntityStargateBase.class,
+		TileEntity entity = ScanningHelper.findNearestTileEntityOf(host.getWorldObj(), TileStargateBase.class,
 				host.xCoord, host.yCoord, host.zCoord, bounds);
 		if (entity == null)
 			return null;
-		TileEntityStargateBase baseObj = (TileEntityStargateBase) entity;
+		TileStargateBase baseObj = (TileStargateBase) entity;
 		StargateMultiblock stargateStruct = baseObj.getAsStructure();
 		return stargateStruct;
 	}
@@ -110,8 +110,8 @@ public class StargatePart extends MultiblockPart {
 			Vector3 location = (Vector3) packet.getValue("currentHost");
 			TileEntity target = host.getWorldObj().getTileEntity(location.floorX(), location.floorY(),
 					location.floorZ());
-			if (target != null && (target instanceof TileEntityStargateBase)) {
-				TileEntityStargateBase stargateBase = (TileEntityStargateBase) target;
+			if (target != null && (target instanceof TileStargateBase)) {
+				TileStargateBase stargateBase = (TileStargateBase) target;
 				currentHost = new WeakReference<GenericMultiblock>(stargateBase.getAsStructure());
 			}
 		} else

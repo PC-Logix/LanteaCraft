@@ -7,10 +7,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RingPlatformRingModel {
+public class ModelRingPlatformBase {
 	private IModelCustom model;
 
-	public RingPlatformRingModel(ResourceLocation location) {
+	public ModelRingPlatformBase(ResourceLocation location) {
 		model = AdvancedModelLoader.loadModel(location);
 	}
 

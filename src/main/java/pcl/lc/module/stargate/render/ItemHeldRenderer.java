@@ -3,7 +3,7 @@ package pcl.lc.module.stargate.render;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
-public class HeldItemRenderer implements IItemRenderer {
+public class ItemHeldRenderer implements IItemRenderer {
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {

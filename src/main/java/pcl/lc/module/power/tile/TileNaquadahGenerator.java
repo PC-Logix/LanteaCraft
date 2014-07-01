@@ -28,7 +28,7 @@ import pcl.lc.module.ModuleCore;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.power.item.ItemEnergyCrystal;
 
-public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IPacketHandler, IFluidHandler,
+public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketHandler, IFluidHandler,
 		INaquadahGeneratorAccess {
 
 	public boolean simulate = false;
@@ -73,7 +73,7 @@ public class TileEntityNaquadahGenerator extends PoweredTileEntity implements IP
 		}
 	};
 
-	public TileEntityNaquadahGenerator() {
+	public TileNaquadahGenerator() {
 		super();
 		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(ModuleCore.Items.lanteaOreItem, 1) },
 				null, true, true);

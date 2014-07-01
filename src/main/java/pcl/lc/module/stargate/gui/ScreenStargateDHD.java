@@ -21,8 +21,8 @@ import pcl.lc.base.network.StandardModPacket;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
 import pcl.lc.module.stargate.GateAddressHelper;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
-import pcl.lc.module.stargate.tile.TileEntityStargateDHD;
+import pcl.lc.module.stargate.tile.TileStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateDHD;
 
 public class ScreenStargateDHD extends GenericScreen {
 	
@@ -33,7 +33,7 @@ public class ScreenStargateDHD extends GenericScreen {
 	final static double dhdRadius2 = dhdWidth * 0.275;
 	final static double dhdRadius3 = dhdWidth * 0.45;
 
-	private TileEntityStargateDHD controller;
+	private TileStargateDHD controller;
 
 	private ResourceLocation dhdLayer;
 	private ResourceLocation dhdButtonLayer;
@@ -45,7 +45,7 @@ public class ScreenStargateDHD extends GenericScreen {
 	private SoundHost soundHost;
 	private AudioPosition soundHostPosition;
 
-	public ScreenStargateDHD(TileEntityStargateDHD controller, EntityPlayer actor) {
+	public ScreenStargateDHD(TileStargateDHD controller, EntityPlayer actor) {
 		super();
 		this.controller = controller;
 		dhdLayer = LanteaCraft.getResource("textures/gui/dhd_gui.png");
@@ -55,7 +55,7 @@ public class ScreenStargateDHD extends GenericScreen {
 		soundHost.addChannel("click", "stargate/milkyway/milkyway_dhd_button.ogg", soundHostPosition, 1.0f, 0);
 	}
 
-	TileEntityStargateBase getStargateTE() {
+	TileStargateBase getStargateTE() {
 		return controller.getLinkedStargateTE();
 	}
 
@@ -148,7 +148,7 @@ public class ScreenStargateDHD extends GenericScreen {
 	}
 
 	void orangeButtonPressed(boolean connectOnly) {
-		TileEntityStargateBase te = getStargateTE();
+		TileStargateBase te = getStargateTE();
 		if (te != null)
 			if (!connectOnly || !te.isConnected()) {
 				StandardModPacket packet = new StandardModPacket(new WorldLocation(te));
@@ -187,7 +187,7 @@ public class ScreenStargateDHD extends GenericScreen {
 
 		bindTexture(dhdButtonLayer, 128, 64);
 		GL11.glEnable(GL11.GL_BLEND);
-		TileEntityStargateBase te = getStargateTE();
+		TileStargateBase te = getStargateTE();
 		boolean connected = te != null && te.isConnected();
 		if (te == null || !te.getAsStructure().isValid())
 			setColor(0.2, 0.2, 0.2);
@@ -211,7 +211,7 @@ public class ScreenStargateDHD extends GenericScreen {
 	}
 
 	protected void drawForegroundLayer(int mouseX, int mouseY) {
-		TileEntityStargateBase te = getStargateTE();
+		TileStargateBase te = getStargateTE();
 		if (te != null)
 			if (te.getState() == EnumStargateState.Idle) {
 				drawEnteredSymbols();

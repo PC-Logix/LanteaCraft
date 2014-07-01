@@ -8,15 +8,15 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.module.ModulePower;
-import pcl.lc.module.power.tile.TileEntityNaquadahGenerator;
+import pcl.lc.module.power.tile.TileNaquadahGenerator;
 import cpw.mods.fml.client.FMLClientHandler;
 
-public class TileEntityNaquadahGeneratorRenderer extends TileEntitySpecialRenderer {
+public class TileNaquadahGeneratorRenderer extends TileEntitySpecialRenderer {
 	private ResourceLocation inactiveTexture;
 	private ResourceLocation activeTexture;
 	private float scale = 1;
 
-	public TileEntityNaquadahGeneratorRenderer() {
+	public TileNaquadahGeneratorRenderer() {
 		activeTexture = LanteaCraft.getResource("textures/models/naquada_generator_on_"
 				+ LanteaCraft.getProxy().getRenderMode() + ".png");
 		inactiveTexture = LanteaCraft.getResource("textures/models/naquada_generator_off_"
@@ -39,7 +39,7 @@ public class TileEntityNaquadahGeneratorRenderer extends TileEntitySpecialRender
 			else
 				GL11.glRotatef(dir * 180F, 0F, 1F, 0F);
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-			FMLClientHandler.instance().getClient().renderEngine.bindTexture(((TileEntityNaquadahGenerator) tileEntity)
+			FMLClientHandler.instance().getClient().renderEngine.bindTexture(((TileNaquadahGenerator) tileEntity)
 					.isActive() ? activeTexture : inactiveTexture);
 			ModulePower.Render.modelNaquadahGenerator.renderAll();
 			GL11.glEnable(GL11.GL_LIGHTING);

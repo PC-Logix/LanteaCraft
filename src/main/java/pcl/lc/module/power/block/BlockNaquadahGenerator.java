@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.RotationOrientedBlock;
 import pcl.lc.module.ModulePower;
-import pcl.lc.module.power.tile.TileEntityNaquadahGenerator;
+import pcl.lc.module.power.tile.TileNaquadahGenerator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -88,7 +88,7 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
-		TileEntityNaquadahGenerator cte = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
+		TileNaquadahGenerator cte = (TileNaquadahGenerator) getTileEntity(world, x, y, z);
 		cte.onHostBlockBreak();
 		super.breakBlock(world, x, y, z, block, data);
 	}
@@ -101,7 +101,7 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		TileEntityNaquadahGenerator te = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
+		TileNaquadahGenerator te = (TileNaquadahGenerator) getTileEntity(world, x, y, z);
 		if (te != null) {
 			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), world, x, y, z);
 			return true;
@@ -111,7 +111,7 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileEntityNaquadahGenerator();
+		return new TileNaquadahGenerator();
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 			int e = isBlockProvidingPower(world, x + 1, y, z, 5);
 			int f = isBlockProvidingPower(world, x - 1, y, z, 4);
 			sig = Math.max(a, Math.max(b, Math.max(c, Math.max(d, Math.max(e, f)))));
-			TileEntityNaquadahGenerator cte = (TileEntityNaquadahGenerator) getTileEntity(world, x, y, z);
+			TileNaquadahGenerator cte = (TileNaquadahGenerator) getTileEntity(world, x, y, z);
 			cte.setRedstoneInputSignal(sig);
 		}
 	}

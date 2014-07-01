@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import pcl.common.helpers.ScanningHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
-import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
+import pcl.lc.module.stargate.tile.TileTransporterRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -40,11 +40,11 @@ public class ItemTransportRingActivator extends Item {
 
 	private void onItemClicked(ItemStack stackOf, World world, EntityPlayer player) {
 		if (!world.isRemote) {
-			TileEntity of = ScanningHelper.findNearestTileEntityOf(world, TileEntityTransporterRing.class,
+			TileEntity of = ScanningHelper.findNearestTileEntityOf(world, TileTransporterRing.class,
 					(int) Math.floor(player.posX), (int) Math.floor(player.posY), (int) Math.floor(player.posZ),
 					AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5));
-			if (of != null && (of instanceof TileEntityTransporterRing)) {
-				TileEntityTransporterRing platform = (TileEntityTransporterRing) of;
+			if (of != null && (of instanceof TileTransporterRing)) {
+				TileTransporterRing platform = (TileTransporterRing) of;
 				if (platform.isHost())
 					if (!platform.getAsStructure().isBusy())
 						platform.getAsStructure().connect();

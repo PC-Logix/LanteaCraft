@@ -33,7 +33,7 @@ public class BlockNaquadahGeneratorRenderer extends GenericBlockRenderer {
 		if (!LanteaCraft.getProxy().isUsingModels())
 			super.renderInventoryBlock(block, metadata, modelID, rb);
 		else {
-			NaquadahGeneratorModel model = ModulePower.Render.modelNaquadahGenerator;
+			ModelNaquadahGenerator model = ModulePower.Render.modelNaquadahGenerator;
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glTranslatef(0.5f, 0.5f, 0.0f);

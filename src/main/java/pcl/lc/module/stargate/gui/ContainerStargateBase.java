@@ -5,14 +5,14 @@ import net.minecraft.inventory.ICrafting;
 import pcl.lc.base.GenericContainer;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.inventory.FilteredSlot;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 
 public class ContainerStargateBase extends GenericContainer {
 
-	private TileEntityStargateBase te;
+	private TileStargateBase te;
 	private FilteredInventory filterInventory;
 
-	public ContainerStargateBase(TileEntityStargateBase te, EntityPlayer player) {
+	public ContainerStargateBase(TileStargateBase te, EntityPlayer player) {
 		super(256, 208);
 		this.te = te;
 		filterInventory = (FilteredInventory) te.getInventory();

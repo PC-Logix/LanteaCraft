@@ -1,4 +1,4 @@
-package pcl.lc.module.power.render;
+package pcl.lc.module.stargate.render;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
@@ -7,10 +7,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class NaquadahGeneratorModel {
+public class ModelRingPlatformRing {
 	private IModelCustom model;
 
-	public NaquadahGeneratorModel(ResourceLocation location) {
+	public ModelRingPlatformRing(ResourceLocation location) {
 		model = AdvancedModelLoader.loadModel(location);
 	}
 

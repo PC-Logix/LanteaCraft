@@ -12,9 +12,9 @@ import pcl.lc.module.power.gui.ContainerNaquadahGenerator;
 import pcl.lc.module.power.item.ItemEnergyCrystal;
 import pcl.lc.module.power.item.ItemZPM;
 import pcl.lc.module.power.render.BlockNaquadahGeneratorRenderer;
-import pcl.lc.module.power.render.NaquadahGeneratorModel;
-import pcl.lc.module.power.render.TileEntityNaquadahGeneratorRenderer;
-import pcl.lc.module.power.tile.TileEntityNaquadahGenerator;
+import pcl.lc.module.power.render.ModelNaquadahGenerator;
+import pcl.lc.module.power.render.TileNaquadahGeneratorRenderer;
+import pcl.lc.module.power.tile.TileNaquadahGenerator;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -33,8 +33,8 @@ public class ModulePower implements IModule {
 	}
 
 	public static class Render {
-		public static NaquadahGeneratorModel modelNaquadahGenerator;
-		public static TileEntityNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
+		public static ModelNaquadahGenerator modelNaquadahGenerator;
+		public static TileNaquadahGeneratorRenderer tileEntityNaquadahGeneratorRenderer;
 		public static BlockNaquadahGeneratorRenderer blockNaquadahGeneratorRenderer;
 
 	}
@@ -52,7 +52,7 @@ public class ModulePower implements IModule {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		Blocks.naquadahGenerator = RegistrationHelper.registerBlock(BlockNaquadahGenerator.class, "naquadahGenerator");
-		GameRegistry.registerTileEntity(TileEntityNaquadahGenerator.class, "tileEntityNaquadahGenerator");
+		GameRegistry.registerTileEntity(TileNaquadahGenerator.class, "tileEntityNaquadahGenerator");
 
 		Items.energyCrystal = RegistrationHelper.registerItem(ItemEnergyCrystal.class, "energyCrystal");
 		Items.zpm = RegistrationHelper.registerItem(ItemZPM.class, "zpm");
@@ -64,11 +64,11 @@ public class ModulePower implements IModule {
 				ContainerNaquadahGenerator.class);
 
 		if (event.getSide() == Side.CLIENT) {
-			Render.modelNaquadahGenerator = new NaquadahGeneratorModel(
+			Render.modelNaquadahGenerator = new ModelNaquadahGenerator(
 					LanteaCraft.getResource("models/naquadah_generator.obj"));
 
-			Render.tileEntityNaquadahGeneratorRenderer = new TileEntityNaquadahGeneratorRenderer();
-			RegistrationHelper.addTileEntityRenderer(TileEntityNaquadahGenerator.class,
+			Render.tileEntityNaquadahGeneratorRenderer = new TileNaquadahGeneratorRenderer();
+			RegistrationHelper.addTileEntityRenderer(TileNaquadahGenerator.class,
 					Render.tileEntityNaquadahGeneratorRenderer);
 
 			Render.blockNaquadahGeneratorRenderer = new BlockNaquadahGeneratorRenderer();

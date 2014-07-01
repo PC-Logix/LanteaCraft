@@ -60,11 +60,11 @@ import pcl.lc.module.stargate.StargateConnectionManager;
 import pcl.lc.module.stargate.StargateConnectionManager.ConnectionRequest;
 import pcl.lc.module.stargate.StargateMultiblock;
 import pcl.lc.module.stargate.block.BlockStargateBase;
-import pcl.lc.module.stargate.render.EventHorizonRenderer;
+import pcl.lc.module.stargate.render.StargateEventHorizonRenderer;
 import pcl.lc.module.stargate.render.StargateRenderConstants;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
-public class TileEntityStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
+public class TileStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
 		ISidedInventory {
 
 	/**
@@ -182,7 +182,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	private SoundHost soundHost;
 	private double ehGrid[][][];
 
-	public TileEntityStargateBase() {
+	public TileStargateBase() {
 		inventory = new FilteredInventory(1) {
 
 			@Override
@@ -318,7 +318,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		soundHost.tick();
 
 		double grid[][][] = getEventHorizonGrid();
-		final int m = EventHorizonRenderer.ehGridRadialSize, n = EventHorizonRenderer.ehGridPolarSize;
+		final int m = StargateEventHorizonRenderer.ehGridRadialSize, n = StargateEventHorizonRenderer.ehGridPolarSize;
 		double u[][] = grid[0], v[][] = grid[1];
 		double dt = 1.0, asq = 0.03, d = 0.95;
 		int r = random.nextInt(m - 1) + 1, t = random.nextInt(n) + 1;
@@ -446,7 +446,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 				 * host. Mabye we can compress this logic a bit more,
 				 * AfterLifeLochie, yes?
 				 */
-				TileEntityStargateBase dte = getConnectedStargateTE();
+				TileStargateBase dte = getConnectedStargateTE();
 				if (dte != null) {
 					Trans3 dt = dte.localToGlobalTransformation();
 					while (entity.ridingEntity != null)
@@ -514,7 +514,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 		return (BlockStargateBase) getBlockType();
 	}
 
-	private TileEntityStargateBase getConnectedStargateTE() {
+	private TileStargateBase getConnectedStargateTE() {
 		if (connection != null)
 			if (connection.isHost(this))
 				return connection.clientTile.get();
@@ -596,8 +596,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 
 	public double[][][] getEventHorizonGrid() {
 		if (ehGrid == null) {
-			int m = EventHorizonRenderer.ehGridRadialSize;
-			int n = EventHorizonRenderer.ehGridPolarSize;
+			int m = StargateEventHorizonRenderer.ehGridRadialSize;
+			int n = StargateEventHorizonRenderer.ehGridPolarSize;
 			ehGrid = new double[2][n + 2][m + 1];
 			for (int i = 0; i < 2; i++) {
 				ehGrid[i][0] = ehGrid[i][n];
@@ -726,8 +726,8 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	private void initiateClosingTransient() {
 		if (!isIrisClosed()) {
 			double v[][] = getEventHorizonGrid()[1];
-			int m = EventHorizonRenderer.ehGridRadialSize;
-			int n = EventHorizonRenderer.ehGridPolarSize;
+			int m = StargateEventHorizonRenderer.ehGridRadialSize;
+			int n = StargateEventHorizonRenderer.ehGridPolarSize;
 			for (int i = 1; i < m; i++)
 				for (int j = 1; j <= n; j++)
 					v[j][i] += StargateRenderConstants.closingTransientRandomness * random.nextGaussian();
@@ -737,7 +737,7 @@ public class TileEntityStargateBase extends GenericTileEntity implements IStarga
 	private void initiateOpeningTransient() {
 		if (!isIrisClosed()) {
 			double v[][] = getEventHorizonGrid()[1];
-			int n = EventHorizonRenderer.ehGridPolarSize;
+			int n = StargateEventHorizonRenderer.ehGridPolarSize;
 			for (int j = 0; j <= n + 1; j++) {
 				v[j][0] = StargateRenderConstants.openingTransientIntensity;
 				v[j][1] = v[j][0] + StargateRenderConstants.openingTransientRandomness * random.nextGaussian();

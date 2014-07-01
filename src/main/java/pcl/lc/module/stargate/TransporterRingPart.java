@@ -12,7 +12,7 @@ import pcl.lc.base.multiblock.GenericMultiblock;
 import pcl.lc.base.multiblock.MultiblockPart;
 import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.StandardModPacket;
-import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
+import pcl.lc.module.stargate.tile.TileTransporterRing;
 
 public class TransporterRingPart extends MultiblockPart {
 
@@ -47,15 +47,15 @@ public class TransporterRingPart extends MultiblockPart {
 			return null;
 		AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(-5, 0, -5, 5, 1, 5);
 		ArrayList<Vector3> entities = ScanningHelper.findAllTileEntitesOf(host.getWorldObj(),
-				TileEntityTransporterRing.class, host.xCoord, host.yCoord, host.zCoord, bounds);
+				TileTransporterRing.class, host.xCoord, host.yCoord, host.zCoord, bounds);
 		if (entities == null || entities.size() == 0)
 			return null;
 		Vector3 origin = new Vector3(host);
 		for (int i = 0; i < entities.size(); i++) {
 			Vector3 apath = entities.get(i).add(origin);
 			TileEntity tile = host.getWorldObj().getTileEntity(apath.floorX(), apath.floorY(), apath.floorZ());
-			if (tile instanceof TileEntityTransporterRing) {
-				TileEntityTransporterRing ring = (TileEntityTransporterRing) tile;
+			if (tile instanceof TileTransporterRing) {
+				TileTransporterRing ring = (TileTransporterRing) tile;
 				if (ring.isHost())
 					return ring.getAsStructure();
 			}
@@ -119,8 +119,8 @@ public class TransporterRingPart extends MultiblockPart {
 			Vector3 location = (Vector3) packet.getValue("currentHost");
 			TileEntity target = host.getWorldObj().getTileEntity(location.floorX(), location.floorY(),
 					location.floorZ());
-			if (target != null && (target instanceof TileEntityTransporterRing)) {
-				TileEntityTransporterRing stargateBase = (TileEntityTransporterRing) target;
+			if (target != null && (target instanceof TileTransporterRing)) {
+				TileTransporterRing stargateBase = (TileTransporterRing) target;
 				currentHost = new WeakReference<GenericMultiblock>(stargateBase.getAsStructure());
 			}
 		} else

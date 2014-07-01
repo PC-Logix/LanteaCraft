@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import pcl.common.util.WorldLocation;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 
 public class ServerPacketHandler {
 
@@ -24,16 +24,16 @@ public class ServerPacketHandler {
 			if (spacket.getType().equals("LanteaPacket.UpdateRequest")) {
 				World w = DimensionManager.getWorld(target.dimension);
 				TileEntity tile = w.getTileEntity(target.x, target.y, target.z);
-				if (tile instanceof TileEntityStargateBase) {
-					TileEntityStargateBase base = (TileEntityStargateBase) tile;
+				if (tile instanceof TileStargateBase) {
+					TileStargateBase base = (TileStargateBase) tile;
 					base.getDescriptionPacket();
 				}
 			} else if (spacket.getType().equals("LanteaPacket.DialRequest")) {
 				World w = DimensionManager.getWorld(target.dimension);
 				TileEntity tile = w.getTileEntity(target.x, target.y, target.z);
-				if (tile instanceof TileEntityStargateBase) {
+				if (tile instanceof TileStargateBase) {
 					String address = (String) spacket.getValue("Address");
-					TileEntityStargateBase base = (TileEntityStargateBase) tile;
+					TileStargateBase base = (TileStargateBase) tile;
 					base.connectOrDisconnect(address);
 				}
 			}

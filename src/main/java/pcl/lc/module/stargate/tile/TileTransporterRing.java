@@ -10,12 +10,12 @@ import pcl.lc.base.network.ModPacket;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.TransporterRingPart;
 
-public class TileEntityTransporterRing extends GenericTileEntity implements IPacketHandler {
+public class TileTransporterRing extends GenericTileEntity implements IPacketHandler {
 
 	private TransporterRingMultiblock multiblock;
 	private boolean isHostBlock = false;
 
-	public TileEntityTransporterRing() {
+	public TileTransporterRing() {
 	}
 
 	public boolean isHost() {

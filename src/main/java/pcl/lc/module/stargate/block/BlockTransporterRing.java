@@ -16,7 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerBlock;
 import pcl.lc.module.ModuleStargates;
-import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
+import pcl.lc.module.stargate.tile.TileTransporterRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -47,7 +47,7 @@ public class BlockTransporterRing extends GenericContainerBlock {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		TileEntityTransporterRing ring = new TileEntityTransporterRing();
+		TileTransporterRing ring = new TileTransporterRing();
 		ring.setHost(metadata != 0);
 		return ring;
 	}

@@ -5,16 +5,16 @@ import net.minecraft.inventory.ICrafting;
 import pcl.lc.base.GenericContainer;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.inventory.FilteredSlot;
-import pcl.lc.module.power.tile.TileEntityNaquadahGenerator;
+import pcl.lc.module.power.tile.TileNaquadahGenerator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerNaquadahGenerator extends GenericContainer {
 
-	private TileEntityNaquadahGenerator te;
+	private TileNaquadahGenerator te;
 	private FilteredInventory filterInventory;
 
-	public ContainerNaquadahGenerator(TileEntityNaquadahGenerator te, EntityPlayer player) {
+	public ContainerNaquadahGenerator(TileNaquadahGenerator te, EntityPlayer player) {
 		super(177, 208);
 		this.te = te;
 		filterInventory = (FilteredInventory) te.getInventory();

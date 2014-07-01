@@ -20,7 +20,7 @@ import pcl.lc.base.multiblock.MultiblockPart;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.StargateMultiblock;
 import pcl.lc.module.stargate.StargatePart;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -46,8 +46,8 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int blockID) {
 		TileEntity host = world.getTileEntity(x, y, z);
-		if (host instanceof TileEntityStargateBase) {
-			TileEntityStargateBase base = (TileEntityStargateBase) host;
+		if (host instanceof TileStargateBase) {
+			TileStargateBase base = (TileStargateBase) host;
 			return (base.isConnected()) ? 15 : 0;
 		}
 		return 0;
@@ -56,8 +56,8 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int blockID) {
 		TileEntity host = world.getTileEntity(x, y, z);
-		if (host instanceof TileEntityStargateBase) {
-			TileEntityStargateBase base = (TileEntityStargateBase) host;
+		if (host instanceof TileStargateBase) {
+			TileStargateBase base = (TileStargateBase) host;
 			return (base.isConnected()) ? 15 : 0;
 		}
 		return 0;
@@ -104,14 +104,14 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		int data = Math.round((180 - player.rotationYaw) / 90) & 3;
 		world.setBlockMetadataWithNotify(x, y, z, data, 0x3);
-		TileEntityStargateBase te = (TileEntityStargateBase) getTileEntity(world, x, y, z);
+		TileStargateBase te = (TileStargateBase) getTileEntity(world, x, y, z);
 		te.hostBlockPlaced();
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
-		TileEntityStargateBase te = (TileEntityStargateBase) world.getTileEntity(x, y, z);
+		TileStargateBase te = (TileStargateBase) world.getTileEntity(x, y, z);
 		if (te != null && te.getAsStructure().isValid()) {
 			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateBase.ordinal(), world, x, y, z);
 			return true;
@@ -132,8 +132,8 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
 		TileEntity te = getTileEntity(world, x, y, z);
-		if (te != null && te instanceof TileEntityStargateBase)
-			((TileEntityStargateBase) te).hostBlockDestroyed();
+		if (te != null && te instanceof TileStargateBase)
+			((TileStargateBase) te).hostBlockDestroyed();
 		super.breakBlock(world, x, y, z, block, data);
 	}
 
@@ -142,8 +142,8 @@ public class BlockStargateBase extends RotationOrientedBlock {
 			return;
 
 		TileEntity te = getTileEntity(world, (int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
-		if (te != null && (te instanceof TileEntityStargateBase)) {
-			TileEntityStargateBase gate = (TileEntityStargateBase) te;
+		if (te != null && (te instanceof TileStargateBase)) {
+			TileStargateBase gate = (TileStargateBase) te;
 			if (gate.getAsStructure() != null) {
 				StargateMultiblock struct = gate.getAsStructure();
 				for (MultiblockPart part : struct.getAllParts())
@@ -159,28 +159,28 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileEntityStargateBase();
+		return new TileStargateBase();
 	}
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		TileEntity te = getTileEntity(world, x, y, z);
-		if (te != null && te instanceof TileEntityStargateBase)
-			((TileEntityStargateBase) te).getAsStructure().invalidate();
+		if (te != null && te instanceof TileStargateBase)
+			((TileStargateBase) te).getAsStructure().invalidate();
 	}
 
 	public boolean isMerged(IBlockAccess world, int x, int y, int z) {
 		TileEntity te = getTileEntity(world, x, y, z);
-		if (te != null && te instanceof TileEntityStargateBase)
-			return ((TileEntityStargateBase) te).getAsStructure().isValid();
+		if (te != null && te instanceof TileStargateBase)
+			return ((TileStargateBase) te).getAsStructure().isValid();
 		return false;
 	}
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
 		TileEntity tileof = block.getTileEntity(x, y, z);
-		if (tileof instanceof TileEntityStargateBase) {
-			TileEntityStargateBase ring = (TileEntityStargateBase) tileof;
+		if (tileof instanceof TileStargateBase) {
+			TileStargateBase ring = (TileStargateBase) tileof;
 			if (ring.getAsStructure().getOrientation() != null) {
 				EnumOrientations orientation = ring.getAsStructure().getOrientation();
 				switch (orientation) {

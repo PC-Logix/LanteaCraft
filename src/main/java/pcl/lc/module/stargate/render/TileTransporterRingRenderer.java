@@ -9,14 +9,14 @@ import org.lwjgl.opengl.GL12;
 import pcl.lc.LanteaCraft;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
-import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
+import pcl.lc.module.stargate.tile.TileTransporterRing;
 import cpw.mods.fml.client.FMLClientHandler;
 
-public class TileEntityTransporterRingRenderer extends TileEntitySpecialRenderer {
+public class TileTransporterRingRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
-		TileEntityTransporterRing platform = (TileEntityTransporterRing) tileEntity;
+		TileTransporterRing platform = (TileTransporterRing) tileEntity;
 		if (!platform.isHost())
 			return;
 		TransporterRingMultiblock structure = platform.getAsStructure();

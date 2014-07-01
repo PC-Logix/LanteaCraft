@@ -7,14 +7,14 @@ import pcl.lc.base.GenericBlockRenderer;
 import pcl.lc.module.stargate.StargateMultiblock;
 import pcl.lc.module.stargate.StargatePart;
 import pcl.lc.module.stargate.block.BlockStargateRing;
-import pcl.lc.module.stargate.tile.TileEntityStargateRing;
+import pcl.lc.module.stargate.tile.TileStargateRing;
 
 public class BlockStargateRingRenderer extends GenericBlockRenderer {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks rb) {
 		BlockStargateRing ringBlock = (BlockStargateRing) block;
-		TileEntityStargateRing ringTE = (TileEntityStargateRing) world.getTileEntity(x, y, z);
+		TileStargateRing ringTE = (TileStargateRing) world.getTileEntity(x, y, z);
 
 		StargatePart partOf = ringTE.getAsPart();
 		if (partOf == null)

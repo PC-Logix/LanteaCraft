@@ -8,10 +8,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
-import pcl.lc.module.decor.tile.TileEntityLanteaDecorGlass;
+import pcl.lc.module.decor.tile.TileLanteaDecorGlass;
 import cpw.mods.fml.client.FMLClientHandler;
 
-public class TileEntityLanteaDecorGlassRenderer extends TileEntitySpecialRenderer {
+public class TileLanteaDecorGlassRenderer extends TileEntitySpecialRenderer {
 
 	private ResourceLocation glassTexture;
 
@@ -24,13 +24,13 @@ public class TileEntityLanteaDecorGlassRenderer extends TileEntitySpecialRendere
 			{ 0.0D, 1.0D, 0.0D }, // West
 	};
 
-	public TileEntityLanteaDecorGlassRenderer() {
+	public TileLanteaDecorGlassRenderer() {
 		glassTexture = LanteaCraft.getResource("textures/tileentity/lantean_glass_128.png");
 	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
-		TileEntityLanteaDecorGlass glass = (TileEntityLanteaDecorGlass) tileEntity;
+		TileLanteaDecorGlass glass = (TileLanteaDecorGlass) tileEntity;
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

@@ -23,7 +23,7 @@ import pcl.lc.base.network.StandardModPacket;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
 
-public class TileEntityStargateDHD extends PoweredTileEntity implements IPacketHandler, IEnergyStore {
+public class TileStargateDHD extends PoweredTileEntity implements IPacketHandler, IEnergyStore {
 
 	public static int linkRangeX = 10;
 	public static int linkRangeY = 10;
@@ -91,7 +91,7 @@ public class TileEntityStargateDHD extends PoweredTileEntity implements IPacketH
 		linkRangeZ = cfg.getInteger("dhd", "linkRangeZ", linkRangeZ);
 	}
 
-	public TileEntityStargateDHD() {
+	public TileStargateDHD() {
 		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(ModulePower.Items.energyCrystal, 1),
 				new ItemStack(ModulePower.Items.zpm, 1) }, null, true, false));
 	}
@@ -132,11 +132,11 @@ public class TileEntityStargateDHD extends PoweredTileEntity implements IPacketH
 		nbt.setTag("energyStore", energyCompound);
 	}
 
-	public TileEntityStargateBase getLinkedStargateTE() {
+	public TileStargateBase getLinkedStargateTE() {
 		if (isLinkedToStargate) {
 			TileEntity gte = worldObj.getTileEntity(linkedX, linkedY, linkedZ);
-			if (gte instanceof TileEntityStargateBase)
-				return (TileEntityStargateBase) gte;
+			if (gte instanceof TileStargateBase)
+				return (TileStargateBase) gte;
 		}
 		return null;
 	}
@@ -149,14 +149,14 @@ public class TileEntityStargateDHD extends PoweredTileEntity implements IPacketH
 					for (int k = 1; k <= linkRangeZ; k++) {
 						Vector3 p = t.p(i, j, -k);
 						TileEntity te = worldObj.getTileEntity(p.floorX(), p.floorY(), p.floorZ());
-						if (te instanceof TileEntityStargateBase)
-							if (linkToStargate((TileEntityStargateBase) te))
+						if (te instanceof TileStargateBase)
+							if (linkToStargate((TileStargateBase) te))
 								return;
 					}
 		}
 	}
 
-	boolean linkToStargate(TileEntityStargateBase gte) {
+	boolean linkToStargate(TileStargateBase gte) {
 		if (!isLinkedToStargate && gte.getAsStructure().isValid()) {
 			linkedX = gte.xCoord;
 			linkedY = gte.yCoord;

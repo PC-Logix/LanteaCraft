@@ -1,15 +1,15 @@
 package pcl.lc.module.stargate.render;
 
-import static pcl.lc.module.stargate.render.TileEntityStargateBaseRenderer.cos;
-import static pcl.lc.module.stargate.render.TileEntityStargateBaseRenderer.sin;
+import static pcl.lc.module.stargate.render.TileStargateBaseRenderer.cos;
+import static pcl.lc.module.stargate.render.TileStargateBaseRenderer.sin;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 
-public class EventHorizonRenderer implements IStargateRenderer {
+public class StargateEventHorizonRenderer implements IStargateRenderer {
 
 	public final static int ehGridRadialSize = 10;
 	public final static int ehGridPolarSize = StargateRenderConstants.numRingSegments;
@@ -18,16 +18,16 @@ public class EventHorizonRenderer implements IStargateRenderer {
 			+ LanteaCraft.getProxy().getRenderMode() + ".png");
 	private static ResourceLocation irisTexture = LanteaCraft.getResource("textures/fx/energy_iris_128.png");
 
-	private TileEntityStargateBaseRenderer caller;
+	private TileStargateBaseRenderer caller;
 
 	@Override
-	public void renderStargateAt(TileEntityStargateBaseRenderer renderer, TileEntityStargateBase te, double x,
+	public void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x,
 			double y, double z, float t) {
 		caller = renderer;
 		renderEventHorizon(te);
 	}
 
-	private void renderEventHorizon(TileEntityStargateBase te) {
+	private void renderEventHorizon(TileStargateBase te) {
 		caller.bind(eventHorizonTexture);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glNormal3d(0, 0, 1);

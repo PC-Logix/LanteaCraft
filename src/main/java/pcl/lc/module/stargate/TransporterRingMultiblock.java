@@ -16,7 +16,7 @@ import pcl.lc.base.multiblock.GenericMultiblock;
 import pcl.lc.base.multiblock.MultiblockPart;
 import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.StandardModPacket;
-import pcl.lc.module.stargate.tile.TileEntityTransporterRing;
+import pcl.lc.module.stargate.tile.TileTransporterRing;
 
 public class TransporterRingMultiblock extends GenericMultiblock {
 
@@ -104,19 +104,19 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 	private void updateState(EnumRingPlatformState state, int timeout) {
 		this.state = state;
 		this.timeout = timeout;
-		((TileEntityTransporterRing) host).markBlockForUpdate();
+		((TileTransporterRing) host).markBlockForUpdate();
 	}
 
 	public void connect() {
 		ArrayList<Vector3> others = ScanningHelper.findAllTileEntitesOf(host.getWorldObj(),
-				TileEntityTransporterRing.class, xCoord, yCoord, zCoord,
+				TileTransporterRing.class, xCoord, yCoord, zCoord,
 				AxisAlignedBB.getBoundingBox(-10, -yCoord, -10, 10, host.getWorldObj().getHeight(), 10));
 		Vector3 vectorHere = new Vector3(host);
 		for (Vector3 other : others) {
 			TileEntity at = host.getWorldObj().getTileEntity(xCoord + (int) Math.floor(other.x),
 					yCoord + (int) Math.floor(other.y), zCoord + (int) Math.floor(other.z));
-			if ((at instanceof TileEntityTransporterRing) && !at.equals(this)) {
-				TileEntityTransporterRing that = (TileEntityTransporterRing) at;
+			if ((at instanceof TileTransporterRing) && !at.equals(this)) {
+				TileTransporterRing that = (TileTransporterRing) at;
 				if (that.isHost() && that.getAsStructure().isValid() && !that.getAsStructure().isBusy()) {
 					performConnection(other.add(vectorHere));
 					that.getAsStructure().performConnection(vectorHere);
@@ -126,8 +126,8 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 		}
 	}
 
-	private TileEntityTransporterRing getSlave() {
-		return (TileEntityTransporterRing) host.getWorldObj().getTileEntity((int) Math.floor(connectionTo.x),
+	private TileTransporterRing getSlave() {
+		return (TileTransporterRing) host.getWorldObj().getTileEntity((int) Math.floor(connectionTo.x),
 				(int) Math.floor(connectionTo.y), (int) Math.floor(connectionTo.z));
 	}
 
@@ -149,7 +149,7 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 	}
 
 	private void entityInPortal(Entity entity) {
-		TileEntityTransporterRing dte = getSlave();
+		TileTransporterRing dte = getSlave();
 		if (dte != null) {
 			while (entity.ridingEntity != null)
 				entity = entity.ridingEntity;
@@ -190,7 +190,7 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 		for (int x = 0; x < 10; x++)
 			for (int z = 0; z < 10; z++) {
 				TileEntity tile = worldAccess.getTileEntity(x - 4, baseY, z - 4);
-				if (tile != null && tile instanceof TileEntityTransporterRing) {
+				if (tile != null && tile instanceof TileTransporterRing) {
 					dx = x;
 					dz = z;
 					break;
@@ -203,7 +203,7 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 		for (int x = 0; x < 5; x++)
 			for (int z = 0; z < 5; z++) {
 				TileEntity tile = worldAccess.getTileEntity(dx + x, baseY, dz + z);
-				if (tile == null || !(tile instanceof TileEntityTransporterRing))
+				if (tile == null || !(tile instanceof TileTransporterRing))
 					return false;
 			}
 		return true;

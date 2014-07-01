@@ -21,7 +21,7 @@ import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.StandardModPacket;
 import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleStargates;
-import pcl.lc.module.stargate.tile.TileEntityStargateRing;
+import pcl.lc.module.stargate.tile.TileStargateRing;
 
 public class StargateMultiblock extends GenericMultiblock {
 
@@ -99,7 +99,7 @@ public class StargateMultiblock extends GenericMultiblock {
 	 * @return If the tile entity part object is a Stargate part
 	 */
 	private boolean isGateTileEntity(TileEntity entity) {
-		if (entity instanceof TileEntityStargateRing)
+		if (entity instanceof TileStargateRing)
 			return true;
 		return false;
 	}
@@ -177,9 +177,9 @@ public class StargateMultiblock extends GenericMultiblock {
 			else
 				return block.isAir(world, x, y, z);
 		if (expectedType == 1 || expectedType == 2) {
-			if (!(entity instanceof TileEntityStargateRing))
+			if (!(entity instanceof TileStargateRing))
 				return false;
-			TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
+			TileStargateRing entityAsRing = (TileStargateRing) entity;
 			StargatePart teAsPart = null;
 			teAsPart = entityAsRing.getAsPart();
 			if (expectedType == 1) {
@@ -209,7 +209,7 @@ public class StargateMultiblock extends GenericMultiblock {
 				for (int y = 0; y < 7; y++) {
 					TileEntity entity = worldAccess.getTileEntity(baseX + (x - 3), baseY + y, baseZ);
 					if (stargateModel[y][x] != 0 && stargateModel[y][x] != 3) {
-						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
+						TileStargateRing entityAsRing = (TileStargateRing) entity;
 						StargatePart teAsPart = entityAsRing.getAsPart();
 						if (!teAsPart.canMergeWith(this))
 							return false;
@@ -230,7 +230,7 @@ public class StargateMultiblock extends GenericMultiblock {
 				for (int y = 0; y < 7; y++) {
 					TileEntity entity = worldAccess.getTileEntity(baseX, baseY + y, baseZ + (z - 3));
 					if (stargateModel[y][z] != 0 && stargateModel[y][z] != 3) {
-						TileEntityStargateRing entityAsRing = (TileEntityStargateRing) entity;
+						TileStargateRing entityAsRing = (TileStargateRing) entity;
 						StargatePart teAsPart = entityAsRing.getAsPart();
 						if (!teAsPart.canMergeWith(this))
 							return false;

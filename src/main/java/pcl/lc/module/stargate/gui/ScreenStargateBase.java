@@ -19,7 +19,7 @@ import pcl.lc.base.render.IconButtonRenderer;
 import pcl.lc.module.stargate.AddressingError;
 import pcl.lc.module.stargate.AddressingError.CoordRangeError;
 import pcl.lc.module.stargate.AddressingError.DimensionRangeError;
-import pcl.lc.module.stargate.tile.TileEntityStargateBase;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 
 public class ScreenStargateBase extends GenericContainerGUI {
 
@@ -28,13 +28,13 @@ public class ScreenStargateBase extends GenericContainerGUI {
 	private static final int guiHeight = 208;
 
 	private ResourceLocation background;
-	private TileEntityStargateBase te;
+	private TileStargateBase te;
 	private String address;
 
 	private boolean mouseDown = false;
 	private int clipboardAction = 0;
 
-	public ScreenStargateBase(TileEntityStargateBase entity, EntityPlayer player) {
+	public ScreenStargateBase(TileStargateBase entity, EntityPlayer player) {
 		super(new ContainerStargateBase(entity, player));
 		te = entity;
 		background = LanteaCraft.getResource("textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png");
