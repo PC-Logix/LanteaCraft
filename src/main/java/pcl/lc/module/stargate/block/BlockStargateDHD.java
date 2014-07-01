@@ -101,7 +101,7 @@ public class BlockStargateDHD extends RotationOrientedBlock {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
 		if (side != ForgeDirection.UP.ordinal())
-			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), world,
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(), world,
 					x, y, z);
 		else {
 			TileEntityStargateDHD tile = (TileEntityStargateDHD) world.getTileEntity(x, y, z);

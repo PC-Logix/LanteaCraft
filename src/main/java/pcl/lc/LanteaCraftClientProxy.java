@@ -62,7 +62,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	public void registerScreens() {
 		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ScreenStargateBase.class);
-		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(), ScreenStargateDHDEnergy.class);
+		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(), ScreenStargateDHDEnergy.class);
 		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ScreenNaquadahGenerator.class);
 	}
 

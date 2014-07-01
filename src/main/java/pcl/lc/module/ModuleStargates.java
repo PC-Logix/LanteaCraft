@@ -147,7 +147,7 @@ public class ModuleStargates implements IModule {
 				net.minecraft.init.Items.diamond);
 
 		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
-		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.StargateControllerEnergy.ordinal(),
+		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(),
 				ContainerStargateDHDEnergy.class);
 
 		if (event.getSide() == Side.CLIENT) {
