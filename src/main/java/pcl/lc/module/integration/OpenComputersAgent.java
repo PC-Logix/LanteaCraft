@@ -20,5 +20,10 @@ public class OpenComputersAgent implements IIntegrationAgent {
 	public void init() {
 		Driver.add(new OpenComputersWrapperPool.OpenComputersDriver());
 	}
+	
+	@Override
+	public void postInit() {
+		
+	}
 
 }

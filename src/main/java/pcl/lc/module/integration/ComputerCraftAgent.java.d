@@ -60,5 +60,10 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 		GameRegistry.registerTileEntity(TileEntityComputerCraftConnector.class, "tileEntityComputercraftAdapter");
 
 	}
+	
+	@Override
+	public void postInit() {
+		
+	}
 
 }

@@ -96,7 +96,13 @@ public class ModuleIntegration implements IModule {
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
-		// Agents don't really need a postInit (for now).
+		Iterator<IIntegrationAgent> agents = this.agents.iterator();
+		while (agents.hasNext())
+			try {
+				agents.next().postInit();
+			} catch (Throwable t) {
+				LanteaCraft.getLogger().log(Level.WARN, "Integration agent threw postinit-time exception.", t);
+			}
 	}
 
 }

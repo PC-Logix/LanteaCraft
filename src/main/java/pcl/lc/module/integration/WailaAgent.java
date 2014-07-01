@@ -16,5 +16,10 @@ public class WailaAgent implements IIntegrationAgent {
 	public void init() {
 		FMLInterModComms.sendMessage("Waila", "register", "pcl.lc.module.integration.WailaHook.callbackRegister");
 	}
+	
+	@Override
+	public void postInit() {
+		
+	}
 
 }
