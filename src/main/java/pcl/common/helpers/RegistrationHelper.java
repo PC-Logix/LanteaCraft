@@ -36,7 +36,8 @@ import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 public class RegistrationHelper {
 
 	private static boolean isLateRegistrationZone = false;
-	private static class VillagerMapping {
+
+	public static class VillagerMapping {
 		public final int villagerID;
 		public final ResourceLocation villagerSkin;
 
@@ -45,8 +46,60 @@ public class RegistrationHelper {
 			villagerSkin = skin;
 		}
 	};
+
+	public static class BlockItemMapping {
+		public final Class<? extends Block> blockClass;
+		public final Class<? extends ItemBlock> itemClass;
+
+		public BlockItemMapping(Class<? extends Block> block, Class<? extends ItemBlock> item) {
+			blockClass = block;
+			itemClass = item;
+		}
+	}
+
+	/**
+	 * Internal list of all registered Block instances.
+	 */
+	private static Map<Integer, BlockItemMapping> registeredBlocks = new HashMap<Integer, BlockItemMapping>();
+
+	/**
+	 * Get a list of all Block and ItemBlock mappings in the registry.
+	 * 
+	 * @return The list of all Block and ItemBlock mappings.
+	 */
+	public static Map<Integer, BlockItemMapping> getBlockMappings() {
+		if (!isLateRegistrationZone)
+			return null;
+		return registeredBlocks;
+	}
+
+	/**
+	 * Internal list of all registered Item instances.
+	 */
+	private static Map<Integer, Class<? extends Item>> registeredItems = new HashMap<Integer, Class<? extends Item>>();
+
+	/**
+	 * Get a list of all Item mappings in the registry.
+	 * 
+	 * @return The list of all Item mappings.
+	 */
+	public static Map<Integer, Class<? extends Item>> getItemMappings() {
+		if (!isLateRegistrationZone)
+			return null;
+		return registeredItems;
+	}
+
+	/**
+	 * Internal list of all registered Container instances.
+	 */
 	private static Map<Integer, Class<? extends Container>> registeredContainers = new HashMap<Integer, Class<? extends Container>>();
+	/**
+	 * Internal list of all registered GUI instances.
+	 */
 	private static Map<Integer, Class<? extends GuiScreen>> registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
+	/**
+	 * Internal list of all registered Villager types.
+	 */
 	private static Map<String, VillagerMapping> registeredVillagers = new HashMap<String, VillagerMapping>();
 
 	/**
@@ -114,6 +167,7 @@ public class RegistrationHelper {
 			if (inCreativeTabs)
 				theMysteryBlock.setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerBlock(theMysteryBlock, itemClassOf, unlocalizedName);
+			registeredBlocks.put(registeredBlocks.size(), new BlockItemMapping(classOf, itemClassOf));
 			return theMysteryBlock;
 		} catch (Throwable e) {
 			LanteaCraft.getLogger().log(Level.FATAL, "Failed to register block, an exception occured.", e);
@@ -139,6 +193,7 @@ public class RegistrationHelper {
 			T theMysteryItem = ctor.newInstance();
 			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(LanteaCraft.getCreativeTab());
 			GameRegistry.registerItem(theMysteryItem, unlocalizedName);
+			registeredItems.put(registeredItems.size(), classOf);
 			return theMysteryItem;
 		} catch (Exception e) {
 			LanteaCraft.getLogger().log(Level.FATAL, "Failed to register item, an exception occured.", e);
@@ -315,8 +370,8 @@ public class RegistrationHelper {
 	 */
 	@Deprecated
 	public static BlockLanteaDecorStair registerStairDecal(String unlocalizedName, int targetMetadata) {
-		LanteaCraft.getLogger()
-				.log(Level.DEBUG, String.format("Attempting to register stair decal %s", unlocalizedName));
+		LanteaCraft.getLogger().log(Level.DEBUG,
+				String.format("Attempting to register stair decal %s", unlocalizedName));
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this stair decal is later than was expected!");
@@ -330,7 +385,7 @@ public class RegistrationHelper {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static int registerVillager(int id, String name, ResourceLocation skin) {
 		LanteaCraft.getLogger().log(Level.DEBUG, "Adding villager ID " + id + " with name " + name);
 		registeredVillagers.put(name, new VillagerMapping(id, skin));
@@ -342,10 +397,9 @@ public class RegistrationHelper {
 				"Registering container with ID " + id + ", class " + cls.getCanonicalName());
 		registeredContainers.put(id, cls);
 	}
-	
+
 	public static void registerGui(int id, Class<? extends GuiScreen> cls) {
-		LanteaCraft.getLogger().log(Level.DEBUG,
-				"Registering GUI with ID " + id + ", class " + cls.getCanonicalName());
+		LanteaCraft.getLogger().log(Level.DEBUG, "Registering GUI with ID " + id + ", class " + cls.getCanonicalName());
 		registeredGUIs.put(id, cls);
 	}
 
