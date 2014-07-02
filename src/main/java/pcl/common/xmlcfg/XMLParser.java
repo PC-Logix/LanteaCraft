@@ -69,23 +69,24 @@ public class XMLParser {
 		for (int i = 0; i < childrenRoot.getLength(); i++) {
 			Node child = childrenRoot.item(i);
 			if (DOMHelper.isNodeOfType(child, "Module", false))
-				rootChildren.add(readModuleConfig((Element) child));
+				rootChildren.add(readModuleConfig(root, (Element) child));
 		}
 		root.setChildren(rootChildren);
 		return root;
 	}
 
-	private ModuleConfig readModuleConfig(Element moduleNode) throws XMLParserException {
+	private ModuleConfig readModuleConfig(ConfigNode parent, Element moduleNode) throws XMLParserException {
 		DOMHelper.checkedAllAttributes(moduleNode, new String[] { "name", "enabled" });
-		ModuleConfig moduleRoot = new ModuleConfig(moduleNode.getAttribute("name"));
+		ModuleConfig moduleRoot = new ModuleConfig(moduleNode.getAttribute("name"), parent);
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		ArrayList<ConfigNode> rootChildren = new ArrayList<ConfigNode>();
+		parameters.put("name", moduleNode.getAttribute("name"));
 		parameters.put("enabled", DOMHelper.popBoolean(moduleNode.getAttribute("enabled"), false));
 		NodeList childrenRoot = moduleNode.getChildNodes();
 		for (int i = 0; i < childrenRoot.getLength(); i++) {
 			Node child = childrenRoot.item(i);
 			if (child instanceof Element)
-				rootChildren.add(readRecusriveObject((Element) child));
+				rootChildren.add(readRecusriveObject(moduleRoot, (Element) child));
 		}
 		moduleRoot.setParameters(parameters);
 		moduleRoot.setChildren(rootChildren);
@@ -95,9 +96,9 @@ public class XMLParser {
 		return moduleRoot;
 	}
 
-	private ConfigNode readRecusriveObject(Element element) throws XMLParserException {
+	private ConfigNode readRecusriveObject(ConfigNode parent, Element element) throws XMLParserException {
 		if (element.hasChildNodes()) {
-			ConfigList group = new ConfigList(element.getTagName());
+			ConfigList group = new ConfigList(element.getTagName(), parent);
 			ArrayList<ConfigNode> childrenGroup = new ArrayList<ConfigNode>();
 			if (element.hasAttributes()) {
 				HashMap<String, Object> parameters = new HashMap<String, Object>();
@@ -110,7 +111,7 @@ public class XMLParser {
 			for (int i = 0; i < children.getLength(); i++) {
 				Node child = children.item(i);
 				if (child instanceof Element)
-					childrenGroup.add(readRecusriveObject((Element) child));
+					childrenGroup.add(readRecusriveObject(group, (Element) child));
 			}
 			group.setChildren(childrenGroup);
 			Comment nodeComment = DOMHelper.findLeadingComment(element);
@@ -118,7 +119,7 @@ public class XMLParser {
 				group.setComment(nodeComment.getData());
 			return group;
 		} else {
-			ConfigNode single = new ConfigNode(element.getTagName());
+			ConfigNode single = new ConfigNode(element.getTagName(), parent);
 			if (element.hasAttributes()) {
 				HashMap<String, Object> parameters = new HashMap<String, Object>();
 				NamedNodeMap nodes = element.getAttributes();

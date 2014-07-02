@@ -2,6 +2,7 @@ package net.afterlifelochie.sandbox;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -13,6 +14,7 @@ import pcl.common.xmlcfg.ModuleList;
 import pcl.common.xmlcfg.XMLParser;
 import pcl.common.xmlcfg.XMLParserException;
 import pcl.common.xmlcfg.XMLSaver;
+import pcl.common.xmlcfg.XMLSaverException;
 
 public class LocalTest {
 
@@ -29,11 +31,23 @@ public class LocalTest {
 			FileInputStream test = new FileInputStream(new File("LanteaCraft.xml"));
 			ModuleList list = parser.read(test);
 			printObject(0, list);
+			
+			for (ModuleConfig module : list.children()) {
+				if (module.name().equalsIgnoreCase("core")) {
+					ConfigNode newNode = new ConfigNode("doYouLikeBacon", "Bacon, yes?", module);
+					newNode.parameters().put("yummy", "yes");
+					module.children().add(newNode);
+				}
+			}
+			
+			saver.save(list, new FileOutputStream(new File("LanteaCraft-out.xml")));
 
 		} catch (IOException ioex) {
 			ioex.printStackTrace();
 		} catch (XMLParserException parse) {
 			parse.printStackTrace();
+		} catch (XMLSaverException save) {
+			save.printStackTrace();
 		}
 	}
 

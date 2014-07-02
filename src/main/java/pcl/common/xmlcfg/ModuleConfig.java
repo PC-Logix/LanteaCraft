@@ -1,7 +1,5 @@
 package pcl.common.xmlcfg;
 
-import java.util.ArrayList;
-
 public class ModuleConfig extends ConfigList {
 
 	public ModuleConfig() {
@@ -14,6 +12,10 @@ public class ModuleConfig extends ConfigList {
 
 	public ModuleConfig(String name, String comment) {
 		super(name, comment);
+	}
+
+	public ModuleConfig(String name, ConfigNode parent) {
+		super(name, parent);
 	}
 
 }
