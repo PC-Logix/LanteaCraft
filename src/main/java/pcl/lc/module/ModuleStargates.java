@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
 import pcl.common.helpers.RegistrationHelper;
+import pcl.common.xmlcfg.ConfigHelper;
 import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
@@ -144,13 +145,17 @@ public class ModuleStargates implements IModule {
 				net.minecraft.init.Items.ender_pearl, 'r', net.minecraft.init.Items.redstone, 'c',
 				Items.controllerCrystal);
 
-		RegistrationHelper.newRecipe(new ItemStack(Items.coreCrystal, 1), "bbr", "rdb", "brb", 'b', new ItemStack(
-				net.minecraft.init.Items.dye, 1, 4), 'r', net.minecraft.init.Items.redstone, 'd',
-				net.minecraft.init.Items.diamond);
+		if (ConfigHelper.getOrSetBooleanParam(config, "Crafting", "allowCrafting", "coreCrystal",
+				"Allow crafting of certain hard-to-obtain items. This de-balances the mod.", false))
+			RegistrationHelper.newRecipe(new ItemStack(Items.coreCrystal, 1), "bbr", "rdb", "brb", 'b', new ItemStack(
+					net.minecraft.init.Items.dye, 1, 4), 'r', net.minecraft.init.Items.redstone, 'd',
+					net.minecraft.init.Items.diamond);
 
-		RegistrationHelper.newRecipe(new ItemStack(Items.controllerCrystal, 1), "roo", "odr", "oor", 'o',
-				new ItemStack(net.minecraft.init.Items.dye, 1, 14), 'r', net.minecraft.init.Items.redstone, 'd',
-				net.minecraft.init.Items.diamond);
+		if (ConfigHelper.getOrSetBooleanParam(config, "Crafting", "allowCrafting", "controllerCrystal",
+				"Allow crafting of certain hard-to-obtain items. This de-balances the mod.", false))
+			RegistrationHelper.newRecipe(new ItemStack(Items.controllerCrystal, 1), "roo", "odr", "oor", 'o',
+					new ItemStack(net.minecraft.init.Items.dye, 1, 14), 'r', net.minecraft.init.Items.redstone, 'd',
+					net.minecraft.init.Items.diamond);
 
 		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
 		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(),

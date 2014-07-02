@@ -6,6 +6,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import pcl.common.helpers.RegistrationHelper;
+import pcl.common.xmlcfg.ConfigHelper;
 import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
@@ -116,8 +117,10 @@ public class ModuleCore implements IModule {
 		RegistrationHelper.registerOre("naquadah", new ItemStack(Items.lanteaOreItem));
 		RegistrationHelper.registerOre("ingotNaquadahAlloy", new ItemStack(Items.lanteaOreIngot));
 
-		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreItem, 1), net.minecraft.init.Items.coal,
-				net.minecraft.init.Items.slime_ball, net.minecraft.init.Items.blaze_powder);
+		if (ConfigHelper.getOrSetBooleanParam(config, "Crafting", "allowCrafting", "naquadah",
+				"Allow crafting of certain hard-to-obtain items. This de-balances the mod.", false))
+			RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreItem, 1), net.minecraft.init.Items.coal,
+					net.minecraft.init.Items.slime_ball, net.minecraft.init.Items.blaze_powder);
 
 		if (event.getSide() == Side.CLIENT) {
 			Render.blockOrientedRenderer = new BlockRotationOrientedRenderer();
