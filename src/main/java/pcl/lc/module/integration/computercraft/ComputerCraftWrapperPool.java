@@ -196,8 +196,10 @@ public class ComputerCraftWrapperPool {
 					pushEvent("sgChevronEncode", new Object[] { access.getEncodedChevrons() });
 					break; 
 				case Transient:
-					if (access.getState() != access.getState().Connected)
+					if (access.getState() != access.getState().Connected) {
+						pushEvent("sgChevronEncode", new Object[] { access.getEncodedChevrons() });
 						pushEvent("sgWormholeOpening", new Object[] { true });
+					}
 					break;
 				case Disconnecting:
 					pushEvent("sgWormholeClosing", new Object[] { true });
