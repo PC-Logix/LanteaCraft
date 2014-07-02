@@ -52,7 +52,7 @@ public class LocalTest {
 		}
 	}
 
-	public void printObject(int level, ConfigNode node) {
+	public static void printObject(int level, ConfigNode node) {
 		StringBuilder tabs = new StringBuilder();
 		for (int i = 0; i < level; i++)
 			tabs.append("\t");
@@ -81,7 +81,7 @@ public class LocalTest {
 			System.out.println(String.format("%s {??}", tabs));
 	}
 
-	public void printParameters(int level, HashMap<String, Object> params) {
+	public static void printParameters(int level, HashMap<String, Object> params) {
 		if (params == null)
 			return;
 		StringBuilder tabs = new StringBuilder();

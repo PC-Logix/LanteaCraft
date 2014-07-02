@@ -8,7 +8,6 @@ import java.util.Set;
 import org.apache.logging.log4j.Level;
 
 import pcl.common.xmlcfg.ConfigHelper;
-import pcl.common.xmlcfg.DOMHelper;
 import pcl.common.xmlcfg.ModuleConfig;
 import pcl.common.xmlcfg.ModuleList;
 import pcl.lc.LanteaCraft;
@@ -195,7 +194,7 @@ public class ModuleManager {
 	 */
 	private boolean isModuleEnabled(Module theModule) {
 		ModuleConfig config = ConfigHelper.findModuleConfigByName(moduleConfig, theModule.name());
-		return DOMHelper.popBoolean((String) config.parameters().get("enabled"), false);
+		return (Boolean) config.parameters().get("enabled");
 	}
 
 	public static ModuleConfig getConfig(IModule module) {

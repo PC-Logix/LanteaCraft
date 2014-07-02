@@ -77,7 +77,7 @@ public class XMLParser {
 
 	private ModuleConfig readModuleConfig(ConfigNode parent, Element moduleNode) throws XMLParserException {
 		DOMHelper.checkedAllAttributes(moduleNode, new String[] { "name", "enabled" });
-		ModuleConfig moduleRoot = new ModuleConfig(moduleNode.getAttribute("name"), parent);
+		ModuleConfig moduleRoot = new ModuleConfig("Module", parent);
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		ArrayList<ConfigNode> rootChildren = new ArrayList<ConfigNode>();
 		parameters.put("name", moduleNode.getAttribute("name"));

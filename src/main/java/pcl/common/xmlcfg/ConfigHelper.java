@@ -16,10 +16,9 @@ public class ConfigHelper {
 	 */
 	public static ModuleConfig findModuleConfigByName(ModuleList list, String name) {
 		for (ModuleConfig element : list.children())
-			if (element.name().equalsIgnoreCase("Module") && element.parameters().containsKey("name"))
-				if (element.parameters().get("name") instanceof String
-						&& ((String) element.parameters().get("name")).equalsIgnoreCase(name))
-					return element;
+			if (element.name().equalsIgnoreCase("Module") && element.parameters().containsKey("name")
+					&& element.parameters().get("name").toString().equalsIgnoreCase(name))
+				return element;
 		ModuleConfig config = new ModuleConfig("Module", list);
 		config.parameters().put("name", name);
 		config.parameters().put("enabled", "true");
@@ -97,8 +96,9 @@ public class ConfigHelper {
 		}
 		return targetNode.parameters().get(paramName);
 	}
-	
-	public static boolean getOrSetBooleanParam(ConfigList list, String clazz, String name, String paramName, String comment, Boolean state) {
+
+	public static boolean getOrSetBooleanParam(ConfigList list, String clazz, String name, String paramName,
+			String comment, Boolean state) {
 		ConfigNode targetNode = null;
 		for (ConfigNode child : list.children())
 			if (child.name().equals(clazz))
