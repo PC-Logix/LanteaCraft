@@ -3,6 +3,7 @@ package pcl.common.xmlcfg;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Comment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -83,6 +84,23 @@ public class DOMHelper {
 				result.add(node);
 		}
 		return result.toArray(new Node[0]);
+	}
+
+	/**
+	 * Attempts to find a leading comment above this node until either a Comment
+	 * is encountered or another Element is found instead.
+	 * 
+	 * @param node
+	 *            The node to search for a leading comment to.
+	 * @return A leading comment or null.
+	 */
+	public static Comment findLeadingComment(Node node) {
+		Node leadingNode = node.getPreviousSibling();
+		while (leadingNode != null && !(leadingNode instanceof Element) && !(leadingNode instanceof Comment))
+			leadingNode = leadingNode.getPreviousSibling();
+		if (leadingNode != null && leadingNode instanceof Comment)
+			return (Comment) leadingNode;
+		return null;
 	}
 
 	/**

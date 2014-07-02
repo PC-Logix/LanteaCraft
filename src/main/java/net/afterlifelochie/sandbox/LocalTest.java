@@ -3,10 +3,13 @@ package net.afterlifelochie.sandbox;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import pcl.common.xmlcfg.ConfigList;
 import pcl.common.xmlcfg.ConfigNode;
 import pcl.common.xmlcfg.ModuleConfig;
+import pcl.common.xmlcfg.ModuleList;
 import pcl.common.xmlcfg.XMLParser;
 import pcl.common.xmlcfg.XMLParserException;
 import pcl.common.xmlcfg.XMLSaver;
@@ -24,11 +27,8 @@ public class LocalTest {
 
 		try {
 			FileInputStream test = new FileInputStream(new File("LanteaCraft.xml"));
-			ConfigList list = parser.read(test);
-
-			for (ConfigNode node : list.children()) {
-
-			}
+			ModuleList list = parser.read(test);
+			printObject(0, list);
 
 		} catch (IOException ioex) {
 			ioex.printStackTrace();
@@ -37,19 +37,43 @@ public class LocalTest {
 		}
 	}
 
-	public void printObject(ConfigNode node) {
-		if (node instanceof ConfigList) {
+	public void printObject(int level, ConfigNode node) {
+		StringBuilder tabs = new StringBuilder();
+		for (int i = 0; i < level; i++)
+			tabs.append("\t");
+		if (node instanceof ModuleList) {
+			ModuleList list = (ModuleList) node;
+			System.out.println(String.format("%s ModuleList: %s, %s", tabs, list.name(), list.comment()));
+			printParameters(level, list.parameters());
+			for (ModuleConfig child : list.children())
+				printObject(level + 1, child);
+		} else if (node instanceof ConfigList) {
 			ConfigList list = (ConfigList) node;
-			System.out.println(String.format("ConfigList: %s, %s", list.name(), list.comment()));
+			System.out.println(String.format("%s ConfigList: %s, %s", tabs, list.name(), list.comment()));
+			printParameters(level, list.parameters());
 			for (ConfigNode child : list.children())
-				printObject(child);
+				printObject(level + 1, child);
 		} else if (node instanceof ModuleConfig) {
 			ModuleConfig module = (ModuleConfig) node;
-			System.out.println(String.format("ModuleConfig: %s, %s", module.name(), module.comment()));
+			System.out.println(String.format("%s ModuleConfig: %s, %s", tabs, module.name(), module.comment()));
+			printParameters(level, module.parameters());
 			for (ConfigNode child : module.children())
-				printObject(child);
+				printObject(level + 1, child);
+		} else if (node instanceof ConfigNode) {
+			System.out.println(String.format("%s ConfigNode: %s, %s", tabs, node.name(), node.comment()));
+			printParameters(level, node.parameters());
 		} else
-			System.out.println("");
+			System.out.println(String.format("%s {??}", tabs));
+	}
+
+	public void printParameters(int level, HashMap<String, Object> params) {
+		if (params == null)
+			return;
+		StringBuilder tabs = new StringBuilder();
+		for (int i = 0; i < level; i++)
+			tabs.append("\t");
+		for (Entry<String, Object> entry : params.entrySet())
+			System.out.println(String.format("%s Param %s: %s", tabs, entry.getKey(), entry.getValue().toString()));
 	}
 
 }

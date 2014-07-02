@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -22,6 +23,7 @@ public class XMLParser {
 
 	public XMLParser() {
 		factory = DocumentBuilderFactory.newInstance();
+		factory.setIgnoringComments(false);
 	}
 
 	/**
@@ -33,11 +35,11 @@ public class XMLParser {
 	 * @throws XMLParserException
 	 *             Any XML or read exception.
 	 */
-	public ConfigList read(InputStream chunk) throws XMLParserException {
+	public ModuleList read(InputStream chunk) throws XMLParserException {
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(chunk);
-			NodeList root = doc.getDocumentElement().getChildNodes();
+			NodeList root = doc.getChildNodes();
 			Node modRoot = DOMHelper.findNode(root, "ModConfig", false);
 			if (modRoot == null)
 				throw new XMLParserException("Missing ModConfig root tag.");
@@ -60,8 +62,8 @@ public class XMLParser {
 	 *         ModuleConfig nodes.
 	 * @throws XMLParserException
 	 */
-	private ConfigList readRoot(Node modRoot) throws XMLParserException {
-		ConfigList root = new ConfigList("ModConfig");
+	private ModuleList readRoot(Node modRoot) throws XMLParserException {
+		ModuleList root = new ModuleList("ModConfig");
 		ArrayList<ModuleConfig> rootChildren = new ArrayList<ModuleConfig>();
 		NodeList childrenRoot = modRoot.getChildNodes();
 		for (int i = 0; i < childrenRoot.getLength(); i++) {
@@ -69,6 +71,7 @@ public class XMLParser {
 			if (DOMHelper.isNodeOfType(child, "Module", false))
 				rootChildren.add(readModuleConfig((Element) child));
 		}
+		root.setChildren(rootChildren);
 		return root;
 	}
 
@@ -86,6 +89,9 @@ public class XMLParser {
 		}
 		moduleRoot.setParameters(parameters);
 		moduleRoot.setChildren(rootChildren);
+		Comment nodeComment = DOMHelper.findLeadingComment(moduleNode);
+		if (nodeComment != null)
+			moduleRoot.setComment(nodeComment.getData());
 		return moduleRoot;
 	}
 
@@ -96,11 +102,8 @@ public class XMLParser {
 			if (element.hasAttributes()) {
 				HashMap<String, Object> parameters = new HashMap<String, Object>();
 				NamedNodeMap nodes = element.getAttributes();
-				// TOOD: handling of attributes on xml-tag
-				for (int i = 0; i < nodes.getLength(); i++) {
-					Node node = nodes.item(i);
-					System.out.println(String.format("readRecursive ConfigList, node: %s", node.toString()));
-				}
+				for (int i = 0; i < nodes.getLength(); i++)
+					parameters.put(nodes.item(i).getNodeName(), nodes.item(i).getNodeValue());
 				group.setParameters(parameters);
 			}
 			NodeList children = element.getChildNodes();
@@ -110,18 +113,22 @@ public class XMLParser {
 					childrenGroup.add(readRecusriveObject((Element) child));
 			}
 			group.setChildren(childrenGroup);
+			Comment nodeComment = DOMHelper.findLeadingComment(element);
+			if (nodeComment != null)
+				group.setComment(nodeComment.getData());
 			return group;
 		} else {
 			ConfigNode single = new ConfigNode(element.getTagName());
 			if (element.hasAttributes()) {
 				HashMap<String, Object> parameters = new HashMap<String, Object>();
 				NamedNodeMap nodes = element.getAttributes();
-				for (int i = 0; i < nodes.getLength(); i++) {
-					Node node = nodes.item(i);
-					System.out.println(String.format("readRecursive ConfigNode, node: %s", node.toString()));
-				}
+				for (int i = 0; i < nodes.getLength(); i++)
+					parameters.put(nodes.item(i).getNodeName(), nodes.item(i).getNodeValue());
 				single.setParameters(parameters);
 			}
+			Comment nodeComment = DOMHelper.findLeadingComment(element);
+			if (nodeComment != null)
+				single.setComment(nodeComment.getData());
 			return single;
 		}
 	}

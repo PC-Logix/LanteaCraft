@@ -1,5 +1,7 @@
 package pcl.common.xmlcfg;
 
+import java.util.ArrayList;
+
 public class ModuleConfig extends ConfigList {
 
 	public ModuleConfig() {
