@@ -166,12 +166,10 @@ public class TileStargateBase extends GenericTileEntity implements IStargateAcce
 	public static void configure(ModuleConfig cfg) {
 		secondsToStayOpen = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "secondsToStayOpen", "time",
 				"Seconds to keep connections open for", secondsToStayOpen).toString());
-		oneWayTravel = DOMHelper.popBoolean(
-				ConfigHelper.getOrSetParam(cfg, "Option", "oneWayTravel", "enabled",
-						"Can players travel only one way?", oneWayTravel).toString(), false);
-		closeFromEitherEnd = DOMHelper.popBoolean(
-				ConfigHelper.getOrSetParam(cfg, "Option", "closeFromEitherEnd", "enabled",
-						"Can players close the gate from either end?", closeFromEitherEnd).toString(), false);
+		oneWayTravel = ConfigHelper.getOrSetBooleanParam(cfg, "Option", "oneWayTravel", "enabled",
+				"Can players travel only one way?", oneWayTravel);
+		closeFromEitherEnd = ConfigHelper.getOrSetBooleanParam(cfg, "Option", "closeFromEitherEnd", "enabled",
+				"Can players close the gate from either end?", closeFromEitherEnd);
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
 

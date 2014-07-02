@@ -97,4 +97,24 @@ public class ConfigHelper {
 		}
 		return targetNode.parameters().get(paramName);
 	}
+	
+	public static boolean getOrSetBooleanParam(ConfigList list, String clazz, String name, String paramName, String comment, Boolean state) {
+		ConfigNode targetNode = null;
+		for (ConfigNode child : list.children())
+			if (child.name().equals(clazz))
+				if (child.parameters().containsKey("name") && child.parameters().get("name") instanceof String)
+					if (((String) child.parameters().get("name")).equalsIgnoreCase(name))
+						targetNode = child;
+		if (targetNode == null) {
+			targetNode = new ConfigNode(clazz, comment, list);
+			targetNode.parameters().put("name", name);
+			list.children().add(targetNode);
+			targetNode.modify();
+		}
+		if (!targetNode.parameters().containsKey(paramName)) {
+			targetNode.parameters().put(paramName, state);
+			targetNode.modify();
+		}
+		return DOMHelper.popBoolean(targetNode.parameters().get(paramName).toString(), false);
+	}
 }
