@@ -74,12 +74,12 @@ public class ModuleStargates implements IModule {
 				"transportRingActivator");
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN", "III", 'I',
-				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1));
+				Item.ingotIron, 'N', new ItemStack(Items.lanteaOreIngot), 'C', new ItemStack(Block.sandStone, 1, 1));
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1, 1), "CgC", "NpN", "IrI", 'I',
-				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1), 'g',
+				Item.ingotIron, 'N', new ItemStack(Items.lanteaOreIngot), 'C', new ItemStack(Block.sandStone, 1, 1), 'g',
 				Item.glowstone, 'r', Item.redstone, 'p', Item.enderPearl);
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateBaseBlock, 1), "CrC", "NeN", "IcI", 'I',
-				Item.ingotIron, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(Block.sandStone, 1, 1), 'r',
+				Item.ingotIron, 'N', new ItemStack(Items.lanteaOreIngot), 'C', new ItemStack(Block.sandStone, 1, 1), 'r',
 				Item.redstone, 'e', Item.eyeOfEnder, 'c', Items.coreCrystal);
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateControllerBlock, 1), "bbb", "OpO", "OcO", 'b',
 				Block.stoneButton, 'O', Block.obsidian, 'p', Item.enderPearl, 'r', Item.redstone, 'c',
