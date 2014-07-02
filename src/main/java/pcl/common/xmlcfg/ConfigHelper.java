@@ -21,7 +21,7 @@ public class ConfigHelper {
 				return element;
 		ModuleConfig config = new ModuleConfig("Module", list);
 		config.parameters().put("name", name);
-		config.parameters().put("enabled", "true");
+		config.parameters().put("enabled", true);
 		list.children().add(config);
 		config.modify();
 		return config;

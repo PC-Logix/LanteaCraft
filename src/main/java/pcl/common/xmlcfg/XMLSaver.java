@@ -15,8 +15,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import net.afterlifelochie.sandbox.LocalTest;
-
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,8 +31,6 @@ public class XMLSaver {
 
 	public void save(ModuleList list, FileOutputStream output) throws XMLSaverException {
 		try {
-			LocalTest.printObject(0, list);
-			
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.newDocument();
 			saveModuleList(doc, list);
