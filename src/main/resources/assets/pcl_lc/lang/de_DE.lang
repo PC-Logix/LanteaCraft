@@ -7,6 +7,7 @@ item.controllerCrystal.name=Stargate Kontrollkristall
 item.energyCrystal.name=Energiekristall
 
 tile.blockLiquidNaquadah.name=Flüssiges Naquadah
+fluid.liquid_naquadah=Flüssiges Naquadah
 item.liquidNaquadahBucket.name=Eimer mit flüssigem Naquadah
 
 tile.lanteaDecor.1.name=Verzierter Antiker Stahl
@@ -42,6 +43,7 @@ item.transportRingActivator.name=Handgerät
 item.tokraSpawnEgg.name=Erschaffe Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
 item.zpm.name=ZPM
+item.gdo.name=GDO
 
 tile.integration.computercraft.name=ComputerCraft Adapter
 
