@@ -15,11 +15,11 @@ public class ModuleList extends ConfigNode {
 	public ModuleList(String name, String comment) {
 		super(name, comment);
 	}
-	
+
 	/**
 	 * The children of the object.
 	 */
-	private ArrayList<ModuleConfig> children;
+	private ArrayList<ModuleConfig> children = new ArrayList<ModuleConfig>();
 
 	public ArrayList<ModuleConfig> children() {
 		return children;
@@ -28,5 +28,5 @@ public class ModuleList extends ConfigNode {
 	public void setChildren(ArrayList<ModuleConfig> children) {
 		this.children = children;
 	}
-	
+
 }

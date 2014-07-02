@@ -11,7 +11,6 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.helpers.ConfigValue;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.OreTypes;
 
@@ -33,7 +32,8 @@ public class ChunkData {
 		Chunk chunk = e.getChunk();
 		ChunkData data = ChunkData.forChunk(chunk);
 		data.readFromNBT(e.getData());
-		if (((ConfigValue<Boolean>) LanteaCraft.getProxy().getConfigValue("addOresToExistingWorlds")).getValue()) {
+		// TODO: Pull from config!
+		if (false) {
 			NaquadahOreWorldGen gen = LanteaCraft.getProxy().getOreGenerator();
 			if (gen != null)
 				gen.readChunk(data, chunk);

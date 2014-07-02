@@ -10,7 +10,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.helpers.ConfigurationHelper;
+import pcl.common.xmlcfg.ConfigHelper;
+import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.OreTypes;
 import pcl.lc.module.ModuleCore;
@@ -26,12 +27,15 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 	// TODO: Unpack from config
 	private EnumSet<OreTypes> enabledOreSpawns = EnumSet.of(OreTypes.NAQUADAH, OreTypes.TRINIUM);
 
-	public static void configure(ConfigurationHelper cfg) {
-		// TODO: Replace me!
-		genUnderLavaOdds = cfg.getInteger("naquadah", "genUnderLavaOdds", genUnderLavaOdds);
-		maxNodesUnderLava = cfg.getInteger("naquadah", "maxNodesUnderLava", maxNodesUnderLava);
-		genIsolatedOdds = cfg.getInteger("naquadah", "genIsolatedOdds", genIsolatedOdds);
-		maxIsolatedNodes = cfg.getInteger("naquadah", "maxIsolatedNodes", maxIsolatedNodes);
+	public static void configure(ModuleConfig cfg) {
+		genUnderLavaOdds = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Generator", "generateUnderLava", "odds",
+				"Odds of generation under lava", genUnderLavaOdds).toString());
+		maxNodesUnderLava = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Generator", "maxNodesUnderLava", "count",
+				"Maximum nodes beneath lava", maxNodesUnderLava).toString());
+		genIsolatedOdds = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Generator", "genIsolated", "odds",
+				"Odds of generation of above lava nodes", genUnderLavaOdds).toString());
+		maxIsolatedNodes = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Generator", "maxIsolatedNodes", "count",
+				"Maximum nodes above lava per chunk", genUnderLavaOdds).toString());
 	}
 
 	public void readChunk(ChunkData data, Chunk chunk) {

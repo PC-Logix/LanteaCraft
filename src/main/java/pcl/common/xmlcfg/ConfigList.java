@@ -26,11 +26,11 @@ public class ConfigList extends ConfigNode {
 	public ConfigList(String name, ConfigNode parent) {
 		super(name, parent);
 	}
-	
+
 	/**
 	 * The children of the object.
 	 */
-	private ArrayList<ConfigNode> children;
+	private ArrayList<ConfigNode> children = new ArrayList<ConfigNode>();
 
 	public ArrayList<ConfigNode> children() {
 		return children;

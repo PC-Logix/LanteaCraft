@@ -7,8 +7,10 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
 import pcl.common.helpers.RegistrationHelper;
+import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
+import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.stargate.block.BlockStargateBase;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
@@ -97,11 +99,15 @@ public class ModuleStargates implements IModule {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
+		ModuleConfig config = ModuleManager.getConfig(this);
+
+		TileStargateDHD.configure(config);
+		TileStargateBase.configure(config);
+
 		Blocks.stargateRingBlock = RegistrationHelper.registerBlock(BlockStargateRing.class, ItemStargateRing.class,
 				"stargateRing");
 		Blocks.stargateBaseBlock = RegistrationHelper.registerBlock(BlockStargateBase.class, "stargateBase");
-		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateDHD.class,
-				"stargateDHD");
+		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateDHD.class, "stargateDHD");
 
 		Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
 				ItemTransporterRing.class, "ringPlatform");
@@ -162,12 +168,10 @@ public class ModuleStargates implements IModule {
 			RegistrationHelper.addTileEntityRenderer(TileStargateBase.class, Render.tileEntityBaseRenderer);
 
 			Render.tileEntityControllerRenderer = new TileStargateDHDRenderer();
-			RegistrationHelper.addTileEntityRenderer(TileStargateDHD.class,
-					Render.tileEntityControllerRenderer);
+			RegistrationHelper.addTileEntityRenderer(TileStargateDHD.class, Render.tileEntityControllerRenderer);
 
 			Render.tileEntityRingPlatformRenderer = new TileTransporterRingRenderer();
-			RegistrationHelper.addTileEntityRenderer(TileTransporterRing.class,
-					Render.tileEntityRingPlatformRenderer);
+			RegistrationHelper.addTileEntityRenderer(TileTransporterRing.class, Render.tileEntityRingPlatformRenderer);
 
 			Render.blockStargateBaseRenderer = new BlockStargateBaseRenderer();
 			RegistrationHelper.registerRenderer(Render.blockStargateBaseRenderer);

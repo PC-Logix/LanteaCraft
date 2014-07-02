@@ -256,8 +256,7 @@ public class StargateMultiblock extends GenericMultiblock {
 		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
 			part.getValue().release();
 		EnumStargateState stateOf = (EnumStargateState) getMetadata("state");
-		if (!isClient && (stateOf == EnumStargateState.Connected || stateOf == EnumStargateState.Disconnecting)
-				&& LanteaCraft.getProxy().doExplosion()) {
+		if (!isClient && (stateOf == EnumStargateState.Connected || stateOf == EnumStargateState.Disconnecting)) {
 			LanteaCraft.getLogger().log(Level.INFO, "Creating explosion: gate destroyed while connected!");
 			Block block = host.getWorldObj().getBlock(host.xCoord, host.yCoord, host.zCoord);
 			if (block.equals(ModuleStargates.Blocks.stargateBaseBlock))

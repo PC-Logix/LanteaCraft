@@ -37,9 +37,10 @@ public class LocalTest {
 					ConfigNode newNode = new ConfigNode("doYouLikeBacon", "Bacon, yes?", module);
 					newNode.parameters().put("yummy", "yes");
 					module.children().add(newNode);
+					newNode.modify();
 				}
 			}
-			
+			System.out.println(String.format("Root modified: %s", list.modified()));
 			saver.save(list, new FileOutputStream(new File("LanteaCraft-out.xml")));
 
 		} catch (IOException ioex) {

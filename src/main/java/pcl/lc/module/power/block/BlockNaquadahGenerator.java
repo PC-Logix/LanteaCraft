@@ -66,12 +66,12 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 
 	@Override
 	public boolean renderAsNormalBlock() {
-		return !LanteaCraft.getProxy().isUsingModels();
+		return false;
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return !LanteaCraft.getProxy().isUsingModels();
+		return false;
 	}
 
 	@Override

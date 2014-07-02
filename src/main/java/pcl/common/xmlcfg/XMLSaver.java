@@ -43,6 +43,11 @@ public class XMLSaver {
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(output);
 			transformer.transform(source, result);
+			try {
+				output.flush();
+				output.close();
+			} catch (Throwable t) {
+			}
 		} catch (ParserConfigurationException e) {
 			throw new XMLSaverException("Can't save; configuration exception.", e);
 		} catch (TransformerConfigurationException e) {

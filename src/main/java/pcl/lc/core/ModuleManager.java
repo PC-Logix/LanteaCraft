@@ -7,6 +7,10 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Level;
 
+import pcl.common.xmlcfg.ConfigHelper;
+import pcl.common.xmlcfg.DOMHelper;
+import pcl.common.xmlcfg.ModuleConfig;
+import pcl.common.xmlcfg.ModuleList;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.module.ModuleCore;
@@ -72,6 +76,15 @@ public class ModuleManager {
 	 * The container for all loaded Module instances in the session.
 	 */
 	private static ArrayList<Module> loadedModules = new ArrayList<Module>();
+
+	/**
+	 * The global module config container
+	 */
+	private static ModuleList moduleConfig;
+
+	public ModuleManager(ModuleList moduleConfig) {
+		ModuleManager.moduleConfig = moduleConfig;
+	}
 
 	/**
 	 * Pre-initialize the ModuleManager and all child Modules.
@@ -181,8 +194,15 @@ public class ModuleManager {
 	 * @return If the Module is enabled.
 	 */
 	private boolean isModuleEnabled(Module theModule) {
-		// TODO: Fetch this from configuration.
-		return true;
+		ModuleConfig config = ConfigHelper.findConfigByName(moduleConfig, theModule.name());
+		return DOMHelper.popBoolean((String) config.parameters().get("enabled"), false);
+	}
+
+	public static ModuleConfig getConfig(IModule module) {
+		for (Module list : Module.values())
+			if (list.loaded && list.moduleOf.equals(module))
+				return ConfigHelper.findConfigByName(moduleConfig, list.name());
+		return null;
 	}
 
 }

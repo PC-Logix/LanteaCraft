@@ -1,6 +1,8 @@
 package pcl.lc;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,11 +19,13 @@ import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import org.apache.logging.log4j.Level;
 
 import pcl.common.helpers.AnalyticsHelper;
-import pcl.common.helpers.ConfigValue;
-import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.helpers.NetworkHelpers;
 import pcl.common.helpers.RegistrationHelper;
 import pcl.common.helpers.VersionHelper;
+import pcl.common.xmlcfg.ModuleList;
+import pcl.common.xmlcfg.XMLParser;
+import pcl.common.xmlcfg.XMLSaver;
+import pcl.common.xmlcfg.XMLSaverException;
 import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.base.network.ClientPacketHandler;
 import pcl.lc.base.network.ModPacket;
@@ -50,17 +54,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 
 public class LanteaCraftCommonProxy {
 
-	/**
-	 * @deprecated Pending deletion (see XML Configuration)
-	 */
-	@Deprecated
-	protected ConfigurationHelper config;
-
-	/**
-	 * @deprecated Pending deletion (see XML Configuration)
-	 */
-	@Deprecated
-	protected ArrayList<ConfigValue<?>> configValues = new ArrayList<ConfigValue<?>>();
+	protected File configFile;
+	protected ModuleList moduleConfig;
 
 	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
 
@@ -93,7 +88,6 @@ public class LanteaCraftCommonProxy {
 			serverPacketLogger = new PacketLogger(new File("lc-network-server.dat"));
 		serverPacketHandler = new ServerPacketHandler(serverPacketLogger);
 		networkHelpers = new NetworkHelpers();
-		moduleManager = new ModuleManager();
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
@@ -106,8 +100,25 @@ public class LanteaCraftCommonProxy {
 			LanteaCraft.getLogger().log(Level.INFO,
 					"Hello there, I'm LanteaCraft " + BuildInfo.versionNumber + "-" + BuildInfo.getBuildNumber() + "!");
 		versionHelper = new VersionHelper();
-		config = new ConfigurationHelper(e.getSuggestedConfigurationFile());
+
+		try {
+			File configDir = new File(e.getModConfigurationDirectory(), "LanteaCraft/");
+			if (!configDir.exists())
+				configDir.mkdir();
+			configFile = new File(configDir, "config.xml");
+			if (configFile.exists()) {
+				XMLParser parser = new XMLParser();
+				FileInputStream test = new FileInputStream(configFile);
+				moduleConfig = parser.read(test);
+			} else {
+				moduleConfig = new ModuleList();
+			}
+		} catch (Throwable t) {
+			throw new RuntimeException("Error configuring LanteaCraft!", t);
+		}
+
 		configure();
+		moduleManager = new ModuleManager(moduleConfig);
 		moduleManager.preInit(e);
 	}
 
@@ -131,8 +142,14 @@ public class LanteaCraftCommonProxy {
 
 	public void postInit(FMLPostInitializationEvent e) {
 		RegistrationHelper.flagLateRegistrationZone();
-		if (config.extended)
-			config.save();
+		if (moduleConfig.modified()) {
+			try {
+				XMLSaver saver = new XMLSaver();
+				saver.save(moduleConfig, new FileOutputStream(configFile));
+			} catch (Throwable t) {
+				LanteaCraft.getLogger().log(Level.WARN, "Failed updating configuration!", t);
+			}
+		}
 		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.getInstance(), guiHandler);
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft done setting up!");
 
@@ -164,82 +181,15 @@ public class LanteaCraftCommonProxy {
 	}
 
 	void configure() {
-		TileStargateDHD.configure(config);
-		NaquadahOreWorldGen.configure(config);
-		TileStargateBase.configure(config);
-		configValues.add(new ConfigValue<Boolean>("addOresToExistingWorlds", config.getBoolean("options",
-				"addOresToExistingWorlds", false)));
-
-		String version = new StringBuilder().append(BuildInfo.versionNumber).append(" build ")
-				.append(BuildInfo.getBuildNumber()).toString();
-		Property prop = config.get("general", "currentVersion", 0);
-		prop.comment = "Version cache - do not change this!";
-		String previousVersion = prop.getString();
-		prop.set(version);
-
-		Property GenerateStruct = config.get("options", "GenerateStructures", true);
-		configValues.add(new ConfigValue<Boolean>("doGenerateStructures", config.getBoolean("stargate",
-				"GenerateStructures", true)));
-		GenerateStruct.comment = "Enables/Disables generation of Gate Rooms under Desert Pyramids. (true/false)";
-
-		Property textureRes = config.get("graphics_options", "textureRes", 32);
-		configValues.add(new ConfigValue<Integer>("renderQuality", config.getInteger("graphics_options", "textureRes",
-				32)));
-		textureRes.comment = "Texture resolution setting. (16 / 32 / 64 / 128)";
-
-		Property HDModels = config.get("graphics_options", "HDModels", true);
-		configValues.add(new ConfigValue<Boolean>("renderUseModels", config.getBoolean("graphics_options", "HDModels",
-				true)));
-		HDModels.comment = "Should HD models be used. (true/false)";
-
-		configValues.add(new ConfigValue<Boolean>("doGateExplosion", config.getBoolean("options",
-				"ActiveGateExplosion", true)));
-
-		Property enableAnalytics = config.get("options", "enableAnalytics", true);
-		configValues.add(new ConfigValue<Boolean>("enableAnalytics", config.getBoolean("options", "enableAnalytics",
-				true)));
-		enableAnalytics.comment = "Submit anonymous usage statistic data. (true/false)";
-
-		if (version != previousVersion && enableAnalytics.getBoolean(true))
-			analyticsHelper.start();
-		versionHelper.start();
+		// TODO: From config!
+		// if (version != previousVersion && enableAnalytics.getBoolean(true))
+		// analyticsHelper.start();
+		// versionHelper.start();
 	}
 
-	void registerRecipes() {
-		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft recipes...");
-		if (config.getBoolean("options", "allowCraftingNaquadah", false)) {
-			// TODO: moved to module -> core
-		}
-		if (config.getBoolean("options", "allowCraftingCrystals", false)) {
-			// TODO: moved to module -> stargate
-		}
-	}
-
-	public ConfigValue<?> getConfigValue(String name) {
-		if (BuildInfo.ASSET_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.DEBUG, "Fetching configuration value `" + name + "`");
-		for (ConfigValue<?> item : configValues)
-			if (item.getName().equalsIgnoreCase(name))
-				return item;
-		return null;
-	}
-
-	@SuppressWarnings("unchecked")
 	public int getRenderMode() {
-		int mode = ((ConfigValue<Integer>) getConfigValue("renderQuality")).getValue();
-		if (mode == 16 || mode == 32 || mode == 64 || mode == 128)
-			return mode;
+		// TODO: From config!
 		return 32;
-	}
-
-	@SuppressWarnings("unchecked")
-	public boolean isUsingModels() {
-		return ((ConfigValue<Boolean>) getConfigValue("renderUseModels")).getValue();
-	}
-
-	@SuppressWarnings("unchecked")
-	public boolean doExplosion() {
-		return ((ConfigValue<Boolean>) getConfigValue("doGateExplosion")).getValue();
 	}
 
 	public void handlePacket(ModPacket modPacket, EntityPlayer player) {
@@ -247,10 +197,6 @@ public class LanteaCraftCommonProxy {
 			serverPacketHandler.handlePacket(modPacket, player);
 		else
 			return;
-	}
-
-	public ConfigurationHelper getConfig() {
-		return config;
 	}
 
 	public ResourceLocation fetchResource(String resource) {

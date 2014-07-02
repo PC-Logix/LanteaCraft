@@ -6,10 +6,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
+import pcl.common.xmlcfg.ConfigHelper;
+import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.base.PoweredTileEntity;
@@ -85,10 +86,13 @@ public class TileStargateDHD extends PoweredTileEntity implements IPacketHandler
 		}
 	};
 
-	public static void configure(ConfigurationHelper cfg) {
-		linkRangeX = cfg.getInteger("dhd", "linkRangeX", linkRangeX);
-		linkRangeY = cfg.getInteger("dhd", "linkRangeY", linkRangeY);
-		linkRangeZ = cfg.getInteger("dhd", "linkRangeZ", linkRangeZ);
+	public static void configure(ModuleConfig cfg) {
+		linkRangeX = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "dhdLinkRangeX", "range",
+				"Maximum X range of DHD to Stargate", linkRangeX).toString());
+		linkRangeY = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "dhdLinkRangeY", "range",
+				"Maximum Y range of DHD to Stargate", linkRangeY).toString());
+		linkRangeZ = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "dhdLinkRangeZ", "range",
+				"Maximum Z range of DHD to Stargate", linkRangeZ).toString());
 	}
 
 	public TileStargateDHD() {

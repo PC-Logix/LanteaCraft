@@ -34,12 +34,14 @@ import net.minecraftforge.common.network.ForgeMessage.DimensionRegisterMessage;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.helpers.ConfigurationHelper;
 import pcl.common.util.ChunkLocation;
 import pcl.common.util.MathUtils;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
+import pcl.common.xmlcfg.ConfigHelper;
+import pcl.common.xmlcfg.DOMHelper;
+import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisState;
@@ -64,8 +66,7 @@ import pcl.lc.module.stargate.render.StargateEventHorizonRenderer;
 import pcl.lc.module.stargate.render.StargateRenderConstants;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
-public class TileStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler,
-		ISidedInventory {
+public class TileStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler, ISidedInventory {
 
 	/**
 	 * Used to damage players who contact with an iris.
@@ -162,10 +163,15 @@ public class TileStargateBase extends GenericTileEntity implements IStargateAcce
 	public static boolean closeFromEitherEnd = true;
 	public static int ticksToStayOpen;
 
-	public static void configure(ConfigurationHelper cfg) {
-		secondsToStayOpen = cfg.getInteger("stargate", "secondsToStayOpen", secondsToStayOpen);
-		oneWayTravel = cfg.getBoolean("stargate", "oneWayTravel", oneWayTravel);
-		closeFromEitherEnd = cfg.getBoolean("stargate", "closeFromEitherEnd", closeFromEitherEnd);
+	public static void configure(ModuleConfig cfg) {
+		secondsToStayOpen = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "secondsToStayOpen", "time",
+				"Seconds to keep connections open for", secondsToStayOpen).toString());
+		oneWayTravel = DOMHelper.popBoolean(
+				ConfigHelper.getOrSetParam(cfg, "Option", "oneWayTravel", "enabled",
+						"Can players travel only one way?", oneWayTravel).toString(), false);
+		closeFromEitherEnd = DOMHelper.popBoolean(
+				ConfigHelper.getOrSetParam(cfg, "Option", "closeFromEitherEnd", "enabled",
+						"Can players close the gate from either end?", closeFromEitherEnd).toString(), false);
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
 
