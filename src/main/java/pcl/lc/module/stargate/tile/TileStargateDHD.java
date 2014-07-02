@@ -87,12 +87,12 @@ public class TileStargateDHD extends PoweredTileEntity implements IPacketHandler
 	};
 
 	public static void configure(ModuleConfig cfg) {
-		linkRangeX = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "dhdLinkRangeX", "range",
-				"Maximum X range of DHD to Stargate", linkRangeX).toString());
-		linkRangeY = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "dhdLinkRangeY", "range",
-				"Maximum Y range of DHD to Stargate", linkRangeY).toString());
-		linkRangeZ = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "dhdLinkRangeZ", "range",
-				"Maximum Z range of DHD to Stargate", linkRangeZ).toString());
+		linkRangeX = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "dhdLinkRange", "x",
+				"Maximum range of DHD to Stargate link", linkRangeX).toString());
+		linkRangeY = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "dhdLinkRange", "y",
+				"Maximum range of DHD to Stargate link", linkRangeY).toString());
+		linkRangeZ = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "dhdLinkRange", "z",
+				"Maximum range of DHD to Stargate link", linkRangeZ).toString());
 	}
 
 	public TileStargateDHD() {

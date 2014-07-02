@@ -1,5 +1,7 @@
 package pcl.common.xmlcfg;
 
+import java.util.ArrayList;
+
 public class ConfigHelper {
 
 	/**
@@ -12,7 +14,7 @@ public class ConfigHelper {
 	 *            The name to find
 	 * @return The module config, or null if it does not exist
 	 */
-	public static ModuleConfig findConfigByName(ModuleList list, String name) {
+	public static ModuleConfig findModuleConfigByName(ModuleList list, String name) {
 		for (ModuleConfig element : list.children())
 			if (element.name().equalsIgnoreCase("Module") && element.parameters().containsKey("name"))
 				if (element.parameters().get("name") instanceof String
@@ -24,6 +26,40 @@ public class ConfigHelper {
 		list.children().add(config);
 		config.modify();
 		return config;
+	}
+
+	/**
+	 * Find a configuration node by a class
+	 * 
+	 * @param list
+	 *            The list
+	 * @param clazz
+	 *            A class
+	 * @return The node or null if no node exists
+	 */
+	public static ConfigNode findConfigByClass(ConfigList list, String clazz) {
+		ConfigNode targetNode = null;
+		for (ConfigNode child : list.children())
+			if (child.name().equals(clazz))
+				targetNode = child;
+		return targetNode;
+	}
+
+	/**
+	 * Find all configuration nodes of a class
+	 * 
+	 * @param list
+	 *            The list
+	 * @param clazz
+	 *            A class
+	 * @return A list of nodes
+	 */
+	public static ArrayList<ConfigNode> findAllConfigByClass(ConfigList list, String clazz) {
+		ArrayList<ConfigNode> result = new ArrayList<ConfigNode>();
+		for (ConfigNode child : list.children())
+			if (child.name().equals(clazz))
+				result.add(child);
+		return result;
 	}
 
 	/**
@@ -41,7 +77,8 @@ public class ConfigHelper {
 	 *            The value to set
 	 * @return The value which exists or was set
 	 */
-	public static Object getOrSetParam(ConfigList list, String clazz, String name, String paramName, String comment, Object value) {
+	public static Object getOrSetParam(ConfigList list, String clazz, String name, String paramName, String comment,
+			Object value) {
 		ConfigNode targetNode = null;
 		for (ConfigNode child : list.children())
 			if (child.name().equals(clazz))
@@ -51,8 +88,11 @@ public class ConfigHelper {
 		if (targetNode == null) {
 			targetNode = new ConfigNode(clazz, comment, list);
 			targetNode.parameters().put("name", name);
-			targetNode.parameters().put(paramName, value);
 			list.children().add(targetNode);
+			targetNode.modify();
+		}
+		if (!targetNode.parameters().containsKey(paramName)) {
+			targetNode.parameters().put(paramName, value);
 			targetNode.modify();
 		}
 		return targetNode.parameters().get(paramName);

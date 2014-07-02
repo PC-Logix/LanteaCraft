@@ -27,6 +27,10 @@ public class ConfigList extends ConfigNode {
 		super(name, parent);
 	}
 
+	public ConfigList(String name, String comment, ConfigNode parent) {
+		super(name, comment, parent);
+	}
+
 	/**
 	 * The children of the object.
 	 */

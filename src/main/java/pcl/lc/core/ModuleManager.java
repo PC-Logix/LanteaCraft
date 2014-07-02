@@ -194,14 +194,14 @@ public class ModuleManager {
 	 * @return If the Module is enabled.
 	 */
 	private boolean isModuleEnabled(Module theModule) {
-		ModuleConfig config = ConfigHelper.findConfigByName(moduleConfig, theModule.name());
+		ModuleConfig config = ConfigHelper.findModuleConfigByName(moduleConfig, theModule.name());
 		return DOMHelper.popBoolean((String) config.parameters().get("enabled"), false);
 	}
 
 	public static ModuleConfig getConfig(IModule module) {
 		for (Module list : Module.values())
 			if (list.loaded && list.moduleOf.equals(module))
-				return ConfigHelper.findConfigByName(moduleConfig, list.name());
+				return ConfigHelper.findModuleConfigByName(moduleConfig, list.name());
 		return null;
 	}
 

@@ -11,6 +11,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 import org.apache.logging.log4j.Level;
 
 import pcl.common.xmlcfg.ConfigHelper;
+import pcl.common.xmlcfg.ConfigList;
+import pcl.common.xmlcfg.ConfigNode;
 import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.OreTypes;
@@ -25,17 +27,42 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 	static int maxIsolatedNodes = 4;
 
 	// TODO: Unpack from config
-	private EnumSet<OreTypes> enabledOreSpawns = EnumSet.of(OreTypes.NAQUADAH, OreTypes.TRINIUM);
+	private static EnumSet<OreTypes> enabledOreSpawns = EnumSet.of(OreTypes.NAQUADAH, OreTypes.TRINIUM);
 
 	public static void configure(ModuleConfig cfg) {
-		genUnderLavaOdds = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Generator", "generateUnderLava", "odds",
-				"Odds of generation under lava", genUnderLavaOdds).toString());
-		maxNodesUnderLava = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Generator", "maxNodesUnderLava", "count",
-				"Maximum nodes beneath lava", maxNodesUnderLava).toString());
-		genIsolatedOdds = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Generator", "genIsolated", "odds",
-				"Odds of generation of above lava nodes", genUnderLavaOdds).toString());
-		maxIsolatedNodes = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Generator", "maxIsolatedNodes", "count",
-				"Maximum nodes above lava per chunk", genUnderLavaOdds).toString());
+
+		ConfigList enabledOres = (ConfigList) ConfigHelper.findConfigByClass(cfg, "EnabledOres");
+		if (enabledOres != null) {
+			enabledOreSpawns.clear();
+			for (ConfigNode node : enabledOres.children()) {
+				if (node.name().equalsIgnoreCase("Ore") && node.parameters().containsKey("name")
+						&& node.parameters().get("name") instanceof String) {
+					OreTypes typeof = OreTypes.fromString(node.parameters().get("name").toString());
+					if (typeof != null)
+						enabledOreSpawns.add(typeof);
+				}
+			}
+		} else {
+			enabledOres = new ConfigList("EnabledOres", "Enabled ore-generation list", cfg);
+			for (OreTypes typeof : enabledOreSpawns) {
+				ConfigNode spawnrule = new ConfigNode("Ore", enabledOres);
+				spawnrule.parameters().put("name", typeof.name());
+				enabledOres.children().add(spawnrule);
+				spawnrule.modify();
+			}
+			cfg.children().add(enabledOres);
+			enabledOres.modify();
+		}
+
+		genUnderLavaOdds = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "OreGenerator", "genUnderLava", "odds",
+				"Odds and density of generation under lava", genUnderLavaOdds).toString());
+		maxNodesUnderLava = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "OreGenerator", "genUnderLava", "size",
+				"Odds and density of generation under lava", maxNodesUnderLava).toString());
+
+		genIsolatedOdds = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "OreGenerator", "genIsolated", "odds",
+				"Odds and density of generation of above lava nodes", genUnderLavaOdds).toString());
+		maxIsolatedNodes = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "OreGenerator", "genIsolated", "size",
+				"Odds and density of generation of above lava nodes", genUnderLavaOdds).toString());
 	}
 
 	public void readChunk(ChunkData data, Chunk chunk) {

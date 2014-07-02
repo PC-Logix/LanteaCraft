@@ -35,6 +35,13 @@ public enum OreTypes {
 		return OreTypes.values()[ord];
 	}
 
+	public static OreTypes fromString(String string) {
+		for (OreTypes ore : OreTypes.values())
+			if (ore.name().equalsIgnoreCase(string))
+				return ore;
+		return null;
+	}
+
 	public String tex() {
 		return tex;
 	}
