@@ -6,9 +6,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import pcl.common.helpers.RegistrationHelper;
+import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.base.render.WrittenFontRenderer;
+import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.core.block.BlockLanteaOre;
 import pcl.lc.module.core.block.BlockOfLanteaOre;
@@ -73,6 +75,8 @@ public class ModuleCore implements IModule {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
+		ModuleConfig config = ModuleManager.getConfig(this);
+
 		Blocks.lanteaOre = RegistrationHelper.registerBlock(BlockLanteaOre.class, ItemLanteaOreBlock.class,
 				"lanteaOreBlock");
 		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem");
@@ -87,8 +91,8 @@ public class ModuleCore implements IModule {
 		Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg");
 		Items.debugger = RegistrationHelper.registerItem(ItemDebugTool.class, "lanteadebug");
 
-		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), "naquadah",
-				net.minecraft.init.Items.iron_ingot);
+		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), new ItemStack(
+				Items.lanteaOreItem, 1), net.minecraft.init.Items.iron_ingot);
 
 		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4), new ItemStack(Blocks.lanteaOre, 0),
 				0.1f);
@@ -98,7 +102,7 @@ public class ModuleCore implements IModule {
 				2), 0.1f);
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1), "NNN", "NNN", "NNN", 'N',
-				"ingotNaquadahAlloy");
+				new ItemStack(Items.lanteaOreIngot, 1));
 		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9), "B", 'B', Blocks.lanteaOreAsBlock);
 
 		Fluids.fluidLiquidNaquadah = new LiquidNaquadah();

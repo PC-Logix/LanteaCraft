@@ -33,7 +33,6 @@ public class VersionHelper extends Thread {
 		serverPath.append(MinecraftForge.MC_VERSION.replace(".", "_")).append("/");
 		serverPath.append("latest");
 		server = serverPath.toString();
-		LanteaCraft.getLogger().log(Level.DEBUG, String.format("Contacting release server: %s", server));
 		setDaemon(true);
 		setName("LanteaCraft version poll thread");
 	}

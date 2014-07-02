@@ -4,16 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 
 import org.apache.logging.log4j.Level;
@@ -25,7 +21,6 @@ import pcl.common.helpers.VersionHelper;
 import pcl.common.xmlcfg.ModuleList;
 import pcl.common.xmlcfg.XMLParser;
 import pcl.common.xmlcfg.XMLSaver;
-import pcl.common.xmlcfg.XMLSaverException;
 import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.base.network.ClientPacketHandler;
 import pcl.lc.base.network.ModPacket;
@@ -42,8 +37,6 @@ import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleWorldGenerator;
 import pcl.lc.module.compat.UpgradeHelper;
 import pcl.lc.module.stargate.StargateConnectionManager;
-import pcl.lc.module.stargate.tile.TileStargateBase;
-import pcl.lc.module.stargate.tile.TileStargateDHD;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -60,7 +53,7 @@ public class LanteaCraftCommonProxy {
 	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
 
 	protected AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
-	private VersionHelper versionHelper;
+	private VersionHelper versionHelper = new VersionHelper();
 
 	protected ClientPacketHandler clientPacketHandler;
 	protected PacketLogger clientPacketLogger;
@@ -99,7 +92,6 @@ public class LanteaCraftCommonProxy {
 		else
 			LanteaCraft.getLogger().log(Level.INFO,
 					"Hello there, I'm LanteaCraft " + BuildInfo.versionNumber + "-" + BuildInfo.getBuildNumber() + "!");
-		versionHelper = new VersionHelper();
 
 		try {
 			File configDir = new File(e.getModConfigurationDirectory(), "LanteaCraft/");
@@ -184,7 +176,7 @@ public class LanteaCraftCommonProxy {
 		// TODO: From config!
 		// if (version != previousVersion && enableAnalytics.getBoolean(true))
 		// analyticsHelper.start();
-		// versionHelper.start();
+		versionHelper.start();
 	}
 
 	public int getRenderMode() {
