@@ -56,7 +56,8 @@ public class ModuleCore implements IModule {
 		Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg");
 		Items.debugger = RegistrationHelper.registerItem(ItemDebugTool.class, "lanteadebug");
 
-		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), "naquadah", Item.ingotIron);
+		// 1x Ore Ingot <= 1x Ore Item, 1x Iron Ingot
+		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), new ItemStack(Items.lanteaOreItem, 1), new ItemStack(Item.ingotIron, 1));
 
 		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4), Blocks.lanteaOre.blockID, 0, 0.1f);
 		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 1), Blocks.lanteaOre.blockID, 1,
@@ -64,9 +65,8 @@ public class ModuleCore implements IModule {
 		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 2), Blocks.lanteaOre.blockID, 2,
 				0.1f);
 
-		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1), "NNN", "NNN", "NNN", 'N',
-				"ingotNaquadahAlloy");
-		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9), "B", 'B', Blocks.lanteaOreAsBlock);
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1), "NNN", "NNN", "NNN", 'N', new ItemStack(Items.lanteaOreIngot, 1));
+		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9), "B", 'B', new ItemStack(Blocks.lanteaOreAsBlock, 1));
 
 		Fluids.fluidLiquidNaquadah = new LiquidNaquadah();
 		FluidRegistry.registerFluid(Fluids.fluidLiquidNaquadah);
