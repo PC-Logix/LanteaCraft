@@ -65,7 +65,7 @@ public class LanteaCraftCommonProxy {
 	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
 
 	protected AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
-	private VersionHelper versionHelper = new VersionHelper();
+	private VersionHelper versionHelper;
 
 	protected ClientPacketHandler clientPacketHandler;
 	protected PacketLogger clientPacketLogger;
@@ -86,8 +86,6 @@ public class LanteaCraftCommonProxy {
 	private ServerTickHandler serverTickHandler = new ServerTickHandler(versionHelper);
 	public int tokraVillagerID;
 
-	
-
 	protected ModuleManager moduleManager;
 
 	public LanteaCraftCommonProxy() {
@@ -107,6 +105,7 @@ public class LanteaCraftCommonProxy {
 		else
 			LanteaCraft.getLogger().log(Level.INFO,
 					"Hello there, I'm LanteaCraft " + BuildInfo.versionNumber + "-" + BuildInfo.getBuildNumber() + "!");
+		versionHelper = new VersionHelper();
 		config = new ConfigurationHelper(e.getSuggestedConfigurationFile());
 		configure();
 		moduleManager.preInit(e);

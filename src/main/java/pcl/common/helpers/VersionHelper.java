@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import org.apache.logging.log4j.Level;
 
 import pcl.lc.BuildInfo;
@@ -26,7 +28,12 @@ public class VersionHelper extends Thread {
 
 	public VersionHelper() {
 		super();
-		server = new StringBuilder().append(BuildInfo.webAPI).append("build/latest").toString();
+		StringBuilder serverPath = new StringBuilder();
+		serverPath.append(BuildInfo.webAPI).append("build/");
+		serverPath.append(MinecraftForge.MC_VERSION.replace(".", "_")).append("/");
+		serverPath.append("latest");
+		server = serverPath.toString();
+		LanteaCraft.getLogger().log(Level.DEBUG, String.format("Contacting release server: %s", server));
 		setDaemon(true);
 		setName("LanteaCraft version poll thread");
 	}
