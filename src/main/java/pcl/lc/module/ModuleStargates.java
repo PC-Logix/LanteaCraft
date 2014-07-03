@@ -127,16 +127,16 @@ public class ModuleStargates implements IModule {
 				"transportRingActivator");
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN", "III", 'I',
-				net.minecraft.init.Items.iron_ingot, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(
+				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
 						(Block) Block.blockRegistry.getObject("sandStone"), 1, 1));
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1, 1), "CgC", "NpN", "IrI", 'I',
-				net.minecraft.init.Items.iron_ingot, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(
+				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
 						net.minecraft.init.Blocks.sandstone, 1, 1), 'g', net.minecraft.init.Blocks.glowstone, 'r',
 				net.minecraft.init.Items.redstone, 'p', net.minecraft.init.Items.ender_pearl);
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateBaseBlock, 1), "CrC", "NeN", "IcI", 'I',
-				net.minecraft.init.Items.iron_ingot, 'N', "ingotNaquadahAlloy", 'C', new ItemStack(
+				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
 						net.minecraft.init.Blocks.sandstone, 1, 1), 'r', net.minecraft.init.Items.redstone, 'e',
 				net.minecraft.init.Items.ender_eye, 'c', Items.coreCrystal);
 
