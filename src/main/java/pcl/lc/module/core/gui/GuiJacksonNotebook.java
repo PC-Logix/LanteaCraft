@@ -36,7 +36,7 @@ public class GuiJacksonNotebook extends GuiScreen {
 		GL11.glPushMatrix();
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		useTexture("noteback");
-		drawTexturedRectUV(width / 2 - 150, height / 2 - 90, 300, 180, 0, 0, 1, 1);
+		drawTexturedRectUV(width / 2 - 200, height / 2 - 110, 400, 220, 0, 0, 1, 1);
 		GL11.glPopMatrix();
 	}
 

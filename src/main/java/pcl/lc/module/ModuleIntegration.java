@@ -14,6 +14,7 @@ import pcl.lc.api.internal.IIntegrationAgent;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.integration.OpenComputersAgent;
+import pcl.lc.module.integration.WailaAgent;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -25,7 +26,7 @@ public class ModuleIntegration implements IModule {
 		ModuleIntegration.clazz_integration = new ArrayList<Class<? extends IIntegrationAgent>>();
 		// ModuleIntegration.registerIntegrationAgent(ComputerCraftAgent.class);
 		ModuleIntegration.registerIntegrationAgent(OpenComputersAgent.class);
-		// ModuleIntegration.registerIntegrationAgent(WailaAgent.class);
+		ModuleIntegration.registerIntegrationAgent(WailaAgent.class);
 	}
 
 	private static ArrayList<Class<? extends IIntegrationAgent>> clazz_integration;

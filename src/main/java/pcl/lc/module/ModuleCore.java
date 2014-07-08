@@ -82,10 +82,7 @@ public class ModuleCore implements IModule {
 				"lanteaOreBlock");
 		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem");
 		Items.lanteaOreIngot = RegistrationHelper.registerItem(ItemLanteaOreIngot.class, "lanteaOreIngot");
-		// TODO: Disabled for 1.7
-		// Items.jacksonNotebook =
-		// RegistrationHelper.registerItem(ItemJacksonNotebook.class,
-		// "jacksonNotebook");
+		Items.jacksonNotebook = RegistrationHelper.registerItem(ItemJacksonNotebook.class, "jacksonNotebook");
 		Blocks.lanteaOreAsBlock = RegistrationHelper.registerBlock(BlockOfLanteaOre.class, ItemBlockOfLanteaOre.class,
 				"lanteaOreIngotBlock");
 
