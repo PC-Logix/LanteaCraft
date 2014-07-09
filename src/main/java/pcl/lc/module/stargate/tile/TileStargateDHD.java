@@ -1,5 +1,6 @@
 package pcl.lc.module.stargate.tile;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,7 +25,7 @@ import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
 
-public class TileStargateDHD extends PoweredTileEntity implements IPacketHandler, IEnergyStore {
+public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 
 	public static int linkRangeX = 10;
 	public static int linkRangeY = 10;
@@ -179,7 +180,7 @@ public class TileStargateDHD extends PoweredTileEntity implements IPacketHandler
 	}
 
 	@Override
-	public void updateEntity() {
+	public void think() {
 		if (!worldObj.isRemote)
 			if (getEnergyStored() < getMaxEnergyStored()) {
 				ItemStack stackOf = inventory.getStackInSlot(0);
@@ -265,9 +266,9 @@ public class TileStargateDHD extends PoweredTileEntity implements IPacketHandler
 	}
 
 	@Override
-	public void handlePacket(ModPacket packetOf) {
+	public void thinkPacket(ModPacket packetOf, EntityPlayer player) {
 		getStateFromPacket(packetOf);
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		markBlockForUpdate();
 	}
 
 	@Override
@@ -316,5 +317,11 @@ public class TileStargateDHD extends PoweredTileEntity implements IPacketHandler
 	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void detectAndSendChanges() {
+		// TODO Auto-generated method stub
+		
 	}
 }

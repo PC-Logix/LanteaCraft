@@ -38,7 +38,6 @@ import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.common.xmlcfg.ConfigHelper;
-import pcl.common.xmlcfg.DOMHelper;
 import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
@@ -50,7 +49,6 @@ import pcl.lc.base.data.ObserverContext;
 import pcl.lc.base.data.WatchedValue;
 import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
-import pcl.lc.base.network.IPacketHandler;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.client.audio.AudioPosition;
@@ -66,7 +64,7 @@ import pcl.lc.module.stargate.render.StargateEventHorizonRenderer;
 import pcl.lc.module.stargate.render.StargateRenderConstants;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
-public class TileStargateBase extends TileManaged implements IStargateAccess, IPacketHandler, ISidedInventory {
+public class TileStargateBase extends TileManaged implements IStargateAccess, ISidedInventory {
 
 	/**
 	 * Used to damage players who contact with an iris.
@@ -678,7 +676,7 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IP
 	}
 
 	@Override
-	public void handlePacket(ModPacket packetOf) {
+	public void thinkPacket(ModPacket packetOf, EntityPlayer player) {
 		if (BuildInfo.DEBUG)
 			LanteaCraft.getLogger().log(Level.INFO, String.format("Handling packet type %s.", packetOf.getType()));
 		if (packetOf.getType().equals("LanteaPacket.MultiblockUpdate"))
@@ -946,7 +944,7 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IP
 	}
 
 	@Override
-	public void updateEntity() {
+	public void think() {
 		if (!worldObj.isRemote)
 			serverThink();
 		else
@@ -978,6 +976,12 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IP
 
 	private Vector3 yawVector(Entity entity) {
 		return yawVector(entity.rotationYaw);
+	}
+
+	@Override
+	public void detectAndSendChanges() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

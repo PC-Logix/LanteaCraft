@@ -1,5 +1,6 @@
 package pcl.lc.module.stargate.tile;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
@@ -8,7 +9,7 @@ import pcl.lc.base.network.IPacketHandler;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.module.stargate.StargatePart;
 
-public class TileStargateRing extends TileManaged implements IPacketHandler {
+public class TileStargateRing extends TileManaged  {
 	private StargatePart part = new StargatePart(this);
 
 	@Override
@@ -19,7 +20,7 @@ public class TileStargateRing extends TileManaged implements IPacketHandler {
 	}
 
 	@Override
-	public void handlePacket(ModPacket packetOf) {
+	public void thinkPacket(ModPacket packetOf, EntityPlayer player) {
 		part.unpack(packetOf);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
@@ -34,7 +35,7 @@ public class TileStargateRing extends TileManaged implements IPacketHandler {
 	}
 
 	@Override
-	public void updateEntity() {
+	public void think() {
 		part.tick();
 		if (part.getType() == null)
 			flagDirty();
@@ -58,6 +59,12 @@ public class TileStargateRing extends TileManaged implements IPacketHandler {
 			}
 			part.devalidateHostMultiblock();
 		}
+	}
+
+	@Override
+	public void detectAndSendChanges() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

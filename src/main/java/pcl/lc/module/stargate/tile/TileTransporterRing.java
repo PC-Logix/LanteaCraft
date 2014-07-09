@@ -1,5 +1,6 @@
 package pcl.lc.module.stargate.tile;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import net.minecraft.util.AxisAlignedBB;
 import pcl.common.util.WorldLocation;
@@ -10,7 +11,7 @@ import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.TransporterRingPart;
 
-public class TileTransporterRing extends TileManaged implements IPacketHandler {
+public class TileTransporterRing extends TileManaged {
 
 	private TransporterRingMultiblock multiblock;
 	private boolean isHostBlock = false;
@@ -31,7 +32,7 @@ public class TileTransporterRing extends TileManaged implements IPacketHandler {
 	}
 
 	@Override
-	public void updateEntity() {
+	public void think() {
 		if (!isHost())
 			return;
 		if (multiblock != null)
@@ -66,7 +67,7 @@ public class TileTransporterRing extends TileManaged implements IPacketHandler {
 	}
 
 	@Override
-	public void handlePacket(ModPacket packetOf) {
+	public void thinkPacket(ModPacket packetOf, EntityPlayer player) {
 		getStateFromPacket(packetOf);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
@@ -74,6 +75,12 @@ public class TileTransporterRing extends TileManaged implements IPacketHandler {
 	public TransporterRingPart getAsPart() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void detectAndSendChanges() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
