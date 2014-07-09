@@ -2,28 +2,24 @@ package pcl.lc.module.power.tile;
 
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import pcl.common.helpers.ReflectionHelper;
-import pcl.common.util.WorldLocation;
-import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.base.PoweredTileEntity;
 import pcl.lc.base.SpecialFluidTank;
-import pcl.lc.base.energy.IEnergyStore;
 import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.network.IPacketHandler;
 import pcl.lc.base.network.packet.ModPacket;
-import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.module.ModuleCore;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.power.item.ItemEnergyCrystal;
@@ -31,11 +27,8 @@ import pcl.lc.module.power.item.ItemEnergyCrystal;
 public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketHandler, IFluidHandler,
 		INaquadahGeneratorAccess {
 
-	public boolean simulate = false;
-
-	public double energy = 0.0;
-	public double maxEnergy = 10.0;
-
+	public final double maxEnergy = 10.0d;
+	
 	public double displayEnergy = 0;
 	public double displayTankVolume = 0;
 
@@ -96,7 +89,7 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 		if (tankCompound != null)
 			tank.readFromNBT(tankCompound);
 		if (nbt.hasKey("energy"))
-			energy = nbt.getDouble("energy");
+			metadata.set("energy", nbt.getDouble("energy"));
 	}
 
 	@Override
@@ -105,11 +98,11 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 		NBTTagCompound tankCompound = new NBTTagCompound();
 		tank.writeToNBT(tankCompound);
 		nbt.setTag("tank", tankCompound);
-		nbt.setDouble("energy", energy);
+		nbt.setDouble("energy", (Double) metadata.get("energy"));
 	}
 
 	@Override
-	public void updateEntity() {
+	public void think() {
 		if (!worldObj.isRemote) {
 			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
 			if (!addedToEnergyNet)
@@ -120,42 +113,16 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 				}
 			if (tank.hasChanged())
 				stateChanged();
-			super.updateEntity();
-
 			refuel();
 		}
 	}
 
 	public void stateChanged() {
 		markDirty();
-		getDescriptionPacket();
-	}
-
-	public void getStateFromPacket(ModPacket packet) {
-		// TODO: Convert to TinyModPacket, SMP is too clunky.
-		StandardModPacket packetOf = (StandardModPacket) packet;
-		simulate = (Boolean) packetOf.getValue("simulate");
-		energy = (Double) packetOf.getValue("energy");
-	}
-
-	public ModPacket getPacketFromState() {
-		// TODO: Convert to TinyModPacket, SMP is too clunky.
-		StandardModPacket packet = new StandardModPacket(new WorldLocation(this));
-		packet.setIsForServer(false);
-		packet.setType("LanteaPacket.TileUpdate");
-		packet.setValue("simulate", simulate);
-		packet.setValue("energy", energy);
-		return packet;
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		LanteaCraft.getNetPipeline().sendToAllAround(getPacketFromState(), new WorldLocation(this), 128.0d);
-		return null;
 	}
 
 	public void refuel() {
-		if (isEnabled() && maxEnergy > energy + 1.0d)
+		if (isEnabled() && maxEnergy > (Double) metadata.get("energy") + 1.0d)
 			for (int i = 0; i < 4; i++) {
 				ItemStack stackOf = inventory.getStackInSlot(i);
 				if (stackOf != null && stackOf.stackSize > 0) {
@@ -165,25 +132,25 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 						inventory.setInventorySlotContents(i, newStack);
 					else
 						inventory.setInventorySlotContents(i, null);
-					energy += 1.0;
+					metadata.set("energy", (Double) metadata.get("energy") + 1.0);
 					stateChanged();
 					break;
 				}
 			}
 
-		if (isEnabled() && maxEnergy > (energy + 0.1) && tank.getFluidAmount() > 100)
+		if (isEnabled() && maxEnergy > ((Double) metadata.get("energy") + 0.1d) && tank.getFluidAmount() > 100)
 			if (tank.drain(100, false).amount == 100) {
 				tank.drain(100, true);
-				energy += 0.1;
+				metadata.set("energy", (Double) metadata.get("energy") + 0.1d);
 				stateChanged();
 			}
 
 		if (isEnabled() && inventory.getStackInSlot(4) != null) {
 			ItemStack stack = inventory.getStackInSlot(4);
 			ItemEnergyCrystal crystal = (ItemEnergyCrystal) stack.getItem();
-			if (crystal.getMaximumEnergy() > crystal.getEnergyStored(stack) && energy > 0.01d) {
+			if (crystal.getMaximumEnergy() > crystal.getEnergyStored(stack) && (Double) metadata.get("energy") > 0.01d) {
 				double used = crystal.receiveEnergy(stack, 0.01d, false);
-				energy -= used;
+				metadata.set("energy", (Double) metadata.get("energy") - used);
 			}
 		}
 	}
@@ -222,9 +189,9 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 
 	@Override
 	public double getAvailableExportEnergy() {
-		if (!isActive() || !simulate)
+		if (!isActive() || !(Boolean) metadata.get("simulating"))
 			return 0;
-		return Math.min(energy, getMaximumExportEnergy());
+		return Math.min((Double) metadata.get("energy"), getMaximumExportEnergy());
 	}
 
 	@Override
@@ -234,15 +201,15 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 
 	@Override
 	public double exportEnergy(double units) {
-		if (!simulate)
+		if (!(Boolean) metadata.get("simulating"))
 			return 0.0d;
-		double reallyExportedUnits = Math.min(units, energy);
-		energy -= reallyExportedUnits;
+		double reallyExportedUnits = Math.min(units, (Double) metadata.get("energy"));
+		metadata.set("energy", (Double) metadata.get("energy") - reallyExportedUnits);
 		return reallyExportedUnits;
 	}
 
 	public boolean isActive() {
-		return simulate && energy > 0;
+		return (Boolean) metadata.get("simulating") && (Double) metadata.get("energy") > 0;
 	}
 
 	@Override
@@ -284,26 +251,27 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 
 	@Override
 	public boolean isEnabled() {
-		return simulate;
+		return (Boolean) metadata.get("simulating");
 	}
 
 	@Override
 	public boolean setEnabled(boolean enable) {
-		return (simulate = enable) || true;
+		metadata.set("simulating", enable);
+		return true;
 	}
 
 	@Override
 	public double getStoredEnergy() {
-		if (!simulate)
+		if (!(Boolean) metadata.get("simulating"))
 			return 0;
-		return energy;
+		return (Double) metadata.get("energy");
 	}
 
 	@Override
 	public double getStoredEnergy(EnumUnits unitsOf) {
-		if (!simulate)
+		if (!(Boolean) metadata.get("simulating"))
 			return 0;
-		return EnumUnits.convertFromNaquadahUnit(unitsOf, energy);
+		return EnumUnits.convertFromNaquadahUnit(unitsOf, (Double) metadata.get("energy"));
 	}
 
 	@Override
@@ -317,15 +285,14 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 	}
 
 	public void setRedstoneInputSignal(int sig) {
-		boolean oldState = simulate;
-		simulate = (sig > 0);
-		if (oldState != simulate)
-			getDescriptionPacket();
+		metadata.set("simulating", sig > 0);
 	}
 
 	@Override
-	public void handlePacket(ModPacket packetOf) {
-		getStateFromPacket(packetOf);
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	public void thinkPacket(ModPacket packet, EntityPlayer player) {
+	}
+
+	@Override
+	public void detectAndSendChanges() {
 	}
 }
