@@ -31,7 +31,7 @@ public class ClientPacketHandler {
 			LanteaCraft.getLogger().log(Level.WARN,
 					String.format("ModPacket type %s sent without OriginLocation, much bad!", packet.getClass()));
 		if (Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().theWorld.provider == null)
-			return; // TODO: Return to queue
+			return;
 		int currentWorld = Minecraft.getMinecraft().theWorld.provider.dimensionId;
 		if (currentWorld == target.dimension) {
 			World world = Minecraft.getMinecraft().theWorld;
@@ -47,15 +47,8 @@ public class ClientPacketHandler {
 				TileEntity tile = world.getTileEntity(target.x, target.y, target.z);
 				if (tile instanceof IPacketHandler) {
 					IPacketHandler handler = (IPacketHandler) tile;
-					handler.handlePacket(packet);
-				} else
-					LanteaCraft
-							.getLogger()
-							.log(Level.WARN,
-									String.format(
-											"Dropping packet %s for coords %s %s %s because the destination class %s wasn't a handler.",
-											packet.getType(), target.x, target.y, target.z, (tile != null) ? tile
-													.getClass().getName() : "<nullptr>"));
+					handler.handlePacket(packet, player);
+				}
 			}
 		}
 

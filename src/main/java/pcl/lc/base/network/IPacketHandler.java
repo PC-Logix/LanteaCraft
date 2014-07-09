@@ -1,5 +1,6 @@
 package pcl.lc.base.network;
 
+import net.minecraft.entity.player.EntityPlayer;
 import pcl.lc.base.network.packet.ModPacket;
 
 /**
@@ -11,6 +12,6 @@ import pcl.lc.base.network.packet.ModPacket;
  */
 public interface IPacketHandler {
 
-	public void handlePacket(ModPacket packetOf);
+	public void handlePacket(ModPacket packetOf, EntityPlayer player);
 
 }

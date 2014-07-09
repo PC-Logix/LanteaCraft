@@ -2,6 +2,7 @@ package pcl.lc.base;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -18,11 +19,16 @@ import pcl.lc.base.data.ObserverContext;
 import pcl.lc.base.data.WatchedList;
 import pcl.lc.base.network.IPacketHandler;
 import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.WatchedListContainerPacket;
+import pcl.lc.base.network.packet.WatchedListRequestPacket;
 import pcl.lc.base.network.packet.WatchedListSyncPacket;
 
 public abstract class TileManaged extends TileEntity implements IInventory, ISidedInventory, IPacketHandler {
 
 	private final ObserverContext metacontext = new ObserverContext();
+	private boolean cli_synchronized = false;
+	private int cli_synchronize_wait = -1;
+	
 	public WatchedList<String, Object> metadata = new WatchedList<String, Object>();
 
 	/**
@@ -40,7 +46,17 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 			}
 			detectAndSendChanges();
 		} else {
-
+			if (!cli_synchronized) {
+				cli_synchronized = true;
+				cli_synchronize_wait = 120;
+				WatchedListRequestPacket packet = new WatchedListRequestPacket(new WorldLocation(this));
+				LanteaCraft.getNetPipeline().sendToServer(packet);
+			} else {
+				if (cli_synchronize_wait > 0)
+					cli_synchronize_wait--;
+				if (cli_synchronize_wait == 0)
+					cli_synchronized = false;
+			}
 		}
 	}
 
@@ -55,7 +71,7 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 	 * @param packet
 	 *            The network packet.
 	 */
-	public abstract void thinkPacket(ModPacket packet);
+	public abstract void thinkPacket(ModPacket packet, EntityPlayer player);
 
 	/**
 	 * Detect and send any changes on the server to the client. You are
@@ -295,14 +311,22 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 	 * Called from the network manager when a packet is received.
 	 */
 	@Override
-	public void handlePacket(ModPacket packetOf) {
+	public void handlePacket(ModPacket packetOf, EntityPlayer player) {
 		if (packetOf == null)
 			return;
-		if (packetOf instanceof WatchedListSyncPacket) {
+		if (packetOf instanceof WatchedListRequestPacket && player instanceof EntityPlayerMP) {
+			WatchedListContainerPacket response = new WatchedListContainerPacket(new WorldLocation(this), metadata);
+			LanteaCraft.getNetPipeline().sendTo(response, (EntityPlayerMP) player);
+		} else if (packetOf instanceof WatchedListContainerPacket) {
+			cli_synchronize_wait = -1;
+			WatchedListContainerPacket container = (WatchedListContainerPacket) packetOf;
+			container.apply(metadata);
+		} else if (packetOf instanceof WatchedListSyncPacket) {
+			cli_synchronize_wait = -1;
 			WatchedListSyncPacket sync = (WatchedListSyncPacket) packetOf;
 			sync.apply(metadata);
 		} else
-			this.thinkPacket(packetOf);
+			this.thinkPacket(packetOf, player);
 	}
 
 }
