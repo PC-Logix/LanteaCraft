@@ -19,6 +19,7 @@ import pcl.lc.module.core.fluid.BlockLiquidNaquadah;
 import pcl.lc.module.core.fluid.ItemSpecialBucket;
 import pcl.lc.module.core.fluid.LiquidNaquadah;
 import pcl.lc.module.core.item.ItemBlockOfLanteaOre;
+import pcl.lc.module.core.item.ItemCraftingReagent;
 import pcl.lc.module.core.item.ItemDebugTool;
 import pcl.lc.module.core.item.ItemJacksonNotebook;
 import pcl.lc.module.core.item.ItemLanteaOre;
@@ -40,6 +41,7 @@ public class ModuleCore implements IModule {
 	}
 
 	public static class Items {
+		public static ItemCraftingReagent reagentItem;
 		public static ItemLanteaOre lanteaOreItem;
 		public static ItemLanteaOreIngot lanteaOreIngot;
 		public static ItemJacksonNotebook jacksonNotebook;
@@ -80,6 +82,7 @@ public class ModuleCore implements IModule {
 
 		Blocks.lanteaOre = RegistrationHelper.registerBlock(BlockLanteaOre.class, ItemLanteaOreBlock.class,
 				"lanteaOreBlock");
+		Items.reagentItem = RegistrationHelper.registerItem(ItemCraftingReagent.class, "lanteaCraftingReagent");
 		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem");
 		Items.lanteaOreIngot = RegistrationHelper.registerItem(ItemLanteaOreIngot.class, "lanteaOreIngot");
 		Items.jacksonNotebook = RegistrationHelper.registerItem(ItemJacksonNotebook.class, "jacksonNotebook");

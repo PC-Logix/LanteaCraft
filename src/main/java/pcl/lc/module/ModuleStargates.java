@@ -13,6 +13,7 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
 import pcl.lc.module.stargate.block.BlockStargateBase;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
 import pcl.lc.module.stargate.block.BlockStargateRing;
@@ -57,8 +58,6 @@ public class ModuleStargates implements IModule {
 	}
 
 	public static class Items {
-		public static ItemCoreCrystal coreCrystal;
-		public static ItemControllerCrystal controllerCrystal;
 		public static ItemIris iris;
 		public static ItemGDO gdo;
 		public static ItemTransportRingActivator transportRingActivator;
@@ -117,9 +116,6 @@ public class ModuleStargates implements IModule {
 		GameRegistry.registerTileEntity(TileStargateRing.class, "tileEntityStargateRing");
 		GameRegistry.registerTileEntity(TileStargateDHD.class, "tileEntityStargateDHD");
 		GameRegistry.registerTileEntity(TileTransporterRing.class, "tileEntityRingPlatform");
-
-		Items.coreCrystal = RegistrationHelper.registerItem(ItemCoreCrystal.class, "coreCrystal");
-		Items.controllerCrystal = RegistrationHelper.registerItem(ItemControllerCrystal.class, "controllerCrystal");
 		Items.iris = RegistrationHelper.registerItem(ItemIris.class, "iris");
 		Items.gdo = RegistrationHelper.registerItem(ItemGDO.class, "gdo");
 
@@ -127,35 +123,38 @@ public class ModuleStargates implements IModule {
 				"transportRingActivator");
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN", "III", 'I',
-				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
-						(Block) Block.blockRegistry.getObject("sandStone"), 1, 1));
+				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
+				new ItemStack((Block) Block.blockRegistry.getObject("sandStone"), 1, 1));
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1, 1), "CgC", "NpN", "IrI", 'I',
-				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
-						net.minecraft.init.Blocks.sandstone, 1, 1), 'g', net.minecraft.init.Blocks.glowstone, 'r',
-				net.minecraft.init.Items.redstone, 'p', net.minecraft.init.Items.ender_pearl);
+				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
+				new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1), 'g', net.minecraft.init.Blocks.glowstone,
+				'r', net.minecraft.init.Items.redstone, 'p', net.minecraft.init.Items.ender_pearl);
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateBaseBlock, 1), "CrC", "NeN", "IcI", 'I',
-				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
-						net.minecraft.init.Blocks.sandstone, 1, 1), 'r', net.minecraft.init.Items.redstone, 'e',
-				net.minecraft.init.Items.ender_eye, 'c', Items.coreCrystal);
+				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
+				new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1), 'r', net.minecraft.init.Items.redstone, 'e',
+				net.minecraft.init.Items.ender_eye, 'c', new ItemStack(ModuleCore.Items.reagentItem, 1,
+						ReagentList.CORECRYSTAL.ordinal()));
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateControllerBlock, 1), "bbb", "OpO", "OcO", 'b',
 				net.minecraft.init.Blocks.stone_button, 'O', net.minecraft.init.Blocks.obsidian, 'p',
-				net.minecraft.init.Items.ender_pearl, 'r', net.minecraft.init.Items.redstone, 'c',
-				Items.controllerCrystal);
+				net.minecraft.init.Items.ender_pearl, 'r', net.minecraft.init.Items.redstone, 'c', new ItemStack(
+						ModuleCore.Items.reagentItem, 1, ReagentList.CORECRYSTAL.ordinal()));
 
 		if (ConfigHelper.getOrSetBooleanParam(config, "Crafting", "allowCrafting", "coreCrystal",
 				"Allow crafting of certain hard-to-obtain items. This de-balances the mod.", false))
-			RegistrationHelper.newRecipe(new ItemStack(Items.coreCrystal, 1), "bbr", "rdb", "brb", 'b', new ItemStack(
-					net.minecraft.init.Items.dye, 1, 4), 'r', net.minecraft.init.Items.redstone, 'd',
-					net.minecraft.init.Items.diamond);
+			RegistrationHelper.newRecipe(
+					new ItemStack(ModuleCore.Items.reagentItem, 1, ReagentList.CORECRYSTAL.ordinal()), "bbr", "rdb",
+					"brb", 'b', new ItemStack(net.minecraft.init.Items.dye, 1, 4), 'r',
+					net.minecraft.init.Items.redstone, 'd', net.minecraft.init.Items.diamond);
 
 		if (ConfigHelper.getOrSetBooleanParam(config, "Crafting", "allowCrafting", "controllerCrystal",
 				"Allow crafting of certain hard-to-obtain items. This de-balances the mod.", false))
-			RegistrationHelper.newRecipe(new ItemStack(Items.controllerCrystal, 1), "roo", "odr", "oor", 'o',
-					new ItemStack(net.minecraft.init.Items.dye, 1, 14), 'r', net.minecraft.init.Items.redstone, 'd',
-					net.minecraft.init.Items.diamond);
+			RegistrationHelper.newRecipe(
+					new ItemStack(ModuleCore.Items.reagentItem, 1, ReagentList.CONTROLCRYSTAL.ordinal()), "roo", "odr",
+					"oor", 'o', new ItemStack(net.minecraft.init.Items.dye, 1, 14), 'r',
+					net.minecraft.init.Items.redstone, 'd', net.minecraft.init.Items.diamond);
 
 		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ContainerStargateBase.class);
 		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(),

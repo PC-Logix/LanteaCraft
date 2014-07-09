@@ -13,6 +13,7 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.core.OreTypes;
 import pcl.lc.module.ModuleCore;
 import pcl.lc.module.ModuleStargates;
+import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class UpgradeHelper {
@@ -74,9 +75,10 @@ public class UpgradeHelper {
 				.ordinal()), true));
 		upgrades.add(new UpgradeMapping("naquadahIngot", new ItemStack(ModuleCore.Items.lanteaOreIngot, 1,
 				OreTypes.NAQUADAH.ordinal()), true));
-		upgrades.add(new UpgradeMapping("sgCoreCrystal", new ItemStack(ModuleStargates.Items.coreCrystal, 1), true));
-		upgrades.add(new UpgradeMapping("sgControllerCrystal",
-				new ItemStack(ModuleStargates.Items.controllerCrystal, 1), true));
+		upgrades.add(new UpgradeMapping("sgCoreCrystal", new ItemStack(ModuleCore.Items.reagentItem, 1,
+				ReagentList.CORECRYSTAL.ordinal()), true));
+		upgrades.add(new UpgradeMapping("sgControllerCrystal", new ItemStack(ModuleCore.Items.reagentItem, 1,
+				ReagentList.CONTROLCRYSTAL.ordinal()), true));
 	}
 
 	/**

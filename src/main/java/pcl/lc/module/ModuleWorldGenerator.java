@@ -15,6 +15,7 @@ import pcl.lc.api.internal.IModule;
 import pcl.lc.base.worldgen.NaquadahOreWorldGen;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -56,10 +57,10 @@ public class ModuleWorldGenerator implements IModule {
 					8, categories);
 			RegistrationHelper.addRandomChestItem(new ItemStack(ModuleStargates.Blocks.stargateRingBlock, 1, 1), 1, 3,
 					7, categories);
-			RegistrationHelper.addRandomChestItem(new ItemStack(ModuleStargates.Items.coreCrystal, 1, 0), 1, 1, 2,
-					categories);
-			RegistrationHelper.addRandomChestItem(new ItemStack(ModuleStargates.Items.controllerCrystal, 1, 0), 1, 1,
-					1, categories);
+			RegistrationHelper.addRandomChestItem(new ItemStack(ModuleCore.Items.reagentItem, 1,
+					ReagentList.CORECRYSTAL.ordinal()), 1, 1, 2, categories);
+			RegistrationHelper.addRandomChestItem(new ItemStack(ModuleCore.Items.reagentItem, 1,
+					ReagentList.CONTROLCRYSTAL.ordinal()), 1, 1, 1, categories);
 		}
 
 		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft NaquadahOre generator...");

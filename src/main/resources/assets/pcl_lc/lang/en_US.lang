@@ -2,9 +2,15 @@ tile.stargateController.name=Stargate Controller
 tile.stargateBase.name=Stargate Base
 tile.stargateRing.0.name=Stargate Ring Segment
 tile.stargateRing.1.name=Stargate Chevron Block
-item.coreCrystal.name=Stargate Core Crystal
-item.controllerCrystal.name=Stargate Controller Crystal
 item.energyCrystal.name=Energy Crystal
+
+item.craftingReagent.0.name=Broken Reagent Item
+item.craftingReagent.1.name=Blank Crystal
+item.craftingReagent.2.name=Stargate Core Crystal
+item.craftingReagent.3.name=Stargate Controller Crystal
+item.craftingReagent.4.name=Iron Plate
+item.craftingReagent.5.name=Naquadah Alloy Plate
+item.craftingReagent.6.name=Trinium Alloy Plate
 
 tile.blockLiquidNaquadah.name=Liquid Naquadah
 item.liquidNaquadahBucket.name=Liquid Naquadah Bucket
