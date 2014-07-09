@@ -68,6 +68,8 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 
 	public TileNaquadahGenerator() {
 		super();
+		metadata.set("energy", 0.0d);
+		metadata.set("simulating", false);
 		FilterRule naquadah = new FilterRule(new ItemStack[] { new ItemStack(ModuleCore.Items.lanteaOreItem, 1) },
 				null, true, true);
 		FilterRule energyCrystal = new FilterRule(
@@ -189,7 +191,7 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 
 	@Override
 	public double getAvailableExportEnergy() {
-		if (!isActive() || !(Boolean) metadata.get("simulating"))
+		if (!isActive() || !isEnabled())
 			return 0;
 		return Math.min((Double) metadata.get("energy"), getMaximumExportEnergy());
 	}
@@ -201,7 +203,7 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 
 	@Override
 	public double exportEnergy(double units) {
-		if (!(Boolean) metadata.get("simulating"))
+		if (!isEnabled())
 			return 0.0d;
 		double reallyExportedUnits = Math.min(units, (Double) metadata.get("energy"));
 		metadata.set("energy", (Double) metadata.get("energy") - reallyExportedUnits);
@@ -209,7 +211,7 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 	}
 
 	public boolean isActive() {
-		return (Boolean) metadata.get("simulating") && (Double) metadata.get("energy") > 0;
+		return isEnabled() && (Double) metadata.get("energy") > 0;
 	}
 
 	@Override
@@ -251,6 +253,8 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 
 	@Override
 	public boolean isEnabled() {
+		if (!metadata.containsKey("simulating"))
+			return false;
 		return (Boolean) metadata.get("simulating");
 	}
 
@@ -262,14 +266,14 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 
 	@Override
 	public double getStoredEnergy() {
-		if (!(Boolean) metadata.get("simulating"))
+		if (!isEnabled() || !metadata.containsKey("energy"))
 			return 0;
 		return (Double) metadata.get("energy");
 	}
 
 	@Override
 	public double getStoredEnergy(EnumUnits unitsOf) {
-		if (!(Boolean) metadata.get("simulating"))
+		if (!isEnabled())
 			return 0;
 		return EnumUnits.convertFromNaquadahUnit(unitsOf, (Double) metadata.get("energy"));
 	}

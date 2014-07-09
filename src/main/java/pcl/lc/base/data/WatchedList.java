@@ -104,6 +104,13 @@ public class WatchedList<A, B> extends Observable {
 	public Iterator<A> keys() {
 		return values.keySet().iterator();
 	}
+	
+	/**
+	 * @see {@link HashMap#containsKey(Object)}
+	 */
+	public boolean containsKey(String key) {
+		return values.containsKey(key);
+	}
 
 	/**
 	 * @see {@link HashMap#put(Object, Object)}
@@ -189,5 +196,6 @@ public class WatchedList<A, B> extends Observable {
 	public boolean equals(Object o) {
 		return values.equals(o);
 	}
+	
 
 }

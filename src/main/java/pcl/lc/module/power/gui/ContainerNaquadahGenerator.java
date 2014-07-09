@@ -28,7 +28,7 @@ public class ContainerNaquadahGenerator extends GenericContainer {
 
 	@Override
 	public void sendStateTo(ICrafting crafter) {
-		int progress = (int) Math.floor(100 * 100 * ((Double) te.metadata.get("energy") / te.maxEnergy));
+		int progress = (int) Math.floor(100 * 100 * (te.getStoredEnergy() / te.maxEnergy));
 		if (progress > 10000)
 			progress = 10000;
 		crafter.sendProgressBarUpdate(this, 0, progress);
