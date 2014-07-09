@@ -21,7 +21,6 @@ import pcl.common.helpers.VersionHelper;
 import pcl.common.xmlcfg.ModuleList;
 import pcl.common.xmlcfg.XMLParser;
 import pcl.common.xmlcfg.XMLSaver;
-import pcl.lc.base.TileEntityChunkManager;
 import pcl.lc.base.network.ClientPacketHandler;
 import pcl.lc.base.network.ModPacket;
 import pcl.lc.base.network.PacketLogger;
@@ -64,7 +63,6 @@ public class LanteaCraftCommonProxy {
 	private NetworkHelpers networkHelpers;
 	private UpgradeHelper upgradeHelper;
 
-	public TileEntityChunkManager chunkManager;
 	protected RemoteChunkLoading remoteChunkManager;
 	protected StargateConnectionManager stargateConnectionManager;
 	protected AudioEngine audioContext;
@@ -118,8 +116,6 @@ public class LanteaCraftCommonProxy {
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft setting up...");
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getInstance());
 		MinecraftForge.EVENT_BUS.register(LanteaCraft.getSpecialBucketHandler());
-
-		chunkManager = new TileEntityChunkManager(LanteaCraft.getInstance());
 		remoteChunkManager = new RemoteChunkLoading();
 		stargateConnectionManager = new StargateConnectionManager();
 		serverTickHandler.registerTickHost(remoteChunkManager);
