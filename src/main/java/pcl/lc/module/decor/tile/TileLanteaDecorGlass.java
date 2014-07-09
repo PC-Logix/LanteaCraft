@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
@@ -184,7 +185,7 @@ public class TileLanteaDecorGlass extends TileEntity implements IPacketHandler {
 	}
 
 	@Override
-	public void handlePacket(ModPacket packetOf) {
+	public void handlePacket(ModPacket packetOf, EntityPlayer player) {
 		if (worldObj.isRemote)
 			if (packetOf instanceof TinyModPacket)
 				try {
