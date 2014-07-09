@@ -1,4 +1,4 @@
-package net.afterlifelochie.sandbox;
+package pcl.lc.base.data;
 
 /**
  * Observable is a container for objects which have values for which we care

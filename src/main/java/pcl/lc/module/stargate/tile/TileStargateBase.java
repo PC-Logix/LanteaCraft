@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import net.afterlifelochie.sandbox.ObserverContext;
-import net.afterlifelochie.sandbox.WatchedValue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -47,12 +45,14 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisState;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.IStargateAccess;
-import pcl.lc.base.GenericTileEntity;
+import pcl.lc.base.TileManaged;
+import pcl.lc.base.data.ObserverContext;
+import pcl.lc.base.data.WatchedValue;
 import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.network.IPacketHandler;
-import pcl.lc.base.network.ModPacket;
-import pcl.lc.base.network.StandardModPacket;
+import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
 import pcl.lc.module.ModuleStargates;
@@ -66,7 +66,7 @@ import pcl.lc.module.stargate.render.StargateEventHorizonRenderer;
 import pcl.lc.module.stargate.render.StargateRenderConstants;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
-public class TileStargateBase extends GenericTileEntity implements IStargateAccess, IPacketHandler, ISidedInventory {
+public class TileStargateBase extends TileManaged implements IStargateAccess, IPacketHandler, ISidedInventory {
 
 	/**
 	 * Used to damage players who contact with an iris.

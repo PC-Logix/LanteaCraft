@@ -1,4 +1,4 @@
-package pcl.lc.base.network;
+package pcl.lc.base.network.packet;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import pcl.common.util.WorldLocation;
+import pcl.lc.base.network.IStreamPackable;
 
 public abstract class ModPacket {
 

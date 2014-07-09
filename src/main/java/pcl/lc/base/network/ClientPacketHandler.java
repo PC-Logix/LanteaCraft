@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Level;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.LanteaCraftClientProxy;
+import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.base.render.gfx.EffectBeam;
 
 public class ClientPacketHandler {

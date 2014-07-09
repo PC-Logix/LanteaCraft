@@ -15,8 +15,8 @@ import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.network.IPacketHandler;
-import pcl.lc.base.network.ModPacket;
-import pcl.lc.base.network.TinyModPacket;
+import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.TinyModPacket;
 
 public class TileLanteaDecorGlass extends TileEntity implements IPacketHandler {
 

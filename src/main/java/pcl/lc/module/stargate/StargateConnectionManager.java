@@ -3,7 +3,6 @@ package pcl.lc.module.stargate;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import net.afterlifelochie.sandbox.WatchedValue;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -16,6 +15,7 @@ import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.internal.ITickAgent;
+import pcl.lc.base.data.WatchedValue;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
 import pcl.lc.module.stargate.tile.TileStargateBase;

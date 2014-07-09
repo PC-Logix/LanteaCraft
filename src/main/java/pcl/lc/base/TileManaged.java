@@ -12,15 +12,76 @@ import net.minecraft.util.ResourceLocation;
 
 import org.apache.logging.log4j.Level;
 
+import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.data.ObserverContext;
+import pcl.lc.base.data.WatchedList;
+import pcl.lc.base.network.IPacketHandler;
+import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.WatchedListSyncPacket;
 
-public class GenericTileEntity extends TileEntity implements IInventory, ISidedInventory {
+public abstract class TileManaged extends TileEntity implements IInventory, ISidedInventory, IPacketHandler {
 
+	private final ObserverContext metacontext = new ObserverContext();
+	public WatchedList<String, Object> metadata = new WatchedList<String, Object>();
+
+	/**
+	 * Updates the tile. Do not override this from TileManaged implementation;
+	 * use the {@link #think()} method instead!
+	 */
+	@Override
+	public void updateEntity() {
+		this.think();
+		if (!worldObj.isRemote) {
+			if (metadata.modified(metacontext)) {
+				WatchedListSyncPacket packet = new WatchedListSyncPacket(new WorldLocation(this), metadata);
+				metadata.clearModified(metacontext);
+				LanteaCraft.getNetPipeline().sendToAllAround(packet, packet.getOriginLocation(), 128.0d);
+			}
+			detectAndSendChanges();
+		} else {
+
+		}
+	}
+
+	/**
+	 * Called once per tick to update the tile.
+	 */
+	public abstract void think();
+
+	/**
+	 * Called when a packet is received for this TileManaged instance.
+	 * 
+	 * @param packet
+	 *            The network packet.
+	 */
+	public abstract void thinkPacket(ModPacket packet);
+
+	/**
+	 * Detect and send any changes on the server to the client. You are
+	 * responsible for dispatching any packets, excluding the metadata
+	 * synchronization packets.
+	 */
+	public abstract void detectAndSendChanges();
+
+	/**
+	 * Marks the host block for an update.
+	 */
 	public void markBlockForUpdate() {
 		if (worldObj != null)
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
+	/**
+	 * Plays a sound effect immediately using the Minecraft sound engine.
+	 * 
+	 * @param name
+	 *            The sound object name.
+	 * @param volume
+	 *            The volume of the sound.
+	 * @param pitch
+	 *            The pitch of the sound.
+	 */
 	public void playSoundEffect(String name, float volume, float pitch) {
 		if (name.contains(":"))
 			LanteaCraft.getLogger().log(Level.WARN, "Old SoundSystem label detected, can't play label: " + name);
@@ -37,6 +98,11 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 		}
 	}
 
+	/**
+	 * Gets the inventory of the tile.
+	 * 
+	 * @return The tile's inventory.
+	 */
 	public IInventory getInventory() {
 		return null;
 	}
@@ -214,20 +280,29 @@ public class GenericTileEntity extends TileEntity implements IInventory, ISidedI
 
 	@Override
 	public boolean hasCustomInventoryName() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void openInventory() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void closeInventory() {
-		// TODO Auto-generated method stub
+	}
 
+	/**
+	 * Called from the network manager when a packet is received.
+	 */
+	@Override
+	public void handlePacket(ModPacket packetOf) {
+		if (packetOf == null)
+			return;
+		if (packetOf instanceof WatchedListSyncPacket) {
+			WatchedListSyncPacket sync = (WatchedListSyncPacket) packetOf;
+			sync.apply(metadata);
+		} else
+			this.thinkPacket(packetOf);
 	}
 
 }

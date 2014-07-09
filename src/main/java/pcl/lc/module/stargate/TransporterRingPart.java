@@ -10,8 +10,8 @@ import pcl.common.util.Vector3;
 import pcl.common.util.WorldLocation;
 import pcl.lc.base.multiblock.GenericMultiblock;
 import pcl.lc.base.multiblock.MultiblockPart;
-import pcl.lc.base.network.ModPacket;
-import pcl.lc.base.network.StandardModPacket;
+import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.module.stargate.tile.TileTransporterRing;
 
 public class TransporterRingPart extends MultiblockPart {

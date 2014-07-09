@@ -1,4 +1,4 @@
-package pcl.lc.base.network;
+package pcl.lc.base.network.packet;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import pcl.common.util.WorldLocation;
+import pcl.lc.base.network.IStreamPackable;
 
 public class TinyModPacket extends ModPacket {
 

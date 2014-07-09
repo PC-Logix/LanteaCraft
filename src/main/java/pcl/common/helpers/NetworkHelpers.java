@@ -12,8 +12,8 @@ import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.base.multiblock.EnumOrientations;
 import pcl.lc.base.network.IStreamPackable;
-import pcl.lc.base.network.ModPacket;
-import pcl.lc.base.network.StandardModPacket;
+import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.StandardModPacket;
 
 /**
  * Generic network helper registry, this is where I chose to dump them as I

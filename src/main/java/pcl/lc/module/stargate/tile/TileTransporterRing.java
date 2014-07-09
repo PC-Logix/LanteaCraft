@@ -4,13 +4,13 @@ import net.minecraft.network.Packet;
 import net.minecraft.util.AxisAlignedBB;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.GenericTileEntity;
+import pcl.lc.base.TileManaged;
 import pcl.lc.base.network.IPacketHandler;
-import pcl.lc.base.network.ModPacket;
+import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.TransporterRingPart;
 
-public class TileTransporterRing extends GenericTileEntity implements IPacketHandler {
+public class TileTransporterRing extends TileManaged implements IPacketHandler {
 
 	private TransporterRingMultiblock multiblock;
 	private boolean isHostBlock = false;

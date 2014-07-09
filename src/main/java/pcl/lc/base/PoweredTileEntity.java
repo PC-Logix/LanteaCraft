@@ -29,7 +29,7 @@ import cpw.mods.fml.common.Loader;
  * 
  * @author AfterLifeLochie
  */
-public abstract class PoweredTileEntity extends GenericTileEntity {
+public abstract class PoweredTileEntity extends TileManaged {
 
 	/**
 	 * Incoming power buffer, particularly only for BuildCraft.

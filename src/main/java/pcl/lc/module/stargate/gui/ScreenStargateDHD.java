@@ -17,7 +17,7 @@ import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.base.GenericScreen;
-import pcl.lc.base.network.StandardModPacket;
+import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
 import pcl.lc.module.stargate.GateAddressHelper;

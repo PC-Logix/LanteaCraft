@@ -3,12 +3,12 @@ package pcl.lc.module.stargate.tile;
 import net.minecraft.network.Packet;
 import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.GenericTileEntity;
+import pcl.lc.base.TileManaged;
 import pcl.lc.base.network.IPacketHandler;
-import pcl.lc.base.network.ModPacket;
+import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.module.stargate.StargatePart;
 
-public class TileStargateRing extends GenericTileEntity implements IPacketHandler {
+public class TileStargateRing extends TileManaged implements IPacketHandler {
 	private StargatePart part = new StargatePart(this);
 
 	@Override

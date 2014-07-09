@@ -19,8 +19,8 @@ import pcl.lc.base.energy.IItemEnergyStore;
 import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.network.IPacketHandler;
-import pcl.lc.base.network.ModPacket;
-import pcl.lc.base.network.StandardModPacket;
+import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
 

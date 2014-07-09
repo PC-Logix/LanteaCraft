@@ -10,7 +10,10 @@ import java.util.Iterator;
 
 import pcl.common.helpers.NetworkHelpers;
 import pcl.common.util.WorldLocation;
+import pcl.lc.base.data.ObserverContext;
+import pcl.lc.base.data.WatchedList;
 import pcl.lc.base.network.PacketLogger;
+import pcl.lc.base.network.packet.WatchedListSyncPacket;
 
 public class LocalTest {
 
@@ -89,7 +92,7 @@ public class LocalTest {
 		for (String s : a.modified()) 
 			System.out.println("m " + s);
 		
-		DiffModPacket packet = new DiffModPacket(new WorldLocation(255, 255, 255, 255), a);
+		WatchedListSyncPacket packet = new WatchedListSyncPacket(new WorldLocation(255, 255, 255, 255), a);
 		a.clearModified(ao);
 
 		log.logPacket(packet);
@@ -99,7 +102,7 @@ public class LocalTest {
 		byte[] rstr = netstr.toByteArray();
 
 		ByteArrayInputStream netin = new ByteArrayInputStream(rstr);
-		DiffModPacket result = new DiffModPacket();
+		WatchedListSyncPacket result = new WatchedListSyncPacket();
 		result.decode(new DataInputStream(netin));
 		result.apply(b);
 		b.clearModified(bo);

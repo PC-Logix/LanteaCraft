@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.network.ModPacket;
+import pcl.lc.base.network.packet.ModPacket;
 
 /**
  * GenericMultiblock acts as a global declaration for all multi-block structure

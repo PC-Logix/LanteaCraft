@@ -1,4 +1,4 @@
-package pcl.lc.base.network;
+package pcl.lc.base.network.packet;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Level;
 import pcl.common.util.WorldLocation;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.network.IStreamPackable;
 
 public class StandardModPacket extends ModPacket {
 

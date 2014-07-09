@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 import pcl.common.util.Facing3;
 import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
-import pcl.lc.base.network.StandardModPacket;
+import pcl.lc.base.network.packet.StandardModPacket;
 
 public class EffectBeam extends EntityFX {
 

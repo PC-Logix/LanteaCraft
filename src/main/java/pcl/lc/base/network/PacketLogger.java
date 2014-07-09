@@ -11,6 +11,7 @@ import java.io.IOException;
 import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.network.packet.ModPacket;
 
 public class PacketLogger {
 	private final File file;

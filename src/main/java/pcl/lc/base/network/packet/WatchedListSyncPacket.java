@@ -1,4 +1,4 @@
-package net.afterlifelochie.sandbox;
+package pcl.lc.base.network.packet;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,15 +17,15 @@ import org.apache.logging.log4j.Level;
 import pcl.common.util.WorldLocation;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.data.WatchedList;
 import pcl.lc.base.network.IStreamPackable;
-import pcl.lc.base.network.ModPacket;
 
 /**
  * Packet to calculate and send Observable state changes.
  * 
  * @author AfterLifeLochie
  */
-public class DiffModPacket extends ModPacket {
+public class WatchedListSyncPacket extends ModPacket {
 	private HashMap<Object, Object> valueMap;
 	private ArrayList<Object> key_add;
 	private ArrayList<Object> key_remove;
@@ -33,14 +33,14 @@ public class DiffModPacket extends ModPacket {
 	private WorldLocation origin;
 	private volatile boolean forServer;
 
-	public DiffModPacket() {
+	public WatchedListSyncPacket() {
 		valueMap = new HashMap<Object, Object>();
 		key_add = new ArrayList<Object>();
 		key_remove = new ArrayList<Object>();
 		key_modified = new ArrayList<Object>();
 	}
 
-	public DiffModPacket(WorldLocation location, WatchedList<String, Object> alist) {
+	public WatchedListSyncPacket(WorldLocation location, WatchedList<String, Object> alist) {
 		origin = location;
 		valueMap = new HashMap<Object, Object>();
 		key_add = (ArrayList<Object>) alist.added().clone();
@@ -243,7 +243,7 @@ public class DiffModPacket extends ModPacket {
 
 	@Override
 	public String getType() {
-		return "DiffModPacket";
+		return "WatchedListSyncPacket";
 	}
 
 	@Override
@@ -251,7 +251,11 @@ public class DiffModPacket extends ModPacket {
 		return origin;
 	}
 
-	public void encode(DataOutputStream data) throws IOException {
+	@SuppressWarnings("unchecked")
+	@Override
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		DataOutputStream data = new DataOutputStream(output);
 		data.writeByte((forServer) ? 1 : 0);
 		IStreamPackable<WorldLocation> packer = (IStreamPackable<WorldLocation>) ModPacket
 				.findPacker(WorldLocation.class);
@@ -263,24 +267,6 @@ public class DiffModPacket extends ModPacket {
 		writeArrayList(key_modified, data);
 		writeHashMap(valueMap, data);
 		data.flush();
-	}
-
-	public void decode(DataInputStream data) throws IOException {
-		forServer = (data.readByte() == 1);
-		IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
-		origin = (WorldLocation) unpacker.unpack(data);
-		key_add = (ArrayList<Object>) readArrayList(data);
-		key_remove = (ArrayList<Object>) readArrayList(data);
-		key_modified = (ArrayList<Object>) readArrayList(data);
-		valueMap = (HashMap<Object, Object>) readHashMap(data);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		DataOutputStream data = new DataOutputStream(output);
-		encode(data);
 		data.close();
 		output.flush();
 		buffer.writeBytes(output.toByteArray());
@@ -292,7 +278,13 @@ public class DiffModPacket extends ModPacket {
 		byte[] b = new byte[buffer.readableBytes() - buffer.readerIndex()];
 		buffer.readBytes(b);
 		DataInputStream data = new DataInputStream(new ByteArrayInputStream(b));
-		decode(data);
+		forServer = (data.readByte() == 1);
+		IStreamPackable<?> unpacker = ModPacket.findPacker(WorldLocation.class);
+		origin = (WorldLocation) unpacker.unpack(data);
+		key_add = (ArrayList<Object>) readArrayList(data);
+		key_remove = (ArrayList<Object>) readArrayList(data);
+		key_modified = (ArrayList<Object>) readArrayList(data);
+		valueMap = (HashMap<Object, Object>) readHashMap(data);
 	}
 
 }
