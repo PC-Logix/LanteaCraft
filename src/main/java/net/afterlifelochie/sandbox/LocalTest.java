@@ -1,20 +1,16 @@
 package net.afterlifelochie.sandbox;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.Iterator;
 
-import pcl.common.xmlcfg.ConfigList;
-import pcl.common.xmlcfg.ConfigNode;
-import pcl.common.xmlcfg.ModuleConfig;
-import pcl.common.xmlcfg.ModuleList;
-import pcl.common.xmlcfg.XMLParser;
-import pcl.common.xmlcfg.XMLParserException;
-import pcl.common.xmlcfg.XMLSaver;
-import pcl.common.xmlcfg.XMLSaverException;
+import pcl.common.helpers.NetworkHelpers;
+import pcl.common.util.WorldLocation;
+import pcl.lc.base.network.PacketLogger;
 
 public class LocalTest {
 
@@ -22,73 +18,91 @@ public class LocalTest {
 		new LocalTest();
 	}
 
-	public LocalTest() {
+	final PacketLogger log = new PacketLogger(new File("log.dat"));
 
-		XMLParser parser = new XMLParser();
-		XMLSaver saver = new XMLSaver();
+	public LocalTest() {
+		final NetworkHelpers helpers = new NetworkHelpers();
+		helpers.init();
 
 		try {
-			FileInputStream test = new FileInputStream(new File("LanteaCraft.xml"));
-			ModuleList list = parser.read(test);
-			printObject(0, list);
-			
-			for (ModuleConfig module : list.children()) {
-				if (module.name().equalsIgnoreCase("core")) {
-					ConfigNode newNode = new ConfigNode("doYouLikeBacon", "Bacon, yes?", module);
-					newNode.parameters().put("yummy", "yes");
-					module.children().add(newNode);
-					newNode.modify();
-				}
-			}
-			System.out.println(String.format("Root modified: %s", list.modified()));
-			saver.save(list, new FileOutputStream(new File("LanteaCraft-out.xml")));
+			log.open();
+			final ObserverContext ac = new ObserverContext();
+			final WatchedList<String, Object> alist = new WatchedList<String, Object>();
 
-		} catch (IOException ioex) {
-			ioex.printStackTrace();
-		} catch (XMLParserException parse) {
-			parse.printStackTrace();
-		} catch (XMLSaverException save) {
-			save.printStackTrace();
+			final ObserverContext bc = new ObserverContext();
+			final WatchedList<String, Object> blist = new WatchedList<String, Object>();
+
+			alist.set("tomato", "red");
+			alist.set("apple", "red");
+			alist.set("orange", "orange");
+			alist.set("bacon", "yummy");
+			synchronize(ac, alist, bc, blist);
+			if (!match(alist, blist))
+				throw new IOException("Mismatch detected!");
+
+			alist.remove("tomato");
+			alist.remove("apple");
+			synchronize(ac, alist, bc, blist);
+			if (!match(alist, blist))
+				throw new IOException("Mismatch detected!");
+			
+			alist.set("tomato", "round");
+			alist.set("apple", "round too");
+			alist.remove("tomato");
+			alist.remove("orange");
+			synchronize(ac, alist, bc, blist);
+			if (!match(alist, blist))
+				throw new IOException("Mismatch detected!");
+
+		} catch (Throwable t) {
+			t.printStackTrace();
+			log.close();
 		}
 	}
 
-	public static void printObject(int level, ConfigNode node) {
-		StringBuilder tabs = new StringBuilder();
-		for (int i = 0; i < level; i++)
-			tabs.append("\t");
-		if (node instanceof ModuleList) {
-			ModuleList list = (ModuleList) node;
-			System.out.println(String.format("%s ModuleList: %s, %s", tabs, list.name(), list.comment()));
-			printParameters(level, list.parameters());
-			for (ModuleConfig child : list.children())
-				printObject(level + 1, child);
-		} else if (node instanceof ConfigList) {
-			ConfigList list = (ConfigList) node;
-			System.out.println(String.format("%s ConfigList: %s, %s", tabs, list.name(), list.comment()));
-			printParameters(level, list.parameters());
-			for (ConfigNode child : list.children())
-				printObject(level + 1, child);
-		} else if (node instanceof ModuleConfig) {
-			ModuleConfig module = (ModuleConfig) node;
-			System.out.println(String.format("%s ModuleConfig: %s, %s", tabs, module.name(), module.comment()));
-			printParameters(level, module.parameters());
-			for (ConfigNode child : module.children())
-				printObject(level + 1, child);
-		} else if (node instanceof ConfigNode) {
-			System.out.println(String.format("%s ConfigNode: %s, %s", tabs, node.name(), node.comment()));
-			printParameters(level, node.parameters());
-		} else
-			System.out.println(String.format("%s {??}", tabs));
+	public boolean match(WatchedList<String, Object> a, WatchedList<String, Object> b) {
+		Iterator<String> i = a.keys();
+		System.out.println("----");
+		while (i.hasNext()) {
+			String key = i.next();
+			System.out.println(String.format("%s: %s =>> %s", key, a.get(key), b.get(key)));
+			if (b.get(key) == null && a.get(key) != null) {
+				return false;
+			}
+			if (a.get(key) == null && b.get(key) != null) {
+				return false;
+			}
+			if (!a.get(key).equals(b.get(key))) {
+				return false;	
+			}
+		}
+		System.out.println("----");
+		return true;
 	}
 
-	public static void printParameters(int level, HashMap<String, Object> params) {
-		if (params == null)
-			return;
-		StringBuilder tabs = new StringBuilder();
-		for (int i = 0; i < level; i++)
-			tabs.append("\t");
-		for (Entry<String, Object> entry : params.entrySet())
-			System.out.println(String.format("%s Param %s: %s", tabs, entry.getKey(), entry.getValue().toString()));
+	public void synchronize(ObserverContext ao, WatchedList<String, Object> a, ObserverContext bo,
+			WatchedList<String, Object> b) throws IOException {
+		for (String s : a.added())
+			System.out.println("+ " + s);
+		for (String s : a.removed())
+			System.out.println("- " + s);
+		for (String s : a.modified()) 
+			System.out.println("m " + s);
+		
+		DiffModPacket packet = new DiffModPacket(new WorldLocation(255, 255, 255, 255), a);
+		a.clearModified(ao);
+
+		log.logPacket(packet);
+
+		ByteArrayOutputStream netstr = new ByteArrayOutputStream();
+		packet.encode(new DataOutputStream(netstr));
+		byte[] rstr = netstr.toByteArray();
+
+		ByteArrayInputStream netin = new ByteArrayInputStream(rstr);
+		DiffModPacket result = new DiffModPacket();
+		result.decode(new DataInputStream(netin));
+		result.apply(b);
+		b.clearModified(bo);
 	}
 
 }

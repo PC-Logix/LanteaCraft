@@ -37,6 +37,12 @@ public class WatchedList<A, B> extends Observable {
 	 * outside.
 	 */
 	private ArrayList<A> key_remove;
+	/**
+	 * The map of all keys updated this Observable session. As B values may not
+	 * be Observable themselves, we must keep a record of changes from the
+	 * outside.
+	 */
+	private ArrayList<A> key_modified;
 
 	/**
 	 * Creates a new WatchedList.
@@ -46,6 +52,7 @@ public class WatchedList<A, B> extends Observable {
 		this.values = new HashMap<A, B>();
 		this.key_add = new ArrayList<A>();
 		this.key_remove = new ArrayList<A>();
+		this.key_modified = new ArrayList<A>();
 	}
 
 	/**
@@ -59,6 +66,7 @@ public class WatchedList<A, B> extends Observable {
 		this.values = new HashMap<A, B>();
 		this.key_add = new ArrayList<A>();
 		this.key_remove = new ArrayList<A>();
+		this.key_modified = new ArrayList<A>();
 	}
 
 	@Override
@@ -66,6 +74,7 @@ public class WatchedList<A, B> extends Observable {
 		super.clearModified(context);
 		this.key_add.clear();
 		this.key_remove.clear();
+		this.key_modified.clear();
 	}
 
 	/**
@@ -103,8 +112,12 @@ public class WatchedList<A, B> extends Observable {
 		modify();
 		// Operation SET(A, B) will create key A if it does not exist already;
 		// reflect this in key_add list if key_add has no such key A.
+		if (key_remove.contains(key))
+			key_remove.remove(key);
 		if (!values.containsKey(key) && !key_add.contains(key))
 			key_add.add(key);
+		if (values.containsKey(key) && !key_modified.contains(key) && !values.get(key).equals(value))
+			key_modified.add(key);
 		return values.put(key, value);
 	}
 
@@ -123,6 +136,8 @@ public class WatchedList<A, B> extends Observable {
 		// Operation REMOVE(A) will remove key A with value B if key A exists
 		// already; reflect this in key_remove list if key_remove has no such
 		// key A.
+		if (key_add.contains(key))
+			key_add.remove(key);
 		if (values.containsKey(key) && !key_remove.contains(key))
 			key_remove.add(key);
 		return values.remove(key);
@@ -138,6 +153,8 @@ public class WatchedList<A, B> extends Observable {
 		Iterator<A> of = values.keySet().iterator();
 		while (of.hasNext()) {
 			A next = of.next();
+			if (key_add.contains(next))
+				key_add.remove(next);
 			if (!key_remove.contains(next))
 				key_remove.add(next);
 		}
@@ -158,6 +175,19 @@ public class WatchedList<A, B> extends Observable {
 	 */
 	public ArrayList<A> removed() {
 		return key_remove;
+	}
+
+	/**
+	 * Gets the history of all key values which have had their associated value
+	 * modified this Observable session.
+	 */
+	public ArrayList<A> modified() {
+		return key_modified;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return values.equals(o);
 	}
 
 }

@@ -37,7 +37,11 @@ public class Observable {
 	 * Returns the state of this Observable.
 	 */
 	public boolean modified(ObserverContext context) {
-		return modified;
+		if (!context.states.containsKey(hashCode()))
+			return true;
+		if (context.states.get(hashCode()) != ((modified) ? 1 : 0))
+			return true;
+		return false;
 	}
 
 	/**
@@ -45,7 +49,7 @@ public class Observable {
 	 * about the change in the Observable state, it should also be reset.
 	 */
 	public void clearModified(ObserverContext context) {
-		modified = false;
+		context.states.put(hashCode(), (modified) ? 1 : 0);
 	}
 
 }
