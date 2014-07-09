@@ -2,9 +2,15 @@ tile.stargateController.name=DHD
 tile.stargateBase.name=Stargate Basis
 tile.stargateRing.0.name=Stargate Ring Segment
 tile.stargateRing.1.name=Stargate Chevron Block
-item.coreCrystal.name=Stargate Kernkristall
-item.controllerCrystal.name=Stargate Kontrollkristall
 item.energyCrystal.name=Energiekristall
+
+item.craftingReagent.0.name=Zerbrochenes Reagens
+item.craftingReagent.1.name=Leerer Kristall
+item.craftingReagent.2.name=Stargate Kernkristall
+item.craftingReagent.3.name=Stargate Kontrollkristall
+item.craftingReagent.4.name=Eisenplatte
+item.craftingReagent.5.name=Naquadah-Legierung Platte
+item.craftingReagent.6.name=Trinium-Legierung Platte
 
 tile.blockLiquidNaquadah.name=Flüssiges Naquadah
 fluid.liquid_naquadah=Flüssiges Naquadah
@@ -44,6 +50,7 @@ item.tokraSpawnEgg.name=Erschaffe Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
 item.zpm.name=ZPM
 item.gdo.name=GDO
+item.iris.name=Iris Erweiterung
 
 tile.integration.computercraft.name=ComputerCraft Adapter
 
