@@ -313,7 +313,6 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 	 */
 	@Override
 	public void handlePacket(ModPacket packetOf, EntityPlayer player) {
-		System.out.println("Packet recieved!");
 		if (packetOf == null)
 			return;
 		if (packetOf instanceof WatchedListRequestPacket && player instanceof EntityPlayerMP) {
