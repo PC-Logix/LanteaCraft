@@ -12,14 +12,18 @@ import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.machine.block.BlockCrystalInfuser;
+import pcl.lc.module.machine.block.BlockTablePress;
 import pcl.lc.module.machine.render.ModelCrystalInfuser;
 import pcl.lc.module.machine.render.TileCrystalInfuserRenderer;
+import pcl.lc.module.machine.render.TileTablePressRenderer;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
+import pcl.lc.module.machine.tile.TileTablePress;
 
 public class ModuleMachine implements IModule {
 
 	public static class Blocks {
 		public static BlockCrystalInfuser infuser;
+		public static BlockTablePress press;
 	}
 
 	public static class Items {
@@ -27,8 +31,8 @@ public class ModuleMachine implements IModule {
 	}
 
 	public static class Render {
-		public static ModelCrystalInfuser modelCrystalInfuser;
 		public static TileCrystalInfuserRenderer tileCrystalInfuserRenderer;
+		public static TileTablePressRenderer tileTablePressRenderer;
 	}
 
 	@Override
@@ -50,12 +54,15 @@ public class ModuleMachine implements IModule {
 	@Override
 	public void init(FMLInitializationEvent event) {
 		Blocks.infuser = RegistrationHelper.registerBlock(BlockCrystalInfuser.class, "blockCrystalInfuser");
+		Blocks.press = RegistrationHelper.registerBlock(BlockTablePress.class, "blockTablePress");
 		GameRegistry.registerTileEntity(TileCrystalInfuser.class, "tileEntityCrystalInfuser");
+		GameRegistry.registerTileEntity(TileTablePress.class, "tileEntityTablePress");
 
 		if (event.getSide() == Side.CLIENT) {
-			Render.modelCrystalInfuser = new ModelCrystalInfuser();
 			Render.tileCrystalInfuserRenderer = new TileCrystalInfuserRenderer();
+			Render.tileTablePressRenderer = new TileTablePressRenderer();
 			RegistrationHelper.addTileEntityRenderer(TileCrystalInfuser.class, Render.tileCrystalInfuserRenderer);
+			RegistrationHelper.addTileEntityRenderer(TileTablePress.class, Render.tileTablePressRenderer);
 		}
 
 	}
