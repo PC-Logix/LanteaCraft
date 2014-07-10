@@ -9,10 +9,12 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import pcl.common.helpers.RegistrationHelper;
+import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.machine.block.BlockCrystalInfuser;
 import pcl.lc.module.machine.block.BlockTablePress;
+import pcl.lc.module.machine.gui.ContainerCrystalInfuser;
 import pcl.lc.module.machine.render.ModelCrystalInfuser;
 import pcl.lc.module.machine.render.TileCrystalInfuserRenderer;
 import pcl.lc.module.machine.render.TileTablePressRenderer;
@@ -57,6 +59,9 @@ public class ModuleMachine implements IModule {
 		Blocks.press = RegistrationHelper.registerBlock(BlockTablePress.class, "blockTablePress");
 		GameRegistry.registerTileEntity(TileCrystalInfuser.class, "tileEntityCrystalInfuser");
 		GameRegistry.registerTileEntity(TileTablePress.class, "tileEntityTablePress");
+
+		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.CrystalInfuser.ordinal(),
+				ContainerCrystalInfuser.class);
 
 		if (event.getSide() == Side.CLIENT) {
 			Render.tileCrystalInfuserRenderer = new TileCrystalInfuserRenderer();

@@ -11,6 +11,8 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,6 +25,9 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.base.network.packet.TinyModPacket;
+import pcl.lc.base.network.packet.WatchedListContainerPacket;
+import pcl.lc.base.network.packet.WatchedListRequestPacket;
+import pcl.lc.base.network.packet.WatchedListSyncPacket;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -46,11 +51,13 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ModPacket msg, List<Object> out) throws Exception {
-		ByteBuf buffer = Unpooled.buffer();
-		Class<? extends ModPacket> clazz = msg.getClass();
-		if (!packets.contains(msg.getClass()))
-			throw new NullPointerException("No Packet Registered for: " + msg.getClass().getCanonicalName());
 
+		Class<? extends ModPacket> clazz = msg.getClass();
+		if (!packets.contains(msg.getClass())) {
+			LanteaCraft.getLogger().log(Level.FATAL, "No Packet Registered for: " + msg.getClass().getCanonicalName());
+		}
+
+		ByteBuf buffer = Unpooled.buffer();
 		byte discriminator = (byte) packets.indexOf(clazz);
 		buffer.writeByte(discriminator);
 		msg.encodeInto(ctx, buffer);
@@ -90,6 +97,9 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 		channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
 		registerPacket(TinyModPacket.class);
 		registerPacket(StandardModPacket.class);
+		registerPacket(WatchedListContainerPacket.class);
+		registerPacket(WatchedListRequestPacket.class);
+		registerPacket(WatchedListSyncPacket.class);
 	}
 
 	@SideOnly(Side.CLIENT)

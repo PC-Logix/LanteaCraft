@@ -116,15 +116,20 @@ public class WatchedList<A, B> extends Observable {
 	 * @see {@link HashMap#put(Object, Object)}
 	 */
 	public B set(A key, B value) {
-		modify();
 		// Operation SET(A, B) will create key A if it does not exist already;
 		// reflect this in key_add list if key_add has no such key A.
-		if (key_remove.contains(key))
+		if (key_remove.contains(key)) {
 			key_remove.remove(key);
-		if (!values.containsKey(key) && !key_add.contains(key))
+			modify();
+		}
+		if (!values.containsKey(key) && !key_add.contains(key)) {
 			key_add.add(key);
-		if (values.containsKey(key) && !key_modified.contains(key) && !values.get(key).equals(value))
+			modify();
+		}
+		if (values.containsKey(key) && !key_modified.contains(key) && !values.get(key).equals(value)) {
 			key_modified.add(key);
+			modify();
+		}
 		return values.put(key, value);
 	}
 

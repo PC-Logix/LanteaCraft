@@ -21,6 +21,7 @@ import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.client.GUIHandlerClient;
 import pcl.lc.client.audio.ClientAudioEngine;
 import pcl.lc.core.ClientTickHandler;
+import pcl.lc.module.machine.gui.ScreenCrystalInfuser;
 import pcl.lc.module.power.gui.ScreenNaquadahGenerator;
 import pcl.lc.module.stargate.gui.ScreenStargateBase;
 import pcl.lc.module.stargate.gui.ScreenStargateDHD;
@@ -64,6 +65,7 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateBase.ordinal(), ScreenStargateBase.class);
 		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(), ScreenStargateDHDEnergy.class);
 		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(), ScreenNaquadahGenerator.class);
+		RegistrationHelper.registerGui(LanteaCraft.EnumGUIs.CrystalInfuser.ordinal(), ScreenCrystalInfuser.class);
 	}
 
 	public void spawnEffect(EntityFX effect) {

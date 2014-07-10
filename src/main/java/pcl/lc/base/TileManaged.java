@@ -41,8 +41,9 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 		if (!worldObj.isRemote) {
 			if (metadata.modified(metacontext)) {
 				WatchedListSyncPacket packet = new WatchedListSyncPacket(new WorldLocation(this), metadata);
-				metadata.clearModified(metacontext);
+				packet.setPacketIsForServer(false);
 				LanteaCraft.getNetPipeline().sendToAllAround(packet, packet.getOriginLocation(), 128.0d);
+				metadata.clearModified(metacontext);
 			}
 			detectAndSendChanges();
 		} else {
@@ -312,6 +313,7 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 	 */
 	@Override
 	public void handlePacket(ModPacket packetOf, EntityPlayer player) {
+		System.out.println("Packet recieved!");
 		if (packetOf == null)
 			return;
 		if (packetOf instanceof WatchedListRequestPacket && player instanceof EntityPlayerMP) {

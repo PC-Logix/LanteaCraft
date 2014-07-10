@@ -31,7 +31,7 @@ public class WatchedListSyncPacket extends ModPacket {
 	private ArrayList<Object> key_remove;
 	private ArrayList<Object> key_modified;
 	private WorldLocation origin;
-	private volatile boolean forServer;
+	private volatile boolean forServer = false;
 
 	public WatchedListSyncPacket() {
 		valueMap = new HashMap<Object, Object>();
@@ -236,6 +236,10 @@ public class WatchedListSyncPacket extends ModPacket {
 		return builder.toString();
 	}
 
+	public void setPacketIsForServer(boolean b) {
+		forServer = b;
+	}
+	
 	@Override
 	public boolean getPacketIsForServer() {
 		return forServer;
@@ -254,6 +258,8 @@ public class WatchedListSyncPacket extends ModPacket {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+		if (BuildInfo.NET_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, "Packing WatchedList modified prototypes into stream.");
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		DataOutputStream data = new DataOutputStream(output);
 		data.writeByte((forServer) ? 1 : 0);
@@ -275,6 +281,8 @@ public class WatchedListSyncPacket extends ModPacket {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+		if (BuildInfo.NET_DEBUGGING)
+			LanteaCraft.getLogger().log(Level.INFO, "Unpacking WatchedList modified prototypes from stream.");
 		byte[] b = new byte[buffer.readableBytes() - buffer.readerIndex()];
 		buffer.readBytes(b);
 		DataInputStream data = new DataInputStream(new ByteArrayInputStream(b));
@@ -286,5 +294,4 @@ public class WatchedListSyncPacket extends ModPacket {
 		key_modified = (ArrayList<Object>) readArrayList(data);
 		valueMap = (HashMap<Object, Object>) readHashMap(data);
 	}
-
 }

@@ -21,7 +21,7 @@ public class FilteredSlot extends Slot {
 		if (inventory instanceof FilteredInventory) {
 			FilteredInventory fint = (FilteredInventory) inventory;
 			FilterRule rule = fint.getFilterRule(slotIndex);
-			if (rule.test(par1ItemStack))
+			if (rule == null || rule.test(par1ItemStack))
 				super.putStack(par1ItemStack);
 		} else
 			super.putStack(par1ItemStack);
@@ -32,7 +32,7 @@ public class FilteredSlot extends Slot {
 		if (inventory instanceof FilteredInventory) {
 			FilteredInventory fint = (FilteredInventory) inventory;
 			FilterRule rule = fint.getFilterRule(slotIndex);
-			return rule.test(par1ItemStack);
+			return rule == null || rule.test(par1ItemStack);
 		} else
 			return super.isItemValid(par1ItemStack);
 	}
