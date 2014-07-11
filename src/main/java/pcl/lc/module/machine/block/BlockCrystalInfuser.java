@@ -1,19 +1,21 @@
 package pcl.lc.module.machine.block;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.RotationOrientedBlock;
 import pcl.lc.module.ModuleCore;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
-import pcl.lc.module.power.tile.TileNaquadahGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockCrystalInfuser extends Block implements ITileEntityProvider {
+public class BlockCrystalInfuser extends RotationOrientedBlock implements ITileEntityProvider {
 
 	public BlockCrystalInfuser() {
 		super(Material.ground);
@@ -36,9 +38,14 @@ public class BlockCrystalInfuser extends Block implements ITileEntityProvider {
 
 	@Override
 	public int getRenderType() {
-		if (ModuleCore.Render.blockVoidRenderer != null)
-			return ModuleCore.Render.blockVoidRenderer.renderID;
+		if (ModuleCore.Render.blockModelRenderer != null)
+			return ModuleCore.Render.blockModelRenderer.renderID;
 		return -9001;
+	}
+	
+	@Override
+	public IIcon getIcon(int side, int meta) {
+		return blockIcon;
 	}
 
 	@Override
@@ -73,7 +80,7 @@ public class BlockCrystalInfuser extends Block implements ITileEntityProvider {
 			cte.setRedstoneInputSignal(sig > 0);
 		}
 	}
-	
+
 	private int isBlockProvidingPower(World world, int x, int y, int z, int direction) {
 		if (y >= 0 && y < world.getHeight()) {
 			int redstoneWireValue = (world.getBlock(x, y, z).equals(Blocks.redstone_wire)) ? world.getBlockMetadata(x,
@@ -83,6 +90,11 @@ public class BlockCrystalInfuser extends Block implements ITileEntityProvider {
 			return Math.max(Math.max(redstoneWireValue, indirectPowerTo), directPowerTo);
 		} else
 			return 0;
+	}
+
+	@Override
+	public void registerBlockIcons(IIconRegister reg) {
+		
 	}
 
 }

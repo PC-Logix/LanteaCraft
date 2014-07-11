@@ -1,9 +1,19 @@
 package pcl.lc.module.machine.render;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import org.lwjgl.opengl.GL11;
 
-public class ModelCrystalInfuser extends ModelBase {
+import pcl.lc.LanteaCraft;
+import pcl.lc.api.internal.HookedModelBase;
+import pcl.lc.module.machine.tile.TileCrystalInfuser;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+
+public class ModelCrystalInfuser extends HookedModelBase {
 	ModelRenderer MachineControls;
 	ModelRenderer MachineBody;
 	ModelRenderer MachineFrontBase;
@@ -102,6 +112,11 @@ public class ModelCrystalInfuser extends ModelBase {
 		setRotation(MachineTrayCoverTW, 0F, 0F, -0.7853982F);
 	}
 
+	@Override
+	public void render(Entity entity, float f0, float f1, float f2, float f3, float f4, float f5) {
+		render(f5);
+	}
+
 	public void render(float f5) {
 		MachineControls.render(f5);
 		MachineBody.render(f5);
@@ -111,17 +126,60 @@ public class ModelCrystalInfuser extends ModelBase {
 		MachineArmRight.render(f5);
 		MachineItemHolderLeft.render(f5);
 		MachineItemHolderRight.render(f5);
-		//MachineTrayCoverFW.render(f5);
-		//MachineTrayCoverBW.render(f5);
-		//MachineTrayCoverLW.render(f5);
-		//MachineTrayCoverRW.render(f5);
-		//MachineTrayCoverTW.render(f5);
+		// MachineTrayCoverFW.render(f5);
+		// MachineTrayCoverBW.render(f5);
+		// MachineTrayCoverLW.render(f5);
+		// MachineTrayCoverRW.render(f5);
+		// MachineTrayCoverTW.render(f5);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
+	}
+
+	@Override
+	public void preInventory(Block block, int meta, int model, RenderBlocks rbx) {
+		Minecraft.getMinecraft().getTextureManager()
+				.bindTexture(LanteaCraft.getResource("textures/tileentity/crystal_infuser_default.png"));
+		GL11.glTranslatef(0.0f, 1.0f, 0.0f);
+		GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+		GL11.glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+	}
+
+	@Override
+	public void postInventory(Block block, int meta, int model, RenderBlocks rbx) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void preWorld(IBlockAccess world, int x, int y, int z, Block block, int renderId, RenderBlocks rbx) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void postWorld(IBlockAccess world, int x, int y, int z, Block block, int renderId, RenderBlocks rbx) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void preTile(TileEntity tile, double x, double y, double z, float scale) {
+		TileCrystalInfuser infuser = (TileCrystalInfuser) tile;
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef((float) x, (float) y, (float) z);
+		GL11.glTranslatef(0.5f, 1.5f, 0.5f);
+		GL11.glRotatef(90 * infuser.getRotation() + 90, 0, 1, 0);
+		GL11.glPushMatrix();
+		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+	}
+
+	@Override
+	public void postTile(TileEntity tile, double x, double y, double z, float scale) {
+		GL11.glPopMatrix();
 	}
 
 }

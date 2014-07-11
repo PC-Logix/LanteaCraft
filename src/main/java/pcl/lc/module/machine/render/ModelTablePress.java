@@ -1,9 +1,14 @@
 package pcl.lc.module.machine.render;
 
+import pcl.lc.api.internal.HookedModelBase;
+import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 
-public class ModelTablePress extends ModelBase {
+public class ModelTablePress extends HookedModelBase {
 	ModelRenderer ModelBase;
 	ModelRenderer ModelSwingArm;
 	ModelRenderer ModelPressJL;
@@ -91,6 +96,42 @@ public class ModelTablePress extends ModelBase {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
+	}
+
+	@Override
+	public void preInventory(Block block, int meta, int model, RenderBlocks rbx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void postInventory(Block block, int meta, int model, RenderBlocks rbx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void preWorld(IBlockAccess world, int x, int y, int z, Block block, int renderId, RenderBlocks rbx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void postWorld(IBlockAccess world, int x, int y, int z, Block block, int renderId, RenderBlocks rbx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void preTile(TileEntity tile, double x, double y, double z, float scale) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void postTile(TileEntity tile, double x, double y, double z, float scale) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

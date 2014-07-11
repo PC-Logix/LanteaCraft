@@ -1,5 +1,7 @@
 package pcl.lc.base;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,6 +11,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import pcl.common.util.Trans3;
 import pcl.common.util.Vector3;
+import pcl.lc.LanteaCraft;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
@@ -50,7 +53,12 @@ public class GenericBlockRenderer implements ISimpleBlockRenderingHandler {
 		tess.setColorOpaque_F(1, 1, 1);
 		Trans3 t = localToInventoryTransformation(metadata);
 		tess.startDrawingQuads();
-		renderBlock(t);
+		try {
+			renderBlock(t);
+		} catch (Throwable q) {
+			LanteaCraft.getLogger().log(Level.WARN,
+					String.format("Error when rendering block class %s", block.getClass().getName()));
+		}
 		tess.draw();
 	}
 

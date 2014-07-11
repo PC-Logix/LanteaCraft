@@ -12,10 +12,12 @@ import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.module.core.render.BlockModelRenderer;
 import pcl.lc.module.machine.block.BlockCrystalInfuser;
 import pcl.lc.module.machine.block.BlockTablePress;
 import pcl.lc.module.machine.gui.ContainerCrystalInfuser;
 import pcl.lc.module.machine.render.ModelCrystalInfuser;
+import pcl.lc.module.machine.render.ModelTablePress;
 import pcl.lc.module.machine.render.TileCrystalInfuserRenderer;
 import pcl.lc.module.machine.render.TileTablePressRenderer;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
@@ -68,6 +70,9 @@ public class ModuleMachine implements IModule {
 			Render.tileTablePressRenderer = new TileTablePressRenderer();
 			RegistrationHelper.addTileEntityRenderer(TileCrystalInfuser.class, Render.tileCrystalInfuserRenderer);
 			RegistrationHelper.addTileEntityRenderer(TileTablePress.class, Render.tileTablePressRenderer);
+			
+			BlockModelRenderer.registerModelForBlock(Blocks.infuser, new ModelCrystalInfuser(), false, true);
+			BlockModelRenderer.registerModelForBlock(Blocks.press, new ModelTablePress(), false, true);
 		}
 
 	}

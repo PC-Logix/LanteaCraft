@@ -2,7 +2,6 @@ package pcl.lc.module.machine.tile;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -19,6 +18,7 @@ import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.AudioSource;
 import pcl.lc.module.ModuleCore.Items;
 import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
+import pcl.lc.module.machine.block.BlockCrystalInfuser;
 
 public class TileCrystalInfuser extends TileManaged {
 
@@ -114,7 +114,7 @@ public class TileCrystalInfuser extends TileManaged {
 	public void setRedstoneInputSignal(boolean state) {
 		metadata.set("enabled", state);
 	}
-	
+
 	public boolean enabled() {
 		if (!metadata.containsKey("enabled"))
 			return false;
@@ -135,7 +135,7 @@ public class TileCrystalInfuser extends TileManaged {
 				source.stop();
 			return;
 		}
-		
+
 		if (!worldObj.isRemote)
 			metadata.set("hasRecipe", checkState());
 
@@ -207,6 +207,10 @@ public class TileCrystalInfuser extends TileManaged {
 	public AxisAlignedBB getRenderBoundingBox() {
 		return AxisAlignedBB.getAABBPool().getAABB(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 1, yCoord + 1,
 				zCoord + 1);
+	}
+
+	public int getRotation() {
+		return ((BlockCrystalInfuser) getBlockType()).rotationInWorld(getBlockMetadata(), this);
 	}
 
 }

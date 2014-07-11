@@ -26,6 +26,7 @@ import pcl.lc.module.core.item.ItemLanteaOre;
 import pcl.lc.module.core.item.ItemLanteaOreBlock;
 import pcl.lc.module.core.item.ItemLanteaOreIngot;
 import pcl.lc.module.core.item.ItemTokraSpawnEgg;
+import pcl.lc.module.core.render.BlockModelRenderer;
 import pcl.lc.module.core.render.BlockVoidRenderer;
 import pcl.lc.module.core.render.BlockRotationOrientedRenderer;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -58,6 +59,7 @@ public class ModuleCore implements IModule {
 	public static class Render {
 		public static BlockRotationOrientedRenderer blockOrientedRenderer;
 		public static BlockVoidRenderer blockVoidRenderer;
+		public static BlockModelRenderer blockModelRenderer;
 		public static WrittenFontRenderer danielFontRenderer;
 	}
 
@@ -128,6 +130,9 @@ public class ModuleCore implements IModule {
 
 			Render.blockVoidRenderer = new BlockVoidRenderer();
 			RegistrationHelper.registerRenderer(Render.blockVoidRenderer);
+
+			Render.blockModelRenderer = new BlockModelRenderer();
+			RegistrationHelper.registerRenderer(Render.blockModelRenderer);
 
 			Render.danielFontRenderer = new WrittenFontRenderer(
 					LanteaCraft.getResource("textures/notebook/daniel.png"),

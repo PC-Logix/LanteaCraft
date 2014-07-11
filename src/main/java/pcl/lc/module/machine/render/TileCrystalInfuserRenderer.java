@@ -53,18 +53,15 @@ public class TileCrystalInfuserRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float scale) {
+		TileCrystalInfuser infuser = (TileCrystalInfuser) tile;
 		bindTexture(LanteaCraft.getResource("textures/tileentity/crystal_infuser_default.png"));
 		GL11.glPushMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-		GL11.glPushMatrix();
-		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+		infuserModel.preTile(tile, x, y, z, scale);
 		infuserModel.render(0.0625F);
+		infuserModel.postTile(tile, x, y, z, scale);
 		GL11.glPopMatrix();
-		GL11.glPopMatrix();
-
+		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		TileCrystalInfuser infuser = (TileCrystalInfuser) tile;
 		if (tile.getDistanceFrom(this.field_147501_a.field_147560_j, this.field_147501_a.field_147561_k,
 				this.field_147501_a.field_147558_l) < 128d) {
 
