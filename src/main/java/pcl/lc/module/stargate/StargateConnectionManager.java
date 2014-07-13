@@ -9,8 +9,6 @@ import net.minecraft.world.chunk.Chunk;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.util.Vector3;
-import pcl.common.util.WorldLocation;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
@@ -19,6 +17,8 @@ import pcl.lc.base.data.WatchedValue;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
 import pcl.lc.module.stargate.tile.TileStargateBase;
+import pcl.lc.util.Vector3;
+import pcl.lc.util.WorldLocation;
 
 public class StargateConnectionManager implements ITickAgent {
 

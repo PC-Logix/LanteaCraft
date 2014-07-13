@@ -1,7 +1,7 @@
 package pcl.lc.base.multiblock;
 
 import net.minecraft.tileentity.TileEntity;
-import pcl.common.util.Vector3;
+import pcl.lc.util.Vector3;
 
 /**
  * MultiblockPart acts as a root container for all multi-block structure,

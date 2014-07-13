@@ -9,8 +9,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import pcl.common.util.WorldLocation;
 import pcl.lc.base.network.IStreamPackable;
+import pcl.lc.util.WorldLocation;
 
 /**
  * Sent from a client to the server to request the entire contents of a

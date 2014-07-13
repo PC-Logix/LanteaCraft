@@ -2,7 +2,7 @@ package pcl.lc.base.ai;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
-import pcl.common.util.Vector3;
+import pcl.lc.util.Vector3;
 
 public class EntityAIRememberHome extends EntityAIBase {
 

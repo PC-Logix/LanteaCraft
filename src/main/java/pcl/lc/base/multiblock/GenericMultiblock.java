@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.util.Vector3;
 
 /**
  * GenericMultiblock acts as a global declaration for all multi-block structure

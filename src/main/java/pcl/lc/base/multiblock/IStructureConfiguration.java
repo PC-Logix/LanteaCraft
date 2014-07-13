@@ -1,6 +1,6 @@
 package pcl.lc.base.multiblock;
 
-import pcl.common.util.ImmutableTuple;
+import pcl.lc.util.ImmutableTuple;
 
 /**
  * Represents a configuration setup for a particular multiblock structure.

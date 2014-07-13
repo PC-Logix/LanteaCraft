@@ -7,11 +7,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import pcl.common.util.Trans3;
-import pcl.common.util.Vector3;
-import pcl.common.util.WorldLocation;
-import pcl.common.xmlcfg.ConfigHelper;
-import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.base.PoweredTileEntity;
@@ -21,8 +16,13 @@ import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;
+import pcl.lc.cfg.ConfigHelper;
+import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
+import pcl.lc.util.Trans3;
+import pcl.lc.util.Vector3;
+import pcl.lc.util.WorldLocation;
 
 public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 

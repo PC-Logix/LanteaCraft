@@ -32,13 +32,6 @@ import net.minecraftforge.common.network.ForgeMessage.DimensionRegisterMessage;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.util.ChunkLocation;
-import pcl.common.util.MathUtils;
-import pcl.common.util.Trans3;
-import pcl.common.util.Vector3;
-import pcl.common.util.WorldLocation;
-import pcl.common.xmlcfg.ConfigHelper;
-import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisState;
@@ -51,6 +44,8 @@ import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;
+import pcl.lc.cfg.ConfigHelper;
+import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
 import pcl.lc.module.ModuleStargates;
@@ -62,6 +57,11 @@ import pcl.lc.module.stargate.StargateMultiblock;
 import pcl.lc.module.stargate.block.BlockStargateBase;
 import pcl.lc.module.stargate.render.StargateEventHorizonRenderer;
 import pcl.lc.module.stargate.render.StargateRenderConstants;
+import pcl.lc.util.ChunkLocation;
+import pcl.lc.util.MathUtils;
+import pcl.lc.util.Trans3;
+import pcl.lc.util.Vector3;
+import pcl.lc.util.WorldLocation;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
 public class TileStargateBase extends TileManaged implements IStargateAccess, ISidedInventory {

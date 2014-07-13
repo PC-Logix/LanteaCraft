@@ -9,13 +9,13 @@ import java.util.Set;
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.world.gen.structure.MapGenStructureIO;
-import pcl.common.xmlcfg.ConfigHelper;
-import pcl.common.xmlcfg.ConfigList;
-import pcl.common.xmlcfg.ConfigNode;
-import pcl.common.xmlcfg.DOMHelper;
-import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
+import pcl.lc.cfg.ConfigHelper;
+import pcl.lc.cfg.ConfigList;
+import pcl.lc.cfg.ConfigNode;
+import pcl.lc.cfg.DOMHelper;
+import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.galaxy.IDimension;

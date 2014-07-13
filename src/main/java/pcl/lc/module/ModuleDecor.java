@@ -3,7 +3,6 @@ package pcl.lc.module;
 import java.util.EnumSet;
 import java.util.Set;
 
-import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.decor.block.BlockLanteaDecor;
@@ -13,6 +12,7 @@ import pcl.lc.module.decor.item.ItemLanteaDecor;
 import pcl.lc.module.decor.item.ItemLanteaDecorGlass;
 import pcl.lc.module.decor.render.TileLanteaDecorGlassRenderer;
 import pcl.lc.module.decor.tile.TileLanteaDecorGlass;
+import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

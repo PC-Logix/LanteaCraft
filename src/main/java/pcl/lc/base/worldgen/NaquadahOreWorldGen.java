@@ -10,11 +10,11 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.xmlcfg.ConfigHelper;
-import pcl.common.xmlcfg.ConfigList;
-import pcl.common.xmlcfg.ConfigNode;
-import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
+import pcl.lc.cfg.ConfigHelper;
+import pcl.lc.cfg.ConfigList;
+import pcl.lc.cfg.ConfigNode;
+import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.OreTypes;
 import pcl.lc.module.ModuleCore;
 import cpw.mods.fml.common.IWorldGenerator;

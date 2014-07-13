@@ -5,18 +5,18 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.helpers.RegistrationHelper;
-import pcl.common.xmlcfg.ConfigHelper;
-import pcl.common.xmlcfg.ModuleConfig;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.base.worldgen.TradeHandler;
+import pcl.lc.cfg.ConfigHelper;
+import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.critters.entity.EntityReplicator;
 import pcl.lc.module.critters.entity.EntityTokra;
 import pcl.lc.module.critters.render.EntityReplicatorRenderer;
 import pcl.lc.module.critters.render.EntityTokraRenderer;
+import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

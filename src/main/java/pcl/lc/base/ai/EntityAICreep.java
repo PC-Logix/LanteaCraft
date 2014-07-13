@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.AxisAlignedBB;
-import pcl.common.util.Vector3;
+import pcl.lc.util.Vector3;
 
 public class EntityAICreep extends EntityAIBase {
 

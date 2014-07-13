@@ -1,8 +1,8 @@
 package pcl.lc.module.core.render;
 
-import pcl.common.util.Trans3;
 import pcl.lc.base.GenericBlockRenderer;
 import pcl.lc.base.OrientedBlock;
+import pcl.lc.util.Trans3;
 
 public class BlockRotationOrientedRenderer extends GenericBlockRenderer {
 

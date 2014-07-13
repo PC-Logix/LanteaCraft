@@ -3,7 +3,7 @@ package pcl.lc.client.audio;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import pcl.common.util.Vector3;
+import pcl.lc.util.Vector3;
 
 public class AudioPosition {
 

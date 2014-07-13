@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.world.World;
-import pcl.common.util.Vector3;
+import pcl.lc.util.Vector3;
 
 public class EffectBolt {
 

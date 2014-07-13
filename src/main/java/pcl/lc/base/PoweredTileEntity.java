@@ -10,9 +10,9 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.asm.RuntimeAnnotation.RuntimeInterface;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
+import pcl.lc.coremod.RuntimeAnnotation.RuntimeInterface;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;

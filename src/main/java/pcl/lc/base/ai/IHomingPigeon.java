@@ -1,6 +1,6 @@
 package pcl.lc.base.ai;
 
-import pcl.common.util.Vector3;
+import pcl.lc.util.Vector3;
 
 /**
  * Any entity which remembers it's home and thus returns there periodically, or

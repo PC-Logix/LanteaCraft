@@ -9,8 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import pcl.common.util.Facing3;
-import pcl.common.util.Vector3;
+import pcl.lc.util.Facing3;
+import pcl.lc.util.Vector3;
 
 public class TeleportationAgent {
 

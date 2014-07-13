@@ -4,14 +4,14 @@ import java.lang.ref.WeakReference;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import pcl.common.helpers.ScanningHelper;
-import pcl.common.util.Vector3;
-import pcl.common.util.WorldLocation;
 import pcl.lc.base.multiblock.GenericMultiblock;
 import pcl.lc.base.multiblock.MultiblockPart;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.module.stargate.tile.TileStargateBase;
+import pcl.lc.util.ScanningHelper;
+import pcl.lc.util.Vector3;
+import pcl.lc.util.WorldLocation;
 
 public class StargatePart extends MultiblockPart {
 

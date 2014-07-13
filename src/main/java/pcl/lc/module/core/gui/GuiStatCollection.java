@@ -9,8 +9,8 @@ import net.minecraft.client.gui.GuiScreen;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 
-import pcl.common.helpers.AnalyticsHelper;
 import pcl.lc.LanteaCraft;
+import pcl.lc.util.AnalyticsHelper;
 
 public class GuiStatCollection extends GuiScreen {
 	private GuiScreen parentGuiScreen;

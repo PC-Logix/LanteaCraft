@@ -2,10 +2,10 @@ package pcl.lc.module.stargate;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import pcl.common.util.ChunkLocation;
-import pcl.common.util.WorldLocation;
 import pcl.lc.module.stargate.AddressingError.CoordRangeError;
 import pcl.lc.module.stargate.AddressingError.DimensionRangeError;
+import pcl.lc.util.ChunkLocation;
+import pcl.lc.util.WorldLocation;
 
 /**
  * Stargate address calculation engine.

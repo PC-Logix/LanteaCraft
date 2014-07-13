@@ -9,9 +9,6 @@ import net.minecraft.world.World;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.util.ImmutablePair;
-import pcl.common.util.Vector3;
-import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.base.multiblock.EnumOrientations;
@@ -22,6 +19,9 @@ import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.tile.TileStargateRing;
+import pcl.lc.util.ImmutablePair;
+import pcl.lc.util.Vector3;
+import pcl.lc.util.WorldLocation;
 
 public class StargateMultiblock extends GenericMultiblock {
 

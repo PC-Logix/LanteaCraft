@@ -4,8 +4,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
-import pcl.common.util.Trans3;
 import pcl.lc.module.ModuleCore;
+import pcl.lc.util.Trans3;
 
 public abstract class OrientedBlock extends GenericContainerBlock {
 

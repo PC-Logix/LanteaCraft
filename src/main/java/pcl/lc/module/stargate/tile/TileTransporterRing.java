@@ -3,12 +3,12 @@ package pcl.lc.module.stargate.tile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import net.minecraft.util.AxisAlignedBB;
-import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.TileManaged;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.TransporterRingPart;
+import pcl.lc.util.WorldLocation;
 
 public class TileTransporterRing extends TileManaged {
 

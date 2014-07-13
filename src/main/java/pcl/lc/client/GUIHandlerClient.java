@@ -8,9 +8,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.GUIHandler;
+import pcl.lc.util.RegistrationHelper;
 
 public class GUIHandlerClient extends GUIHandler {
 

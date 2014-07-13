@@ -8,7 +8,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
-import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
@@ -22,6 +21,7 @@ import pcl.lc.module.machine.render.TileCrystalInfuserRenderer;
 import pcl.lc.module.machine.render.TileTablePressRenderer;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
 import pcl.lc.module.machine.tile.TileTablePress;
+import pcl.lc.util.RegistrationHelper;
 
 public class ModuleMachine implements IModule {
 

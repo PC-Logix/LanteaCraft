@@ -12,12 +12,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.util.Vector3;
-import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.network.IPacketHandler;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.TinyModPacket;
+import pcl.lc.util.Vector3;
+import pcl.lc.util.WorldLocation;
 
 public class TileLanteaDecorGlass extends TileEntity implements IPacketHandler {
 

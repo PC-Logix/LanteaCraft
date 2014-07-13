@@ -7,11 +7,11 @@ import org.apache.logging.log4j.Level;
 
 import mcp.mobius.waila.api.IWailaRegistrar;
 import cpw.mods.fml.common.event.FMLInterModComms;
-import pcl.common.helpers.RegistrationHelper;
-import pcl.common.helpers.RegistrationHelper.BlockItemMapping;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
+import pcl.lc.util.RegistrationHelper;
+import pcl.lc.util.RegistrationHelper.BlockItemMapping;
 
 @Agent(modname = "Waila")
 public class WailaAgent implements IIntegrationAgent {

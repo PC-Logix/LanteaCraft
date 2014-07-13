@@ -11,7 +11,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import pcl.common.helpers.ReflectionHelper;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.api.INaquadahGeneratorAccess;
 import pcl.lc.base.PoweredTileEntity;
@@ -23,6 +22,7 @@ import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.module.ModuleCore;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.power.item.ItemEnergyCrystal;
+import pcl.lc.util.ReflectionHelper;
 
 public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketHandler, IFluidHandler,
 		INaquadahGeneratorAccess {

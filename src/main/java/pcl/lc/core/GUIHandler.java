@@ -9,8 +9,8 @@ import net.minecraft.world.World;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
+import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GUIHandler implements IGuiHandler {

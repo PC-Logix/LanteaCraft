@@ -15,10 +15,10 @@ import java.util.Map.Entry;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.util.WorldLocation;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.network.IStreamPackable;
+import pcl.lc.util.WorldLocation;
 
 public class StandardModPacket extends ModPacket {
 

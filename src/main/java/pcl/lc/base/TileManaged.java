@@ -13,7 +13,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.data.ObserverContext;
 import pcl.lc.base.data.WatchedList;
@@ -22,6 +21,7 @@ import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.WatchedListContainerPacket;
 import pcl.lc.base.network.packet.WatchedListRequestPacket;
 import pcl.lc.base.network.packet.WatchedListSyncPacket;
+import pcl.lc.util.WorldLocation;
 
 public abstract class TileManaged extends TileEntity implements IInventory, ISidedInventory, IPacketHandler {
 

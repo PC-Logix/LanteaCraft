@@ -2,11 +2,11 @@ package pcl.lc.module.stargate.tile;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
-import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.TileManaged;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.module.stargate.StargatePart;
+import pcl.lc.util.WorldLocation;
 
 public class TileStargateRing extends TileManaged  {
 	private StargatePart part = new StargatePart(this);

@@ -9,10 +9,10 @@ import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
-import pcl.common.helpers.CreativeTabHelper;
-import pcl.common.helpers.SpecialBucketHandler;
 import pcl.lc.base.network.PCLPacketPipeline;
 import pcl.lc.module.ModuleCore;
+import pcl.lc.util.CreativeTabHelper;
+import pcl.lc.util.SpecialBucketHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;

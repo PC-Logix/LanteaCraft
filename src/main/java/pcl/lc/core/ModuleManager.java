@@ -7,11 +7,11 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.xmlcfg.ConfigHelper;
-import pcl.common.xmlcfg.ModuleConfig;
-import pcl.common.xmlcfg.ModuleList;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
+import pcl.lc.cfg.ConfigHelper;
+import pcl.lc.cfg.ModuleConfig;
+import pcl.lc.cfg.ModuleList;
 import pcl.lc.module.ModuleCore;
 import pcl.lc.module.ModuleCritters;
 import pcl.lc.module.ModuleDecor;

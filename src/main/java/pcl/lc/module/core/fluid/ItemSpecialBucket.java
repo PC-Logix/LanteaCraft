@@ -5,8 +5,8 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
-import pcl.common.helpers.SpecialBucketHandler;
 import pcl.lc.LanteaCraft;
+import pcl.lc.util.SpecialBucketHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

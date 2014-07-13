@@ -12,8 +12,6 @@ import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import pcl.common.util.Vector3;
-import pcl.common.util.WorldLocation;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.base.GenericScreen;
@@ -23,6 +21,8 @@ import pcl.lc.client.audio.SoundHost;
 import pcl.lc.module.stargate.GateAddressHelper;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 import pcl.lc.module.stargate.tile.TileStargateDHD;
+import pcl.lc.util.Vector3;
+import pcl.lc.util.WorldLocation;
 
 public class ScreenStargateDHD extends GenericScreen {
 	

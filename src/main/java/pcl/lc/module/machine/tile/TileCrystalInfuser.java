@@ -7,7 +7,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.StatCollector;
-import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.LanteaInternalRecipe;
 import pcl.lc.base.TileManaged;
@@ -19,6 +18,7 @@ import pcl.lc.client.audio.AudioSource;
 import pcl.lc.module.ModuleCore.Items;
 import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
 import pcl.lc.module.machine.block.BlockCrystalInfuser;
+import pcl.lc.util.Vector3;
 
 public class TileCrystalInfuser extends TileManaged {
 

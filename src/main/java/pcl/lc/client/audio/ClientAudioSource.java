@@ -10,9 +10,9 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.Level;
 
 import paulscode.sound.SoundSystem;
-import pcl.common.util.Vector3;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
+import pcl.lc.util.Vector3;
 
 public class ClientAudioSource extends AudioSource implements Comparable<ClientAudioSource> {
 

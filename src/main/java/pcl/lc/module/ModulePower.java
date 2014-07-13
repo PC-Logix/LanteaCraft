@@ -3,7 +3,6 @@ package pcl.lc.module;
 import java.util.EnumSet;
 import java.util.Set;
 
-import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
@@ -15,6 +14,7 @@ import pcl.lc.module.power.render.BlockNaquadahGeneratorRenderer;
 import pcl.lc.module.power.render.ModelNaquadahGenerator;
 import pcl.lc.module.power.render.TileNaquadahGeneratorRenderer;
 import pcl.lc.module.power.tile.TileNaquadahGenerator;
+import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

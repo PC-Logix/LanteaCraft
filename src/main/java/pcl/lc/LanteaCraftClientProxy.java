@@ -1,13 +1,11 @@
 package pcl.lc;
 
 import java.io.File;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
-
-import pcl.common.helpers.CloakHandler;
-import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.base.network.ClientPacketHandler;
 import pcl.lc.base.network.PacketLogger;
 import pcl.lc.base.network.packet.ModPacket;
@@ -18,6 +16,8 @@ import pcl.lc.module.machine.gui.ScreenCrystalInfuser;
 import pcl.lc.module.power.gui.ScreenNaquadahGenerator;
 import pcl.lc.module.stargate.gui.ScreenStargateBase;
 import pcl.lc.module.stargate.gui.ScreenStargateDHDEnergy;
+import pcl.lc.util.CloakHandler;
+import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
