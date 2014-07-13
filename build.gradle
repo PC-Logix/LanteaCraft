@@ -1,18 +1,18 @@
 buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
+	repositories {
+		mavenCentral()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+	}
 }
 
 
@@ -29,7 +29,6 @@ archivesBaseName = "LanteaCraft"
 
 minecraft {
 	version = "1.7.2-10.12.1.1060"
-	assetDir = "eclipse/assets"
 	replace "@VERSION@", project.version
 	replace "@BUILD@", project.ext.buildNumber
 }
@@ -37,27 +36,26 @@ minecraft {
 sourceSets.main.java.srcDir("./src/externs/java")
 
 jar.doFirst {
-	for (String s : new File("./src/externs/java").list())
-		delete new File(sourceSets.main.output.classesDir, s);
+	for (String s : new File("./src/externs/java").list()) {
+		File junkfile = new File(sourceSets.main.output.classesDir, s);
+		logger.lifecycle(String.format("Deleting compiled extern file %s.", junkfile.getAbsolutePath()));
+		delete junkfile;
+	}
 }
 
 jar.classifier = "${ext.buildNumber}"
 jar.manifest = manifest { attributes(
-	"FMLCorePlugin": "pcl.common.asm.PCLCoreTransformerPlugin",
+	"FMLCorePlugin": "pcl.lc.coremod.LCCoreMod",
 	"FMLCorePluginContainsFMLMod": "icanhazfmlmodpweeze"
 ) }
 
 processResources {
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod/info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+		expand 'version':project.version + '-' + project.ext.buildNumber, 'mcversion':project.minecraft.version
+	}
+	
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+	}
 }
