@@ -13,9 +13,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.apache.logging.log4j.Level;
-
-import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.RotationOrientedBlock;
 import pcl.lc.module.ModuleStargates;

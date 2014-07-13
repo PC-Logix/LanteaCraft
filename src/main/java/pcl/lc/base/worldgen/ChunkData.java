@@ -27,7 +27,6 @@ public class ChunkData {
 		return data;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void onChunkLoad(ChunkDataEvent.Load e) {
 		Chunk chunk = e.getChunk();
 		ChunkData data = ChunkData.forChunk(chunk);

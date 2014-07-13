@@ -11,11 +11,7 @@ import net.minecraft.world.World;
 
 import org.apache.logging.log4j.Level;
 
-import pcl.common.util.Vector3;
 import pcl.lc.LanteaCraft;
-import pcl.lc.client.audio.AudioEngine;
-import pcl.lc.client.audio.AudioPosition;
-import pcl.lc.client.audio.AudioSource;
 import pcl.lc.module.power.tile.TileNaquadahGenerator;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 import pcl.lc.module.stargate.tile.TileStargateDHD;

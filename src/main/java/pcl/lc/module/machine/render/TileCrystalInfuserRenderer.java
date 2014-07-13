@@ -8,8 +8,6 @@ import com.google.common.primitives.SignedBytes;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.LanteaInternalRecipe;
-import pcl.lc.module.ModuleCore;
-import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;

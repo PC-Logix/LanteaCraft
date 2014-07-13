@@ -1,17 +1,10 @@
 package pcl.lc;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-
-import org.apache.logging.log4j.Level;
 
 import pcl.common.helpers.CloakHandler;
 import pcl.common.helpers.RegistrationHelper;
@@ -24,7 +17,6 @@ import pcl.lc.core.ClientTickHandler;
 import pcl.lc.module.machine.gui.ScreenCrystalInfuser;
 import pcl.lc.module.power.gui.ScreenNaquadahGenerator;
 import pcl.lc.module.stargate.gui.ScreenStargateBase;
-import pcl.lc.module.stargate.gui.ScreenStargateDHD;
 import pcl.lc.module.stargate.gui.ScreenStargateDHDEnergy;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;

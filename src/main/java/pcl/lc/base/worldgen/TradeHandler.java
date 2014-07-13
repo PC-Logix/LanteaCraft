@@ -9,7 +9,6 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.ModuleCore;
-import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 

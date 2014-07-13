@@ -7,8 +7,6 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.primitives.SignedBytes;
 
 import pcl.lc.LanteaCraft;
-import pcl.lc.module.ModuleCore;
-import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

@@ -3,7 +3,6 @@ package pcl.lc.module.machine.render;
 import pcl.lc.api.internal.HookedModelBase;
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;

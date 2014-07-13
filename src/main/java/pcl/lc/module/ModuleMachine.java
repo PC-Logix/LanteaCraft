@@ -74,7 +74,6 @@ public class ModuleMachine implements IModule {
 			BlockModelRenderer.registerModelForBlock(Blocks.infuser, new ModelCrystalInfuser(), false, true);
 			BlockModelRenderer.registerModelForBlock(Blocks.press, new ModelTablePress(), false, true);
 		}
-
 	}
 
 	@Override

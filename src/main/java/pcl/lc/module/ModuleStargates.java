@@ -20,8 +20,6 @@ import pcl.lc.module.stargate.block.BlockStargateRing;
 import pcl.lc.module.stargate.block.BlockTransporterRing;
 import pcl.lc.module.stargate.gui.ContainerStargateBase;
 import pcl.lc.module.stargate.gui.ContainerStargateDHDEnergy;
-import pcl.lc.module.stargate.item.ItemControllerCrystal;
-import pcl.lc.module.stargate.item.ItemCoreCrystal;
 import pcl.lc.module.stargate.item.ItemGDO;
 import pcl.lc.module.stargate.item.ItemIris;
 import pcl.lc.module.stargate.item.ItemStargateRing;

@@ -19,7 +19,6 @@ import pcl.lc.base.energy.IEnergyStore;
 import pcl.lc.base.energy.IItemEnergyStore;
 import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
-import pcl.lc.base.network.IPacketHandler;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.module.ModulePower;
