@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.HookedModelBase;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -142,7 +143,7 @@ public class ModelCrystalInfuser extends HookedModelBase {
 	@Override
 	public void preInventory(Block block, int meta, int model, RenderBlocks rbx) {
 		Minecraft.getMinecraft().getTextureManager()
-				.bindTexture(LanteaCraft.getResource("textures/tileentity/crystal_infuser_default.png"));
+				.bindTexture(ResourceAccess.getNamedResource("textures/tileentity/crystal_infuser_default.png"));
 		GL11.glTranslatef(0.0f, 1.0f, 0.0f);
 		GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
 		GL11.glRotatef(180.0f, 0.0f, 1.0f, 0.0f);

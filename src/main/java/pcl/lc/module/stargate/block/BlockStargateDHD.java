@@ -12,9 +12,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.RotationOrientedBlock;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.gui.ScreenStargateDHD;
 import pcl.lc.module.stargate.tile.TileStargateDHD;
@@ -34,17 +34,17 @@ public class BlockStargateDHD extends RotationOrientedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", getUnlocalizedName());
 	}
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_top_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		bottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_bottom_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_side_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		topTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"controller_top"));
+		bottomTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"controller_bottom"));
+		sideTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"controller_side"));
 	}
 
 	@Override
@@ -98,8 +98,7 @@ public class BlockStargateDHD extends RotationOrientedBlock {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
 		if (side != ForgeDirection.UP.ordinal())
-			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(), world,
-					x, y, z);
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(), world, x, y, z);
 		else {
 			TileStargateDHD tile = (TileStargateDHD) world.getTileEntity(x, y, z);
 			Minecraft.getMinecraft().displayGuiScreen(new ScreenStargateDHD(tile, player));

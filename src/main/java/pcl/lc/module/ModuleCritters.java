@@ -11,6 +11,7 @@ import pcl.lc.base.worldgen.TradeHandler;
 import pcl.lc.cfg.ConfigHelper;
 import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.ModuleManager;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.critters.entity.EntityReplicator;
 import pcl.lc.module.critters.entity.EntityTokra;
@@ -65,7 +66,7 @@ public class ModuleCritters implements IModule {
 		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft Tokra villagers...");
 		LanteaCraft.getProxy().tokraVillagerID = RegistrationHelper.registerVillager(Integer.parseInt(ConfigHelper
 				.getOrSetParam(config, "ID", "tokra", "id", "Tok'ra villager ID", 100).toString()), "tokra",
-				LanteaCraft.getResource("textures/skins/tokra.png"));
+				ResourceAccess.getNamedResource("textures/skins/tokra.png"));
 		RegistrationHelper.addTradeHandler(LanteaCraft.getProxy().tokraVillagerID, new TradeHandler());
 
 		if (event.getSide() == Side.CLIENT) {

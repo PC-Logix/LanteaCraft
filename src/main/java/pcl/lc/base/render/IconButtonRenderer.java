@@ -2,7 +2,7 @@ package pcl.lc.base.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 
 public class IconButtonRenderer {
 	public static void drawButton(Minecraft mc, String iconName, boolean hover, boolean pressed, int x, int y,
@@ -14,7 +14,7 @@ public class IconButtonRenderer {
 	}
 
 	private static void bindAndClamp(Minecraft mc, String name) {
-		mc.getTextureManager().bindTexture(LanteaCraft.getResource("textures/gui/" + name));
+		mc.getTextureManager().bindTexture(ResourceAccess.getNamedResource("textures/gui/" + name));
 	}
 
 	private static void drawTexturedRectUV(double x, double y, double w, double h, double u, double v, double us,

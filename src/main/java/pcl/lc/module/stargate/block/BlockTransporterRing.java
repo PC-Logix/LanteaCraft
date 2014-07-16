@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerBlock;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.tile.TileTransporterRing;
 import cpw.mods.fml.relauncher.Side;
@@ -35,7 +36,7 @@ public class BlockTransporterRing extends GenericContainerBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", getUnlocalizedName());
 	}
 
 	@Override
@@ -86,12 +87,12 @@ public class BlockTransporterRing extends GenericContainerBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister reg) {
-		defaultIcon = reg.registerIcon(LanteaCraft.getAssetKey() + ":" + "ring_transporter_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		topTexture = reg.registerIcon(LanteaCraft.getAssetKey() + ":" + "transport_ring_base_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		faceTexture = reg.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBlock_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		defaultIcon = reg.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"ring_transporter"));
+		topTexture = reg.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"transport_ring_base"));
+		faceTexture = reg.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"stargateBlock"));
 	}
 
 	@Override

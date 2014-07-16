@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 
 public class StargateEventHorizonRenderer implements IStargateRenderer {
@@ -14,15 +15,15 @@ public class StargateEventHorizonRenderer implements IStargateRenderer {
 	public final static int ehGridRadialSize = 10;
 	public final static int ehGridPolarSize = StargateRenderConstants.numRingSegments;
 	public final static double ehBandWidth = StargateRenderConstants.ringInnerRadius / ehGridRadialSize;
-	private static ResourceLocation eventHorizonTexture = LanteaCraft.getResource("textures/fx/eventhorizon_"
-			+ LanteaCraft.getProxy().getRenderMode() + ".png");
-	private static ResourceLocation irisTexture = LanteaCraft.getResource("textures/fx/energy_iris_128.png");
+	private static ResourceLocation eventHorizonTexture = ResourceAccess.getNamedResource(ResourceAccess
+			.formatResourceName("textures/fx/eventhorizon_${TEX_QUALITY}.png"));
+	private static ResourceLocation irisTexture = ResourceAccess.getNamedResource("textures/fx/energy_iris_128.png");
 
 	private TileStargateBaseRenderer caller;
 
 	@Override
-	public void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x,
-			double y, double z, float t) {
+	public void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x, double y, double z,
+			float t) {
 		caller = renderer;
 		renderEventHorizon(te);
 	}

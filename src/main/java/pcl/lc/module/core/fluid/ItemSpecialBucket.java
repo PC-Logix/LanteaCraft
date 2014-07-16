@@ -6,6 +6,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.util.SpecialBucketHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,8 +49,8 @@ public class ItemSpecialBucket extends ItemBucket {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
-		itemIcon = par1IconRegister.registerIcon(LanteaCraft.getAssetKey() + ":bucket_" + iconName + "_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		itemIcon = par1IconRegister.registerIcon(ResourceAccess.formatResourceName(
+				"${ASSET_KEY}:bucket_%s_${TEX_QUALITY}", iconName));
 	}
 
 	public void setTargetTexture(String bucketTextureName) {

@@ -21,14 +21,15 @@ import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.WatchedListContainerPacket;
 import pcl.lc.base.network.packet.WatchedListRequestPacket;
 import pcl.lc.base.network.packet.WatchedListSyncPacket;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.util.WorldLocation;
 
 public abstract class TileManaged extends TileEntity implements IInventory, ISidedInventory, IPacketHandler {
 
-	private final ObserverContext metacontext = new ObserverContext();
+	protected ObserverContext metacontext = new ObserverContext();
 	private boolean cli_synchronized = false;
 	private int cli_synchronize_wait = -1;
-	
+
 	public WatchedList<String, Object> metadata = new WatchedList<String, Object>();
 
 	/**
@@ -62,7 +63,9 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 	}
 
 	/**
-	 * Called once per tick to update the tile.
+	 * Called once per tick to update the tile. This is called before any update
+	 * packets are sent, so changes will be sent to clients immediately after
+	 * invocation.
 	 */
 	public abstract void think();
 
@@ -103,7 +106,7 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 		if (name.contains(":"))
 			LanteaCraft.getLogger().log(Level.WARN, "Old SoundSystem label detected, can't play label: " + name);
 		else {
-			String label = new StringBuilder().append(LanteaCraft.getAssetKey()).append(":").append(name).toString();
+			String label = ResourceAccess.formatResourceName("${ASSET_KEY}:%s", name);
 			try {
 				ResourceLocation location = new ResourceLocation(label);
 				if (Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream() == null)

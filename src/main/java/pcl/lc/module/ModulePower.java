@@ -5,6 +5,7 @@ import java.util.Set;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.power.block.BlockNaquadahGenerator;
 import pcl.lc.module.power.gui.ContainerNaquadahGenerator;
@@ -65,7 +66,7 @@ public class ModulePower implements IModule {
 
 		if (event.getSide() == Side.CLIENT) {
 			Render.modelNaquadahGenerator = new ModelNaquadahGenerator(
-					LanteaCraft.getResource("models/naquadah_generator.obj"));
+					ResourceAccess.getNamedResource("models/naquadah_generator.obj"));
 
 			Render.tileEntityNaquadahGeneratorRenderer = new TileNaquadahGeneratorRenderer();
 			RegistrationHelper.addTileEntityRenderer(TileNaquadahGenerator.class,

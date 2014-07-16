@@ -31,12 +31,9 @@ public class ChunkData {
 		Chunk chunk = e.getChunk();
 		ChunkData data = ChunkData.forChunk(chunk);
 		data.readFromNBT(e.getData());
-		// TODO: Pull from config!
-		if (false) {
-			NaquadahOreWorldGen gen = LanteaCraft.getProxy().getOreGenerator();
-			if (gen != null)
-				gen.readChunk(data, chunk);
-		}
+		NaquadahOreWorldGen gen = LanteaCraft.getProxy().getOreGenerator();
+		if (gen != null)
+			gen.readChunk(data, chunk);
 	}
 
 	public static void onChunkSave(ChunkDataEvent.Save e) {

@@ -11,6 +11,7 @@ import pcl.lc.base.render.WrittenFontRenderer;
 import pcl.lc.cfg.ConfigHelper;
 import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.ModuleManager;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.core.block.BlockLanteaOre;
 import pcl.lc.module.core.block.BlockOfLanteaOre;
@@ -135,8 +136,8 @@ public class ModuleCore implements IModule {
 			RegistrationHelper.registerRenderer(Render.blockModelRenderer);
 
 			Render.danielFontRenderer = new WrittenFontRenderer(
-					LanteaCraft.getResource("textures/notebook/daniel.png"),
-					LanteaCraft.getResource("textures/notebook/daniel.metrics.xml"));
+					ResourceAccess.getNamedResource("textures/notebook/daniel.png"),
+					ResourceAccess.getNamedResource("textures/notebook/daniel.metrics.xml"));
 			Render.danielFontRenderer.buildFont();
 		}
 	}

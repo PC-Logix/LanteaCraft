@@ -7,8 +7,8 @@ import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
 
-import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericBlockRenderer;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModulePower;
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -17,8 +17,8 @@ public class BlockNaquadahGeneratorRenderer extends GenericBlockRenderer {
 	private ResourceLocation texture;
 
 	public BlockNaquadahGeneratorRenderer() {
-		texture = LanteaCraft.getResource("textures/models/naquada_generator_off_"
-				+ LanteaCraft.getProxy().getRenderMode() + ".png");
+		texture = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/models/naquada_generator_off_${TEX_QUALITY}.png"));
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package pcl.lc;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -10,6 +9,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import pcl.lc.base.network.PCLPacketPipeline;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleCore;
 import pcl.lc.util.CreativeTabHelper;
 import pcl.lc.util.SpecialBucketHandler;
@@ -90,32 +90,12 @@ public class LanteaCraft {
 	}
 
 	/**
-	 * Get a resource location from an abstract path
-	 * 
-	 * @param path
-	 *            The path to use
-	 * @return A fully qualified {@link ResourceLocation} to the resource
-	 */
-	public static ResourceLocation getResource(String path) {
-		return getProxy().fetchResource(path);
-	}
-
-	/**
 	 * Gets the current Proxy object for LanteaCraft
 	 * 
 	 * @return The current Proxy object for LanteaCraft
 	 */
 	public static LanteaCraftCommonProxy getProxy() {
 		return LanteaCraft.proxy;
-	}
-
-	/**
-	 * Gets the currently used asset key for resources and other paths
-	 * 
-	 * @return The current asset key
-	 */
-	public static String getAssetKey() {
-		return LanteaCraft.getInstance().assetKey;
 	}
 
 	/**
@@ -145,11 +125,6 @@ public class LanteaCraft {
 	 * ItemSpecialBucket bucket collection handler object - Forge eventbus only.
 	 */
 	private SpecialBucketHandler bucketHandler = new SpecialBucketHandler();
-
-	/**
-	 * Declaration of asset key.
-	 */
-	private String assetKey = "pcl_lc";
 
 	public LanteaCraft() {
 		LanteaCraft.mod = this;
@@ -185,6 +160,8 @@ public class LanteaCraft {
 	@EventHandler
 	public void onServerStopping(FMLServerStoppingEvent e) {
 		proxy.onServerStopping(e);
+		// TODO: Temporary
+		ResourceAccess.saveRegistry();
 	}
 
 	@SubscribeEvent

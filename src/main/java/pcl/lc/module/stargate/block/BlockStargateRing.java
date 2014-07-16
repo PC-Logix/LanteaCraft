@@ -17,6 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerBlock;
 import pcl.lc.base.multiblock.EnumOrientations;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.StargateMultiblock;
 import pcl.lc.module.stargate.tile.TileStargateBase;
@@ -42,7 +43,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", getUnlocalizedName());
 	}
 
 	@Override
@@ -54,12 +55,12 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topAndBottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBlock_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		sideTextures[0] = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateRing_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		sideTextures[1] = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateChevron_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		topAndBottomTexture = register.registerIcon(ResourceAccess.formatResourceName(
+				"${ASSET_KEY}:%s_${TEX_QUALITY}", "stargateBlock"));
+		sideTextures[0] = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"stargateRing"));
+		sideTextures[1] = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"stargateChevron"));
 	}
 
 	@Override

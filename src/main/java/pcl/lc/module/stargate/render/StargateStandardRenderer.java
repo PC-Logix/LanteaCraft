@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 
 public class StargateStandardRenderer implements IStargateRenderer {
@@ -17,15 +18,15 @@ public class StargateStandardRenderer implements IStargateRenderer {
 	private ResourceLocation chevronTex;
 
 	public StargateStandardRenderer() {
-		stargateTex = LanteaCraft.getResource("textures/tileentity/stargate_" + LanteaCraft.getProxy().getRenderMode()
-				+ ".png");
-		chevronTex = LanteaCraft.getResource("textures/tileentity/stargate_glyphs_"
-				+ LanteaCraft.getProxy().getRenderMode() + ".png");
+		stargateTex = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/tileentity/stargate_${TEX_QUALITY}.png"));
+		chevronTex = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/tileentity/stargate_glyphs_${TEX_QUALITY}.png"));
 	}
 
 	@Override
-	public void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x,
-			double y, double z, float t) {
+	public void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x, double y, double z,
+			float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		caller.bind(stargateTex);

@@ -8,6 +8,7 @@ import com.google.common.primitives.SignedBytes;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.LanteaInternalRecipe;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -52,13 +53,13 @@ public class TileCrystalInfuserRenderer extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float scale) {
 		TileCrystalInfuser infuser = (TileCrystalInfuser) tile;
-		bindTexture(LanteaCraft.getResource("textures/tileentity/crystal_infuser_default.png"));
+		bindTexture(ResourceAccess.getNamedResource("textures/tileentity/crystal_infuser_default.png"));
 		GL11.glPushMatrix();
 		infuserModel.preTile(tile, x, y, z, scale);
 		infuserModel.render(0.0625F);
 		infuserModel.postTile(tile, x, y, z, scale);
 		GL11.glPopMatrix();
-		
+
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if (tile.getDistanceFrom(this.field_147501_a.field_147560_j, this.field_147501_a.field_147561_k,
 				this.field_147501_a.field_147558_l) < 128d) {
@@ -72,7 +73,7 @@ public class TileCrystalInfuserRenderer extends TileEntitySpecialRenderer {
 					renderNextItem = recipe.product(0).copy();
 				}
 			}
-			
+
 			if (renderItem != null)
 				renderItem.stackSize = 1;
 			if (renderNextItem != null)

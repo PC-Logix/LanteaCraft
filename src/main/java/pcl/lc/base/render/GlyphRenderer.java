@@ -1,8 +1,11 @@
 package pcl.lc.base.render;
 
+import com.sun.naming.internal.ResourceManager;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.GateAddressHelper;
 
 public class GlyphRenderer {
@@ -34,7 +37,7 @@ public class GlyphRenderer {
 	}
 
 	private static void bindSGTexture(Minecraft mc, String name, int usize, int vsize) {
-		mc.getTextureManager().bindTexture(LanteaCraft.getResource("textures/gui/" + name));
+		mc.getTextureManager().bindTexture(ResourceAccess.getNamedResource("textures/gui/" + name));
 		uscale = 1.0 / usize;
 		vscale = 1.0 / vsize;
 	}

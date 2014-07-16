@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.power.tile.TileNaquadahGenerator;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -17,10 +18,10 @@ public class TileNaquadahGeneratorRenderer extends TileEntitySpecialRenderer {
 	private float scale = 1;
 
 	public TileNaquadahGeneratorRenderer() {
-		activeTexture = LanteaCraft.getResource("textures/models/naquada_generator_on_"
-				+ LanteaCraft.getProxy().getRenderMode() + ".png");
-		inactiveTexture = LanteaCraft.getResource("textures/models/naquada_generator_off_"
-				+ LanteaCraft.getProxy().getRenderMode() + ".png");
+		activeTexture = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/models/naquada_generator_on_${TEX_QUALITY}.png"));
+		inactiveTexture = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/models/naquada_generator_off_${TEX_QUALITY}.png"));
 	}
 
 	@Override

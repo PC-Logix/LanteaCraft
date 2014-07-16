@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.OreTypes;
+import pcl.lc.core.ResourceAccess;
 
 public class ItemLanteaOre extends Item {
 	private IIcon missing;
@@ -20,13 +21,13 @@ public class ItemLanteaOre extends Item {
 
 	@Override
 	public void registerIcons(IIconRegister register) {
-		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
-		OreTypes.NAQUADAH.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadah_"
-				+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.NAQUADRIAH.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":naquadriah_"
-				+ LanteaCraft.getProxy().getRenderMode()));
-		OreTypes.TRINIUM.setItemTexture(register.registerIcon(LanteaCraft.getAssetKey() + ":trinium_"
-				+ LanteaCraft.getProxy().getRenderMode()));
+		missing = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:missing"));
+		OreTypes.NAQUADAH.setItemTexture(register.registerIcon(ResourceAccess.formatResourceName(
+				"${ASSET_KEY}:%s_${TEX_QUALITY}", "naquadah")));
+		OreTypes.NAQUADRIAH.setItemTexture(register.registerIcon(ResourceAccess.formatResourceName(
+				"${ASSET_KEY}:%s_${TEX_QUALITY}", "naquadriah")));
+		OreTypes.TRINIUM.setItemTexture(register.registerIcon(ResourceAccess.formatResourceName(
+				"${ASSET_KEY}:%s_${TEX_QUALITY}", "trinium")));
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.core.gui.GuiJacksonNotebook;
 
 public class ItemJacksonNotebook extends Item {
@@ -17,7 +17,7 @@ public class ItemJacksonNotebook extends Item {
 
 	@Override
 	public String getIconString() {
-		return LanteaCraft.getAssetKey() + ":notebook";
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:notebook_${TEX_QUALITY}");
 	}
 
 	@Override

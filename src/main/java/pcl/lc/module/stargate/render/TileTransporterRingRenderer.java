@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.tile.TileTransporterRing;
@@ -29,14 +30,15 @@ public class TileTransporterRingRenderer extends TileEntitySpecialRenderer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		float scale = 1.0f;
 		GL11.glScalef(scale, scale, scale);
-		FMLClientHandler.instance().getClient().renderEngine
-				.bindTexture(LanteaCraft.getResource("textures/models/transport_rings_base_"
-						+ LanteaCraft.getProxy().getRenderMode() + ".png"));
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(ResourceAccess
+				.getNamedResource(ResourceAccess
+						.formatResourceName("textures/models/transport_rings_base_${TEX_QUALITY}.png")));
 		GL11.glTranslated(x, y + 1.0d, z);
 		ModuleStargates.Render.modelRingPlatformBase.renderAll();
 
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture(LanteaCraft
-				.getResource("textures/models/transport_rings_" + LanteaCraft.getProxy().getRenderMode() + ".png"));
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(ResourceAccess
+				.getNamedResource(ResourceAccess
+						.formatResourceName("textures/models/transport_rings_${TEX_QUALITY}.png")));
 		GL11.glTranslated(0, -0.2, 0);
 
 		double heightOf = platform.getAsStructure().getRingPosition(f);

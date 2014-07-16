@@ -48,13 +48,22 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 		return true;
 	}
 
+	public void init(String channelName) {
+		channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
+		registerPacket(TinyModPacket.class);
+		registerPacket(StandardModPacket.class);
+		registerPacket(WatchedListContainerPacket.class);
+		registerPacket(WatchedListRequestPacket.class);
+		registerPacket(WatchedListSyncPacket.class);
+	}
+
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ModPacket msg, List<Object> out) throws Exception {
 
 		Class<? extends ModPacket> clazz = msg.getClass();
-		if (!packets.contains(msg.getClass())) {
-			LanteaCraft.getLogger().log(Level.FATAL, "No Packet Registered for: " + msg.getClass().getCanonicalName());
-		}
+		if (!packets.contains(msg.getClass()))
+			LanteaCraft.getLogger().log(Level.FATAL,
+					String.format("Attempt to send unregistered packet class %s!", msg.getClass().getCanonicalName()));
 
 		ByteBuf buffer = Unpooled.buffer();
 		byte discriminator = (byte) packets.indexOf(clazz);
@@ -71,7 +80,8 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 		byte discriminator = payload.readByte();
 		Class<? extends ModPacket> clazz = packets.get(discriminator);
 		if (clazz == null)
-			throw new NullPointerException("No packet registered for discriminator: " + discriminator);
+			LanteaCraft.getLogger().log(Level.FATAL,
+					String.format("Attempt to handlle unregistered packet class %s!", discriminator));
 
 		ModPacket pkt = clazz.newInstance();
 		pkt.decodeFrom(ctx, payload.slice());
@@ -90,15 +100,6 @@ public class PCLPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, Mod
 			throw new IOException("Instance is not client or server. Cannot continue!");
 		}
 		LanteaCraft.getProxy().handlePacket(pkt, player);
-	}
-
-	public void init(String channelName) {
-		channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
-		registerPacket(TinyModPacket.class);
-		registerPacket(StandardModPacket.class);
-		registerPacket(WatchedListContainerPacket.class);
-		registerPacket(WatchedListRequestPacket.class);
-		registerPacket(WatchedListSyncPacket.class);
 	}
 
 	@SideOnly(Side.CLIENT)

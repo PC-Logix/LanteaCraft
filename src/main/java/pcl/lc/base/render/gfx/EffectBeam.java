@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.network.packet.StandardModPacket;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.util.Facing3;
 import pcl.lc.util.Vector3;
 
@@ -106,8 +107,8 @@ public class EffectBeam extends EntityFX {
 		// GL11.glLoadIdentity();
 		// GL11.glTranslated(renderOrigin.x, renderOrigin.y, renderOrigin.z);
 		System.out.println(String.format("RenderAt: %s %s %s", renderOrigin.x, renderOrigin.y, renderOrigin.z));
-		Minecraft.getMinecraft().renderEngine.bindTexture(LanteaCraft.getResource("textures/models/transport_rings_"
-				+ LanteaCraft.getProxy().getRenderMode() + ".png"));
+		Minecraft.getMinecraft().renderEngine.bindTexture(ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/models/transport_rings_${TEX_QUALITY}.png")));
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glBegin(GL11.GL_QUADS);

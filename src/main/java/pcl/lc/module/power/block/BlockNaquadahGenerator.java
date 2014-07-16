@@ -14,6 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.RotationOrientedBlock;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.power.tile.TileNaquadahGenerator;
 import cpw.mods.fml.relauncher.Side;
@@ -32,17 +33,17 @@ public class BlockNaquadahGenerator extends RotationOrientedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", getUnlocalizedName());
 	}
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_top_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		bottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_bottom_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "controller_side_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		topTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"controller_top"));
+		bottomTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"controller_bottom"));
+		sideTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"controller_side"));
 	}
 
 	@Override

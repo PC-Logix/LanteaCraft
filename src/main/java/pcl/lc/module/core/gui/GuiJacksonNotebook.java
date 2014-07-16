@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 
 public class GuiJacksonNotebook extends GuiScreen {
 
@@ -52,7 +53,7 @@ public class GuiJacksonNotebook extends GuiScreen {
 	}
 
 	private void useTexture(String name) {
-		mc.getTextureManager().bindTexture(LanteaCraft.getResource("textures/notebook/" + name + ".png"));
+		mc.getTextureManager().bindTexture(ResourceAccess.getNamedResource("textures/notebook/" + name + ".png"));
 	}
 
 	private void pushVertex(float x, float y, float z, float u, float v) {

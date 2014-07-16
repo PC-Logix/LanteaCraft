@@ -19,7 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
-import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.critters.entity.EntityReplicator;
 import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -34,7 +34,7 @@ public class ItemTokraSpawnEgg extends Item {
 
 	@Override
 	protected String getIconString() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", getUnlocalizedName());
 	}
 
 	@Override

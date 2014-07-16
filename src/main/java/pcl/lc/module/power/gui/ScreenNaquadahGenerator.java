@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerGUI;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.power.tile.TileNaquadahGenerator;
 
 public class ScreenNaquadahGenerator extends GenericContainerGUI {
@@ -20,8 +21,8 @@ public class ScreenNaquadahGenerator extends GenericContainerGUI {
 	public ScreenNaquadahGenerator(TileNaquadahGenerator te, EntityPlayer player) {
 		super(new ContainerNaquadahGenerator(te, player), guiWidth, guiHeight);
 		tileEntity = te;
-		background = LanteaCraft.getResource("textures/gui/naquadah_generator_"
-				+ LanteaCraft.getProxy().getRenderMode() + ".png");
+		background = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/gui/naquadah_generator_${TEX_QUALITY}.png"));
 	}
 
 	@Override

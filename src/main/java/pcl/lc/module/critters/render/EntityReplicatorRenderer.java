@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 
 public class EntityReplicatorRenderer extends RenderLiving {
 
@@ -18,7 +18,7 @@ public class EntityReplicatorRenderer extends RenderLiving {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return LanteaCraft.getResource("textures/skins/BipedTetris.png");
+		return ResourceAccess.getNamedResource("textures/skins/BipedTetris.png");
 	}
 
 	@Override

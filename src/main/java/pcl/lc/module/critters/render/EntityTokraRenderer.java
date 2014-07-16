@@ -9,14 +9,15 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.critters.entity.EntityTokra;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EntityTokraRenderer extends RenderLiving {
-	private static final ResourceLocation villagerTextures = LanteaCraft.getResource("textures/skins/BipedTetris.png");
+	private static final ResourceLocation villagerTextures = ResourceAccess
+			.getNamedResource("textures/skins/BipedTetris.png");
 
 	protected ModelBiped model;
 

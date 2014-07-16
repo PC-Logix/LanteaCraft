@@ -171,8 +171,6 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
 
-	private final ObserverContext observerContext = new ObserverContext();
-
 	private StargateMultiblock multiblock = new StargateMultiblock(this);
 	private FilteredInventory inventory;
 	private List<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
@@ -229,27 +227,27 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 		checkForEntitiesInPortal();
 		if (connection != null)
 			// Synchronize the connection between this instance and the client
-			if (connection.running.modified(observerContext) || connection.chevrons.modified(observerContext)
-					|| connection.state.modified(observerContext) || connection.symbol.modified(observerContext)) {
+			if (connection.running.modified(metacontext) || connection.chevrons.modified(metacontext)
+					|| connection.state.modified(metacontext) || connection.symbol.modified(metacontext)) {
 				if (BuildInfo.DEBUG)
 					LanteaCraft.getLogger().log(Level.INFO, "Update detected, sending update packet.");
 				StandardModPacket update = new StandardModPacket(new WorldLocation(this));
 				update.setType("LanteaPacket.ConnectionUpdate");
 				update.setIsForServer(false);
-				if (connection.running.modified(observerContext)) {
-					connection.running.clearModified(observerContext);
+				if (connection.running.modified(metacontext)) {
+					connection.running.clearModified(metacontext);
 					update.setValue("running", connection.running.get());
 				}
-				if (connection.chevrons.modified(observerContext)) {
-					connection.chevrons.clearModified(observerContext);
+				if (connection.chevrons.modified(metacontext)) {
+					connection.chevrons.clearModified(metacontext);
 					update.setValue("chevrons", connection.chevrons.get());
 				}
-				if (connection.state.modified(observerContext)) {
-					connection.state.clearModified(observerContext);
+				if (connection.state.modified(metacontext)) {
+					connection.state.clearModified(metacontext);
 					update.setValue("state", connection.state.get());
 				}
-				if (connection.symbol.modified(observerContext)) {
-					connection.symbol.clearModified(observerContext);
+				if (connection.symbol.modified(metacontext)) {
+					connection.symbol.clearModified(metacontext);
 					update.setValue("symbol", connection.symbol.get());
 				}
 				LanteaCraft.getNetPipeline().sendToAll(update);
@@ -264,8 +262,8 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 		if (soundHost == null)
 			soundHost = new SoundHost(this);
 		if (connection_cli != null) {
-			if (connection_cli.state.modified(observerContext)) {
-				connection_cli.state.clearModified(observerContext);
+			if (connection_cli.state.modified(metacontext)) {
+				connection_cli.state.clearModified(metacontext);
 
 				// The ring is now spinning, calculate the destination angle
 				if (connection_cli.state.get() == EnumStargateState.Dialling) {

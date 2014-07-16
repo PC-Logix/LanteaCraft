@@ -3,6 +3,7 @@ package pcl.lc.module.core.item;
 import java.util.List;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -27,13 +28,14 @@ public class ItemCraftingReagent extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
-		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
+		missing = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:missing"));
 		for (ReagentList reagent : ReagentList.values())
 			if (reagent == ReagentList.BROKENITEM)
-				reagent.icon = register.registerIcon(LanteaCraft.getAssetKey() + ":reagent_broken");
+				reagent.icon = register
+						.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:reagent_broken"));
 			else
-				reagent.icon = register.registerIcon(LanteaCraft.getAssetKey() + ":reagent_"
-						+ reagent.name().toLowerCase() + "_" + LanteaCraft.getProxy().getRenderMode());
+				reagent.icon = register.registerIcon(ResourceAccess.formatResourceName(
+						"${ASSET_KEY}:reagent_%s_${TEX_QUALITY}", reagent.name().toLowerCase()));
 	}
 
 	@Override

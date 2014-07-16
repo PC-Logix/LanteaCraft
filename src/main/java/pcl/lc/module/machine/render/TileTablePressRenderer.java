@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.primitives.SignedBytes;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -50,7 +51,7 @@ public class TileTablePressRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float scale) {
-		bindTexture(LanteaCraft.getResource("textures/tileentity/table_press_default.png"));
+		bindTexture(ResourceAccess.getNamedResource("textures/tileentity/table_press_default.png"));
 		GL11.glPushMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);

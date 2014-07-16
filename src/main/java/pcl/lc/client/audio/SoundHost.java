@@ -120,8 +120,11 @@ public class SoundHost {
 		if (BuildInfo.SS_DEBUGGING)
 			LanteaCraft.getLogger().log(Level.INFO, String.format("SoundHost operation: PLAY %s", channel));
 		AudioSourceWrapper wrapper = sources.get(channel);
-		if (wrapper != null)
+		if (wrapper != null) {
+			if (wrapper.playing())
+				wrapper.stop();
 			wrapper.play();
+		}
 	}
 
 	public void pauseChannel(String channel) {

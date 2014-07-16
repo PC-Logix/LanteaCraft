@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.energy.IItemEnergyStore;
+import pcl.lc.core.ResourceAccess;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,7 +25,7 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return LanteaCraft.getAssetKey() + ":energy_crystal_" + LanteaCraft.getProxy().getRenderMode();
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", "energy_crystal");
 	}
 
 	@Override

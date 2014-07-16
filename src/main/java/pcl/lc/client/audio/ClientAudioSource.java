@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Level;
 import paulscode.sound.SoundSystem;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.util.Vector3;
 
 public class ClientAudioSource extends AudioSource implements Comparable<ClientAudioSource> {
@@ -31,7 +32,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 			configuredVolume = volume;
 			ClientAudioEngine engine = (ClientAudioEngine) LanteaCraft.getProxy().getAudioEngine();
 
-			String filename = LanteaCraft.getAssetKey() + ":sound/" + file;
+			String filename = ResourceAccess.formatResourceName("${ASSET_KEY}:sound/%s", file);
 
 			ResourceLocation resourcelocation = new ResourceLocation(filename);
 			String s1 = String.format("%s:%s:%s", "soundconnectionhax", resourcelocation.getResourceDomain(),

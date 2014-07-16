@@ -4,11 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 
@@ -48,8 +45,6 @@ public class LanteaCraftCommonProxy {
 
 	protected File configFile;
 	protected ModuleList moduleConfig;
-
-	protected Map<String, ResourceLocation> resourceCache = new HashMap<String, ResourceLocation>();
 
 	protected AnalyticsHelper analyticsHelper = new AnalyticsHelper(false, null);
 	private VersionHelper versionHelper = new VersionHelper();
@@ -175,22 +170,11 @@ public class LanteaCraftCommonProxy {
 		versionHelper.start();
 	}
 
-	public int getRenderMode() {
-		// TODO: From config!
-		return 32;
-	}
-
 	public void handlePacket(ModPacket modPacket, EntityPlayer player) {
 		if (modPacket.getPacketIsForServer())
 			serverPacketHandler.handlePacket(modPacket, player);
 		else
 			return;
-	}
-
-	public ResourceLocation fetchResource(String resource) {
-		if (!resourceCache.containsKey(resource))
-			resourceCache.put(resource, new ResourceLocation(LanteaCraft.getAssetKey(), resource));
-		return resourceCache.get(resource);
 	}
 
 	public void onServerStarting(FMLServerStartingEvent e) {

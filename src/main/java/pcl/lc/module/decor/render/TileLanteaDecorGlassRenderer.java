@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.decor.tile.TileLanteaDecorGlass;
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -25,7 +25,7 @@ public class TileLanteaDecorGlassRenderer extends TileEntitySpecialRenderer {
 	};
 
 	public TileLanteaDecorGlassRenderer() {
-		glassTexture = LanteaCraft.getResource("textures/tileentity/lantean_glass_128.png");
+		glassTexture = ResourceAccess.getNamedResource("textures/tileentity/lantean_glass_128.png");
 	}
 
 	@Override

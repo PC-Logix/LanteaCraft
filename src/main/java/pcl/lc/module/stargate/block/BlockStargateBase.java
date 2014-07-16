@@ -16,6 +16,7 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.base.RotationOrientedBlock;
 import pcl.lc.base.multiblock.EnumOrientations;
 import pcl.lc.base.multiblock.MultiblockPart;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
 import pcl.lc.module.stargate.StargateMultiblock;
 import pcl.lc.module.stargate.StargatePart;
@@ -40,7 +41,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getTextureName() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", getUnlocalizedName());
 	}
 
 	@Override
@@ -77,12 +78,12 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topAndBottomTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBlock_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		frontTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateBase_front_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		sideTexture = register.registerIcon(LanteaCraft.getAssetKey() + ":" + "stargateRing_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		topAndBottomTexture = register.registerIcon(ResourceAccess.formatResourceName(
+				"${ASSET_KEY}:%s_${TEX_QUALITY}", "stargateBlock"));
+		frontTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"stargateBase_front"));
+		sideTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"stargateRing"));
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.power.tile.TileNaquadahGenerator;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 import pcl.lc.module.stargate.tile.TileStargateDHD;
@@ -30,7 +31,7 @@ public class ItemDebugTool extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return LanteaCraft.getAssetKey() + ":" + getUnlocalizedName() + "_" + LanteaCraft.getProxy().getRenderMode();
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", getUnlocalizedName());
 	}
 
 	/**
@@ -78,8 +79,10 @@ public class ItemDebugTool extends Item {
 		if (entity instanceof TileNaquadahGenerator) {
 			TileNaquadahGenerator generator = (TileNaquadahGenerator) entity;
 			par2EntityPlayer.addChatMessage(new ChatComponentText("type: TileNaquadahGenerator"));
-			par2EntityPlayer.addChatMessage(new ChatComponentText("simulating: " + (Boolean) generator.metadata.get("simulating")));
-			par2EntityPlayer.addChatMessage(new ChatComponentText("energy: " + (Double) generator.metadata.get("energy")));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("simulating: "
+					+ (Boolean) generator.metadata.get("simulating")));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("energy: "
+					+ (Double) generator.metadata.get("energy")));
 			par2EntityPlayer.addChatMessage(new ChatComponentText("exportEnergy: "
 					+ generator.getAvailableExportEnergy()));
 		}

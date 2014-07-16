@@ -1,9 +1,7 @@
 package pcl.lc.module.stargate.item;
 
 import net.minecraft.item.Item;
-import pcl.lc.LanteaCraft;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import pcl.lc.core.ResourceAccess;
 
 public class ItemControllerCrystal extends Item {
 
@@ -12,8 +10,7 @@ public class ItemControllerCrystal extends Item {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return LanteaCraft.getAssetKey() + ":sgControllerCrystal_" + LanteaCraft.getProxy().getRenderMode();
+		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", "sgControllerCrystal");
 	}
 }

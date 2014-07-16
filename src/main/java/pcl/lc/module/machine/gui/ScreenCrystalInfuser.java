@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerGUI;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -22,17 +23,17 @@ public class ScreenCrystalInfuser extends GenericContainerGUI {
 	protected void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
-		bindTexture(LanteaCraft.getResource(String.format("textures/gui/inventory_gui_%s.png", LanteaCraft.getProxy()
-				.getRenderMode())), 256, 256);
+		bindTexture(ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/gui/inventory_gui_${TEX_QUALITY}.png")), 256, 256);
 		drawTexturedRect(0, 73, 177, 108, 0, 0);
 
-		bindTexture(LanteaCraft.getResource("textures/gui/dhd_powercrystal_slot.png"), 60, 60);
+		bindTexture(ResourceAccess.getNamedResource("textures/gui/dhd_powercrystal_slot.png"), 60, 60);
 		drawTexturedRect(46, 0, 24, 24);
 		drawTexturedRect(46, 16 + 12, 24, 24);
 		drawTexturedRect(96, 12, 24, 24);
 
-		bindTexture(LanteaCraft.getResource(String.format("textures/gui/progressbar_gui_%s.png", LanteaCraft.getProxy()
-				.getRenderMode())), 256, 256);
+		bindTexture(ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/gui/progressbar_gui_${TEX_QUALITY}.png")), 256, 256);
 		drawTexturedRectUV(39, 60, 100, 12, 0, 0, 168 / 256d, 28 / 256d);
 		drawTexturedRectUV(42, 60 + 2, 94.0d * (container.getCraftingProgress() / 100.0d), 8, 0, 29 / 256d,
 				(160.0d * container.getCraftingProgress()) / 25600.0d, 12.0d / 256.0d);

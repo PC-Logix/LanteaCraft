@@ -18,9 +18,7 @@ public enum EnumIrisState {
 	/** Iris is opening */
 	Opening,
 	/** Iris is closing */
-	Closing,
-	/** Iris is procrastinating (TODO: what even is this?) */
-	Waiting;
+	Closing;
 
 	public static EnumIrisState fromOrdinal(int ordinal) {
 		return EnumIrisState.values()[ordinal];

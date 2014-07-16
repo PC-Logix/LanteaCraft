@@ -21,16 +21,13 @@ import cpw.mods.fml.common.IWorldGenerator;
 
 public class NaquadahOreWorldGen implements IWorldGenerator {
 
-	static int genUnderLavaOdds = 4;
-	static int maxNodesUnderLava = 8;
-	static int genIsolatedOdds = 8;
-	static int maxIsolatedNodes = 4;
-
-	// TODO: Unpack from config
+	private static int genUnderLavaOdds = 4;
+	private static int maxNodesUnderLava = 8;
+	private static int genIsolatedOdds = 8;
+	private static int maxIsolatedNodes = 4;
 	private static EnumSet<OreTypes> enabledOreSpawns = EnumSet.of(OreTypes.NAQUADAH, OreTypes.TRINIUM);
 
 	public static void configure(ModuleConfig cfg) {
-
 		ConfigList enabledOres = (ConfigList) ConfigHelper.findConfigByClass(cfg, "EnabledOres");
 		if (enabledOres != null) {
 			enabledOreSpawns.clear();

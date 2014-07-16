@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -15,8 +16,8 @@ public class TileStargateDHDRenderer extends TileEntitySpecialRenderer {
 	private float scale = 1;
 
 	public TileStargateDHDRenderer() {
-		theTexture = LanteaCraft.getResource("textures/models/dhd_off_" + LanteaCraft.getProxy().getRenderMode()
-				+ ".png");
+		theTexture = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/models/dhd_off_${TEX_QUALITY}.png"));
 	}
 
 	@Override

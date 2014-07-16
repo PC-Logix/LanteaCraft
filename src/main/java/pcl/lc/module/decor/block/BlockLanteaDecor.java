@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft;
+import pcl.lc.core.ResourceAccess;
 
 public class BlockLanteaDecor extends Block {
 
@@ -27,17 +28,17 @@ public class BlockLanteaDecor extends Block {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		lanteaDecor = register.registerIcon(LanteaCraft.getAssetKey() + ":lantean_decor_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		lanteaMetal = register.registerIcon(LanteaCraft.getAssetKey() + ":lantean_metal_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		lanteaDecor = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"lantean_decor"));
+		lanteaMetal = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"lantean_metal"));
 
-		goauldDecor = register.registerIcon(LanteaCraft.getAssetKey() + ":goauld_golddecor_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		goauldMetal = register.registerIcon(LanteaCraft.getAssetKey() + ":goauld_goldplain_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		goauldDecor = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"goauld_golddecor"));
+		goauldMetal = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"goauld_goldplain"));
 
-		missing = register.registerIcon(LanteaCraft.getAssetKey() + ":missing");
+		missing = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:missing"));
 	}
 
 	@Override

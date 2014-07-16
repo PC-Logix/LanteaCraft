@@ -17,6 +17,7 @@ import pcl.lc.cfg.ConfigNode;
 import pcl.lc.cfg.DOMHelper;
 import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.ModuleManager;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.galaxy.IDimension;
 import pcl.lc.module.galaxy.MapGenFeatureStructureStart;
@@ -50,7 +51,7 @@ public class ModuleGalaxy implements IModule {
 
 	public static class DimensionConfig extends ConfigList {
 		private Dimension dimension;
-		
+
 		public DimensionConfig(String name, ConfigNode parent) {
 			super(name, parent);
 		}
@@ -103,8 +104,8 @@ public class ModuleGalaxy implements IModule {
 				dimensionConfigs.put(setup.parameters().get("name").toString(), setup);
 			}
 
-		MapGenStructureIO.registerStructure(MapGenFeatureStructureStart.class, LanteaCraft.getAssetKey()
-				+ ":LanteaCraft");
+		MapGenStructureIO.registerStructure(MapGenFeatureStructureStart.class,
+				ResourceAccess.formatResourceName("${ASSET_KEY}:LanteaCraft"));
 
 		for (Dimension dimension : Dimension.values()) {
 			DimensionConfig dimensionSettings = dimensionConfigs.get(dimension.name());

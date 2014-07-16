@@ -18,6 +18,7 @@ import pcl.lc.base.GenericScreen;
 import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.client.audio.AudioPosition;
 import pcl.lc.client.audio.SoundHost;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.GateAddressHelper;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 import pcl.lc.module.stargate.tile.TileStargateDHD;
@@ -48,8 +49,8 @@ public class ScreenStargateDHD extends GenericScreen {
 	public ScreenStargateDHD(TileStargateDHD controller, EntityPlayer actor) {
 		super();
 		this.controller = controller;
-		dhdLayer = LanteaCraft.getResource("textures/gui/dhd_gui.png");
-		dhdButtonLayer = LanteaCraft.getResource("textures/gui/dhd_centre.png");
+		dhdLayer = ResourceAccess.getNamedResource("textures/gui/dhd_gui.png");
+		dhdButtonLayer = ResourceAccess.getNamedResource("textures/gui/dhd_centre.png");
 		soundHost = new SoundHost(controller);
 		soundHostPosition = new AudioPosition(controller.getWorldObj(), new Vector3(controller));
 		soundHost.addChannel("click", "stargate/milkyway/milkyway_dhd_button.ogg", soundHostPosition, 1.0f, 0);

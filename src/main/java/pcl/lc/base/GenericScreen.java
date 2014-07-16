@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.render.GlyphRenderer;
+import pcl.lc.core.ResourceAccess;
 
 public abstract class GenericScreen extends GuiScreen {
 
@@ -40,7 +41,7 @@ public abstract class GenericScreen extends GuiScreen {
 
 	public void drawFramedSymbols(int x, int y, String address) {
 		int scale = 2;
-		bindTexture(LanteaCraft.getResource("textures/gui/symbol_frame.png"), 512 / scale, 128 / scale);
+		bindTexture(ResourceAccess.getNamedResource("textures/gui/symbol_frame.png"), 512 / scale, 128 / scale);
 		drawTexturedRect(x - (472 / scale) / 2, y, 472 / scale, 88 / scale, 0, 0);
 		GlyphRenderer.drawAddress(mc, address, x - (472 / scale) / 2, y, 9, scale, zLevel);
 	}

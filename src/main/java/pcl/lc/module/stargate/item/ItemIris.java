@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisType;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
 
 public class ItemIris extends Item {
@@ -40,11 +41,11 @@ public class ItemIris extends Item {
 
 	@Override
 	public void registerIcons(IIconRegister reg) {
-		iconMissing = reg.registerIcon(LanteaCraft.getAssetKey() + ":missing");
-		iconMechanical = reg.registerIcon(LanteaCraft.getAssetKey() + ":energy_iris_upgrade_"
-				+ LanteaCraft.getProxy().getRenderMode());
-		iconEnergy = reg.registerIcon(LanteaCraft.getAssetKey() + ":iris_upgrade_"
-				+ LanteaCraft.getProxy().getRenderMode());
+		iconMissing = reg.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:missing"));
+		iconMechanical = reg.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"energy_iris_upgrade"));
+		iconEnergy = reg.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"iris_upgrade"));
 	}
 
 	@Override

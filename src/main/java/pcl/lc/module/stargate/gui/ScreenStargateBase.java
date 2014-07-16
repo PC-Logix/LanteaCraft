@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerGUI;
 import pcl.lc.base.render.IconButtonRenderer;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.AddressingError;
 import pcl.lc.module.stargate.AddressingError.CoordRangeError;
 import pcl.lc.module.stargate.AddressingError.DimensionRangeError;
@@ -37,7 +38,8 @@ public class ScreenStargateBase extends GenericContainerGUI {
 	public ScreenStargateBase(TileStargateBase entity, EntityPlayer player) {
 		super(new ContainerStargateBase(entity, player));
 		te = entity;
-		background = LanteaCraft.getResource("textures/gui/sg_gui_" + LanteaCraft.getProxy().getRenderMode() + ".png");
+		background = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/gui/sg_gui_${TEX_QUALITY}.png"));
 	}
 
 	@Override
