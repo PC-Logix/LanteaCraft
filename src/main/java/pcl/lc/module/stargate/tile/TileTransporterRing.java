@@ -62,7 +62,7 @@ public class TileTransporterRing extends TileManaged {
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord - 4, yCoord, zCoord - 4, xCoord + 4, yCoord + 7, zCoord + 4);
+		return AxisAlignedBB.getBoundingBox(xCoord - 4, yCoord, zCoord - 4, xCoord + 4, yCoord + 7, zCoord + 4);
 	}
 
 	@Override

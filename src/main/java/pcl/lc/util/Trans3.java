@@ -153,7 +153,7 @@ public class Trans3 {
 	}
 
 	static AxisAlignedBB boxEnclosing(Vector3 p, Vector3 q) {
-		return AxisAlignedBB.getAABBPool().getAABB(min(p.x, q.x), min(p.y, q.y), min(p.z, q.z), max(p.x, q.x),
+		return AxisAlignedBB.getBoundingBox(min(p.x, q.x), min(p.y, q.y), min(p.z, q.z), max(p.x, q.x),
 				max(p.y, q.y), max(p.z, q.z));
 	}
 
