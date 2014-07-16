@@ -1,21 +1,18 @@
-{
-  "modinfoversion": 2,
-  "modlist": [{
-    "modid": "LanteaCraft",
-    "name": "LanteaCraft",
-    "description": "LanteaCraft, Adds Stargates, and other Lantean based tech!",
-    "version": "${version}",
-    "mcversion": "${mcversion}",
-    "url": "http://www.minecraftforum.net/topic/2059956-",
-    "updateUrl": "",
-    "authors": [ "Michiyo", "AfterLifeLochie", "DrakeBD", "TempusBD", "Greg Ewing" ],
-    "credits": "Greg_Ewing for the original mod, deltastrium.com for the Delta NP SGCraft textures.",
-    "logoFile": "/assets/textures/forge/LanteaCraft.png",
-    "screenshots": [ ],
-    "parent": "",
-    "requiredMods": [ "Forge"],
-    "dependencies": [ "ComputerCraft", "OpenComputers" ],
-    "dependants": [ ],
-    "useDependencyInformation": "true"
-  }]
-}
+[{
+	"modid": "LanteaCraft",
+	"name": "LanteaCraft",
+	"description": "Adds Stargates and other Stargate-themed tech!",
+	"version": "${version}",
+	"mcversion": "${mcversion}",
+	"url": "http://www.minecraftforum.net/topic/2059956-",
+	"updateUrl": "",
+	"authors": [ "Michiyo", "AfterLifeLochie", "DrakeBD", "TempusBD", "Greg Ewing" ],
+	"credits": "Greg_Ewing for the original mod, deltastrium.com for the Delta NP SGCraft textures.",
+	"logoFile": "/assets/textures/forge/LanteaCraft.png",
+	"screenshots": [ ],
+	"parent": "",
+	"requiredMods": [ "Forge" ],
+	"dependencies": [ "ComputerCraft", "OpenComputers" ],
+	"dependants": [ ],
+	"useDependencyInformation": "true"
+}]
