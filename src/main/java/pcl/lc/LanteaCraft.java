@@ -160,8 +160,6 @@ public class LanteaCraft {
 	@EventHandler
 	public void onServerStopping(FMLServerStoppingEvent e) {
 		proxy.onServerStopping(e);
-		// TODO: Temporary
-		ResourceAccess.saveRegistry();
 	}
 
 	@SubscribeEvent
