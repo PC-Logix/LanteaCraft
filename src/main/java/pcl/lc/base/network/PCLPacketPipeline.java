@@ -11,14 +11,15 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.common.network.ForgeMessage;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;

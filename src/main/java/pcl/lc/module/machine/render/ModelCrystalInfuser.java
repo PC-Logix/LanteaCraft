@@ -1,11 +1,5 @@
 package pcl.lc.module.machine.render;
 
-import org.lwjgl.opengl.GL11;
-
-import pcl.lc.LanteaCraft;
-import pcl.lc.api.internal.HookedModelBase;
-import pcl.lc.core.ResourceAccess;
-import pcl.lc.module.machine.tile.TileCrystalInfuser;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
@@ -13,6 +7,12 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+
+import org.lwjgl.opengl.GL11;
+
+import pcl.lc.api.internal.HookedModelBase;
+import pcl.lc.core.ResourceAccess;
+import pcl.lc.module.machine.tile.TileCrystalInfuser;
 
 public class ModelCrystalInfuser extends HookedModelBase {
 	ModelRenderer MachineControls;

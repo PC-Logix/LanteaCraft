@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import pcl.lc.LanteaCraft;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
 import cpw.mods.fml.relauncher.Side;

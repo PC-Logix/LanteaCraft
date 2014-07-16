@@ -20,9 +20,9 @@ import pcl.lc.cfg.ModuleList;
 import pcl.lc.cfg.XMLParser;
 import pcl.lc.cfg.XMLSaver;
 import pcl.lc.client.audio.AudioEngine;
+import pcl.lc.core.GUIHandler;
 import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
-import pcl.lc.core.GUIHandler;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.ServerTickHandler;
 import pcl.lc.core.WorldLog;
@@ -95,9 +95,8 @@ public class LanteaCraftCommonProxy {
 				XMLParser parser = new XMLParser();
 				FileInputStream test = new FileInputStream(configFile);
 				moduleConfig = parser.read(test);
-			} else {
+			} else
 				moduleConfig = new ModuleList();
-			}
 		} catch (Throwable t) {
 			throw new RuntimeException("Error configuring LanteaCraft!", t);
 		}
@@ -125,14 +124,13 @@ public class LanteaCraftCommonProxy {
 
 	public void postInit(FMLPostInitializationEvent e) {
 		RegistrationHelper.flagLateRegistrationZone();
-		if (moduleConfig.modified()) {
+		if (moduleConfig.modified())
 			try {
 				XMLSaver saver = new XMLSaver();
 				saver.save(moduleConfig, new FileOutputStream(configFile));
 			} catch (Throwable t) {
 				LanteaCraft.getLogger().log(Level.WARN, "Failed updating configuration!", t);
 			}
-		}
 		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.getInstance(), guiHandler);
 		LanteaCraft.getLogger().log(Level.INFO, "LanteaCraft done setting up!");
 

@@ -9,7 +9,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import pcl.lc.LanteaCraft;
 import pcl.lc.core.ResourceAccess;
 
 public class BlockLanteaDecor extends Block {

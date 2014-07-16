@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.Tessellator;
 
 import org.lwjgl.opengl.GL11;
 
-import pcl.lc.LanteaCraft;
 import pcl.lc.core.ResourceAccess;
 
 public class GuiJacksonNotebook extends GuiScreen {

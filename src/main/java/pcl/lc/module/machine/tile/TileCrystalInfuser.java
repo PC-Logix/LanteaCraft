@@ -150,10 +150,9 @@ public class TileCrystalInfuser extends TileManaged {
 					source.play();
 			}
 
-			if (worldObj.isRemote && getProgress() >= 10.0f) {
+			if (worldObj.isRemote && getProgress() >= 10.0f)
 				if (source.isPlaying())
 					source.stop();
-			}
 
 			if (!worldObj.isRemote)
 				metadata.set("progress", getProgress() + 0.1f);
@@ -183,9 +182,8 @@ public class TileCrystalInfuser extends TileManaged {
 				}
 			}
 		} else {
-			if (getProgress() > 0.0f) {
+			if (getProgress() > 0.0f)
 				metadata.set("progress", 0.0f);
-			}
 			if (worldObj.isRemote && source != null && source.isPlaying())
 				source.stop();
 		}

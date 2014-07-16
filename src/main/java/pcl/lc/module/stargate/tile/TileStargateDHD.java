@@ -321,6 +321,6 @@ public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 	@Override
 	public void detectAndSendChanges() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

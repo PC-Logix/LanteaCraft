@@ -13,7 +13,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerBlock;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
@@ -92,7 +91,7 @@ public class BlockTransporterRing extends GenericContainerBlock {
 		topTexture = reg.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
 				"transport_ring_base"));
 		faceTexture = reg.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargateBlock"));
+				"stargate_block"));
 	}
 
 	@Override

@@ -39,7 +39,7 @@ public class ServerPacketHandler {
 				}
 			}
 		}
-		
+
 		TileEntity tile = w.getTileEntity(target.x, target.y, target.z);
 		if (tile instanceof IPacketHandler) {
 			IPacketHandler handler = (IPacketHandler) tile;

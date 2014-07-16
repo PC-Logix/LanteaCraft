@@ -30,7 +30,7 @@ public class ClientPacketHandler {
 		if (target == null)
 			LanteaCraft.getLogger().log(Level.WARN,
 					String.format("ModPacket type %s sent without OriginLocation, much bad!", packet.getClass()));
-		if (Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().theWorld.provider == null) 
+		if (Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().theWorld.provider == null)
 			return;
 		int currentWorld = Minecraft.getMinecraft().theWorld.provider.dimensionId;
 		if (currentWorld == target.dimension) {

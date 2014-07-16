@@ -5,14 +5,13 @@ import java.util.Set;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
-import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.base.render.WrittenFontRenderer;
 import pcl.lc.cfg.ConfigHelper;
 import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.ModuleManager;
-import pcl.lc.core.ResourceAccess;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.core.block.BlockLanteaOre;
 import pcl.lc.module.core.block.BlockOfLanteaOre;
 import pcl.lc.module.core.fluid.BlockLiquidNaquadah;
@@ -27,8 +26,8 @@ import pcl.lc.module.core.item.ItemLanteaOreBlock;
 import pcl.lc.module.core.item.ItemLanteaOreIngot;
 import pcl.lc.module.core.item.ItemTokraSpawnEgg;
 import pcl.lc.module.core.render.BlockModelRenderer;
-import pcl.lc.module.core.render.BlockVoidRenderer;
 import pcl.lc.module.core.render.BlockRotationOrientedRenderer;
+import pcl.lc.module.core.render.BlockVoidRenderer;
 import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -114,7 +113,7 @@ public class ModuleCore implements IModule {
 		Fluids.fluidLiquidNaquadahHost = RegistrationHelper.registerBlock(BlockLiquidNaquadah.class, ItemBlock.class,
 				"blockLiquidNaquadah", false);
 		Fluids.fluidLiquidNaquadahBucket = RegistrationHelper.registerSpecialBucket(Fluids.fluidLiquidNaquadahHost,
-				"liquidNaquadahBucket", "liquid-naquadah");
+				"liquidNaquadahBucket", "naquadah");
 
 		RegistrationHelper.registerOre("oreNaquadah", new ItemStack(Blocks.lanteaOre));
 		RegistrationHelper.registerOre("naquadah", new ItemStack(Items.lanteaOreItem));

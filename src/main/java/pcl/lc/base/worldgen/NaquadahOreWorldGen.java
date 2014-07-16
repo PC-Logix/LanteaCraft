@@ -31,14 +31,13 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 		ConfigList enabledOres = (ConfigList) ConfigHelper.findConfigByClass(cfg, "EnabledOres");
 		if (enabledOres != null) {
 			enabledOreSpawns.clear();
-			for (ConfigNode node : enabledOres.children()) {
+			for (ConfigNode node : enabledOres.children())
 				if (node.name().equalsIgnoreCase("Ore") && node.parameters().containsKey("name")
 						&& node.parameters().get("name") instanceof String) {
 					OreTypes typeof = OreTypes.fromString(node.parameters().get("name").toString());
 					if (typeof != null)
 						enabledOreSpawns.add(typeof);
 				}
-			}
 		} else {
 			enabledOres = new ConfigList("EnabledOres", "Enabled ore-generation list", cfg);
 			for (OreTypes typeof : enabledOreSpawns) {

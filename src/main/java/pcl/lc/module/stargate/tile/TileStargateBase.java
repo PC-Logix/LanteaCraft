@@ -38,7 +38,6 @@ import pcl.lc.api.EnumIrisState;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.base.TileManaged;
-import pcl.lc.base.data.ObserverContext;
 import pcl.lc.base.data.WatchedValue;
 import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;

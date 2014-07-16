@@ -1,9 +1,5 @@
 package pcl.lc.module.machine.block;
 
-import pcl.lc.LanteaCraft;
-import pcl.lc.base.RotationOrientedBlock;
-import pcl.lc.module.ModuleCore;
-import pcl.lc.module.machine.tile.TileCrystalInfuser;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -14,6 +10,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import pcl.lc.LanteaCraft;
+import pcl.lc.base.RotationOrientedBlock;
+import pcl.lc.module.ModuleCore;
+import pcl.lc.module.machine.tile.TileCrystalInfuser;
 
 public class BlockCrystalInfuser extends RotationOrientedBlock implements ITileEntityProvider {
 
@@ -42,7 +42,7 @@ public class BlockCrystalInfuser extends RotationOrientedBlock implements ITileE
 			return ModuleCore.Render.blockModelRenderer.renderID;
 		return -9001;
 	}
-	
+
 	@Override
 	public IIcon getIcon(int side, int meta) {
 		return blockIcon;
@@ -94,7 +94,7 @@ public class BlockCrystalInfuser extends RotationOrientedBlock implements ITileE
 
 	@Override
 	public void registerBlockIcons(IIconRegister reg) {
-		
+
 	}
 
 }

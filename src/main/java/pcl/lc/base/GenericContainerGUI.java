@@ -6,7 +6,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import pcl.lc.LanteaCraft;
 import pcl.lc.base.render.GlyphRenderer;
 import pcl.lc.core.ResourceAccess;
 

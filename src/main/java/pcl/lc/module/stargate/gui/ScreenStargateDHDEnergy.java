@@ -4,7 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
-import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerGUI;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.tile.TileStargateDHD;

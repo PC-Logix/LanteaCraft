@@ -22,7 +22,7 @@ public interface IIntegrationAgent {
 	 * Perform any extended integration logic.
 	 */
 	public void init();
-	
+
 	/**
 	 * Perform any final deferred integration logic.
 	 */

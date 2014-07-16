@@ -9,7 +9,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisType;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;

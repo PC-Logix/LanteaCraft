@@ -79,7 +79,7 @@ public class TileTransporterRing extends TileManaged {
 	@Override
 	public void detectAndSendChanges() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

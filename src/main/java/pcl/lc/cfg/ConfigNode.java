@@ -43,7 +43,7 @@ public class ConfigNode {
 	public ConfigNode(String name) {
 		this(name, null, null);
 	}
-	
+
 	public ConfigNode(String name, ConfigNode parent) {
 		this(name, null, parent);
 	}
@@ -51,12 +51,12 @@ public class ConfigNode {
 	public ConfigNode(String name, String comment) {
 		this(name, comment, null);
 	}
-	
+
 	public ConfigNode(String name, String comment, ConfigNode parent) {
 		this.name = name;
 		this.comment = comment;
 		this.parent = new WeakReference<ConfigNode>(parent);
-		this.parameters = new HashMap<String, Object>();
+		parameters = new HashMap<String, Object>();
 	}
 
 	public String name() {

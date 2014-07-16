@@ -57,7 +57,7 @@ public class ChunkLocation {
 		dimension = 0;
 		isStrongLocation = false;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof ChunkLocation))

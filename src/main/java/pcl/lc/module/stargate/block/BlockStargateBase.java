@@ -78,12 +78,12 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topAndBottomTexture = register.registerIcon(ResourceAccess.formatResourceName(
-				"${ASSET_KEY}:%s_${TEX_QUALITY}", "stargateBlock"));
+		topAndBottomTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"stargate_block"));
 		frontTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargateBase_front"));
+				"stargate_base_front"));
 		sideTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargateRing"));
+				"stargate_ring"));
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerGUI;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.power.tile.TileNaquadahGenerator;

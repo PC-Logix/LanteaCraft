@@ -52,15 +52,15 @@ public class WatchedListSyncPacket extends ModPacket {
 		for (Object modified : key_modified)
 			valueMap.put(modified, alist.get((String) modified));
 		for (Object deleted : key_remove)
-			if (valueMap.containsKey((String) deleted))
-				valueMap.remove((String) deleted);
+			if (valueMap.containsKey(deleted))
+				valueMap.remove(deleted);
 	}
 
 	public void apply(WatchedList<String, Object> alist) {
 		for (Object added : key_add)
-			alist.set((String) added, valueMap.get((String) added));
+			alist.set((String) added, valueMap.get(added));
 		for (Object modified : key_modified)
-			alist.set((String) modified, valueMap.get((String) modified));
+			alist.set((String) modified, valueMap.get(modified));
 		for (Object deleted : key_remove)
 			alist.remove((String) deleted);
 	}
@@ -239,7 +239,7 @@ public class WatchedListSyncPacket extends ModPacket {
 	public void setPacketIsForServer(boolean b) {
 		forServer = b;
 	}
-	
+
 	@Override
 	public boolean getPacketIsForServer() {
 		return forServer;

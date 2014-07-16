@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import pcl.lc.LanteaCraft;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleCore;
 import pcl.lc.module.decor.tile.TileLanteaDecorGlass;
@@ -50,8 +49,8 @@ public class BlockLanteaDecorGlass extends Block implements ITileEntityProvider 
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		lanteaGlassDefault = register.registerIcon(ResourceAccess.formatResourceName(
-				"${ASSET_KEY}:%s_${TEX_QUALITY}", "lantean_glass"));
+		lanteaGlassDefault = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"lantean_glass"));
 
 		missing = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:missing"));
 	}

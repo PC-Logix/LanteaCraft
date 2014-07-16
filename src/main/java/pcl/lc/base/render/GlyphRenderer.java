@@ -1,10 +1,7 @@
 package pcl.lc.base.render;
 
-import com.sun.naming.internal.ResourceManager;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import pcl.lc.LanteaCraft;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.GateAddressHelper;
 

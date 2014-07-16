@@ -1,13 +1,13 @@
 package pcl.lc.module.machine.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
 import pcl.lc.base.GenericContainer;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.inventory.FilteredSlot;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerCrystalInfuser extends GenericContainer {
 

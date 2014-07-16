@@ -79,10 +79,9 @@ public class ItemDebugTool extends Item {
 		if (entity instanceof TileNaquadahGenerator) {
 			TileNaquadahGenerator generator = (TileNaquadahGenerator) entity;
 			par2EntityPlayer.addChatMessage(new ChatComponentText("type: TileNaquadahGenerator"));
-			par2EntityPlayer.addChatMessage(new ChatComponentText("simulating: "
-					+ (Boolean) generator.metadata.get("simulating")));
-			par2EntityPlayer.addChatMessage(new ChatComponentText("energy: "
-					+ (Double) generator.metadata.get("energy")));
+			par2EntityPlayer
+					.addChatMessage(new ChatComponentText("simulating: " + generator.metadata.get("simulating")));
+			par2EntityPlayer.addChatMessage(new ChatComponentText("energy: " + generator.metadata.get("energy")));
 			par2EntityPlayer.addChatMessage(new ChatComponentText("exportEnergy: "
 					+ generator.getAvailableExportEnergy()));
 		}

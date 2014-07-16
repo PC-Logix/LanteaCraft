@@ -4,8 +4,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import org.apache.logging.log4j.Level;
-
 import li.cil.oc.api.Network;
 import li.cil.oc.api.driver.MethodWhitelist;
 import li.cil.oc.api.network.Arguments;
@@ -18,6 +16,9 @@ import li.cil.oc.api.network.Visibility;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;

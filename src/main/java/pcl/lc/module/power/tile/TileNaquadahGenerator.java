@@ -28,7 +28,7 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 		INaquadahGeneratorAccess {
 
 	public final double maxEnergy = 10.0d;
-	
+
 	public double displayEnergy = 0;
 	public double displayTankVolume = 0;
 

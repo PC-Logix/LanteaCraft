@@ -6,19 +6,19 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Set;
 
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+
 import org.apache.logging.log4j.Level;
 
-import net.minecraft.world.gen.structure.MapGenStructureIO;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.cfg.ConfigHelper;
-import pcl.lc.cfg.ConfigList;
 import pcl.lc.cfg.ConfigNode;
 import pcl.lc.cfg.DOMHelper;
 import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.ModuleManager;
-import pcl.lc.core.ResourceAccess;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.galaxy.IDimension;
 import pcl.lc.module.galaxy.MapGenFeatureStructureStart;
 import pcl.lc.module.galaxy.abydos.AbydosDimension;
@@ -49,7 +49,7 @@ public class ModuleGalaxy implements IModule {
 		}
 	}
 
-	public static class DimensionConfig extends ConfigList {
+	public static class DimensionConfig extends ConfigNode {
 		private Dimension dimension;
 
 		public DimensionConfig(String name, ConfigNode parent) {
@@ -98,11 +98,10 @@ public class ModuleGalaxy implements IModule {
 
 		ArrayList<ConfigNode> dimensionMap = ConfigHelper.findAllConfigByClass(config, "Dimension");
 		HashMap<String, DimensionConfig> dimensionConfigs = new HashMap<String, DimensionConfig>();
-		for (ConfigNode node : dimensionMap)
-			if (node instanceof ConfigList) {
-				DimensionConfig setup = (DimensionConfig) node;
-				dimensionConfigs.put(setup.parameters().get("name").toString(), setup);
-			}
+		for (ConfigNode node : dimensionMap) {
+			DimensionConfig setup = (DimensionConfig) node;
+			dimensionConfigs.put(setup.parameters().get("name").toString(), setup);
+		}
 
 		MapGenStructureIO.registerStructure(MapGenFeatureStructureStart.class,
 				ResourceAccess.formatResourceName("${ASSET_KEY}:LanteaCraft"));
@@ -116,7 +115,7 @@ public class ModuleGalaxy implements IModule {
 				config.children().add(dimensionSettings);
 				dimensionSettings.modify();
 			}
-			if (DOMHelper.popBoolean(dimensionSettings.parameters().get("enabled").toString(), false)) {
+			if (DOMHelper.popBoolean(dimensionSettings.parameters().get("enabled").toString(), false))
 				try {
 					dimensionSettings.setDimension(dimension);
 					Constructor<?> dimensionCtr = dimension.registrar
@@ -125,7 +124,6 @@ public class ModuleGalaxy implements IModule {
 				} catch (Throwable t) {
 					LanteaCraft.getLogger().log(Level.WARN, "Error when setting up dimension.", t);
 				}
-			}
 		}
 	}
 

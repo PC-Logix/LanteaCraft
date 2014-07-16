@@ -8,7 +8,7 @@ import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.module.stargate.StargatePart;
 import pcl.lc.util.WorldLocation;
 
-public class TileStargateRing extends TileManaged  {
+public class TileStargateRing extends TileManaged {
 	private StargatePart part = new StargatePart(this);
 
 	@Override
@@ -63,7 +63,7 @@ public class TileStargateRing extends TileManaged  {
 	@Override
 	public void detectAndSendChanges() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

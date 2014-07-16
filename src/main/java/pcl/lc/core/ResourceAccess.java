@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import net.minecraft.util.ResourceLocation;
+
 import org.apache.logging.log4j.Level;
 
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
-import net.minecraft.util.ResourceLocation;
 
 public class ResourceAccess {
 
@@ -68,23 +69,21 @@ public class ResourceAccess {
 	public static void saveRegistry() {
 		try {
 			PrintStream resources = new PrintStream(new File("resourceMap.txt"));
-			for (Entry<String, ArrayList<String>> access : resourceAccesses.entrySet()) {
+			for (Entry<String, ArrayList<String>> access : resourceAccesses.entrySet())
 				for (String source : access.getValue()) {
 					resources.print(access.getKey());
 					resources.print(": ");
 					resources.println(source);
 				}
-			}
 			resources.close();
 
 			PrintStream names = new PrintStream(new File("nameMap.txt"));
-			for (Entry<String, ArrayList<String>> access : nameAccesses.entrySet()) {
+			for (Entry<String, ArrayList<String>> access : nameAccesses.entrySet())
 				for (String source : access.getValue()) {
 					names.print(access.getKey());
 					names.print(": ");
 					names.println(source);
 				}
-			}
 			names.close();
 		} catch (IOException ioex) {
 			LanteaCraft.getLogger().log(Level.WARN, "Failed to save log!", ioex);

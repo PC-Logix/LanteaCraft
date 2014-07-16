@@ -26,10 +26,10 @@ import pcl.lc.util.Vector3;
 import pcl.lc.util.WorldLocation;
 
 public class ScreenStargateDHD extends GenericScreen {
-	
+
 	final static int dhdWidth = 260;
 	final static int dhdHeight = 180;
-	
+
 	final static double dhdRadius1 = dhdWidth * 0.1;
 	final static double dhdRadius2 = dhdWidth * 0.275;
 	final static double dhdRadius3 = dhdWidth * 0.45;
@@ -119,8 +119,8 @@ public class ScreenStargateDHD extends GenericScreen {
 	@Override
 	protected void keyTyped(char c, int key) {
 		if (key == Keyboard.KEY_ESCAPE) {
-			this.mc.displayGuiScreen((GuiScreen) null);
-			this.mc.setIngameFocus();
+			mc.displayGuiScreen((GuiScreen) null);
+			mc.setIngameFocus();
 		} else if (key == Keyboard.KEY_BACK || key == Keyboard.KEY_DELETE)
 			backspace();
 		else if (key == Keyboard.KEY_RETURN || key == Keyboard.KEY_NUMPADENTER)
@@ -199,7 +199,8 @@ public class ScreenStargateDHD extends GenericScreen {
 		double rx = dhdWidth * 48 / 512.0;
 		double ry = dhdHeight * 48 / (32.0 + 256.0);
 		Tessellator.instance.disableColor();
-		//drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry, 2 * rx, 1.5 * ry, 64, 0, 64, 48);
+		// drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry, 2 * rx, 1.5 * ry,
+		// 64, 0, 64, 48);
 		resetColor();
 		if (connected) {
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);

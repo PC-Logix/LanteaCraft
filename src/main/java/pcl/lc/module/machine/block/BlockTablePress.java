@@ -1,14 +1,14 @@
 package pcl.lc.module.machine.block;
 
-import pcl.lc.base.RotationOrientedBlock;
-import pcl.lc.module.ModuleCore;
-import pcl.lc.module.machine.tile.TileTablePress;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import pcl.lc.base.RotationOrientedBlock;
+import pcl.lc.module.ModuleCore;
+import pcl.lc.module.machine.tile.TileTablePress;
 
 public class BlockTablePress extends RotationOrientedBlock implements ITileEntityProvider {
 
@@ -51,7 +51,7 @@ public class BlockTablePress extends RotationOrientedBlock implements ITileEntit
 	@Override
 	public void registerBlockIcons(IIconRegister reg) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

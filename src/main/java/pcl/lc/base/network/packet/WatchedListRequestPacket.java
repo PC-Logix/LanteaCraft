@@ -27,7 +27,7 @@ public class WatchedListRequestPacket extends ModPacket {
 	}
 
 	public WatchedListRequestPacket(WorldLocation location) {
-		this.origin = location;
+		origin = location;
 	}
 
 	@Override

@@ -104,7 +104,7 @@ public class WatchedList<A, B> extends Observable {
 	public Iterator<A> keys() {
 		return values.keySet().iterator();
 	}
-	
+
 	/**
 	 * @see {@link HashMap#containsKey(Object)}
 	 */
@@ -196,11 +196,10 @@ public class WatchedList<A, B> extends Observable {
 	public ArrayList<A> modified() {
 		return key_modified;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		return values.equals(o);
 	}
-	
 
 }

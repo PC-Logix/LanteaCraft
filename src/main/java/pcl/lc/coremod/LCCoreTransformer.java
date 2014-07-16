@@ -39,8 +39,7 @@ public class LCCoreTransformer implements IClassTransformer {
 				transformers.add((IClassTransformer) Class.forName(transformer).newInstance());
 				LCCoreMod.getLogger().log(Level.DEBUG, "Instantiated transformer " + transformer);
 			} catch (Throwable e) {
-				LCCoreMod.getLogger()
-						.log(Level.WARN, "Could not instantiate transformer " + transformer);
+				LCCoreMod.getLogger().log(Level.WARN, "Could not instantiate transformer " + transformer);
 				e.printStackTrace();
 			}
 	}
@@ -58,11 +57,9 @@ public class LCCoreTransformer implements IClassTransformer {
 			try {
 				bytes = transformer.transform(name, transformedName, bytes);
 				if (bytes == null)
-					LCCoreMod.getLogger().log(Level.FATAL,
-							"Transformer " + transformer + " corrupted class " + name);
+					LCCoreMod.getLogger().log(Level.FATAL, "Transformer " + transformer + " corrupted class " + name);
 			} catch (Throwable e) {
-				LCCoreMod.getLogger().log(Level.WARN,
-						"Could not transform class " + name + " using " + transformer);
+				LCCoreMod.getLogger().log(Level.WARN, "Could not transform class " + name + " using " + transformer);
 				e.printStackTrace();
 			}
 		return bytes;

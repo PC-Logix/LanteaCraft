@@ -11,7 +11,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import pcl.lc.LanteaCraft;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleCore;
 import cpw.mods.fml.relauncher.Side;
@@ -60,8 +59,8 @@ public class BlockLiquidNaquadah extends BlockFluidClassic {
 	public void registerBlockIcons(IIconRegister register) {
 		fluidIcon = new IIcon[] {
 				register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-						"naquada_still")),
+						"naquadah_still")),
 				register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-						"naquada_flow")) };
+						"naquadah_flow")) };
 	}
 }

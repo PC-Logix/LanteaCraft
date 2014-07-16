@@ -14,7 +14,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerBlock;
 import pcl.lc.base.multiblock.EnumOrientations;
 import pcl.lc.core.ResourceAccess;
@@ -55,12 +54,12 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topAndBottomTexture = register.registerIcon(ResourceAccess.formatResourceName(
-				"${ASSET_KEY}:%s_${TEX_QUALITY}", "stargateBlock"));
+		topAndBottomTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"stargate_block"));
 		sideTextures[0] = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargateRing"));
+				"stargate_ring"));
 		sideTextures[1] = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargateChevron"));
+				"stargate_chevron"));
 	}
 
 	@Override

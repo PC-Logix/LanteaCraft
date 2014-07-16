@@ -2,12 +2,13 @@ package pcl.lc.module.core.render;
 
 import java.util.HashMap;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
+
+import org.lwjgl.opengl.GL11;
+
 import pcl.lc.api.internal.HookedModelBase;
 import pcl.lc.base.GenericBlockRenderer;
 

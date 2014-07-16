@@ -11,8 +11,8 @@ import pcl.lc.api.internal.IModule;
 import pcl.lc.cfg.ConfigHelper;
 import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.ModuleManager;
-import pcl.lc.core.ResourceAccess;
 import pcl.lc.core.ModuleManager.Module;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
 import pcl.lc.module.stargate.block.BlockStargateBase;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
@@ -160,12 +160,12 @@ public class ModuleStargates implements IModule {
 				ContainerStargateDHDEnergy.class);
 
 		if (event.getSide() == Side.CLIENT) {
-			Render.modelController = new ModelStargateDHD(ResourceAccess.getNamedResource("models/dhd.obj"));
+			Render.modelController = new ModelStargateDHD(ResourceAccess.getNamedResource("models/model_dhd.obj"));
 
 			Render.modelRingPlatformBase = new ModelRingPlatformBase(
-					ResourceAccess.getNamedResource("models/transport_rings_base.obj"));
+					ResourceAccess.getNamedResource("models/model_transport_ring_base.obj"));
 			Render.modelRingPlatformRing = new ModelRingPlatformRing(
-					ResourceAccess.getNamedResource("models/transport_rings.obj"));
+					ResourceAccess.getNamedResource("models/model_transport_ring.obj"));
 
 			Render.tileEntityBaseRenderer = new TileStargateBaseRenderer();
 			RegistrationHelper.addTileEntityRenderer(TileStargateBase.class, Render.tileEntityBaseRenderer);

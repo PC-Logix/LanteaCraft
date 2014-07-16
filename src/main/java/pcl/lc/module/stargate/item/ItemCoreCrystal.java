@@ -1,7 +1,6 @@
 package pcl.lc.module.stargate.item;
 
 import net.minecraft.item.Item;
-import pcl.lc.LanteaCraft;
 import pcl.lc.core.ResourceAccess;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

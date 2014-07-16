@@ -1,7 +1,5 @@
 package pcl.lc.base;
 
-import org.apache.logging.log4j.Level;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,6 +7,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.apache.logging.log4j.Level;
+
 import pcl.lc.LanteaCraft;
 import pcl.lc.util.Trans3;
 import pcl.lc.util.Vector3;

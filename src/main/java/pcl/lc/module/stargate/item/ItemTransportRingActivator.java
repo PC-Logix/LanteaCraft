@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import pcl.lc.LanteaCraft;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.tile.TileTransporterRing;

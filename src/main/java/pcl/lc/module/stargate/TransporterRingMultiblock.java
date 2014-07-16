@@ -108,8 +108,8 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 	}
 
 	public void connect() {
-		ArrayList<Vector3> others = ScanningHelper.findAllTileEntitesOf(host.getWorldObj(),
-				TileTransporterRing.class, xCoord, yCoord, zCoord,
+		ArrayList<Vector3> others = ScanningHelper.findAllTileEntitesOf(host.getWorldObj(), TileTransporterRing.class,
+				xCoord, yCoord, zCoord,
 				AxisAlignedBB.getBoundingBox(-10, -yCoord, -10, 10, host.getWorldObj().getHeight(), 10));
 		Vector3 vectorHere = new Vector3(host);
 		for (Vector3 other : others) {

@@ -2,20 +2,20 @@ package pcl.lc.module.machine.render;
 
 import java.util.Random;
 
-import org.lwjgl.opengl.GL11;
-
-import com.google.common.primitives.SignedBytes;
-
-import pcl.lc.LanteaCraft;
-import pcl.lc.api.internal.LanteaInternalRecipe;
-import pcl.lc.core.ResourceAccess;
-import pcl.lc.module.machine.tile.TileCrystalInfuser;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
+import org.lwjgl.opengl.GL11;
+
+import pcl.lc.api.internal.LanteaInternalRecipe;
+import pcl.lc.core.ResourceAccess;
+import pcl.lc.module.machine.tile.TileCrystalInfuser;
+
+import com.google.common.primitives.SignedBytes;
 
 public class TileCrystalInfuserRenderer extends TileEntitySpecialRenderer {
 
@@ -61,8 +61,8 @@ public class TileCrystalInfuserRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		if (tile.getDistanceFrom(this.field_147501_a.field_147560_j, this.field_147501_a.field_147561_k,
-				this.field_147501_a.field_147558_l) < 128d) {
+		if (tile.getDistanceFrom(field_147501_a.field_147560_j, field_147501_a.field_147561_k,
+				field_147501_a.field_147558_l) < 128d) {
 
 			ItemStack renderItem = null;
 			ItemStack renderNextItem = null;

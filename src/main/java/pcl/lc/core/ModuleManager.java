@@ -15,7 +15,6 @@ import pcl.lc.cfg.ModuleList;
 import pcl.lc.module.ModuleCore;
 import pcl.lc.module.ModuleCritters;
 import pcl.lc.module.ModuleDecor;
-import pcl.lc.module.ModuleGalaxy;
 import pcl.lc.module.ModuleIntegration;
 import pcl.lc.module.ModuleMachine;
 import pcl.lc.module.ModulePower;
@@ -42,7 +41,7 @@ public class ModuleManager {
 	public static enum Module {
 		CORE(new ModuleCore()), STARGATE(new ModuleStargates()), POWER(new ModulePower()), MACHINE(new ModuleMachine()), WORLDGEN(
 				new ModuleWorldGenerator()), CRITTERS(new ModuleCritters()), DECOR(new ModuleDecor()), INTEGRATION(
-				new ModuleIntegration()), GALAXY(new ModuleGalaxy());
+				new ModuleIntegration()); /* , GALAXY(new ModuleGalaxy()); */
 
 		private final IModule moduleOf;
 		private boolean loaded = false;

@@ -1,12 +1,12 @@
 package pcl.lc.module.machine.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import org.lwjgl.opengl.GL11;
 
-import pcl.lc.LanteaCraft;
 import pcl.lc.base.GenericContainerGUI;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class ScreenCrystalInfuser extends GenericContainerGUI {
 

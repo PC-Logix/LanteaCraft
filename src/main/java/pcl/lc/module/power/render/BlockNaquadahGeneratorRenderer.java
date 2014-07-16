@@ -18,7 +18,7 @@ public class BlockNaquadahGeneratorRenderer extends GenericBlockRenderer {
 
 	public BlockNaquadahGeneratorRenderer() {
 		texture = ResourceAccess.getNamedResource(ResourceAccess
-				.formatResourceName("textures/models/naquada_generator_off_${TEX_QUALITY}.png"));
+				.formatResourceName("textures/models/naquadah_generator_off_${TEX_QUALITY}.png"));
 	}
 
 	@Override

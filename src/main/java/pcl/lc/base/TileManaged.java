@@ -38,7 +38,7 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 	 */
 	@Override
 	public void updateEntity() {
-		this.think();
+		think();
 		if (!worldObj.isRemote) {
 			if (metadata.modified(metacontext)) {
 				WatchedListSyncPacket packet = new WatchedListSyncPacket(new WorldLocation(this), metadata);
@@ -47,18 +47,16 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 				metadata.clearModified(metacontext);
 			}
 			detectAndSendChanges();
+		} else if (!cli_synchronized) {
+			cli_synchronized = true;
+			cli_synchronize_wait = 120;
+			WatchedListRequestPacket packet = new WatchedListRequestPacket(new WorldLocation(this));
+			LanteaCraft.getNetPipeline().sendToServer(packet);
 		} else {
-			if (!cli_synchronized) {
-				cli_synchronized = true;
-				cli_synchronize_wait = 120;
-				WatchedListRequestPacket packet = new WatchedListRequestPacket(new WorldLocation(this));
-				LanteaCraft.getNetPipeline().sendToServer(packet);
-			} else {
-				if (cli_synchronize_wait > 0)
-					cli_synchronize_wait--;
-				if (cli_synchronize_wait == 0)
-					cli_synchronized = false;
-			}
+			if (cli_synchronize_wait > 0)
+				cli_synchronize_wait--;
+			if (cli_synchronize_wait == 0)
+				cli_synchronized = false;
 		}
 	}
 
@@ -330,7 +328,7 @@ public abstract class TileManaged extends TileEntity implements IInventory, ISid
 			WatchedListSyncPacket sync = (WatchedListSyncPacket) packetOf;
 			sync.apply(metadata);
 		} else
-			this.thinkPacket(packetOf, player);
+			thinkPacket(packetOf, player);
 	}
 
 }

@@ -23,11 +23,11 @@ public class LanteaInternalRecipe {
 	public boolean shapeless() {
 		return r_shapeless;
 	}
-	
+
 	public int products() {
 		return r_products.size();
 	}
-	
+
 	public int reagents() {
 		return r_stacklist.size();
 	}
@@ -35,7 +35,7 @@ public class LanteaInternalRecipe {
 	public ItemStack reagent(int i) {
 		return r_stacklist.get(i);
 	}
-	
+
 	public ItemStack product(int i) {
 		return r_products.get(i);
 	}

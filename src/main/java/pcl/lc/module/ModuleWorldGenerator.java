@@ -65,7 +65,7 @@ public class ModuleWorldGenerator implements IModule {
 
 		LanteaCraft.getLogger().log(Level.DEBUG, "Registering LanteaCraft NaquadahOre generator...");
 		naquadahOreGenerator = new NaquadahOreWorldGen();
-		naquadahOreGenerator.configure(ModuleManager.getConfig(this));
+		NaquadahOreWorldGen.configure(ModuleManager.getConfig(this));
 		GameRegistry.registerWorldGenerator(naquadahOreGenerator, 0);
 	}
 
