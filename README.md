@@ -31,6 +31,7 @@ You should setup the decompile environment if you plan on using Eclipse:
 
 
 The build tasks and gradle setup has been configured to operate out of the box, but requires some user-end setup before it will work properly.
+
 1. Use the pre-set Eclipse directory as your workspace.
 2. By default, you should already have `/src/main/java` set as a Source folder; if not, add it.
 3. Add `/src/externs/java` and `/src/main/resources` as Source folders if they are not Source folders.
