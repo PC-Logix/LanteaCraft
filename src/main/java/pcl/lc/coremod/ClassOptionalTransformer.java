@@ -40,7 +40,7 @@ public class ClassOptionalTransformer implements IClassTransformer {
 			MethodNode method = decMethods.next();
 			if (method.visibleAnnotations != null)
 				for (AnnotationNode a : method.visibleAnnotations)
-					if (a.desc.equals("Lpcl/common/asm/RuntimeAnnotation$RuntimeInterface;")) {
+					if (a.desc.equals("Lpcl/lc/coremod/RuntimeAnnotation$RuntimeInterface;")) {
 						int k = a.values.indexOf("modid"), l = a.values.indexOf("clazz");
 						String modname = (String) a.values.get(k + 1), iface = (String) a.values.get(l + 1);
 						if (Loader.isModLoaded(modname)) {
