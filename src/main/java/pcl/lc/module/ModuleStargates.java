@@ -46,6 +46,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ModuleStargates implements IModule {
 
@@ -62,6 +63,7 @@ public class ModuleStargates implements IModule {
 		public static ItemTransportRingActivator transportRingActivator;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Render {
 		public static ModelStargateDHD modelController;
 		public static ModelRingPlatformBase modelRingPlatformBase;

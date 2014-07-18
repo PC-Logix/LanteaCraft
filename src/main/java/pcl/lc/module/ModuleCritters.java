@@ -71,10 +71,10 @@ public class ModuleCritters implements IModule {
 
 		if (event.getSide() == Side.CLIENT) {
 			Render.entityTokraRenderer = new EntityTokraRenderer();
-			RenderingRegistry.registerEntityRenderingHandler(EntityTokra.class, Render.entityTokraRenderer);
+			RegistrationHelper.registerEntityRenderer(EntityTokra.class, Render.entityTokraRenderer);
 
 			Render.entityReplicatorRenderer = new EntityReplicatorRenderer();
-			RenderingRegistry.registerEntityRenderingHandler(EntityReplicator.class, Render.entityReplicatorRenderer);
+			RegistrationHelper.registerEntityRenderer(EntityReplicator.class, Render.entityReplicatorRenderer);
 		}
 	}
 

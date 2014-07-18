@@ -39,9 +39,14 @@ public class ModuleManager {
 	 * 
 	 */
 	public static enum Module {
-		CORE(new ModuleCore()), STARGATE(new ModuleStargates()), POWER(new ModulePower()), MACHINE(new ModuleMachine()), WORLDGEN(
-				new ModuleWorldGenerator()), CRITTERS(new ModuleCritters()), DECOR(new ModuleDecor()), INTEGRATION(
-				new ModuleIntegration()); /* , GALAXY(new ModuleGalaxy()); */
+		CORE(new ModuleCore()), 
+		STARGATE(new ModuleStargates()), 
+		POWER(new ModulePower()), 
+		MACHINE(new ModuleMachine()), 
+		WORLDGEN(new ModuleWorldGenerator()), 
+		CRITTERS(new ModuleCritters()), 
+		DECOR(new ModuleDecor()), 
+		INTEGRATION(new ModuleIntegration()); /* , GALAXY(new ModuleGalaxy()); */
 
 		private final IModule moduleOf;
 		private boolean loaded = false;

@@ -6,7 +6,9 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -351,11 +353,15 @@ public class RegistrationHelper {
 	 * @param renderer
 	 *            The renderer object
 	 */
-	public static void addTileEntityRenderer(Class<? extends TileEntity> teClass, TileEntitySpecialRenderer renderer) {
+	public static void addTileEntityRenderer(Class<? extends TileEntity> teClass, Object renderer) {
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger().log(Level.WARN,
 					"Warning, registration of this tile-entity renderer is later than was expected!");
-		ClientRegistry.bindTileEntitySpecialRenderer(teClass, renderer);
+		ClientRegistry.bindTileEntitySpecialRenderer(teClass, (TileEntitySpecialRenderer) renderer);
+	}
+
+	public static void registerEntityRenderer(Class<? extends Entity> entity, Object renderer) {
+		RenderingRegistry.registerEntityRenderingHandler(entity, (Render) renderer);
 	}
 
 	/**
