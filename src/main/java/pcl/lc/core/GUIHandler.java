@@ -31,7 +31,6 @@ public class GUIHandler implements IGuiHandler {
 			} catch (Throwable t) {
 				LanteaCraft.getLogger().log(Level.WARN, "Failed to create GUI component!", t);
 			}
-		LanteaCraft.getLogger().log(Level.WARN, String.format("Could not find component with ID %s!", ID));
 		return null;
 	}
 

@@ -104,22 +104,7 @@ public class BlockStargateDHD extends RotationOrientedBlock {
 		if (side != ForgeDirection.UP.ordinal())
 			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateDHDEnergy.ordinal(), world, x, y, z);
 		else {
-			if (world.isRemote) {
-				TileStargateDHD tile = (TileStargateDHD) world.getTileEntity(x, y, z);
-				try {
-					Class<?> guiClazz = Class.forName("net.minecraft.client.gui.GuiScreen", false, this.getClass()
-							.getClassLoader());
-					Class<?> screenClazz = Class.forName("pcl.lc.module.stargate.gui.ScreenStargateDHD", false, this
-							.getClass().getClassLoader());
-					Method showScreen = Minecraft.class.getMethod("displayGuiScreen", guiClazz);
-					Constructor<?> c = screenClazz.getConstructor(new Class<?>[] { TileStargateDHD.class,
-							EntityPlayer.class });
-					Object o1 = c.newInstance(tile, player);
-					showScreen.invoke(Minecraft.getMinecraft(), o1);
-				} catch (Throwable t) {
-					LanteaCraft.getLogger().log(Level.WARN, "Could not open DHD interface!", t);
-				}
-			}
+			player.openGui(LanteaCraft.getInstance(), LanteaCraft.EnumGUIs.StargateDHD.ordinal(), world, x, y, z);
 		}
 		return true;
 	}

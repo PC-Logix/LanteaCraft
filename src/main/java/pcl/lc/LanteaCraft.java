@@ -118,7 +118,7 @@ public class LanteaCraft {
 	}
 
 	public static enum EnumGUIs {
-		StargateBase, StargateDHDEnergy, NaquadahGenerator, CrystalInfuser;
+		StargateBase, StargateDHD, StargateDHDEnergy, NaquadahGenerator, CrystalInfuser;
 	}
 
 	/**
