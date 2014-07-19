@@ -4,9 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 
 import org.apache.logging.log4j.Level;
@@ -120,6 +126,15 @@ public class LanteaCraftCommonProxy {
 		FMLCommonHandler.instance().bus().register(serverTickHandler);
 		networkHelpers.init();
 		moduleManager.init(e);
+
+		ForgeChunkManager.setForcedChunkLoadingCallback(LanteaCraft.getInstance(), new LoadingCallback() {
+			@Override
+			public void ticketsLoaded(List<Ticket> tickets, World world) {
+				Iterator<Ticket> iter = tickets.iterator();
+				while (iter.hasNext())
+					ForgeChunkManager.releaseTicket(iter.next());
+			}
+		});
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
