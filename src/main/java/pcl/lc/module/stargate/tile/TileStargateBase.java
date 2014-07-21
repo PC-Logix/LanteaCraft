@@ -674,40 +674,53 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 
 	@Override
 	public void thinkPacket(ModPacket packetOf, EntityPlayer player) {
-		if (BuildInfo.DEBUG)
-			LanteaCraft.getLogger().log(Level.INFO, String.format("Handling packet type %s.", packetOf.getType()));
-		if (packetOf.getType().equals("LanteaPacket.MultiblockUpdate"))
-			getAsStructure().unpack(packetOf);
-		else if (packetOf.getType().equals("LanteaPacket.ConnectionUpdate")) {
+		if (worldObj.isRemote) {
 			if (BuildInfo.DEBUG)
-				LanteaCraft.getLogger().log(Level.INFO, "Accepted connection status update.");
-			if (connection_cli == null) {
-				// uhoh!
-			}
-			StandardModPacket payload = (StandardModPacket) packetOf;
-			if (payload.hasFieldWithValue("running"))
-				connection_cli.running.set((Boolean) payload.getValue("running"));
-			if (payload.hasFieldWithValue("chevrons"))
-				connection_cli.chevrons.set((Integer) payload.getValue("chevrons"));
-			if (payload.hasFieldWithValue("state"))
-				connection_cli.state.set((EnumStargateState) payload.getValue("state"));
-			if (payload.hasFieldWithValue("symbol"))
-				connection_cli.symbol.set((Character) payload.getValue("symbol"));
-		} else if (packetOf.getType().equals("LanteaPacket.ConnectionSet")) {
-			StandardModPacket payload = (StandardModPacket) packetOf;
-			ClientConnectionRequest req = new ClientConnectionRequest((String) payload.getValue("name"),
-					(String) payload.getValue("hostName"), (String) payload.getValue("clientName"),
-					(String) payload.getValue("hostAddress"), (String) payload.getValue("clientAddress"),
-					(Boolean) payload.getValue("isHost"));
-			req.running.set((Boolean) payload.getValue("running"));
-			req.chevrons.set((Integer) payload.getValue("chevrons"));
-			req.state.set((EnumStargateState) payload.getValue("state"));
-			req.symbol.set((Character) payload.getValue("symbol"));
-			setClientConnection(req);
-		} else
-			LanteaCraft.getLogger().log(Level.WARN, String.format("Strange packet type %s.", packetOf.getType()));
-
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				LanteaCraft.getLogger().log(Level.TRACE,
+						String.format("Handling client packet type %s.", packetOf.getType()));
+			if (packetOf.getType().equals("LanteaPacket.MultiblockUpdate"))
+				getAsStructure().unpack(packetOf);
+			else if (packetOf.getType().equals("LanteaPacket.ConnectionUpdate")) {
+				if (BuildInfo.DEBUG)
+					LanteaCraft.getLogger().log(Level.TRACE, "Accepted connection status update.");
+				if (connection_cli != null) {
+					StandardModPacket payload = (StandardModPacket) packetOf;
+					if (payload.hasFieldWithValue("running"))
+						connection_cli.running.set((Boolean) payload.getValue("running"));
+					if (payload.hasFieldWithValue("chevrons"))
+						connection_cli.chevrons.set((Integer) payload.getValue("chevrons"));
+					if (payload.hasFieldWithValue("state"))
+						connection_cli.state.set((EnumStargateState) payload.getValue("state"));
+					if (payload.hasFieldWithValue("symbol"))
+						connection_cli.symbol.set((Character) payload.getValue("symbol"));
+				} else {
+					StandardModPacket packet = new StandardModPacket(new WorldLocation(this));
+					packet.setIsForServer(true);
+					packet.setType("LanteaPacket.ConnectionStatusRequest");
+					LanteaCraft.getNetPipeline().sendToServer(packet);
+				}
+			} else if (packetOf.getType().equals("LanteaPacket.ConnectionSet")) {
+				StandardModPacket payload = (StandardModPacket) packetOf;
+				ClientConnectionRequest req = new ClientConnectionRequest((String) payload.getValue("name"),
+						(String) payload.getValue("hostName"), (String) payload.getValue("clientName"),
+						(String) payload.getValue("hostAddress"), (String) payload.getValue("clientAddress"),
+						(Boolean) payload.getValue("isHost"));
+				req.running.set((Boolean) payload.getValue("running"));
+				req.chevrons.set((Integer) payload.getValue("chevrons"));
+				req.state.set((EnumStargateState) payload.getValue("state"));
+				req.symbol.set((Character) payload.getValue("symbol"));
+				setClientConnection(req);
+			} else
+				LanteaCraft.getLogger().log(Level.WARN,
+						String.format("Strange packet type, ignoring %s.", packetOf.getType()));
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		} else {
+			if (packetOf.getType().equals("LanteaPacket.ConnectionStatusRequest"))
+				getDescriptionPacket();
+			else
+				LanteaCraft.getLogger().log(Level.WARN,
+						String.format("Strange packet type, ignoring %s.", packetOf.getType()));
+		}
 	}
 
 	public void hostBlockDestroyed() {
