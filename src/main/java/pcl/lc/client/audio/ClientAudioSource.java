@@ -20,7 +20,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 	private SoundSystem system;
 	private AudioPosition position;
 	private String name;
-	private boolean valid, culled;
+	private boolean valid, culled, paused;
 	private float configuredVolume, realVolume;
 
 	public ClientAudioSource(SoundSystem system, AudioPosition position, String file, boolean looping,
@@ -61,14 +61,11 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 						String.format("Can't play sound %s because it's already playing.", name));
 			return;
 		}
-		if (culled) {
-			if (BuildInfo.SS_DEBUGGING)
-				LanteaCraft.getLogger()
-						.log(Level.INFO, String.format("Can't play sound %s because it's culled.", name));
-			return;
-		}
+		if (culled) 
+			activate();
 		if (name == null)
 			LanteaCraft.getLogger().log(Level.WARN, "Attempt to perform audio operation on illegal label.");
+		paused = false;
 		system.play(name);
 	}
 
@@ -76,6 +73,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 	public void pause() {
 		if (!valid || !isPlaying() || culled)
 			return;
+		paused = true;
 		system.pause(name);
 	}
 
@@ -147,7 +145,7 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 		float rolloff = 1.0F, rd = 1.0F;
 
 		float d = 0.0F;
-
+		
 		if (position.world.equals(clientPlayer.worldObj))
 			d = (float) position.position.sub(new Vector3(clientPlayer)).mag();
 
@@ -218,5 +216,12 @@ public class ClientAudioSource extends AudioSource implements Comparable<ClientA
 		if (!valid || name == null)
 			return false;
 		return system.playing(name);
+	}
+	
+	@Override
+	public boolean isPaused() {
+		if (!valid || name == null)
+			return false;
+		return paused;
 	}
 }

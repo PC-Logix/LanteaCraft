@@ -44,16 +44,14 @@ public class ScreenStargateDHD extends GenericScreen {
 	private int ticks = 0, ticksWarning = 0;
 
 	private SoundHost soundHost;
-	private AudioPosition soundHostPosition;
 
 	public ScreenStargateDHD(TileStargateDHD controller, EntityPlayer actor) {
 		super();
 		this.controller = controller;
 		dhdLayer = ResourceAccess.getNamedResource("textures/gui/dhd_gui.png");
 		dhdButtonLayer = ResourceAccess.getNamedResource("textures/gui/dhd_centre.png");
-		soundHost = new SoundHost(controller);
-		soundHostPosition = new AudioPosition(controller.getWorldObj(), new Vector3(controller));
-		soundHost.addChannel("click", "stargate/milkyway/milkyway_dhd_button.ogg", soundHostPosition, 1.0f, 0);
+		soundHost = new SoundHost(controller, new AudioPosition(controller.getWorld(), new Vector3(controller)));
+		soundHost.registerChannel("click", "stargate/milkyway/milkyway_dhd_button.ogg", 1.0f, 0);
 	}
 
 	TileStargateBase getStargateTE() {

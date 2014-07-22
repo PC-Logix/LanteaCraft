@@ -12,53 +12,72 @@ import pcl.lc.LanteaCraft;
 public class SoundHost {
 
 	protected final Object owner;
-	private HashMap<String, AudioSourceWrapper> sources;
-	private ArrayList<String> dead_sources;
+	protected final AudioPosition ownerPosition;
+	private final HashMap<String, AudioSourceDef> defs;
+	private final HashMap<String, AudioSourceWrapper> sources;
+	private final ArrayList<String> dead_sources;
 
-	private class AudioSourceWrapper {
-		private String filename;
-		private AudioPosition position;
-		private float volume;
+	private class AudioSourceDef {
+		protected final String filename;
+		protected final float volume;
+		protected final int maxAge;
 
-		private AudioSource vsource;
-		private int maxAge;
-		private int age;
-		private boolean stopped;
-
-		public AudioSourceWrapper(String filename, AudioPosition position, float volume, int maxAge) {
+		public AudioSourceDef(String filename, float volume, int maxAge) {
 			this.filename = filename;
-			this.position = position;
 			this.volume = volume;
 			this.maxAge = maxAge;
+		}
+	}
+
+	private class AudioSourceWrapper {
+		private final SoundHost host;
+		private final AudioSourceDef def;
+		private AudioSource vsource;
+		private int age;
+		private boolean stopped, gcollected;
+
+		public AudioSourceWrapper(SoundHost host, AudioSourceDef def) {
+			this.host = host;
+			this.def = def;
 		}
 
 		public void tick() {
 			if (!playing() || stopped)
 				return;
-			if (maxAge > 0)
+			if (def.maxAge > 0) {
 				age++;
-			if (age > maxAge)
-				stop();
+				if (age > def.maxAge)
+					stop();
+			}
 		}
 
 		public boolean alive() {
-			return ((0 > maxAge) || (maxAge > age)) && playing();
+			return ((0 > def.maxAge) || (def.maxAge > age)) && playing();
 		}
 
-		public boolean canPlay() {
-			return !stopped;
+		public boolean dead() {
+			if (gcollected)
+				return true;
+			if ((def.maxAge > 0 && age > def.maxAge) || stopped)
+				return true;
+			if (vsource != null && !vsource.isPlaying() && !vsource.isPaused())
+				return true;
+			return false;
 		}
 
 		public void setupSource() {
 			AudioEngine engine = LanteaCraft.getProxy().getAudioEngine();
-			vsource = engine.create(owner, position, filename, 0 > age, false, volume);
+			vsource = engine.create(owner, host.ownerPosition, def.filename, 0 > age, false, def.volume);
 		}
 
 		public void play() {
+			if (gcollected)
+				return;
 			if (vsource == null)
 				setupSource();
 			if (vsource.isPlaying())
 				vsource.stop();
+			stopped = false;
 			vsource.play();
 		}
 
@@ -67,11 +86,15 @@ public class SoundHost {
 		}
 
 		public void pause() {
+			if (gcollected)
+				return;
 			if (vsource != null)
 				vsource.pause();
 		}
 
 		public void stop() {
+			if (gcollected)
+				return;
 			if (vsource != null)
 				vsource.stop();
 			vsource = null;
@@ -82,66 +105,77 @@ public class SoundHost {
 			if (vsource != null) {
 				vsource.stop();
 				vsource.remove();
+				gcollected = true;
 			}
 		}
 	}
 
-	public SoundHost(Object owner) {
+	public SoundHost(Object owner, AudioPosition ownerPosition) {
 		this.owner = owner;
-		sources = new HashMap<String, AudioSourceWrapper>();
-		dead_sources = new ArrayList<String>();
+		this.ownerPosition = ownerPosition;
+		this.defs = new HashMap<String, AudioSourceDef>();
+		this.sources = new HashMap<String, AudioSourceWrapper>();
+		this.dead_sources = new ArrayList<String>();
 	}
 
 	public void tick() {
 		for (Entry<String, AudioSourceWrapper> wrapper : sources.entrySet()) {
 			wrapper.getValue().tick();
-			if (!wrapper.getValue().canPlay())
+			if (wrapper.getValue().dead())
 				dead_sources.add(wrapper.getKey());
 		}
-		for (String dead : dead_sources)
-			sources.remove(dead);
-		dead_sources.clear();
-	}
 
-	public void addChannel(String name, String filename, AudioPosition position, float volume, int age) {
-		if (BuildInfo.SS_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO,
-					String.format("SoundHost operation: ADD %s %s %s", filename, volume, age));
-		synchronized (sources) {
-			sources.put(name, new AudioSourceWrapper(filename, position, volume, age));
+		if (dead_sources.size() > 0) {
+			for (String dead : dead_sources) {
+				AudioSourceWrapper wrapper = sources.get(dead);
+				wrapper.shutdown();
+				sources.remove(dead);
+			}
+			dead_sources.clear();
 		}
 	}
 
-	public boolean channelExists(String channel) {
-		return sources.containsKey(channel) && sources.get(channel) != null;
+	public void registerChannel(String name, String filename, float volume, int age) {
+		if (!defs.containsKey(name))
+			defs.put(name, new AudioSourceDef(filename, volume, age));
+	}
+
+	public AudioSourceWrapper findOrCreateWrapper(String key) {
+		for (Entry<String, AudioSourceWrapper> wrapper : sources.entrySet())
+			if (wrapper.getKey().equalsIgnoreCase(key))
+				return wrapper.getValue();
+		AudioSourceDef def = defs.get(key.toLowerCase());
+		if (def == null)
+			return null;
+		AudioSourceWrapper wrapper = new AudioSourceWrapper(this, def);
+		sources.put(key.toLowerCase(), wrapper);
+		return wrapper;
 	}
 
 	public void playChannel(String channel) {
-		if (BuildInfo.SS_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO, String.format("SoundHost operation: PLAY %s", channel));
-		AudioSourceWrapper wrapper = sources.get(channel);
+		AudioSourceWrapper wrapper = findOrCreateWrapper(channel);
 		if (wrapper != null) {
 			if (wrapper.playing())
 				wrapper.stop();
 			wrapper.play();
-		}
+		} else
+			LanteaCraft.getLogger().log(Level.WARN, String.format("No such channel %s.", channel));
 	}
 
 	public void pauseChannel(String channel) {
-		if (BuildInfo.SS_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO, String.format("SoundHost operation: PAUSE %s", channel));
-		AudioSourceWrapper wrapper = sources.get(channel);
-		if (wrapper != null)
+		AudioSourceWrapper wrapper = findOrCreateWrapper(channel);
+		if (wrapper != null) {
 			wrapper.pause();
+		} else
+			LanteaCraft.getLogger().log(Level.WARN, String.format("No such channel %s.", channel));
 	}
 
 	public void stopChannel(String channel) {
-		if (BuildInfo.SS_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO, String.format("SoundHost operation: STOP %s", channel));
-		AudioSourceWrapper wrapper = sources.get(channel);
-		if (wrapper != null)
+		AudioSourceWrapper wrapper = findOrCreateWrapper(channel);
+		if (wrapper != null) {
 			wrapper.stop();
-		sources.remove(channel);
+		} else
+			LanteaCraft.getLogger().log(Level.WARN, String.format("No such channel %s.", channel));
 	}
 
 	public void shutdown(boolean force) {
@@ -149,13 +183,10 @@ public class SoundHost {
 			for (AudioSourceWrapper wrapper : sources.values())
 				if (wrapper.playing())
 					return;
-		if (BuildInfo.SS_DEBUGGING)
-			LanteaCraft.getLogger().log(Level.INFO, String.format("SoundHost operation: SHUTDOWN"));
 		for (AudioSourceWrapper wrapper : sources.values()) {
 			wrapper.stop();
 			wrapper.shutdown();
 		}
-		sources.clear();
 	}
 
 }

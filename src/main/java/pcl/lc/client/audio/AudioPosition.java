@@ -25,6 +25,8 @@ public class AudioPosition {
 	}
 
 	public AudioPosition(World world, Vector3 position) {
+		if (world == null || position == null)
+			throw new IllegalArgumentException("Parameters world and position may not be null.");
 		this.world = world;
 		this.position = position;
 	}

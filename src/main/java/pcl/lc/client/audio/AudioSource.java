@@ -104,4 +104,8 @@ public class AudioSource {
 		return false;
 	}
 
+	public boolean isPaused() {
+		return false;
+	}
+
 }
