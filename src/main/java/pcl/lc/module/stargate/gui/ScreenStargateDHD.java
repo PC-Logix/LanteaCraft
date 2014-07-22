@@ -195,16 +195,15 @@ public class ScreenStargateDHD extends GenericScreen {
 		else
 			setColor(0.5, 0.25, 0.0);
 		double rx = dhdWidth * 48 / 512.0;
-		double ry = dhdHeight * 48 / (32.0 + 256.0);
+		double ry = dhdHeight * 48 / (96.0 + 256.0);
 		Tessellator.instance.disableColor();
-		// drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry, 2 * rx, 1.5 * ry,
-		// 64, 0, 64, 48);
+		drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry + 8.0d, 2 * rx, 1.5 * ry, 64, 0, 64, 48);
 		resetColor();
 		if (connected) {
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 			double d = 5;
-			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY - ry - d, 2 * (rx + d), ry + d, 0, 0, 64, 32);
-			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY, 2 * (rx + d), 0.5 * ry + d, 0, 32, 64, 32);
+			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY - ry - d + 8.0d, 2 * (rx + d), ry + d, 0, 0, 64, 32);
+			drawTexturedRect(dhdCentreX - rx - d, dhdCentreY + 8.0d, 2 * (rx + d), 0.5 * ry + d, 0, 32, 64, 32);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		}
 		drawForegroundLayer(mouseX, mouseY);
