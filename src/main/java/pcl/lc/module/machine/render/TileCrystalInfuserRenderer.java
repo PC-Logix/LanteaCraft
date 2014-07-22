@@ -53,7 +53,7 @@ public class TileCrystalInfuserRenderer extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float scale) {
 		TileCrystalInfuser infuser = (TileCrystalInfuser) tile;
-		bindTexture(ResourceAccess.getNamedResource("textures/tileentity/crystal_infuser_default.png"));
+		bindTexture(ResourceAccess.getNamedResource("textures/tileentity/crystal_infuser_16.png"));
 		GL11.glPushMatrix();
 		infuserModel.preTile(tile, x, y, z, scale);
 		infuserModel.render(0.0625F);
