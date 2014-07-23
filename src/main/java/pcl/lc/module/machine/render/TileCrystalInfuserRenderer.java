@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -22,6 +23,7 @@ public class TileCrystalInfuserRenderer extends TileEntitySpecialRenderer {
 	private RenderItem itemRenderer;
 	private ModelCrystalInfuser infuserModel;
 	private Random random;
+	private ResourceLocation texture;
 
 	public TileCrystalInfuserRenderer() {
 		itemRenderer = new RenderItem() {
@@ -48,12 +50,14 @@ public class TileCrystalInfuserRenderer extends TileEntitySpecialRenderer {
 		itemRenderer.setRenderManager(RenderManager.instance);
 		infuserModel = new ModelCrystalInfuser();
 		random = new Random();
+		texture = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/tileentity/crystal_infuser_${TEX_QUALITY}.png"));
 	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float scale) {
 		TileCrystalInfuser infuser = (TileCrystalInfuser) tile;
-		bindTexture(ResourceAccess.getNamedResource("textures/tileentity/crystal_infuser_16.png"));
+		bindTexture(texture);
 		GL11.glPushMatrix();
 		infuserModel.preTile(tile, x, y, z, scale);
 		infuserModel.render(0.0625F);
