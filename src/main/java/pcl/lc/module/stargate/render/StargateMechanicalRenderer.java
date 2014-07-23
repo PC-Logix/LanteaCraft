@@ -9,14 +9,14 @@ import org.lwjgl.opengl.GL11;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 
-public class StargateStandardRenderer implements IStargateRenderer {
+public class StargateMechanicalRenderer implements IStargateRenderer {
 
 	private double u0, v0;
 	private TileStargateBaseRenderer caller;
 	private ResourceLocation stargateTex;
 	private ResourceLocation chevronTex;
 
-	public StargateStandardRenderer() {
+	public StargateMechanicalRenderer() {
 		stargateTex = ResourceAccess.getNamedResource(ResourceAccess
 				.formatResourceName("textures/tileentity/stargate_${TEX_QUALITY}.png"));
 		chevronTex = ResourceAccess.getNamedResource(ResourceAccess
@@ -151,18 +151,9 @@ public class StargateStandardRenderer implements IStargateRenderer {
 			GL11.glRotatef(
 					(float) ((StargateRenderConstants.chevronAngle * i) - StargateRenderConstants.chevronAngleOffset),
 					0, 0, 1);
-			chevron((sizeof != -1) && before(renderQueue, i, te.getEncodedChevrons()));
+			chevron((sizeof != -1) && TileStargateBaseRenderer.before(renderQueue, i, te.getEncodedChevrons()));
 			GL11.glPopMatrix();
 		}
-	}
-
-	private boolean before(int[] i, int j, int k) {
-		if (k >= i.length)
-			return true;
-		for (int l = k; 0 <= l; l--)
-			if (i[l] == j)
-				return true;
-		return false;
 	}
 
 	private void chevron(boolean engaged) {
