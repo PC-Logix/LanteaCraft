@@ -1,6 +1,8 @@
 package pcl.lc.module.stargate.block;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -9,11 +11,13 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import pcl.lc.api.EnumStargateType;
 import pcl.lc.base.GenericContainerBlock;
 import pcl.lc.base.multiblock.EnumOrientations;
 import pcl.lc.core.ResourceAccess;
@@ -78,8 +82,20 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public int damageDropped(int data) {
-		return data;
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ItemStack stackOf = new ItemStack(Item.getItemFromBlock(this), 1);
+
+		stackOf.stackTagCompound = new NBTTagCompound();
+		TileStargateRing ringTile = (TileStargateRing) world.getTileEntity(x, y, z);
+		stackOf.stackTagCompound = new NBTTagCompound();
+		ringTile.setStackData(stackOf.stackTagCompound);
+		if (!stackOf.stackTagCompound.hasKey("isChevron")) {
+			stackOf.stackTagCompound.setBoolean("isChevron", (metadata > 0));
+			stackOf.stackTagCompound.setInteger("type", EnumStargateType.STANDARD.ordinal());
+		}
+		
+		return ret;
 	}
 
 	@Override

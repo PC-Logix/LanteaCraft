@@ -1,6 +1,7 @@
 package pcl.lc.module.stargate.tile;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.TileManaged;
@@ -10,6 +11,7 @@ import pcl.lc.util.WorldLocation;
 
 public class TileStargateRing extends TileManaged {
 	private StargatePart part = new StargatePart(this);
+	private NBTTagCompound blockData;
 
 	@Override
 	public Packet getDescriptionPacket() {
@@ -22,6 +24,16 @@ public class TileStargateRing extends TileManaged {
 	public void thinkPacket(ModPacket packetOf, EntityPlayer player) {
 		part.unpack(packetOf);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		// TODO: Load chunks from NBT
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound compound) {
+		// TODO: Save chunks to NBT
 	}
 
 	public StargatePart getAsPart() {
@@ -64,6 +76,10 @@ public class TileStargateRing extends TileManaged {
 	public void detectAndSendChanges() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setStackData(NBTTagCompound stackTagCompound) {
+		// TODO: blockData =>> stackTagCompound
 	}
 
 }
