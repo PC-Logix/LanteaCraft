@@ -2,6 +2,7 @@ package pcl.lc.base.render;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -22,6 +23,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.io.StackedPushbackStringReader;
 
 /**
  * Renders a written-like typeface in game using natural writing styles.
@@ -178,47 +180,75 @@ public class WrittenFontRenderer {
 	 *            The line
 	 * @param page
 	 *            The page to box onto
-	 * @param isBeginParagraph
-	 *            If this line is the beginning of a paragraph section
-	 * @return Any overflow text, or null if no overflow occurs
+	 * @return If a page overflow occurs - that is, if there is no more
+	 *         available vertical space for lines to occupy.
 	 */
-	private String boxLine(String text, PageBox page, boolean isBeginParagraph) {
+	private boolean boxLine(StackedPushbackStringReader text, PageBox page) throws IOException {
 		// Calculate some required properties
-		int realPageWidth = page.page_width - page.margin_left - page.margin_right;
-		int freeHeight = page.getFreeHeight();
+		int effectiveWidth = page.page_width - page.margin_left - page.margin_right;
+		int effectiveHeight = page.getFreeHeight();
 
 		int width_new_line = 0, width_new_word = 0;
 		// Start globbing characters
-		Stack<String> words = new Stack<String>();
-		Stack<Character> chars = new Stack<Character>();
-		for (int i = 0, j = text.length(); i < j; i++) {
-			char c = text.charAt(i);
+		ArrayList<String> words = new ArrayList<String>();
+		ArrayList<Character> chars = new ArrayList<Character>();
+		// Push our place in case we have to abort
+		text.pushPosition();
+		while (text.available() > 0) {
+			// Take a char
+			char c = text.next();
 			// Treat space as a word separator
 			if (c == ' ') {
 				// Push a whole word if one exists
 				if (chars.size() > 0) {
-					// Find out if there is enough space
+					// Find out if there is enough space to push this word
 					int new_width_nl = width_new_line + width_new_word + page.min_space_size;
-					if (realPageWidth >= new_width_nl) {
+					if (effectiveWidth >= new_width_nl) {
 						// Yes, there is enough space, add the word
-						width_new_line += width_new_word; // Don't add a
-															// min-space
-						words.push(String.valueOf(chars.toArray(new Character[0])));
+						width_new_line += width_new_word;
+						words.add(String.valueOf(chars.toArray(new Character[0])));
+						// Clear the character buffers
+						chars.clear();
 						width_new_word = 0;
 					} else {
 						// No, the word doesn't fit, back it up
+						chars.clear();
 						width_new_word = 0;
-						words.clear();
+						break;
 					}
 				}
 			} else {
 				GlyphMetric metric = char_metrics.get((int) c);
 				if (metric != null) {
 					width_new_word += metric.width;
-					chars.push(c);
+					chars.add(c);
 				}
 			}
 		}
+
+		// Find the maximum height of any characters in the line
+		int height_new_line = 0;
+		for (int i = 0; i < words.size(); i++) {
+			String word = words.get(i);
+			for (int j = 0; j < word.length(); j++) {
+				char c = word.charAt(j);
+				if (c != ' ') {
+					GlyphMetric metric = char_metrics.get((int) c);
+					if (metric.height > height_new_line)
+						height_new_line = metric.height;
+				}
+			}
+		}
+
+		// If the line doesn't fit at all, we can't do anything
+		if (height_new_line > effectiveHeight) {
+			text.popPosition(); // back out
+			return true;
+		}
+
+		// Commit our position as we have now read a line and it fits all
+		// current constraints on the page
+		text.commitPosition();
 
 		// Glue the whole line together
 		StringBuilder line = new StringBuilder();
@@ -228,45 +258,38 @@ public class WrittenFontRenderer {
 				line.append(" ");
 		}
 
-		// Find the maximum height of any characters in the line
-		int height_new_line = 0;
-		for (int i = 0; i < line.length(); i++) {
-			char c = line.charAt(i);
-			if (c != ' ') {
-				GlyphMetric metric = char_metrics.get((int) c);
-				if (metric.height > height_new_line)
-					height_new_line = metric.height;
-			}
-		}
-
-		// If the line doesn't fit at all, we can't do anything
-		if (height_new_line > freeHeight)
-			return text;
-
 		// Figure out how much space is left over from the line
-		int space_remain = realPageWidth - width_new_line;
+		int space_remain = effectiveWidth - width_new_line;
 		int extra_px_per_space = (int) Math.floor(space_remain / words.size());
 
 		// Create the linebox
 		BoxedLine linebox = new BoxedLine(line.toString(), page.min_space_size + extra_px_per_space, height_new_line);
-
-		return null;
+		page.lines.add(linebox);
+		return false;
 	}
 
 	/**
-	 * Attempt to box a paragraph or part of a paragraph onto a PageBox. This
-	 * immediately attempts to fit as much of the paragraph onto the page. Any
-	 * overflow text which cannot be boxed onto the page is returned.
+	 * Attempt to box a paragraph or part of a paragraph onto a collection of
+	 * PageBox instances.
 	 * 
 	 * @param text
-	 *            The paragraph
-	 * @param page
-	 *            The page to box onto
-	 * @return Any overflow text, or null if no overflow occurs
+	 *            The text blob
+	 * @return The page results
 	 */
-	private String boxParagraph(String text, PageBox page) {
-
-		return null;
+	private PageBox[] boxParagraph(String text, int width, int height, int margin_l, int margin_r) throws IOException {
+		StackedPushbackStringReader reader = new StackedPushbackStringReader(text);
+		ArrayList<PageBox> pages = new ArrayList<PageBox>();
+		PageBox currentPage = new PageBox(width, height, margin_l, margin_r, 1);
+		boolean flag = false;
+		while (reader.available() > 0) {
+			flag = boxLine(reader, currentPage);
+			if (flag) {
+				pages.add(currentPage);
+				currentPage = new PageBox(width, height, margin_l, margin_r, 1);
+			}
+		}
+		if (!flag)
+			pages.add(currentPage);
+		return pages.toArray(new PageBox[0]);
 	}
-
 }
