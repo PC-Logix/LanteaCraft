@@ -6,7 +6,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import pcl.lc.api.internal.IModule;
-import pcl.lc.base.render.WrittenFontRenderer;
+import pcl.lc.base.render.font.WrittenFontRenderer;
 import pcl.lc.cfg.ConfigHelper;
 import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.ModuleManager;

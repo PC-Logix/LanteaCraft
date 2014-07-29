@@ -13,7 +13,7 @@ import net.minecraft.client.resources.IResource;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import pcl.lc.base.render.WrittenFontRenderer;
+import pcl.lc.base.render.font.WrittenFontRenderer;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleCore.Render;
 
