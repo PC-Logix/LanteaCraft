@@ -22,6 +22,7 @@ import pcl.lc.module.stargate.gui.ContainerStargateBase;
 import pcl.lc.module.stargate.gui.ContainerStargateDHDEnergy;
 import pcl.lc.module.stargate.item.ItemGDO;
 import pcl.lc.module.stargate.item.ItemIris;
+import pcl.lc.module.stargate.item.ItemStargateBase;
 import pcl.lc.module.stargate.item.ItemStargateRing;
 import pcl.lc.module.stargate.item.ItemTransportRingActivator;
 import pcl.lc.module.stargate.item.ItemTransporterRing;
@@ -105,7 +106,8 @@ public class ModuleStargates implements IModule {
 
 		Blocks.stargateRingBlock = RegistrationHelper.registerBlock(BlockStargateRing.class, ItemStargateRing.class,
 				"stargateRing");
-		Blocks.stargateBaseBlock = RegistrationHelper.registerBlock(BlockStargateBase.class, "stargateBase");
+		Blocks.stargateBaseBlock = RegistrationHelper.registerBlock(BlockStargateBase.class, ItemStargateBase.class,
+				"stargateBase");
 		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateDHD.class, "stargateDHD");
 
 		Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
