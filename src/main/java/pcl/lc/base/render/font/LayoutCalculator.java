@@ -127,10 +127,6 @@ public class LayoutCalculator {
 
 		// Figure out how much space is left over from the line
 		int space_remain = effectiveWidth - width_new_line;
-		System.out.println("Chars remain: " + text.available());
-		System.out.println("Px used: " + width_new_line);
-		System.out.println("Px remaining: " + space_remain);
-
 		int space_width = page.min_space_size;
 
 		// If the line is not blank, then...

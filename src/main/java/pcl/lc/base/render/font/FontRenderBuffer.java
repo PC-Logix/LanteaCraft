@@ -3,7 +3,6 @@ package pcl.lc.base.render.font;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 
 import org.lwjgl.opengl.GL11;
@@ -30,8 +29,6 @@ public class FontRenderBuffer {
 	private final int listSize;
 
 	public FontRenderBuffer(FontMetric metric) {
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		Minecraft.getMinecraft().getTextureManager().bindTexture(metric.fontImageName);
 		this.listSize = metric.glyphs.size();
 		this.listOrigin = GL11.glGenLists(listSize);
 		if (this.listOrigin == 0)
@@ -40,8 +37,11 @@ public class FontRenderBuffer {
 		for (Entry<Integer, GlyphMetric> metricData : metric.glyphs.entrySet()) {
 			GlyphMetric glyph = metricData.getValue();
 			GL11.glNewList(cx, GL11.GL_COMPILE);
+			GL11.glPushMatrix();
+			// TODO: Move texture uvx calculations to the metric container.
 			drawTexturedRectUV(0, 0, glyph.width, glyph.height, glyph.ux * (1f / 418f), glyph.vy * (1f / 242f),
 					glyph.width * (1f / 418f), glyph.height * (1f / 242f), 1.0);
+			GL11.glPopMatrix();
 			GL11.glEndList();
 			charmap.put(metricData.getKey(), cx++);
 		}
