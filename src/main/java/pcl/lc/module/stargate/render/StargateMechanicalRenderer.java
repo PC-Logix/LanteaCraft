@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import pcl.lc.api.EnumStargateType;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 
@@ -24,8 +25,8 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 	}
 
 	@Override
-	public void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x, double y, double z,
-			float t) {
+	public void renderStargateAt(TileStargateBaseRenderer renderer, EnumStargateType type, TileStargateBase te,
+			double x, double y, double z, float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		caller.bind(stargateTex);
@@ -34,7 +35,7 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 		renderInnerRing(te, t);
 		renderChevrons(te);
 		if (te.isConnected())
-			TileStargateBaseRenderer.horizonRenderer.renderStargateAt(renderer, te, x, y, z, t);
+			TileStargateBaseRenderer.horizonRenderer.renderStargateAt(renderer, type, te, x, y, z, t);
 	}
 
 	private void renderInnerRing(TileStargateBase te, float t) {

@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import pcl.lc.api.EnumStargateType;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 
@@ -21,8 +22,8 @@ public class StargateEventHorizonRenderer implements IStargateRenderer {
 	private TileStargateBaseRenderer caller;
 
 	@Override
-	public void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x, double y, double z,
-			float t) {
+	public void renderStargateAt(TileStargateBaseRenderer renderer, EnumStargateType type, TileStargateBase te,
+			double x, double y, double z, float t) {
 		caller = renderer;
 		renderEventHorizon(te);
 	}

@@ -53,10 +53,10 @@ public class TileStargateBaseRenderer extends TileEntitySpecialRenderer {
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glTranslated(x + 0.5, y + 3.5, z + 0.5);
 			EnumStargateType typeof = tesg.getType();
-			if (typeof == EnumStargateType.STANDARD)
-				mechanicalRenderer.renderStargateAt(this, tesg, x, y, z, t);
-			if (typeof == EnumStargateType.ATLANTIS)
-				digitalRenderer.renderStargateAt(this, tesg, x, y, z, t);
+			if (typeof == EnumStargateType.STANDARD || typeof == EnumStargateType.NOX)
+				mechanicalRenderer.renderStargateAt(this, typeof, tesg, x, y, z, t);
+			if (typeof == EnumStargateType.ATLANTIS || typeof == EnumStargateType.WRAITH)
+				digitalRenderer.renderStargateAt(this, typeof, tesg, x, y, z, t);
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 			GL11.glPopMatrix();
 		}

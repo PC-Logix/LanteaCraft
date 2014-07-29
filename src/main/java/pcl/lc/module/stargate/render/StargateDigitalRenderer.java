@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import pcl.lc.api.EnumStargateType;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 
@@ -27,8 +28,8 @@ public class StargateDigitalRenderer implements IStargateRenderer {
 	}
 
 	@Override
-	public void renderStargateAt(TileStargateBaseRenderer renderer, TileStargateBase te, double x, double y, double z,
-			float t) {
+	public void renderStargateAt(TileStargateBaseRenderer renderer, EnumStargateType type, TileStargateBase te,
+			double x, double y, double z, float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
 		caller.bind(stargateTex);
@@ -37,7 +38,7 @@ public class StargateDigitalRenderer implements IStargateRenderer {
 		renderInnerRing(te, t);
 		renderChevrons(te);
 		if (te.isConnected())
-			TileStargateBaseRenderer.horizonRenderer.renderStargateAt(renderer, te, x, y, z, t);
+			TileStargateBaseRenderer.horizonRenderer.renderStargateAt(renderer, type, te, x, y, z, t);
 	}
 
 	private void renderInnerRing(TileStargateBase te, float t) {
@@ -185,15 +186,15 @@ public class StargateDigitalRenderer implements IStargateRenderer {
 
 		// Side 1
 		vertex(x2, y2, z1, 0, 0);
-		vertex(x2, y2, z2 - (1/4.0f), 0, 4);
-		vertex(x1, y1, z2 - (1/4.0f), 16, 4);
+		vertex(x2, y2, z2 - (1 / 4.0f), 0, 4);
+		vertex(x1, y1, z2 - (1 / 4.0f), 16, 4);
 		vertex(x1, y1, z1, 16, 0);
 
 		// End 1
 		vertex(x2, y2, z1, 16, 0);
 		vertex(x2, y2 - w2, z1, 12, 0);
-		vertex(x2, y2 - w2, z2 - (1/4.0f), 12, 4);
-		vertex(x2, y2, z2 - (1/4.0f), 16, 4);
+		vertex(x2, y2 - w2, z2 - (1 / 4.0f), 12, 4);
+		vertex(x2, y2, z2 - (1 / 4.0f), 16, 4);
 
 		// Face 2
 		vertex(x1 + w1, y1 - w1, z1, 4, 12);
@@ -215,21 +216,21 @@ public class StargateDigitalRenderer implements IStargateRenderer {
 
 		// Side 3
 		vertex(x1, -y1, z1, 0, 0);
-		vertex(x1, -y1, z2 - (1/4.0f), 0, 4);
-		vertex(x2, -y2, z2 - (1/4.0f), 16, 4);
+		vertex(x1, -y1, z2 - (1 / 4.0f), 0, 4);
+		vertex(x2, -y2, z2 - (1 / 4.0f), 16, 4);
 		vertex(x2, -y2, z1, 16, 0);
 
 		// End 3
 		vertex(x2, -y2, z1, 0, 0);
-		vertex(x2, -y2, z2 - (1/4.0f), 0, 4);
-		vertex(x2, -y2 + w2, z2 - (1/4.0f), 4, 4);
+		vertex(x2, -y2, z2 - (1 / 4.0f), 0, 4);
+		vertex(x2, -y2 + w2, z2 - (1 / 4.0f), 4, 4);
 		vertex(x2, -y2 + w2, z1, 4, 0);
 
 		// Back
-		vertex(x2, -y2, z2 - (1/4.0f), 0, 0);
-		vertex(x1, -y1, z2 - (1/4.0f), 0, 16);
-		vertex(x1, y1, z2 - (1/4.0f), 16, 16);
-		vertex(x2, y2, z2 - (1/4.0f), 16, 0);
+		vertex(x2, -y2, z2 - (1 / 4.0f), 0, 0);
+		vertex(x1, -y1, z2 - (1 / 4.0f), 0, 16);
+		vertex(x1, y1, z2 - (1 / 4.0f), 16, 16);
+		vertex(x2, y2, z2 - (1 / 4.0f), 16, 0);
 
 		GL11.glEnd();
 
@@ -252,10 +253,10 @@ public class StargateDigitalRenderer implements IStargateRenderer {
 		vertex(x2, -y2 + w2, z1, 16, 4);
 
 		// End 4
-		vertex(x2, y2 - w2, z2 - (1/4.0f), 0, 0);
+		vertex(x2, y2 - w2, z2 - (1 / 4.0f), 0, 0);
 		vertex(x2, y2 - w2, z1, 0, 4);
 		vertex(x2, -y2 + w2, z1, 16, 4);
-		vertex(x2, -y2 + w2, z2 - (1/4.0f), 16, 0);
+		vertex(x2, -y2 + w2, z2 - (1 / 4.0f), 16, 0);
 
 		GL11.glColor3f(1, 1, 1);
 		GL11.glEnd();
