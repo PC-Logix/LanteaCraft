@@ -1,11 +1,14 @@
+# Stargate DHD controller
 tile.stargateController.name=Stargate Controller
 
+# Stargate Base & settings screens
 tile.stargateBase.0.name=Stargate Base
 tile.stargateBase.4.name=Pegasus Stargate Base
 tile.stargateBase.8.name=Wraith Stargate Base
 tile.stargateBase.12.name=Nox Stargate Base
 screen.stargate_base.title=Stargate Settings
 
+# Stargate Ring and Chevrons
 tile.stargateRing.0.name=Stargate Ring
 tile.stargateRing.1.name=Stargate Chevron
 tile.stargateRing.2.name=Pegasus Stargate Ring
@@ -15,10 +18,26 @@ tile.stargateRing.5.name=Wraith Stargate Chevron
 tile.stargateRing.6.name=Nox Stargate Ring
 tile.stargateRing.7.name=Nox Stargate Chevron
 
+# Iris items & tags
 item.iris.name=Stargate Iris
+item.gdo.name=Garage Door Opener
+# Iris types
+iris.mechanical.name=Mechanical
+iris.energy.name=Energy
+# Label used to display iris type, 1 param
+iris.type.text=%s iris
+# Label used to display iris %damage, 1 param
+iris.damage.text=%s damaged
 
+# Power-related items
 item.energyCrystal.name=Energy Crystal
+item.zpm.name=ZPM
+# Label used to display energy, 1 param
+energy.text=Energy: %s
+# Label used to display used entropy, 1 param
+entropy.text=Entropy: %s
 
+# Crafting reagents
 item.craftingReagent.0.name=Broken Reagent Item
 item.craftingReagent.1.name=Blank Crystal
 item.craftingReagent.2.name=Stargate Core Crystal
@@ -27,64 +46,72 @@ item.craftingReagent.4.name=Iron Plate
 item.craftingReagent.5.name=Naquadah Alloy Plate
 item.craftingReagent.6.name=Trinium Alloy Plate
 
+% Fluids
 tile.blockLiquidNaquadah.name=Liquid Naquadah
 item.liquidNaquadahBucket.name=Liquid Naquadah Bucket
 
+# Decor blocks
 tile.lanteaDecor.1.name=Lantean Patterned Steel
 tile.lanteaDecor.2.name=Lantean Steel
 tile.lanteaDecor.3.name=Goa'uld Patterned Gold
 tile.lanteaDecor.4.name=Goa'uld Gold
 
+# Decor stairs
 tile.goauldPatternedGoldDecorStair.name=Goa'uld Gold Stairs
 tile.goauldGoldDecorStair.name=Goa'uld Patterned Gold Stairs
 tile.lanteaPatternedSteelDecorStair.name=Lantean Steel Stairs
 tile.lanteaSteelDecorStair.name=Lantean Patterned Steel Stairs
 
+# Decor glass
 tile.lanteaGlassDecor.1.name=Lantean Glass
 
+# Naquadah Ore / Ingots / Blocks
 tile.lanteaOre.0.name=Naquadah Ore
 item.lanteaOre.0.name=Naquadah
 item.lanteaOreIngot.0.name=Naquadah Ingot
 tile.lanteaOreIngotBlock.0.name=Block of Naquadah
 
+# Naquadriah Ore / Ingots / Blocks
 tile.lanteaOre.1.name=Naquadriah Ore
 item.lanteaOre.1.name=Naquadriah
 item.lanteaOreIngot.1.name=Naquadriah Ingot
 tile.lanteaOreIngotBlock.1.name=Block of Naquadriah
 
+# Trinium Ore / Ingots / Blocks
 tile.lanteaOre.2.name=Trinium Ore
 item.lanteaOre.2.name=Trinium
 item.lanteaOreIngot.2.name=Trinium Ingot
 tile.lanteaOreIngotBlock.2.name=Block of Trinium
 
+# Machines
 tile.naquadahGenerator.name=Naquadah Generator
+# Label used to display fill level of fluid tanks, 1 param
+tank.text=Tank: %s
 tile.blockCrystalInfuser.name=Crystal Infuser
-tile.ringPlatform.name=Transport Rings
-item.zpm.name=ZPM
-item.jacksonNotebook.name=Daniel Jackson's Notebook
-item.gdo.name=Garage Door Opener
 
+# Help Notebook
+item.jacksonNotebook.name=Daniel Jackson's Notebook
+
+# Transporter Rings
 tile.transporterRing.0.name=Transporter Ring Frame
 tile.transporterRing.1.name=Transporter Ring Controller
 item.transportRingActivator.name=Transport Ring Activator
 
+# Debug and other items
 item.tokraSpawnEgg.name=Tok'ra Spawn Egg
 item.lanteadebug.name=LanteaCraft Debugger
+
+# Integration blocks and items
 tile.integration.computercraft.name=ComputerCraft Adapter
+
+# Death messages
 death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
 
-iris.mechanical.name=Mechanical
-iris.energy.name=Energy
-
-tank.text=Tank: %s
-energy.text=Energy: %s
-entropy.text=Entropy: %s
-iris.type.text=%s iris
-iris.damage.text=%s damaged
-
+# Clipboard operations; used as a single string only (no context).
 lc.clipboard.put_success.text=Copied to Clipboard!
 lc.clipboard.put_address.text=Copy Address
 
+# Stargate error messages; used as a single string only (no context).
 lc.stargate.coord_out_of_range.text=Coordinates out of stargate range
 lc.stargate.dimension_out_of_range.text=Dimension not reachable by stargate
 lc.stargate.general_address_error.text=Stargate addressing error; check the log!
