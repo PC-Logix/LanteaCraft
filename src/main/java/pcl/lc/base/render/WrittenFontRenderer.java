@@ -12,10 +12,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 
 import org.apache.logging.log4j.Level;
+import org.lwjgl.opengl.GL11;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,6 +25,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import pcl.lc.LanteaCraft;
+import pcl.lc.base.render.WrittenFontRenderer.PageBox;
 import pcl.lc.io.StackedPushbackStringReader;
 
 /**
@@ -75,15 +78,16 @@ public class WrittenFontRenderer {
 	public static class PageBox {
 		public final int page_width, page_height;
 		public final int margin_left, margin_right;
-		public final int min_space_size;
+		public final int min_space_size, lineheight_size;
 		public LinkedList<BoxedLine> lines = new LinkedList<BoxedLine>();
 
-		public PageBox(int w, int h, int ml, int mr, int min_sp) {
+		public PageBox(int w, int h, int ml, int mr, int min_sp, int min_lhs) {
 			page_width = w;
 			page_height = h;
 			margin_left = ml;
 			margin_right = mr;
 			min_space_size = min_sp;
+			lineheight_size = min_lhs;
 		}
 
 		public int getFreeHeight() {
@@ -183,7 +187,7 @@ public class WrittenFontRenderer {
 	 * @return If a page overflow occurs - that is, if there is no more
 	 *         available vertical space for lines to occupy.
 	 */
-	private boolean boxLine(StackedPushbackStringReader text, PageBox page) throws IOException {
+	public boolean boxLine(StackedPushbackStringReader text, PageBox page) throws IOException {
 		// Calculate some required properties
 		int effectiveWidth = page.page_width - page.margin_left - page.margin_right;
 		int effectiveHeight = page.getFreeHeight();
@@ -198,7 +202,13 @@ public class WrittenFontRenderer {
 			// Take a char
 			char c = text.next();
 			// Treat space as a word separator
-			if (c == ' ') {
+			if (c == '\r' || c == '\n') {
+				// Look and see if the next character is a newline
+				char c1 = text.next();
+				if (c1 != '\n' && c1 != '\r')
+					text.rewind(1); // put it back, aha!
+				break; // hard eol
+			} else if (c == ' ') {
 				// Push a whole word if one exists
 				if (chars.size() > 0) {
 					// Find out if there is enough space to push this word
@@ -206,7 +216,10 @@ public class WrittenFontRenderer {
 					if (effectiveWidth >= new_width_nl) {
 						// Yes, there is enough space, add the word
 						width_new_line += width_new_word;
-						words.add(String.valueOf(chars.toArray(new Character[0])));
+						StringBuilder builder = new StringBuilder();
+						for (char c1 : chars)
+							builder.append(c1);
+						words.add(builder.toString());
 						// Clear the character buffers
 						chars.clear();
 						width_new_word = 0;
@@ -226,8 +239,28 @@ public class WrittenFontRenderer {
 			}
 		}
 
+		// Anything left on buffer?
+		if (chars.size() > 0) {
+			// Find out if there is enough space to push this word
+			int new_width_nl = width_new_line + width_new_word + page.min_space_size;
+			if (effectiveWidth >= new_width_nl) {
+				// Yes, there is enough space, add the word
+				width_new_line += width_new_word;
+				StringBuilder builder = new StringBuilder();
+				for (char c1 : chars)
+					builder.append(c1);
+				words.add(builder.toString());
+				// Clear the character buffers
+				chars.clear();
+				width_new_word = 0;
+			} else {
+				// No, the word doesn't fit, back it up
+				chars.clear();
+			}
+		}
+
 		// Find the maximum height of any characters in the line
-		int height_new_line = 0;
+		int height_new_line = page.lineheight_size;
 		for (int i = 0; i < words.size(); i++) {
 			String word = words.get(i);
 			for (int j = 0; j < word.length(); j++) {
@@ -260,10 +293,29 @@ public class WrittenFontRenderer {
 
 		// Figure out how much space is left over from the line
 		int space_remain = effectiveWidth - width_new_line;
-		int extra_px_per_space = (int) Math.floor(space_remain / words.size());
+		System.out.println("Chars remain: " + text.available());
+		System.out.println("Px used: " + width_new_line);
+		System.out.println("Px remaining: " + space_remain);
+
+		int space_width = page.min_space_size;
+
+		// If the line is not blank, then...
+		if (words.size() > 0) {
+			int extra_px_per_space = (int) Math.floor(space_remain / words.size());
+			if (width_new_line > extra_px_per_space)
+				space_width = page.min_space_size + extra_px_per_space;
+		} else
+			height_new_line = 2 * page.lineheight_size;
+
+		// Make the line height fit exactly 1 or more line units
+		int line_height = height_new_line;
+		if (line_height % page.lineheight_size != 0) {
+			line_height -= line_height % page.lineheight_size;
+			// line_height += page.lineheight_size;
+		}
 
 		// Create the linebox
-		BoxedLine linebox = new BoxedLine(line.toString(), page.min_space_size + extra_px_per_space, height_new_line);
+		BoxedLine linebox = new BoxedLine(line.toString(), space_width, line_height);
 		page.lines.add(linebox);
 		return false;
 	}
@@ -276,20 +328,70 @@ public class WrittenFontRenderer {
 	 *            The text blob
 	 * @return The page results
 	 */
-	private PageBox[] boxParagraph(String text, int width, int height, int margin_l, int margin_r) throws IOException {
+	public PageBox[] boxParagraph(String text, int width, int height, int margin_l, int margin_r) throws IOException {
 		StackedPushbackStringReader reader = new StackedPushbackStringReader(text);
 		ArrayList<PageBox> pages = new ArrayList<PageBox>();
-		PageBox currentPage = new PageBox(width, height, margin_l, margin_r, 1);
+		PageBox currentPage = new PageBox(width, height, margin_l, margin_r, 10, 20);
 		boolean flag = false;
+		LanteaCraft.getLogger().log(Level.INFO, String.format("Paginating %s characters...", reader.available()));
 		while (reader.available() > 0) {
 			flag = boxLine(reader, currentPage);
 			if (flag) {
+				System.out.println("Page is full!");
 				pages.add(currentPage);
-				currentPage = new PageBox(width, height, margin_l, margin_r, 1);
+				currentPage = new PageBox(width, height, margin_l, margin_r, 10, 20);
 			}
 		}
 		if (!flag)
 			pages.add(currentPage);
+		LanteaCraft.getLogger().log(Level.INFO, String.format("Successfully paginated onto %s pages.", pages.size()));
 		return pages.toArray(new PageBox[0]);
+	}
+
+	/**
+	 * Render a page box to the screen
+	 * 
+	 * @param pages
+	 *            The pages
+	 */
+	public void renderPages(PageBox page, float ox, float oy, float z) {
+		Minecraft.getMinecraft().getTextureManager().bindTexture(fontImageName);
+		float x = 0, y = 0;
+		GL11.glPushMatrix();
+		GL11.glTranslatef(ox, oy, 0.0f);
+		for (BoxedLine line : page.lines) {
+			x = 0;
+			for (int i = 0; i < line.line.length(); i++) {
+				char c = line.line.charAt(i);
+				if (c == ' ')
+					x += line.space_size;
+				GlyphMetric metric = char_metrics.get((int) c);
+				if (metric == null)
+					continue;
+				drawTexturedRectUV(x, y, metric.width, metric.height, metric.ux * (1f / 418f), metric.vy * (1f / 242f),
+						metric.width * (1f / 418f), metric.height * (1f / 242f), z);
+				x += metric.width;
+			}
+			y += line.line_height;
+		}
+		GL11.glPopMatrix();
+	}
+
+	public void drawTexturedRectUV(double x, double y, double w, double h, double u, double v, double us, double vs,
+			double zLevel) {
+		Tessellator tess = Tessellator.instance;
+		GL11.glPushMatrix();
+		GL11.glScalef(0.45f, 0.45f, 1.0f);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		tess.startDrawingQuads();
+		tess.setColorOpaque_F(1.0f, 1.0f, 1.0f);
+		tess.addVertexWithUV(x, y + h, zLevel, u, v + vs);
+		tess.addVertexWithUV(x + w, y + h, zLevel, u + us, v + vs);
+		tess.addVertexWithUV(x + w, y, zLevel, u + us, v);
+		tess.addVertexWithUV(x, y, zLevel, u, v);
+		tess.draw();
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPopMatrix();
 	}
 }

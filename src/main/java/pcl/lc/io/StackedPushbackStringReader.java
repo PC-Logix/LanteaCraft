@@ -1,21 +1,23 @@
 package pcl.lc.io;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
 public class StackedPushbackStringReader {
 
 	protected Object lock;
-	private LinkedList<Character> str;
+	private ArrayList<Character> str;
 	private Stack<Integer> pushback;
 	private int next = 0;
 
 	public StackedPushbackStringReader(String s) {
 		this.lock = this;
-		this.str = new LinkedList<Character>();
+		this.str = new ArrayList<Character>();
 		this.pushback = new Stack<Integer>();
 		char[] chars = s.toCharArray();
+		System.out.println(chars.length);
 		for (int i = 0; i < chars.length; i++)
 			str.add(chars[i]);
 	}
@@ -110,7 +112,7 @@ public class StackedPushbackStringReader {
 	public int available() throws IOException {
 		synchronized (lock) {
 			ensureOpen();
-			return Math.min(0, str.size() - next);
+			return Math.max(0, str.size() - next);
 		}
 	}
 
