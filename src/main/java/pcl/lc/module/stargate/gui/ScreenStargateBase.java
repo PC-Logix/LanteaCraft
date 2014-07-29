@@ -3,8 +3,10 @@ package pcl.lc.module.stargate.gui;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -23,8 +25,6 @@ import pcl.lc.module.stargate.tile.TileStargateBase;
 import pcl.lc.util.ImmutablePair;
 
 public class ScreenStargateBase extends GenericContainerGUI {
-
-	private static String screenTitle = "Stargate Address";
 	private static final int guiWidth = 256;
 	private static final int guiHeight = 208;
 
@@ -60,12 +60,20 @@ public class ScreenStargateBase extends GenericContainerGUI {
 		int cx = xSize / 2;
 		drawFramedSymbols(cx, 22, address);
 		textColor = 0x004c66;
-		drawCenteredString(screenTitle, cx, 8);
+		drawCenteredString(I18n.format("screen.stargate_base.title"), cx, 8);
 		drawCenteredString(address, cx, 72);
 		ImmutablePair<Integer, Integer> coord = transformMouseCoordinates(x, y);
 		IconButtonRenderer.drawButton(Minecraft.getMinecraft(), (clipboardAction > 0) ? "tick" : "copy",
 				(coord.getA() >= 232 && coord.getA() <= 232 + 12 && coord.getB() >= 70 && coord.getB() <= 70 + 12),
 				mouseDown, 232, 70, 0.5, zLevel);
+		if (coord.getA() >= 232 && coord.getA() <= 232 + 12 && coord.getB() >= 70 && coord.getB() <= 70 + 12) {
+			ArrayList list = new ArrayList();
+			if (clipboardAction > 0)
+				list.add("lc.clipboard.put_success.text");
+			else
+				list.add(I18n.format("lc.clipboard.put_address.text"));
+			drawHoveringText(list, coord.getA() - 2, coord.getB() - 2, fontRendererObj);
+		}
 	}
 
 	@Override
@@ -126,12 +134,12 @@ public class ScreenStargateBase extends GenericContainerGUI {
 			try {
 				address = te.getHomeAddress();
 			} catch (CoordRangeError e) {
-				address = "Coordinates out of stargate range";
+				address = I18n.format("lc.stargate.coord_out_of_range.text");
 			} catch (DimensionRangeError e) {
-				address = "Dimension not reachable by stargate";
+				address = I18n.format("lc.stargate.dimension_out_of_range.text");
 			} catch (AddressingError e) {
 				LanteaCraft.getLogger().log(Level.INFO, "Addressing error!", e);
-				address = "Stargate addressing error; check the log";
+				address = I18n.format("lc.stargate.general_address_error.text");
 			}
 		return address;
 	}

@@ -17,6 +17,7 @@ public class StargatePart extends MultiblockPart {
 
 	private String typeof;
 	private boolean modified = false;
+	private boolean clientSync = false;
 
 	private WeakReference<GenericMultiblock> currentHost;
 
@@ -28,6 +29,11 @@ public class StargatePart extends MultiblockPart {
 	public void tick() {
 		if (!host.getWorldObj().isRemote && modified) {
 			modified = !modified;
+			host.getDescriptionPacket();
+		}
+
+		if (host.getWorldObj().isRemote && !clientSync) {
+			clientSync = !clientSync;
 			host.getDescriptionPacket();
 		}
 	}
@@ -106,6 +112,10 @@ public class StargatePart extends MultiblockPart {
 
 	public void unpack(ModPacket packetOf) {
 		StandardModPacket packet = (StandardModPacket) packetOf;
+		if (packet.getType().equals("LanteaPacket.MultiblockPoll")) {
+			host.getDescriptionPacket();
+			return;
+		}
 		if (packet.hasFieldWithValue("currentHost")) {
 			Vector3 location = (Vector3) packet.getValue("currentHost");
 			TileEntity target = host.getWorldObj().getTileEntity(location.floorX(), location.floorY(),

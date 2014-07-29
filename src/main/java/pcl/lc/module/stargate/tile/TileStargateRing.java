@@ -1,25 +1,29 @@
 package pcl.lc.module.stargate.tile;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.TileManaged;
 import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.module.stargate.StargatePart;
 import pcl.lc.util.WorldLocation;
 
 public class TileStargateRing extends TileManaged {
 	private StargatePart part = new StargatePart(this);
-	private NBTTagCompound blockData;
 
 	@Override
 	public Packet getDescriptionPacket() {
-		ModPacket packet = part.pack();
-		LanteaCraft.getNetPipeline().sendToAllAround(packet, new WorldLocation(this), 128.0d);
+		if (!worldObj.isRemote){ 
+			ModPacket packet = part.pack();
+			LanteaCraft.getNetPipeline().sendToAllAround(packet, new WorldLocation(this), 128.0d);
+		} else {
+			StandardModPacket req = new StandardModPacket(new WorldLocation(this));
+			req.setIsForServer(true);
+			req.setType("LanteaPacket.MultiblockPoll");
+			LanteaCraft.getNetPipeline().sendToServer(req);
+		}
 		return null;
 	}
 
@@ -79,30 +83,6 @@ public class TileStargateRing extends TileManaged {
 	public void detectAndSendChanges() {
 		// TODO Auto-generated method stub
 
-	}
-
-	public void applyStackData(NBTTagCompound stackTagCompound) {
-		if (blockData == null)
-			blockData = new NBTTagCompound();
-		if (stackTagCompound == null)
-			return;
-		Set taglist = stackTagCompound.func_150296_c();
-		Iterator it = taglist.iterator();
-		while (it.hasNext()) {
-			String tagname = (String) it.next();
-			blockData.setTag(tagname, stackTagCompound.getTag(tagname));
-		}
-	}
-
-	public void setStackData(NBTTagCompound stackTagCompound) {
-		if (blockData == null)
-			return;
-		Set taglist = blockData.func_150296_c();
-		Iterator it = taglist.iterator();
-		while (it.hasNext()) {
-			String tagname = (String) it.next();
-			stackTagCompound.setTag(tagname, blockData.getTag(tagname));
-		}
 	}
 
 }
