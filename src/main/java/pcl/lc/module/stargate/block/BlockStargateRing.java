@@ -102,10 +102,14 @@ public class BlockStargateRing extends GenericContainerBlock {
 		}
 		return false;
 	}
+	
+	public int getBaseType(int metadata) {
+		return (int) Math.floor(metadata / blockMutex);
+	}
 
 	@Override
 	public IIcon getIcon(int side, int data) {
-		int typeof = (int) Math.floor(data / blockMutex);
+		int typeof = getBaseType(data);
 		if (side <= 1)
 			return topAndBottomTexture[typeof];
 		else

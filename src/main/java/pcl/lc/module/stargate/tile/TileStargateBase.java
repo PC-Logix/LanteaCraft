@@ -36,6 +36,7 @@ import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisState;
 import pcl.lc.api.EnumStargateState;
+import pcl.lc.api.EnumStargateType;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.base.TileManaged;
 import pcl.lc.base.data.WatchedValue;
@@ -172,6 +173,7 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 
 	private StargateMultiblock multiblock = new StargateMultiblock(this);
 	private FilteredInventory inventory;
+	private EnumStargateType type;
 	private List<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
 
 	private ConnectionRequest connection;
@@ -953,6 +955,15 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 
 	public void setClientConnection(ClientConnectionRequest request) {
 		connection_cli = request;
+	}
+
+	public EnumStargateType getType() {
+		if (type == null) {
+			BlockStargateBase block = (BlockStargateBase) worldObj.getBlock(xCoord, yCoord, zCoord);
+			int typeof = block.getBaseType(worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
+			type = EnumStargateType.fromOrdinal(typeof);
+		}
+		return type;
 	}
 
 	@Override

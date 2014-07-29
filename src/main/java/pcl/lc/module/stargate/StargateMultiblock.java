@@ -18,6 +18,8 @@ import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.core.WorldLog;
 import pcl.lc.module.ModuleStargates;
+import pcl.lc.module.stargate.block.BlockStargateBase;
+import pcl.lc.module.stargate.block.BlockStargateRing;
 import pcl.lc.module.stargate.tile.TileStargateRing;
 import pcl.lc.util.ImmutablePair;
 import pcl.lc.util.Vector3;
@@ -136,6 +138,8 @@ public class StargateMultiblock extends GenericMultiblock {
 	@Override
 	public boolean isValidStructure(World worldAccess, int baseX, int baseY, int baseZ) {
 		EnumOrientations currentOrientation = getOrientation(worldAccess, baseX, baseY, baseZ);
+		int baseMetadata = worldAccess.getBlockMetadata(baseX, baseY, baseZ);
+		Block baseBlock = worldAccess.getBlock(baseX, baseY, baseZ);
 
 		// North-South means the gate is aligned along X
 		if (currentOrientation == EnumOrientations.EAST_WEST) {
@@ -143,9 +147,10 @@ public class StargateMultiblock extends GenericMultiblock {
 			for (int y = 0; y < 7; y++)
 				for (int x = 0; x < 7; x++) {
 					Block block = worldAccess.getBlock(baseX + (x - 3), baseY + y, baseZ);
+					int metadata = worldAccess.getBlockMetadata(baseX + (x - 3), baseY + y, baseZ);
 					TileEntity entity = worldAccess.getTileEntity(baseX + (x - 3), baseY + y, baseZ);
-					if (!testIsValidForExpected(worldAccess, baseX + (x - 3), baseY + y, baseZ, entity, block,
-							stargateModel[y][x]))
+					if (!testIsValidForExpected(worldAccess, baseX + (x - 3), baseY + y, baseZ, baseBlock,
+							baseMetadata, entity, metadata, block, stargateModel[y][x]))
 						return false;
 				}
 			return true;
@@ -157,9 +162,10 @@ public class StargateMultiblock extends GenericMultiblock {
 			for (int y = 0; y < 7; y++)
 				for (int z = 0; z < 7; z++) {
 					Block block = worldAccess.getBlock(baseX, baseY + y, baseZ + (z - 3));
+					int metadata = worldAccess.getBlockMetadata(baseX, baseY + y, baseZ + (z - 3));
 					TileEntity entity = worldAccess.getTileEntity(baseX, baseY + y, baseZ + (z - 3));
-					if (!testIsValidForExpected(worldAccess, baseX, baseY + y, baseZ + (z - 3), entity, block,
-							stargateModel[y][z]))
+					if (!testIsValidForExpected(worldAccess, baseX, baseY + y, baseZ + (z - 3), baseBlock,
+							baseMetadata, entity, metadata, block, stargateModel[y][z]))
 						return false;
 				}
 			return true;
@@ -169,8 +175,8 @@ public class StargateMultiblock extends GenericMultiblock {
 		return false;
 	}
 
-	private boolean testIsValidForExpected(World world, int x, int y, int z, TileEntity entity, Block block,
-			int expectedType) {
+	private boolean testIsValidForExpected(World world, int x, int y, int z, Block baseBlock, int baseMetadata,
+			TileEntity entity, int metadata, Block block, int expectedType) {
 		if (expectedType == 0)
 			if (block == null)
 				return true;
@@ -179,9 +185,12 @@ public class StargateMultiblock extends GenericMultiblock {
 		if (expectedType == 1 || expectedType == 2) {
 			if (!(entity instanceof TileStargateRing))
 				return false;
+			int baseBlockType = ((BlockStargateBase) baseBlock).getBaseType(baseMetadata);
+			int refBlockType = ((BlockStargateRing) block).getBaseType(metadata);
+			if (baseBlockType != refBlockType)
+				return false;
 			TileStargateRing entityAsRing = (TileStargateRing) entity;
-			StargatePart teAsPart = null;
-			teAsPart = entityAsRing.getAsPart();
+			StargatePart teAsPart = entityAsRing.getAsPart();
 			if (expectedType == 1) {
 				if (teAsPart.getType() == null || !teAsPart.getType().equals("partStargateBlock"))
 					return false;

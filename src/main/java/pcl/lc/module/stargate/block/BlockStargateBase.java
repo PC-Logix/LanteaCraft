@@ -123,16 +123,20 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		int rotation = Math.round((180 - player.rotationYaw) / 90) & 3;
 		System.out.println(rotation);
-		int data = ((int) Math.floor(stack.getItemDamage() / blockMutex) * blockMutex) + rotation;
+		int data = (getBaseType(stack.getItemDamage()) * blockMutex) + rotation;
 		System.out.println(data);
 		world.setBlockMetadataWithNotify(x, y, z, data, 0x3);
 		TileStargateBase te = (TileStargateBase) getTileEntity(world, x, y, z);
 		te.hostBlockPlaced();
 	}
+	
+	public int getBaseType(int metadata) {
+		return (int) Math.floor(metadata / blockMutex);
+	}
 
 	@Override
 	public int damageDropped(int metadata) {
-		return (int) Math.floor(metadata / blockMutex);
+		return getBaseType(metadata);
 	}
 	
 	@Override
@@ -153,7 +157,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public IIcon getIcon(int side, int data) {
-		int typeof = (int) Math.floor(data / blockMutex);
+		int typeof = getBaseType(data);
 		if (side <= 1)
 			return topAndBottomTexture[typeof];
 		else if (side == 3)

@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import pcl.lc.api.EnumStargateType;
 import pcl.lc.module.stargate.tile.TileStargateBase;
 
 public class TileStargateBaseRenderer extends TileEntitySpecialRenderer {
@@ -51,7 +52,11 @@ public class TileStargateBaseRenderer extends TileEntitySpecialRenderer {
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glTranslated(x + 0.5, y + 3.5, z + 0.5);
-			mechanicalRenderer.renderStargateAt(this, tesg, x, y, z, t);
+			EnumStargateType typeof = tesg.getType();
+			if (typeof == EnumStargateType.STANDARD)
+				mechanicalRenderer.renderStargateAt(this, tesg, x, y, z, t);
+			if (typeof == EnumStargateType.ATLANTIS)
+				digitalRenderer.renderStargateAt(this, tesg, x, y, z, t);
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 			GL11.glPopMatrix();
 		}
