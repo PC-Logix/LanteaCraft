@@ -13,14 +13,14 @@ import net.minecraft.client.resources.IResource;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import pcl.lc.base.render.font.PageBox;
 import pcl.lc.base.render.font.WrittenFontRenderer;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleCore.Render;
 
 public class GuiJacksonNotebook extends GuiScreen {
 
-	private WrittenFontRenderer fontRenderer;
-	private WrittenFontRenderer.PageBox[] pages;
+	private PageBox[] pages;
 	private int currentPage = 0;
 
 	public GuiJacksonNotebook() {
@@ -28,7 +28,6 @@ public class GuiJacksonNotebook extends GuiScreen {
 	}
 
 	public GuiJacksonNotebook(String index) {
-		this.fontRenderer = Render.danielFontRenderer;
 		StringBuffer fileData = new StringBuffer();
 		fileData.append("Here lies lorum ipsum.\r\n\r\n");
 		try {
@@ -41,7 +40,8 @@ public class GuiJacksonNotebook extends GuiScreen {
 			while ((len = reader.read(buf)) != -1)
 				fileData.append(buf, 0, len);
 			reader.close();
-			this.pages = fontRenderer.boxParagraph(fileData.toString(), 350, 450, 2, 2);
+			this.pages = Render.fontCalculator.boxParagraph(Render.danielFont, fileData.toString(), 350, 450, 2, 2, 10,
+					20);
 		} catch (IOException ioex) {
 			ioex.printStackTrace();
 		}
@@ -75,10 +75,12 @@ public class GuiJacksonNotebook extends GuiScreen {
 		if (this.pages != null) {
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			if (this.pages.length > currentPage) {
-				fontRenderer.renderPages(this.pages[currentPage], width / 2 - 185, height / 2 - 99, zLevel);
+				Render.fontRenderer.renderPages(Render.danielFont, Render.danielFontBuffer,
+						this.pages[currentPage], width / 2 - 185, height / 2 - 99, zLevel);
 			}
 			if (this.pages.length > currentPage + 1) {
-				fontRenderer.renderPages(this.pages[currentPage + 1], width / 2 + 12, height / 2 - 98, zLevel);
+				Render.fontRenderer.renderPages(Render.danielFont, Render.danielFontBuffer,
+						this.pages[currentPage + 1], width / 2 + 12, height / 2 - 98, zLevel);
 			}
 		}
 		GL11.glPopMatrix();

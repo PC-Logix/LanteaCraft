@@ -163,17 +163,17 @@ public class LayoutCalculator {
 	 *            The text blob
 	 * @return The page results
 	 */
-	public PageBox[] boxParagraph(FontMetric metric, String text, int width, int height, int margin_l, int margin_r)
-			throws IOException {
+	public PageBox[] boxParagraph(FontMetric metric, String text, int width, int height, int margin_l, int margin_r,
+			int min_sp, int min_lhs) throws IOException {
 		StackedPushbackStringReader reader = new StackedPushbackStringReader(text);
 		ArrayList<PageBox> pages = new ArrayList<PageBox>();
-		PageBox currentPage = new PageBox(width, height, margin_l, margin_r, 10, 20);
+		PageBox currentPage = new PageBox(width, height, margin_l, margin_r, min_sp, min_lhs);
 		boolean flag = false;
 		while (reader.available() > 0) {
 			flag = boxLine(metric, reader, currentPage);
 			if (flag) {
 				pages.add(currentPage);
-				currentPage = new PageBox(width, height, margin_l, margin_r, 10, 20);
+				currentPage = new PageBox(width, height, margin_l, margin_r, min_sp, min_lhs);
 			}
 		}
 		if (!flag)

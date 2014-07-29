@@ -6,6 +6,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import pcl.lc.api.internal.IModule;
+import pcl.lc.base.render.font.FontMetric;
+import pcl.lc.base.render.font.FontRenderBuffer;
+import pcl.lc.base.render.font.LayoutCalculator;
 import pcl.lc.base.render.font.WrittenFontRenderer;
 import pcl.lc.cfg.ConfigHelper;
 import pcl.lc.cfg.ModuleConfig;
@@ -60,7 +63,11 @@ public class ModuleCore implements IModule {
 		public static BlockRotationOrientedRenderer blockOrientedRenderer;
 		public static BlockVoidRenderer blockVoidRenderer;
 		public static BlockModelRenderer blockModelRenderer;
-		public static WrittenFontRenderer danielFontRenderer;
+
+		public static FontMetric danielFont;
+		public static LayoutCalculator fontCalculator;
+		public static FontRenderBuffer danielFontBuffer;
+		public static WrittenFontRenderer fontRenderer;
 	}
 
 	@Override
@@ -134,10 +141,13 @@ public class ModuleCore implements IModule {
 			Render.blockModelRenderer = new BlockModelRenderer();
 			RegistrationHelper.registerRenderer(Render.blockModelRenderer);
 
-			Render.danielFontRenderer = new WrittenFontRenderer(
-					ResourceAccess.getNamedResource("textures/notebook/daniel.png"),
+			Render.fontCalculator = new LayoutCalculator();
+			Render.fontRenderer = new WrittenFontRenderer();
+
+			Render.danielFont = new FontMetric(ResourceAccess.getNamedResource("textures/notebook/daniel.png"),
 					ResourceAccess.getNamedResource("textures/notebook/daniel.metrics.xml"));
-			Render.danielFontRenderer.buildFont();
+			Render.danielFont.buildFont();
+			Render.danielFontBuffer = new FontRenderBuffer(Render.danielFont);
 		}
 	}
 
