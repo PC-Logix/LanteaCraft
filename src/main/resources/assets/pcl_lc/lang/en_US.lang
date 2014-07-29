@@ -1,7 +1,18 @@
 tile.stargateController.name=Stargate Controller
-tile.stargateBase.name=Stargate Base
-tile.stargateRing.0.name=Stargate Ring Segment
-tile.stargateRing.1.name=Stargate Chevron Block
+tile.stargateBase.0.name=Stargate Base
+tile.stargateBase.4.name=Pegasus Stargate Base
+tile.stargateBase.8.name=Wraith Stargate Base
+tile.stargateBase.12.name=Nox Stargate Base
+
+tile.stargateRing.0.name=Stargate Ring
+tile.stargateRing.1.name=Stargate Chevron
+tile.stargateRing.2.name=Pegasus Stargate Ring
+tile.stargateRing.3.name=Pegasus Stargate Chevron
+tile.stargateRing.4.name=Wraith Stargate Ring
+tile.stargateRing.5.name=Wraith Stargate Chevron
+tile.stargateRing.6.name=Nox Stargate Ring
+tile.stargateRing.7.name=Nox Stargate Chevron
+
 item.energyCrystal.name=Energy Crystal
 
 item.craftingReagent.0.name=Broken Reagent Item
@@ -51,3 +62,12 @@ item.tokraSpawnEgg.name=Tok'ra Spawn Egg
 item.lanteadebug.name=LanteaCraft Debugger
 tile.integration.computercraft.name=ComputerCraft Adapter
 death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
+
+iris.mechanical.name=Mechanical
+iris.energy.name=Energy
+
+tank.text=Tank: %s
+energy.text=Energy: %s
+entropy.text=Entropy: %s
+iris.type.text=%s iris
+iris.damage.text=%s damaged
