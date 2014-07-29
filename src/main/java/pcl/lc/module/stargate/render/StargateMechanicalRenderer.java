@@ -14,14 +14,18 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 
 	private double u0, v0;
 	private TileStargateBaseRenderer caller;
-	private ResourceLocation stargateTex;
-	private ResourceLocation chevronTex;
+	private ResourceLocation stargateTex[] = new ResourceLocation[2];
+	private ResourceLocation chevronTex[] = new ResourceLocation[2];
 
 	public StargateMechanicalRenderer() {
-		stargateTex = ResourceAccess.getNamedResource(ResourceAccess
+		stargateTex[0] = ResourceAccess.getNamedResource(ResourceAccess
 				.formatResourceName("textures/tileentity/stargate_${TEX_QUALITY}.png"));
-		chevronTex = ResourceAccess.getNamedResource(ResourceAccess
+		stargateTex[1] = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/tileentity/stargate_nox_${TEX_QUALITY}.png"));
+		chevronTex[0] = ResourceAccess.getNamedResource(ResourceAccess
 				.formatResourceName("textures/tileentity/stargate_glyphs_${TEX_QUALITY}.png"));
+		chevronTex[1] = ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/tileentity/stargate_glyphs_nox_${TEX_QUALITY}.png"));
 	}
 
 	@Override
@@ -29,21 +33,33 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 			double x, double y, double z, float t) {
 		caller = renderer;
 		GL11.glRotatef(90 * te.getRotation(), 0, 1, 0);
-		caller.bind(stargateTex);
+		caller.bind(stargateTexFor(type));
 		GL11.glNormal3f(0, 1, 0);
-		renderRing(te);
-		renderInnerRing(te, t);
-		renderChevrons(te);
+		renderRing(te, type);
+		renderInnerRing(te, type, t);
+		renderChevrons(te, type);
 		if (te.isConnected())
 			TileStargateBaseRenderer.horizonRenderer.renderStargateAt(renderer, type, te, x, y, z, t);
 	}
+	
+	private ResourceLocation stargateTexFor(EnumStargateType type) {
+		if (type == EnumStargateType.NOX)
+			return stargateTex[1];
+		return stargateTex[0];
+	}
+	
+	private ResourceLocation chevronTexFor(EnumStargateType type) {
+		if (type == EnumStargateType.NOX)
+			return chevronTex[1];
+		return chevronTex[0];
+	}
 
-	private void renderInnerRing(TileStargateBase te, float t) {
+	private void renderInnerRing(TileStargateBase te, EnumStargateType type, float t) {
 		double radiusMidInner = StargateRenderConstants.ringInnerMovingRadius - (1 / 128d);
 		double radiusMidOuter = StargateRenderConstants.ringMidRadius + (1 / 128d);
 		double z = StargateRenderConstants.ringDepth - (1d / 128d);
 		GL11.glPushMatrix();
-		caller.bind(chevronTex);
+		caller.bind(chevronTexFor(type));
 		GL11.glRotatef((float) (85 + te.interpolatedRingAngle(t)), 0, 0, 1);
 		GL11.glNormal3f(0, 0, 1);
 		GL11.glBegin(GL11.GL_QUADS);
@@ -62,10 +78,10 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 
 		GL11.glEnd();
 		GL11.glPopMatrix();
-		caller.bind(stargateTex);
+		caller.bind(stargateTexFor(type));
 	}
 
-	private void renderRing(TileStargateBase te) {
+	private void renderRing(TileStargateBase te, EnumStargateType type) {
 		double radiusInner = StargateRenderConstants.ringInnerRadius;
 		double radiusOuter = StargateRenderConstants.ringOuterRadius;
 		double radiusMidInner = StargateRenderConstants.ringInnerMovingRadius;
@@ -142,7 +158,7 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 		GL11.glEnd();
 	}
 
-	private void renderChevrons(TileStargateBase te) {
+	private void renderChevrons(TileStargateBase te, EnumStargateType type) {
 		GL11.glNormal3f(0, 0, 1);
 		int sizeof = (te.getDialledAddress() != null) ? te.getDialledAddress().length() : -1;
 		int[] renderQueue = (sizeof == 7) ? StargateRenderConstants.standardRenderQueue
