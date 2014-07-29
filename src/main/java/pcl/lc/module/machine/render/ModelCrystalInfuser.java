@@ -142,8 +142,12 @@ public class ModelCrystalInfuser extends HookedModelBase {
 
 	@Override
 	public void preInventory(Block block, int meta, int model, RenderBlocks rbx) {
-		Minecraft.getMinecraft().getTextureManager()
-				.bindTexture(ResourceAccess.getNamedResource("textures/tileentity/crystal_infuser_default.png"));
+		Minecraft
+				.getMinecraft()
+				.getTextureManager()
+				.bindTexture(
+						ResourceAccess.getNamedResource(ResourceAccess
+								.formatResourceName("textures/tileentity/crystal_infuser_${TEX_QUALITY}.png")));
 		GL11.glTranslatef(0.0f, 1.0f, 0.0f);
 		GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
 		GL11.glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
