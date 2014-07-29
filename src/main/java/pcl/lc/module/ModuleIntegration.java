@@ -12,6 +12,9 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
 import pcl.lc.api.internal.IModule;
+import pcl.lc.cfg.ConfigHelper;
+import pcl.lc.cfg.ModuleConfig;
+import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.integration.OpenComputersAgent;
 import pcl.lc.module.integration.WailaAgent;
@@ -51,6 +54,7 @@ public class ModuleIntegration implements IModule {
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
+		ModuleConfig config = ModuleManager.getConfig(this);
 		LanteaCraft.getLogger().log(Level.INFO, "Preparing integration module loading.");
 		Iterator<Class<? extends IIntegrationAgent>> agents = clazz_integration.iterator();
 		while (agents.hasNext()) {
@@ -64,7 +68,10 @@ public class ModuleIntegration implements IModule {
 			for (Annotation annotate : annotations)
 				if (annotate.annotationType().equals(Agent.class)) {
 					Agent theAgent = (Agent) annotate;
-					if (Loader.isModLoaded(theAgent.modname()))
+					String modName = theAgent.modname();
+					boolean configEnabled = ConfigHelper.getOrSetBooleanParam(config, "ExternalMod", modName, "enabled",
+							String.format("Enable integration with the external mod %s.", modName), true);
+					if (Loader.isModLoaded(theAgent.modname()) && configEnabled)
 						try {
 							LanteaCraft.getLogger().log(Level.INFO,
 									String.format("Hot-loading agent %s", agent.getName()));
