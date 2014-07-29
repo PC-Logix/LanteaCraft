@@ -1,8 +1,10 @@
 tile.stargateController.name=Stargate Controller
+
 tile.stargateBase.0.name=Stargate Base
 tile.stargateBase.4.name=Pegasus Stargate Base
 tile.stargateBase.8.name=Wraith Stargate Base
 tile.stargateBase.12.name=Nox Stargate Base
+screen.stargate_base.title=Stargate Settings
 
 tile.stargateRing.0.name=Stargate Ring
 tile.stargateRing.1.name=Stargate Chevron
