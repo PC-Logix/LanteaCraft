@@ -2,6 +2,7 @@ package pcl.lc.module.power.item;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -80,7 +81,7 @@ public class ItemEnergyCrystal extends Item implements IItemEnergyStore {
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
 		double energy = ((100 * getEnergyStored(par1ItemStack)) / getMaximumEnergy());
-		par3List.add(String.format("Energy: %.2f%%", energy));
+		par3List.add(I18n.format("energy.text", String.format("%.2f%%", energy)));
 	}
 
 	private void updateDisplay(ItemStack stack) {

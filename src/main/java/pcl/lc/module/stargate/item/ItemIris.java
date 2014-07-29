@@ -3,6 +3,7 @@ package pcl.lc.module.stargate.item;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -110,8 +111,8 @@ public class ItemIris extends Item {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wat) {
 		double damage = ((100 * getIrisDamage(stack)) / getMaximumDamage(getType(stack)));
-		list.add(String.format("Type: %s", getType(stack).getName()));
-		list.add(String.format("Damage: %.2f%%", damage));
+		list.add(I18n.format("iris.type.text", I18n.format(String.format("%s.name", getType(stack).getName()))));
+		list.add(I18n.format("iris.damage.text", String.format("%.2f%%", damage)));
 	}
 
 	private void updateDisplay(ItemStack stack) {

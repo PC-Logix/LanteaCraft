@@ -1,5 +1,6 @@
 package pcl.lc.module.power.gui;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -49,13 +50,10 @@ public class ScreenNaquadahGenerator extends GenericContainerGUI {
 		int dw = fontRendererObj.getStringWidth(sg.toString());
 		fontRendererObj.drawString(sg.toString(), 48 + ((int) Math.floor((80d - dw) / 2)), 98,
 				(tileEntity.displayEnergy > 0.00d) ? 0xFFFFFF : 0x9F0101, true);
-
-		StringBuilder st = new StringBuilder().append("Tank: ").append(tileEntity.displayTankVolume / 100d);
-		if (st.substring(st.indexOf(".") + 1).length() != 2)
-			st.append("0");
-		st.append("%");
-		int dm = fontRendererObj.getStringWidth(st.toString());
-		fontRendererObj.drawString(st.toString(), 48 + ((int) Math.floor((80d - dm) / 2)), 110, 0xFFFFFF);
+		
+		String tankLabel = I18n.format("tank.text", String.format("%.2f%%", tileEntity.displayTankVolume / 100d));
+		int dm = fontRendererObj.getStringWidth(tankLabel);
+		fontRendererObj.drawString(tankLabel, 48 + ((int) Math.floor((80d - dm) / 2)), 110, 0xFFFFFF);
 	}
 
 }
