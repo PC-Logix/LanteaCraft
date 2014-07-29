@@ -13,6 +13,8 @@ tile.stargateRing.5.name=Wraith Stargate Chevron
 tile.stargateRing.6.name=Nox Stargate Ring
 tile.stargateRing.7.name=Nox Stargate Chevron
 
+item.iris.name=Stargate Iris
+
 item.energyCrystal.name=Energy Crystal
 
 item.craftingReagent.0.name=Broken Reagent Item
@@ -54,8 +56,14 @@ item.lanteaOreIngot.2.name=Trinium Ingot
 tile.lanteaOreIngotBlock.2.name=Block of Trinium
 
 tile.naquadahGenerator.name=Naquadah Generator
+tile.blockCrystalInfuser.name=Crystal Infuser
 tile.ringPlatform.name=Transport Rings
 item.zpm.name=ZPM
+item.jacksonNotebook.name=Daniel Jackson's Notebook
+item.gdo.name=Garage Door Opener
+
+tile.transporterRing.0.name=Transporter Ring Frame
+tile.transporterRing.1.name=Transporter Ring Controller
 item.transportRingActivator.name=Transport Ring Activator
 
 item.tokraSpawnEgg.name=Tok'ra Spawn Egg
@@ -71,3 +79,10 @@ energy.text=Energy: %s
 entropy.text=Entropy: %s
 iris.type.text=%s iris
 iris.damage.text=%s damaged
+
+lc.clipboard.put_success.text=Copied to Clipboard!
+lc.clipboard.put_address.text=Copy Address
+
+lc.stargate.coord_out_of_range.text=Coordinates out of stargate range
+lc.stargate.dimension_out_of_range.text=Dimension not reachable by stargate
+lc.stargate.general_address_error.text=Stargate addressing error; check the log!
