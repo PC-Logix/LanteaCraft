@@ -1,5 +1,8 @@
 package pcl.lc.module.stargate.tile;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
@@ -78,8 +81,28 @@ public class TileStargateRing extends TileManaged {
 
 	}
 
+	public void applyStackData(NBTTagCompound stackTagCompound) {
+		if (blockData == null)
+			blockData = new NBTTagCompound();
+		if (stackTagCompound == null)
+			return;
+		Set taglist = stackTagCompound.func_150296_c();
+		Iterator it = taglist.iterator();
+		while (it.hasNext()) {
+			String tagname = (String) it.next();
+			blockData.setTag(tagname, stackTagCompound.getTag(tagname));
+		}
+	}
+
 	public void setStackData(NBTTagCompound stackTagCompound) {
-		// TODO: blockData =>> stackTagCompound
+		if (blockData == null)
+			return;
+		Set taglist = blockData.func_150296_c();
+		Iterator it = taglist.iterator();
+		while (it.hasNext()) {
+			String tagname = (String) it.next();
+			stackTagCompound.setTag(tagname, blockData.getTag(tagname));
+		}
 	}
 
 }

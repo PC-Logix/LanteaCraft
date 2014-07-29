@@ -1,11 +1,14 @@
 package pcl.lc.module.stargate.item;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
+import pcl.lc.module.stargate.tile.TileStargateRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,6 +42,17 @@ public class ItemStargateRing extends ItemBlock {
 
 	public static String subItemName(int i) {
 		return "tile.stargateRing." + i;
+	}
+
+	@Override
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
+			float hitX, float hitY, float hitZ, int metadata) {
+		boolean flag = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
+		if (!flag)
+			return flag;
+		TileStargateRing ring = (TileStargateRing) world.getTileEntity(x, y, z);
+		ring.applyStackData(stack.stackTagCompound);
+		return flag;
 	}
 
 }

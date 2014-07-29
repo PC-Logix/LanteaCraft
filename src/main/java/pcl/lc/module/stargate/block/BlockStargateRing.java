@@ -1,8 +1,6 @@
 package pcl.lc.module.stargate.block;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -11,7 +9,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -31,14 +28,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStargateRing extends GenericContainerBlock {
 
-	static final int numSubBlocks = 2;
-	public static final int subBlockMask = 0x1;
-	IIcon topAndBottomTexture;
-	IIcon sideTextures[] = new IIcon[numSubBlocks];
+	IIcon topAndBottomTexture[] = new IIcon[EnumStargateType.values().length];
+	IIcon sideTextures[][] = new IIcon[EnumStargateType.values().length][2];
 
 	public BlockStargateRing() {
 		super(Material.ground);
-		setHardness(50F);
+		setHardness(3F);
 		setResistance(2000F);
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
@@ -82,23 +77,6 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ItemStack stackOf = new ItemStack(Item.getItemFromBlock(this), 1);
-
-		stackOf.stackTagCompound = new NBTTagCompound();
-		TileStargateRing ringTile = (TileStargateRing) world.getTileEntity(x, y, z);
-		stackOf.stackTagCompound = new NBTTagCompound();
-		ringTile.setStackData(stackOf.stackTagCompound);
-		if (!stackOf.stackTagCompound.hasKey("isChevron")) {
-			stackOf.stackTagCompound.setBoolean("isChevron", (metadata > 0));
-			stackOf.stackTagCompound.setInteger("type", EnumStargateType.STANDARD.ordinal());
-		}
-		
-		return ret;
-	}
-
-	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
 			float cy, float cz) {
 		TileStargateRing te = (TileStargateRing) world.getTileEntity(x, y, z);
@@ -117,7 +95,7 @@ public class BlockStargateRing extends GenericContainerBlock {
 		if (side <= 1)
 			return topAndBottomTexture;
 		else
-			return sideTextures[data & subBlockMask];
+			return sideTextures[(int) Math.floor(data / 2)][data % 2];
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
