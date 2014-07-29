@@ -1,11 +1,14 @@
 package pcl.lc.module.stargate.block;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -13,6 +16,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.EnumStargateType;
 import pcl.lc.base.RotationOrientedBlock;
 import pcl.lc.base.multiblock.EnumOrientations;
 import pcl.lc.base.multiblock.MultiblockPart;
@@ -26,9 +30,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStargateBase extends RotationOrientedBlock {
-	protected IIcon topAndBottomTexture;
-	protected IIcon frontTexture;
-	protected IIcon sideTexture;
+
+	private static final int blockMutex = 4;
+	private static final int blockCount = EnumStargateType.values().length * blockMutex;
+
+	private static final int blockCraftableMutex = 4;
+	private static final int blockCraftableCount = blockCount;
+
+	protected IIcon topAndBottomTexture[] = new IIcon[EnumStargateType.values().length];
+	protected IIcon frontTexture[] = new IIcon[EnumStargateType.values().length];
+	protected IIcon sideTexture[] = new IIcon[EnumStargateType.values().length];
 
 	public BlockStargateBase() {
 		super(Material.rock);
@@ -78,12 +89,19 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topAndBottomTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargate_block"));
-		frontTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargate_base_front"));
-		sideTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargate_ring"));
+		EnumStargateType[] types = EnumStargateType.values();
+		for (EnumStargateType typeof : types) {
+			StringBuilder typename = new StringBuilder();
+			typename.append("stargate_%s");
+			if (typeof.getSuffix() != null && typeof.getSuffix().length() > 0)
+				typename.append("_").append(typeof.getSuffix());
+			topAndBottomTexture[typeof.ordinal()] = register.registerIcon(ResourceAccess.formatResourceName(
+					"${ASSET_KEY}:%s_${TEX_QUALITY}", String.format(typename.toString(), "block")));
+			frontTexture[typeof.ordinal()] = register.registerIcon(ResourceAccess.formatResourceName(
+					"${ASSET_KEY}:%s_${TEX_QUALITY}", String.format(typename.toString(), "base_front")));
+			sideTexture[typeof.ordinal()] = register.registerIcon(ResourceAccess.formatResourceName(
+					"${ASSET_KEY}:%s_${TEX_QUALITY}", String.format(typename.toString(), "ring")));
+		}
 	}
 
 	@Override
@@ -103,10 +121,23 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
-		int data = Math.round((180 - player.rotationYaw) / 90) & 3;
+		int rotation = Math.round((180 - player.rotationYaw) / 90) & 3;
+		System.out.println(rotation);
+		int data = ((int) Math.floor(stack.getItemDamage() / blockMutex) * blockMutex) + rotation;
+		System.out.println(data);
 		world.setBlockMetadataWithNotify(x, y, z, data, 0x3);
 		TileStargateBase te = (TileStargateBase) getTileEntity(world, x, y, z);
 		te.hostBlockPlaced();
+	}
+
+	@Override
+	public int damageDropped(int metadata) {
+		return (int) Math.floor(metadata / blockMutex);
+	}
+	
+	@Override
+	public int extractRotation(int data) {
+		return data % blockMutex;
 	}
 
 	@Override
@@ -122,12 +153,20 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public IIcon getIcon(int side, int data) {
+		int typeof = (int) Math.floor(data / blockMutex);
 		if (side <= 1)
-			return topAndBottomTexture;
+			return topAndBottomTexture[typeof];
 		else if (side == 3)
-			return frontTexture;
+			return frontTexture[typeof];
 		else
-			return sideTexture;
+			return sideTexture[typeof];
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+		for (int i = 0; i < blockCraftableCount; i += blockCraftableMutex)
+			list.add(new ItemStack(item, 1, i));
 	}
 
 	@Override

@@ -28,8 +28,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStargateRing extends GenericContainerBlock {
 
+	private static final int blockMutex = 2;
+	private static final int blockCount = EnumStargateType.values().length * blockMutex;
+
+	private static final int blockCraftableMutex = 1;
+	private static final int blockCraftableCount = blockCount;
+
 	IIcon topAndBottomTexture[] = new IIcon[EnumStargateType.values().length];
-	IIcon sideTextures[][] = new IIcon[EnumStargateType.values().length][2];
+	IIcon sideTextures[][] = new IIcon[EnumStargateType.values().length][blockMutex];
 
 	public BlockStargateRing() {
 		super(Material.ground);
@@ -53,12 +59,19 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		topAndBottomTexture = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargate_block"));
-		sideTextures[0] = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargate_ring"));
-		sideTextures[1] = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
-				"stargate_chevron"));
+		EnumStargateType[] types = EnumStargateType.values();
+		for (EnumStargateType typeof : types) {
+			StringBuilder typename = new StringBuilder();
+			typename.append("stargate_%s");
+			if (typeof.getSuffix() != null && typeof.getSuffix().length() > 0)
+				typename.append("_").append(typeof.getSuffix());
+			topAndBottomTexture[typeof.ordinal()] = register.registerIcon(ResourceAccess.formatResourceName(
+					"${ASSET_KEY}:%s_${TEX_QUALITY}", String.format(typename.toString(), "block")));
+			sideTextures[typeof.ordinal()][0] = register.registerIcon(ResourceAccess.formatResourceName(
+					"${ASSET_KEY}:%s_${TEX_QUALITY}", String.format(typename.toString(), "ring")));
+			sideTextures[typeof.ordinal()][1] = register.registerIcon(ResourceAccess.formatResourceName(
+					"${ASSET_KEY}:%s_${TEX_QUALITY}", String.format(typename.toString(), "chevron")));
+		}
 	}
 
 	@Override
@@ -92,16 +105,17 @@ public class BlockStargateRing extends GenericContainerBlock {
 
 	@Override
 	public IIcon getIcon(int side, int data) {
+		int typeof = (int) Math.floor(data / blockMutex);
 		if (side <= 1)
-			return topAndBottomTexture;
+			return topAndBottomTexture[typeof];
 		else
-			return sideTextures[(int) Math.floor(data / 2)][data % 2];
+			return sideTextures[typeof][data % blockMutex];
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		for (int i = 0; i < numSubBlocks; i++)
+		for (int i = 0; i < blockCraftableCount; i += blockCraftableMutex)
 			list.add(new ItemStack(item, 1, i));
 	}
 
