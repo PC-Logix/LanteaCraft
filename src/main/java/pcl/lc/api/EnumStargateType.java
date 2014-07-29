@@ -10,19 +10,15 @@ package pcl.lc.api;
  */
 public enum EnumStargateType {
 
-	/** Standard Stargate type. */
-	STANDARD("stargate.standard"),
-	/** Atlantis Stargate type. */
-	ATLANTIS("stargate.atl"),
-	/** Reserved for future expansion. */
-	RESERVED_A("stargate.resv_a"),
-	/** Reserved for future expansion. */
-	RESERVED_B("stargate.resv_b");
+	STANDARD("stargate.standard", ""), ATLANTIS("stargate.pegasus", "pegasus"), WRAITH("stargate.wraith", "wraith"), NOX(
+			"stargate.nox", "nox");
 
 	private final String name;
+	private final String suffix;
 
-	EnumStargateType(String name) {
+	EnumStargateType(String name, String suffix) {
 		this.name = name;
+		this.suffix = suffix;
 	}
 
 	/**
@@ -32,6 +28,10 @@ public enum EnumStargateType {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	public String getSuffix() {
+		return suffix;
 	}
 
 	public static EnumStargateType fromOrdinal(int ordinal) {
