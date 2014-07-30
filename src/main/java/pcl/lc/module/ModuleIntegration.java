@@ -49,7 +49,9 @@ public class ModuleIntegration implements IModule {
 
 	@Override
 	public Set<Module> getLoadDependenciesAfter() {
-		return EnumSet.of(Module.CORE);
+		Set<Module> modules = EnumSet.allOf(Module.class);
+		modules.remove(Module.INTEGRATION);
+		return modules;
 	}
 
 	@Override
@@ -69,8 +71,8 @@ public class ModuleIntegration implements IModule {
 				if (annotate.annotationType().equals(Agent.class)) {
 					Agent theAgent = (Agent) annotate;
 					String modName = theAgent.modname();
-					boolean configEnabled = ConfigHelper.getOrSetBooleanParam(config, "ExternalMod", modName, "enabled",
-							String.format("Enable integration with the external mod %s.", modName), true);
+					boolean configEnabled = ConfigHelper.getOrSetBooleanParam(config, "ExternalMod", modName,
+							"enabled", String.format("Enable integration with the external mod %s.", modName), true);
 					if (Loader.isModLoaded(theAgent.modname()) && configEnabled)
 						try {
 							LanteaCraft.getLogger().log(Level.INFO,

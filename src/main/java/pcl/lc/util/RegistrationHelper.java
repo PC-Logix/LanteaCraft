@@ -72,7 +72,8 @@ public class RegistrationHelper {
 	 */
 	public static Map<Integer, BlockItemMapping> getBlockMappings() {
 		if (!isLateRegistrationZone)
-			return null;
+			LanteaCraft.getLogger().log(Level.WARN,
+					"Block registration mappings are being accessed earlier than init::finish, problems may occur.");
 		return registeredBlocks;
 	}
 
@@ -214,7 +215,8 @@ public class RegistrationHelper {
 	 *            The texture target for the bucket.
 	 * @return The ItemSpecialBucket singleton for this host fluid.
 	 */
-	public static ItemSpecialBucket registerSpecialBucket(Block hostOf, String unlocalizedName, String bucketTextureName, CreativeTabs tab) {
+	public static ItemSpecialBucket registerSpecialBucket(Block hostOf, String unlocalizedName,
+			String bucketTextureName, CreativeTabs tab) {
 		LanteaCraft.getLogger().log(Level.DEBUG, "Attempting to register SpecialBucket " + unlocalizedName);
 		if (isLateRegistrationZone)
 			LanteaCraft.getLogger().log(Level.WARN,

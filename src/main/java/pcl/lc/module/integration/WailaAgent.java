@@ -28,19 +28,23 @@ public class WailaAgent implements IIntegrationAgent {
 		FMLInterModComms.sendMessage("Waila", "register", "pcl.lc.module.integration.WailaAgent.callbackRegister");
 	}
 
+	public static void callbackRegister(IWailaRegistrar registrar) {
+		try {
+			Map<Integer, BlockItemMapping> ablock = RegistrationHelper.getBlockMappings();
+			for (Entry<Integer, BlockItemMapping> amapping : ablock.entrySet()) {
+				WailaHook hook = new WailaHook(amapping.getValue().blockClass);
+				registrar.registerHeadProvider(hook, amapping.getValue().blockClass);
+				registrar.registerBodyProvider(hook, amapping.getValue().blockClass);
+			}
+			LanteaCraft.getLogger().log(Level.INFO, "Waila integration loaded!");
+		} catch (Throwable tt) {
+			LanteaCraft.getLogger().log(Level.WARN, "Internal registration exception.", tt);
+		}
+	}
+
 	@Override
 	public void postInit() {
 
-	}
-
-	public static void callbackRegister(IWailaRegistrar registrar) {
-		Map<Integer, BlockItemMapping> ablock = RegistrationHelper.getBlockMappings();
-		for (Entry<Integer, BlockItemMapping> amapping : ablock.entrySet()) {
-			WailaHook hook = new WailaHook(amapping.getValue().blockClass);
-			registrar.registerHeadProvider(hook, amapping.getValue().blockClass);
-			registrar.registerBodyProvider(hook, amapping.getValue().blockClass);
-		}
-		LanteaCraft.getLogger().log(Level.INFO, "Waila integration loaded!");
 	}
 
 }
