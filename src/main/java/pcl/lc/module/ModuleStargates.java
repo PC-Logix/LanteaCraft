@@ -113,20 +113,25 @@ public class ModuleStargates implements IModule {
 		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateDHD.class, ItemBlock.class,
 				"stargateDHD", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 
-		Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
-				ItemTransporterRing.class, "ringPlatform", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
+		if (false)
+			Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
+					ItemTransporterRing.class, "ringPlatform", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 
 		GameRegistry.registerTileEntity(TileStargateBase.class, "tileEntityStargateBase");
 		GameRegistry.registerTileEntity(TileStargateRing.class, "tileEntityStargateRing");
 		GameRegistry.registerTileEntity(TileStargateDHD.class, "tileEntityStargateDHD");
 		GameRegistry.registerTileEntity(TileTransporterRing.class, "tileEntityRingPlatform");
-		Items.iris = RegistrationHelper.registerItem(ItemIris.class, "iris",
-				CreativeTabHelper.getTab("LanteaCraft: Stargates"));
-		Items.gdo = RegistrationHelper.registerItem(ItemGDO.class, "gdo",
-				CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 
-		Items.transportRingActivator = RegistrationHelper.registerItem(ItemTransportRingActivator.class,
-				"transportRingActivator", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
+		if (false)
+			Items.iris = RegistrationHelper.registerItem(ItemIris.class, "iris",
+					CreativeTabHelper.getTab("LanteaCraft: Stargates"));
+		if (false)
+			Items.gdo = RegistrationHelper.registerItem(ItemGDO.class, "gdo",
+					CreativeTabHelper.getTab("LanteaCraft: Stargates"));
+
+		if (false)
+			Items.transportRingActivator = RegistrationHelper.registerItem(ItemTransportRingActivator.class,
+					"transportRingActivator", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN", "III", 'I',
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',

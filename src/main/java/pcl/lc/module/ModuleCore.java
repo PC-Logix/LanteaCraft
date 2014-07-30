@@ -103,13 +103,15 @@ public class ModuleCore implements IModule {
 				CreativeTabHelper.getTab("LanteaCraft"));
 		Items.lanteaOreIngot = RegistrationHelper.registerItem(ItemLanteaOreIngot.class, "lanteaOreIngot",
 				CreativeTabHelper.getTab("LanteaCraft"));
-		Items.jacksonNotebook = RegistrationHelper.registerItem(ItemJacksonNotebook.class, "jacksonNotebook",
-				CreativeTabHelper.getTab("LanteaCraft"));
+		if (false)
+			Items.jacksonNotebook = RegistrationHelper.registerItem(ItemJacksonNotebook.class, "jacksonNotebook",
+					CreativeTabHelper.getTab("LanteaCraft"));
 		Blocks.lanteaOreAsBlock = RegistrationHelper.registerBlock(BlockOfLanteaOre.class, ItemBlockOfLanteaOre.class,
 				"lanteaOreIngotBlock", CreativeTabHelper.getTab("LanteaCraft"));
 
-		Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg",
-				CreativeTabHelper.getTab("LanteaCraft"));
+		if (false)
+			Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg",
+					CreativeTabHelper.getTab("LanteaCraft"));
 
 		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), new ItemStack(
 				Items.lanteaOreItem, 1), net.minecraft.init.Items.iron_ingot);
