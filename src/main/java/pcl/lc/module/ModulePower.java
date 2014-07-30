@@ -54,6 +54,11 @@ public class ModulePower implements IModule {
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
+
+	}
+
+	@Override
+	public void init(FMLInitializationEvent event) {
 		Blocks.naquadahGenerator = RegistrationHelper.registerBlock(BlockNaquadahGenerator.class, ItemBlock.class,
 				"naquadahGenerator", CreativeTabHelper.getTab("LanteaCraft: Machines"));
 		GameRegistry.registerTileEntity(TileNaquadahGenerator.class, "tileEntityNaquadahGenerator");
@@ -61,10 +66,7 @@ public class ModulePower implements IModule {
 		Items.energyCrystal = RegistrationHelper.registerItem(ItemEnergyCrystal.class, "energyCrystal",
 				CreativeTabHelper.getTab("LanteaCraft"));
 		Items.zpm = RegistrationHelper.registerItem(ItemZPM.class, "zpm", CreativeTabHelper.getTab("LanteaCraft"));
-	}
 
-	@Override
-	public void init(FMLInitializationEvent event) {
 		RegistrationHelper.registerContainer(LanteaCraft.EnumGUIs.NaquadahGenerator.ordinal(),
 				ContainerNaquadahGenerator.class);
 
