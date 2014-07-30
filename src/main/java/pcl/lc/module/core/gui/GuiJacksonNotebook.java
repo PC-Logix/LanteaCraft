@@ -79,7 +79,7 @@ public class GuiJacksonNotebook extends GuiScreen {
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			if (this.pages.length > currentPage) {
 				Render.fontRenderer.renderPages(Render.danielFont, Render.danielFontBuffer, this.pages[currentPage],
-						18, 12, zLevel, true);
+						18, 12, zLevel);
 				GL11.glPushMatrix();
 				GL11.glTranslatef(90.0f, 200.0f, 0.0f);
 				GL11.glScalef(0.5f, 0.5f, 1.0f);
@@ -88,7 +88,7 @@ public class GuiJacksonNotebook extends GuiScreen {
 			}
 			if (this.pages.length > currentPage + 1) {
 				Render.fontRenderer.renderPages(Render.danielFont, Render.danielFontBuffer,
-						this.pages[currentPage + 1], 204, 12, zLevel, true);
+						this.pages[currentPage + 1], 204, 12, zLevel);
 				GL11.glPushMatrix();
 				GL11.glTranslatef(290.0f, 200.0f, 0.0f);
 				GL11.glScalef(0.5f, 0.5f, 1.0f);

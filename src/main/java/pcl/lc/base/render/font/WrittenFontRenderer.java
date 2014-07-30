@@ -26,18 +26,14 @@ public class WrittenFontRenderer {
 	 *            The origin y coord for the draw.
 	 * @param z
 	 *            The z-depth of the draw.
-	 * @param debug
-	 *            If the draw is debug enabled.
 	 */
-	public void renderPages(FontMetric metric, FontRenderBuffer buffer, PageBox page, float ox, float oy, float z,
-			boolean debug) {
+	public void renderPages(FontMetric metric, FontRenderBuffer buffer, PageBox page, float ox, float oy, float z) {
 		float x = 0, y = 0;
 		Minecraft.getMinecraft().getTextureManager().bindTexture(metric.fontImageName);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(ox, oy, z);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
 		// Translate to the draw dest
 		for (LineBox line : page.lines) {
 			x = 0; // carriage return
