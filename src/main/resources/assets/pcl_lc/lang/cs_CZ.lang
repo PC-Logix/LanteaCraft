@@ -6,7 +6,16 @@ item.coreCrystal.name=Hlavní krystal
 item.controllerCrystal.name=Řídící krystal
 item.energyCrystal.name=Energetický krystal
 
+item.craftingReagent.0.name=Poškozená ingredience
+item.craftingReagent.1.name=Prázdný krystal
+item.craftingReagent.2.name=Hlavní krystal brány
+item.craftingReagent.3.name=Řídící krystal brány
+item.craftingReagent.4.name=Železný plát
+item.craftingReagent.5.name=Plát z Naquadahové slitiny
+item.craftingReagent.6.name=Plát z Triniové slitiny
+
 tile.blockLiquidNaquadah.name=Tekutý naquadah
+fluid.liquid_naquadah=Tekutý naquadah
 item.liquidNaquadahBucket.name=Kbelík tekutého naquadahu
 
 tile.lanteaDecor.1.name=Kov předků s ornamenty
