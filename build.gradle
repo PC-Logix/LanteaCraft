@@ -23,12 +23,12 @@ if (System.getenv().BUILD_NUMBER != null)
 else
 	ext.buildNumber = 0
 
-version = "RC2"
+version = "RC3"
 group = "pcl.LanteaCraft"
 archivesBaseName = "LanteaCraft"
 
 minecraft {
-	version = "1.7.2-10.12.1.1060"
+	version = "1.7.10-10.13.0.1180"
 	replace "@VERSION@", project.version
 	replace "@BUILD@", project.ext.buildNumber
 }

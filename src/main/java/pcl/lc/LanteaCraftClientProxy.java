@@ -17,7 +17,6 @@ import pcl.lc.module.power.gui.ScreenNaquadahGenerator;
 import pcl.lc.module.stargate.gui.ScreenStargateBase;
 import pcl.lc.module.stargate.gui.ScreenStargateDHD;
 import pcl.lc.module.stargate.gui.ScreenStargateDHDEnergy;
-import pcl.lc.util.CloakHandler;
 import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -26,7 +25,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 
 	private ClientTickHandler clientTickHandler = new ClientTickHandler();
-	private CloakHandler cloakHandler = new CloakHandler(BuildInfo.webAPI + "cloaks");
 
 	public LanteaCraftClientProxy() {
 		super();
@@ -43,8 +41,6 @@ public class LanteaCraftClientProxy extends LanteaCraftCommonProxy {
 	@Override
 	public void init(FMLInitializationEvent e) {
 		super.init(e);
-		cloakHandler.buildDatabase();
-		FMLCommonHandler.instance().bus().register(cloakHandler);
 		FMLCommonHandler.instance().bus().register(clientTickHandler);
 		audioContext = new ClientAudioEngine();
 		audioContext.initialize();
