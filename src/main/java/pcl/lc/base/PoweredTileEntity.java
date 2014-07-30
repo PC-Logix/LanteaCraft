@@ -163,7 +163,6 @@ public abstract class PoweredTileEntity extends TileManaged {
 	 * invoked using super. Failure to do so prevents the exporting of energy to
 	 * nearby BuildCraft systems.
 	 */
-	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if (canExportEnergy() && !worldObj.isRemote && receiverBuffer != null)
@@ -253,29 +252,6 @@ public abstract class PoweredTileEntity extends TileManaged {
 	public void drawEnergy(double amount) {
 		double naqQuantity = EnumUnits.convertToNaquadahUnit(EnumUnits.EnergyUnit, amount);
 		exportEnergy(naqQuantity);
-	}
-
-	/**
-	 * Determine if this IC2 accepts energy, and if so, how much energy to
-	 * accept.
-	 */
-	@RuntimeInterface(modid = "IC2", clazz = "ic2.api.energy.tile.IEnergySink")
-	public double demandedEnergyUnits() {
-		if (!canReceiveEnergy())
-			return 0;
-		return EnumUnits.convertFromNaquadahUnit(EnumUnits.EnergyUnit, getMaximumReceiveEnergy());
-	}
-
-	/**
-	 * Transfer energy from IC2 to this sink.
-	 */
-	@RuntimeInterface(modid = "IC2", clazz = "ic2.api.energy.tile.IEnergySink")
-	public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
-		if (!canReceiveEnergy())
-			return 0;
-		double quantity = EnumUnits.convertToNaquadahUnit(EnumUnits.EnergyUnit, amount);
-		receiveEnergy(quantity);
-		return amount;
 	}
 
 	/**
@@ -371,11 +347,6 @@ public abstract class PoweredTileEntity extends TileManaged {
 	}
 
 	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
-	public boolean canInterface(ForgeDirection from) {
-		return true;
-	}
-
-	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
 	public int getEnergyStored(ForgeDirection from) {
 		return (int) EnumUnits.convertFromNaquadahUnit(EnumUnits.RedstoneFlux, getAvailableExportEnergy());
 	}
@@ -383,5 +354,36 @@ public abstract class PoweredTileEntity extends TileManaged {
 	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
 	public int getMaxEnergyStored(ForgeDirection from) {
 		return (int) EnumUnits.convertFromNaquadahUnit(EnumUnits.RedstoneFlux, getMaximumExportEnergy());
+	}
+
+	@RuntimeInterface(modid = "CoFHCore", clazz = "cofh.api.energy.IEnergyHandler")
+	public boolean canConnectEnergy(ForgeDirection from) {
+		return true;
+	}
+
+	@RuntimeInterface(modid = "IC2", clazz = "ic2.api.energy.tile.IEnergySink")
+	public double getDemandedEnergy() {
+		if (!canReceiveEnergy())
+			return 0;
+		return EnumUnits.convertFromNaquadahUnit(EnumUnits.EnergyUnit, getMaximumReceiveEnergy());
+	}
+
+	@RuntimeInterface(modid = "IC2", clazz = "ic2.api.energy.tile.IEnergySink")
+	public int getSinkTier() {
+		return 4;
+	}
+
+	@RuntimeInterface(modid = "IC2", clazz = "ic2.api.energy.tile.IEnergySink")
+	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
+		if (!canReceiveEnergy())
+			return 0;
+		double quantity = EnumUnits.convertToNaquadahUnit(EnumUnits.EnergyUnit, amount);
+		receiveEnergy(quantity);
+		return amount;
+	}
+
+	@RuntimeInterface(modid = "IC2", clazz = "ic2.api.energy.tile.IEnergySource")
+	public int getSourceTier() {
+		return 4;
 	}
 }
