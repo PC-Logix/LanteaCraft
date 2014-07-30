@@ -12,6 +12,7 @@ import pcl.lc.module.decor.item.ItemLanteaDecor;
 import pcl.lc.module.decor.item.ItemLanteaDecorGlass;
 import pcl.lc.module.decor.render.TileLanteaDecorGlassRenderer;
 import pcl.lc.module.decor.tile.TileLanteaDecorGlass;
+import pcl.lc.util.CreativeTabHelper;
 import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -116,12 +117,14 @@ public class ModuleDecor implements IModule {
 				"lanteaDecor");
 		Blocks.glassDecorBlock = RegistrationHelper.registerBlock(BlockLanteaDecorGlass.class,
 				ItemLanteaDecorGlass.class, "lanteaGlassDecor");
-		Blocks.lanteaSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaSteelDecorStair", 1);
+		Blocks.lanteaSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaSteelDecorStair", 1,
+				CreativeTabHelper.getTab("LanteaCraft"));
 		Blocks.lanteaPatternedSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaPatternedSteelDecorStair",
-				2);
-		Blocks.goauldGoldDecorStair = RegistrationHelper.registerStairDecal("goauldGoldDecorStair", 3);
-		Blocks.goauldPatternedGoldDecorStair = RegistrationHelper
-				.registerStairDecal("goauldPatternedGoldDecorStair", 4);
+				2, CreativeTabHelper.getTab("LanteaCraft"));
+		Blocks.goauldGoldDecorStair = RegistrationHelper.registerStairDecal("goauldGoldDecorStair", 3,
+				CreativeTabHelper.getTab("LanteaCraft"));
+		Blocks.goauldPatternedGoldDecorStair = RegistrationHelper.registerStairDecal("goauldPatternedGoldDecorStair",
+				4, CreativeTabHelper.getTab("LanteaCraft"));
 
 		GameRegistry.registerTileEntity(TileLanteaDecorGlass.class, "tileEntityLanteaDecorGlass");
 		if (event.getSide() == Side.CLIENT) {

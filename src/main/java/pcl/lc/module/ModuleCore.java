@@ -31,6 +31,7 @@ import pcl.lc.module.core.item.ItemTokraSpawnEgg;
 import pcl.lc.module.core.render.BlockModelRenderer;
 import pcl.lc.module.core.render.BlockRotationOrientedRenderer;
 import pcl.lc.module.core.render.BlockVoidRenderer;
+import pcl.lc.util.CreativeTabHelper;
 import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -89,17 +90,26 @@ public class ModuleCore implements IModule {
 	public void init(FMLInitializationEvent event) {
 		ModuleConfig config = ModuleManager.getConfig(this);
 
+		Items.debugger = RegistrationHelper.registerItem(ItemDebugTool.class, "lanteadebug", null);
+		CreativeTabHelper.registerTab("LanteaCraft", Items.debugger);
+		CreativeTabHelper.registerTab("LanteaCraft: Stargates", Items.debugger);
+		CreativeTabHelper.registerTab("LanteaCraft: Machines", Items.debugger);
+
 		Blocks.lanteaOre = RegistrationHelper.registerBlock(BlockLanteaOre.class, ItemLanteaOreBlock.class,
 				"lanteaOreBlock");
-		Items.reagentItem = RegistrationHelper.registerItem(ItemCraftingReagent.class, "lanteaCraftingReagent");
-		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem");
-		Items.lanteaOreIngot = RegistrationHelper.registerItem(ItemLanteaOreIngot.class, "lanteaOreIngot");
-		Items.jacksonNotebook = RegistrationHelper.registerItem(ItemJacksonNotebook.class, "jacksonNotebook");
+		Items.reagentItem = RegistrationHelper.registerItem(ItemCraftingReagent.class, "lanteaCraftingReagent",
+				CreativeTabHelper.getTab("LanteaCraft"));
+		Items.lanteaOreItem = RegistrationHelper.registerItem(ItemLanteaOre.class, "lanteaOreItem",
+				CreativeTabHelper.getTab("LanteaCraft"));
+		Items.lanteaOreIngot = RegistrationHelper.registerItem(ItemLanteaOreIngot.class, "lanteaOreIngot",
+				CreativeTabHelper.getTab("LanteaCraft"));
+		Items.jacksonNotebook = RegistrationHelper.registerItem(ItemJacksonNotebook.class, "jacksonNotebook",
+				CreativeTabHelper.getTab("LanteaCraft"));
 		Blocks.lanteaOreAsBlock = RegistrationHelper.registerBlock(BlockOfLanteaOre.class, ItemBlockOfLanteaOre.class,
-				"lanteaOreIngotBlock");
+				"lanteaOreIngotBlock", CreativeTabHelper.getTab("LanteaCraft"));
 
-		Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg");
-		Items.debugger = RegistrationHelper.registerItem(ItemDebugTool.class, "lanteadebug");
+		Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg",
+				CreativeTabHelper.getTab("LanteaCraft"));
 
 		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), new ItemStack(
 				Items.lanteaOreItem, 1), net.minecraft.init.Items.iron_ingot);
@@ -118,9 +128,9 @@ public class ModuleCore implements IModule {
 		Fluids.fluidLiquidNaquadah = new LiquidNaquadah();
 		FluidRegistry.registerFluid(Fluids.fluidLiquidNaquadah);
 		Fluids.fluidLiquidNaquadahHost = RegistrationHelper.registerBlock(BlockLiquidNaquadah.class, ItemBlock.class,
-				"blockLiquidNaquadah", false);
+				"blockLiquidNaquadah", null);
 		Fluids.fluidLiquidNaquadahBucket = RegistrationHelper.registerSpecialBucket(Fluids.fluidLiquidNaquadahHost,
-				"liquidNaquadahBucket", "naquadah");
+				"liquidNaquadahBucket", "naquadah", CreativeTabHelper.getTab("LanteaCraft"));
 
 		RegistrationHelper.registerOre("oreNaquadah", new ItemStack(Blocks.lanteaOre));
 		RegistrationHelper.registerOre("naquadah", new ItemStack(Items.lanteaOreItem));

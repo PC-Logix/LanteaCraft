@@ -3,6 +3,7 @@ package pcl.lc.module;
 import java.util.EnumSet;
 import java.util.Set;
 
+import net.minecraft.item.ItemBlock;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
@@ -14,6 +15,7 @@ import pcl.lc.module.machine.render.ModelCrystalInfuser;
 import pcl.lc.module.machine.render.TileCrystalInfuserRenderer;
 import pcl.lc.module.machine.render.TileTablePressRenderer;
 import pcl.lc.module.machine.tile.TileCrystalInfuser;
+import pcl.lc.util.CreativeTabHelper;
 import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -55,10 +57,13 @@ public class ModuleMachine implements IModule {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
-		Blocks.infuser = RegistrationHelper.registerBlock(BlockCrystalInfuser.class, "blockCrystalInfuser");
+		Blocks.infuser = RegistrationHelper.registerBlock(BlockCrystalInfuser.class, ItemBlock.class,
+				"blockCrystalInfuser", CreativeTabHelper.getTab("LanteaCraft: Machines"));
 		// Blocks.press =
 		// RegistrationHelper.registerBlock(BlockTablePress.class,
-		// "blockTablePress");
+		// ItemBlock.class,
+		// "blockTablePress",
+		// CreativeTabHelper.getTab("LanteaCraft: Machines"));
 
 		GameRegistry.registerTileEntity(TileCrystalInfuser.class, "tileEntityCrystalInfuser");
 		// GameRegistry.registerTileEntity(TileTablePress.class,

@@ -3,6 +3,7 @@ package pcl.lc.module;
 import java.util.EnumSet;
 import java.util.Set;
 
+import net.minecraft.item.ItemBlock;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
@@ -15,6 +16,7 @@ import pcl.lc.module.power.render.BlockNaquadahGeneratorRenderer;
 import pcl.lc.module.power.render.ModelNaquadahGenerator;
 import pcl.lc.module.power.render.TileNaquadahGeneratorRenderer;
 import pcl.lc.module.power.tile.TileNaquadahGenerator;
+import pcl.lc.util.CreativeTabHelper;
 import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -52,11 +54,13 @@ public class ModulePower implements IModule {
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
-		Blocks.naquadahGenerator = RegistrationHelper.registerBlock(BlockNaquadahGenerator.class, "naquadahGenerator");
+		Blocks.naquadahGenerator = RegistrationHelper.registerBlock(BlockNaquadahGenerator.class, ItemBlock.class,
+				"naquadahGenerator", CreativeTabHelper.getTab("LanteaCraft: Machines"));
 		GameRegistry.registerTileEntity(TileNaquadahGenerator.class, "tileEntityNaquadahGenerator");
 
-		Items.energyCrystal = RegistrationHelper.registerItem(ItemEnergyCrystal.class, "energyCrystal");
-		Items.zpm = RegistrationHelper.registerItem(ItemZPM.class, "zpm");
+		Items.energyCrystal = RegistrationHelper.registerItem(ItemEnergyCrystal.class, "energyCrystal",
+				CreativeTabHelper.getTab("LanteaCraft"));
+		Items.zpm = RegistrationHelper.registerItem(ItemZPM.class, "zpm", CreativeTabHelper.getTab("LanteaCraft"));
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import pcl.lc.LanteaCraft;
 import pcl.lc.core.ResourceAccess;
+import pcl.lc.util.CreativeTabHelper;
 import pcl.lc.util.SpecialBucketHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,7 +37,7 @@ public class ItemSpecialBucket extends ItemBucket {
 	public ItemSpecialBucket(Block hostBlock) {
 		super(hostBlock);
 		LanteaCraft.getSpecialBucketHandler().registerBucketMapping(hostBlock, this);
-		setCreativeTab(LanteaCraft.getCreativeTab());
+		setCreativeTab(CreativeTabHelper.getTab("LanteaCraft"));
 		setContainerItem(Items.bucket);
 	}
 

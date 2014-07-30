@@ -42,16 +42,6 @@ public class LanteaCraft {
 	public static LanteaCraftCommonProxy proxy;
 
 	/**
-	 * Creative tab instance
-	 */
-	private static CreativeTabHelper lanteaCraftTab = new CreativeTabHelper(CreativeTabs.getNextID(), "LanteaCraft") {
-		@Override
-		public Item getTabIconItem() {
-			return ModuleCore.Items.debugger;
-		}
-	};
-
-	/**
 	 * The private instance of the logger used. Use {@link #getLogger()} to
 	 * access this object safely
 	 */
@@ -96,16 +86,6 @@ public class LanteaCraft {
 	 */
 	public static LanteaCraftCommonProxy getProxy() {
 		return LanteaCraft.proxy;
-	}
-
-	/**
-	 * Gets the current CreativeTabs creative-tab object
-	 * 
-	 * @return The current creative tab
-	 */
-	public static CreativeTabs getCreativeTab() {
-		LanteaCraft.getInstance();
-		return LanteaCraft.lanteaCraftTab;
 	}
 
 	/**
