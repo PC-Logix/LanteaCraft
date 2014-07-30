@@ -1,16 +1,17 @@
 package pcl.lc.module.integration;
 
 import java.lang.reflect.Method;
+
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import pcl.common.helpers.RegistrationHelper;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
 import pcl.lc.module.integration.computercraft.BlockComputerCraftConnector;
 import pcl.lc.module.integration.computercraft.TileEntityComputerCraftConnector;
+import pcl.lc.util.RegistrationHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
@@ -21,7 +22,7 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 	private class ComputerCraftProvider implements IPeripheralProvider {
 		@Override
 		public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
-			TileEntity entity = world.getBlockTileEntity(x, y, z);
+			TileEntity entity = world.getTileEntity(x, y, z);
 			if (entity instanceof TileEntityComputerCraftConnector)
 				return (TileEntityComputerCraftConnector) entity;
 			return null;
@@ -60,10 +61,10 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 		GameRegistry.registerTileEntity(TileEntityComputerCraftConnector.class, "tileEntityComputercraftAdapter");
 
 	}
-	
+
 	@Override
 	public void postInit() {
-		
+
 	}
 
 }

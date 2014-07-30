@@ -5,9 +5,10 @@ import java.util.ArrayList;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import pcl.common.util.Vector3;
 import pcl.lc.module.integration.computercraft.ComputerCraftWrapperPool.ComputerCraftVirtualPeripheral;
+import pcl.lc.util.Vector3;
 import dan200.computercraft.api.lua.ILuaContext;
+import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 
@@ -80,8 +81,12 @@ public class TileEntityComputerCraftConnector extends TileEntity implements IPer
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
-			throws Exception {
-		return iface.callMethod(computer, context, method, arguments);
+			throws LuaException, InterruptedException {
+		try {
+			return iface.callMethod(computer, context, method, arguments);
+		} catch (Throwable t) {
+			throw new LuaException(t.getMessage());
+		}
 	}
 
 	@Override
