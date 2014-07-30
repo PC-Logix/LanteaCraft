@@ -14,7 +14,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import pcl.lc.base.render.font.PageBox;
-import pcl.lc.base.render.font.WrittenFontRenderer;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleCore.Render;
 
@@ -40,7 +39,7 @@ public class GuiJacksonNotebook extends GuiScreen {
 			while ((len = reader.read(buf)) != -1)
 				fileData.append(buf, 0, len);
 			reader.close();
-			this.pages = Render.fontCalculator.boxParagraph(Render.danielFont, fileData.toString(), 350, 450, 2, 2, 10,
+			this.pages = Render.fontCalculator.boxParagraph(Render.danielFont, fileData.toString(), 325, 425, 2, 2, 10,
 					20);
 		} catch (IOException ioex) {
 			ioex.printStackTrace();
@@ -67,20 +66,34 @@ public class GuiJacksonNotebook extends GuiScreen {
 		super.drawScreen(par1, par2, par3);
 		GL11.glPushMatrix();
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		GL11.glTranslatef(width / 2 - 200, height / 2 - 110, 0.0f);
 		useTexture("noteback");
-		drawTexturedRectUV(width / 2 - 200, height / 2 - 110, 400, 220, 0, 0, 1, 1);
-		GL11.glPopMatrix();
+		drawTexturedRectUV(0, 0, 400, 220, 0, 0, 1083.0f / 1111.0f, 847.0f / 1024.0f);
+		drawTexturedRectUV(20, 198, 45 / 3, 25 / 3, 0f, 860.0f / 1024.0f, 45.0f / 1111.0f, 25.0f / 1024.0f);
+		drawTexturedRectUV(360, 198, 45 / 3, 25 / 3, 58.0f / 1111.0f, 892.0f / 1024.0f, 45.0f / 1111.0f,
+				25.0f / 1024.0f);
 
-		GL11.glPushMatrix();
+		drawTexturedRectUV(-5, 16, 57 / 3, 20 / 3, 196.0f / 1111.0f, 860.0f / 1024.0f, 57.0f / 1111.0f, 20.0f / 1024.0f);
+
 		if (this.pages != null) {
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			if (this.pages.length > currentPage) {
-				Render.fontRenderer.renderPages(Render.danielFont, Render.danielFontBuffer,
-						this.pages[currentPage], width / 2 - 185, height / 2 - 99, zLevel);
+				Render.fontRenderer.renderPages(Render.danielFont, Render.danielFontBuffer, this.pages[currentPage],
+						18, 12, zLevel);
+				GL11.glPushMatrix();
+				GL11.glTranslatef(90.0f, 200.0f, 0.0f);
+				GL11.glScalef(0.5f, 0.5f, 1.0f);
+				fontRendererObj.drawString(String.format("- %s -", currentPage), 0, 0, 0);
+				GL11.glPopMatrix();
 			}
 			if (this.pages.length > currentPage + 1) {
 				Render.fontRenderer.renderPages(Render.danielFont, Render.danielFontBuffer,
-						this.pages[currentPage + 1], width / 2 + 12, height / 2 - 98, zLevel);
+						this.pages[currentPage + 1], 204, 12, zLevel);
+				GL11.glPushMatrix();
+				GL11.glTranslatef(290.0f, 200.0f, 0.0f);
+				GL11.glScalef(0.5f, 0.5f, 1.0f);
+				fontRendererObj.drawString(String.format("- %s -", currentPage + 1), 0, 0, 0);
+				GL11.glPopMatrix();
 			}
 		}
 		GL11.glPopMatrix();

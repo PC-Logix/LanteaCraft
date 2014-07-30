@@ -35,7 +35,6 @@ public class StackedPushbackStringReader {
 		this.str = new ArrayList<Character>();
 		this.pushback = new Stack<Integer>();
 		char[] chars = s.toCharArray();
-		System.out.println(chars.length);
 		for (int i = 0; i < chars.length; i++)
 			str.add(chars[i]);
 	}
