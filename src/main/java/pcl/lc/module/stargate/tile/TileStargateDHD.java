@@ -1,5 +1,7 @@
 package pcl.lc.module.stargate.tile;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,7 @@ import pcl.lc.cfg.ConfigHelper;
 import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.module.ModulePower;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
+import pcl.lc.util.ReflectionHelper;
 import pcl.lc.util.Trans3;
 import pcl.lc.util.Vector3;
 import pcl.lc.util.WorldLocation;
@@ -180,7 +183,14 @@ public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 
 	@Override
 	public void think() {
-		if (!worldObj.isRemote)
+		if (!worldObj.isRemote) {
+			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+			if (!addedToEnergyNet)
+				if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+						|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
+					postIC2Update(true);
+				}
+
 			if (getEnergyStored() < getMaxEnergyStored()) {
 				ItemStack stackOf = inventory.getStackInSlot(0);
 				if (stackOf != null && (stackOf.getItem() instanceof IItemEnergyStore)) {
@@ -191,14 +201,29 @@ public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 				}
 			}
 
-		if (isLinkedToStargate) {
-			TileStargateBase base = getLinkedStargateTE();
-			if (base.getMaxEnergyStored() > base.getEnergyStored()) {
-				double qty = extractEnergy(1.0d, true);
-				double acceptedQty = base.receiveEnergy(qty, false);
-				extractEnergy(acceptedQty, false);
+			if (isLinkedToStargate) {
+				TileStargateBase base = getLinkedStargateTE();
+				if (base == null)
+					clearLinkToStargate();
+				if (base != null && base.getMaxEnergyStored() > base.getEnergyStored()) {
+					double qty = extractEnergy(1.0d, true);
+					double acceptedQty = base.receiveEnergy(qty, false);
+					extractEnergy(acceptedQty, false);
+				}
 			}
 		}
+	}
+
+	@Override
+	public void invalidate() {
+		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+		if (addedToEnergyNet)
+			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+					|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
+				postIC2Update(false);
+				markDirty();
+			}
+		super.invalidate();
 	}
 
 	public void getStateFromPacket(ModPacket packet) {
@@ -281,50 +306,42 @@ public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 
 	@Override
 	public boolean canReceiveEnergy() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean canExportEnergy() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public double getMaximumReceiveEnergy() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1.0d;
 	}
 
 	@Override
 	public double getMaximumExportEnergy() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double getAvailableExportEnergy() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void receiveEnergy(double units) {
-		// TODO Auto-generated method stub
-
+		energy += units;
 	}
 
 	@Override
 	public double exportEnergy(double units) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

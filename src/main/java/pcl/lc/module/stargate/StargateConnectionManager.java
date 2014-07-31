@@ -170,7 +170,7 @@ public class StargateConnectionManager implements ITickAgent {
 					clientTile.get().performTransientDamage();
 				}
 				--ticksRemaining;
-			} else
+			} else {
 				switch (state.get()) {
 				case InterDialling: // Any dial_wait state -> any dial state
 					symbol.set(nextChevron());
@@ -206,14 +206,17 @@ public class StargateConnectionManager implements ITickAgent {
 					shutdown();
 					break;
 				}
+			}
+			
 			if (state.get() == EnumStargateState.Connected) {
-				if (energyTicksRemaining == 0) {
+				if (energyTicksRemaining < 0) {
 					if (!hostTile.get().useEnergy(energyPerTick))
 						if (StargateConnectionManager.canPowerFromEitherEnd && clientTile.get() != null
 								&& !clientTile.get().useEnergy(energyPerTick))
 							hostTile.get().disconnect();
 					energyTicksRemaining = 20 * StargateConnectionManager.secondsPerTick;
-				}
+				} else
+					energyTicksRemaining--;
 			}
 		}
 

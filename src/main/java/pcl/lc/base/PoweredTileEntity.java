@@ -379,7 +379,7 @@ public abstract class PoweredTileEntity extends TileManaged {
 			return 0;
 		double quantity = EnumUnits.convertToNaquadahUnit(EnumUnits.EnergyUnit, amount);
 		receiveEnergy(quantity);
-		return amount;
+		return 0;
 	}
 
 	@RuntimeInterface(modid = "IC2", clazz = "ic2.api.energy.tile.IEnergySource")

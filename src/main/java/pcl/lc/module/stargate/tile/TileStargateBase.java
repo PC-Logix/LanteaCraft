@@ -985,6 +985,11 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 
 	public boolean useEnergy(double q) {
 		double avail = getEnergyStored();
+		if (BuildInfo.DEBUG)
+			LanteaCraft.getLogger().log(
+					Level.INFO,
+					String.format("Energy deduction: %s stored %s required (can complete: %s).", avail, q,
+							(q > avail) ? "no" : "yes"));
 		if (q > avail)
 			return false;
 		metadata.set("energy", avail - q);
@@ -1031,7 +1036,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 
 	@Override
 	public double getMaximumReceiveEnergy() {
-		return 128;
+		return 2;
 	}
 
 	@Override
@@ -1091,7 +1096,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	public void saveEnergyStore(NBTTagCompound compound) {
 		if (!metadata.containsKey("energy"))
 			metadata.set("energy", 0.0d);
-		compound.setDouble("energy", (Float) metadata.get("energy"));
+		compound.setDouble("energy", (Double) metadata.get("energy"));
 	}
 
 	@Override
