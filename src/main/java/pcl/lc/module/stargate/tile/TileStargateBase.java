@@ -286,7 +286,10 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 							.get()] : StargateRenderConstants.extendedRenderQueue[1 + connection_cli.chevrons.get()];
 					double chevronAngle = (StargateRenderConstants.chevronAngle * whichChevron);
 					double symbolRotation = symbolIndex * StargateRenderConstants.ringSymbolAngle;
-					ring_dest_angle = MathUtils.normaliseAngle(symbolRotation + chevronAngle);
+					double dest = symbolRotation;
+					if (getType() == EnumStargateType.ATLANTIS || getType() == EnumStargateType.WRAITH)
+						dest += chevronAngle; // must specify destination uvx
+					ring_dest_angle = MathUtils.normaliseAngle(dest);
 				}
 
 				switch (getState()) {

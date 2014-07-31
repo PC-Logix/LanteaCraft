@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.EnumStargateType;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.stargate.tile.TileStargateBase;
@@ -41,13 +42,13 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 		if (te.isConnected())
 			TileStargateBaseRenderer.horizonRenderer.renderStargateAt(renderer, type, te, x, y, z, t);
 	}
-	
+
 	private ResourceLocation stargateTexFor(EnumStargateType type) {
 		if (type == EnumStargateType.NOX)
 			return stargateTex[1];
 		return stargateTex[0];
 	}
-	
+
 	private ResourceLocation chevronTexFor(EnumStargateType type) {
 		if (type == EnumStargateType.NOX)
 			return chevronTex[1];
@@ -168,12 +169,13 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 			GL11.glRotatef(
 					(float) ((StargateRenderConstants.chevronAngle * i) - StargateRenderConstants.chevronAngleOffset),
 					0, 0, 1);
-			chevron((sizeof != -1) && TileStargateBaseRenderer.before(renderQueue, i, te.getEncodedChevrons()));
+			chevron((sizeof != -1) && TileStargateBaseRenderer.before(renderQueue, i, te.getEncodedChevrons()), i == 0
+					&& te.getState() == EnumStargateState.InterDialling);
 			GL11.glPopMatrix();
 		}
 	}
 
-	private void chevron(boolean engaged) {
+	private void chevron(boolean engaged, boolean moved) {
 		double r1 = StargateRenderConstants.chevronInnerRadius;
 		double r2 = StargateRenderConstants.chevronOuterRadius;
 		double z2 = StargateRenderConstants.ringDepth - (1d / 32d);
@@ -185,7 +187,7 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 		double x1 = r1, y1 = StargateRenderConstants.chevronWidth / 4;
 		double x2 = r2, y2 = StargateRenderConstants.chevronWidth / 2;
 
-		if (engaged)
+		if (moved)
 			GL11.glTranslated(-StargateRenderConstants.chevronMotionDistance, 0, 0);
 		GL11.glBegin(GL11.GL_QUADS);
 
