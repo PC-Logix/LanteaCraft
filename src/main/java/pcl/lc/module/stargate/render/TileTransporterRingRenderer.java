@@ -22,6 +22,8 @@ public class TileTransporterRingRenderer extends TileEntitySpecialRenderer {
 		TransporterRingMultiblock structure = platform.getAsStructure();
 		if (structure == null)
 			return;
+		if (!structure.isValid())
+			return;
 
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);

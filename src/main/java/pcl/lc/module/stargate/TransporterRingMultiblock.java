@@ -1,13 +1,19 @@
 package pcl.lc.module.stargate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
+
+import org.apache.logging.log4j.Level;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import pcl.lc.BuildInfo;
+import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumRingPlatformState;
 import pcl.lc.base.multiblock.GenericMultiblock;
 import pcl.lc.base.multiblock.MultiblockPart;
@@ -27,7 +33,7 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 	private EnumRingPlatformState state = EnumRingPlatformState.Idle;
 	private int timeout;
 	private Vector3 connectionTo;
-	private ArrayList<Entity> boundingEntities;
+	private ArrayList<Entity> boundingEntities = new ArrayList<Entity>();
 	private double ringPosition, nextRingPosition;
 
 	public TransporterRingMultiblock(TileEntity host) {
@@ -115,7 +121,7 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 		for (Vector3 other : others) {
 			TileEntity at = host.getWorldObj().getTileEntity(xCoord + (int) Math.floor(other.x),
 					yCoord + (int) Math.floor(other.y), zCoord + (int) Math.floor(other.z));
-			if ((at instanceof TileTransporterRing) && !at.equals(this)) {
+			if ((at instanceof TileTransporterRing) && !at.equals(this.getTileEntity())) {
 				TileTransporterRing that = (TileTransporterRing) at;
 				if (that.isHost() && that.getAsStructure().isValid() && !that.getAsStructure().isBusy()) {
 					performConnection(other.add(vectorHere));
@@ -179,30 +185,15 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 			((EntityPlayerMP) entity).setPositionAndUpdate(destination.x, destination.y, destination.z);
 		else
 			entity.setPosition(destination.x, destination.y, destination.z);
-		System.out.println("done!");
 		entity.worldObj.updateEntityWithOptionalForce(entity, false);
 		return entity;
 	}
 
 	@Override
 	public boolean isValidStructure(World worldAccess, int baseX, int baseY, int baseZ) {
-		int dx = -1, dz = -1;
-		for (int x = 0; x < 10; x++)
-			for (int z = 0; z < 10; z++) {
-				TileEntity tile = worldAccess.getTileEntity(x - 4, baseY, z - 4);
-				if (tile != null && tile instanceof TileTransporterRing) {
-					dx = x;
-					dz = z;
-					break;
-				}
-
-			}
-
-		if (dx == -1 || dz == -1)
-			return false;
 		for (int x = 0; x < 5; x++)
 			for (int z = 0; z < 5; z++) {
-				TileEntity tile = worldAccess.getTileEntity(dx + x, baseY, dz + z);
+				TileEntity tile = worldAccess.getTileEntity(baseX - 2 + x, baseY, baseZ - 2 + z);
 				if (tile == null || !(tile instanceof TileTransporterRing))
 					return false;
 			}
@@ -211,45 +202,71 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 
 	@Override
 	public boolean collectStructure(World worldAccess, int baseX, int baseY, int baseZ) {
-		// TODO Auto-generated method stub
-		return false;
+		for (int x = 0; x < 5; x++)
+			for (int z = 0; z < 5; z++) {
+				TileEntity tile = worldAccess.getTileEntity(baseX - 2 + x, baseY, baseZ - 2 + z);
+				if (tile == null || !(tile instanceof TileTransporterRing))
+					return false;
+				TileTransporterRing transporter = (TileTransporterRing) tile;
+				TransporterRingPart part = transporter.getAsPart();
+				if (!part.canMergeWith(this)) {
+					if (BuildInfo.DEBUG)
+						LanteaCraft.getLogger().log(
+								Level.INFO,
+								String.format("Merge failure, merge rejected: %s %s %s", baseX - 2 + x, baseY, baseZ
+										- 2 + z));
+					return false;
+				}
+				part.mergeWith(this);
+				structureParts.put(new Vector3(baseX - 2 + x, baseY, baseZ - 2 + z), part);
+			}
+		if (BuildInfo.DEBUG)
+			LanteaCraft.getLogger().log(Level.INFO, "Successfully merged structure.");
+		return true;
 	}
 
 	@Override
 	public void freeStructure() {
-		// TODO Auto-generated method stub
-
+		for (MultiblockPart part : structureParts.values())
+			part.release();
+		structureParts.clear();
 	}
 
 	@Override
 	public MultiblockPart getPart(Object reference) {
-		// TODO Auto-generated method stub
-		return null;
+		return structureParts.get(reference);
 	}
 
 	@Override
 	public MultiblockPart[] getAllParts() {
-		// TODO Auto-generated method stub
-		return null;
+		return structureParts.values().toArray(new MultiblockPart[0]);
 	}
 
 	@Override
 	public void validated(boolean oldState, boolean newState) {
-		// TODO Auto-generated method stub
-
+		if (!isClient)
+			host.getDescriptionPacket();
 	}
 
 	@Override
 	public void disband() {
-		// TODO Auto-generated method stub
-
+		boolean wasValid = isValid();
+		freeStructure();
+		isValid = false;
+		validated(wasValid, isValid());
 	}
 
 	@Override
 	public ModPacket pack() {
 		StandardModPacket packet = new StandardModPacket(new WorldLocation(host));
 		packet.setIsForServer(false);
-		packet.setType("LanteaPacket.TileUpdate");
+		packet.setType("LanteaPacket.MultiblockUpdate");
+		packet.setValue("metadata", metadata);
+		packet.setValue("isValid", isValid());
+		HashMap<Object, Vector3> gparts = new HashMap<Object, Vector3>();
+		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
+			gparts.put(part.getKey(), part.getValue().getVectorLoc());
+		packet.setValue("parts", gparts);
 		packet.setValue("timeout", timeout);
 		packet.setValue("state", state);
 		return packet;
@@ -260,12 +277,15 @@ public class TransporterRingMultiblock extends GenericMultiblock {
 		StandardModPacket thePacket = (StandardModPacket) packet;
 		timeout = (Integer) thePacket.getValue("timeout");
 		state = (EnumRingPlatformState) thePacket.getValue("state");
+		isValid = (Boolean) thePacket.getValue("isValid");
 	}
 
 	@Override
 	public ModPacket pollForUpdate() {
-		// TODO Auto-generated method stub
-		return null;
+		StandardModPacket packet = new StandardModPacket(new WorldLocation(host));
+		packet.setIsForServer(true);
+		packet.setType("LanteaPacket.UpdateRequest");
+		return packet;
 	}
 
 }

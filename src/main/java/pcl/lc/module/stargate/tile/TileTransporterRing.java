@@ -6,34 +6,40 @@ import net.minecraft.util.AxisAlignedBB;
 import pcl.lc.LanteaCraft;
 import pcl.lc.base.TileManaged;
 import pcl.lc.base.network.packet.ModPacket;
+import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.TransporterRingPart;
 import pcl.lc.util.WorldLocation;
 
 public class TileTransporterRing extends TileManaged {
 
-	private TransporterRingMultiblock multiblock;
-	private boolean isHostBlock = false;
+	private TransporterRingMultiblock multiblock = new TransporterRingMultiblock(this);
+	private TransporterRingPart part = new TransporterRingPart(this);
+	private boolean initialized = false;
 
 	public TileTransporterRing() {
-	}
-
-	public boolean isHost() {
-		return isHostBlock;
-	}
-
-	public void setHost(boolean b) {
-		isHostBlock = b;
 	}
 
 	public TransporterRingMultiblock getAsStructure() {
 		return multiblock;
 	}
 
+	public TransporterRingPart getAsPart() {
+		return part;
+	}
+
+	public boolean isHost() {
+		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 0;
+	}
+
 	@Override
 	public void think() {
 		if (!isHost())
 			return;
+		if (!initialized) {
+			initialized = true;
+			multiblock.invalidate();
+		}
 		if (multiblock != null)
 			multiblock.tick();
 	}
@@ -52,6 +58,16 @@ public class TileTransporterRing extends TileManaged {
 		return null;
 	}
 
+	public void hostBlockDestroyed() {
+		if (!worldObj.isRemote) {
+			if (getAsStructure() != null)
+				getAsStructure().disband();
+			if (part != null)
+				part.devalidateHostMultiblock();
+		}
+			
+	}
+
 	@Override
 	public Packet getDescriptionPacket() {
 		ModPacket packet = getPacketFromState();
@@ -67,13 +83,12 @@ public class TileTransporterRing extends TileManaged {
 
 	@Override
 	public void thinkPacket(ModPacket packetOf, EntityPlayer player) {
-		getStateFromPacket(packetOf);
+		if (packetOf instanceof StandardModPacket) {
+			StandardModPacket packet = (StandardModPacket) packetOf;
+			if (packet.getType().equals("LanteaPacket.MultiblockUpdate"))
+				getStateFromPacket(packet);
+		}
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-	}
-
-	public TransporterRingPart getAsPart() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

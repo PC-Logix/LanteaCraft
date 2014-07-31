@@ -2,6 +2,7 @@ package pcl.lc.module.stargate.block;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -16,6 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import pcl.lc.base.GenericContainerBlock;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.ModuleStargates;
+import pcl.lc.module.stargate.tile.TileStargateBase;
 import pcl.lc.module.stargate.tile.TileTransporterRing;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,13 +50,20 @@ public class BlockTransporterRing extends GenericContainerBlock {
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
 		TileTransporterRing ring = new TileTransporterRing();
-		ring.setHost(metadata != 0);
 		return ring;
 	}
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		super.onBlockAdded(world, x, y, z);
+	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
+		TileEntity te = getTileEntity(world, x, y, z);
+		if (te != null && te instanceof TileTransporterRing)
+			((TileTransporterRing) te).hostBlockDestroyed();
+		super.breakBlock(world, x, y, z, block, data);
 	}
 
 	@Override
