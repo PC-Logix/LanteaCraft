@@ -14,6 +14,9 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.internal.ITickAgent;
 import pcl.lc.base.data.WatchedValue;
+import pcl.lc.cfg.ConfigHelper;
+import pcl.lc.cfg.ConfigNode;
+import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
 import pcl.lc.module.stargate.tile.TileStargateBase;
@@ -26,6 +29,25 @@ public class StargateConnectionManager implements ITickAgent {
 	public final static int interDiallingTime = 10;
 	public final static int transientDuration = 20;
 	public final static int disconnectTime = 30;
+
+	public static boolean canPowerFromEitherEnd = true;
+	public static float costInitialize = 1.0f;
+	public static float costPerTick = 0.1f;
+	public static float costPentaltyCrossDimension = 1.1f;
+	public static int secondsPerTick = 1;
+
+	public static void configure(ModuleConfig config) {
+		canPowerFromEitherEnd = ConfigHelper.getOrSetBooleanParam(config, "Power", "powerFromEitherEnd", "enabled",
+				"Can the Stargate draw power from either end when connected?", canPowerFromEitherEnd);
+		costInitialize = Float.parseFloat(ConfigHelper.getOrSetParam(config, "Power", "costInitialize", "value",
+				"The energy cost when a Stargate opens a connection.", costInitialize).toString());
+		costPerTick = Float.parseFloat(ConfigHelper.getOrSetParam(config, "Power", "costPerTick", "value",
+				"The energy cost per energy tick to maintain the connction.", costPerTick).toString());
+		costPentaltyCrossDimension = Float.parseFloat(ConfigHelper.getOrSetParam(config, "Power", "costPentaltyCrossDimension", "value",
+				"The energy cost penalty if the connection crosses dimensions.", costPentaltyCrossDimension).toString());
+		secondsPerTick = Integer.parseInt(ConfigHelper.getOrSetParam(config, "Power", "secondsPerTick", "value",
+				"The number of seconds between each energy cost tick.", secondsPerTick).toString());
+	}
 
 	/**
 	 * Used to simulate a connection on a server.

@@ -15,6 +15,7 @@ import pcl.lc.core.ModuleManager;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
+import pcl.lc.module.stargate.StargateConnectionManager;
 import pcl.lc.module.stargate.block.BlockStargateBase;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
 import pcl.lc.module.stargate.block.BlockStargateRing;
@@ -105,6 +106,7 @@ public class ModuleStargates implements IModule {
 
 		TileStargateDHD.configure(config);
 		TileStargateBase.configure(config);
+		StargateConnectionManager.configure(config);
 
 		Blocks.stargateRingBlock = RegistrationHelper.registerBlock(BlockStargateRing.class, ItemStargateRing.class,
 				"stargateRing", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
