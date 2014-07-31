@@ -190,6 +190,15 @@ public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 					energy += receive;
 				}
 			}
+
+		if (isLinkedToStargate) {
+			TileStargateBase base = getLinkedStargateTE();
+			if (base.getMaxEnergyStored() > base.getEnergyStored()) {
+				double qty = extractEnergy(1.0d, true);
+				double acceptedQty = base.receiveEnergy(qty, false);
+				extractEnergy(acceptedQty, false);
+			}
+		}
 	}
 
 	public void getStateFromPacket(ModPacket packet) {

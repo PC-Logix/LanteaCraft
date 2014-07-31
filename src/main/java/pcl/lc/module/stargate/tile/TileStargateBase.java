@@ -42,6 +42,7 @@ import pcl.lc.api.EnumUnits;
 import pcl.lc.api.IStargateAccess;
 import pcl.lc.base.PoweredTileEntity;
 import pcl.lc.base.data.WatchedValue;
+import pcl.lc.base.energy.IEnergyStore;
 import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
 import pcl.lc.base.network.packet.ModPacket;
@@ -66,7 +67,7 @@ import pcl.lc.util.Vector3;
 import pcl.lc.util.WorldLocation;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
-public class TileStargateBase extends PoweredTileEntity implements IStargateAccess, ISidedInventory {
+public class TileStargateBase extends PoweredTileEntity implements IStargateAccess, IEnergyStore, ISidedInventory {
 
 	/**
 	 * Used to damage players who contact with an iris.
@@ -177,7 +178,6 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	private StargateMultiblock multiblock = new StargateMultiblock(this);
 	private List<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
 	private FilteredInventory inventory;
-
 	private ConnectionRequest connection;
 
 	/** Client-only fields, not synchronized (un-needed) */
@@ -983,14 +983,18 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		multiblock.tick();
 	}
 
-	public boolean useEnergy(float q) {
-		// TODO Auto-generated method stub
+	public boolean useEnergy(double q) {
+		double avail = getEnergyStored();
+		if (q > avail)
+			return false;
+		metadata.set("energy", avail - q);
 		return true;
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
+		saveEnergyStore(nbt);
 	}
 
 	private double yawAngle(Vector3 v) {
@@ -1017,50 +1021,83 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 
 	@Override
 	public boolean canReceiveEnergy() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean canExportEnergy() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public double getMaximumReceiveEnergy() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 128;
 	}
 
 	@Override
 	public double getMaximumExportEnergy() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double getAvailableExportEnergy() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void receiveEnergy(double units) {
-		// TODO Auto-generated method stub
-
+		receiveEnergy(units, false);
 	}
 
 	@Override
 	public double exportEnergy(double units) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
+	}
+
+	@Override
+	public double receiveEnergy(double quantity, boolean isSimulated) {
+		double actualQty = Math.min(quantity, getMaxEnergyStored() - getEnergyStored());
+		if (!isSimulated)
+			metadata.set("energy", ((Double) metadata.get("energy")) + actualQty);
+		return actualQty;
+	}
+
+	@Override
+	public double extractEnergy(double quantity, boolean isSimulated) {
+		double actualQty = Math.min(quantity, getMaxEnergyStored());
+		if (!isSimulated)
+			metadata.set("energy", ((Double) metadata.get("energy")) - actualQty);
+		return actualQty;
+	}
+
+	@Override
+	public double getEnergyStored() {
+		if (!metadata.containsKey("energy"))
+			metadata.set("energy", 0.0d);
+		return (Double) metadata.get("energy");
+	}
+
+	@Override
+	public double getMaxEnergyStored() {
+		return 64.0d;
+	}
+
+	@Override
+	public void saveEnergyStore(NBTTagCompound compound) {
+		if (!metadata.containsKey("energy"))
+			metadata.set("energy", 0.0d);
+		compound.setDouble("energy", (Float) metadata.get("energy"));
+	}
+
+	@Override
+	public void loadEnergyStore(NBTTagCompound compound) {
+		metadata.set("energy", compound.getDouble("energy"));
+
 	}
 
 }
