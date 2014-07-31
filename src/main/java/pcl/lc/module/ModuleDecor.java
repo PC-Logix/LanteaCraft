@@ -3,6 +3,7 @@ package pcl.lc.module;
 import java.util.EnumSet;
 import java.util.Set;
 
+import pcl.lc.BuildInfo;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
 import pcl.lc.module.decor.block.BlockLanteaDecor;
@@ -115,8 +116,9 @@ public class ModuleDecor implements IModule {
 	public void init(FMLInitializationEvent event) {
 		Blocks.decorBlock = RegistrationHelper.registerBlock(BlockLanteaDecor.class, ItemLanteaDecor.class,
 				"lanteaDecor");
-		Blocks.glassDecorBlock = RegistrationHelper.registerBlock(BlockLanteaDecorGlass.class,
-				ItemLanteaDecorGlass.class, "lanteaGlassDecor");
+		if (BuildInfo.ENABLE_UNSTABLE)
+			Blocks.glassDecorBlock = RegistrationHelper.registerBlock(BlockLanteaDecorGlass.class,
+					ItemLanteaDecorGlass.class, "lanteaGlassDecor");
 		Blocks.lanteaSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaSteelDecorStair", 1,
 				CreativeTabHelper.getTab("LanteaCraft"));
 		Blocks.lanteaPatternedSteelDecorStair = RegistrationHelper.registerStairDecal("lanteaPatternedSteelDecorStair",
@@ -126,11 +128,15 @@ public class ModuleDecor implements IModule {
 		Blocks.goauldPatternedGoldDecorStair = RegistrationHelper.registerStairDecal("goauldPatternedGoldDecorStair",
 				4, CreativeTabHelper.getTab("LanteaCraft"));
 
-		GameRegistry.registerTileEntity(TileLanteaDecorGlass.class, "tileEntityLanteaDecorGlass");
+		if (BuildInfo.ENABLE_UNSTABLE)
+			GameRegistry.registerTileEntity(TileLanteaDecorGlass.class, "tileEntityLanteaDecorGlass");
 		if (event.getSide() == Side.CLIENT) {
-			Render.tileEntityLanteaDecorGlassRenderer = new TileLanteaDecorGlassRenderer();
-			RegistrationHelper.addTileEntityRenderer(TileLanteaDecorGlass.class,
-					Render.tileEntityLanteaDecorGlassRenderer);
+			if (BuildInfo.ENABLE_UNSTABLE) {
+				Render.tileEntityLanteaDecorGlassRenderer = new TileLanteaDecorGlassRenderer();
+
+				RegistrationHelper.addTileEntityRenderer(TileLanteaDecorGlass.class,
+						Render.tileEntityLanteaDecorGlassRenderer);
+			}
 		}
 
 	}

@@ -5,6 +5,7 @@ import java.util.Set;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
+import pcl.lc.BuildInfo;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.base.render.font.FontMetric;
 import pcl.lc.base.render.font.FontRenderBuffer;
@@ -103,13 +104,12 @@ public class ModuleCore implements IModule {
 				CreativeTabHelper.getTab("LanteaCraft"));
 		Items.lanteaOreIngot = RegistrationHelper.registerItem(ItemLanteaOreIngot.class, "lanteaOreIngot",
 				CreativeTabHelper.getTab("LanteaCraft"));
-		if (false)
+		if (BuildInfo.ENABLE_UNSTABLE)
 			Items.jacksonNotebook = RegistrationHelper.registerItem(ItemJacksonNotebook.class, "jacksonNotebook",
 					CreativeTabHelper.getTab("LanteaCraft"));
 		Blocks.lanteaOreAsBlock = RegistrationHelper.registerBlock(BlockOfLanteaOre.class, ItemBlockOfLanteaOre.class,
 				"lanteaOreIngotBlock", CreativeTabHelper.getTab("LanteaCraft"));
-
-		if (false)
+		if (BuildInfo.ENABLE_UNSTABLE)
 			Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg",
 					CreativeTabHelper.getTab("LanteaCraft"));
 

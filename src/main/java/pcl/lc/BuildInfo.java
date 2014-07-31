@@ -40,6 +40,11 @@ public class BuildInfo {
 	 * Enable or disable chunk loading dumping.
 	 */
 	public static final boolean CHUNK_DEBUGGING = true && isDevelopmentEnvironment();
+	
+	/**
+	 * Enable unstable features flag.
+	 */
+	public static final boolean ENABLE_UNSTABLE = false && isDevelopmentEnvironment();
 
 	public static int getBuildNumber() {
 		if (buildNumber.equals("@" + "BUILD" + "@"))

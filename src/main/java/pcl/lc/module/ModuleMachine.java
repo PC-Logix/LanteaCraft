@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import net.minecraft.item.ItemBlock;
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.core.ModuleManager.Module;
@@ -57,6 +58,9 @@ public class ModuleMachine implements IModule {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
+		if (!BuildInfo.ENABLE_UNSTABLE)
+			return;
+
 		Blocks.infuser = RegistrationHelper.registerBlock(BlockCrystalInfuser.class, ItemBlock.class,
 				"blockCrystalInfuser", CreativeTabHelper.getTab("LanteaCraft: Machines"));
 		// Blocks.press =

@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.IModule;
 import pcl.lc.cfg.ConfigHelper;
@@ -115,23 +116,24 @@ public class ModuleStargates implements IModule {
 		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateDHD.class, ItemBlock.class,
 				"stargateDHD", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 
-		if (false)
+		if (BuildInfo.ENABLE_UNSTABLE)
 			Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
 					ItemTransporterRing.class, "ringPlatform", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 
 		GameRegistry.registerTileEntity(TileStargateBase.class, "tileEntityStargateBase");
 		GameRegistry.registerTileEntity(TileStargateRing.class, "tileEntityStargateRing");
 		GameRegistry.registerTileEntity(TileStargateDHD.class, "tileEntityStargateDHD");
-		GameRegistry.registerTileEntity(TileTransporterRing.class, "tileEntityRingPlatform");
+		if (BuildInfo.ENABLE_UNSTABLE)
+			GameRegistry.registerTileEntity(TileTransporterRing.class, "tileEntityRingPlatform");
 
-		if (false)
+		if (BuildInfo.ENABLE_UNSTABLE)
 			Items.iris = RegistrationHelper.registerItem(ItemIris.class, "iris",
 					CreativeTabHelper.getTab("LanteaCraft: Stargates"));
-		if (false)
+		if (BuildInfo.ENABLE_UNSTABLE)
 			Items.gdo = RegistrationHelper.registerItem(ItemGDO.class, "gdo",
 					CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 
-		if (false)
+		if (BuildInfo.ENABLE_UNSTABLE)
 			Items.transportRingActivator = RegistrationHelper.registerItem(ItemTransportRingActivator.class,
 					"transportRingActivator", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 

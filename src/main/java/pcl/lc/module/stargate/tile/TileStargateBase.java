@@ -29,6 +29,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.network.ForgeMessage.DimensionRegisterMessage;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.logging.log4j.Level;
 
@@ -37,8 +38,9 @@ import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumIrisState;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.EnumStargateType;
+import pcl.lc.api.EnumUnits;
 import pcl.lc.api.IStargateAccess;
-import pcl.lc.base.TileManaged;
+import pcl.lc.base.PoweredTileEntity;
 import pcl.lc.base.data.WatchedValue;
 import pcl.lc.base.inventory.FilterRule;
 import pcl.lc.base.inventory.FilteredInventory;
@@ -64,7 +66,7 @@ import pcl.lc.util.Vector3;
 import pcl.lc.util.WorldLocation;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
-public class TileStargateBase extends TileManaged implements IStargateAccess, ISidedInventory {
+public class TileStargateBase extends PoweredTileEntity implements IStargateAccess, ISidedInventory {
 
 	/**
 	 * Used to damage players who contact with an iris.
@@ -171,16 +173,17 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
 
+	/** Server-only fields, not synchronzied (self-managed) */
 	private StargateMultiblock multiblock = new StargateMultiblock(this);
-	private FilteredInventory inventory;
-	private EnumStargateType type;
 	private List<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
+	private FilteredInventory inventory;
 
 	private ConnectionRequest connection;
-	private ClientConnectionRequest connection_cli;
-	private double ring_angle, ring_reference_angle, ring_dest_angle;
 
+	/** Client-only fields, not synchronized (un-needed) */
+	private ClientConnectionRequest connection_cli;
 	private SoundHost soundHost;
+	private double ring_angle, ring_reference_angle, ring_dest_angle;
 	private double ehGrid[][][];
 
 	public TileStargateBase() {
@@ -963,12 +966,12 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 	}
 
 	public EnumStargateType getType() {
-		if (type == null) {
+		if (metadata.get("type") == null || !(metadata.get("type") instanceof EnumStargateType)) {
 			BlockStargateBase block = (BlockStargateBase) worldObj.getBlock(xCoord, yCoord, zCoord);
 			int typeof = block.getBaseType(worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
-			type = EnumStargateType.fromOrdinal(typeof);
+			metadata.set("type", EnumStargateType.fromOrdinal(typeof));
 		}
-		return type;
+		return (EnumStargateType) metadata.get("type");
 	}
 
 	@Override
@@ -1010,6 +1013,54 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 	public void detectAndSendChanges() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public boolean canReceiveEnergy() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean canExportEnergy() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public double getMaximumReceiveEnergy() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getMaximumExportEnergy() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getAvailableExportEnergy() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void receiveEnergy(double units) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public double exportEnergy(double units) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

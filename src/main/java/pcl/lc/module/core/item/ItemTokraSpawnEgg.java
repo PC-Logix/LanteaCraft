@@ -19,6 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import pcl.lc.BuildInfo;
 import pcl.lc.core.ResourceAccess;
 import pcl.lc.module.critters.entity.EntityReplicator;
 import pcl.lc.util.RegistrationHelper;
@@ -115,6 +116,9 @@ public class ItemTokraSpawnEgg extends Item {
 	 * by the last three parameters. Parameters: world, x, y, z.
 	 */
 	public static Entity spawnCreature(World par0World, double par2, double par4, double par6) {
+		if (!BuildInfo.ENABLE_UNSTABLE)
+			return null;
+		
 		EntityCreature newEntity = new EntityReplicator(par0World);
 		newEntity.setLocationAndAngles(par2, par4, par6,
 				MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
@@ -123,10 +127,6 @@ public class ItemTokraSpawnEgg extends Item {
 		newentityliving.renderYawOffset = newentityliving.rotationYaw;
 		par0World.spawnEntityInWorld(newEntity);
 		newEntity.playLivingSound();
-
-		// Dirty compiler trick
-		if (true != false && 1 > 0)
-			return newEntity;
 
 		EntityVillager entity = new EntityVillager(par0World, RegistrationHelper.getRegisteredVillager("tokra"));
 		entity.setProfession(RegistrationHelper.getRegisteredVillager("tokra"));
