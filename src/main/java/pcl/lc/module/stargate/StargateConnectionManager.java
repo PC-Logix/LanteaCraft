@@ -15,7 +15,6 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.internal.ITickAgent;
 import pcl.lc.base.data.WatchedValue;
 import pcl.lc.cfg.ConfigHelper;
-import pcl.lc.cfg.ConfigNode;
 import pcl.lc.cfg.ModuleConfig;
 import pcl.lc.core.RemoteChunkLoading;
 import pcl.lc.core.RemoteChunkLoading.ChunkLoadRequest;
@@ -29,6 +28,7 @@ public class StargateConnectionManager implements ITickAgent {
 	public final static int interDiallingTime = 10;
 	public final static int transientDuration = 20;
 	public final static int disconnectTime = 30;
+	public final static int abortTime = 40;
 
 	public static boolean canPowerFromEitherEnd = true;
 	public static float costInitialize = 1.0f;
@@ -43,8 +43,9 @@ public class StargateConnectionManager implements ITickAgent {
 				"The energy cost when a Stargate opens a connection.", costInitialize).toString());
 		costPerTick = Float.parseFloat(ConfigHelper.getOrSetParam(config, "Power", "costPerTick", "value",
 				"The energy cost per energy tick to maintain the connction.", costPerTick).toString());
-		costPentaltyCrossDimension = Float.parseFloat(ConfigHelper.getOrSetParam(config, "Power", "costPentaltyCrossDimension", "value",
-				"The energy cost penalty if the connection crosses dimensions.", costPentaltyCrossDimension).toString());
+		costPentaltyCrossDimension = Float.parseFloat(ConfigHelper.getOrSetParam(config, "Power",
+				"costPentaltyCrossDimension", "value", "The energy cost penalty if the connection crosses dimensions.",
+				costPentaltyCrossDimension).toString());
 		secondsPerTick = Integer.parseInt(ConfigHelper.getOrSetParam(config, "Power", "secondsPerTick", "value",
 				"The number of seconds between each energy cost tick.", secondsPerTick).toString());
 	}
@@ -86,6 +87,13 @@ public class StargateConnectionManager implements ITickAgent {
 		/* The remaining number of ticks to remain in this state */
 		public int ticksRemaining = 0;
 
+		/* The computed cost per tick this gate will draw */
+		public float energyPerTick = StargateConnectionManager.costPerTick;
+		/* The computed cost for initialization this gate will draw */
+		public float energyForInit = StargateConnectionManager.costInitialize;
+		/* The number of ticks until the next energy update */
+		public int energyTicksRemaining = 0;
+
 		private ConnectionRequest(String hostAddress, String clientAddress, WorldLocation hostLocation,
 				WorldLocation clientLocation, String name) {
 			this.hostAddress = hostAddress;
@@ -113,6 +121,13 @@ public class StargateConnectionManager implements ITickAgent {
 			if (clientWorld != null)
 				clientChunkLoader = loader.create(clientName, clientWorld, TileStargateBase.ticksToStayOpen,
 						createRadiusOf(clientLocation, 1));
+
+			energyTicksRemaining = 20 * StargateConnectionManager.secondsPerTick;
+			if (hostLocation.dimension != clientLocation.dimension) {
+				energyForInit += StargateConnectionManager.costPentaltyCrossDimension;
+				energyPerTick += StargateConnectionManager.costPentaltyCrossDimension;
+			}
+
 			/* Start dialling */
 			runState(EnumStargateState.Dialling, diallingTime);
 		}
@@ -170,23 +185,36 @@ public class StargateConnectionManager implements ITickAgent {
 					else {
 						if (BuildInfo.DEBUG)
 							LanteaCraft.getLogger().log(Level.WARN, "Cannot find host tile, aborting!");
-						requestDisconnect();
+						runState(EnumStargateState.Abort, abortTime);
 					}
 					break;
 				case Transient: // Any transient state -> any connected state
-					runState(EnumStargateState.Connected, TileStargateBase.ticksToStayOpen);
+					if (!hostTile.get().useEnergy(energyForInit))
+						runState(EnumStargateState.Abort, abortTime);
+					else
+						runState(EnumStargateState.Connected, TileStargateBase.ticksToStayOpen);
 					break;
 				case Connected: // Any connected state -> any disconnected state
 					requestDisconnect();
+					break;
+				case Abort: // Any transient state -> idle
+					state.set(EnumStargateState.Idle);
+					shutdown();
 					break;
 				case Disconnecting: // Any disconnected state -> idle
 					state.set(EnumStargateState.Idle);
 					shutdown();
 					break;
 				}
-			if (state.get() == EnumStargateState.Connected)
-				if (!hostTile.get().useEnergy(1))
-					hostTile.get().disconnect();
+			if (state.get() == EnumStargateState.Connected) {
+				if (energyTicksRemaining == 0) {
+					if (!hostTile.get().useEnergy(energyPerTick))
+						if (StargateConnectionManager.canPowerFromEitherEnd && clientTile.get() != null
+								&& !clientTile.get().useEnergy(energyPerTick))
+							hostTile.get().disconnect();
+					energyTicksRemaining = 20 * StargateConnectionManager.secondsPerTick;
+				}
+			}
 		}
 
 		public char nextChevron() {

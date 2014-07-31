@@ -15,6 +15,8 @@ public enum EnumStargateState {
 	InterDialling,
 	/** Stargate has formed unstable wormhole (transient effect). */
 	Transient,
+	/** Stargate can not connect */
+	Abort,
 	/** Stargate is connected and stable. */
 	Connected,
 	/** Stargate is closing wormhole connection. */

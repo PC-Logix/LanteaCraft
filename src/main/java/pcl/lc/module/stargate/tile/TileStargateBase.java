@@ -266,6 +266,7 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 			soundHost.registerChannel("stargate_chevron", "stargate/milkyway/milkyway_chevron_lock.ogg", 1.0F, 1200);
 			soundHost.registerChannel("stargate_transient", "stargate/milkyway/milkyway_open.ogg", 1.0F, 1200);
 			soundHost.registerChannel("stargate_close", "stargate/milkyway/milkyway_close.ogg", 1.0F, 1200);
+			soundHost.registerChannel("stargate_abort", "stargate/milkyway/milkyway_abort.ogg", 1.0F, 1200);
 		}
 		if (soundHost != null)
 			soundHost.tick();
@@ -303,10 +304,14 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 					ring_dest_angle = 0;
 					initiateClosingTransient();
 					break;
+				case Abort:
+					soundHost.playChannel("stargate_abort");
+					ring_dest_angle = 0;
+					break;
 				case Connected:
 					break;
 				case Idle:
-					soundHost.shutdown(false);
+					soundHost.shutdown(true);
 					break;
 				}
 			}
@@ -975,7 +980,7 @@ public class TileStargateBase extends TileManaged implements IStargateAccess, IS
 		multiblock.tick();
 	}
 
-	public boolean useEnergy(int i) {
+	public boolean useEnergy(float q) {
 		// TODO Auto-generated method stub
 		return true;
 	}
