@@ -2,8 +2,10 @@
  * This file is part of the official LanteaCraft API. Please see the usage guide and
  * restrictions on use in the package-info file.
  */
-package pcl.lc.api;
+package pcl.lc.api.access;
 
+import pcl.lc.api.EnumIrisState;
+import pcl.lc.api.EnumStargateState;
 import pcl.lc.util.ChunkLocation;
 
 /**

@@ -39,7 +39,7 @@ import pcl.lc.api.EnumIrisState;
 import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.EnumStargateType;
 import pcl.lc.api.EnumUnits;
-import pcl.lc.api.IStargateAccess;
+import pcl.lc.api.access.IStargateAccess;
 import pcl.lc.base.PoweredTileEntity;
 import pcl.lc.base.data.WatchedValue;
 import pcl.lc.base.energy.IEnergyStore;

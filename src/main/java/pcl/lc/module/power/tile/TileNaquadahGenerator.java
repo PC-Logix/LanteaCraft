@@ -12,7 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import pcl.lc.api.EnumUnits;
-import pcl.lc.api.INaquadahGeneratorAccess;
+import pcl.lc.api.access.INaquadahGeneratorAccess;
 import pcl.lc.base.PoweredTileEntity;
 import pcl.lc.base.SpecialFluidTank;
 import pcl.lc.base.inventory.FilterRule;

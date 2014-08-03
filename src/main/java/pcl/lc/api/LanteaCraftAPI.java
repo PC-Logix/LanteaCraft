@@ -4,6 +4,8 @@
  */
 package pcl.lc.api;
 
+import pcl.lc.api.access.IStargateManagementAccess;
+
 public class LanteaCraftAPI {
 
 	/**

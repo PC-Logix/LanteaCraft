@@ -7,9 +7,9 @@ import java.util.Map.Entry;
 import org.apache.logging.log4j.Level;
 
 import pcl.lc.LanteaCraft;
-import pcl.lc.api.INaquadahGeneratorAccess;
-import pcl.lc.api.IStargateAccess;
-import pcl.lc.api.IStargateControllerAccess;
+import pcl.lc.api.access.INaquadahGeneratorAccess;
+import pcl.lc.api.access.IStargateAccess;
+import pcl.lc.api.access.IStargateControllerAccess;
 import pcl.lc.util.RegistrationHelper;
 import pcl.lc.util.RegistrationHelper.BlockItemMapping;
 import mcp.mobius.waila.api.IWailaConfigHandler;
