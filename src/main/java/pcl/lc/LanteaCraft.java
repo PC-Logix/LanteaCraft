@@ -1,7 +1,5 @@
 package pcl.lc;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -9,9 +7,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import pcl.lc.base.network.PCLPacketPipeline;
-import pcl.lc.core.ResourceAccess;
-import pcl.lc.module.ModuleCore;
-import pcl.lc.util.CreativeTabHelper;
 import pcl.lc.util.SpecialBucketHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;

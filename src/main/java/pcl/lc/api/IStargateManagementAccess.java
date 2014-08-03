@@ -4,15 +4,16 @@
  */
 package pcl.lc.api;
 
-public class LanteaCraftAPI {
+/**
+ * @author AfterLifeLochie
+ * 
+ */
+public interface IStargateManagementAccess {
 
 	/**
 	 * 
 	 * @return
 	 */
-	public IStargateManagementAccess getStargateManager() {
-		// TODO: reflection
-		return null;
-	}
-	
+	public IStargateConnectionAccess[] getCurrentConnections();
+
 }
