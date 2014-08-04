@@ -23,7 +23,7 @@ if (System.getenv().BUILD_NUMBER != null)
 else
 	ext.buildNumber = 0
 
-version = "RC3"
+version = "1.0.0"
 group = "pcl.LanteaCraft"
 archivesBaseName = "LanteaCraft"
 
@@ -43,6 +43,7 @@ jar.doFirst {
 	}
 }
 
+jar.version = "${minecraft.version}"
 jar.classifier = "${ext.buildNumber}"
 jar.manifest = manifest { attributes(
 	"FMLCorePlugin": "pcl.lc.coremod.LCCoreMod",
