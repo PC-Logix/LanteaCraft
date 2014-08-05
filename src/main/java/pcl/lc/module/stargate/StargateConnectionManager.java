@@ -31,6 +31,7 @@ public class StargateConnectionManager implements ITickAgent {
 	public final static int abortTime = 40;
 
 	public static boolean canPowerFromEitherEnd = true;
+	public static boolean canGatesCrossTypes = true;
 	public static float costInitialize = 1.0f;
 	public static float costPerTick = 0.1f;
 	public static float costPentaltyCrossDimension = 1.1f;
@@ -39,6 +40,8 @@ public class StargateConnectionManager implements ITickAgent {
 	public static void configure(ModuleConfig config) {
 		canPowerFromEitherEnd = ConfigHelper.getOrSetBooleanParam(config, "Power", "powerFromEitherEnd", "enabled",
 				"Can the Stargate draw power from either end when connected?", canPowerFromEitherEnd);
+		canGatesCrossTypes = ConfigHelper.getOrSetBooleanParam(config, "Connection", "canGatesCrossTypes", "enabled",
+				"Can a Stargate connect to a Stargate of another type?", canGatesCrossTypes);
 		costInitialize = Float.parseFloat(ConfigHelper.getOrSetParam(config, "Power", "costInitialize", "value",
 				"The energy cost when a Stargate opens a connection.", costInitialize).toString());
 		costPerTick = Float.parseFloat(ConfigHelper.getOrSetParam(config, "Power", "costPerTick", "value",
@@ -180,9 +183,16 @@ public class StargateConnectionManager implements ITickAgent {
 					chevrons.set(chevrons.get() + 1);
 					if (clientAddress.length() > chevrons.get())
 						runState(EnumStargateState.InterDialling, interDiallingTime);
-					else if (clientTile != null)
+					else if (clientTile != null && clientTile.get() != null) {
+						if (!canGatesCrossTypes && clientTile.get().getType() != hostTile.get().getType()) {
+							if (BuildInfo.DEBUG)
+								LanteaCraft.getLogger().log(Level.WARN,
+										"Inter-gate type dialling not allowed, aborting!");
+							runState(EnumStargateState.Abort, abortTime);
+						}
+
 						runState(EnumStargateState.Transient, transientDuration);
-					else {
+					} else {
 						if (BuildInfo.DEBUG)
 							LanteaCraft.getLogger().log(Level.WARN, "Cannot find host tile, aborting!");
 						runState(EnumStargateState.Abort, abortTime);
@@ -207,7 +217,7 @@ public class StargateConnectionManager implements ITickAgent {
 					break;
 				}
 			}
-			
+
 			if (state.get() == EnumStargateState.Connected) {
 				if (energyTicksRemaining < 0) {
 					if (!hostTile.get().useEnergy(energyPerTick))
