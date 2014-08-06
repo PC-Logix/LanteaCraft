@@ -32,8 +32,9 @@ public class StargateMultiblock extends GenericMultiblock {
 	private int watcher = 0;
 	private boolean watcherLast = false;
 	private boolean modified = false;
+	private boolean simple = false;
 
-	private int[][] stargateModel = { { 1, 2, 1, 3, 1, 2, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 },
+	private int[][] stargateModel = { { 1, 4, 1, 3, 1, 4, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 },
 			{ 1, 0, 0, 0, 0, 0, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 2, 1, 2, 1, 2, 1 } };
 
 	public StargateMultiblock(TileEntity host) {
@@ -73,6 +74,10 @@ public class StargateMultiblock extends GenericMultiblock {
 	 */
 	public int getRotation() {
 		return rotation;
+	}
+
+	public boolean isSimpleGate() {
+		return simple;
 	}
 
 	/**
@@ -207,12 +212,21 @@ public class StargateMultiblock extends GenericMultiblock {
 					return false;
 			}
 		}
+		if (expectedType == 4) {
+			if (!(entity instanceof TileStargateRing))
+				return false;
+			TileStargateRing entityAsRing = (TileStargateRing) entity;
+			StargatePart teAsPart = entityAsRing.getAsPart();
+			if (!teAsPart.canMergeWith(this))
+				return false;
+		}
 		return true;
 	}
 
 	@Override
 	public boolean collectStructure(World worldAccess, int baseX, int baseY, int baseZ) {
 		EnumOrientations currentOrientation = getOrientation(worldAccess, baseX, baseY, baseZ);
+		simple = false;
 
 		// North-South means the gate is aligned along X
 		if (currentOrientation == EnumOrientations.EAST_WEST) {
@@ -228,6 +242,8 @@ public class StargateMultiblock extends GenericMultiblock {
 							return false;
 						teAsPart.mergeWith(this);
 						structureParts.put(new ImmutablePair<Integer, Integer>(x, y), teAsPart);
+						if (stargateModel[y][x] == 4 && entityAsRing.getAsPart().getType().equals("partStargateBlock"))
+							simple = true;
 					}
 				}
 			if (BuildInfo.DEBUG)
@@ -251,6 +267,8 @@ public class StargateMultiblock extends GenericMultiblock {
 							return false;
 						teAsPart.mergeWith(this);
 						structureParts.put(new ImmutablePair<Integer, Integer>(z, y), teAsPart);
+						if (stargateModel[y][z] == 4 && entityAsRing.getAsPart().getType().equals("partStargateBlock"))
+							simple = true;
 					}
 				}
 			if (BuildInfo.DEBUG)
@@ -322,6 +340,7 @@ public class StargateMultiblock extends GenericMultiblock {
 		packet.setValue("metadata", metadata);
 		packet.setValue("isValid", isValid());
 		packet.setValue("orientation", getOrientation());
+		packet.setValue("isSimple", isSimpleGate());
 		HashMap<Object, Vector3> gparts = new HashMap<Object, Vector3>();
 		for (Entry<Object, MultiblockPart> part : structureParts.entrySet())
 			gparts.put(part.getKey(), part.getValue().getVectorLoc());
@@ -335,6 +354,7 @@ public class StargateMultiblock extends GenericMultiblock {
 		StandardModPacket packetStandard = (StandardModPacket) packet;
 		metadata = (HashMap<String, Object>) packetStandard.getValue("metadata");
 		isValid = (Boolean) packetStandard.getValue("isValid");
+		simple = (Boolean) packetStandard.getValue("isSimple");
 		setOrientation((EnumOrientations) packetStandard.getValue("orientation"));
 	}
 

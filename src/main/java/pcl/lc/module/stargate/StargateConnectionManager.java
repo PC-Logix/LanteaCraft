@@ -177,13 +177,19 @@ public class StargateConnectionManager implements ITickAgent {
 				switch (state.get()) {
 				case InterDialling: // Any dial_wait state -> any dial state
 					symbol.set(nextChevron());
-					runState(EnumStargateState.Dialling, diallingTime);
+					if (hostTile.get().getAsStructure().isSimpleGate() && chevrons.get() >= 6 && clientAddress.length() != 7) {
+						if (BuildInfo.DEBUG)
+							LanteaCraft.getLogger().log(Level.WARN,
+									"Gate only has seven chevrons, can't dial long addresses, aborting!");
+						runState(EnumStargateState.Abort, abortTime);
+					} else
+						runState(EnumStargateState.Dialling, diallingTime);
 					break;
 				case Dialling: // Any dial state -> any idle_wait state
 					chevrons.set(chevrons.get() + 1);
-					if (clientAddress.length() > chevrons.get())
+					if (clientAddress.length() > chevrons.get()) {
 						runState(EnumStargateState.InterDialling, interDiallingTime);
-					else if (clientTile != null && clientTile.get() != null) {
+					} else if (clientTile != null && clientTile.get() != null) {
 						if (!canGatesCrossTypes && clientTile.get().getType() != hostTile.get().getType()) {
 							if (BuildInfo.DEBUG)
 								LanteaCraft.getLogger().log(Level.WARN,
