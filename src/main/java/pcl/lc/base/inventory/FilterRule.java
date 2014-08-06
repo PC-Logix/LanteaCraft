@@ -47,8 +47,7 @@ public class FilterRule {
 	 * @param metadata
 	 *            If this FilterRule is metadata sensitive.
 	 */
-	public FilterRule(ItemStack[] accept, ItemStack[] deny, boolean whitelist,
-			boolean metadata) {
+	public FilterRule(ItemStack[] accept, ItemStack[] deny, boolean whitelist, boolean metadata) {
 		if (accept != null)
 			for (ItemStack item : accept)
 				this.accept.add(new ItemStack(item.getItem(), 1));
@@ -129,13 +128,8 @@ public class FilterRule {
 	}
 
 	private boolean isItemVirtuallyEqual(ItemStack a, ItemStack b) {
-		if (a == null || a.getItem() == null) {
-			LanteaCraft
-					.getLogger()
-					.log(Level.WARN,
-							"FilterRule.isItemVirtuallyEqual fed strange "
-									+ "arguments for filtering rules. Unexpected behaviour is expected");
-		}
+		if (a == null || a.getItem() == null)
+			return false;
 		if (!a.getItem().equals(b.getItem()))
 			return false;
 		if (observeMetadata && a.getItemDamage() != b.getItemDamage())

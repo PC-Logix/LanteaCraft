@@ -174,7 +174,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		ticksToStayOpen = 20 * secondsToStayOpen;
 	}
 
-	/** Server-only fields, not synchronzied (self-managed) */
+	/** Server-only fields, not synchronized (self-managed) */
 	private StargateMultiblock multiblock = new StargateMultiblock(this);
 	private List<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
 	private FilteredInventory inventory;
