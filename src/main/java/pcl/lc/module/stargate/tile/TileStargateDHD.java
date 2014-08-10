@@ -316,7 +316,7 @@ public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 
 	@Override
 	public double getMaximumReceiveEnergy() {
-		return 1.0d;
+		return Math.max(0, getMaxEnergyStored() - getEnergyStored());
 	}
 
 	@Override

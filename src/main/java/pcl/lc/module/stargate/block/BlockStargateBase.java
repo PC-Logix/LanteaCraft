@@ -122,9 +122,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		int rotation = Math.round((180 - player.rotationYaw) / 90) & 3;
-		System.out.println(rotation);
 		int data = (getBaseType(stack.getItemDamage()) * blockMutex) + rotation;
-		System.out.println(data);
 		world.setBlockMetadataWithNotify(x, y, z, data, 0x3);
 		TileStargateBase te = (TileStargateBase) getTileEntity(world, x, y, z);
 		te.hostBlockPlaced();

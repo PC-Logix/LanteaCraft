@@ -116,15 +116,13 @@ public class ModuleStargates implements IModule {
 		Blocks.stargateControllerBlock = RegistrationHelper.registerBlock(BlockStargateDHD.class, ItemBlock.class,
 				"stargateDHD", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 
-		if (BuildInfo.ENABLE_UNSTABLE)
-			Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
-					ItemTransporterRing.class, "ringPlatform", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
+		Blocks.transporterRing = RegistrationHelper.registerBlock(BlockTransporterRing.class,
+				ItemTransporterRing.class, "ringPlatform", CreativeTabHelper.getTab("LanteaCraft: Stargates"));
 
 		GameRegistry.registerTileEntity(TileStargateBase.class, "tileEntityStargateBase");
 		GameRegistry.registerTileEntity(TileStargateRing.class, "tileEntityStargateRing");
 		GameRegistry.registerTileEntity(TileStargateDHD.class, "tileEntityStargateDHD");
-		if (BuildInfo.ENABLE_UNSTABLE)
-			GameRegistry.registerTileEntity(TileTransporterRing.class, "tileEntityRingPlatform");
+		GameRegistry.registerTileEntity(TileTransporterRing.class, "tileEntityRingPlatform");
 
 		if (BuildInfo.ENABLE_UNSTABLE)
 			Items.iris = RegistrationHelper.registerItem(ItemIris.class, "iris",

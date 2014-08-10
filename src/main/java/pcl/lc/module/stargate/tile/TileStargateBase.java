@@ -1039,7 +1039,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 
 	@Override
 	public double getMaximumReceiveEnergy() {
-		return 2;
+		return Math.max(0, getMaxEnergyStored() - getEnergyStored());
 	}
 
 	@Override

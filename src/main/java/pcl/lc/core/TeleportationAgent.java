@@ -31,7 +31,6 @@ public class TeleportationAgent {
 	private Entity teleportEntity(Entity entity, Vector3 destination, Vector3 velocity, Facing3 rotation, int dimension) {
 		final Entity newEntity;
 		if (entity.dimension == dimension) {
-			System.out.println("Performing local teleportation.");
 			newEntity = teleportWithinDimension(entity, destination, velocity, rotation);
 		} else {
 			newEntity = teleportToOtherDimension(entity, destination, velocity, rotation, dimension);
