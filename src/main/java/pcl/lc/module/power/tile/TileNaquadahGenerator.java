@@ -27,12 +27,13 @@ import pcl.lc.util.ReflectionHelper;
 public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketHandler, IFluidHandler,
 		INaquadahGeneratorAccess {
 
-	public final double maxEnergy = 10.0d;
+	public final double maxEnergy = 100.0d;
+	public final double energyPerItem = 16.0d;
+	public final double energyPerTenthBucket = 8.0d;
 
-	public double displayEnergy = 0;
-	public double displayTankVolume = 0;
+	public int fuelBurnTimer = -1;
 
-	public SpecialFluidTank tank = new SpecialFluidTank(ModuleCore.Fluids.fluidLiquidNaquadah, 8000, 0, true, true);
+	public SpecialFluidTank tank = new SpecialFluidTank(ModuleCore.Fluids.fluidLiquidNaquadah, 16000, 0, true, true);
 
 	private FilteredInventory inventory = new FilteredInventory(5) {
 
@@ -92,6 +93,8 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 			tank.readFromNBT(tankCompound);
 		if (nbt.hasKey("energy"))
 			metadata.set("energy", nbt.getDouble("energy"));
+		if (nbt.hasKey("breakdown-timer"))
+			metadata.set("breakdown-timer", nbt.getDouble("breakdown-timer"));
 	}
 
 	@Override
@@ -100,7 +103,10 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 		NBTTagCompound tankCompound = new NBTTagCompound();
 		tank.writeToNBT(tankCompound);
 		nbt.setTag("tank", tankCompound);
-		nbt.setDouble("energy", (Double) metadata.get("energy"));
+		if (metadata.containsKey("energy"))
+			nbt.setDouble("energy", (Double) metadata.get("energy"));
+		if (metadata.containsKey("breakdown-timer"))
+			nbt.setDouble("breakdown-timer", (Double) metadata.get("breakdown-timer"));
 	}
 
 	@Override
@@ -124,7 +130,19 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 	}
 
 	public void refuel() {
-		if (isEnabled() && maxEnergy > (Double) metadata.get("energy") + 1.0d)
+		if (fuelBurnTimer > 0)
+			fuelBurnTimer--;
+		if (fuelBurnTimer == 0) {
+			if (getMaximumStoredEnergy() > (Double) metadata.get("energy") + energyPerItem) {
+				metadata.set("energy", (Double) metadata.get("energy") + energyPerItem);
+				metadata.set("breakdown-timer", (Double) metadata.get("breakdown-timer") - 1);
+				if (getBurnProgress() > 0.0d)
+					fuelBurnTimer = 10;
+				else
+					fuelBurnTimer = -1;
+				stateChanged();
+			}
+		} else if (getBurnProgress() <= 0.0d) {
 			for (int i = 0; i < 4; i++) {
 				ItemStack stackOf = inventory.getStackInSlot(i);
 				if (stackOf != null && stackOf.stackSize > 0) {
@@ -134,16 +152,19 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 						inventory.setInventorySlotContents(i, newStack);
 					else
 						inventory.setInventorySlotContents(i, null);
-					metadata.set("energy", (Double) metadata.get("energy") + 1.0);
+					fuelBurnTimer += 10;
+					metadata.set("breakdown-timer", 10.0d);
 					stateChanged();
 					break;
 				}
 			}
+		}
 
-		if (isEnabled() && maxEnergy > ((Double) metadata.get("energy") + 0.1d) && tank.getFluidAmount() > 100)
+		if (isEnabled() && maxEnergy > ((Double) metadata.get("energy") + energyPerTenthBucket)
+				&& tank.getFluidAmount() > 100)
 			if (tank.drain(100, false).amount == 100) {
 				tank.drain(100, true);
-				metadata.set("energy", (Double) metadata.get("energy") + 0.1d);
+				metadata.set("energy", (Double) metadata.get("energy") + energyPerTenthBucket);
 				stateChanged();
 			}
 
@@ -186,7 +207,7 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 
 	@Override
 	public double getMaximumExportEnergy() {
-		return 0.1;
+		return 3.0d;
 	}
 
 	@Override
@@ -281,6 +302,16 @@ public class TileNaquadahGenerator extends PoweredTileEntity implements IPacketH
 	@Override
 	public double getMaximumStoredEnergy() {
 		return maxEnergy;
+	}
+
+	public double getBurnProgress() {
+		if (!metadata.containsKey("breakdown-timer"))
+			return -1.0d;
+		return (Double) metadata.get("breakdown-timer");
+	}
+
+	public int getBurnTimer() {
+		return fuelBurnTimer;
 	}
 
 	public void onHostBlockBreak() {
