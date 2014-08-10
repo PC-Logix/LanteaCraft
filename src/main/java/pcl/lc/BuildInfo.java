@@ -40,11 +40,17 @@ public class BuildInfo {
 	 * Enable or disable chunk loading dumping.
 	 */
 	public static final boolean CHUNK_DEBUGGING = true && isDevelopmentEnvironment();
-	
+
 	/**
 	 * Enable unstable features flag.
 	 */
-	public static final boolean ENABLE_UNSTABLE = true && isDevelopmentEnvironment();
+	public static final boolean ENABLE_UNSTABLE = false && isDevelopmentEnvironment();
+
+	private static boolean IS_DEV_ENV;
+
+	static {
+		IS_DEV_ENV = getBuildNumber() == 0;
+	}
 
 	public static int getBuildNumber() {
 		if (buildNumber.equals("@" + "BUILD" + "@"))
@@ -53,7 +59,7 @@ public class BuildInfo {
 	}
 
 	public static boolean isDevelopmentEnvironment() {
-		return getBuildNumber() == 0;
+		return IS_DEV_ENV;
 	}
 
 	public static final String webAPI = "http://lanteacraft.com/api/";
