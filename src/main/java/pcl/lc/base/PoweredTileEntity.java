@@ -10,6 +10,7 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import org.apache.logging.log4j.Level;
 
+import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.coremod.RuntimeAnnotation.RuntimeInterface;
@@ -276,8 +277,9 @@ public abstract class PoweredTileEntity extends TileManaged {
 				Constructor<? extends WorldEvent> c_loadevent = clazz_loadevent
 						.getConstructor(new Class<?>[] { clazz_ic2energytile });
 				WorldEvent event = c_loadevent.newInstance(clazz_ic2energytile.cast(this));
-				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("Sending IC2 event class %s", event.getClass().getName()));
+				if (BuildInfo.DEBUG)
+					LanteaCraft.getLogger().log(Level.INFO,
+							String.format("Sending IC2 event class %s", event.getClass().getName()));
 				MinecraftForge.EVENT_BUS.post(event);
 				addedToEnergyNet = true;
 			} else {
@@ -286,13 +288,14 @@ public abstract class PoweredTileEntity extends TileManaged {
 				Constructor<? extends WorldEvent> c_unloadevent = clazz_loadevent
 						.getConstructor(new Class<?>[] { clazz_ic2energytile });
 				WorldEvent event = c_unloadevent.newInstance(clazz_ic2energytile.cast(this));
-				LanteaCraft.getLogger().log(Level.INFO,
-						String.format("Sending IC2 event class %s", event.getClass().getName()));
+				if (BuildInfo.DEBUG)
+					LanteaCraft.getLogger().log(Level.INFO,
+							String.format("Sending IC2 event class %s", event.getClass().getName()));
 				MinecraftForge.EVENT_BUS.post(event);
 				addedToEnergyNet = false;
 			}
 		} catch (Throwable t) {
-			LanteaCraft.getLogger().log(Level.WARN, "Could not push IC2 energy event.", t);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not push IC2 energy event. IC2 tiles may not be supported.", t);
 		}
 	}
 
