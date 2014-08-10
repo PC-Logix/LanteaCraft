@@ -184,12 +184,14 @@ public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 	@Override
 	public void think() {
 		if (!worldObj.isRemote) {
-			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-			if (!addedToEnergyNet)
+			
+			if (!addedToEnergyNet) {
+				List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
 				if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
 						|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
 					postIC2Update(true);
 				}
+			}
 
 			if (getEnergyStored() < getMaxEnergyStored()) {
 				ItemStack stackOf = inventory.getStackInSlot(0);

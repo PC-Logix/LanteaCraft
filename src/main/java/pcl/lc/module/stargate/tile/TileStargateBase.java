@@ -62,6 +62,7 @@ import pcl.lc.module.stargate.render.StargateEventHorizonRenderer;
 import pcl.lc.module.stargate.render.StargateRenderConstants;
 import pcl.lc.util.ChunkLocation;
 import pcl.lc.util.MathUtils;
+import pcl.lc.util.ReflectionHelper;
 import pcl.lc.util.Trans3;
 import pcl.lc.util.Vector3;
 import pcl.lc.util.WorldLocation;
@@ -228,6 +229,15 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		// Don't serverThink if on a client
 		if (worldObj.isRemote)
 			return;
+		
+		if (!addedToEnergyNet) {
+			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+					|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
+				postIC2Update(true);
+			}
+		}
+		
 		checkForEntitiesInPortal();
 		if (connection != null)
 			// Synchronize the connection between this instance and the client
@@ -1106,6 +1116,18 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	public void loadEnergyStore(NBTTagCompound compound) {
 		metadata.set("energy", compound.getDouble("energy"));
 
+	}
+	
+	@Override
+	public void invalidate() {
+		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+		if (addedToEnergyNet)
+			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+					|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
+				postIC2Update(false);
+				markDirty();
+			}
+		super.invalidate();
 	}
 
 }

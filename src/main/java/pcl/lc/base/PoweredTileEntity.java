@@ -207,7 +207,8 @@ public abstract class PoweredTileEntity extends TileManaged {
 	 */
 	@RuntimeInterface(modid = "BuildCraft|Core", clazz = "buildcraft.api.power.IPowerReceptor")
 	public void doWork(PowerHandler workProvider) {
-		float quantity = (float) workProvider.useEnergy(0, 100.0f, true);
+		float reqd = (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.MinecraftJoules, getMaximumReceiveEnergy());
+		float quantity = (float) workProvider.useEnergy(reqd, reqd, true);
 		double naqQuantity = EnumUnits.convertToNaquadahUnit(EnumUnits.MinecraftJoules, quantity);
 		receiveEnergy(naqQuantity);
 	}
