@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -103,7 +104,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 				String.format("Node generator building node around %s %s %s with density %s typeof %s", cx
 						+ (16 * chunk.getChunkCoordIntPair().chunkXPos), cy, cz
 						+ (16 * chunk.getChunkCoordIntPair().chunkZPos), density, metadata));
-		Block blockStone = (Block) Block.blockRegistry.getObject("stone");
+		Block blockStone = Blocks.stone;
 		int tries = 0;
 		main: while (density > 0) {
 			int tx = cx, ty = cy, tz = cz;
@@ -164,7 +165,7 @@ public class NaquadahOreWorldGen implements IWorldGenerator {
 	void generateChunk(OreTypes typeof, World world, Chunk chunk) {
 		Random random = requestRandomFor(chunk.getChunkCoordIntPair().chunkXPos,
 				chunk.getChunkCoordIntPair().chunkZPos, world, typeof.ordinal());
-		Block blockStone = (Block) Block.blockRegistry.getObject("stone");
+		Block blockStone = Blocks.stone;
 		if (odds(random, genIsolatedOdds) || true) {
 			int n = random.nextInt(maxIsolatedNodes) + 1;
 			for (int i = 0; i < n; i++) {

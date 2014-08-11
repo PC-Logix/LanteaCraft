@@ -113,19 +113,33 @@ public class ModuleCore implements IModule {
 			Items.tokraSpawnEgg = RegistrationHelper.registerItem(ItemTokraSpawnEgg.class, "tokraSpawnEgg",
 					CreativeTabHelper.getTab("LanteaCraft"));
 
-		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1), new ItemStack(
-				Items.lanteaOreItem, 1), net.minecraft.init.Items.iron_ingot);
+		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1, 0), new ItemStack(
+				Items.lanteaOreItem, 1, 0), net.minecraft.init.Items.iron_ingot);
+		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1, 1), new ItemStack(
+				Items.lanteaOreItem, 1, 1), net.minecraft.init.Items.iron_ingot);
+		RegistrationHelper.newShapelessRecipe(new ItemStack(Items.lanteaOreIngot, 1, 2), new ItemStack(
+				Items.lanteaOreItem, 1, 2), net.minecraft.init.Items.iron_ingot);
 
-		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4), new ItemStack(Blocks.lanteaOre, 0),
-				0.1f);
-		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 1), new ItemStack(Blocks.lanteaOre,
-				1), 0.1f);
-		RegistrationHelper.newSmeltingRecipe(new ItemStack(Items.lanteaOreItem, 4, 2), new ItemStack(Blocks.lanteaOre,
-				2), 0.1f);
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Blocks.lanteaOre, 1, 0), new ItemStack(Items.lanteaOreItem,
+				1, 0), 0.1f);
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Blocks.lanteaOre, 1, 1), new ItemStack(Items.lanteaOreItem,
+				1, 1), 0.1f);
+		RegistrationHelper.newSmeltingRecipe(new ItemStack(Blocks.lanteaOre, 1, 2), new ItemStack(Items.lanteaOreItem,
+				1, 2), 0.1f);
 
-		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1), "NNN", "NNN", "NNN", 'N',
-				new ItemStack(Items.lanteaOreIngot, 1));
-		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9), "B", 'B', Blocks.lanteaOreAsBlock);
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1, 0), "NNN", "NNN", "NNN", 'N',
+				new ItemStack(Items.lanteaOreIngot, 1, 0));
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1, 1), "NNN", "NNN", "NNN", 'N',
+				new ItemStack(Items.lanteaOreIngot, 1, 1));
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.lanteaOreAsBlock, 1, 2), "NNN", "NNN", "NNN", 'N',
+				new ItemStack(Items.lanteaOreIngot, 1, 2));
+
+		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9, 0), "B", 'B', new ItemStack(
+				Blocks.lanteaOreAsBlock, 1, 0));
+		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9, 1), "B", 'B', new ItemStack(
+				Blocks.lanteaOreAsBlock, 1, 1));
+		RegistrationHelper.newRecipe(new ItemStack(Items.lanteaOreIngot, 9, 2), "B", 'B', new ItemStack(
+				Blocks.lanteaOreAsBlock, 1, 2));
 
 		Fluids.fluidLiquidNaquadah = new LiquidNaquadah();
 		FluidRegistry.registerFluid(Fluids.fluidLiquidNaquadah);

@@ -137,7 +137,7 @@ public class ModuleStargates implements IModule {
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN", "III", 'I',
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
-				new ItemStack((Block) Block.blockRegistry.getObject("sandStone"), 1, 1));
+				new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1));
 
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1, 1), "CgC", "NpN", "IrI", 'I',
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',

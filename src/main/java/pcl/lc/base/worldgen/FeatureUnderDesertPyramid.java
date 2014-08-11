@@ -3,6 +3,7 @@ package pcl.lc.base.worldgen;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -30,15 +31,15 @@ public class FeatureUnderDesertPyramid extends StructureComponent {
 	@Override
 	public boolean addComponentParts(World world, Random rand, StructureBoundingBox clip) {
 		StructureBoundingBox box = getBoundingBox();
-		Block air = (Block) Block.blockRegistry.getObject("air");
-		Block glowstone = (Block) Block.blockRegistry.getObject("glowStone");
-		Block sandstone = (Block) Block.blockRegistry.getObject("sandStone");
+		Block air = Blocks.air;
+		Block glowstone = Blocks.glowstone;
+		Block sandstone = Blocks.sandstone;
 		int smoothSandstone = 2;
-		Block wool = (Block) Block.blockRegistry.getObject("cloth");
+		Block wool = Blocks.wool;
 		int orange = 1;
-		Block stairs = (Block) Block.blockRegistry.getObject("stairsSandStone");
+		Block stairs = Blocks.sandstone_stairs;
 		int stairsWest = 0;
-		Block ladder = (Block) Block.blockRegistry.getObject("ladder");
+		Block ladder = Blocks.ladder;
 		int ladderSouth = 2;
 		Block dhd = ModuleStargates.Blocks.stargateControllerBlock;
 		int dhdNorth = 4;
