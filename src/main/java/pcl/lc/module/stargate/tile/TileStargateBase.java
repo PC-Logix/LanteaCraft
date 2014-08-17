@@ -156,14 +156,56 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		}
 	}
 
+	/**
+	 * Stargate inventory stub.
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	private static class StargateInventoryStub extends FilteredInventory {
+		public StargateInventoryStub() {
+			super(1);
+			setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(ModuleStargates.Items.iris, 1) }, null,
+					true, false));
+		}
+
+		@Override
+		public String getInventoryName() {
+			return "stargate";
+		}
+
+		@Override
+		public int[] getAccessibleSlotsFromSide(int var1) {
+			return new int[] { 0 };
+		}
+
+		@Override
+		public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+			if (0 > i || i > items.length)
+				return false;
+			return items[i] == null || ItemStack.areItemStacksEqual(items[i], itemstack);
+		}
+
+		@Override
+		public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+			if (0 > i || i > items.length)
+				return false;
+			return true;
+		}
+
+		@Override
+		public boolean hasCustomInventoryName() {
+			return false;
+		}
+	}
+
 	public final static Random random = new Random();
 	public final static TransientDamageSource transientDamage = new TransientDamageSource();
 	public final static IrisDamageSource irisDamage = new IrisDamageSource();
 
 	public static int secondsToStayOpen = 5 * 60;
+	public static int ticksToStayOpen = 20 * secondsToStayOpen;
 	public static boolean oneWayTravel = true;
 	public static boolean closeFromEitherEnd = true;
-	public static int ticksToStayOpen;
 
 	public static void configure(ModuleConfig cfg) {
 		secondsToStayOpen = Integer.parseInt(ConfigHelper.getOrSetParam(cfg, "Option", "secondsToStayOpen", "time",
@@ -188,40 +230,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	private double ehGrid[][][];
 
 	public TileStargateBase() {
-		inventory = new FilteredInventory(1) {
-
-			@Override
-			public String getInventoryName() {
-				return "stargate";
-			}
-
-			@Override
-			public int[] getAccessibleSlotsFromSide(int var1) {
-				return new int[] { 0 };
-			}
-
-			@Override
-			public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-				if (0 > i || i > items.length)
-					return false;
-				return items[i] == null || ItemStack.areItemStacksEqual(items[i], itemstack);
-			}
-
-			@Override
-			public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-				if (0 > i || i > items.length)
-					return false;
-				return true;
-			}
-
-			@Override
-			public boolean hasCustomInventoryName() {
-				return false;
-			}
-		};
-
-		inventory.setFilterRule(0, new FilterRule(new ItemStack[] { new ItemStack(ModuleStargates.Items.iris, 1) },
-				null, true, false));
+		inventory = new StargateInventoryStub();
 		getAsStructure().invalidate();
 	}
 
@@ -413,6 +422,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	}
 
 	@Override
+	@Deprecated
 	public boolean connect(String address) {
 		if (isBusy() || isConnected())
 			return false;
@@ -436,6 +446,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		}
 	}
 
+	@Deprecated
 	public void connectOrDisconnect(String address) {
 		if (connection == null || connection.state.get() == EnumStargateState.Idle)
 			connect(address);
