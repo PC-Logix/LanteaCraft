@@ -102,9 +102,14 @@ public class BlockStargateRing extends GenericContainerBlock {
 		}
 		return false;
 	}
-	
+
 	public int getBaseType(int metadata) {
 		return (int) Math.floor(metadata / blockMutex);
+	}
+
+	@Override
+	public int damageDropped(int metadata) {
+		return metadata;
 	}
 
 	@Override
