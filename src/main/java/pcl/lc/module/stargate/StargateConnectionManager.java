@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Level;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumStargateState;
+import pcl.lc.api.access.IStargateConnectionAccess;
+import pcl.lc.api.access.IStargateManagementAccess;
 import pcl.lc.api.internal.ITickAgent;
 import pcl.lc.base.data.WatchedValue;
 import pcl.lc.cfg.ConfigHelper;
@@ -22,7 +24,7 @@ import pcl.lc.module.stargate.tile.TileStargateBase;
 import pcl.lc.util.Vector3;
 import pcl.lc.util.WorldLocation;
 
-public class StargateConnectionManager implements ITickAgent {
+public class StargateConnectionManager implements ITickAgent, IStargateManagementAccess {
 
 	public final static int diallingTime = 40;
 	public final static int interDiallingTime = 10;
@@ -58,7 +60,7 @@ public class StargateConnectionManager implements ITickAgent {
 	 * 
 	 * @author AfterLifeLochie
 	 */
-	public static class ConnectionRequest {
+	public static class ConnectionRequest implements IStargateConnectionAccess {
 		/* The local and target addresses */
 		public String hostAddress, clientAddress;
 		/* The location for the request */
@@ -328,6 +330,11 @@ public class StargateConnectionManager implements ITickAgent {
 		synchronized (requests) {
 			requests.remove(request);
 		}
+	}
+
+	@Override
+	public IStargateConnectionAccess[] getCurrentConnections() {
+		return requests.toArray(new IStargateConnectionAccess[0]);
 	}
 
 }
