@@ -170,7 +170,7 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 					(float) ((StargateRenderConstants.chevronAngle * i) - StargateRenderConstants.chevronAngleOffset),
 					0, 0, 1);
 			chevron((sizeof != -1) && TileStargateBaseRenderer.before(renderQueue, i, te.getEncodedChevrons()), i == 0
-					&& te.getState() == EnumStargateState.InterDialling);
+					&& te.getState() == EnumStargateState.InterDialling || i != 0);
 			GL11.glPopMatrix();
 		}
 	}
