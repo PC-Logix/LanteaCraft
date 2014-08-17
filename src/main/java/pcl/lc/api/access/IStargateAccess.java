@@ -73,6 +73,12 @@ public interface IStargateAccess {
 	 *         connection is active.
 	 */
 	public String getConnectionAddress();
+	
+	/**
+	 * Obtains the list of encoded glpyhs the Stargate has engaged.
+	 * @return The list of encoded glpyhs the Stargate has engaged.
+	 */
+	public char[] getLockedGlyphs();
 
 	/**
 	 * Instructs the Stargate to dial to a particular glyph on the inner
