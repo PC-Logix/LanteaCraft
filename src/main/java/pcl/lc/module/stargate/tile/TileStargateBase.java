@@ -229,7 +229,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		// Don't serverThink if on a client
 		if (worldObj.isRemote)
 			return;
-		
+
 		if (!addedToEnergyNet) {
 			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
 			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
@@ -237,7 +237,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 				postIC2Update(true);
 			}
 		}
-		
+
 		checkForEntitiesInPortal();
 		if (connection != null)
 			// Synchronize the connection between this instance and the client
@@ -336,8 +336,11 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 			if (getState() == EnumStargateState.Dialling
 					|| (getState() == EnumStargateState.Disconnecting && connection_cli.ticksRemaining > 0))
 				if (connection_cli.ticksRemaining > 0) {
-					double da = MathUtils.diffAngle(ring_angle, ring_dest_angle) / connection_cli.ticksRemaining;
-					ring_angle = MathUtils.addAngle(ring_angle, da);
+					int movementTicksRemain = connection_cli.ticksRemaining - 4;
+					if (movementTicksRemain > 0) {
+						double da = MathUtils.diffAngle(ring_angle, ring_dest_angle) / movementTicksRemain;
+						ring_angle = MathUtils.addAngle(ring_angle, da);
+					}
 				} else
 					ring_angle = ring_dest_angle;
 		} else {
@@ -1117,7 +1120,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		metadata.set("energy", compound.getDouble("energy"));
 
 	}
-	
+
 	@Override
 	public void invalidate() {
 		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
