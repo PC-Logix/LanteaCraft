@@ -199,12 +199,15 @@ public class StargateConnectionManager implements ITickAgent, IStargateManagemen
 							runState(EnumStargateState.Abort, abortTime);
 						}
 
-						runState(EnumStargateState.Transient, transientDuration);
+						runState(EnumStargateState.PendingTransient, 25);
 					} else {
 						if (BuildInfo.DEBUG)
 							LanteaCraft.getLogger().log(Level.WARN, "Cannot find host tile, aborting!");
 						runState(EnumStargateState.Abort, abortTime);
 					}
+					break;
+				case PendingTransient: // Any pending state -> any transient state
+					runState(EnumStargateState.Transient, transientDuration);
 					break;
 				case Transient: // Any transient state -> any connected state
 					if (!hostTile.get().useEnergy(energyForInit))
