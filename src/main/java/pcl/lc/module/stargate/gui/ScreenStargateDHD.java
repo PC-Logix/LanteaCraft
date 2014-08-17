@@ -40,8 +40,6 @@ public class ScreenStargateDHD extends GenericScreen {
 	private ResourceLocation dhdButtonLayer;
 
 	private int dhdTop, dhdCentreX, dhdCentreY;
-	private String enteredAddress = "", warningMessage = "";
-	private int ticks = 0, ticksWarning = 0;
 
 	private SoundHost soundHost;
 
@@ -69,11 +67,6 @@ public class ScreenStargateDHD extends GenericScreen {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		ticks++;
-		if (ticks > 20)
-			ticks = 0;
-		if (ticksWarning > 0)
-			ticksWarning--;
 	}
 
 	@Override
@@ -141,42 +134,30 @@ public class ScreenStargateDHD extends GenericScreen {
 							enterCharacter(c1);
 				} catch (Throwable t) {
 					LanteaCraft.getLogger().log(Level.WARN, "Clipboard pull failed!", t);
-					warningMessage = "Couldn't read the clipboard!";
-					ticksWarning = 20 * 10;
 				}
 	}
 
 	void orangeButtonPressed(boolean connectOnly) {
-		TileStargateBase te = getStargateTE();
-		if (te != null)
-			if (!connectOnly || !te.isConnected()) {
-				StandardModPacket packet = new StandardModPacket(new WorldLocation(te));
-				packet.setIsForServer(true);
-				packet.setType("LanteaPacket.DialRequest");
-				packet.setValue("Address", enteredAddress);
-				LanteaCraft.getNetPipeline().sendToServer(packet);
-				mc.displayGuiScreen((GuiScreen) null);
-				mc.setIngameFocus();
-			}
+		// TODO: Something useful
 	}
 
 	private void backspace() {
-		int n = enteredAddress.length();
-		if (n > 0)
-			enteredAddress = enteredAddress.substring(0, n - 1);
+		// TODO: Something useful
 	}
 
 	private void enterCharacter(char c) {
-		if (enteredAddress.length() < 9)
-			enteredAddress = enteredAddress + c;
+		// TODO: Something useful
 	}
 
 	void drawEnteredSymbols() {
-		drawFramedSymbols(width / 2, dhdTop - 60, enteredAddress);
+		// TODO: Something useful
+		// drawFramedSymbols(width / 2, dhdTop - 60, enteredAddress);
 	}
 
 	void drawEnteredString() {
-		drawAddressString(width / 2, dhdTop - 12, enteredAddress, 9, " ", (ticks > 10) ? "_" : " ");
+		// TODO: Something useful
+		// drawAddressString(width / 2, dhdTop - 12, enteredAddress, 9, " ",
+		// (ticks > 10) ? "_" : " ");
 	}
 
 	@Override
@@ -216,8 +197,6 @@ public class ScreenStargateDHD extends GenericScreen {
 				drawEnteredSymbols();
 				drawEnteredString();
 			}
-		if (ticksWarning > 0 && warningMessage != null)
-			drawCenteredString(fontRendererObj, warningMessage, width / 2, dhdTop - 3, 0xffaaaa);
 	}
 
 }
