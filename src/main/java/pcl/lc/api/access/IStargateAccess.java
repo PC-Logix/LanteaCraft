@@ -27,16 +27,6 @@ public interface IStargateAccess {
 	public boolean isValid();
 
 	/**
-	 * Fetches the busy state of the Stargate. If the Stargate is in currently
-	 * dialling a connection, receiving a connection, in a connection or closing
-	 * a connection, this returns true. If the gate is completely idle (that is,
-	 * doing nothing), this returns false.
-	 * 
-	 * @return If the Stargate is currently engaged in any operation.
-	 */
-	public boolean isBusy();
-
-	/**
 	 * Fetches the raw state of the Stargate.
 	 * 
 	 * @return The raw state of the Stargate.
@@ -83,22 +73,6 @@ public interface IStargateAccess {
 	 *         connection is active.
 	 */
 	public String getConnectionAddress();
-
-	/**
-	 * Requests this Stargate attempt to dial the provided address.
-	 * 
-	 * @param address
-	 *            The address to attempt to dial.
-	 * @return Returns true if the dialling has started successfully. Returns
-	 *         false if the address is invalid, if there is not enough energy
-	 *         available to open the connection, or if some other condition
-	 *         currently prevents this Stargate from initiating a connection.
-	 * @deprecated This method is being replaced in favor of manual dialling
-	 *             systems (spinToGlyph, stopSpinning, lockChevron and
-	 *             unlockChevron).
-	 */
-	@Deprecated
-	public boolean connect(String address);
 
 	/**
 	 * Instructs the Stargate to dial to a particular glyph on the inner

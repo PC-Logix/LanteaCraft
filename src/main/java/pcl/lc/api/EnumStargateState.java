@@ -7,15 +7,8 @@ package pcl.lc.api;
  * 
  */
 public enum EnumStargateState {
-	/** Stargate is idle. */
-	@Deprecated
+	/** No owned state */
 	Idle,
-	/** Stargate is dialling to a chevron. */
-	@Deprecated
-	Dialling,
-	/** Stargate has paused after dialling a chevron. */
-	@Deprecated
-	InterDialling,
 	/** Stargate is waiting for the connection to establish (visual only). */
 	PendingTransient,
 	/** Stargate has formed unstable wormhole (transient effect). */

@@ -446,14 +446,6 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		}
 	}
 
-	@Deprecated
-	public void connectOrDisconnect(String address) {
-		if (connection == null || connection.state.get() == EnumStargateState.Idle)
-			connect(address);
-		else if (connection.state.get() != EnumStargateState.Disconnecting && canCloseFromThisEnd())
-			connection.requestDisconnect();
-	}
-
 	@Override
 	public boolean disconnect() {
 		if (connection.isHost(this) || closeFromEitherEnd) {
@@ -804,18 +796,8 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		return da;
 	}
 
-	@Override
-	public boolean isBusy() {
-		return isDialling() || isConnected();
-	}
-
 	public boolean isConnected() {
-		return getState() == EnumStargateState.Transient || getState() == EnumStargateState.Connected
-				|| getState() == EnumStargateState.Disconnecting;
-	}
-
-	public boolean isDialling() {
-		return getState() == EnumStargateState.InterDialling || getState() == EnumStargateState.Dialling;
+		return getState() != null && getState() != EnumStargateState.Idle;
 	}
 
 	public boolean isIrisClosed() {
@@ -1142,6 +1124,42 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 				markDirty();
 			}
 		super.invalidate();
+	}
+
+	@Override
+	public boolean spinToGlyph(char glyph) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean spinAndWaitForGlyph(char glpyh) throws InterruptedException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isSpinning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean stopSpinning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean lockChevron() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean unlockChevron() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
