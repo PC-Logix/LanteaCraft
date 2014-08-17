@@ -176,7 +176,7 @@ public class StargateMechanicalRenderer implements IStargateRenderer {
 	}
 
 	private void chevron(boolean engaged, boolean moved) {
-		double r1 = StargateRenderConstants.chevronInnerRadius;
+		double r1 = StargateRenderConstants.chevronInnerRadius - (1d / 18d);
 		double r2 = StargateRenderConstants.chevronOuterRadius;
 		double z2 = StargateRenderConstants.ringDepth - (1d / 32d);
 
