@@ -93,8 +93,63 @@ public interface IStargateAccess {
 	 *         false if the address is invalid, if there is not enough energy
 	 *         available to open the connection, or if some other condition
 	 *         currently prevents this Stargate from initiating a connection.
+	 * @deprecated This method is being replaced in favor of manual dialling
+	 *             systems (spinToGlyph, stopSpinning, lockChevron and
+	 *             unlockChevron).
 	 */
+	@Deprecated
 	public boolean connect(String address);
+
+	/**
+	 * Instructs the Stargate to dial to a particular glyph on the inner
+	 * dialling ring. If the Stargate is already spinning, this has no effect.
+	 * 
+	 * @param glyph
+	 *            The glyph to spin to.
+	 * @return If the instruction was given to the Stargate successfully.
+	 */
+	public boolean spinToGlyph(char glyph);
+
+	/**
+	 * Instructs and waits for the Stargate to dial to a particular glyph on the
+	 * inner dialling ring.
+	 * 
+	 * @param glpyh
+	 *            The glyph to spin to.
+	 * @return If the instruction was given to the Stargate successfully.
+	 * @throws InterruptedException
+	 *             If the thread is interrupted while waiting for the dialling
+	 *             to occur, an InterruptedException will be thrown.
+	 */
+	public boolean spinAndWaitForGlyph(char glpyh) throws InterruptedException;
+
+	/**
+	 * Returns if the inner dialling ring is spinning.
+	 * 
+	 * @return If the inner dialling ring is spinning.
+	 */
+	public boolean isSpinning();
+
+	/**
+	 * Requests the inner dialling ring stop spinning immediately.
+	 * 
+	 * @return If the dialling ring has been stopped.
+	 */
+	public boolean stopSpinning();
+
+	/**
+	 * Instructs the Stargate to lock the current chevron waiting.
+	 * 
+	 * @return If the current chevron has been locked.
+	 */
+	public boolean lockChevron();
+
+	/**
+	 * Instructs the Stargate to unlock the last chevron written.
+	 * 
+	 * @return If the last chevron has been unlocked.
+	 */
+	public boolean unlockChevron();
 
 	/**
 	 * Requests this Stargate close it's active connection.
