@@ -145,7 +145,7 @@ public class StargateConnectionManager implements ITickAgent, IStargateManagemen
 						for (Object o : chunk.chunkTileEntityMap.values())
 							if (o instanceof TileStargateBase) {
 								TileStargateBase tile = (TileStargateBase) o;
-								if (!tile.isBusy()) {
+								if (!tile.getIsBusy()) {
 									tile.setConnection(this);
 									clientTile = new WeakReference<TileStargateBase>(tile);
 									clientTilePos = new Vector3(tile);
@@ -156,7 +156,7 @@ public class StargateConnectionManager implements ITickAgent, IStargateManagemen
 								clientTilePos.floorZ());
 						if (o != null && (o instanceof TileStargateBase)) {
 							TileStargateBase tile = (TileStargateBase) o;
-							if (!tile.isBusy()) {
+							if (!tile.getIsBusy()) {
 								tile.setConnection(this);
 								clientTile = new WeakReference<TileStargateBase>(tile);
 								clientTilePos = new Vector3(tile);

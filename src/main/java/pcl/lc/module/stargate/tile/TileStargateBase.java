@@ -61,6 +61,7 @@ import pcl.lc.module.stargate.block.BlockStargateBase;
 import pcl.lc.module.stargate.render.StargateEventHorizonRenderer;
 import pcl.lc.module.stargate.render.StargateRenderConstants;
 import pcl.lc.util.ChunkLocation;
+import pcl.lc.util.LengthLimitedList;
 import pcl.lc.util.MathUtils;
 import pcl.lc.util.ReflectionHelper;
 import pcl.lc.util.Trans3;
@@ -69,41 +70,6 @@ import pcl.lc.util.WorldLocation;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
 public class TileStargateBase extends PoweredTileEntity implements IStargateAccess, IEnergyStore, ISidedInventory {
-
-	/**
-	 * Used to damage players who contact with an iris.
-	 * 
-	 * @author AfterLifeLochie
-	 */
-	private static class IrisDamageSource extends DamageSource {
-		public IrisDamageSource() {
-			super("stargate_iris");
-			setDamageBypassesArmor();
-			setDamageAllowedInCreativeMode();
-		}
-
-		public String getDeathMessage(EntityPlayer player) {
-			return new StringBuilder().append(player.getDisplayName()).append(" was obliterated by an iris.")
-					.toString();
-		}
-	}
-
-	/**
-	 * Used to track an entity position and velocity
-	 * 
-	 * @author AfterLifeLochie
-	 */
-	private class TrackedEntity {
-		public Entity entity;
-		public Vector3 lastPos;
-		public Vector3 lastVel;
-
-		public TrackedEntity(Entity entity) {
-			this.entity = entity;
-			lastPos = new Vector3(entity);
-			lastVel = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
-		}
-	}
 
 	/**
 	 * Used to shadow a connection on a client.
@@ -136,18 +102,19 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	}
 
 	/**
-	 * Used to damage players who contact with a transient wormhole.
+	 * Used to damage players who contact with an iris.
 	 * 
 	 * @author AfterLifeLochie
 	 */
-	private static class TransientDamageSource extends DamageSource {
-		public TransientDamageSource() {
-			super("wormhole_transient");
+	private static class IrisDamageSource extends DamageSource {
+		public IrisDamageSource() {
+			super("stargate_iris");
 			setDamageBypassesArmor();
+			setDamageAllowedInCreativeMode();
 		}
 
 		public String getDeathMessage(EntityPlayer player) {
-			return new StringBuilder().append(player.getDisplayName()).append(" was torn apart by an event horizon.")
+			return new StringBuilder().append(player.getDisplayName()).append(" was obliterated by an iris.")
 					.toString();
 		}
 	}
@@ -165,13 +132,10 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		}
 
 		@Override
-		public String getInventoryName() {
-			return "stargate";
-		}
-
-		@Override
-		public int[] getAccessibleSlotsFromSide(int var1) {
-			return new int[] { 0 };
+		public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+			if (0 > i || i > items.length)
+				return false;
+			return true;
 		}
 
 		@Override
@@ -182,15 +146,52 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		}
 
 		@Override
-		public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-			if (0 > i || i > items.length)
-				return false;
-			return true;
+		public int[] getAccessibleSlotsFromSide(int var1) {
+			return new int[] { 0 };
+		}
+
+		@Override
+		public String getInventoryName() {
+			return "stargate";
 		}
 
 		@Override
 		public boolean hasCustomInventoryName() {
 			return false;
+		}
+	}
+
+	/**
+	 * Used to track an entity position and velocity
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	private class TrackedEntity {
+		public Entity entity;
+		public Vector3 lastPos;
+		public Vector3 lastVel;
+
+		public TrackedEntity(Entity entity) {
+			this.entity = entity;
+			lastPos = new Vector3(entity);
+			lastVel = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
+		}
+	}
+
+	/**
+	 * Used to damage players who contact with a transient wormhole.
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	private static class TransientDamageSource extends DamageSource {
+		public TransientDamageSource() {
+			super("wormhole_transient");
+			setDamageBypassesArmor();
+		}
+
+		public String getDeathMessage(EntityPlayer player) {
+			return new StringBuilder().append(player.getDisplayName()).append(" was torn apart by an event horizon.")
+					.toString();
 		}
 	}
 
@@ -228,79 +229,19 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		getAsStructure().invalidate();
 	}
 
-	public void serverThink() {
-		// Don't serverThink if on a client
-		if (worldObj.isRemote)
-			return;
-
-		if (!addedToEnergyNet) {
-			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
-					|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
-				postIC2Update(true);
-			}
-		}
-
-		checkForEntitiesInPortal();
-		if (connection != null)
-			// Synchronize the connection between this instance and the client
-			if (connection.running.modified(metacontext) || connection.state.modified(metacontext)) {
-				if (BuildInfo.DEBUG)
-					LanteaCraft.getLogger().log(Level.INFO, "Update detected, sending update packet.");
-				StandardModPacket update = new StandardModPacket(new WorldLocation(this));
-				update.setType("LanteaPacket.ConnectionUpdate");
-				update.setIsForServer(false);
-				if (connection.running.modified(metacontext)) {
-					connection.running.clearModified(metacontext);
-					update.setValue("running", connection.running.get());
-				}
-				if (connection.state.modified(metacontext)) {
-					connection.state.clearModified(metacontext);
-					update.setValue("state", connection.state.get());
-				}
-				update.setValue("ticksRemaining", connection.ticksRemaining);
-				LanteaCraft.getNetPipeline().sendToAll(update);
-			}
+	@Override
+	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
+		return true;
 	}
 
-	private void clientThink() {
-		// Don't clientThink if on a server
-		if (!worldObj.isRemote)
-			return;
-		if (soundHost == null && worldObj != null) {
-			soundHost = new SoundHost(this, new AudioPosition(worldObj, new Vector3(this)));
-			soundHost.registerChannel("stargate_spin", "stargate/milkyway/milkyway_roll.ogg", 1.0F, -1);
-			soundHost.registerChannel("stargate_chevron", "stargate/milkyway/milkyway_chevron_lock.ogg", 1.0F, 1200);
-			soundHost.registerChannel("stargate_transient", "stargate/milkyway/milkyway_open.ogg", 1.0F, 1200);
-			soundHost.registerChannel("stargate_close", "stargate/milkyway/milkyway_close.ogg", 1.0F, 1200);
-			soundHost.registerChannel("stargate_abort", "stargate/milkyway/milkyway_abort.ogg", 1.0F, 1200);
-		}
-		if (soundHost != null)
-			soundHost.tick();
-		if (connection_cli != null) {
-			if (connection_cli.ticksRemaining >= 0)
-				connection_cli.ticksRemaining--;
-			if (connection_cli.state.modified(metacontext)) {
-				connection_cli.state.clearModified(metacontext);
-				switch (getState()) {
-				case Transient:
-					soundHost.stopChannel("stargate_spin");
-					soundHost.playChannel("stargate_transient");
-					break;
-				case Disconnecting:
-					soundHost.playChannel("stargate_close");
-					break;
-				case Abort:
-					soundHost.playChannel("stargate_abort");
-					break;
-				case Connected:
-					break;
-				case Idle:
-					soundHost.shutdown(true);
-					break;
-				}
-			}
-		}
+	@Override
+	public boolean canExportEnergy() {
+		return false;
+	}
+
+	@Override
+	public boolean canReceiveEnergy() {
+		return true;
 	}
 
 	@Override
@@ -308,27 +249,10 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
-	private void checkForEntitiesInPortal() {
-		if (getState() == EnumStargateState.Connected) {
-			for (TrackedEntity trk : trackedEntities)
-				entityInPortal(trk.entity, trk.lastPos);
-			trackedEntities.clear();
-			Vector3 p0 = new Vector3(-2.5, 0.5, -3.5);
-			Vector3 p1 = new Vector3(2.5, 5.5, 3.5);
-			Trans3 t = localToGlobalTransformation();
-			AxisAlignedBB box = t.box(p0, p1);
-			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
-			for (Entity entity : ents)
-				if (!entity.isDead && entity.ridingEntity == null)
-					trackedEntities.add(new TrackedEntity(entity));
-		}
-	}
-
 	@Override
 	@Deprecated
 	public boolean connect(String address) {
-		if (isBusy() || isConnected())
+		if (getIsBusy() || isConnected())
 			return false;
 		try {
 			String localAddress = (address.length() == 7) ? getLocalAddress().substring(0, 7) : getLocalAddress();
@@ -351,6 +275,11 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	}
 
 	@Override
+	public void detectAndSendChanges() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
 	public boolean disconnect() {
 		if (connection.isHost(this) || closeFromEitherEnd) {
 			connection.requestDisconnect();
@@ -359,78 +288,17 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		return false;
 	}
 
-	private void entityInPortal(Entity entity, Vector3 prevPos) {
-		if (!entity.isDead && getState() == EnumStargateState.Connected && canTravelFromThisEnd()) {
-			Trans3 t = localToGlobalTransformation();
-			double vx = entity.posX - prevPos.x;
-			double vy = entity.posY - prevPos.y;
-			double vz = entity.posZ - prevPos.z;
-			Vector3 p1 = t.ip(entity.posX, entity.posY, entity.posZ);
-			Vector3 p0 = t.ip(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z - entity.posZ);
-			double z0 = 0.0;
-			if (p0.z >= z0 && p1.z < z0) {
-				entity.motionX = vx;
-				entity.motionY = vy;
-				entity.motionZ = vz;
-				/*
-				 * TODO: Hum, getConnectedStargateTE returns the foreign gate,
-				 * but we then check again to see if this connection is the
-				 * host. Mabye we can compress this logic a bit more,
-				 * AfterLifeLochie, yes?
-				 */
-				TileStargateBase dte = getConnectedStargateTE();
-				if (dte != null) {
-					Trans3 dt = dte.localToGlobalTransformation();
-					while (entity.ridingEntity != null)
-						entity = entity.ridingEntity;
-					if (connection.isHost(this)) {
-						teleportEntityAndRider(entity, t, dt, connection.clientLocation.dimension);
-						dte.acceptEntity(entity);
-					} else {
-						teleportEntityAndRider(entity, t, dt, connection.hostLocation.dimension);
-						dte.acceptEntity(entity);
-					}
-				}
-			}
-		}
+	@Override
+	public double exportEnergy(double units) {
+		return 0;
 	}
 
-	/**
-	 * Called on the remote gate to determine if this entity is allowed to have
-	 * arrived at the gate. This is called after the entity is teleported to
-	 * remove the chance of escape.
-	 * 
-	 * @param entity
-	 *            The entity.
-	 */
-	private void acceptEntity(Entity entity) {
-		// Determine if an iris is currently closed
-		if (getIrisState() == EnumIrisState.Closed || getIrisState() == EnumIrisState.Closing
-				|| getIrisState() == EnumIrisState.Opening)
-			if (entity instanceof EntityPlayer) {
-				// Inflict player damage
-				EntityPlayer player = (EntityPlayer) entity;
-				player.attackEntityFrom(irisDamage, 9999999);
-			} else if (entity instanceof EntityLivingBase) {
-				// Inflict living damage
-				EntityLivingBase living = (EntityLivingBase) entity;
-				living.attackEntityFrom(irisDamage, 9999999);
-			} else
-				// Just hard kill the entity, this is nasty
-				entity.setDead();
-	}
-
-	private void extractEntityFromWorld(World world, Entity entity) {
-		if (entity instanceof EntityPlayer) {
-			world.playerEntities.remove(entity);
-			world.updateAllPlayersSleepingFlag();
-		}
-		int i = entity.chunkCoordX;
-		int j = entity.chunkCoordZ;
-		if (entity.addedToChunk && world.getChunkProvider().chunkExists(i, j))
-			world.getChunkFromChunkCoords(i, j).removeEntity(entity);
-		world.loadedEntityList.remove(entity);
-		world.onEntityRemoved(entity);
+	@Override
+	public double extractEnergy(double quantity, boolean isSimulated) {
+		double actualQty = Math.min(quantity, getMaxEnergyStored());
+		if (!isSimulated)
+			metadata.set("energy", ((Double) metadata.get("energy")) - actualQty);
+		return actualQty;
 	}
 
 	public StargateMultiblock getAsStructure() {
@@ -439,38 +307,16 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 
 	@Override
 	public double getAvailableEnergy() {
-		return 99999.0d;
+		return getEnergyStored();
+	}
+
+	@Override
+	public double getAvailableExportEnergy() {
+		return 0;
 	}
 
 	public BlockStargateBase getBlock() {
 		return (BlockStargateBase) getBlockType();
-	}
-
-	private TileStargateBase getConnectedStargateTE() {
-		if (connection != null)
-			if (connection.isHost(this))
-				return connection.clientTile.get();
-			else
-				return connection.hostTile.get();
-		return null;
-	}
-
-	public String getDialledAddress() {
-		if (!worldObj.isRemote) {
-			if (connection != null)
-				if (connection.isHost(this))
-					return connection.clientAddress;
-				else
-					return connection.hostAddress;
-			return null;
-		} else {
-			if (connection_cli != null)
-				if (connection_cli.isHost)
-					return connection_cli.clientAddress;
-				else
-					return connection_cli.hostAddress;
-			return null;
-		}
 	}
 
 	@Override
@@ -518,6 +364,20 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		return (glyphs != null) ? glyphs.length : 0;
 	}
 
+	@SuppressWarnings("unchecked")
+	public LengthLimitedList<Character> getEncodedGlpyhs() {
+		if (!metadata.containsKey("glpyhs") || metadata.get("glpyhs") == null)
+			metadata.set("glpyhs", new LengthLimitedList<Character>(9));
+		return (LengthLimitedList<Character>) metadata.get("glyphs");
+	}
+
+	@Override
+	public double getEnergyStored() {
+		if (!metadata.containsKey("energy"))
+			metadata.set("energy", 0.0d);
+		return (Double) metadata.get("energy");
+	}
+
 	@Override
 	public IInventory getInventory() {
 		return inventory;
@@ -535,6 +395,23 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	}
 
 	@Override
+	public boolean getIsBusy() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean getIsOutgoingConnection() {
+		return connection != null && connection.isHost(this);
+	}
+
+	@Override
+	public boolean getIsSpinning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public String getLocalAddress() {
 		try {
 			return GateAddressHelper.addressForLocation(new WorldLocation(this));
@@ -546,6 +423,30 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	@Override
 	public ChunkLocation getLocation() {
 		return new ChunkLocation(this);
+	}
+
+	@Override
+	public char[] getLockedGlyphs() {
+		LengthLimitedList<Character> list = getEncodedGlpyhs();
+		char[] result = new char[list.size()];
+		for (int i = 0; i < result.length; i++)
+			result[i] = list.get(i);
+		return result;
+	}
+
+	@Override
+	public double getMaxEnergyStored() {
+		return 64.0d;
+	}
+
+	@Override
+	public double getMaximumExportEnergy() {
+		return 0;
+	}
+
+	@Override
+	public double getMaximumReceiveEnergy() {
+		return Math.max(0, getMaxEnergyStored() - getEnergyStored());
 	}
 
 	@Override
@@ -578,6 +479,136 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 				return EnumStargateState.Idle;
 			return connection_cli.state.get();
 		}
+	}
+
+	public EnumStargateType getType() {
+		if (metadata.get("type") == null || !(metadata.get("type") instanceof EnumStargateType)) {
+			BlockStargateBase block = (BlockStargateBase) worldObj.getBlock(xCoord, yCoord, zCoord);
+			int typeof = block.getBaseType(worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
+			metadata.set("type", EnumStargateType.fromOrdinal(typeof));
+		}
+		return (EnumStargateType) metadata.get("type");
+	}
+
+	public void hostBlockDestroyed() {
+		if (connection != null)
+			connection.shutdown();
+		if (!worldObj.isRemote)
+			getAsStructure().disband();
+	}
+
+	public void hostBlockPlaced() {
+		if (!worldObj.isRemote)
+			getAsStructure().invalidate();
+	}
+
+	@Override
+	public void invalidate() {
+		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+		if (addedToEnergyNet)
+			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+					|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
+				postIC2Update(false);
+				markDirty();
+			}
+		super.invalidate();
+	}
+
+	@Override
+	public boolean isValid() {
+		return getAsStructure().isValid();
+	}
+
+	@Override
+	public void loadEnergyStore(NBTTagCompound compound) {
+		metadata.set("energy", compound.getDouble("energy"));
+	}
+
+	@Override
+	public boolean lockChevron() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void performTransientDamage() {
+		Vector3 p0 = new Vector3(-3.5, 0.0, 0.0);
+		Vector3 p1 = new Vector3(3.5, 5.5, 2.5);
+		Trans3 t = localToGlobalTransformation();
+		AxisAlignedBB box = t.box(p0, p1);
+		List<EntityLiving> ents = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
+		for (EntityLivingBase ent : ents)
+			ent.attackEntityFrom(transientDamage, 9999999);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		getAsStructure().invalidate();
+	}
+
+	@Override
+	public void receiveEnergy(double units) {
+		receiveEnergy(units, false);
+	}
+
+	@Override
+	public double receiveEnergy(double quantity, boolean isSimulated) {
+		double actualQty = Math.min(quantity, getMaxEnergyStored() - getEnergyStored());
+		if (!isSimulated)
+			metadata.set("energy", ((Double) metadata.get("energy")) + actualQty);
+		return actualQty;
+	}
+
+	@Override
+	public void saveEnergyStore(NBTTagCompound compound) {
+		if (!metadata.containsKey("energy"))
+			metadata.set("energy", 0.0d);
+		compound.setDouble("energy", (Double) metadata.get("energy"));
+	}
+
+	public void setClientConnection(ClientConnectionRequest request) {
+		connection_cli = request;
+	}
+
+	public void setConnection(ConnectionRequest request) {
+		if (BuildInfo.DEBUG)
+			LanteaCraft.getLogger()
+					.log(Level.INFO, String.format("Setting ConnectionRequest: %s.", request.hashCode()));
+		connection = request;
+		getDescriptionPacket();
+	}
+
+	@Override
+	public boolean spinAndWaitForGlyph(char glpyh) throws InterruptedException {
+		boolean result = spinToGlyph(glpyh);
+		if (!result)
+			return result;
+		while (getIsSpinning()) {
+			Thread.sleep(2L);
+		}
+		return result;
+	}
+
+	@Override
+	public boolean spinToGlyph(char glyph) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean stopSpinning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void think() {
+		if (!worldObj.isRemote)
+			serverThink();
+		else
+			clientThink();
+		multiblock.tick();
 	}
 
 	@Override
@@ -628,47 +659,208 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		}
 	}
 
-	public void hostBlockDestroyed() {
+	@Override
+	public boolean unlockChevron() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean useEnergy(double q) {
+		double avail = getEnergyStored();
+		if (BuildInfo.DEBUG)
+			LanteaCraft.getLogger().log(
+					Level.INFO,
+					String.format("Energy deduction: %s stored %s required (can complete: %s).", avail, q,
+							(q > avail) ? "no" : "yes"));
+		if (q > avail)
+			return false;
+		metadata.set("energy", avail - q);
+		return true;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		saveEnergyStore(nbt);
+	}
+
+	/**
+	 * Called on the remote gate to determine if this entity is allowed to have
+	 * arrived at the gate. This is called after the entity is teleported to
+	 * remove the chance of escape.
+	 * 
+	 * @param entity
+	 *            The entity.
+	 */
+	private void acceptEntity(Entity entity) {
+		// Determine if an iris is currently closed
+		if (getIrisState() == EnumIrisState.Closed || getIrisState() == EnumIrisState.Closing
+				|| getIrisState() == EnumIrisState.Opening)
+			if (entity instanceof EntityPlayer) {
+				// Inflict player damage
+				EntityPlayer player = (EntityPlayer) entity;
+				player.attackEntityFrom(irisDamage, 9999999);
+			} else if (entity instanceof EntityLivingBase) {
+				// Inflict living damage
+				EntityLivingBase living = (EntityLivingBase) entity;
+				living.attackEntityFrom(irisDamage, 9999999);
+			} else
+				// Just hard kill the entity, this is nasty
+				entity.setDead();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void checkForEntitiesInPortal() {
+		if (getState() == EnumStargateState.Connected) {
+			for (TrackedEntity trk : trackedEntities)
+				entityInPortal(trk.entity, trk.lastPos);
+			trackedEntities.clear();
+			Vector3 p0 = new Vector3(-2.5, 0.5, -3.5);
+			Vector3 p1 = new Vector3(2.5, 5.5, 3.5);
+			Trans3 t = localToGlobalTransformation();
+			AxisAlignedBB box = t.box(p0, p1);
+			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
+			for (Entity entity : ents)
+				if (!entity.isDead && entity.ridingEntity == null)
+					trackedEntities.add(new TrackedEntity(entity));
+		}
+	}
+
+	private void clientThink() {
+		// Don't clientThink if on a server
+		if (!worldObj.isRemote)
+			return;
+		if (soundHost == null && worldObj != null) {
+			soundHost = new SoundHost(this, new AudioPosition(worldObj, new Vector3(this)));
+			soundHost.registerChannel("stargate_spin", "stargate/milkyway/milkyway_roll.ogg", 1.0F, -1);
+			soundHost.registerChannel("stargate_chevron", "stargate/milkyway/milkyway_chevron_lock.ogg", 1.0F, 1200);
+			soundHost.registerChannel("stargate_transient", "stargate/milkyway/milkyway_open.ogg", 1.0F, 1200);
+			soundHost.registerChannel("stargate_close", "stargate/milkyway/milkyway_close.ogg", 1.0F, 1200);
+			soundHost.registerChannel("stargate_abort", "stargate/milkyway/milkyway_abort.ogg", 1.0F, 1200);
+		}
+		if (soundHost != null)
+			soundHost.tick();
+		if (connection_cli != null) {
+			if (connection_cli.ticksRemaining >= 0)
+				connection_cli.ticksRemaining--;
+			if (connection_cli.state.modified(metacontext)) {
+				connection_cli.state.clearModified(metacontext);
+				switch (getState()) {
+				case Transient:
+					soundHost.stopChannel("stargate_spin");
+					soundHost.playChannel("stargate_transient");
+					break;
+				case Disconnecting:
+					soundHost.playChannel("stargate_close");
+					break;
+				case Abort:
+					soundHost.playChannel("stargate_abort");
+					break;
+				case Connected:
+					break;
+				case Idle:
+					soundHost.shutdown(true);
+					break;
+				}
+			}
+		}
+	}
+
+	private void entityInPortal(Entity entity, Vector3 prevPos) {
+		if (!entity.isDead && getState() == EnumStargateState.Connected && canTravelFromThisEnd()) {
+			Trans3 t = localToGlobalTransformation();
+			double vx = entity.posX - prevPos.x;
+			double vy = entity.posY - prevPos.y;
+			double vz = entity.posZ - prevPos.z;
+			Vector3 p1 = t.ip(entity.posX, entity.posY, entity.posZ);
+			Vector3 p0 = t.ip(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z - entity.posZ);
+			double z0 = 0.0;
+			if (p0.z >= z0 && p1.z < z0) {
+				entity.motionX = vx;
+				entity.motionY = vy;
+				entity.motionZ = vz;
+				/*
+				 * TODO: Hum, getConnectedStargateTE returns the foreign gate,
+				 * but we then check again to see if this connection is the
+				 * host. Mabye we can compress this logic a bit more,
+				 * AfterLifeLochie, yes?
+				 */
+				TileStargateBase dte = getConnectedStargateTE();
+				if (dte != null) {
+					Trans3 dt = dte.localToGlobalTransformation();
+					while (entity.ridingEntity != null)
+						entity = entity.ridingEntity;
+					if (connection.isHost(this)) {
+						teleportEntityAndRider(entity, t, dt, connection.clientLocation.dimension);
+						dte.acceptEntity(entity);
+					} else {
+						teleportEntityAndRider(entity, t, dt, connection.hostLocation.dimension);
+						dte.acceptEntity(entity);
+					}
+				}
+			}
+		}
+	}
+
+	private void extractEntityFromWorld(World world, Entity entity) {
+		if (entity instanceof EntityPlayer) {
+			world.playerEntities.remove(entity);
+			world.updateAllPlayersSleepingFlag();
+		}
+		int i = entity.chunkCoordX;
+		int j = entity.chunkCoordZ;
+		if (entity.addedToChunk && world.getChunkProvider().chunkExists(i, j))
+			world.getChunkFromChunkCoords(i, j).removeEntity(entity);
+		world.loadedEntityList.remove(entity);
+		world.onEntityRemoved(entity);
+	}
+
+	private TileStargateBase getConnectedStargateTE() {
 		if (connection != null)
-			connection.shutdown();
-		if (!worldObj.isRemote)
-			getAsStructure().disband();
-	}
-
-	public void hostBlockPlaced() {
-		if (!worldObj.isRemote)
-			getAsStructure().invalidate();
-	}
-
-	@Override
-	public boolean isOutgoingConnection() {
-		return connection != null && connection.isHost(this);
-	}
-
-	@Override
-	public boolean isValid() {
-		return getAsStructure().isValid();
+			if (connection.isHost(this))
+				return connection.clientTile.get();
+			else
+				return connection.hostTile.get();
+		return null;
 	}
 
 	private Trans3 localToGlobalTransformation() {
 		return getBlock().localToGlobalTransformation(xCoord, yCoord, zCoord, getBlockMetadata(), this);
 	}
 
-	@SuppressWarnings("unchecked")
-	public void performTransientDamage() {
-		Vector3 p0 = new Vector3(-3.5, 0.0, 0.0);
-		Vector3 p1 = new Vector3(3.5, 5.5, 2.5);
-		Trans3 t = localToGlobalTransformation();
-		AxisAlignedBB box = t.box(p0, p1);
-		List<EntityLiving> ents = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (EntityLivingBase ent : ents)
-			ent.attackEntityFrom(transientDamage, 9999999);
-	}
+	private void serverThink() {
+		// Don't serverThink if on a client
+		if (worldObj.isRemote)
+			return;
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		getAsStructure().invalidate();
+		if (!addedToEnergyNet) {
+			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
+			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
+					|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
+				postIC2Update(true);
+			}
+		}
+
+		checkForEntitiesInPortal();
+		if (connection != null)
+			// Synchronize the connection between this instance and the client
+			if (connection.running.modified(metacontext) || connection.state.modified(metacontext)) {
+				if (BuildInfo.DEBUG)
+					LanteaCraft.getLogger().log(Level.INFO, "Update detected, sending update packet.");
+				StandardModPacket update = new StandardModPacket(new WorldLocation(this));
+				update.setType("LanteaPacket.ConnectionUpdate");
+				update.setIsForServer(false);
+				if (connection.running.modified(metacontext)) {
+					connection.running.clearModified(metacontext);
+					update.setValue("running", connection.running.get());
+				}
+				if (connection.state.modified(metacontext)) {
+					connection.state.clearModified(metacontext);
+					update.setValue("state", connection.state.get());
+				}
+				update.setValue("ticksRemaining", connection.ticksRemaining);
+				LanteaCraft.getNetPipeline().sendToAll(update);
+			}
 	}
 
 	private void setVelocity(Entity entity, Vector3 v) {
@@ -798,55 +990,6 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		MinecraftForge.EVENT_BUS.post(new PlayerChangedDimensionEvent(player, oldDimension, newDimension));
 	}
 
-	public void setConnection(ConnectionRequest request) {
-		if (BuildInfo.DEBUG)
-			LanteaCraft.getLogger()
-					.log(Level.INFO, String.format("Setting ConnectionRequest: %s.", request.hashCode()));
-		connection = request;
-		getDescriptionPacket();
-	}
-
-	public void setClientConnection(ClientConnectionRequest request) {
-		connection_cli = request;
-	}
-
-	public EnumStargateType getType() {
-		if (metadata.get("type") == null || !(metadata.get("type") instanceof EnumStargateType)) {
-			BlockStargateBase block = (BlockStargateBase) worldObj.getBlock(xCoord, yCoord, zCoord);
-			int typeof = block.getBaseType(worldObj.getBlockMetadata(xCoord, yCoord, zCoord));
-			metadata.set("type", EnumStargateType.fromOrdinal(typeof));
-		}
-		return (EnumStargateType) metadata.get("type");
-	}
-
-	@Override
-	public void think() {
-		if (!worldObj.isRemote)
-			serverThink();
-		else
-			clientThink();
-		multiblock.tick();
-	}
-
-	public boolean useEnergy(double q) {
-		double avail = getEnergyStored();
-		if (BuildInfo.DEBUG)
-			LanteaCraft.getLogger().log(
-					Level.INFO,
-					String.format("Energy deduction: %s stored %s required (can complete: %s).", avail, q,
-							(q > avail) ? "no" : "yes"));
-		if (q > avail)
-			return false;
-		metadata.set("energy", avail - q);
-		return true;
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		saveEnergyStore(nbt);
-	}
-
 	private double yawAngle(Vector3 v) {
 		double a = Math.atan2(-v.x, v.z);
 		double d = Math.toDegrees(a);
@@ -861,147 +1004,6 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 
 	private Vector3 yawVector(Entity entity) {
 		return yawVector(entity.rotationYaw);
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean canReceiveEnergy() {
-		return true;
-	}
-
-	@Override
-	public boolean canExportEnergy() {
-		return false;
-	}
-
-	@Override
-	public double getMaximumReceiveEnergy() {
-		return Math.max(0, getMaxEnergyStored() - getEnergyStored());
-	}
-
-	@Override
-	public double getMaximumExportEnergy() {
-		return 0;
-	}
-
-	@Override
-	public double getAvailableExportEnergy() {
-		return 0;
-	}
-
-	@Override
-	public void receiveEnergy(double units) {
-		receiveEnergy(units, false);
-	}
-
-	@Override
-	public double exportEnergy(double units) {
-		return 0;
-	}
-
-	@Override
-	public boolean canEnergyFormatConnectToSide(EnumUnits typeof, ForgeDirection direction) {
-		return true;
-	}
-
-	@Override
-	public double receiveEnergy(double quantity, boolean isSimulated) {
-		double actualQty = Math.min(quantity, getMaxEnergyStored() - getEnergyStored());
-		if (!isSimulated)
-			metadata.set("energy", ((Double) metadata.get("energy")) + actualQty);
-		return actualQty;
-	}
-
-	@Override
-	public double extractEnergy(double quantity, boolean isSimulated) {
-		double actualQty = Math.min(quantity, getMaxEnergyStored());
-		if (!isSimulated)
-			metadata.set("energy", ((Double) metadata.get("energy")) - actualQty);
-		return actualQty;
-	}
-
-	@Override
-	public double getEnergyStored() {
-		if (!metadata.containsKey("energy"))
-			metadata.set("energy", 0.0d);
-		return (Double) metadata.get("energy");
-	}
-
-	@Override
-	public double getMaxEnergyStored() {
-		return 64.0d;
-	}
-
-	@Override
-	public void saveEnergyStore(NBTTagCompound compound) {
-		if (!metadata.containsKey("energy"))
-			metadata.set("energy", 0.0d);
-		compound.setDouble("energy", (Double) metadata.get("energy"));
-	}
-
-	@Override
-	public void loadEnergyStore(NBTTagCompound compound) {
-		metadata.set("energy", compound.getDouble("energy"));
-
-	}
-
-	@Override
-	public void invalidate() {
-		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
-		if (addedToEnergyNet)
-			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
-					|| ifaces.contains("ic2.api.energy.tile.IEnergyAcceptor")) {
-				postIC2Update(false);
-				markDirty();
-			}
-		super.invalidate();
-	}
-
-	@Override
-	public boolean spinToGlyph(char glyph) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean spinAndWaitForGlyph(char glpyh) throws InterruptedException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isSpinning() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean stopSpinning() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean lockChevron() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean unlockChevron() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public char[] getLockedGlyphs() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

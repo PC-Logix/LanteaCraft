@@ -55,7 +55,7 @@ public interface IStargateAccess {
 	 * 
 	 * @return If the Stargate initiated the current connection.
 	 */
-	public boolean isOutgoingConnection();
+	public boolean getIsOutgoingConnection();
 
 	/**
 	 * Obtains the local address of the current Stargate.
@@ -73,6 +73,12 @@ public interface IStargateAccess {
 	 *         connection is active.
 	 */
 	public String getConnectionAddress();
+	
+	/**
+	 * TODO: flergh
+	 * @return
+	 */
+	public boolean getIsBusy();
 	
 	/**
 	 * Obtains the list of encoded glpyhs the Stargate has engaged.
@@ -108,7 +114,7 @@ public interface IStargateAccess {
 	 * 
 	 * @return If the inner dialling ring is spinning.
 	 */
-	public boolean isSpinning();
+	public boolean getIsSpinning();
 
 	/**
 	 * Requests the inner dialling ring stop spinning immediately.

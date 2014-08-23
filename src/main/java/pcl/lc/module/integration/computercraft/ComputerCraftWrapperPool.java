@@ -160,7 +160,7 @@ public class ComputerCraftWrapperPool {
 					throw new Exception("Stargate cannot be closed from this end");
 				return new Object[] { true };
 			case 3:
-				return new Object[] { access.isBusy() };
+				return new Object[] { access.getIsBusy() };
 			case 4:
 				return new Object[] { access.getLocalAddress() };
 			case 5:
@@ -185,7 +185,7 @@ public class ComputerCraftWrapperPool {
 					pushEvent("sgIdle", new Object[] { true });
 					break;
 				case Dialling:
-					if (access.isOutgoingConnection())
+					if (access.getIsOutgoingConnection())
 						pushEvent("sgOutgoing", new Object[] { access.getConnectionAddress() });
 					else
 						pushEvent(

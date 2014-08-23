@@ -164,7 +164,7 @@ public class OpenComputersWrapperPool {
 					node.sendToReachable("computer.signal", "sgIdle", true);
 					break;
 				case Dialling:
-					if (access.isOutgoingConnection())
+					if (access.getIsOutgoingConnection())
 						node.sendToReachable("computer.signal", "sgOutgoing", access.getConnectionAddress());
 					else
 						node.sendToReachable("computer.signal", "sgIncoming",
@@ -224,7 +224,7 @@ public class OpenComputersWrapperPool {
 
 		@Callback
 		public Object[] disconnect(Context context, Arguments args) throws Exception {
-			if (!access.isBusy())
+			if (!access.getIsBusy())
 				throw new Exception("Stargate is not connected");
 			if (!access.disconnect())
 				throw new Exception("Stargate cannot be disconnected");
@@ -233,7 +233,7 @@ public class OpenComputersWrapperPool {
 
 		@Callback
 		public Object[] isConnected(Context context, Arguments args) {
-			return new Object[] { access.isBusy() };
+			return new Object[] { access.getIsBusy() };
 		}
 
 		@Callback
