@@ -85,10 +85,6 @@ public class StargateConnectionManager implements ITickAgent, IStargateManagemen
 		public int ticks = 0;
 		/* The current state of the connection */
 		public WatchedValue<EnumStargateState> state = new WatchedValue<EnumStargateState>(EnumStargateState.Idle);
-		/* The current symbol being dialled */
-		public WatchedValue<Character> symbol = new WatchedValue<Character>(' ');
-		/* The number of chevrons dialled */
-		public WatchedValue<Integer> chevrons = new WatchedValue<Integer>(0);
 		/* The remaining number of ticks to remain in this state */
 		public int ticksRemaining = 0;
 
@@ -134,7 +130,7 @@ public class StargateConnectionManager implements ITickAgent, IStargateManagemen
 			}
 
 			/* Start dialling */
-			runState(EnumStargateState.Dialling, diallingTime);
+			runState(EnumStargateState.PendingTransient, 25);
 		}
 
 		public void advance() {
@@ -177,36 +173,8 @@ public class StargateConnectionManager implements ITickAgent, IStargateManagemen
 				--ticksRemaining;
 			} else {
 				switch (state.get()) {
-				case InterDialling: // Any dial_wait state -> any dial state
-					symbol.set(nextChevron());
-					if (hostTile.get().getAsStructure().isSimpleGate() && chevrons.get() >= 6 && clientAddress.length() != 7) {
-						if (BuildInfo.DEBUG)
-							LanteaCraft.getLogger().log(Level.WARN,
-									"Gate only has seven chevrons, can't dial long addresses, aborting!");
-						runState(EnumStargateState.Abort, abortTime);
-					} else
-						runState(EnumStargateState.Dialling, diallingTime);
-					break;
-				case Dialling: // Any dial state -> any idle_wait state
-					chevrons.set(chevrons.get() + 1);
-					if (clientAddress.length() > chevrons.get()) {
-						runState(EnumStargateState.InterDialling, interDiallingTime);
-					} else if (clientTile != null && clientTile.get() != null) {
-						if (!canGatesCrossTypes && clientTile.get().getType() != hostTile.get().getType()) {
-							if (BuildInfo.DEBUG)
-								LanteaCraft.getLogger().log(Level.WARN,
-										"Inter-gate type dialling not allowed, aborting!");
-							runState(EnumStargateState.Abort, abortTime);
-						}
-
-						runState(EnumStargateState.PendingTransient, 25);
-					} else {
-						if (BuildInfo.DEBUG)
-							LanteaCraft.getLogger().log(Level.WARN, "Cannot find host tile, aborting!");
-						runState(EnumStargateState.Abort, abortTime);
-					}
-					break;
-				case PendingTransient: // Any pending state -> any transient state
+				case PendingTransient: // Any pending state -> any transient
+										// state
 					runState(EnumStargateState.Transient, transientDuration);
 					break;
 				case Transient: // Any transient state -> any connected state
@@ -239,10 +207,6 @@ public class StargateConnectionManager implements ITickAgent, IStargateManagemen
 				} else
 					energyTicksRemaining--;
 			}
-		}
-
-		public char nextChevron() {
-			return clientAddress.charAt(chevrons.get());
 		}
 
 		public void runState(EnumStargateState state, int timeout) {

@@ -117,10 +117,6 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		public final boolean isHost;
 		/* The current state of the connection */
 		public WatchedValue<EnumStargateState> state = new WatchedValue<EnumStargateState>(EnumStargateState.Idle);
-		/* The current symbol being dialled */
-		public WatchedValue<Character> symbol = new WatchedValue<Character>(' ');
-		/* The number of chevrons dialled */
-		public WatchedValue<Integer> chevrons = new WatchedValue<Integer>(0);
 		/* The remaining number of ticks to remain in this state */
 		public int ticksRemaining = 0;
 		/* The name of the request */
@@ -226,8 +222,6 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	/** Client-only fields, not synchronized (un-needed) */
 	private ClientConnectionRequest connection_cli;
 	private SoundHost soundHost;
-	private double ring_angle, ring_reference_angle, ring_dest_angle;
-	private double ehGrid[][][];
 
 	public TileStargateBase() {
 		inventory = new StargateInventoryStub();
@@ -250,8 +244,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		checkForEntitiesInPortal();
 		if (connection != null)
 			// Synchronize the connection between this instance and the client
-			if (connection.running.modified(metacontext) || connection.chevrons.modified(metacontext)
-					|| connection.state.modified(metacontext) || connection.symbol.modified(metacontext)) {
+			if (connection.running.modified(metacontext) || connection.state.modified(metacontext)) {
 				if (BuildInfo.DEBUG)
 					LanteaCraft.getLogger().log(Level.INFO, "Update detected, sending update packet.");
 				StandardModPacket update = new StandardModPacket(new WorldLocation(this));
@@ -261,17 +254,9 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 					connection.running.clearModified(metacontext);
 					update.setValue("running", connection.running.get());
 				}
-				if (connection.chevrons.modified(metacontext)) {
-					connection.chevrons.clearModified(metacontext);
-					update.setValue("chevrons", connection.chevrons.get());
-				}
 				if (connection.state.modified(metacontext)) {
 					connection.state.clearModified(metacontext);
 					update.setValue("state", connection.state.get());
-				}
-				if (connection.symbol.modified(metacontext)) {
-					connection.symbol.clearModified(metacontext);
-					update.setValue("symbol", connection.symbol.get());
 				}
 				update.setValue("ticksRemaining", connection.ticksRemaining);
 				LanteaCraft.getNetPipeline().sendToAll(update);
@@ -297,41 +282,16 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 				connection_cli.ticksRemaining--;
 			if (connection_cli.state.modified(metacontext)) {
 				connection_cli.state.clearModified(metacontext);
-				// The ring is now spinning, calculate the destination angle
-				if (connection_cli.state.get() == EnumStargateState.Dialling) {
-					char symbol = getDialledAddress().charAt(connection_cli.chevrons.get());
-					int symbolIndex = GateAddressHelper.singleton().index(symbol);
-					int whichChevron = (getDialledAddress().length() == 7) ? StargateRenderConstants.standardRenderQueue[1 + connection_cli.chevrons
-							.get()] : StargateRenderConstants.extendedRenderQueue[1 + connection_cli.chevrons.get()];
-					double chevronAngle = (StargateRenderConstants.chevronAngle * whichChevron);
-					double symbolRotation = symbolIndex * StargateRenderConstants.ringSymbolAngle;
-					double dest = symbolRotation;
-					if (getType() == EnumStargateType.ATLANTIS || getType() == EnumStargateType.WRAITH)
-						dest += chevronAngle; // must specify destination uvx
-					ring_dest_angle = MathUtils.normaliseAngle(dest);
-				}
-
 				switch (getState()) {
-				case Dialling:
-					soundHost.playChannel("stargate_spin");
-					break;
-				case InterDialling:
-					soundHost.pauseChannel("stargate_spin");
-					soundHost.playChannel("stargate_chevron");
-					break;
 				case Transient:
 					soundHost.stopChannel("stargate_spin");
 					soundHost.playChannel("stargate_transient");
-					initiateOpeningTransient();
 					break;
 				case Disconnecting:
 					soundHost.playChannel("stargate_close");
-					ring_dest_angle = 0;
-					initiateClosingTransient();
 					break;
 				case Abort:
 					soundHost.playChannel("stargate_abort");
-					ring_dest_angle = 0;
 					break;
 				case Connected:
 					break;
@@ -340,63 +300,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 					break;
 				}
 			}
-
-			ring_reference_angle = ring_angle;
-			if (getState() == EnumStargateState.Dialling
-					|| (getState() == EnumStargateState.Disconnecting && connection_cli.ticksRemaining > 0))
-				if (connection_cli.ticksRemaining > 0) {
-					int movementTicksRemain = connection_cli.ticksRemaining - 4;
-					if (movementTicksRemain > 0) {
-						double da = MathUtils.diffAngle(ring_angle, ring_dest_angle) / movementTicksRemain;
-						ring_angle = MathUtils.addAngle(ring_angle, da);
-					}
-				} else
-					ring_angle = ring_dest_angle;
-		} else {
-
 		}
-
-		double grid[][][] = getEventHorizonGrid();
-		final int m = StargateEventHorizonRenderer.ehGridRadialSize, n = StargateEventHorizonRenderer.ehGridPolarSize;
-		double u[][] = grid[0], v[][] = grid[1];
-		double dt = 1.0, asq = 0.03, d = 0.95;
-		int r = random.nextInt(m - 1) + 1, t = random.nextInt(n) + 1;
-		v[t][r] += 0.05 * random.nextGaussian();
-		for (int i = 1; i < m; i++)
-			for (int j = 1; j <= n; j++) {
-				double du_dr = 0.5 * (u[j][i + 1] - u[j][i - 1]);
-				double d2u_drsq = u[j][i + 1] - 2 * u[j][i] + u[j][i - 1];
-				double d2u_dthsq = u[j + 1][i] - 2 * u[j][i] + u[j - 1][i];
-				v[j][i] = d * v[j][i] + asq * dt * (d2u_drsq + du_dr / i + d2u_dthsq / (i * i));
-			}
-		for (int i = 1; i < m; i++)
-			for (int j = 1; j <= n; j++)
-				u[j][i] += v[j][i] * dt;
-		double u0 = 0, v0 = 0;
-		for (int j = 1; j <= n; j++) {
-			u0 += u[j][1];
-			v0 += v[j][1];
-		}
-		u0 /= n;
-		v0 /= n;
-		for (int j = 1; j <= n; j++) {
-			u[j][0] = u0;
-			v[j][0] = v0;
-		}
-	}
-
-	private boolean canTravelFromThisEnd() {
-		return !oneWayTravel || connection.isHost(this);
-	}
-
-	private boolean canCloseFromThisEnd() {
-		return closeFromEitherEnd || connection.isHost(this);
-	}
-
-	public int getTicks() {
-		if (worldObj.isRemote || connection == null)
-			return 0;
-		return connection.ticks;
 	}
 
 	@Override
@@ -594,9 +498,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 			update.setType("LanteaPacket.ConnectionSet");
 			update.setIsForServer(false);
 			update.setValue("running", connection.running.get());
-			update.setValue("chevrons", connection.chevrons.get());
 			update.setValue("state", connection.state.get());
-			update.setValue("symbol", connection.symbol.get());
 
 			update.setValue("name", connection.name);
 			update.setValue("hostName", connection.hostName);
@@ -612,32 +514,8 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 
 	@Override
 	public int getEncodedChevrons() {
-		if (!worldObj.isRemote) {
-			if (connection == null || !connection.running.get())
-				return -1;
-			return connection.chevrons.get();
-		} else {
-			if (connection_cli == null || !connection_cli.running.get())
-				return -1;
-			return connection_cli.chevrons.get();
-		}
-	}
-
-	public double[][][] getEventHorizonGrid() {
-		if (ehGrid == null) {
-			int m = StargateEventHorizonRenderer.ehGridRadialSize;
-			int n = StargateEventHorizonRenderer.ehGridPolarSize;
-			ehGrid = new double[2][n + 2][m + 1];
-			for (int i = 0; i < 2; i++) {
-				ehGrid[i][0] = ehGrid[i][n];
-				ehGrid[i][n + 1] = ehGrid[i][1];
-			}
-		}
-		return ehGrid;
-	}
-
-	public String getHomeAddress() throws AddressingError {
-		return GateAddressHelper.addressForLocation(new WorldLocation(this));
+		char[] glyphs = getLockedGlyphs();
+		return (glyphs != null) ? glyphs.length : 0;
 	}
 
 	@Override
@@ -659,7 +537,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	@Override
 	public String getLocalAddress() {
 		try {
-			return getHomeAddress();
+			return GateAddressHelper.addressForLocation(new WorldLocation(this));
 		} catch (AddressingError e) {
 			return "";
 		}
@@ -717,12 +595,8 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 					StandardModPacket payload = (StandardModPacket) packetOf;
 					if (payload.hasFieldWithValue("running"))
 						connection_cli.running.set((Boolean) payload.getValue("running"));
-					if (payload.hasFieldWithValue("chevrons"))
-						connection_cli.chevrons.set((Integer) payload.getValue("chevrons"));
 					if (payload.hasFieldWithValue("state"))
 						connection_cli.state.set((EnumStargateState) payload.getValue("state"));
-					if (payload.hasFieldWithValue("symbol"))
-						connection_cli.symbol.set((Character) payload.getValue("symbol"));
 					if (payload.hasFieldWithValue("ticksRemaining"))
 						connection_cli.ticksRemaining = (Integer) payload.getValue("ticksRemaining");
 				} else {
@@ -738,9 +612,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 						(String) payload.getValue("hostAddress"), (String) payload.getValue("clientAddress"),
 						(Boolean) payload.getValue("isHost"));
 				req.running.set((Boolean) payload.getValue("running"));
-				req.chevrons.set((Integer) payload.getValue("chevrons"));
 				req.state.set((EnumStargateState) payload.getValue("state"));
-				req.symbol.set((Character) payload.getValue("symbol"));
 				req.ticksRemaining = (Integer) payload.getValue("ticksRemaining");
 				setClientConnection(req);
 			} else
@@ -766,42 +638,6 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	public void hostBlockPlaced() {
 		if (!worldObj.isRemote)
 			getAsStructure().invalidate();
-	}
-
-	private void initiateClosingTransient() {
-		if (!isIrisClosed()) {
-			double v[][] = getEventHorizonGrid()[1];
-			int m = StargateEventHorizonRenderer.ehGridRadialSize;
-			int n = StargateEventHorizonRenderer.ehGridPolarSize;
-			for (int i = 1; i < m; i++)
-				for (int j = 1; j <= n; j++)
-					v[j][i] += StargateRenderConstants.closingTransientRandomness * random.nextGaussian();
-		}
-	}
-
-	private void initiateOpeningTransient() {
-		if (!isIrisClosed()) {
-			double v[][] = getEventHorizonGrid()[1];
-			int n = StargateEventHorizonRenderer.ehGridPolarSize;
-			for (int j = 0; j <= n + 1; j++) {
-				v[j][0] = StargateRenderConstants.openingTransientIntensity;
-				v[j][1] = v[j][0] + StargateRenderConstants.openingTransientRandomness * random.nextGaussian();
-			}
-		}
-	}
-
-	public double interpolatedRingAngle(double t) {
-		double dx = MathUtils.diffAngle(ring_reference_angle, ring_angle);
-		double da = MathUtils.addAngle(ring_angle, t * dx);
-		return da;
-	}
-
-	public boolean isConnected() {
-		return getState() != null && getState() != EnumStargateState.Idle;
-	}
-
-	public boolean isIrisClosed() {
-		return false;
 	}
 
 	@Override
@@ -1160,6 +996,12 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	public boolean unlockChevron() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public char[] getLockedGlyphs() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
