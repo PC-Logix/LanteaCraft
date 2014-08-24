@@ -6,8 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import lc.common.BuildInfo;
 import lc.common.LCLog;
+import lc.core.BuildInfo;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.Level;

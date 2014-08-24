@@ -9,8 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import lc.common.BuildInfo;
 import lc.common.LCLog;
+import lc.core.BuildInfo;
 import net.minecraftforge.common.ForgeVersion;
 
 import org.apache.logging.log4j.Level;

@@ -88,7 +88,8 @@ public class LanteaCraftPacketPipe extends MessageToMessageCodec<FMLProxyPacket,
 			// We should never get here
 			throw new IOException("Instance is not client or server. Cannot continue!");
 		}
-		LanteaCraft.getProxy().handlePacket(pkt, player);
+		// TODO: Fix packets. :<
+		// LanteaCraft.getProxy().handlePacket(pkt, player);
 	}
 
 	@SideOnly(Side.CLIENT)

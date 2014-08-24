@@ -1,4 +1,4 @@
-package lc.common;
+package lc.core;
 
 /**
  * This file is automatically updated by Jenkins as part of the CI build script

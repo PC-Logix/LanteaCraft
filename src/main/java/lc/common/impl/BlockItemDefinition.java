@@ -11,6 +11,7 @@ import lc.common.base.LCItem;
 import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
 import lc.common.util.RegistrationHelper;
+import lc.core.LCRuntime;
 
 public class BlockItemDefinition implements ILanteaCraftDefinition {
 
@@ -52,7 +53,7 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 	}
 
 	public void init() {
-		if (!RegistryContainer.instance.components().isEnabled(ownerType))
+		if (!LCRuntime.runtime.registries().components().isEnabled(ownerType))
 			return;
 		if (blockType != null && itemBlockType != null)
 			RegistrationHelper.registerBlock(blockType, itemBlockType, defName);

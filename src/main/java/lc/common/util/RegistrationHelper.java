@@ -4,9 +4,11 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import lc.common.BuildInfo;
 import lc.common.LCLog;
+import lc.common.base.LCBlock;
+import lc.common.base.LCItem;
 import lc.common.base.LCItemBucket;
+import lc.core.BuildInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.Render;
@@ -29,6 +31,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
@@ -175,6 +178,23 @@ public class RegistrationHelper {
 		}
 	}
 
+	public static <T extends Item> T registerItem(Class<? extends T> classOf, String unlocalizedName) {
+		LCLog.debug("Attempting to register item " + unlocalizedName);
+		if (isLateRegistrationZone)
+			LCLog.warn("Warning, registration of this item is later than was expected!");
+		try {
+			Constructor<? extends T> ctor = classOf.getConstructor();
+			T theMysteryItem = ctor.newInstance();
+			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(CreativeTabHelper.getTab("LanteaCraft"));
+			GameRegistry.registerItem(theMysteryItem, unlocalizedName);
+			registeredItems.put(registeredItems.size(), classOf);
+			return theMysteryItem;
+		} catch (Exception e) {
+			LCLog.fatal("Failed to register item, an exception occured.", e);
+			throw new RuntimeException(e);
+		}
+	}
+
 	/**
 	 * Registers an item with a given class and an unlocalized name.
 	 * 
@@ -212,7 +232,7 @@ public class RegistrationHelper {
 	 *            The texture target for the bucket.
 	 * @return The ItemSpecialBucket singleton for this host fluid.
 	 */
-	public static LCItemBucket registerSpecialBucket(Block hostOf, String unlocalizedName, String bucketTextureName,
+	public static LCItemBucket registerSpecialBucket(LCBlock hostOf, String unlocalizedName, String bucketTextureName,
 			CreativeTabs tab) {
 		LCLog.debug("Attempting to register SpecialBucket " + unlocalizedName);
 		if (isLateRegistrationZone)
@@ -331,10 +351,11 @@ public class RegistrationHelper {
 	 * @param renderer
 	 *            A block renderer
 	 */
-	public static void registerRenderer(GenericBlockRenderer renderer) {
+	public static void registerRenderer(ISimpleBlockRenderingHandler renderer) {
 		if (isLateRegistrationZone)
 			LCLog.warn("Warning, registration of this block renderer is later than was expected!");
-		renderer.renderID = RenderingRegistry.getNextAvailableRenderId();
+		// TODO: Fix rendering registry :<
+		// renderer.renderID = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(renderer);
 	}
 
@@ -354,32 +375,6 @@ public class RegistrationHelper {
 
 	public static void registerEntityRenderer(Class<? extends Entity> entity, Object renderer) {
 		RenderingRegistry.registerEntityRenderingHandler(entity, (Render) renderer);
-	}
-
-	/**
-	 * Registers a block as a LanteaCraft stair-type decal.
-	 * 
-	 * @param unlocalizedName
-	 *            The unlocalized name of the target block. Has to already have
-	 *            been reigstered with FML.
-	 * @param targetMetadata
-	 *            The target metadata type, if not default. (0)
-	 * @return The decal stair instance.
-	 */
-	@Deprecated
-	public static BlockLanteaDecorStair registerStairDecal(String unlocalizedName, int targetMetadata, CreativeTabs tab) {
-		LCLog.debug("Attempting to register stair decal %s", unlocalizedName);
-		if (isLateRegistrationZone)
-			LCLog.warn("Warning, registration of this stair decal is later than was expected!");
-		try {
-			BlockLanteaDecorStair stair = new BlockLanteaDecorStair(targetMetadata);
-			stair.setBlockName(unlocalizedName).setCreativeTab(tab);
-			GameRegistry.registerBlock(stair, unlocalizedName);
-			return stair;
-		} catch (Exception e) {
-			LCLog.fatal("Failed to register stair decal, an exception occured.", e);
-			throw new RuntimeException(e);
-		}
 	}
 
 	public static int registerVillager(int id, String name, ResourceLocation skin) {

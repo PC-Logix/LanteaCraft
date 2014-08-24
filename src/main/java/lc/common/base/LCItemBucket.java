@@ -48,8 +48,10 @@ public class LCItemBucket extends ItemBucket {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
-		itemIcon = par1IconRegister.registerIcon(ResourceAccess.formatResourceName(
-				"${ASSET_KEY}:bucket_%s_${TEX_QUALITY}", iconName));
+		// TODO: resourceaccess qualifier
+		// itemIcon =
+		// par1IconRegister.registerIcon(ResourceAccess.formatResourceName(
+		// "${ASSET_KEY}:bucket_%s_${TEX_QUALITY}", iconName));
 	}
 
 	public void setTargetTexture(String bucketTextureName) {

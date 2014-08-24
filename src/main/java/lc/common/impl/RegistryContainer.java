@@ -6,13 +6,8 @@ import lc.api.components.IRegistryContainer;
 
 public class RegistryContainer implements IRegistryContainer {
 
-	public static final RegistryContainer instance = new RegistryContainer();
-
 	private ComponentRegistry components = new ComponentRegistry();
 	private DefinitionRegistry definitions = new DefinitionRegistry();
-
-	private RegistryContainer() {
-	}
 
 	@Override
 	public IComponentRegistry components() {
