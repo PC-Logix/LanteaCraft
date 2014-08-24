@@ -3,6 +3,7 @@ package lc.common.util;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import lc.common.base.LCBlock;
 import lc.common.base.LCItemBucket;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBucket;
@@ -24,7 +25,7 @@ public class SpecialBucketHandler {
 	/**
 	 * Map of all Block to LCItemBucket mappings.
 	 */
-	private HashMap<Block, LCItemBucket> buckets = new HashMap<Block, LCItemBucket>();
+	private static HashMap<Block, LCItemBucket> buckets = new HashMap<Block, LCItemBucket>();
 
 	/**
 	 * Register a new mapping of {@link Block} type blockOf with an
@@ -36,7 +37,7 @@ public class SpecialBucketHandler {
 	 *            The resulting LCItemBucket when the host block is collected in
 	 *            a bucket.
 	 */
-	public void registerBucketMapping(Block blockOf, LCItemBucket itemResult) {
+	public static void registerBucketMapping(LCBlock blockOf, LCItemBucket itemResult) {
 		buckets.put(blockOf, itemResult);
 	}
 

@@ -1,6 +1,7 @@
 package lc.common.base;
 
 import lc.common.util.CreativeTabHelper;
+import lc.common.util.SpecialBucketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Items;
@@ -23,17 +24,17 @@ public class LCItemBucket extends ItemBucket {
 	private String iconName;
 
 	/**
-	 * Creates an instance of an LCItemBucket and initializes it with
-	 * default properties and with the {@link SpecialBucketHandler} registry.
+	 * Creates an instance of an LCItemBucket and initializes it with default
+	 * properties and with the {@link SpecialBucketHandler} registry.
 	 * 
 	 * @param i
 	 *            The item ID to use for this bucket.
 	 * @param hostBlock
 	 *            The fluid block this Bucket is hosting.
 	 */
-	public LCItemBucket(Block hostBlock) {
+	public LCItemBucket(LCBlock hostBlock) {
 		super(hostBlock);
-		LanteaCraft.getSpecialBucketHandler().registerBucketMapping(hostBlock, this);
+		SpecialBucketHandler.registerBucketMapping(hostBlock, this);
 		setCreativeTab(CreativeTabHelper.getTab("LanteaCraft"));
 		setContainerItem(Items.bucket);
 	}
