@@ -40,6 +40,7 @@ import pcl.lc.api.EnumStargateState;
 import pcl.lc.api.EnumStargateType;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.api.access.IStargateAccess;
+import pcl.lc.api.internal.IBlockTileSignalable;
 import pcl.lc.base.PoweredTileEntity;
 import pcl.lc.base.data.WatchedValue;
 import pcl.lc.base.energy.IEnergyStore;
@@ -69,7 +70,7 @@ import pcl.lc.util.Vector3;
 import pcl.lc.util.WorldLocation;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
-public class TileStargateBase extends PoweredTileEntity implements IStargateAccess, IEnergyStore, ISidedInventory {
+public class TileStargateBase extends PoweredTileEntity implements IStargateAccess, IEnergyStore, IBlockTileSignalable, ISidedInventory {
 
 	/**
 	 * Used to shadow a connection on a client.
@@ -490,16 +491,18 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		return (EnumStargateType) metadata.get("type");
 	}
 
+	@Override
+	public void hostBlockPlaced() {
+		if (!worldObj.isRemote)
+			getAsStructure().invalidate();
+	}
+
+	@Override
 	public void hostBlockDestroyed() {
 		if (connection != null)
 			connection.shutdown();
 		if (!worldObj.isRemote)
 			getAsStructure().disband();
-	}
-
-	public void hostBlockPlaced() {
-		if (!worldObj.isRemote)
-			getAsStructure().invalidate();
 	}
 
 	@Override
@@ -767,7 +770,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	}
 
 	private void entityInPortal(Entity entity, Vector3 prevPos) {
-		if (!entity.isDead && getState() == EnumStargateState.Connected && canTravelFromThisEnd()) {
+		if (!entity.isDead && getState() == EnumStargateState.Connected && (!oneWayTravel || getIsOutgoingConnection())) {
 			Trans3 t = localToGlobalTransformation();
 			double vx = entity.posX - prevPos.x;
 			double vy = entity.posY - prevPos.y;

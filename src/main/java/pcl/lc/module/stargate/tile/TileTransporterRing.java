@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
 import net.minecraft.util.AxisAlignedBB;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.internal.IBlockTileSignalable;
 import pcl.lc.base.TileManaged;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;
@@ -11,7 +12,7 @@ import pcl.lc.module.stargate.TransporterRingMultiblock;
 import pcl.lc.module.stargate.TransporterRingPart;
 import pcl.lc.util.WorldLocation;
 
-public class TileTransporterRing extends TileManaged {
+public class TileTransporterRing extends TileManaged implements IBlockTileSignalable {
 
 	private TransporterRingMultiblock multiblock = new TransporterRingMultiblock(this);
 	private TransporterRingPart part = new TransporterRingPart(this);
@@ -58,6 +59,12 @@ public class TileTransporterRing extends TileManaged {
 		return null;
 	}
 
+	@Override
+	public void hostBlockPlaced() {
+		
+	}
+
+	@Override
 	public void hostBlockDestroyed() {
 		if (!worldObj.isRemote) {
 			if (getAsStructure() != null)
@@ -65,7 +72,7 @@ public class TileTransporterRing extends TileManaged {
 			if (part != null)
 				part.devalidateHostMultiblock();
 		}
-			
+
 	}
 
 	@Override

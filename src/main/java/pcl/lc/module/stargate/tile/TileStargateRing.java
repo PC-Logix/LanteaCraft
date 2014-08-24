@@ -4,18 +4,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import pcl.lc.LanteaCraft;
+import pcl.lc.api.internal.IBlockTileSignalable;
 import pcl.lc.base.TileManaged;
 import pcl.lc.base.network.packet.ModPacket;
 import pcl.lc.base.network.packet.StandardModPacket;
 import pcl.lc.module.stargate.StargatePart;
 import pcl.lc.util.WorldLocation;
 
-public class TileStargateRing extends TileManaged {
+public class TileStargateRing extends TileManaged implements IBlockTileSignalable {
 	private StargatePart part = new StargatePart(this);
 
 	@Override
 	public Packet getDescriptionPacket() {
-		if (!worldObj.isRemote){ 
+		if (!worldObj.isRemote) {
 			ModPacket packet = part.pack();
 			LanteaCraft.getNetPipeline().sendToAllAround(packet, new WorldLocation(this), 128.0d);
 		} else {
@@ -59,11 +60,13 @@ public class TileStargateRing extends TileManaged {
 			flagDirty();
 	}
 
+	@Override
 	public void hostBlockPlaced() {
 		if (!worldObj.isRemote)
 			flagDirty();
 	}
 
+	@Override
 	public void hostBlockDestroyed() {
 		if (!worldObj.isRemote)
 			flagDirty();

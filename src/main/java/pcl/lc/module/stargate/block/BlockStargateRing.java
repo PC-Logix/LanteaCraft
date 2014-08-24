@@ -129,12 +129,6 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		TileStargateRing te = (TileStargateRing) getTileEntity(world, x, y, z);
-		te.hostBlockPlaced();
-	}
-
-	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
 		TileStargateRing te = (TileStargateRing) getTileEntity(world, x, y, z);
 		if (te != null) {

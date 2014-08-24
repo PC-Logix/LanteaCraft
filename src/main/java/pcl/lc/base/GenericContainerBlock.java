@@ -2,10 +2,12 @@ package pcl.lc.base;
 
 import java.util.Random;
 
+import pcl.lc.api.internal.IBlockTileSignalable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -41,9 +43,17 @@ public abstract class GenericContainerBlock extends BlockContainer {
 	}
 
 	@Override
+	public void onBlockAdded(World world, int x, int y, int z) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile != null && (tile instanceof IBlockTileSignalable))
+			((IBlockTileSignalable) tile).hostBlockPlaced();
+		super.onBlockAdded(world, x, y, z);
+	}
+
+	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int blockMeta) {
 		TileEntity te = world.getTileEntity(x, y, z);
-		if (te instanceof IInventory) {
+		if (te != null && (te instanceof IInventory)) {
 			IInventory inventory = (IInventory) te;
 			if (inventory != null)
 				for (int i = 0; i < inventory.getSizeInventory(); ++i) {
@@ -71,6 +81,10 @@ public abstract class GenericContainerBlock extends BlockContainer {
 					}
 				}
 		}
+
+		if (te != null && (te instanceof IBlockTileSignalable))
+			((IBlockTileSignalable) te).hostBlockDestroyed();
+
 		super.breakBlock(world, x, y, z, block, blockMeta);
 	}
 }

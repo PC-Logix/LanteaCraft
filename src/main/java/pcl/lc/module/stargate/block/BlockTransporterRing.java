@@ -54,19 +54,6 @@ public class BlockTransporterRing extends GenericContainerBlock {
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		super.onBlockAdded(world, x, y, z);
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
-		TileEntity te = getTileEntity(world, x, y, z);
-		if (te != null && te instanceof TileTransporterRing)
-			((TileTransporterRing) te).hostBlockDestroyed();
-		super.breakBlock(world, x, y, z, block, data);
-	}
-
-	@Override
 	public int damageDropped(int data) {
 		return data;
 	}

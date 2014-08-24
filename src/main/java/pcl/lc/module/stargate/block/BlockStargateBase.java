@@ -124,8 +124,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 		int rotation = Math.round((180 - player.rotationYaw) / 90) & 3;
 		int data = (getBaseType(stack.getItemDamage()) * blockMutex) + rotation;
 		world.setBlockMetadataWithNotify(x, y, z, data, 0x3);
-		TileStargateBase te = (TileStargateBase) getTileEntity(world, x, y, z);
-		te.hostBlockPlaced();
+		super.onBlockPlacedBy(world, x, y, z, player, stack);
 	}
 	
 	public int getBaseType(int metadata) {
@@ -173,9 +172,6 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int data) {
-		TileEntity te = getTileEntity(world, x, y, z);
-		if (te != null && te instanceof TileStargateBase)
-			((TileStargateBase) te).hostBlockDestroyed();
 		super.breakBlock(world, x, y, z, block, data);
 	}
 
