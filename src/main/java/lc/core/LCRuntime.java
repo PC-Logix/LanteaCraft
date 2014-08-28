@@ -1,9 +1,14 @@
 package lc.core;
 
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import lc.api.ILCAPIProxy;
 import lc.api.components.IRegistryContainer;
 import lc.api.defs.Blocks;
 import lc.api.defs.Items;
+import lc.common.LCLog;
+import lc.common.impl.DefinitionRegistry;
 import lc.common.impl.RegistryContainer;
 
 public class LCRuntime implements ILCAPIProxy {
@@ -13,6 +18,10 @@ public class LCRuntime implements ILCAPIProxy {
 	private Blocks blocks = new Blocks();
 	private Items items = new Items();
 	private RegistryContainer registries = new RegistryContainer();
+	private RegistrationContainer container = new RegistrationContainer();
+
+	private LCRuntime() {
+	}
 
 	@Override
 	public Blocks blocks() {
@@ -27,6 +36,22 @@ public class LCRuntime implements ILCAPIProxy {
 	@Override
 	public IRegistryContainer registries() {
 		return registries;
+	}
+
+	public void preinit(FMLPreInitializationEvent event) {
+		LCLog.debug("LCRuntime entering phase preinit");
+		container.preinit(this, event);
+	}
+
+	public void init(FMLInitializationEvent event) {
+		LCLog.debug("LCRuntime entering phase init");
+		container.init(this, event);
+		((DefinitionRegistry) registries().definitions()).init(this, event);
+	}
+
+	public void postinit(FMLPostInitializationEvent event) {
+		LCLog.debug("LCRuntime entering phase postinit");
+		container.postinit(this, event);
 	}
 
 }

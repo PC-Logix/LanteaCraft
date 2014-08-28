@@ -7,6 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 
 public interface ILanteaCraftDefinition {
 
+	public abstract String getName();
+
 	public abstract Block getBlock();
 
 	public abstract Item getItem();

@@ -1,5 +1,7 @@
 package lc.core;
 
+import lc.common.LCLog;
+
 /**
  * This file is automatically updated by Jenkins as part of the CI build script
  * in Gradle. Don't put any pre-set values here.
@@ -16,45 +18,28 @@ public class BuildInfo {
 	/**
 	 * Enable or disable general debugging mode.
 	 */
-	public static final boolean DEBUG = true && isDevelopmentEnvironment();
+	public static boolean DEBUG;
 
 	/**
-	 * Enable or disable the SoundSystem debugging; often this is useful for
-	 * recording all the operations on the SoundDevice, meaning that clients
-	 * aren't slammed with logging if they don't need to be.
+	 * Allow DEBUG and TRACE level messages to masquerade as higher priority
+	 * ones.
 	 */
-	public static final boolean SS_DEBUGGING = true && isDevelopmentEnvironment();
+	public static boolean DEBUG_MASQ;
 
-	/**
-	 * Enable or disable network traffic dumping mode.
-	 */
-	public static final boolean NET_DEBUGGING = true && isDevelopmentEnvironment();
-
-	/**
-	 * Enable or disable asset and configuration access dumping.
-	 */
-	public static final boolean ASSET_DEBUGGING = true && isDevelopmentEnvironment();
-
-	/**
-	 * Enable or disable chunk loading dumping.
-	 */
-	public static final boolean CHUNK_DEBUGGING = true && isDevelopmentEnvironment();
-
-	/**
-	 * Enable unstable features flag.
-	 */
-	public static final boolean ENABLE_UNSTABLE = true && isDevelopmentEnvironment();
-
-	private static boolean IS_DEV_ENV;
+	private static final boolean IS_DEV_ENV;
 
 	static {
 		IS_DEV_ENV = getBuildNumber() == 0;
+		DEBUG = true && IS_DEV_ENV;
+		DEBUG_MASQ = true && DEBUG;
 	}
 
 	public static int getBuildNumber() {
-		if (buildNumber.equals("@" + "BUILD" + "@"))
+		try {
+			return Integer.parseInt(buildNumber);
+		} catch (Throwable t) {
 			return 0;
-		return Integer.parseInt(buildNumber);
+		}
 	}
 
 	public static boolean isDevelopmentEnvironment() {

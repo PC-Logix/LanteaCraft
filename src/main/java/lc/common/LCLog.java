@@ -1,5 +1,7 @@
 package lc.common;
 
+import lc.core.BuildInfo;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
@@ -17,12 +19,11 @@ public class LCLog {
 				log.log(level, (Throwable) args[0]);
 			else
 				log.log(level, args[0]);
-		} else if (args.length == 2) {
-			if (args[0] instanceof Throwable)
-				log.log(level, (String) args[1], (Throwable) args[0]);
-			else
-				log.log(level, (String) args[0], (Throwable) args[1]);
-		} else {
+		} else if (args.length == 2 && args[0] instanceof Throwable)
+			log.log(level, (String) args[1], (Throwable) args[0]);
+		else if (args.length == 2 && args[1] instanceof Throwable)
+			log.log(level, (String) args[0], (Throwable) args[1]);
+		else {
 			boolean flag = false;
 			for (int i = 0; i < args.length; i++)
 				if (args[i] instanceof Throwable)
@@ -61,11 +62,18 @@ public class LCLog {
 	}
 
 	public static void debug(Object... args) {
-		push(Level.DEBUG, args);
+		if (BuildInfo.DEBUG)
+			push((BuildInfo.DEBUG_MASQ) ? Level.INFO : Level.DEBUG, args);
 	}
 
 	public static void trace(Object... args) {
-		push(Level.TRACE, args);
+		if (BuildInfo.DEBUG)
+			push((BuildInfo.DEBUG_MASQ) ? Level.INFO : Level.TRACE, args);
+	}
+
+	public static void showRuntimeInfo() {
+		info("Loading LanteaCraft build %s (debugging: %s, masq: %s).", BuildInfo.getBuildNumber(), BuildInfo.DEBUG,
+				BuildInfo.DEBUG_MASQ);
 	}
 
 }

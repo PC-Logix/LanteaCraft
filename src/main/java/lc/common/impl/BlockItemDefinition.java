@@ -33,7 +33,7 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 			Class<? extends Item> itemType) {
 		this.ownerType = ownerType;
 		this.defName = defName;
-		if (itemType.isInstance(LCItemBlock.class)) {
+		if (LCItemBlock.class.isAssignableFrom(itemType)) {
 			this.itemType = null;
 			this.itemBlockType = (Class<? extends LCItemBlock>) itemType;
 		} else {
@@ -57,8 +57,13 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 			return;
 		if (blockType != null && itemBlockType != null)
 			RegistrationHelper.registerBlock(blockType, itemBlockType, defName);
-		else
+		else if (itemType != null)
 			RegistrationHelper.registerItem(itemType, defName);
+	}
+
+	@Override
+	public String getName() {
+		return defName;
 	}
 
 	@Override

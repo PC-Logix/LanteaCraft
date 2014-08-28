@@ -8,7 +8,7 @@ public class ComponentRegistry implements IComponentRegistry {
 	@Override
 	public boolean isEnabled(ComponentType type) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

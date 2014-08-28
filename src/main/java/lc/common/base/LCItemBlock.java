@@ -1,9 +1,14 @@
 package lc.common.base;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public class LCItemBlock extends ItemBlock {
+	
+	public LCItemBlock(Block block) {
+		this((LCBlock) block);
+	}
 
 	public LCItemBlock(LCBlock block) {
 		super(block);
