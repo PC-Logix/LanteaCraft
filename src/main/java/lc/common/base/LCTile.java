@@ -1,9 +1,11 @@
 package lc.common.base;
 
+import lc.common.LCLog;
 import lc.common.network.IPacketHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler {
@@ -13,6 +15,44 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	public abstract void thinkClient();
 
 	public abstract void thinkServer();
+
+	public abstract void save(NBTTagCompound compound);
+
+	public abstract void load(NBTTagCompound compound);
+
+	@Override
+	public boolean canUpdate() {
+		return true;
+	}
+
+	@Override
+	public void updateEntity() {
+		if (worldObj != null)
+			if (worldObj.isRemote)
+				thinkClient();
+			else
+				thinkServer();
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound p_145839_1_) {
+		super.readFromNBT(p_145839_1_);
+		try {
+			load(p_145839_1_);
+		} catch (Throwable t) {
+			LCLog.warn("Failed when loading data from NBT for tile.", t);
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound p_145841_1_) {
+		super.writeToNBT(p_145841_1_);
+		try {
+			save(p_145841_1_);
+		} catch (Throwable t) {
+			LCLog.warn("Failed when saving data to NBT for tile.", t);
+		}
+	}
 
 	@Override
 	public int getSizeInventory() {
