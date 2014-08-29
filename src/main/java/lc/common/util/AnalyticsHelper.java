@@ -13,8 +13,6 @@ import lc.common.LCLog;
 import lc.core.BuildInfo;
 import net.minecraftforge.common.ForgeVersion;
 
-import org.apache.logging.log4j.Level;
-
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 
 /**

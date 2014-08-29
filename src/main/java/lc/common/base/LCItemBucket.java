@@ -2,7 +2,6 @@ package lc.common.base;
 
 import lc.common.util.CreativeTabHelper;
 import lc.common.util.SpecialBucketHandler;
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;

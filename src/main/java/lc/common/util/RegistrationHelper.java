@@ -6,7 +6,6 @@ import java.util.Map;
 
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
-import lc.common.base.LCItem;
 import lc.common.base.LCItemBucket;
 import lc.core.BuildInfo;
 import net.minecraft.block.Block;
@@ -27,8 +26,6 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;

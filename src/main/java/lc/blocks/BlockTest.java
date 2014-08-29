@@ -5,8 +5,9 @@ import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.common.base.LCBlock;
 import lc.items.ItemBlockTest;
+import lc.tiles.TileDriverTest;
 
-@Definition(name = "testBlock", type = ComponentType.CORE, blockClass = BlockTest.class, itemBlockClass = ItemBlockTest.class)
+@Definition(name = "testBlock", type = ComponentType.CORE, blockClass = BlockTest.class, itemBlockClass = ItemBlockTest.class, tileClass = TileDriverTest.class)
 public class BlockTest extends LCBlock {
 
 	public BlockTest() {

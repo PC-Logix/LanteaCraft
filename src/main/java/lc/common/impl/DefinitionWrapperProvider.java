@@ -35,8 +35,8 @@ public class DefinitionWrapperProvider {
 					if (!definition.tileClass().equals(Void.class))
 						tileClass = (Class<? extends LCTile>) definition.tileClass();
 					result = new BlockItemDefinition(type, name, blockClass, itemBlockClass).setTileType(tileClass);
-					LCLog.trace("Providing definition: %s: %s, block: %s, itemblock: %s", type, name, blockClass,
-							itemBlockClass);
+					LCLog.trace("Providing definition: %s: %s, block: %s, itemblock: %s, tile: %s", type, name, blockClass,
+							itemBlockClass, tileClass);
 				} else if (!definition.itemClass().equals(Void.class)) {
 					itemClass = (Class<? extends LCItem>) definition.itemClass();
 					result = new BlockItemDefinition(type, name, null, itemClass);

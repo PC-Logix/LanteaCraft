@@ -22,7 +22,8 @@ public class LCCoreMod implements IFMLLoadingPlugin {
 	/**
 	 * The logger
 	 */
-	private static final Logger log = LogManager.getFormatterLogger("LCCoreMod");
+	private static final Logger log = LogManager
+			.getFormatterLogger("LCCoreMod");
 
 	/**
 	 * Gets the logger
@@ -62,7 +63,8 @@ public class LCCoreMod implements IFMLLoadingPlugin {
 	}
 
 	public static String[] getTransformers() {
-		return new String[] { "lc.coremod.ClassOptionalTransformer" };
+		return new String[] { "lc.coremod.ClassOptionalTransformer",
+				"lc.coremod.DriverBindingTransformer" };
 	}
 
 	@Override

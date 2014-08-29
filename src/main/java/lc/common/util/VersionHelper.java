@@ -10,8 +10,6 @@ import lc.common.LCLog;
 import lc.core.BuildInfo;
 import net.minecraftforge.common.MinecraftForge;
 
-import org.apache.logging.log4j.Level;
-
 public class VersionHelper extends Thread {
 
 	private final String charset = "UTF-8";

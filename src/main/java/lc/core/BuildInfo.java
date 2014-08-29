@@ -1,7 +1,5 @@
 package lc.core;
 
-import lc.common.LCLog;
-
 /**
  * This file is automatically updated by Jenkins as part of the CI build script
  * in Gradle. Don't put any pre-set values here.
