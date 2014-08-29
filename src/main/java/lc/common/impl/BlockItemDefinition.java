@@ -78,7 +78,7 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 
 	@Override
 	public Class<? extends TileEntity> getTileType() {
-		return getTileType();
+		return tileType;
 	}
 
 	@Override
