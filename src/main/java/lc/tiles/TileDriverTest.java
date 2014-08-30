@@ -52,8 +52,7 @@ public class TileDriverTest extends LCTile implements IPowerDriver {
 
 	@Override
 	public boolean canInterface(ForgeDirection direction) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -82,8 +81,7 @@ public class TileDriverTest extends LCTile implements IPowerDriver {
 
 	@Override
 	public World getWorld() {
-		// TODO Auto-generated method stub
-		return null;
+		return worldObj;
 	}
 
 }

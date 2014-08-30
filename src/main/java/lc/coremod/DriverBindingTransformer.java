@@ -1,7 +1,5 @@
 package lc.coremod;
 
-import io.netty.util.internal.logging.AbstractInternalLogger;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -15,12 +13,10 @@ import lc.api.components.DriverMap;
 import lc.api.components.IntegrationType;
 import lc.api.drivers.DeviceDrivers;
 import lc.common.LCLog;
-import lc.common.base.LCTile;
 import lc.core.BuildInfo;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -69,14 +65,34 @@ public class DriverBindingTransformer implements IClassTransformer {
 		return driverImplCache.get(className);
 	}
 
+	/**
+	 * Generate a signature for a method.
+	 * 
+	 * @param aMethod
+	 *            The method.
+	 * @return A signature.
+	 */
 	private String signature(MethodNode aMethod) {
 		return new StringBuilder().append(aMethod.name).append(aMethod.desc).toString();
 	}
 
+	/**
+	 * Generate a signature for a field.
+	 * 
+	 * @param aField
+	 *            The field.
+	 * @return A signature.
+	 */
 	private String signature(FieldNode aField) {
 		return new StringBuilder().append(aField.name).append(aField.desc).toString();
 	}
 
+	/**
+	 * Dump a class' methods.
+	 * 
+	 * @param clazz
+	 *            The classnode to dump.
+	 */
 	private void dumpMethods(ClassNode clazz) {
 		Iterator<MethodNode> methods = clazz.methods.iterator();
 		while (methods.hasNext()) {
@@ -88,28 +104,37 @@ public class DriverBindingTransformer implements IClassTransformer {
 			data.append("maxStack: ").append(method.maxStack).append(", ");
 			data.append("#instructions: ").append(method.instructions.size()).append(", ");
 			System.out.println(data.toString());
-
-			if (method.name.equals("test")) {
-				Iterator<AbstractInsnNode> instructions = method.instructions.iterator();
-				while (instructions.hasNext()) {
-					AbstractInsnNode instruction = instructions.next();
-					System.out.println(" * " + instruction.toString());
-					if (instruction instanceof LdcInsnNode) {
-						System.out.println("  =>> " + ((LdcInsnNode) instruction).cst.toString());
-					} else if (instruction instanceof InsnNode) {
-						System.out.println("  =>> " + ((InsnNode) instruction).getOpcode());
-					} else if (instruction instanceof VarInsnNode) {
-						System.out.println("  =>> " + ((VarInsnNode) instruction).getOpcode());
-					} else if (instruction instanceof MethodInsnNode) {
-						MethodInsnNode callable = (MethodInsnNode) instruction;
-						System.out.println("  =>> " + callable.name + callable.desc);
-						System.out.println("  =>> " + callable.owner);
-					}
+			Iterator<AbstractInsnNode> instructions = method.instructions.iterator();
+			while (instructions.hasNext()) {
+				AbstractInsnNode instruction = instructions.next();
+				System.out.println(" * " + instruction.toString());
+				if (instruction instanceof LdcInsnNode) {
+					System.out.println("  =>> " + ((LdcInsnNode) instruction).cst.toString());
+				} else if (instruction instanceof InsnNode) {
+					System.out.println("  =>> " + ((InsnNode) instruction).getOpcode());
+				} else if (instruction instanceof VarInsnNode) {
+					System.out.println("  =>> " + ((VarInsnNode) instruction).getOpcode());
+				} else if (instruction instanceof MethodInsnNode) {
+					MethodInsnNode callable = (MethodInsnNode) instruction;
+					System.out.println("  =>> " + callable.name + callable.desc);
+					System.out.println("  =>> " + callable.owner);
 				}
 			}
 		}
 	}
 
+	/**
+	 * Determines if a class provided already has a method of the type
+	 * specified. This doesn't check for exceptions, but will detect identical
+	 * signature issues.
+	 * 
+	 * @param theMethod
+	 *            The method node
+	 * @param theClass
+	 *            The class node
+	 * @return If method type with return type and param args with name already
+	 *         exists in classnode class provided.
+	 */
 	private boolean hasDuplicateMethod(MethodNode theMethod, ClassNode theClass) {
 		if (theClass.methods == null || theClass.methods.size() == 0)
 			return false;
@@ -120,7 +145,17 @@ public class DriverBindingTransformer implements IClassTransformer {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Determines if a class provided already has a field of the type specified.
+	 * 
+	 * @param theField
+	 *            The field node
+	 * @param theClass
+	 *            The class node
+	 * @return If field type with name already exists in classnode class
+	 *         provided.
+	 */
 	private boolean hasDuplicateField(FieldNode theField, ClassNode theClass) {
 		if (theClass.fields == null || theClass.fields.size() == 0)
 			return false;
