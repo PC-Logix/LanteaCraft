@@ -2,9 +2,11 @@ package lc.api.components;
 
 import java.util.EnumSet;
 
+import cpw.mods.fml.common.Loader;
+
 public enum DriverMap {
 	IC2("IndustrialCraft 2", "IC2", "lc.common.impl.drivers.DriverIC2Power", IntegrationType.POWER), BUILDCRAFT(
-			"BuildCraft", "BC", "lc.common.impl.drivers.DriverBCPower", IntegrationType.POWER);
+			"BuildCraft", "BuildCraft|Core", "lc.common.impl.drivers.DriverBCPower", IntegrationType.POWER);
 
 	public final String modName;
 	public final String modId;
@@ -21,7 +23,7 @@ public enum DriverMap {
 	public static EnumSet<DriverMap> mapOf(IntegrationType typeof) {
 		EnumSet<DriverMap> map = EnumSet.noneOf(DriverMap.class);
 		for (DriverMap mapping : values())
-			if (mapping.type.equals(typeof))
+			if (mapping.type.equals(typeof) && Loader.isModLoaded(mapping.modId))
 				map.add(mapping);
 		return map;
 	}
