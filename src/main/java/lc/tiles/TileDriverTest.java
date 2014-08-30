@@ -11,7 +11,7 @@ import lc.common.network.LCPacket;
 import lc.api.drivers.DeviceDrivers;
 import lc.api.drivers.IPowerDriver;
 
-@DeviceDrivers.DriverCandidate(types = { IntegrationType.POWER, IntegrationType.POWER })
+@DeviceDrivers.DriverCandidate(types = { IntegrationType.POWER })
 public class TileDriverTest extends LCTile implements IPowerDriver {
 
 	@Override
