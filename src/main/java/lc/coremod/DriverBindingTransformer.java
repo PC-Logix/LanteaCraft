@@ -211,11 +211,10 @@ public class DriverBindingTransformer implements IClassTransformer {
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
 		if (!name.startsWith("lc."))
 			return basicClass;
-
+		
 		ClassNode classNode = new ClassNode();
 		ClassReader classReader = new ClassReader(basicClass);
 		classReader.accept(classNode, 0);
-
 		List<AnnotationNode> annotations = classNode.visibleAnnotations;
 		if (annotations != null)
 			for (Iterator<AnnotationNode> i = annotations.iterator(); i.hasNext();) {
@@ -226,6 +225,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 					return basicClass;
 				} else if (annotation.desc.equals("Llc/api/drivers/DeviceDrivers$DriverCandidate;")) {
 					ArrayList<IntegrationType> types = new ArrayList<IntegrationType>();
+					HashMap<String, String> events = new HashMap<String, String>();
 					for (Object o : (ArrayList<Object>) annotation.values.get(annotation.values.indexOf("types") + 1)) {
 						if (o instanceof String[]) {
 							String[] params = (String[]) o;
@@ -236,12 +236,9 @@ public class DriverBindingTransformer implements IClassTransformer {
 							}
 						}
 					}
-
-					HashMap<String, String> eventMap = new HashMap<String, String>();
 					for (IntegrationType type : types) {
 						LCLog.debug("Adding drivers for type %s.", type);
-						EnumSet<DriverMap> mappings = DriverMap.mapOf(type);
-						for (DriverMap mapping : mappings) {
+						for (DriverMap mapping : DriverMap.mapOf(type)) {
 							LCLog.debug("Binding mapping %s (mod %s)", mapping, mapping.modName);
 							byte[] driverSrc = findClass(mapping.className);
 							if (driverSrc == null) {
@@ -251,7 +248,6 @@ public class DriverBindingTransformer implements IClassTransformer {
 							ClassNode driverClass = new ClassNode();
 							ClassReader reader = new ClassReader(driverSrc);
 							reader.accept(driverClass, 0);
-
 							if (driverClass.interfaces != null)
 								for (String iface : driverClass.interfaces) {
 									if (classNode.interfaces == null)
@@ -259,7 +255,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 									if (!classNode.interfaces.contains(iface))
 										classNode.interfaces.add(iface);
 								}
-							if (driverClass.methods != null) {
+							if (driverClass.methods != null)
 								for (MethodNode method : driverClass.methods)
 									if (!hasDuplicateMethod(method, classNode)) {
 										classNode.methods.add(remapMethod(driverClass.name, classNode.name, method));
@@ -267,25 +263,22 @@ public class DriverBindingTransformer implements IClassTransformer {
 											for (AnnotationNode methodTag : method.visibleAnnotations)
 												if (methodTag.desc
 														.equals("Llc/api/drivers/DeviceDrivers$DriverRTCallback;"))
-													eventMap.put(method.name, (String) methodTag.values
+													events.put(method.name, (String) methodTag.values
 															.get(methodTag.values.indexOf("event") + 1));
 										}
 									} else
 										LCLog.warn("Skipping method %s, already present!", signature(method));
-							}
-							if (driverClass.fields != null) {
-								for (FieldNode field : driverClass.fields) {
+							if (driverClass.fields != null)
+								for (FieldNode field : driverClass.fields)
 									if (!hasDuplicateField(field, classNode))
 										classNode.fields.add(remapField(driverClass.name, classNode.name, field));
 									else
 										LCLog.warn("Skipping field %s, already present!", signature(field));
-								}
-							}
 						}
 					}
 
-					if (eventMap.size() > 0) {
-						LCLog.debug("Adding %s event hooks.", eventMap.size());
+					if (events.size() > 0) {
+						LCLog.debug("Adding %s event hooks.", events.size());
 						boolean hasUserInit = false;
 						for (Object o : classNode.methods) {
 							MethodNode method = (MethodNode) o;
@@ -302,15 +295,13 @@ public class DriverBindingTransformer implements IClassTransformer {
 								Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]), null, null);
 						classNode.methods.add(0, classInitializer);
 						classInitializer.visitCode();
-
-						for (Entry<String, String> eventMapItem : eventMap.entrySet()) {
+						for (Entry<String, String> eventMapItem : events.entrySet()) {
 							classInitializer.visitLdcInsn(Type.getObjectType(name.replace(".", "/")));
 							classInitializer.visitLdcInsn(eventMapItem.getKey());
 							classInitializer.visitLdcInsn(eventMapItem.getValue());
 							classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, "lc/common/base/LCTile",
 									"registerCallback", "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)V");
 						}
-
 						if (hasUserInit)
 							classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, classNode.name, "user_clinit",
 									Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]));
@@ -323,20 +314,20 @@ public class DriverBindingTransformer implements IClassTransformer {
 
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(writer);
-		if (BuildInfo.DEBUG) {
+		if (BuildInfo.DEBUG)
 			try {
-				if (!new File("vm/").exists())
-					new File("vm/").mkdir();
-				File saveObj = new File("vm/" + name.replace("/", "_").replace(".", "_") + ".class");
+				File vmdir = new File("vm/");
+				File saveObj = new File(vmdir, name.replace("/", "_").replace(".", "_") + ".class");
+				if (!vmdir.exists())
+					vmdir.mkdir();
 				if (saveObj.exists())
 					saveObj.delete();
-				FileOutputStream output = new FileOutputStream(saveObj);
+				FileOutputStream output = new FileOutputStream(saveObj, false);
 				output.write(writer.toByteArray());
 				output.close();
 			} catch (Throwable t) {
 				LCLog.fatal("Failed to save runtime implementation of class %s.", t);
 			}
-		}
 		return writer.toByteArray();
 	}
 }
