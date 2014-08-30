@@ -25,6 +25,8 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
@@ -71,6 +73,10 @@ public class DriverBindingTransformer implements IClassTransformer {
 		return new StringBuilder().append(aMethod.name).append(aMethod.desc).toString();
 	}
 
+	private String signature(FieldNode aField) {
+		return new StringBuilder().append(aField.name).append(aField.desc).toString();
+	}
+
 	private void dumpMethods(ClassNode clazz) {
 		Iterator<MethodNode> methods = clazz.methods.iterator();
 		while (methods.hasNext()) {
@@ -114,6 +120,17 @@ public class DriverBindingTransformer implements IClassTransformer {
 		}
 		return false;
 	}
+	
+	private boolean hasDuplicateField(FieldNode theField, ClassNode theClass) {
+		if (theClass.fields == null || theClass.fields.size() == 0)
+			return false;
+		String signature = signature(theField);
+		for (FieldNode field : theClass.fields) {
+			if (signature(field).equalsIgnoreCase(signature))
+				return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Remap a method from one owner container to another owner container.
@@ -135,8 +152,16 @@ public class DriverBindingTransformer implements IClassTransformer {
 				MethodInsnNode callable = (MethodInsnNode) instruction;
 				if (callable.owner.equals(sourceName))
 					callable.owner = destName;
+			} else if (instruction instanceof FieldInsnNode) {
+				FieldInsnNode fieldop = (FieldInsnNode) instruction;
+				if (fieldop.owner.equals(sourceName))
+					fieldop.owner = destName;
 			}
 		}
+		return master;
+	}
+
+	private FieldNode remapField(String sourceName, String destName, FieldNode master) {
 		return master;
 	}
 
@@ -205,6 +230,14 @@ public class DriverBindingTransformer implements IClassTransformer {
 										}
 									} else
 										LCLog.warn("Skipping method %s, already present!", signature(method));
+							}
+							if (driverClass.fields != null) {
+								for (FieldNode field : driverClass.fields) {
+									if (!hasDuplicateField(field, classNode))
+										classNode.fields.add(remapField(driverClass.name, classNode.name, field));
+									else
+										LCLog.warn("Skipping field %s, already present!", signature(field));
+								}
 							}
 						}
 					}

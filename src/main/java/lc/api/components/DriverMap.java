@@ -3,7 +3,8 @@ package lc.api.components;
 import java.util.EnumSet;
 
 public enum DriverMap {
-	IC2("IndustrialCraft 2", "IC2", "lc.common.impl.drivers.DriverIC2Power", IntegrationType.POWER);
+	IC2("IndustrialCraft 2", "IC2", "lc.common.impl.drivers.DriverIC2Power", IntegrationType.POWER), BUILDCRAFT(
+			"BuildCraft", "BC", "lc.common.impl.drivers.DriverBCPower", IntegrationType.POWER);
 
 	public final String modName;
 	public final String modId;

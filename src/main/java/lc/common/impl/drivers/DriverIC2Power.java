@@ -1,6 +1,7 @@
 package lc.common.impl.drivers;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -42,6 +43,12 @@ public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmi
 	public double getEnergyCapacity() {
 		// Auto-generated method stub
 		return 0.0d;
+	}
+
+	@Override
+	public World getWorld() {
+		// Auto-generated method stub
+		return null;
 	}
 
 	@Override
