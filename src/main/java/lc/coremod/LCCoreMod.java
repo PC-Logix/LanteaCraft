@@ -2,11 +2,10 @@ package lc.coremod;
 
 import java.util.Map;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lc.common.LCLog;
 
-import cpw.mods.fml.common.FMLLog;
+import org.apache.logging.log4j.LogManager;
+
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 /**
@@ -20,26 +19,11 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 public class LCCoreMod implements IFMLLoadingPlugin {
 
 	/**
-	 * The logger
-	 */
-	private static final Logger log = LogManager
-			.getFormatterLogger("LCCoreMod");
-
-	/**
-	 * Gets the logger
-	 * 
-	 * @return The logger
-	 */
-	public static Logger getLogger() {
-		return LCCoreMod.log;
-	}
-
-	/**
 	 * Initializes the tweak plugin
 	 */
 	public LCCoreMod() {
-		FMLLog.getLogger();
-		log.log(Level.INFO, "LCCoreMod ready for action!");
+		LCLog.setCoremodLogger(LogManager.getFormatterLogger("LCCoreMod"));
+		LCLog.info("LCCoreMod ready for action!");
 	}
 
 	@Override
@@ -63,8 +47,7 @@ public class LCCoreMod implements IFMLLoadingPlugin {
 	}
 
 	public static String[] getTransformers() {
-		return new String[] { "lc.coremod.ClassOptionalTransformer",
-				"lc.coremod.DriverBindingTransformer" };
+		return new String[] { "lc.coremod.ClassOptionalTransformer", "lc.coremod.DriverBindingTransformer" };
 	}
 
 	@Override

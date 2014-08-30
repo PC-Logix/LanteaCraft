@@ -3,6 +3,7 @@ package lc.coremod;
 import java.util.ArrayList;
 import java.util.List;
 
+import lc.common.LCLog;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.apache.logging.log4j.Level;
@@ -37,10 +38,9 @@ public class LCCoreTransformer implements IClassTransformer {
 		for (String transformer : tnames)
 			try {
 				transformers.add((IClassTransformer) Class.forName(transformer).newInstance());
-				LCCoreMod.getLogger().log(Level.DEBUG, "Instantiated transformer " + transformer);
+				LCLog.debug("Instantiated transformer %s.", transformer);
 			} catch (Throwable e) {
-				LCCoreMod.getLogger().log(Level.WARN, "Could not instantiate transformer " + transformer);
-				e.printStackTrace();
+				LCLog.warn("Could not instantiate transformer %s.", transformer, e);
 			}
 	}
 
@@ -57,10 +57,9 @@ public class LCCoreTransformer implements IClassTransformer {
 			try {
 				bytes = transformer.transform(name, transformedName, bytes);
 				if (bytes == null)
-					LCCoreMod.getLogger().log(Level.FATAL, "Transformer " + transformer + " corrupted class " + name);
+					LCLog.fatal("Transformer %s corrupted class %s!", transformer, name);
 			} catch (Throwable e) {
-				LCCoreMod.getLogger().log(Level.WARN, "Could not transform class " + name + " using " + transformer);
-				e.printStackTrace();
+				LCLog.fatal("Could not transform class %s using %s!", name, transformer, e);
 			}
 		return bytes;
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import lc.common.LCLog;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.apache.logging.log4j.Level;
@@ -45,21 +46,16 @@ public class ClassOptionalTransformer implements IClassTransformer {
 						String modname = (String) a.values.get(k + 1), iface = (String) a.values.get(l + 1);
 						if (Loader.isModLoaded(modname)) {
 							if (!interfaceList.contains(iface)) {
-								LCCoreMod.getLogger().log(Level.DEBUG,
-										String.format("Adding interface %s because mod %s is loaded.", iface, modname));
+								LCLog.debug("Adding interface %s because mod %s is loaded.", iface, modname);
 								interfaceList.add(iface);
 							}
 						} else
-							LCCoreMod.getLogger()
-									.log(Level.DEBUG,
-											String.format("Skipping interface %s because mod %s is not loaded.", iface,
-													modname));
+							LCLog.debug("Skipping interface %s because mod %s is not loaded.", iface, modname);
 					}
 		}
 
 		if (interfaceList.size() > 0) {
-			LCCoreMod.getLogger().log(Level.DEBUG,
-					String.format("Performing total %s ASM operations...", interfaceList.size()));
+			LCLog.debug("Performing total %s ASM operations...", interfaceList.size());
 			for (String iface : interfaceList)
 				addInterface(classNode, iface);
 			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -76,10 +72,7 @@ public class ClassOptionalTransformer implements IClassTransformer {
 			if (!clazz.interfaces.contains(iface))
 				clazz.interfaces.add(iface);
 		} catch (ClassNotFoundException notfound) {
-			LCCoreMod.getLogger().log(
-					Level.WARN,
-					String.format("Attempted to load interface %s into class %s, but it does not exist!", iface,
-							clazz.name));
+			LCLog.debug("Attempted to load interface %s into class %s, but it does not exist!", iface, clazz.name);
 		}
 	}
 

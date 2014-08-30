@@ -8,12 +8,24 @@ import org.apache.logging.log4j.Logger;
 public class LCLog {
 
 	private static Logger log;
+	private static Logger cmLog;
 
 	public static void setLogger(Logger log) {
 		LCLog.log = log;
 	}
+	
+	public static void setCoremodLogger(Logger log) {
+		LCLog.cmLog = log;
+	}
 
 	private static void push(Level level, Object[] args) {
+		StackTraceElement[] trackback = Thread.currentThread().getStackTrace();
+		Logger log = LCLog.log;
+		for (int i = 0; i < trackback.length; i++)
+			if (trackback[i].getClassName().startsWith("lc.coremod")) {
+				log = LCLog.cmLog;
+				break;
+			}
 		if (args.length == 1) {
 			if (args[0] instanceof Throwable)
 				log.log(level, (Throwable) args[0]);
