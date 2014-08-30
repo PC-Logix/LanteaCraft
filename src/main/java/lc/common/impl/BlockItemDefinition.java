@@ -55,9 +55,10 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 	public void init() {
 		if (!LCRuntime.runtime.registries().components().isEnabled(ownerType))
 			return;
-		if (blockType != null && itemBlockType != null)
-			RegistrationHelper.registerBlock(blockType, itemBlockType, defName);
-		else if (itemType != null)
+		if (blockType != null && itemBlockType != null) {
+			blockObject = RegistrationHelper.registerBlock(blockType, itemBlockType, defName);
+			blockObject.setProvidesTile(tileType);
+		} else if (itemType != null)
 			RegistrationHelper.registerItem(itemType, defName);
 	}
 

@@ -3,6 +3,7 @@ package lc.common.util;
 import java.util.HashMap;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
 /**
@@ -28,6 +29,8 @@ public class CreativeTabHelper {
 
 		@Override
 		public Item getTabIconItem() {
+			if (par3Item == null)
+				return Items.potato;
 			return par3Item;
 		}
 	}

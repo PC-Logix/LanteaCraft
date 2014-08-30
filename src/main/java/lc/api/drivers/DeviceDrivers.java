@@ -11,7 +11,7 @@ public class DeviceDrivers {
 	 * Annotation for classes which act as drivers at runtime.
 	 * 
 	 * @author AfterLifeLochie
-	 *
+	 * 
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
 	public static @interface DriverProvider {
@@ -27,7 +27,7 @@ public class DeviceDrivers {
 	 * Annotation for classes which require drivers at runtime.
 	 * 
 	 * @author AfterLifeLochie
-	 *
+	 * 
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
 	public static @interface DriverCandidate {
@@ -37,6 +37,11 @@ public class DeviceDrivers {
 		 * @return A list of requested driver types.
 		 */
 		IntegrationType[] types();
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	public static @interface DriverRTCallback {
+		String event();
 	}
 
 }

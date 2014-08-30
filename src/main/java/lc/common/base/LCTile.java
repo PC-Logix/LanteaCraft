@@ -1,5 +1,9 @@
 package lc.common.base;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import lc.common.LCLog;
 import lc.common.network.IPacketHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,6 +14,53 @@ import net.minecraft.tileentity.TileEntity;
 
 public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler {
 
+	private static HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>> callbacks = new HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>>();
+
+	public static void registerCallback(Class me, String method, String event) {
+		Class<? extends LCTile> tile = (Class<? extends LCTile>) me;
+		if (!callbacks.containsKey(tile))
+			callbacks.put(tile, new HashMap<String, ArrayList<String>>());
+		HashMap<String, ArrayList<String>> me_calls = callbacks.get(tile);
+		if (!me_calls.containsKey(event))
+			me_calls.put(event, new ArrayList<String>());
+		if (!me_calls.get(event).contains(method))
+			me_calls.get(event).add(method);
+		LCLog.debug("Driver adding callback on class %s event %s: %s", me.getName(), event, method);
+	}
+
+	public static void doCallbacksNow(Object me, String type) {
+		Class<? extends LCTile> meClazz = (Class<? extends LCTile>) me.getClass();
+		ArrayList<String> cbs = getCallbacks(meClazz, type);
+		if (cbs == null)
+			return;
+		doCallbacks(meClazz, me, cbs);
+	}
+
+	public static ArrayList<String> getCallbacks(Class<? extends LCTile> me, String type) {
+		if (!callbacks.containsKey(me))
+			return null;
+		HashMap<String, ArrayList<String>> me_calls = callbacks.get(me);
+		if (!me_calls.containsKey(type))
+			return null;
+		return me_calls.get(type);
+	}
+
+	public static void doCallbacks(Class<? extends LCTile> me, Object meObject, ArrayList<String> methods) {
+		Method[] meMethods = me.getMethods();
+		for (String methodName : methods) {
+			for (int i = 0; i < meMethods.length; i++)
+				if (meMethods[i].getName().equalsIgnoreCase(methodName)) {
+					try {
+						Method invoke = meMethods[i];
+						invoke.invoke(meObject, new Object[] { (LCTile) meObject });
+					} catch (Throwable t) {
+						LCLog.warn("Error when processing callback %s!", methodName, t);
+					}
+					break;
+				}
+		}
+	}
+
 	public abstract IInventory getInventory();
 
 	public abstract void thinkClient();
@@ -19,6 +70,14 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	public abstract void save(NBTTagCompound compound);
 
 	public abstract void load(NBTTagCompound compound);
+	
+	public void blockPlaced() {
+		LCTile.doCallbacksNow(this, "blockPlace");
+	}
+	
+	public void blockBroken() {
+		LCTile.doCallbacksNow(this, "blockBreak");
+	}
 
 	@Override
 	public boolean canUpdate() {

@@ -9,6 +9,7 @@ import ic2.api.energy.tile.IEnergySource;
 import lc.api.components.IntegrationType;
 import lc.api.drivers.IPowerDriver;
 import lc.api.drivers.DeviceDrivers;
+import lc.common.base.LCTile;
 
 @DeviceDrivers.DriverProvider(type = IntegrationType.POWER)
 public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmitter, IEnergySink, IEnergySource {
@@ -81,6 +82,16 @@ public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmi
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
 		return acceptEnergy(amount, false);
+	}
+
+	@DeviceDrivers.DriverRTCallback(event = "blockPlace")
+	public void ic2AddTile(LCTile tile) {
+		System.out.println("ic2AddTile called!");
+	}
+
+	@DeviceDrivers.DriverRTCallback(event = "blockBreak")
+	public void ic2RemoveTile(LCTile tile) {
+		System.out.println("ic2RemoveTile called!");
 	}
 
 }

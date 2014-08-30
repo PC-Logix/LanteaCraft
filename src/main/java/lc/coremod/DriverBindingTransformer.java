@@ -1,5 +1,7 @@
 package lc.coremod;
 
+import io.netty.util.internal.logging.AbstractInternalLogger;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -7,18 +9,29 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import lc.api.components.DriverMap;
 import lc.api.components.IntegrationType;
 import lc.api.drivers.DeviceDrivers;
 import lc.common.LCLog;
+import lc.common.base.LCTile;
 import lc.core.BuildInfo;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.Opcodes;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -58,6 +71,39 @@ public class DriverBindingTransformer implements IClassTransformer {
 		return new StringBuilder().append(aMethod.name).append(aMethod.desc).toString();
 	}
 
+	private void dumpMethods(ClassNode clazz) {
+		Iterator<MethodNode> methods = clazz.methods.iterator();
+		while (methods.hasNext()) {
+			MethodNode method = methods.next();
+			StringBuilder data = new StringBuilder();
+			data.append(method.name).append(method.desc).append(":: ");
+			data.append("access: ").append(method.access).append(", ");
+			data.append("maxLocals: ").append(method.maxLocals).append(", ");
+			data.append("maxStack: ").append(method.maxStack).append(", ");
+			data.append("#instructions: ").append(method.instructions.size()).append(", ");
+			System.out.println(data.toString());
+
+			if (method.name.equals("test")) {
+				Iterator<AbstractInsnNode> instructions = method.instructions.iterator();
+				while (instructions.hasNext()) {
+					AbstractInsnNode instruction = instructions.next();
+					System.out.println(" * " + instruction.toString());
+					if (instruction instanceof LdcInsnNode) {
+						System.out.println("  =>> " + ((LdcInsnNode) instruction).cst.toString());
+					} else if (instruction instanceof InsnNode) {
+						System.out.println("  =>> " + ((InsnNode) instruction).getOpcode());
+					} else if (instruction instanceof VarInsnNode) {
+						System.out.println("  =>> " + ((VarInsnNode) instruction).getOpcode());
+					} else if (instruction instanceof MethodInsnNode) {
+						MethodInsnNode callable = (MethodInsnNode) instruction;
+						System.out.println("  =>> " + callable.name + callable.desc);
+						System.out.println("  =>> " + callable.owner);
+					}
+				}
+			}
+		}
+	}
+
 	private boolean hasDuplicateMethod(MethodNode theMethod, ClassNode theClass) {
 		if (theClass.methods == null || theClass.methods.size() == 0)
 			return false;
@@ -67,6 +113,31 @@ public class DriverBindingTransformer implements IClassTransformer {
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Remap a method from one owner container to another owner container.
+	 * Performs all operations on the MethodNode provided directly (no copy).
+	 * 
+	 * @param sourceName
+	 *            The source container type.
+	 * @param destName
+	 *            The destination container type.
+	 * @param master
+	 *            The root MethodNode element.
+	 * @return The remapped MethodNode, not a copy of the root provided.
+	 */
+	private MethodNode remapMethod(String sourceName, String destName, MethodNode master) {
+		InsnList instructions = master.instructions;
+		for (int i = 0, j = instructions.size(); i < j; i++) {
+			AbstractInsnNode instruction = instructions.get(i);
+			if (instruction instanceof MethodInsnNode) {
+				MethodInsnNode callable = (MethodInsnNode) instruction;
+				if (callable.owner.equals(sourceName))
+					callable.owner = destName;
+			}
+		}
+		return master;
 	}
 
 	@Override
@@ -99,6 +170,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 						}
 					}
 
+					HashMap<String, String> eventMap = new HashMap<String, String>();
 					for (IntegrationType type : types) {
 						LCLog.debug("Adding drivers for type %s.", type);
 						EnumSet<DriverMap> mappings = DriverMap.mapOf(type);
@@ -106,7 +178,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 							LCLog.debug("Binding mapping %s (mod %s)", mapping, mapping.modName);
 							byte[] driverSrc = findClass(mapping.className);
 							if (driverSrc == null) {
-								LCLog.warn("Can't find class %s for driver %s, abort.", mapping.className, mapping);
+								LCLog.warn("Can't find class %s for driver %s, skipping...", mapping.className, mapping);
 								continue;
 							}
 							ClassNode driverClass = new ClassNode();
@@ -123,14 +195,53 @@ public class DriverBindingTransformer implements IClassTransformer {
 							if (driverClass.methods != null) {
 								for (MethodNode method : driverClass.methods)
 									if (!hasDuplicateMethod(method, classNode)) {
-										LCLog.debug("Adding method %s to destination class.", signature(method));
-										classNode.methods.add(method);
+										classNode.methods.add(remapMethod(driverClass.name, classNode.name, method));
+										if (method.visibleAnnotations != null) {
+											for (AnnotationNode methodTag : method.visibleAnnotations)
+												if (methodTag.desc
+														.equals("Llc/api/drivers/DeviceDrivers$DriverRTCallback;"))
+													eventMap.put(method.name, (String) methodTag.values
+															.get(methodTag.values.indexOf("event") + 1));
+										}
 									} else
-										LCLog.debug(
-												"Skipping method %s because it already exists in destination class.",
-												signature(method));
+										LCLog.warn("Skipping method %s, already present!", signature(method));
 							}
 						}
+					}
+
+					if (eventMap.size() > 0) {
+						LCLog.debug("Adding %s event hooks.", eventMap.size());
+						boolean hasUserInit = false;
+						for (Object o : classNode.methods) {
+							MethodNode method = (MethodNode) o;
+							if (method.name.equals("<clinit>")) {
+								LCLog.debug("Moving user's <clinit> block to user_clinit...");
+								method.name = "user_clinit";
+								method.access = Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC;
+								hasUserInit = true;
+								break;
+							}
+						}
+
+						MethodNode classInitializer = new MethodNode(Opcodes.ACC_STATIC, "<clinit>",
+								Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]), null, null);
+						classNode.methods.add(0, classInitializer);
+						classInitializer.visitCode();
+
+						for (Entry<String, String> eventMapItem : eventMap.entrySet()) {
+							classInitializer.visitLdcInsn(Type.getObjectType(name.replace(".", "/")));
+							classInitializer.visitLdcInsn(eventMapItem.getKey());
+							classInitializer.visitLdcInsn(eventMapItem.getValue());
+							classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, "lc/common/base/LCTile",
+									"registerCallback", "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)V");
+						}
+
+						if (hasUserInit)
+							classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, classNode.name, "user_clinit",
+									Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]));
+						classInitializer.visitInsn(Opcodes.RETURN);
+						classInitializer.visitMaxs(3, 0);
+						classInitializer.visitEnd();
 					}
 				}
 			}

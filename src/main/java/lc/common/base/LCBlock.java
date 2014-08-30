@@ -25,7 +25,7 @@ public abstract class LCBlock extends BlockContainer {
 		opaque = b;
 	}
 
-	protected void setProvidesTile(Class<? extends LCTile> tile) {
+	public void setProvidesTile(Class<? extends LCTile> tile) {
 		tileType = tile;
 	}
 
@@ -61,14 +61,15 @@ public abstract class LCBlock extends BlockContainer {
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		super.onBlockAdded(world, x, y, z);
+		if (tileType != null)
+			((LCTile) world.getTileEntity(x, y, z)).blockPlaced();
 	}
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block a, int b) {
 		LCTile tile = (LCTile) world.getTileEntity(x, y, z);
-		if (tile != null) {
-
-		}
+		if (tile != null)
+			((LCTile) world.getTileEntity(x, y, z)).blockBroken();
 		super.breakBlock(world, x, y, z, a, b);
 	}
 
