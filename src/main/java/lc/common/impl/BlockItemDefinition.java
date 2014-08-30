@@ -84,8 +84,7 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 
 	@Override
 	public ItemStack getStackOf(int size) {
-		// TODO Auto-generated method stub
-		return null;
+		return (itemBlockType != null) ? new ItemStack(blockObject, size) : new ItemStack(itemObject, size);
 	}
 
 }
