@@ -196,6 +196,13 @@ public class DriverBindingTransformer implements IClassTransformer {
 		return master;
 	}
 
+	/**
+	 * 
+	 * @param sourceName
+	 * @param destName
+	 * @param master
+	 * @return
+	 */
 	private FieldNode remapField(String sourceName, String destName, FieldNode master) {
 		return master;
 	}
