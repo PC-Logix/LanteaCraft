@@ -3,6 +3,7 @@ package lc.common.impl;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
@@ -31,27 +32,45 @@ import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import lc.api.components.IComponentRegistry;
 import lc.api.components.IDefinitionRegistry;
 import lc.api.defs.ILanteaCraftDefinition;
+import lc.api.defs.ILanteaCraftRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
+import lc.common.base.LCBlockRenderer;
 import lc.common.base.LCItemBucket;
 import lc.common.base.LCTile;
+import lc.common.base.LCTileRenderer;
 import lc.common.util.LCCreativeTabManager;
 import lc.core.BuildInfo;
 import lc.core.LCRuntime;
 
 public class DefinitionRegistry implements IDefinitionRegistry {
 
+	/**
+	 * Types of renderers managed by this registry.
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	public static enum RendererType {
+		BLOCK, ENTITY, TILE;
+	}
+
 	/** Pool of all known definitions. */
-	private final HashMap<String, ILanteaCraftDefinition> definitionPool;
+	private final Map<String, ILanteaCraftDefinition> definitionPool;
 	/** Internal list of all registered Container instances. */
 	private final Map<Integer, Class<? extends Container>> registeredContainers;
 	/** Internal list of all registered GUI instances. */
 	private final Map<Integer, Class<? extends GuiScreen>> registeredGUIs;
+	/** Internal list of all registered renderers. */
+	private final Map<RendererType, Map<Class<?>, Class<? extends ILanteaCraftRenderer>>> registeredRenderers;
+	/** Internal list of all initialized renderers. */
+	private final Map<RendererType, Map<Class<?>, ILanteaCraftRenderer>> initializedRenderers;
 
 	public DefinitionRegistry() {
 		definitionPool = new HashMap<String, ILanteaCraftDefinition>();
 		registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 		registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
+		registeredRenderers = new HashMap<RendererType, Map<Class<?>, Class<? extends ILanteaCraftRenderer>>>();
+		initializedRenderers = new HashMap<DefinitionRegistry.RendererType, Map<Class<?>, ILanteaCraftRenderer>>();
 	}
 
 	@Override
@@ -328,8 +347,52 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 		ClientRegistry.bindTileEntitySpecialRenderer(teClass, (TileEntitySpecialRenderer) renderer);
 	}
 
+	public void registerBlockRenderer(Class<? extends LCBlock> block, Class<? extends LCBlockRenderer> renderer) {
+		if (!registeredRenderers.containsKey(RendererType.BLOCK))
+			registeredRenderers.put(RendererType.BLOCK, new HashMap<Class<?>, Class<? extends ILanteaCraftRenderer>>());
+		registeredRenderers.get(RendererType.BLOCK).put(block, renderer);
+	}
+
+	public void registerTileRenderer(Class<? extends LCTile> tile, Class<? extends LCTileRenderer> renderer) {
+		if (!registeredRenderers.containsKey(RendererType.TILE))
+			registeredRenderers.put(RendererType.TILE, new HashMap<Class<?>, Class<? extends ILanteaCraftRenderer>>());
+		registeredRenderers.get(RendererType.TILE).put(tile, renderer);
+	}
+
 	public void registerEntityRenderer(Class<? extends Entity> entity, Object renderer) {
 		RenderingRegistry.registerEntityRenderingHandler(entity, (Render) renderer);
+	}
+
+	public ILanteaCraftRenderer getRendererFor(RendererType typeof, Class<?> clazz) {
+		if (initializedRenderers.containsKey(typeof))
+			for (Entry<Class<?>, ILanteaCraftRenderer> renderer : initializedRenderers.get(typeof).entrySet())
+				if (renderer.getKey().equals(clazz))
+					return renderer.getValue();
+		if (!registeredRenderers.containsKey(typeof))
+			return null;
+		Map<Class<?>, Class<? extends ILanteaCraftRenderer>> typemap = registeredRenderers.get(typeof);
+		for (Entry<Class<?>, Class<? extends ILanteaCraftRenderer>> type : typemap.entrySet())
+			if (type.getKey().equals(clazz)) {
+				try {
+					ILanteaCraftRenderer renderer = type.getValue().getConstructor().newInstance();
+					if (!initializedRenderers.containsKey(typeof))
+						initializedRenderers.put(typeof, new HashMap<Class<?>, ILanteaCraftRenderer>());
+					initializedRenderers.get(typeof).put(type.getValue(), renderer);
+					return renderer;
+				} catch (Throwable t) {
+					LCLog.warn("Failed to initialize renderer.", t);
+					return null;
+				}
+			}
+		return null;
+	}
+
+	public ILanteaCraftRenderer getRenderer(RendererType typeof, Class<? extends ILanteaCraftRenderer> type) {
+		if (initializedRenderers.containsKey(typeof))
+			for (Entry<Class<?>, ILanteaCraftRenderer> renderer : initializedRenderers.get(typeof).entrySet())
+				if (renderer.getValue().getClass().equals(type))
+					return renderer.getValue();
+		return null;
 	}
 
 	public void registerContainer(int id, Class<? extends Container> cls) {
