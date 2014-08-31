@@ -2,6 +2,7 @@ package lc.common.util;
 
 import java.util.ArrayList;
 
+import lc.common.util.math.Vector3;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;

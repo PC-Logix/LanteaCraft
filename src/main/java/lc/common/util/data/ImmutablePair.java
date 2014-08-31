@@ -1,4 +1,4 @@
-package lc.common.util;
+package lc.common.util.data;
 
 /**
  * A instance of an immutable pair. The A-B pair represented by this object are

@@ -12,14 +12,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lc.common.LCLog;
-import lc.common.util.WorldLocation;
+import lc.common.util.math.WorldLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.common.network.ForgeMessage;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;

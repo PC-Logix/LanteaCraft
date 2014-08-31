@@ -1,4 +1,4 @@
-package lc.common.util;
+package lc.common.util.math;
 
 public class Matrix3 {
 

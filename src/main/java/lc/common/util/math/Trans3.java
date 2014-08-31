@@ -1,4 +1,4 @@
-package lc.common.util;
+package lc.common.util.math;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

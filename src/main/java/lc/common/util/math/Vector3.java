@@ -1,4 +1,4 @@
-package lc.common.util;
+package lc.common.util.math;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;

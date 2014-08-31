@@ -1,4 +1,4 @@
-package lc.common.util;
+package lc.common.util.data;
 
 import java.util.ArrayList;
 
