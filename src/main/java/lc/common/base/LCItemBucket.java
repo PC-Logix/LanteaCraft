@@ -1,6 +1,6 @@
 package lc.common.base;
 
-import lc.common.util.CreativeTabHelper;
+import lc.common.util.LCCreativeTabManager;
 import lc.common.util.SpecialBucketHandler;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Items;
@@ -34,7 +34,7 @@ public class LCItemBucket extends ItemBucket {
 	public LCItemBucket(LCBlock hostBlock) {
 		super(hostBlock);
 		SpecialBucketHandler.registerBucketMapping(hostBlock, this);
-		setCreativeTab(CreativeTabHelper.getTab("LanteaCraft"));
+		setCreativeTab(LCCreativeTabManager.getTab("LanteaCraft"));
 		setContainerItem(Items.bucket);
 	}
 

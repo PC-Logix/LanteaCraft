@@ -35,7 +35,7 @@ import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItemBucket;
 import lc.common.base.LCTile;
-import lc.common.util.CreativeTabHelper;
+import lc.common.util.LCCreativeTabManager;
 import lc.core.BuildInfo;
 import lc.core.LCRuntime;
 
@@ -84,7 +84,8 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Register a Block with a given class and unlocalized name. The block will
-	 * use the default {@link ItemBlock} structure when held as an item.
+	 * use the default {@link ItemBlock} structure when held as an item. The
+	 * block will display in the default Creative tabs.
 	 * 
 	 * @param classOf
 	 *            The class of the block.
@@ -98,7 +99,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Register a block with a given class, a given item class and an
-	 * unlocalized name. The block will display by default in CreativeTabs.
+	 * unlocalized name. The block will display in the default Creative tabs.
 	 * 
 	 * @param classOf
 	 *            The class of the block.
@@ -110,7 +111,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 */
 	public <T extends Block> T registerBlock(Class<? extends T> classOf, Class<? extends ItemBlock> itemClassOf,
 			String unlocalizedName) {
-		return registerBlock(classOf, itemClassOf, unlocalizedName, CreativeTabHelper.getTab("LanteaCraft"));
+		return registerBlock(classOf, itemClassOf, unlocalizedName, LCCreativeTabManager.getTab("LanteaCraft"));
 	}
 
 	/**
@@ -123,8 +124,8 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 *            The class of the item.
 	 * @param unlocalizedName
 	 *            The unlocalized name.
-	 * @param inCreativeTabs
-	 *            Show the item in the CreativeTabs instance.
+	 * @param tab
+	 *            The creative tab to place the Block into.
 	 * @return The Block singleton.
 	 */
 	public <T extends Block> T registerBlock(Class<? extends T> classOf, Class<? extends ItemBlock> itemClassOf,
@@ -143,18 +144,17 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 		}
 	}
 
+	/**
+	 * Registers an item with a given class and an unlocalized name.
+	 * 
+	 * @param classOf
+	 *            The class of the item.
+	 * @param unlocalizedName
+	 *            The unlocalized name.
+	 * @return The Item singleton.
+	 */
 	public <T extends Item> T registerItem(Class<? extends T> classOf, String unlocalizedName) {
-		LCLog.debug("Attempting to register item " + unlocalizedName);
-		try {
-			Constructor<? extends T> ctor = classOf.getConstructor();
-			T theMysteryItem = ctor.newInstance();
-			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(CreativeTabHelper.getTab("LanteaCraft"));
-			GameRegistry.registerItem(theMysteryItem, unlocalizedName);
-			return theMysteryItem;
-		} catch (Exception e) {
-			LCLog.fatal("Failed to register item, an exception occured.", e);
-			throw new RuntimeException(e);
-		}
+		return registerItem(classOf, unlocalizedName, LCCreativeTabManager.getTab("LanteaCraft"));
 	}
 
 	/**
@@ -164,6 +164,8 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 *            The class of the item.
 	 * @param unlocalizedName
 	 *            The unlocalized name.
+	 * @param tab
+	 *            The creative tab to place the Item into.
 	 * @return The Item singleton.
 	 */
 	public <T extends Item> T registerItem(Class<? extends T> classOf, String unlocalizedName, CreativeTabs tab) {

@@ -3,6 +3,7 @@ package lc.core;
 import org.apache.logging.log4j.Level;
 
 import lc.common.LCLog;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -23,6 +24,8 @@ public class LanteaCraft {
 	public void preinit(FMLPreInitializationEvent event) {
 		LCLog.setLogger(event.getModLog());
 		LCLog.showRuntimeInfo();
+		if (!Loader.isModLoaded("LanteaCraft-Core"))
+			throw new RuntimeException("LanteaCraft Core mod is missing. Cannot load the game.");
 		LCRuntime.runtime.preinit(event);
 	}
 

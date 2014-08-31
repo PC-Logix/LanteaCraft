@@ -7,7 +7,6 @@ import java.util.Map;
 import lc.common.LCLog;
 import net.minecraft.launchwrapper.IClassTransformer;
 
-import org.apache.logging.log4j.Level;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AnnotationNode;

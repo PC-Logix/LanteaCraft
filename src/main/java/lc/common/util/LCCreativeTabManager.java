@@ -7,19 +7,23 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
 /**
- * Creative tab helper
+ * Creative Tab manager
  * 
  * @author AfterLifeLochie
  * 
  */
-public class CreativeTabHelper {
+public class LCCreativeTabManager {
 
 	public static class CreativeTabImpl extends CreativeTabs {
-		private final Item par3Item;
+		private Item par3Item;
 
 		public CreativeTabImpl(int par1, String par2Str, Item par3Item) {
 			super(par1, par2Str);
 			this.par3Item = par3Item;
+		}
+
+		public void setTabIconItem(Item item) {
+			this.par3Item = item;
 		}
 
 		@Override
@@ -35,13 +39,30 @@ public class CreativeTabHelper {
 		}
 	}
 
+	/** Creative tab map */
 	private static HashMap<String, CreativeTabImpl> tabs = new HashMap<String, CreativeTabImpl>();
 
+	/**
+	 * Create a new Creative tab element with the specified name and item. If
+	 * the item is null, a potato will be selected for the item instead.
+	 * 
+	 * @param name
+	 *            The Tab name.
+	 * @param item
+	 *            The item or null.
+	 */
 	public static void registerTab(String name, Item item) {
-		tabs.put(name, new CreativeTabImpl(CreativeTabs.getNextID(), name, item));
+		tabs.put(name.toLowerCase(), new CreativeTabImpl(CreativeTabs.getNextID(), name, item));
 	}
 
+	/**
+	 * Fetch an existing Creative tab element with the specified name.
+	 * 
+	 * @param name
+	 *            The name.
+	 * @return The Tab element.
+	 */
 	public static CreativeTabImpl getTab(String name) {
-		return tabs.get(name);
+		return tabs.get(name.toLowerCase());
 	}
 }

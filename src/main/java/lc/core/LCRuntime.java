@@ -10,8 +10,7 @@ import lc.api.defs.Items;
 import lc.common.LCLog;
 import lc.common.impl.DefinitionRegistry;
 import lc.common.impl.RegistryContainer;
-import lc.common.util.CreativeTabHelper;
-import lc.tiles.TileDriverTest;
+import lc.common.util.LCCreativeTabManager;
 
 public class LCRuntime implements ILCAPIProxy {
 
@@ -42,7 +41,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	public void preinit(FMLPreInitializationEvent event) {
 		LCLog.debug("LCRuntime entering phase preinit");
-		CreativeTabHelper.registerTab("LanteaCraft", null);
+		LCCreativeTabManager.registerTab("LanteaCraft", null);
 		container.preinit(this, event);
 	}
 
