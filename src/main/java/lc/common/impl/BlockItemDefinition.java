@@ -10,7 +10,6 @@ import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
 import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
-import lc.common.util.RegistrationHelper;
 import lc.core.LCRuntime;
 
 public class BlockItemDefinition implements ILanteaCraftDefinition {
@@ -52,14 +51,20 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 		return ownerType;
 	}
 
-	public void init() {
+	public void init(DefinitionRegistry registry) {
 		if (!LCRuntime.runtime.registries().components().isEnabled(ownerType))
 			return;
 		if (blockType != null && itemBlockType != null) {
-			blockObject = RegistrationHelper.registerBlock(blockType, itemBlockType, defName);
+			blockObject = registry.registerBlock(blockType, itemBlockType, defName);
 			blockObject.setProvidesTile(tileType);
+			if (tileType != null) {
+				String tileName = tileType.getSimpleName();
+				if (tileName.startsWith("Tile"))
+					tileName.replace("Tile", "tileEntity");
+				registry.registerTileEntity(tileType, tileName);
+			}
 		} else if (itemType != null)
-			RegistrationHelper.registerItem(itemType, defName);
+			registry.registerItem(itemType, defName);
 	}
 
 	@Override
