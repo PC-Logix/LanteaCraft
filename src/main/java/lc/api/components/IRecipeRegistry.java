@@ -6,4 +6,6 @@ public interface IRecipeRegistry {
 
 	public void addRecipe(IRecipeDefinition definition);
 
+	public IRecipeDefinition getRecipe(String name);
+
 }
