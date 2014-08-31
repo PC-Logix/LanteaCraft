@@ -9,6 +9,7 @@ import lc.api.defs.Blocks;
 import lc.api.defs.Items;
 import lc.common.LCLog;
 import lc.common.impl.DefinitionRegistry;
+import lc.common.impl.RecipeRegistry;
 import lc.common.impl.RegistryContainer;
 import lc.common.util.LCCreativeTabManager;
 
@@ -49,6 +50,7 @@ public class LCRuntime implements ILCAPIProxy {
 		LCLog.debug("LCRuntime entering phase init");
 		container.init(this, event);
 		((DefinitionRegistry) registries().definitions()).init(this, event);
+		((RecipeRegistry) registries().recipes()).init(this, event);
 	}
 
 	public void postinit(FMLPostInitializationEvent event) {
