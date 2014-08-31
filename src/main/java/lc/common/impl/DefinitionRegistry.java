@@ -75,12 +75,14 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	@Override
 	public void addDefinition(ILanteaCraftDefinition definition) {
-		definitionPool.put(definition.getName(), definition);
+		if (definitionPool.containsKey(definition.getName().toLowerCase()))
+			throw new RuntimeException("Attempt to overwrite existing definition " + definition.getName());
+		definitionPool.put(definition.getName().toLowerCase(), definition);
 	}
 
 	@Override
 	public ILanteaCraftDefinition getDefinition(String name) {
-		return definitionPool.get(name);
+		return definitionPool.get(name.toLowerCase());
 	}
 
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {

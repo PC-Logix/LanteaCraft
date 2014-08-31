@@ -5,13 +5,16 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public class LCItemBlock extends ItemBlock {
-	
+
+	protected final LCBlock blockType;
+
 	public LCItemBlock(Block block) {
 		this((LCBlock) block);
 	}
 
 	public LCItemBlock(LCBlock block) {
 		super(block);
+		this.blockType = block;
 		setHasSubtypes(block.typed);
 	}
 

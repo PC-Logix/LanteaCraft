@@ -64,7 +64,7 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 				registry.registerTileEntity(tileType, tileName);
 			}
 		} else if (itemType != null)
-			registry.registerItem(itemType, defName);
+			itemObject = registry.registerItem(itemType, defName);
 	}
 
 	@Override

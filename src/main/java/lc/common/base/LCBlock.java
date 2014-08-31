@@ -17,24 +17,27 @@ public abstract class LCBlock extends BlockContainer {
 	/** The type of tile entity for this block */
 	protected Class<? extends LCTile> tileType;
 
-	protected LCBlock(Material material) {
+	public LCBlock(Material material) {
 		super(material);
 	}
 
-	protected void setOpaque(boolean b) {
+	public LCBlock setOpaque(boolean b) {
 		opaque = b;
+		return this;
 	}
 
 	public void setProvidesTile(Class<? extends LCTile> tile) {
 		tileType = tile;
 	}
 
-	protected void setProvidesInventory(boolean b) {
+	public LCBlock setProvidesInventory(boolean b) {
 		inventory = b;
+		return this;
 	}
 
-	protected void setProvidesTypes(boolean b) {
+	public LCBlock setProvidesTypes(boolean b) {
 		typed = b;
+		return this;
 	}
 
 	@Override

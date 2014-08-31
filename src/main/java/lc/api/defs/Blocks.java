@@ -2,6 +2,20 @@ package lc.api.defs;
 
 public class Blocks {
 	
-	public ILanteaCraftDefinition testBlock;
+	public ILanteaCraftDefinition lanteaOreBlock;
+	public ILanteaCraftDefinition lanteaAlloyBlock;
+
+	public ILanteaCraftDefinition stargateRingBlock;
+	public ILanteaCraftDefinition stargateBaseBlock;
+	public ILanteaCraftDefinition stargateDHDBlock;
+	public ILanteaCraftDefinition transporterBlock;
+	
+	public ILanteaCraftDefinition lanteaDecorBlock;
+	public ILanteaCraftDefinition lanteaGlassBlock;
+	
+	public ILanteaCraftDefinition machineCrystalInfuser;
+	public ILanteaCraftDefinition machineTablePress;
+	public ILanteaCraftDefinition machineNaquadahGenerator;
+	
 
 }
