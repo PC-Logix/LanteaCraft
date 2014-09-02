@@ -14,7 +14,7 @@ import lc.api.drivers.IPowerDriver;
 @DeviceDrivers.DriverProvider(type = IntegrationType.POWER)
 public class DriverBCPower implements IPowerDriver, IPowerEmitter, IPowerReceptor {
 
-	PowerHandler driverPCPower_receiver;
+	PowerHandler driverBCPower_receiver;
 
 	@Override
 	public double getStoredEnergy() {
@@ -54,9 +54,9 @@ public class DriverBCPower implements IPowerDriver, IPowerEmitter, IPowerRecepto
 
 	@Override
 	public PowerReceiver getPowerReceiver(ForgeDirection side) {
-		if (driverPCPower_receiver == null)
-			driverPCPower_receiver = new PowerHandler(this, Type.PIPE);
-		return driverPCPower_receiver.getPowerReceiver();
+		if (driverBCPower_receiver == null)
+			driverBCPower_receiver = new PowerHandler(this, Type.PIPE);
+		return driverBCPower_receiver.getPowerReceiver();
 	}
 
 	@Override

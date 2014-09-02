@@ -2,7 +2,10 @@ package lc.common.impl.drivers;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
@@ -10,10 +13,13 @@ import ic2.api.energy.tile.IEnergySource;
 import lc.api.components.IntegrationType;
 import lc.api.drivers.IPowerDriver;
 import lc.api.drivers.DeviceDrivers;
+import lc.common.LCLog;
 import lc.common.base.LCTile;
 
 @DeviceDrivers.DriverProvider(type = IntegrationType.POWER)
 public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmitter, IEnergySink, IEnergySource {
+
+	boolean driverIC2Power_onEnergyNet;
 
 	@Override
 	public double acceptEnergy(double quantity, boolean simulated) {
@@ -93,12 +99,23 @@ public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmi
 
 	@DeviceDrivers.DriverRTCallback(event = "blockPlace")
 	public void ic2AddTile(LCTile tile) {
-		System.out.println("ic2AddTile called!");
+		try {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+			driverIC2Power_onEnergyNet = true;
+		} catch (Throwable t) {
+			LCLog.warn("Driver code could not add tile to network!", t);
+		}
 	}
 
 	@DeviceDrivers.DriverRTCallback(event = "blockBreak")
 	public void ic2RemoveTile(LCTile tile) {
-		System.out.println("ic2RemoveTile called!");
+		if (driverIC2Power_onEnergyNet)
+			try {
+				MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+				driverIC2Power_onEnergyNet = false;
+			} catch (Throwable t) {
+				LCLog.warn("Driver code could not remove tile from network!", t);
+			}
 	}
 
 }
