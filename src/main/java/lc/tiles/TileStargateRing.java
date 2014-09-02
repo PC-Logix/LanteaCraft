@@ -3,9 +3,12 @@ package lc.tiles;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
+import lc.api.components.IntegrationType;
+import lc.api.drivers.DeviceDrivers.DriverCandidate;
 import lc.common.base.LCTile;
 import lc.common.network.LCPacket;
 
+@DriverCandidate(types = { IntegrationType.POWER })
 public class TileStargateRing extends LCTile {
 
 	@Override
