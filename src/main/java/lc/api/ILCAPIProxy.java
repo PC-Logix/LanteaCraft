@@ -5,6 +5,8 @@ import lc.api.defs.Blocks;
 import lc.api.defs.Items;
 
 public interface ILCAPIProxy {
+	
+	public boolean signedState();
 
 	public Blocks blocks();
 

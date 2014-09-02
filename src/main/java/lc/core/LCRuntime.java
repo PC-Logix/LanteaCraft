@@ -26,6 +26,11 @@ public class LCRuntime implements ILCAPIProxy {
 	}
 
 	@Override
+	public boolean signedState() {
+		return !BuildInfo.isDevelopmentEnvironment();
+	}
+
+	@Override
 	public Blocks blocks() {
 		return blocks;
 	}
