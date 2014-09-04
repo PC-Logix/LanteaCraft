@@ -1,12 +1,12 @@
 package lc.core;
 
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import lc.api.ILCAPIProxy;
 import lc.api.components.IRegistryContainer;
 import lc.api.defs.Blocks;
+import lc.api.defs.HintProvider;
 import lc.api.defs.Items;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
@@ -27,15 +27,14 @@ public class LCRuntime implements ILCAPIProxy {
 	private Items items = new Items();
 	/** Container of all API registries */
 	private RegistryContainer registries = new RegistryContainer();
-	
-	
+
 	/** Container of all registrations */
 	private RegistrationContainer container = new RegistrationContainer();
 	/** Network driver */
 	private LCPacketPipeline network = new LCPacketPipeline();
 
 	/** Hints provider */
-	@SidedProxy(serverSide = "lc.core.HintProviderServer", clientSide = "lc.core.HintProviderClient")
+	@HintProvider(serverClass = "lc.core.HintProviderServer", clientClass = "lc.core.HintProviderClient")
 	private IHintProvider hints;
 
 	private LCRuntime() {
@@ -63,6 +62,10 @@ public class LCRuntime implements ILCAPIProxy {
 
 	public LCPacketPipeline network() {
 		return network;
+	}
+
+	public IHintProvider hints() {
+		return hints;
 	}
 
 	public void preinit(FMLPreInitializationEvent event) {
