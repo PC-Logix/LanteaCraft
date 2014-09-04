@@ -27,7 +27,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @ChannelHandler.Sharable
-public class LanteaCraftPacketPipe extends MessageToMessageCodec<FMLProxyPacket, LCPacket> {
+public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPacket> {
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
 	private LinkedList<Class<? extends LCPacket>> packets = new LinkedList<Class<? extends LCPacket>>();
 
