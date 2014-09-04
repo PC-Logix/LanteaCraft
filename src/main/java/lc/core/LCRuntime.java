@@ -25,12 +25,12 @@ public class LCRuntime implements ILCAPIProxy {
 	private Blocks blocks = new Blocks();
 	/** The LC items container */
 	private Items items = new Items();
-
 	/** Container of all API registries */
 	private RegistryContainer registries = new RegistryContainer();
+	
+	
 	/** Container of all registrations */
 	private RegistrationContainer container = new RegistrationContainer();
-
 	/** Network driver */
 	private LCPacketPipeline network = new LCPacketPipeline();
 

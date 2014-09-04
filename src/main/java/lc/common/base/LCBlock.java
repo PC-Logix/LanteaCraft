@@ -19,6 +19,8 @@ public abstract class LCBlock extends BlockContainer {
 	protected boolean rotation = false;
 	/** The type of tile entity for this block */
 	protected Class<? extends LCTile> tileType;
+	/** The renderer ID for this block */
+	protected int rendererIdx = 0;
 
 	public LCBlock(Material material) {
 		super(material);
@@ -26,6 +28,11 @@ public abstract class LCBlock extends BlockContainer {
 
 	public LCBlock setOpaque(boolean b) {
 		opaque = b;
+		return this;
+	}
+
+	public LCBlock setRenderer(int i) {
+		rendererIdx = i;
 		return this;
 	}
 
@@ -70,6 +77,11 @@ public abstract class LCBlock extends BlockContainer {
 	@Override
 	public boolean renderAsNormalBlock() {
 		return opaque;
+	}
+
+	@Override
+	public int getRenderType() {
+		return rendererIdx;
 	}
 
 	@Override
