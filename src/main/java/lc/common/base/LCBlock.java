@@ -5,6 +5,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class LCBlock extends BlockContainer {
 
@@ -14,6 +15,8 @@ public abstract class LCBlock extends BlockContainer {
 	protected boolean typed = false;
 	/** If the block instance has an inventory */
 	protected boolean inventory = false;
+	/** If the block instance observes rotation */
+	protected boolean rotation = false;
 	/** The type of tile entity for this block */
 	protected Class<? extends LCTile> tileType;
 
@@ -35,9 +38,28 @@ public abstract class LCBlock extends BlockContainer {
 		return this;
 	}
 
+	public LCBlock setCanRotate(boolean b) {
+		rotation = b;
+		return this;
+	}
+
 	public LCBlock setProvidesTypes(boolean b) {
 		typed = b;
 		return this;
+	}
+
+	public boolean canRotate() {
+		return rotation;
+	}
+
+	public ForgeDirection getRotation(int data, int ord) {
+		int rotation = (data & (0x0F << ord)) >> ord;
+		return ForgeDirection.getOrientation(rotation);
+	}
+
+	public int setRotation(int data, ForgeDirection direction, int ord) {
+		int rotation = direction.ordinal() & 0x0F;
+		return (data | (rotation << ord));
 	}
 
 	@Override
