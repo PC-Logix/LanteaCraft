@@ -3,8 +3,13 @@ package lc.core;
 import lc.api.defs.ILanteaCraftDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
+import lc.common.LCLog;
 
 public class HintProviderServer implements IHintProvider {
+
+	public HintProviderServer() {
+		LCLog.debug("HintProviderServer providing server-side hints");
+	}
 
 	@Override
 	public void preInit() {

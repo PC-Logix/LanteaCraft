@@ -5,7 +5,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import lc.api.defs.ILanteaCraftDefinition;
 import lc.api.defs.IRecipeDefinition;
-import lc.common.IHintProvider;
+import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderHook;
 import lc.common.base.LCItem;
@@ -13,24 +13,27 @@ import lc.common.base.LCItemRenderHook;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
 
-public class HintProviderClient implements IHintProvider {
+public class HintProviderClient extends HintProviderServer {
 
 	private LCBlockRenderHook blockRenderingHook;
 	private LCTileRenderHook tileRenderingHook;
 	private LCItemRenderHook itemRenderingHook;
 
 	public HintProviderClient() {
-		// TODO Auto-generated method stub
+		super();
+		LCLog.debug("HintProviderClient providing client-side hints");
 	}
 
 	@Override
 	public void preInit() {
+		super.preInit();
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void init() {
+		super.init();
 		blockRenderingHook = new LCBlockRenderHook(RenderingRegistry.getNextAvailableRenderId());
 		tileRenderingHook = new LCTileRenderHook();
 		itemRenderingHook = new LCItemRenderHook();
@@ -39,12 +42,14 @@ public class HintProviderClient implements IHintProvider {
 
 	@Override
 	public void postInit() {
+		super.postInit();
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void provideHints(ILanteaCraftDefinition definition) {
+		super.provideHints(definition);
 		if (definition.getBlock() != null) {
 			LCBlock theBlock = (LCBlock) definition.getBlock();
 			theBlock.setRenderer(blockRenderingHook.getRenderId());
@@ -64,6 +69,7 @@ public class HintProviderClient implements IHintProvider {
 
 	@Override
 	public void provideHints(IRecipeDefinition definition) {
+		super.provideHints(definition);
 		// TODO Auto-generated method stub
 
 	}

@@ -47,7 +47,8 @@ public class LCCoreMod implements IFMLLoadingPlugin {
 	}
 
 	public static String[] getTransformers() {
-		return new String[] { "lc.coremod.ClassOptionalTransformer", "lc.coremod.DriverBindingTransformer" };
+		return new String[] { "lc.coremod.ClassOptionalTransformer", "lc.coremod.HintInjectionTransformer",
+				"lc.coremod.DriverBindingTransformer" };
 	}
 
 	@Override
