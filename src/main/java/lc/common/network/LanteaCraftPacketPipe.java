@@ -6,12 +6,10 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 
-import java.io.IOException;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import lc.common.LCLog;
 import lc.common.util.math.WorldLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,10 +45,10 @@ public class LanteaCraftPacketPipe extends MessageToMessageCodec<FMLProxyPacket,
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, LCPacket msg, List<Object> out) throws Exception {
-
 		Class<? extends LCPacket> clazz = msg.getClass();
 		if (!packets.contains(msg.getClass()))
-			LCLog.warn("Attempt to send unregistered packet class %s!", msg.getClass().getCanonicalName());
+			throw new LCNetworkException(String.format("Attempt to send unregistered packet class %s!", msg.getClass()
+					.getCanonicalName()));
 
 		ByteBuf buffer = Unpooled.buffer();
 		byte discriminator = (byte) packets.indexOf(clazz);
@@ -67,7 +65,8 @@ public class LanteaCraftPacketPipe extends MessageToMessageCodec<FMLProxyPacket,
 		byte discriminator = payload.readByte();
 		Class<? extends LCPacket> clazz = packets.get(discriminator);
 		if (clazz == null)
-			LCLog.warn("Attempt to handlle unregistered packet class %s!", discriminator);
+			throw new LCNetworkException(String.format("Attempt to handlle unregistered packet class %s!",
+					discriminator));
 
 		LCPacket pkt = clazz.newInstance();
 		pkt.decodeFrom(ctx, payload.slice());
@@ -83,7 +82,7 @@ public class LanteaCraftPacketPipe extends MessageToMessageCodec<FMLProxyPacket,
 			break;
 		default:
 			// We should never get here
-			throw new IOException("Instance is not client or server. Cannot continue!");
+			throw new LCNetworkException("Instance is not client or server. Cannot continue!");
 		}
 		// TODO: Fix packets. :<
 		// LanteaCraft.getProxy().handlePacket(pkt, player);
