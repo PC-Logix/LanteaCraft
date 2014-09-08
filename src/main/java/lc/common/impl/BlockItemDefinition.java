@@ -65,6 +65,7 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 			}
 		} else if (itemType != null)
 			itemObject = registry.registerItem(itemType, defName);
+		LCRuntime.runtime.hints().provideHints(this);
 	}
 
 	@Override

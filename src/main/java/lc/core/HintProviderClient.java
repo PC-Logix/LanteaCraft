@@ -27,17 +27,16 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public void preInit() {
 		super.preInit();
-		// TODO Auto-generated method stub
-
+		blockRenderingHook = new LCBlockRenderHook(RenderingRegistry.getNextAvailableRenderId());
+		tileRenderingHook = new LCTileRenderHook();
+		itemRenderingHook = new LCItemRenderHook();
+		RenderingRegistry.registerBlockHandler(blockRenderingHook.getRenderId(), blockRenderingHook);
 	}
 
 	@Override
 	public void init() {
 		super.init();
-		blockRenderingHook = new LCBlockRenderHook(RenderingRegistry.getNextAvailableRenderId());
-		tileRenderingHook = new LCTileRenderHook();
-		itemRenderingHook = new LCItemRenderHook();
-		RenderingRegistry.registerBlockHandler(blockRenderingHook.getRenderId(), blockRenderingHook);
+		// TODO Auto-generated method stub
 	}
 
 	@Override
