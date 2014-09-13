@@ -3,23 +3,23 @@ package lc.common.util.math;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class WorldLocation {
+public class DimensionPos {
 
 	public int dimension;
 	public int x, y, z;
 
-	public WorldLocation(TileEntity te) {
+	public DimensionPos(TileEntity te) {
 		this(te.getWorldObj().provider.dimensionId, te.xCoord, te.yCoord, te.zCoord);
 	}
 
-	public WorldLocation(int dimension, int x, int y, int z) {
+	public DimensionPos(int dimension, int x, int y, int z) {
 		this.dimension = dimension;
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	public WorldLocation(NBTTagCompound nbt) {
+	public DimensionPos(NBTTagCompound nbt) {
 		dimension = nbt.getInteger("dimension");
 		x = nbt.getInteger("x");
 		y = nbt.getInteger("y");
@@ -35,8 +35,8 @@ public class WorldLocation {
 		return nbt;
 	}
 
-	public ChunkLocation toChunkLocation() {
-		return new ChunkLocation(dimension, x >> 4, z >> 4);
+	public ChunkPos toChunkLocation() {
+		return new ChunkPos(dimension, x >> 4, z >> 4);
 	}
 
 	public Vector3 toVector3() {

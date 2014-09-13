@@ -8,9 +8,8 @@ import java.io.IOException;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
-import lc.common.network.LCPacket;
 
-public abstract class LCNBTPacket extends LCPacket {
+public abstract class LCNBTPacket extends LCTargetPacket {
 
 	@Override
 	public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException;

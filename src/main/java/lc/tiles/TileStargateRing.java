@@ -6,13 +6,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import lc.api.components.IntegrationType;
 import lc.api.drivers.DeviceDrivers.DriverCandidate;
 import lc.common.base.LCTile;
+import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 
 @DriverCandidate(types = { IntegrationType.POWER })
 public class TileStargateRing extends LCTile {
 
 	@Override
-	public void handlePacket(LCPacket packetOf, EntityPlayer player) {
+	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
 		// TODO Auto-generated method stub
 
 	}

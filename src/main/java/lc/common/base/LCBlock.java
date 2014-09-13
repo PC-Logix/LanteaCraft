@@ -3,11 +3,19 @@ package lc.common.base;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class LCBlock extends BlockContainer {
+
+	/** Rotation direction map across Y-axis */
+	protected static final ForgeDirection[] directions = new ForgeDirection[] { ForgeDirection.SOUTH,
+			ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.EAST };
 
 	/** If the block instance is opaque */
 	protected boolean opaque = false;
@@ -59,14 +67,20 @@ public abstract class LCBlock extends BlockContainer {
 		return rotation;
 	}
 
-	public ForgeDirection getRotation(int data, int ord) {
-		int rotation = (data & (0x0F << ord)) >> ord;
-		return ForgeDirection.getOrientation(rotation);
+	public ForgeDirection getRotation(IBlockAccess world, int x, int y, int z) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile == null || !(tile instanceof LCTile))
+			return null;
+		return ((LCTile) tile).getRotation();
 	}
 
-	public int setRotation(int data, ForgeDirection direction, int ord) {
-		int rotation = direction.ordinal() & 0x0F;
-		return (data | (rotation << ord));
+	public void setRotation(World world, int x, int y, int z, ForgeDirection direction) {
+		if (world.isRemote)
+			return;
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile == null || !(tile instanceof LCTile))
+			return;
+		((LCTile) tile).setRotation(direction);
 	}
 
 	@Override
@@ -93,6 +107,16 @@ public abstract class LCBlock extends BlockContainer {
 				throw new RuntimeException(t);
 			}
 		return null;
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
+		super.onBlockPlacedBy(world, x, y, z, player, stack);
+		if (canRotate() && !world.isRemote) {
+			int heading = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			setRotation(world, x, y, z, directions[heading]);
+			world.markBlockForUpdate(x, y, z);
+		}
 	}
 
 	@Override

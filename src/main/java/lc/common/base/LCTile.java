@@ -6,11 +6,17 @@ import java.util.HashMap;
 
 import lc.common.LCLog;
 import lc.common.network.IPacketHandler;
+import lc.common.network.LCNetworkException;
+import lc.common.network.LCPacket;
+import lc.common.network.packets.LCTileSync;
+import lc.common.util.math.DimensionPos;
+import lc.core.LCRuntime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler {
 
@@ -61,22 +67,59 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		}
 	}
 
+	private NBTTagCompound compound;
+	private boolean nbtDirty;
+
 	public abstract IInventory getInventory();
 
 	public abstract void thinkClient();
 
 	public abstract void thinkServer();
 
+	public abstract void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException;
+
 	public abstract void save(NBTTagCompound compound);
 
 	public abstract void load(NBTTagCompound compound);
-	
+
+	public NBTTagCompound getBaseCompound() {
+		return compound;
+	}
+
+	public ForgeDirection getRotation() {
+		if (compound == null || !compound.hasKey("rotation"))
+			return ForgeDirection.NORTH;
+		return ForgeDirection.getOrientation(compound.getInteger("rotation"));
+	}
+
+	public void setRotation(ForgeDirection direction) {
+		if (compound == null)
+			compound = new NBTTagCompound();
+		compound.setInteger("rotation", direction.ordinal());
+		markNbtDirty();
+	}
+
 	public void blockPlaced() {
 		LCTile.doCallbacksNow(this, "blockPlace");
 	}
-	
+
 	public void blockBroken() {
 		LCTile.doCallbacksNow(this, "blockBreak");
+	}
+
+	private void markNbtDirty() {
+		this.nbtDirty = true;
+	}
+
+	@Override
+	public void handlePacket(LCPacket packetOf, EntityPlayer player) throws LCNetworkException {
+		if (packetOf instanceof LCTileSync) {
+			if (worldObj.isRemote) {
+				this.compound = ((LCTileSync) packetOf).compound;
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
+		} else
+			thinkPacket(packetOf, player);
 	}
 
 	@Override
@@ -86,16 +129,28 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	@Override
 	public void updateEntity() {
-		if (worldObj != null)
+		if (worldObj != null) {
 			if (worldObj.isRemote)
 				thinkClient();
-			else
+			else {
 				thinkServer();
+				if (nbtDirty) {
+					nbtDirty = false;
+					LCTileSync packet = new LCTileSync(new DimensionPos(this), compound);
+					LCRuntime.runtime.network().sendToAllAround(packet, packet.target, 128.0d);
+				}
+			}
+		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound p_145839_1_) {
 		super.readFromNBT(p_145839_1_);
+		if (p_145839_1_.hasKey("base-tag"))
+			this.compound = p_145839_1_.getCompoundTag("base-tag");
+		else
+			this.compound = new NBTTagCompound();
+		markNbtDirty();
 		try {
 			load(p_145839_1_);
 		} catch (Throwable t) {
@@ -106,6 +161,8 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	@Override
 	public void writeToNBT(NBTTagCompound p_145841_1_) {
 		super.writeToNBT(p_145841_1_);
+		if (this.compound != null)
+			p_145841_1_.setTag("base-tag", this.compound);
 		try {
 			save(p_145841_1_);
 		} catch (Throwable t) {

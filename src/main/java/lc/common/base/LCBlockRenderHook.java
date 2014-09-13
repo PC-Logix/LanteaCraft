@@ -1,6 +1,7 @@
 package lc.common.base;
 
 import lc.api.defs.ILanteaCraftRenderer;
+import lc.client.DefaultBlockRenderer;
 import lc.common.impl.DefinitionRegistry;
 import lc.common.impl.DefinitionRegistry.RendererType;
 import lc.core.LCRuntime;
@@ -13,40 +14,57 @@ public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
 
 	private final int renderIdx;
 	private final DefinitionRegistry registry;
+	private final DefaultBlockRenderer defaultBlockRenderer;
 
 	public LCBlockRenderHook(int renderIdx) {
 		this.renderIdx = renderIdx;
 		this.registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
+		this.defaultBlockRenderer = new DefaultBlockRenderer();
 	}
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+		boolean flag = true;
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.BLOCK, block.getClass());
-		if (worker == null || !(worker instanceof LCBlockRenderer))
-			return;
-		LCBlockRenderer blockRenderer = (LCBlockRenderer) worker;
-		while (blockRenderer != null && !blockRenderer.renderInventoryBlock(block, renderer, metadata)) {
-			worker = registry.getRenderer(RendererType.BLOCK, blockRenderer.getParent());
-			if (worker == null || !(worker instanceof LCBlockRenderer))
-				return;
-			blockRenderer = (LCBlockRenderer) worker;
+		if (worker == null || !(worker instanceof LCBlockRenderer)) {
+			flag = false;
+		} else {
+			LCBlockRenderer blockRenderer = (LCBlockRenderer) worker;
+			while (blockRenderer != null && !blockRenderer.renderInventoryBlock(block, renderer, metadata)) {
+				worker = registry.getRenderer(RendererType.BLOCK, blockRenderer.getParent());
+				if (worker == null || !(worker instanceof LCBlockRenderer)) {
+					flag = false;
+					break;
+				}
+				blockRenderer = (LCBlockRenderer) worker;
+			}
 		}
+		if (!flag)
+			defaultBlockRenderer.renderInventoryBlock(block, renderer, metadata);
 	}
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
 			RenderBlocks renderer) {
+		boolean flag = true;
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.BLOCK, block.getClass());
-		if (worker == null || !(worker instanceof LCBlockRenderer))
-			return false;
-		LCBlockRenderer blockRenderer = (LCBlockRenderer) worker;
-		while (blockRenderer != null && !blockRenderer.renderWorldBlock(block, renderer, world, x, y, z)) {
-			worker = registry.getRenderer(RendererType.BLOCK, blockRenderer.getParent());
-			if (worker == null || !(worker instanceof LCBlockRenderer))
-				return false;
-			blockRenderer = (LCBlockRenderer) worker;
+		if (worker == null || !(worker instanceof LCBlockRenderer)) {
+			flag = false;
+		} else {
+			LCBlockRenderer blockRenderer = (LCBlockRenderer) worker;
+			while (blockRenderer != null && !blockRenderer.renderWorldBlock(block, renderer, world, x, y, z)) {
+				worker = registry.getRenderer(RendererType.BLOCK, blockRenderer.getParent());
+				if (worker == null || !(worker instanceof LCBlockRenderer)) {
+					flag = false;
+					break;
+				}
+				blockRenderer = (LCBlockRenderer) worker;
+			}
 		}
-		return true;
+
+		if (!flag)
+			flag = defaultBlockRenderer.renderWorldBlock(block, renderer, world, x, y, z);
+		return flag;
 	}
 
 	@Override

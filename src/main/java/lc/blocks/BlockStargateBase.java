@@ -19,11 +19,7 @@ import lc.tiles.TileStargateBase;
 @Definition(name = "stargateBase", type = ComponentType.STARGATE, blockClass = BlockStargateBase.class, itemBlockClass = ItemBlockStargateBase.class, tileClass = TileStargateBase.class)
 public class BlockStargateBase extends LCBlock {
 
-	private static final int blockMask = 4;
-	private static final int blockCount = StargateType.count() * blockMask;
-
-	private static final int blockCraftingMask = 4;
-	private static final int blockCraftingCount = blockCount;
+	private static final int blockCount = StargateType.count();
 
 	protected IIcon topAndBottomTexture[] = new IIcon[StargateType.count()];
 	protected IIcon frontTexture[] = new IIcon[StargateType.count()];
@@ -32,7 +28,7 @@ public class BlockStargateBase extends LCBlock {
 	public BlockStargateBase() {
 		super(Material.ground);
 		setHardness(3F).setResistance(2000F);
-		setOpaque(false).setProvidesInventory(false).setProvidesTypes(true);
+		setOpaque(false).setProvidesInventory(false).setProvidesTypes(true).setCanRotate(true);
 	}
 
 	@Override
@@ -58,7 +54,7 @@ public class BlockStargateBase extends LCBlock {
 	}
 
 	public int getBaseType(int metadata) {
-		return (int) Math.floor(metadata / blockMask);
+		return metadata;
 	}
 
 	@Override
@@ -75,7 +71,7 @@ public class BlockStargateBase extends LCBlock {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		for (int i = 0; i < blockCraftingCount; i += blockCraftingMask)
+		for (int i = 0; i < blockCount; i++)
 			list.add(new ItemStack(item, 1, i));
 	}
 
