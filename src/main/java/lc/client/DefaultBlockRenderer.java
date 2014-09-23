@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import lc.api.rendering.IBlockRenderInfo;
+import lc.api.rendering.IRenderInfo;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
 import lc.common.util.math.Trans3;
@@ -24,10 +26,13 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		if (!(block instanceof LCBlock))
 			return false;
 		LCBlock theBlock = (LCBlock) block;
+		IBlockRenderInfo info = null;
+		if (theBlock instanceof IRenderInfo)
+			info = ((IRenderInfo) theBlock).block();
 		Trans3 trans = new Trans3(0.0, 0.0, 0.0);
-		trans = preRenderInInventory(theBlock, metadata, renderer, trans);
+		trans = preRenderInInventory(theBlock, info, metadata, renderer, trans);
 		renderDefaultInventoryBlock(block, metadata, trans, renderer);
-		boolean flag = postRenderInInventory(theBlock, metadata, renderer);
+		boolean flag = postRenderInInventory(theBlock, info, metadata, renderer);
 		return flag;
 	}
 
@@ -36,10 +41,13 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		if (!(block instanceof LCBlock))
 			return false;
 		LCBlock theBlock = (LCBlock) block;
+		IBlockRenderInfo info = null;
+		if (theBlock instanceof IRenderInfo)
+			info = ((IRenderInfo) theBlock).block();
 		Trans3 trans = new Trans3(x + 0.5, y + 0.5, z + 0.5);
-		trans = preRenderInWorld(theBlock, world, renderer, trans, x, y, z);
+		trans = preRenderInWorld(theBlock, info, world, renderer, trans, x, y, z);
 		boolean flag = renderDefaultWorldBlock(world, x, y, z, block, trans, renderer);
-		flag = postRenderInWorld(theBlock, world, renderer, flag, x, y, z);
+		flag = postRenderInWorld(theBlock, info, world, renderer, flag, x, y, z);
 		return flag;
 	}
 
@@ -49,8 +57,8 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		return true;
 	}
 
-	private Trans3 preRenderInWorld(LCBlock block, IBlockAccess world, RenderBlocks renderer, Trans3 trans, int x,
-			int y, int z) {
+	private Trans3 preRenderInWorld(LCBlock block, IBlockRenderInfo info, IBlockAccess world, RenderBlocks renderer,
+			Trans3 trans, int x, int y, int z) {
 		if (block.canRotate()) {
 			ForgeDirection rotation = block.getRotation(world, x, y, z);
 			trans = trans.side(0).turn(rotationMap[rotation.ordinal()]);
@@ -58,17 +66,18 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		return trans;
 	}
 
-	private boolean postRenderInWorld(LCBlock block, IBlockAccess world, RenderBlocks renderer, boolean flag, int x,
-			int y, int z) {
+	private boolean postRenderInWorld(LCBlock block, IBlockRenderInfo info, IBlockAccess world, RenderBlocks renderer,
+			boolean flag, int x, int y, int z) {
 		renderer.uvRotateBottom = renderer.uvRotateEast = renderer.uvRotateNorth = renderer.uvRotateSouth = renderer.uvRotateTop = renderer.uvRotateWest = 0;
 		return flag;
 	}
 
-	private Trans3 preRenderInInventory(LCBlock theBlock, int metadata, RenderBlocks renderer, Trans3 trans) {
+	private Trans3 preRenderInInventory(LCBlock theBlock, IBlockRenderInfo info, int metadata, RenderBlocks renderer,
+			Trans3 trans) {
 		return trans;
 	}
 
-	private boolean postRenderInInventory(LCBlock theBlock, int metadata, RenderBlocks renderer) {
+	private boolean postRenderInInventory(LCBlock theBlock, IBlockRenderInfo info, int metadata, RenderBlocks renderer) {
 		return true;
 	}
 }

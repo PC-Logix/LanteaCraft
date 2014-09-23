@@ -12,7 +12,7 @@ import lc.common.base.LCItem;
 import lc.common.base.LCItemRenderHook;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
-import lc.common.impl.DefinitionRegistry;
+import lc.common.impl.registry.DefinitionRegistry;
 
 public class HintProviderClient extends HintProviderServer {
 

@@ -2,8 +2,8 @@ package lc.common.base;
 
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.client.DefaultBlockRenderer;
-import lc.common.impl.DefinitionRegistry;
-import lc.common.impl.DefinitionRegistry.RendererType;
+import lc.common.impl.registry.DefinitionRegistry;
+import lc.common.impl.registry.DefinitionRegistry.RendererType;
 import lc.core.LCRuntime;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

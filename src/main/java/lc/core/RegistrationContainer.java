@@ -5,7 +5,7 @@ import lc.api.defs.Items;
 import lc.blocks.BlockLanteaOre;
 import lc.blocks.BlockStargateBase;
 import lc.blocks.BlockStargateRing;
-import lc.common.impl.DefinitionWrapperProvider;
+import lc.common.impl.registry.DefinitionWrapperProvider;
 import lc.items.ItemLanteaOre;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

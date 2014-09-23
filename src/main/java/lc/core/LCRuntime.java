@@ -10,9 +10,9 @@ import lc.api.defs.HintProvider;
 import lc.api.defs.Items;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
-import lc.common.impl.DefinitionRegistry;
-import lc.common.impl.RecipeRegistry;
-import lc.common.impl.RegistryContainer;
+import lc.common.impl.registry.DefinitionRegistry;
+import lc.common.impl.registry.RecipeRegistry;
+import lc.common.impl.registry.RegistryContainer;
 import lc.common.network.LCPacketPipeline;
 import lc.common.util.LCCreativeTabManager;
 

@@ -1,4 +1,4 @@
-package lc.common.impl;
+package lc.common.impl.registry;
 
 import java.util.HashMap;
 import java.util.Map;

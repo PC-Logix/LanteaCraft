@@ -1,4 +1,4 @@
-package lc.common.impl;
+package lc.common.impl.registry;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;

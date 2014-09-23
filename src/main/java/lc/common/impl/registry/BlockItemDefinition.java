@@ -1,4 +1,4 @@
-package lc.common.impl;
+package lc.common.impl.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

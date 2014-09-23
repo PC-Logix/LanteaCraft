@@ -1,4 +1,4 @@
-package lc.common.impl;
+package lc.common.impl.registry;
 
 import lc.api.components.ComponentType;
 import lc.api.components.IComponentRegistry;
