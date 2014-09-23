@@ -1,5 +1,9 @@
 package lc.common.base;
 
+import lc.api.rendering.IBlockRenderInfo;
+import lc.api.rendering.IEntityRenderInfo;
+import lc.api.rendering.IRenderInfo;
+import lc.api.rendering.ITileRenderInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -11,7 +15,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public abstract class LCBlock extends BlockContainer {
+public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/** Rotation direction map across Y-axis */
 	protected static final ForgeDirection[] directions = new ForgeDirection[] { ForgeDirection.SOUTH,
@@ -132,6 +136,21 @@ public abstract class LCBlock extends BlockContainer {
 		if (tile != null)
 			((LCTile) world.getTileEntity(x, y, z)).blockBroken();
 		super.breakBlock(world, x, y, z, a, b);
+	}
+
+	@Override
+	public IBlockRenderInfo block() {
+		return null;
+	}
+
+	@Override
+	public ITileRenderInfo tile() {
+		return null;
+	}
+
+	@Override
+	public IEntityRenderInfo entity() {
+		return null;
 	}
 
 }
