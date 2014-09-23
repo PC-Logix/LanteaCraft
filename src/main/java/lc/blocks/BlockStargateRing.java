@@ -22,7 +22,7 @@ public class BlockStargateRing extends LCBlock {
 	private static final int blockMask = 2;
 	private static final int blockCount = StargateType.count() * blockMask;
 
-	private static final int blockCraftingMask = 2;
+	private static final int blockCraftingMask = 1;
 	private static final int blockCraftingCount = blockCount;
 
 	IIcon topAndBottomTexture[] = new IIcon[StargateType.count()];
