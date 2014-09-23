@@ -8,8 +8,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
+import lc.api.rendering.IBlockRenderInfo;
 import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
 import lc.core.ResourceAccess;
@@ -20,6 +22,22 @@ import lc.tiles.TileStargateBase;
 public class BlockStargateBase extends LCBlock {
 
 	private static final int blockCount = StargateType.count();
+	
+	private static final IBlockRenderInfo renderInfo = new IBlockRenderInfo() {
+
+		@Override
+		public boolean doWorldRender(IBlockAccess access, int data, int x, int y, int z) {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+		@Override
+		public boolean doInventoryRender(int data) {
+			// TODO Auto-generated method stub
+			return true;
+		}
+		
+	};
 
 	protected IIcon topAndBottomTexture[] = new IIcon[StargateType.count()];
 	protected IIcon frontTexture[] = new IIcon[StargateType.count()];
@@ -79,4 +97,7 @@ public class BlockStargateBase extends LCBlock {
 	public int damageDropped(int metadata) {
 		return getBaseType(metadata);
 	}
+	
+	@Override
+	public IBlockRenderInfo block() { return BlockStargateBase.renderInfo; }
 }

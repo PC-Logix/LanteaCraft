@@ -31,7 +31,7 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 			info = ((IRenderInfo) theBlock).block();
 		Trans3 trans = new Trans3(0.0, 0.0, 0.0);
 		trans = preRenderInInventory(theBlock, info, metadata, renderer, trans);
-		if (info == null || info.doInventoryRender())
+		if (info == null || info.doInventoryRender(metadata))
 			renderDefaultInventoryBlock(block, metadata, trans, renderer);
 		boolean flag = postRenderInInventory(theBlock, info, metadata, renderer);
 		return flag;
@@ -48,7 +48,7 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		Trans3 trans = new Trans3(x + 0.5, y + 0.5, z + 0.5);
 		trans = preRenderInWorld(theBlock, info, world, renderer, trans, x, y, z);
 		boolean flag = true;
-		if (info == null || info.doWorldRender(x, y, z))
+		if (info == null || info.doWorldRender(world, world.getBlockMetadata(x, y, z), x, y, z))
 			flag = renderDefaultWorldBlock(world, x, y, z, block, trans, renderer);
 		flag = postRenderInWorld(theBlock, info, world, renderer, flag, x, y, z);
 		return flag;
