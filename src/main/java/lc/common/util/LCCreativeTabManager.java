@@ -14,14 +14,36 @@ import net.minecraft.item.Item;
  */
 public class LCCreativeTabManager {
 
+	/**
+	 * Creative tab stub class
+	 * 
+	 * @author AfterLifeLochie
+	 * 
+	 */
 	public static class CreativeTabImpl extends CreativeTabs {
 		private Item par3Item;
 
+		/**
+		 * Creative tab stub constructor
+		 * 
+		 * @param par1
+		 *            The tabID
+		 * @param par2Str
+		 *            The tab name
+		 * @param par3Item
+		 *            The item on the tab
+		 */
 		public CreativeTabImpl(int par1, String par2Str, Item par3Item) {
 			super(par1, par2Str);
 			this.par3Item = par3Item;
 		}
 
+		/**
+		 * Update the tab icon
+		 * 
+		 * @param item
+		 *            The new item to show on the tab
+		 */
 		public void setTabIconItem(Item item) {
 			this.par3Item = item;
 		}

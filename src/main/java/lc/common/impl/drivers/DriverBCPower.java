@@ -11,6 +11,12 @@ import lc.api.components.IntegrationType;
 import lc.api.drivers.DeviceDrivers;
 import lc.api.drivers.IPowerDriver;
 
+/**
+ * Buildcraft power driver.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 @DeviceDrivers.DriverProvider(type = IntegrationType.POWER)
 public class DriverBCPower implements IPowerDriver, IPowerEmitter, IPowerReceptor {
 

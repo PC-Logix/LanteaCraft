@@ -17,10 +17,17 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * XML configuration parser
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class XMLParser {
 
 	private final DocumentBuilderFactory factory;
 
+	/** Default constructor */
 	public XMLParser() {
 		factory = DocumentBuilderFactory.newInstance();
 		factory.setIgnoringComments(false);

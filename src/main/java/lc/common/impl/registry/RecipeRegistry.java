@@ -14,6 +14,12 @@ import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
 import lc.core.LCRuntime;
 
+/**
+ * Recipe registry implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class RecipeRegistry implements IRecipeRegistry {
 
 	/** Pool of all known definitions. */

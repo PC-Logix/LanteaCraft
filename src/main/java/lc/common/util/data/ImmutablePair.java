@@ -2,8 +2,7 @@ package lc.common.util.data;
 
 /**
  * A instance of an immutable pair. The A-B pair represented by this object are
- * immutable, but may not be immutable themselves (such as List). ALL GLORY TO
- * THE IMMUTABLE PAIR.
+ * immutable, but may not be immutable themselves.
  * 
  * @author AfterLifeLochie
  * 

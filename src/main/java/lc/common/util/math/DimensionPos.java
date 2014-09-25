@@ -3,11 +3,29 @@ package lc.common.util.math;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
+/**
+ * A position in four-dimensional space (dimension, x, y, z)
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class DimensionPos {
 
+	/** The dimension element */
 	public int dimension;
-	public int x, y, z;
+	/** The x-coordinate */
+	public int x;
+	/** The y-coordinate */
+	public int y;
+	/** The z-coordinate */
+	public int z;
 
+	/**
+	 * Create a new position based on a tile
+	 * 
+	 * @param te
+	 *            The tile entity
+	 */
 	public DimensionPos(TileEntity te) {
 		this(te.getWorldObj().provider.dimensionId, te.xCoord, te.yCoord, te.zCoord);
 	}

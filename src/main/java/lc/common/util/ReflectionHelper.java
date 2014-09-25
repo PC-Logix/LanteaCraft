@@ -3,6 +3,12 @@ package lc.common.util;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Reflection utilities
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class ReflectionHelper {
 
 	/**

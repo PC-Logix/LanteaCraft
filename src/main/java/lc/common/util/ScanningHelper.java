@@ -7,6 +7,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
+/**
+ * World scanning helpers
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class ScanningHelper {
 
 	/**

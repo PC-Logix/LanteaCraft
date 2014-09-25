@@ -1,5 +1,11 @@
 package lc.common.util.math;
 
+/**
+ * Direction map
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class Directions {
 
 	static int globalToLocalSideTable[][] = { { 0, 0, 0, 0 }, // DOWN

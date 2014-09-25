@@ -5,6 +5,12 @@ import lc.api.components.IDefinitionRegistry;
 import lc.api.components.IRecipeRegistry;
 import lc.api.components.IRegistryContainer;
 
+/**
+ * Registry container implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class RegistryContainer implements IRegistryContainer {
 
 	private ComponentRegistry components = new ComponentRegistry();

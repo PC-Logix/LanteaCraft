@@ -16,6 +16,12 @@ import lc.api.drivers.DeviceDrivers;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
 
+/**
+ * IC2 power driver.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 @DeviceDrivers.DriverProvider(type = IntegrationType.POWER)
 public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmitter, IEnergySink, IEnergySource {
 

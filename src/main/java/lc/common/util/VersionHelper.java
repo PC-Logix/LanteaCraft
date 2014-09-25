@@ -10,6 +10,12 @@ import lc.common.LCLog;
 import lc.core.BuildInfo;
 import net.minecraftforge.common.MinecraftForge;
 
+/**
+ * Version checking thread.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class VersionHelper extends Thread {
 
 	private final String charset = "UTF-8";
@@ -17,12 +23,18 @@ public class VersionHelper extends Thread {
 	private final String server;
 	private int tries = 0;
 
+	/** Remote version data */
 	public String remoteVersion;
+	/** Remote version data */
 	public String remoteLabel;
+	/** Remote version data */
 	public int remoteBuild;
+	/** Has finished ? */
 	public boolean finished = false;
+	/** Needs notification ? */
 	public boolean requiresNotify = false;
 
+	/** Default constructor */
 	public VersionHelper() {
 		super();
 		StringBuilder serverPath = new StringBuilder();

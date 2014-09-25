@@ -3,6 +3,12 @@ package lc.common.impl.registry;
 import lc.api.components.ComponentType;
 import lc.api.components.IComponentRegistry;
 
+/**
+ * Component registry implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class ComponentRegistry implements IComponentRegistry {
 
 	@Override

@@ -36,6 +36,9 @@ public class ObserverContext {
 	 */
 	public HashMap<Integer, Integer> states = new HashMap<Integer, Integer>();
 
+	/**
+	 * Create a new default observer context.
+	 */
 	public ObserverContext() {
 		id = ObserverContext.getUID();
 	}

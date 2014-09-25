@@ -9,13 +9,29 @@ import net.minecraft.nbt.NBTTagCompound;
 import lc.common.network.packets.abs.LCNBTPacket;
 import lc.common.util.math.DimensionPos;
 
+/**
+ * Tile synchronization packet
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class LCTileSync extends LCNBTPacket {
 
+	/** The tag compound */
 	public NBTTagCompound compound;
 
+	/** Create a blank sync packet */
 	public LCTileSync() {
 	}
 
+	/**
+	 * Create a new sync packet
+	 * 
+	 * @param target
+	 *            The target element
+	 * @param compound
+	 *            The tag compound
+	 */
 	public LCTileSync(DimensionPos target, NBTTagCompound compound) {
 		this.target = target;
 		this.compound = compound;

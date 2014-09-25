@@ -74,6 +74,11 @@ public class AnalyticsHelper extends Thread {
 		LCLog.warn("Failed to push metrics data, maximum tries exceeded!");
 	}
 
+	/**
+	 * Get all report data
+	 * 
+	 * @return The report data to send.
+	 */
 	public String getReportData() {
 		return report.toString();
 	}
