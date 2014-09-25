@@ -13,7 +13,7 @@ public interface IListRecipeManager extends Iterable<IRecipeInput> {
 	/**
 	 * Adds a stack to the list.
 	 * 
-	 * @param stack Stack to add
+	 * @param input Stack to add
 	 */
 	public void add(IRecipeInput input);
 

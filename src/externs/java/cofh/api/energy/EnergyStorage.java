@@ -3,7 +3,8 @@ package cofh.api.energy;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Reference implementation of {@link IEnergyStorage}. Use/extend this or implement your own.
+ * Reference implementation of {@link IEnergyStorage}. Use/extend this or
+ * implement your own.
  * 
  * @author King Lemming
  * 
@@ -87,10 +88,12 @@ public class EnergyStorage implements IEnergyStorage {
 	}
 
 	/**
-	 * This function is included to allow for server -> client sync. Do not call this externally to the containing Tile Entity, as not all IEnergyHandlers are
-	 * guaranteed to have it.
+	 * This function is included to allow for server -> client sync. Do not call
+	 * this externally to the containing Tile Entity, as not all IEnergyHandlers
+	 * are guaranteed to have it.
 	 * 
 	 * @param energy
+	 *            Energy
 	 */
 	public void setEnergyStored(int energy) {
 
@@ -104,10 +107,12 @@ public class EnergyStorage implements IEnergyStorage {
 	}
 
 	/**
-	 * This function is included to allow the containing tile to directly and efficiently modify the energy contained in the EnergyStorage. Do not rely on this
-	 * externally, as not all IEnergyHandlers are guaranteed to have it.
+	 * This function is included to allow the containing tile to directly and
+	 * efficiently modify the energy contained in the EnergyStorage. Do not rely
+	 * on this externally, as not all IEnergyHandlers are guaranteed to have it.
 	 * 
 	 * @param energy
+	 *            energy
 	 */
 	public void modifyEnergyStored(int energy) {
 

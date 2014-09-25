@@ -37,7 +37,8 @@ public final class IronEngineCoolant {
 	}
 
 	public static Coolant getCoolant(FluidStack fluidStack) {
-		return fluidStack != null && fluidStack.getFluid() != null ? liquidCoolants.get(fluidStack.getFluid().getName()) : null;
+		return fluidStack != null && fluidStack.getFluid() != null ? liquidCoolants
+				.get(fluidStack.getFluid().getName()) : null;
 	}
 
 	public interface Coolant {
@@ -57,12 +58,14 @@ public final class IronEngineCoolant {
 	}
 
 	/**
-	 * Adds a solid coolant like Ice Blocks. The FluidStack must contain a registered
-	 * Coolant Fluid or nothing will happen. You do not need to call this for
-	 * Fluid Containers.
-	 *
+	 * Adds a solid coolant like Ice Blocks. The FluidStack must contain a
+	 * registered Coolant Fluid or nothing will happen. You do not need to call
+	 * this for Fluid Containers.
+	 * 
 	 * @param stack
+	 *            stack
 	 * @param coolant
+	 *            coolant
 	 */
 	public static void addCoolant(final ItemStack stack, final FluidStack coolant) {
 		if (stack != null && stack.getItem() != null && coolant != null) {
@@ -76,7 +79,9 @@ public final class IronEngineCoolant {
 	 * this for Fluid Containers.
 	 * 
 	 * @param item
+	 *            item
 	 * @param coolant
+	 *            coolant
 	 */
 	public static void addCoolant(final Item item, final int metadata, final FluidStack coolant) {
 		addCoolant(new ItemStack(item, 1, metadata), coolant);

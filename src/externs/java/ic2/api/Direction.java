@@ -21,7 +21,7 @@ public enum Direction {
 	/**
 	 * -Y
 	 */
-	YN(2), //MC-Code starts with 0 here
+	YN(2), // MC-Code starts with 0 here
 	/**
 	 * +Y
 	 */
@@ -40,18 +40,20 @@ public enum Direction {
 		this.dir = dir1;
 	}
 
-	/*public CoordinateTuple ApplyToCoordinates(CoordinateTuple coordinates) {
-		CoordinateTuple ret = new CoordinateTuple(coordinates);
-
-		ret.coords[dir/2] += GetSign();
-
-		return ret;
-	}*/
+	/*
+	 * public CoordinateTuple ApplyToCoordinates(CoordinateTuple coordinates) {
+	 * CoordinateTuple ret = new CoordinateTuple(coordinates);
+	 * 
+	 * ret.coords[dir/2] += GetSign();
+	 * 
+	 * return ret; }
+	 */
 
 	/**
 	 * Get the tile entity next to a tile entity following this direction.
-	 *
-	 * @param tileEntity tile entity to check
+	 * 
+	 * @param te
+	 *            tile entity to check
 	 * @return Adjacent tile entity or null if none exists
 	 */
 	public TileEntity applyToTileEntity(TileEntity te) {
@@ -60,23 +62,28 @@ public enum Direction {
 
 	/**
 	 * Get the tile entity next to a position following this direction.
-	 *
-	 * @param world World to check
-	 * @param x X coordinate to check from
-	 * @param y Y coordinate to check from
-	 * @param z Z coordinate to check from
+	 * 
+	 * @param world
+	 *            World to check
+	 * @param x
+	 *            X coordinate to check from
+	 * @param y
+	 *            Y coordinate to check from
+	 * @param z
+	 *            Z coordinate to check from
 	 * @return Adjacent tile entity or null if none exists
 	 */
 	public TileEntity applyTo(World world, int x, int y, int z) {
 		int coords[] = { x, y, z };
 
-		coords[dir/2] += getSign();
+		coords[dir / 2] += getSign();
 
 		if (world != null && world.blockExists(coords[0], coords[1], coords[2])) {
 			try {
 				return world.getTileEntity(coords[0], coords[1], coords[2]);
 			} catch (Exception e) {
-				throw new RuntimeException("error getting TileEntity at dim "+world.provider.dimensionId+" "+coords[0]+"/"+coords[1]+"/"+coords[2]);
+				throw new RuntimeException("error getting TileEntity at dim " + world.provider.dimensionId + " "
+						+ coords[0] + "/" + coords[1] + "/" + coords[2]);
 			}
 		}
 
@@ -92,7 +99,8 @@ public enum Direction {
 		int inverseDir = dir - getSign();
 
 		for (Direction direction : directions) {
-			if (direction.dir == inverseDir) return direction;
+			if (direction.dir == inverseDir)
+				return direction;
 		}
 
 		return this;
@@ -109,7 +117,7 @@ public enum Direction {
 
 	/**
 	 * Determine direction sign (N for negative or P for positive).
-	 *
+	 * 
 	 * @return -1 if the direction is negative, +1 if the direction is positive
 	 */
 	private int getSign() {
@@ -123,4 +131,3 @@ public enum Direction {
 	private int dir;
 	public static final Direction[] directions = Direction.values();
 }
-

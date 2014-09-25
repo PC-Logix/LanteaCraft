@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 /**
  * Implement this interface on Item classes that are themselves inventories.
  * 
- * A reference implementation is provided {@link ItemInventoryContainer}.
+ * A reference implementation is provided ItemInventoryContainer.
  * 
  * @author King Lemming
  * 

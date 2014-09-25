@@ -31,7 +31,7 @@ import buildcraft.api.mj.MjBattery;
  * receive power from other Engines.
  * <p/>
  * See TileRefinery for a simple example of a power using machine.
- *
+ * 
  * @see IPowerReceptor
  * @see IPowerEmitter
  */
@@ -43,21 +43,21 @@ public final class PowerHandler implements IBatteryProvider {
 
 		public boolean canReceiveFromPipes() {
 			switch (this) {
-				case MACHINE:
-				case STORAGE:
-					return true;
-				default:
-					return false;
+			case MACHINE:
+			case STORAGE:
+				return true;
+			default:
+				return false;
 			}
 		}
 
 		public boolean eatsEngineExcess() {
 			switch (this) {
-				case MACHINE:
-				case STORAGE:
-					return true;
-				default:
-					return false;
+			case MACHINE:
+			case STORAGE:
+				return true;
+			default:
+				return false;
 			}
 		}
 	}
@@ -79,8 +79,9 @@ public final class PowerHandler implements IBatteryProvider {
 
 		/**
 		 * Simple constructor for simple Perdition per tick.
-		 *
-		 * @param powerLoss power loss per tick
+		 * 
+		 * @param powerLoss
+		 *            power loss per tick
 		 */
 		public PerditionCalculator(double powerLoss) {
 			if (powerLoss < MIN_POWERLOSS) {
@@ -94,10 +95,13 @@ public final class PowerHandler implements IBatteryProvider {
 		 * Apply the perdition algorithm to the current stored energy. This
 		 * function can only be called once per tick, but it might not be called
 		 * every tick. It is triggered by any manipulation of the stored energy.
-		 *
-		 * @param powerHandler the PowerHandler requesting the perdition update
-		 * @param current      the current stored energy
-		 * @param ticksPassed  ticks since the last time this function was called
+		 * 
+		 * @param powerHandler
+		 *            the PowerHandler requesting the perdition update
+		 * @param current
+		 *            the current stored energy
+		 * @param ticksPassed
+		 *            ticks since the last time this function was called
 		 */
 		public double applyPerdition(PowerHandler powerHandler, double current, long ticksPassed) {
 			double newPower = current - powerLoss * ticksPassed;
@@ -113,7 +117,7 @@ public final class PowerHandler implements IBatteryProvider {
 		 * Taxes a flat rate on all incoming power.
 		 * <p/>
 		 * Defaults to 0% tax rate.
-		 *
+		 * 
 		 * @return percent of input to tax
 		 */
 		public double getTaxPercent() {
@@ -191,7 +195,7 @@ public final class PowerHandler implements IBatteryProvider {
 
 	/**
 	 * Setup your PowerHandler's settings.
-	 *
+	 * 
 	 * @param minEnergyReceived
 	 *            This is the minimum about of power that will be accepted by
 	 *            the PowerHandler. This should generally be greater than the
@@ -213,7 +217,7 @@ public final class PowerHandler implements IBatteryProvider {
 	 *            being common.
 	 */
 	public void configure(double minEnergyReceived, double maxEnergyReceived, double activationEnergy,
-						  double maxStoredEnergy) {
+			double maxStoredEnergy) {
 		double localMaxEnergyReceived = maxEnergyReceived;
 
 		if (minEnergyReceived > localMaxEnergyReceived) {
@@ -229,9 +233,11 @@ public final class PowerHandler implements IBatteryProvider {
 	 * <p/>
 	 * This function is mostly for legacy implementations. See
 	 * PerditionCalculator for more complex perdition formulas.
-	 *
+	 * 
 	 * @param powerLoss
+	 *            qty
 	 * @param powerLossRegularity
+	 *            reg
 	 * @see PerditionCalculator
 	 */
 	public void configurePowerPerdition(int powerLoss, int powerLossRegularity) {
@@ -248,8 +254,9 @@ public final class PowerHandler implements IBatteryProvider {
 	 * <p/>
 	 * For example if you want exponentially increasing loss based on amount
 	 * stored.
-	 *
+	 * 
 	 * @param perdition
+	 *            perdition
 	 */
 	public void setPerdition(PerditionCalculator perdition) {
 		if (perdition == null) {
@@ -286,15 +293,18 @@ public final class PowerHandler implements IBatteryProvider {
 		double energyStored = getEnergyStored();
 		if (perditionTracker.markTimeIfDelay(receptor.getWorld()) && energyStored > 0) {
 			double prev = energyStored;
-			double newEnergy = getPerdition().applyPerdition(this, energyStored, perditionTracker.durationOfLastDelay());
+			double newEnergy = getPerdition()
+					.applyPerdition(this, energyStored, perditionTracker.durationOfLastDelay());
 			if (newEnergy == 0 || newEnergy < energyStored) {
 				battery.setEnergyStored(energyStored = newEnergy);
 			} else {
-				battery.setEnergyStored(energyStored = DEFAULT_PERDITION.applyPerdition(this, energyStored, perditionTracker.durationOfLastDelay()));
+				battery.setEnergyStored(energyStored = DEFAULT_PERDITION.applyPerdition(this, energyStored,
+						perditionTracker.durationOfLastDelay()));
 			}
 			validateEnergy();
 
-			averageLostPower = (averageLostPower * ROLLING_AVERAGE_NUMERATOR + (prev - energyStored)) * ROLLING_AVERAGE_DENOMINATOR;
+			averageLostPower = (averageLostPower * ROLLING_AVERAGE_NUMERATOR + (prev - energyStored))
+					* ROLLING_AVERAGE_DENOMINATOR;
 		}
 	}
 
@@ -324,10 +334,13 @@ public final class PowerHandler implements IBatteryProvider {
 	/**
 	 * Extract energy from the PowerHandler. You must call this even if doWork()
 	 * triggers.
-	 *
+	 * 
 	 * @param min
+	 *            min
 	 * @param max
+	 *            max
 	 * @param doUse
+	 *            doUse
 	 * @return amount used
 	 */
 	public double useEnergy(double min, double max, boolean doUse) {
@@ -438,9 +451,11 @@ public final class PowerHandler implements IBatteryProvider {
 		 * Add power to the PowerReceiver from an external source.
 		 * <p/>
 		 * IPowerEmitters are responsible for calling this themselves.
-		 *
+		 * 
 		 * @param quantity
+		 *            qty
 		 * @param from
+		 *            from
 		 * @return the amount of power used
 		 */
 		public double receiveEnergy(Type source, final double quantity, ForgeDirection from) {
@@ -465,7 +480,8 @@ public final class PowerHandler implements IBatteryProvider {
 				used = Math.min(quantity, getMaxEnergyReceived());
 			}
 
-			averageReceivedPower = (averageReceivedPower * ROLLING_AVERAGE_NUMERATOR + used) * ROLLING_AVERAGE_DENOMINATOR;
+			averageReceivedPower = (averageReceivedPower * ROLLING_AVERAGE_NUMERATOR + used)
+					* ROLLING_AVERAGE_DENOMINATOR;
 
 			return used;
 		}
