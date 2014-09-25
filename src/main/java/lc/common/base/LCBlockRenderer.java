@@ -6,7 +6,6 @@ import lc.common.util.math.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -22,7 +21,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 	public abstract Class<? extends LCBlockRenderer> getParent();
 
 	/**
-	 * Render a block in the player's inventory. If this operation cannot be
+	 * Render a block in the player's hasInventory. If this operation cannot be
 	 * completed by the renderer, it must return <code>false</code>. If the
 	 * rendering can be completed, the renderer must return <code>true</code>.
 	 * If the rendering is not completed, the parent renderer will be called to

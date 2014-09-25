@@ -19,11 +19,28 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+/**
+ * Generic tile-entity implementation with default handlers.
+ * 
+ * @author AfterLifeLochie
+ */
 public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler, IBlockEventHandler {
 
 	private static HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>> callbacks = new HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>>();
 
-	public static void registerCallback(Class me, String method, String event) {
+	/**
+	 * Register an event callback on a class. Must provide the method name, the
+	 * event name and the self class.
+	 * 
+	 * @param me
+	 *            The self class.
+	 * @param method
+	 *            The method to invoke.
+	 * @param event
+	 *            The event to invoke for.
+	 */
+	@SuppressWarnings("unchecked")
+	public static void registerCallback(Class<?> me, String method, String event) {
 		Class<? extends LCTile> tile = (Class<? extends LCTile>) me;
 		if (!callbacks.containsKey(tile))
 			callbacks.put(tile, new HashMap<String, ArrayList<String>>());
@@ -35,7 +52,16 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		LCLog.debug("Driver adding callback on class %s event %s: %s", me.getName(), event, method);
 	}
 
+	/**
+	 * Perform a set of callbacks now, if any are registered for an event.
+	 * 
+	 * @param me
+	 *            The self object
+	 * @param type
+	 *            The type of event
+	 */
 	public static void doCallbacksNow(Object me, String type) {
+		@SuppressWarnings("unchecked")
 		Class<? extends LCTile> meClazz = (Class<? extends LCTile>) me.getClass();
 		ArrayList<String> cbs = getCallbacks(meClazz, type);
 		if (cbs == null)
@@ -43,6 +69,15 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		doCallbacks(meClazz, me, cbs);
 	}
 
+	/**
+	 * Get a list of callbacks for the self class.
+	 * 
+	 * @param me
+	 *            The self class
+	 * @param type
+	 *            The type of event
+	 * @return A list of callable methods for event handling
+	 */
 	public static ArrayList<String> getCallbacks(Class<? extends LCTile> me, String type) {
 		if (!callbacks.containsKey(me))
 			return null;
@@ -52,6 +87,17 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		return me_calls.get(type);
 	}
 
+	/**
+	 * Perform a list of callbacks on a provided type, the self class and a list
+	 * of methods.
+	 * 
+	 * @param me
+	 *            The self class
+	 * @param meObject
+	 *            The self object
+	 * @param methods
+	 *            The methods to invoke
+	 */
 	public static void doCallbacks(Class<? extends LCTile> me, Object meObject, ArrayList<String> methods) {
 		Method[] meMethods = me.getMethods();
 		for (String methodName : methods) {
@@ -71,32 +117,78 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	private NBTTagCompound compound;
 	private boolean nbtDirty;
 
+	/**
+	 * Get the hasInventory of the tile. If the tile has no hasInventory,
+	 * <code>null</code> may be returned.
+	 * 
+	 * @return The tile's hasInventory, or <code>null</code>
+	 */
 	public abstract IInventory getInventory();
 
+	/** Called to perform update logic on the client. */
 	public abstract void thinkClient();
 
+	/** Called to perform update logic on the server. */
 	public abstract void thinkServer();
 
+	/**
+	 * Called to handle a packet.
+	 * 
+	 * @param packet
+	 *            The packet element
+	 * @param player
+	 *            The player
+	 * @throws LCNetworkException
+	 *             Any network exception when handling the packet
+	 */
 	public abstract void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException;
 
+	/**
+	 * Called to request the save of any tile data to a provided NBT compound.
+	 * 
+	 * @param compound
+	 *            The compound to save to.
+	 */
 	public abstract void save(NBTTagCompound compound);
 
+	/**
+	 * Called to request the load of any tile data from a provided NBT compound.
+	 * 
+	 * @param compound
+	 *            The compound to load from.
+	 */
 	public abstract void load(NBTTagCompound compound);
 
+	/**
+	 * Get the default compound.
+	 * 
+	 * @return The default NBT compound for the tile.
+	 */
 	public NBTTagCompound getBaseCompound() {
 		return compound;
 	}
 
+	/**
+	 * Get the canRotate of the block. The default is NORTH.
+	 * 
+	 * @return The canRotate of the block.
+	 */
 	public ForgeDirection getRotation() {
-		if (compound == null || !compound.hasKey("rotation"))
+		if (compound == null || !compound.hasKey("canRotate"))
 			return ForgeDirection.NORTH;
-		return ForgeDirection.getOrientation(compound.getInteger("rotation"));
+		return ForgeDirection.getOrientation(compound.getInteger("canRotate"));
 	}
 
+	/**
+	 * Set the canRotate of the block.
+	 * 
+	 * @param direction
+	 *            The canRotate.
+	 */
 	public void setRotation(ForgeDirection direction) {
 		if (compound == null)
 			compound = new NBTTagCompound();
-		compound.setInteger("rotation", direction.ordinal());
+		compound.setInteger("canRotate", direction.ordinal());
 		markNbtDirty();
 	}
 

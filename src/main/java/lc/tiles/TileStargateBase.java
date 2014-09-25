@@ -9,6 +9,12 @@ import lc.common.base.LCTile;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 
+/**
+ * Stargate Base tile implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 @DriverCandidate(types = { IntegrationType.POWER })
 public class TileStargateBase extends LCTile {
 

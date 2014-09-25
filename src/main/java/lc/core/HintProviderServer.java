@@ -5,6 +5,12 @@ import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
 
+/**
+ * Server-side hint provider
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class HintProviderServer implements IHintProvider {
 
 	public HintProviderServer() {

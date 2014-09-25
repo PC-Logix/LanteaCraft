@@ -6,8 +6,6 @@ import java.util.List;
 import lc.common.LCLog;
 import net.minecraft.launchwrapper.IClassTransformer;
 
-import org.apache.logging.log4j.Level;
-
 /**
  * {@link LCCoreTransformer} acts as a proxy for children transformers in the
  * {@link LCCoreMod} instance.

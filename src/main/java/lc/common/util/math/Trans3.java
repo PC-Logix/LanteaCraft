@@ -23,7 +23,7 @@ public class Trans3 {
 	public Vector3 offset;
 
 	/**
-	 * A matrix representing a rotation.
+	 * A matrix representing a canRotate.
 	 */
 	public Matrix3 rotation;
 
@@ -38,7 +38,7 @@ public class Trans3 {
 	 * @param v
 	 *            The offset vector.
 	 * @param m
-	 *            The rotation matrix.
+	 *            The canRotate matrix.
 	 * @param s
 	 *            The scaling factor.
 	 */
@@ -63,8 +63,8 @@ public class Trans3 {
 	}
 
 	/**
-	 * Translates this Trans3 into a new Trans3, applying the local rotation and
-	 * local offset factors.
+	 * Translates this Trans3 into a new Trans3, applying the local canRotate
+	 * and local offset factors.
 	 * 
 	 * @param dx
 	 *            The offset on the x-axis.
@@ -72,6 +72,7 @@ public class Trans3 {
 	 *            The offset on the y-axis.
 	 * @param dz
 	 *            The offset on the z-axis.
+	 * @return The Trans3 product.
 	 */
 	public Trans3 translate(double dx, double dy, double dz) {
 		return new Trans3(offset.add(rotation.mul(dx * scaling, dy * scaling, dz * scaling)), rotation, scaling);
@@ -81,7 +82,7 @@ public class Trans3 {
 	 * Rotates this Trans3 around a Matrix3.
 	 * 
 	 * @param m
-	 *            The rotation matrix.
+	 *            The canRotate matrix.
 	 * @return The new Trans3.
 	 */
 	public Trans3 rotate(Matrix3 m) {
@@ -153,8 +154,8 @@ public class Trans3 {
 	}
 
 	static AxisAlignedBB boxEnclosing(Vector3 p, Vector3 q) {
-		return AxisAlignedBB.getBoundingBox(min(p.x, q.x), min(p.y, q.y), min(p.z, q.z), max(p.x, q.x),
-				max(p.y, q.y), max(p.z, q.z));
+		return AxisAlignedBB.getBoundingBox(min(p.x, q.x), min(p.y, q.y), min(p.z, q.z), max(p.x, q.x), max(p.y, q.y),
+				max(p.z, q.z));
 	}
 
 }

@@ -5,6 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotations for run-time tagging.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public final class RuntimeAnnotation {
 
 	@Retention(RetentionPolicy.RUNTIME)

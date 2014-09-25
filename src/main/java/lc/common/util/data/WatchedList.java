@@ -79,6 +79,9 @@ public class WatchedList<A, B> extends Observable {
 
 	/**
 	 * @see HashMap#get(Object)
+	 * @param key
+	 *            The key to get from
+	 * @return The value associated with the key
 	 */
 	public B get(A key) {
 		return values.get(key);
@@ -86,6 +89,7 @@ public class WatchedList<A, B> extends Observable {
 
 	/**
 	 * @see HashMap#entrySet()
+	 * @return The entry set.
 	 */
 	public Set<Entry<A, B>> entrySet() {
 		return values.entrySet();
@@ -107,6 +111,9 @@ public class WatchedList<A, B> extends Observable {
 
 	/**
 	 * @see HashMap#containsKey(Object)
+	 * @param key
+	 *            The key to check
+	 * @return If the list contains an element with the key specified.
 	 */
 	public boolean containsKey(String key) {
 		return values.containsKey(key);
@@ -114,6 +121,11 @@ public class WatchedList<A, B> extends Observable {
 
 	/**
 	 * @see HashMap#put(Object, Object)
+	 * @param key
+	 *            The put key
+	 * @param value
+	 *            The put value
+	 * @return The value put
 	 */
 	public B set(A key, B value) {
 		// Operation SET(A, B) will create key A if it does not exist already;
@@ -135,6 +147,7 @@ public class WatchedList<A, B> extends Observable {
 
 	/**
 	 * @see HashMap#size()
+	 * @return The number of elements in the list
 	 */
 	public int size() {
 		return values.size();
@@ -142,6 +155,9 @@ public class WatchedList<A, B> extends Observable {
 
 	/**
 	 * @see HashMap#remove(Object)
+	 * @param key
+	 *            The key to remove
+	 * @return The element value removed
 	 */
 	public B remove(A key) {
 		modify();
@@ -176,6 +192,8 @@ public class WatchedList<A, B> extends Observable {
 	/**
 	 * Gets the history of all key values which have been added this Observable
 	 * session.
+	 * 
+	 * @return A list of all added keys
 	 */
 	public ArrayList<A> added() {
 		return key_add;
@@ -184,6 +202,8 @@ public class WatchedList<A, B> extends Observable {
 	/**
 	 * Gets the history of all key values which have been removed this
 	 * Observable session.
+	 * 
+	 * @return A list of all removed keys
 	 */
 	public ArrayList<A> removed() {
 		return key_remove;
@@ -192,6 +212,8 @@ public class WatchedList<A, B> extends Observable {
 	/**
 	 * Gets the history of all key values which have had their associated value
 	 * modified this Observable session.
+	 * 
+	 * @return A list of all modified keys
 	 */
 	public ArrayList<A> modified() {
 		return key_modified;

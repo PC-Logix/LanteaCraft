@@ -10,6 +10,12 @@ import java.util.Map.Entry;
 import lc.common.LCLog;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Resource access controller.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class ResourceAccess {
 	private static HashMap<String, ResourceLocation> resourceMap = new HashMap<String, ResourceLocation>();
 
@@ -20,10 +26,22 @@ public class ResourceAccess {
 
 	private static String assetKey = "pcl_lc";
 
+	/**
+	 * Get the system asset key.
+	 * 
+	 * @return The system asset key.
+	 */
 	public static String getAssetKey() {
 		return assetKey;
 	}
 
+	/**
+	 * Get a resource based on a fully-qualified name.
+	 * 
+	 * @param resourceName
+	 *            The resource name.
+	 * @return A path to the resource
+	 */
 	public static ResourceLocation getNamedResource(String resourceName) {
 		if (!resourceMap.containsKey(resourceName))
 			resourceMap.put(resourceName, new ResourceLocation(getAssetKey(), resourceName));
@@ -42,6 +60,16 @@ public class ResourceAccess {
 		return resourceMap.get(resourceName);
 	}
 
+	/**
+	 * Formats a resource name using pattern matching.
+	 * 
+	 * @param format
+	 *            The format string.
+	 * @param args
+	 *            Any additional formatting arguments (see
+	 *            {@link String#format(String, Object...)})
+	 * @return The formatted resource name.
+	 */
 	public static String formatResourceName(String format, Object... args) {
 		format = format.replace("${TEX_QUALITY}", "32");
 		format = format.replace("${ASSET_KEY}", getAssetKey());
@@ -61,6 +89,9 @@ public class ResourceAccess {
 		return result;
 	}
 
+	/**
+	 * Save the resource access history to file.
+	 */
 	public static void saveRegistry() {
 		try {
 			PrintStream resources = new PrintStream(new File("resourceMap.txt"));

@@ -13,6 +13,12 @@ import lc.api.world.OreType;
 import lc.common.base.LCItem;
 import lc.core.ResourceAccess;
 
+/**
+ * Ore block implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 @Definition(name = "lanteaOre", type = ComponentType.CORE, itemClass = ItemLanteaOre.class)
 public class ItemLanteaOre extends LCItem {
 	private IIcon missing;

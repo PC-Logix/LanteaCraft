@@ -14,6 +14,7 @@ import lc.core.LCRuntime;
 
 public class DefinitionWrapperProvider {
 
+	@SuppressWarnings("unchecked")
 	public static ILanteaCraftDefinition provide(Class<?> clazz) {
 		LCLog.debug("Attempting to provide definition for class %s.", clazz);
 		ILanteaCraftDefinition result = null;

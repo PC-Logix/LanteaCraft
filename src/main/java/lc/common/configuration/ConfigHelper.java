@@ -72,6 +72,8 @@ public class ConfigHelper {
 	 *            The name of the qualifier
 	 * @param paramName
 	 *            The name of the parameter
+	 * @param comment
+	 *            The parameter comment, if any
 	 * @param value
 	 *            The value to set
 	 * @return The value which exists or was set

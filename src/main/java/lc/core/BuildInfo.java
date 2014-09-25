@@ -7,11 +7,18 @@ package lc.core;
  * @author AfterLifeLochie
  */
 public class BuildInfo {
+	/** Mod name */
 	public static final String modName = "LanteaCraft";
+	/** Mod ID */
 	public static final String modID = "LanteaCraft";
 
+	/** Mod version number */
 	public static final String versionNumber = "@VERSION@";
+	/** Build number (auto-gen) */
 	public static final String buildNumber = "@BUILD@";
+
+	/** The base path for all API requests */
+	public static final String webAPI = "http://lanteacraft.com/api/";
 
 	/**
 	 * Enable or disable general debugging mode.
@@ -32,6 +39,11 @@ public class BuildInfo {
 		DEBUG_MASQ = true && DEBUG;
 	}
 
+	/**
+	 * Get the build number of the mod
+	 * 
+	 * @return The build number
+	 */
 	public static int getBuildNumber() {
 		try {
 			return Integer.parseInt(buildNumber);
@@ -40,9 +52,12 @@ public class BuildInfo {
 		}
 	}
 
+	/**
+	 * Get if this build is a development version
+	 * 
+	 * @return If this build is a development version
+	 */
 	public static boolean isDevelopmentEnvironment() {
 		return IS_DEV_ENV;
 	}
-
-	public static final String webAPI = "http://lanteacraft.com/api/";
 }

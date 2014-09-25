@@ -212,6 +212,8 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 *            The unlocalized name for the bucket.
 	 * @param bucketTextureName
 	 *            The texture target for the bucket.
+	 * @param tab
+	 *            The creative tab to display the bucket on.
 	 * @return The ItemSpecialBucket singleton for this host fluid.
 	 */
 	public LCItemBucket registerSpecialBucket(LCBlock hostOf, String unlocalizedName, String bucketTextureName,

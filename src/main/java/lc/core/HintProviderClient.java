@@ -12,7 +12,6 @@ import lc.common.base.LCItem;
 import lc.common.base.LCItemRenderHook;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
-import lc.common.impl.registry.DefinitionRegistry;
 
 public class HintProviderClient extends HintProviderServer {
 
@@ -43,10 +42,10 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public void postInit() {
 		super.postInit();
-		DefinitionRegistry registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void provideHints(ILanteaCraftDefinition definition) {
 		super.provideHints(definition);

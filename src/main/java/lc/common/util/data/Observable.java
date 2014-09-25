@@ -35,6 +35,10 @@ public class Observable {
 
 	/**
 	 * Returns the state of this Observable.
+	 * 
+	 * @param context
+	 *            The Observer context.
+	 * @return The state of this Observable.
 	 */
 	public boolean modified(ObserverContext context) {
 		if (!context.states.containsKey(System.identityHashCode(this)))
@@ -47,6 +51,9 @@ public class Observable {
 	/**
 	 * Resets the state of this Observable. If the Observable has any meta-data
 	 * about the change in the Observable state, it should also be reset.
+	 * 
+	 * @param context
+	 *            The observer context.
 	 */
 	public void clearModified(ObserverContext context) {
 		modified = false;

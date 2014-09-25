@@ -23,13 +23,13 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 			ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.EAST };
 
 	/** If the block instance is opaque */
-	protected boolean opaque = false;
+	protected boolean isOpaque = false;
 	/** If the block instance has more than one type */
-	protected boolean typed = false;
-	/** If the block instance has an inventory */
-	protected boolean inventory = false;
-	/** If the block instance observes rotation */
-	protected boolean rotation = false;
+	protected boolean isTyped = false;
+	/** If the block instance has an hasInventory */
+	protected boolean hasInventory = false;
+	/** If the block instance observes canRotate */
+	protected boolean canRotate = false;
 	/** The type of tile entity for this block */
 	protected Class<? extends LCTile> tileType;
 	/** The renderer ID for this block */
@@ -40,7 +40,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 	}
 
 	public LCBlock setOpaque(boolean b) {
-		opaque = b;
+		isOpaque = b;
 		return this;
 	}
 
@@ -54,22 +54,22 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 	}
 
 	public LCBlock setProvidesInventory(boolean b) {
-		inventory = b;
+		hasInventory = b;
 		return this;
 	}
 
 	public LCBlock setCanRotate(boolean b) {
-		rotation = b;
+		canRotate = b;
 		return this;
 	}
 
 	public LCBlock setProvidesTypes(boolean b) {
-		typed = b;
+		isTyped = b;
 		return this;
 	}
 
 	public boolean canRotate() {
-		return rotation;
+		return canRotate;
 	}
 
 	public ForgeDirection getRotation(IBlockAccess world, int x, int y, int z) {
@@ -90,12 +90,12 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	@Override
 	public final boolean isOpaqueCube() {
-		return opaque;
+		return isOpaque;
 	}
 
 	@Override
 	public boolean renderAsNormalBlock() {
-		return opaque;
+		return isOpaque;
 	}
 
 	@Override

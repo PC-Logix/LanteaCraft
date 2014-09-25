@@ -220,6 +220,7 @@ public class Vector3 {
 	 * 
 	 * @param direction
 	 *            The ForgeDirection to translate.
+	 * @return The Vector3 product.
 	 */
 	public Vector3 add(ForgeDirection direction) {
 		return new Vector3(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ);

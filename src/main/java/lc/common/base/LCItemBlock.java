@@ -15,7 +15,7 @@ public class LCItemBlock extends ItemBlock {
 	public LCItemBlock(LCBlock block) {
 		super(block);
 		this.blockType = block;
-		setHasSubtypes(block.typed);
+		setHasSubtypes(block.isTyped);
 	}
 
 	@Override

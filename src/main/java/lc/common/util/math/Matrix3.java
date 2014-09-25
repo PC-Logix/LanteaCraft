@@ -1,11 +1,20 @@
 package lc.common.util.math;
 
+/**
+ * 3D matrix implementation
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class Matrix3 {
 
+	/** Identity matrix */
 	public static Matrix3 ident = new Matrix3();
 
+	/** Rotation map */
 	public static Matrix3[] turnRotations = { rotY(0), rotY(90), rotY(180), rotY(270) };
 
+	/** Side rotation map */
 	public static Matrix3[] sideRotations = {
 	/* 0, -Y, DOWN */ident,
 	/* 1, +Y, UP */rotX(180),
@@ -14,16 +23,38 @@ public class Matrix3 {
 	/* 4, -X, WEST */rotZ(-90).mul(rotY(90)),
 	/* 5, +X, EAST */rotZ(90).mul(rotY(-90)) };
 
+	/** Unit matricies */
 	public double m[][] = new double[][] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
 
+	/**
+	 * Rotation over x axis
+	 * 
+	 * @param deg
+	 *            The angle in degrees
+	 * @return A rotation matrix for the angle specified
+	 * */
 	public static Matrix3 rotX(double deg) {
 		return rot(deg, 1, 2);
 	}
 
+	/**
+	 * Rotation over y axis
+	 * 
+	 * @param deg
+	 *            The angle in degrees
+	 * @return A rotation matrix for the angle specified
+	 * */
 	public static Matrix3 rotY(double deg) {
 		return rot(deg, 2, 0);
 	}
 
+	/**
+	 * Rotation over z axis
+	 * 
+	 * @param deg
+	 *            The angle in degrees
+	 * @return A rotation matrix for the angle specified
+	 * */
 	public static Matrix3 rotZ(double deg) {
 		return rot(deg, 0, 1);
 	}
@@ -40,6 +71,13 @@ public class Matrix3 {
 		return r;
 	}
 
+	/**
+	 * Multiply this matrix against another matrix
+	 * 
+	 * @param n
+	 *            The other matrix
+	 * @return The product matrix
+	 */
 	public Matrix3 mul(Matrix3 n) {
 		Matrix3 r = new Matrix3();
 		for (int i = 0; i < 3; i++)
@@ -57,29 +95,59 @@ public class Matrix3 {
 	// return r;
 	// }
 
+	/**
+	 * Multiply this matrix against a vector.
+	 * 
+	 * @param x
+	 *            The x of the vector
+	 * @param y
+	 *            The y of the vector
+	 * @param z
+	 *            The z of the vector
+	 * @return The product of matrix * vector result
+	 */
 	public Vector3 mul(double x, double y, double z) {
 		return new Vector3(x * m[0][0] + y * m[0][1] + z * m[0][2], x * m[1][0] + y * m[1][1] + z * m[1][2], x
 				* m[2][0] + y * m[2][1] + z * m[2][2]);
 	}
 
+	/**
+	 * Multiply this matrix by inverse against a vector
+	 * 
+	 * @param x
+	 *            The x of the vector
+	 * @param y
+	 *            The y of the vector
+	 * @param z
+	 *            The z of the vector
+	 * @return The product of matrix * vector result
+	 */
 	public Vector3 imul(double x, double y, double z) {
 		// Multiply by inverse, assuming an orthonormal matrix
 		return new Vector3(x * m[0][0] + y * m[1][0] + z * m[2][0], x * m[0][1] + y * m[1][1] + z * m[2][1], x
 				* m[0][2] + y * m[1][2] + z * m[2][2]);
 	}
 
+	/**
+	 * Multiply this matrix against a vector
+	 * 
+	 * @param v
+	 *            The vector
+	 * @return The product of matrix * vector result
+	 */
 	public Vector3 mul(Vector3 v) {
 		return mul(v.x, v.y, v.z);
 	}
 
+	/**
+	 * Multiply this matrix by inverse against a vector
+	 * 
+	 * @param v
+	 *            The vector
+	 * @return The product of matrix * vector result
+	 */
 	public Vector3 imul(Vector3 v) {
 		return imul(v.x, v.y, v.z);
-	}
-
-	public void dump() {
-		// for (int i = 0; i < 3; i++)
-		// System.out.printf("[%6.3f %6.3f %6.3f]\n", m[i][0], m[i][1],
-		// m[i][2]);
 	}
 
 }

@@ -28,6 +28,7 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 
 	private Class<? extends LCTile> tileType;
 
+	@SuppressWarnings("unchecked")
 	public BlockItemDefinition(ComponentType ownerType, String defName, Class<? extends LCBlock> blockType,
 			Class<? extends Item> itemType) {
 		this.ownerType = ownerType;

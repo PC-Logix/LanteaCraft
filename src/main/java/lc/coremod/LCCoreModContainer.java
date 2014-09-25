@@ -13,6 +13,8 @@ import cpw.mods.fml.common.ModMetadata;
  * @author AfterLifeLochie
  */
 public class LCCoreModContainer extends DummyModContainer {
+
+	/** General constructor */
 	public LCCoreModContainer() {
 		super(new ModMetadata());
 		ModMetadata md = getMetadata();

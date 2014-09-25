@@ -16,6 +16,12 @@ import lc.common.impl.registry.RegistryContainer;
 import lc.common.network.LCPacketPipeline;
 import lc.common.util.LCCreativeTabManager;
 
+/**
+ * LanteaCraft main mod container
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class LCRuntime implements ILCAPIProxy {
 
 	/** The runtime instance */
