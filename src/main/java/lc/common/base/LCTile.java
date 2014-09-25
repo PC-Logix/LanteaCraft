@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import lc.api.event.IBlockEventHandler;
 import lc.common.LCLog;
 import lc.common.network.IPacketHandler;
 import lc.common.network.LCNetworkException;
@@ -18,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler {
+public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler, IBlockEventHandler {
 
 	private static HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>> callbacks = new HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>>();
 
@@ -99,10 +100,12 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		markNbtDirty();
 	}
 
+	@Override
 	public void blockPlaced() {
 		LCTile.doCallbacksNow(this, "blockPlace");
 	}
 
+	@Override
 	public void blockBroken() {
 		LCTile.doCallbacksNow(this, "blockBreak");
 	}

@@ -23,9 +23,10 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Render a block in the player's inventory. If this operation cannot be
-	 * completed by the renderer, it must return {@link false}. If the rendering
-	 * can be completed, the renderer must return {@link true}. If the rendering
-	 * is not completed, the parent renderer will be called to render the block.
+	 * completed by the renderer, it must return <code>false</code>. If the
+	 * rendering can be completed, the renderer must return <code>true</code>.
+	 * If the rendering is not completed, the parent renderer will be called to
+	 * render the block.
 	 * 
 	 * @param block
 	 *            The block
@@ -34,15 +35,15 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 	 * @param metadata
 	 *            The block's metadata
 	 * @return If the rendering was completed
-	 * @see {@link LCBlockRenderer#getParent()}
+	 * @see LCBlockRenderer#getParent()
 	 */
 	public abstract boolean renderInventoryBlock(Block block, RenderBlocks renderer, int metadata);
 
 	/**
 	 * Render a block in the world. If this operation cannot be completed by the
-	 * renderer, it must return {@link false}. If the rendering can be
-	 * completed, the renderer must return {@link true}. If the rendering is not
-	 * completed, the parent renderer will be called to render the block.
+	 * renderer, it must return <code>false</code>. If the rendering can be
+	 * completed, the renderer must return <code>true</code>. If the rendering
+	 * is not completed, the parent renderer will be called to render the block.
 	 * 
 	 * @param block
 	 *            The block
@@ -57,7 +58,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 	 * @param z
 	 *            The z-coordinate of the block
 	 * @return If the rendering was completed
-	 * @see {@link LCBlockRenderer#getParent()}
+	 * @see LCBlockRenderer#getParent()
 	 */
 	public abstract boolean renderWorldBlock(Block block, RenderBlocks renderer, IBlockAccess world, int x, int y, int z);
 

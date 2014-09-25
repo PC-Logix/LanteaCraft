@@ -19,13 +19,19 @@ import lc.tiles.TileStargateRing;
 @Definition(name = "stargateRing", type = ComponentType.STARGATE, blockClass = BlockStargateRing.class, itemBlockClass = ItemBlockStargateRing.class, tileClass = TileStargateRing.class)
 public class BlockStargateRing extends LCBlock {
 
+	/** Mask for all block types */
 	private static final int blockMask = 2;
+	/** Number of total blocks inside block */
 	private static final int blockCount = StargateType.count() * blockMask;
 
+	/** Mask for crafting blocks */
 	private static final int blockCraftingMask = 1;
+	/** Number of total craftable types */
 	private static final int blockCraftingCount = blockCount;
 
+	/** Top and bottom textures */
 	IIcon topAndBottomTexture[] = new IIcon[StargateType.count()];
+	/** Side textures */
 	IIcon sideTextures[][] = new IIcon[StargateType.count()][blockMask];
 
 	public BlockStargateRing() {

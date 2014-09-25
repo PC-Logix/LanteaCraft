@@ -14,9 +14,10 @@ public abstract class LCTileRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Render a tile-entity in the world. If this operation cannot be completed
-	 * by the renderer, it must return {@link false}. If the rendering can be
-	 * completed, the renderer must return {@link true}. If the rendering is not
-	 * completed, the parent renderer will be called to render the block.
+	 * by the renderer, it must return <code>false</code>. If the rendering can
+	 * be completed, the renderer must return <code>true</code>. If the
+	 * rendering is not completed, the parent renderer will be called to render
+	 * the block.
 	 * 
 	 * @param tile
 	 *            The tile entity object
@@ -27,8 +28,9 @@ public abstract class LCTileRenderer implements ILanteaCraftRenderer {
 	 * @param z
 	 *            The z-coordinate of the tile
 	 * @param partialTickTime
+	 *            The number of frames in this tick
 	 * @return If the rendering was completed
-	 * @see {@link LCBlockRenderer#getParent()}
+	 * @see lc.common.base.LCBlockRenderer#getParent()
 	 */
 	public abstract boolean renderTileEntityAt(LCTile tile, double x, double y, double z, float partialTickTime);
 

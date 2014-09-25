@@ -88,7 +88,7 @@ public class WatchedValue<T extends Object> extends Observable {
 
 	/**
 	 * Returns the hash-code of the last value in this WatchedValue. This value
-	 * may be {@link null} if the last value was a {@link null} value.
+	 * may be <code>null</code> if the last value was a <code>null</code> value.
 	 */
 	public int last() {
 		return this.last;

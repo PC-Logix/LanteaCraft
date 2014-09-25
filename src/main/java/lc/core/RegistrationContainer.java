@@ -14,22 +14,22 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 public class RegistrationContainer {
 
 	public void preinit(LCRuntime runtime, FMLPreInitializationEvent event) {
+		// TODO: Auto-generated method stub
+	}
+
+	public void init(LCRuntime runtime, FMLInitializationEvent event) {
 		Blocks blocks = runtime.blocks();
 		Items items = runtime.items();
 
 		blocks.stargateRingBlock = DefinitionWrapperProvider.provide(BlockStargateRing.class);
 		blocks.stargateBaseBlock = DefinitionWrapperProvider.provide(BlockStargateBase.class);
 		blocks.lanteaOreBlock = DefinitionWrapperProvider.provide(BlockLanteaOre.class);
-		
+
 		items.lanteaOreItem = DefinitionWrapperProvider.provide(ItemLanteaOre.class);
 	}
 
-	public void init(LCRuntime runtime, FMLInitializationEvent event) {
-
-	}
-
 	public void postinit(LCRuntime runtime, FMLPostInitializationEvent event) {
-
+		// TODO: Auto-generated method stub
 	}
 
 }

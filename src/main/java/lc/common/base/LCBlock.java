@@ -1,5 +1,6 @@
 package lc.common.base;
 
+import lc.api.event.IBlockEventHandler;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.api.rendering.IEntityRenderInfo;
 import lc.api.rendering.IRenderInfo;
@@ -126,15 +127,18 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		super.onBlockAdded(world, x, y, z);
-		if (tileType != null)
-			((LCTile) world.getTileEntity(x, y, z)).blockPlaced();
+		if (tileType != null) {
+			TileEntity tile = world.getTileEntity(x, y, z);
+			if (tile instanceof IBlockEventHandler)
+				((IBlockEventHandler) tile).blockPlaced();
+		}
 	}
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block a, int b) {
-		LCTile tile = (LCTile) world.getTileEntity(x, y, z);
-		if (tile != null)
-			((LCTile) world.getTileEntity(x, y, z)).blockBroken();
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile != null && tile instanceof IBlockEventHandler)
+			((IBlockEventHandler) tile).blockBroken();
 		super.breakBlock(world, x, y, z, a, b);
 	}
 

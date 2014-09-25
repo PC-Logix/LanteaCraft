@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import lc.api.defs.HintProvider;
 import lc.common.LCLog;
 import net.minecraft.launchwrapper.IClassTransformer;
 

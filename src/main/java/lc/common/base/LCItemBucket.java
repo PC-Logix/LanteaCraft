@@ -26,8 +26,6 @@ public class LCItemBucket extends ItemBucket {
 	 * Creates an instance of an LCItemBucket and initializes it with default
 	 * properties and with the {@link SpecialBucketHandler} registry.
 	 * 
-	 * @param i
-	 *            The item ID to use for this bucket.
 	 * @param hostBlock
 	 *            The fluid block this Bucket is hosting.
 	 */

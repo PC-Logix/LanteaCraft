@@ -78,14 +78,14 @@ public class WatchedList<A, B> extends Observable {
 	}
 
 	/**
-	 * @see {@link HashMap#get(Object)}
+	 * @see HashMap#get(Object)
 	 */
 	public B get(A key) {
 		return values.get(key);
 	}
 
 	/**
-	 * @see {@link HashMap#entrySet()}
+	 * @see HashMap#entrySet()
 	 */
 	public Set<Entry<A, B>> entrySet() {
 		return values.entrySet();
@@ -106,14 +106,14 @@ public class WatchedList<A, B> extends Observable {
 	}
 
 	/**
-	 * @see {@link HashMap#containsKey(Object)}
+	 * @see HashMap#containsKey(Object)
 	 */
 	public boolean containsKey(String key) {
 		return values.containsKey(key);
 	}
 
 	/**
-	 * @see {@link HashMap#put(Object, Object)}
+	 * @see HashMap#put(Object, Object)
 	 */
 	public B set(A key, B value) {
 		// Operation SET(A, B) will create key A if it does not exist already;
@@ -134,14 +134,14 @@ public class WatchedList<A, B> extends Observable {
 	}
 
 	/**
-	 * @see {@link HashMap#size()}
+	 * @see HashMap#size()
 	 */
 	public int size() {
 		return values.size();
 	}
 
 	/**
-	 * @see {@link HashMap#remove(Object)}
+	 * @see HashMap#remove(Object)
 	 */
 	public B remove(A key) {
 		modify();
@@ -156,7 +156,7 @@ public class WatchedList<A, B> extends Observable {
 	}
 
 	/**
-	 * @see {@link HashMap#clear()}
+	 * @see HashMap#clear()
 	 */
 	public void clear() {
 		modify();
