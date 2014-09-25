@@ -223,3 +223,4 @@ pip-log.txt
 /server_runtime/
 *~
 *.lnk
+/.apt_generated
