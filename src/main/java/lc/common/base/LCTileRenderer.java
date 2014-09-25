@@ -2,6 +2,12 @@ package lc.common.base;
 
 import lc.api.defs.ILanteaCraftRenderer;
 
+/**
+ * Generic tile rendering stub.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public abstract class LCTileRenderer implements ILanteaCraftRenderer {
 
 	/**

@@ -1,7 +1,18 @@
 package lc.api.components;
 
+/**
+ * Recipe type list.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public enum RecipeType {
 
-	SHAPELESS, SHAPED, SMELTING;
+	/** Shapeless recipe */
+	SHAPELESS,
+	/** Shaped recipe */
+	SHAPED,
+	/** Smelting recipe */
+	SMELTING;
 
 }

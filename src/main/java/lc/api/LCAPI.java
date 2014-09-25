@@ -1,9 +1,21 @@
 package lc.api;
 
+/**
+ * LanteaCraft API access class
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class LCAPI {
 
+	/** Runtime container */
 	private static ILCAPIProxy runtime = null;
 
+	/**
+	 * Fetch the current LanteaCraft API runtime element.
+	 * 
+	 * @return The current LanteaCraft API runtime.
+	 */
 	public static ILCAPIProxy runtime() {
 		if (runtime == null)
 			try {

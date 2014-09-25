@@ -10,12 +10,22 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
+/**
+ * Block rendering hook.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
 
 	private final int renderIdx;
 	private final DefinitionRegistry registry;
 	private final DefaultBlockRenderer defaultBlockRenderer;
 
+	/**
+	 * Create a new rendering hook.
+	 * @param renderIdx The renderer ID of this hook
+	 */
 	public LCBlockRenderHook(int renderIdx) {
 		this.renderIdx = renderIdx;
 		this.registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();

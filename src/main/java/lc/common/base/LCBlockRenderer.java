@@ -74,10 +74,32 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 	private boolean textureOverridden;
 	private float cmr, cmg, cmb;
 
+	/**
+	 * Render a default inventory block
+	 * 
+	 * @param block
+	 *            The block
+	 * @param metadata
+	 *            The metadata
+	 * @param rb
+	 *            The renderblocks instance
+	 */
 	public void renderDefaultInventoryBlock(Block block, int metadata, RenderBlocks rb) {
 		renderDefaultInventoryBlock(block, metadata, new Trans3(0, 0, 0), rb);
 	}
 
+	/**
+	 * Render a default inventory block
+	 * 
+	 * @param block
+	 *            The block
+	 * @param metadata
+	 *            The metadata
+	 * @param trans
+	 *            The local transformation matrix
+	 * @param rb
+	 *            The renderblocks instance
+	 */
 	public void renderDefaultInventoryBlock(Block block, int metadata, Trans3 trans, RenderBlocks rb) {
 		setUpTextureOverride(rb);
 		setColorMultiplier(0xffffff);
@@ -88,10 +110,46 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 		tess.draw();
 	}
 
+	/**
+	 * Render a default world block
+	 * 
+	 * @param world
+	 *            The world
+	 * @param x
+	 *            The x-coord
+	 * @param y
+	 *            The y-coord
+	 * @param z
+	 *            The z-coord
+	 * @param block
+	 *            The block
+	 * @param rb
+	 *            The renderblocks instance
+	 * @return If rendering was a success
+	 */
 	public boolean renderDefaultWorldBlock(IBlockAccess world, int x, int y, int z, Block block, RenderBlocks rb) {
 		return renderDefaultWorldBlock(world, x, y, z, block, new Trans3(x + 0.5, y + 0.5, z + 0.5), rb);
 	}
 
+	/**
+	 * Render a default world block
+	 * 
+	 * @param world
+	 *            The world
+	 * @param x
+	 *            The x-coord
+	 * @param y
+	 *            The y-coord
+	 * @param z
+	 *            The z-coord
+	 * @param block
+	 *            The block
+	 * @param trans
+	 *            The world render transformation matrix
+	 * @param rb
+	 *            The renderblocks instance
+	 * @return If rendering was a success
+	 */
 	public boolean renderDefaultWorldBlock(IBlockAccess world, int x, int y, int z, Block block, Trans3 trans,
 			RenderBlocks rb) {
 		setUpTextureOverride(rb);
@@ -134,6 +192,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 		v1 = icon.getMaxV();
 	}
 
+	/** The cube face map */
 	protected static double cubeMap[][] = { { -0.5, -0.5, 0.5, 0, 0, -1, 1, 0, 0, 0, -1, 0 }, // DOWN
 			{ -0.5, 0.5, -0.5, 0, 0, 1, 1, 0, 0, 0, 1, 0 }, // UP
 			{ 0.5, 0.5, -0.5, 0, -1, 0, -1, 0, 0, 0, 0, -1 }, // NORTH
@@ -142,6 +201,28 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 			{ 0.5, 0.5, 0.5, 0, -1, 0, 0, 0, -1, 1, 0, 0 }, // EAST
 	};
 
+	/**
+	 * Render a cube on screen
+	 * 
+	 * @param tess
+	 *            The tesselator
+	 * @param t
+	 *            The rotation transformation element
+	 * @param world
+	 *            The world
+	 * @param block
+	 *            The block
+	 * @param x
+	 *            The x-coord
+	 * @param y
+	 *            The y-coord
+	 * @param z
+	 *            The z-coord
+	 * @param data
+	 *            The block data
+	 * @param brightness
+	 *            The block brightness
+	 */
 	protected void renderCube(Tessellator tess, Trans3 t, IBlockAccess world, Block block, int x, int y, int z,
 			int data, int brightness) {
 		for (int i = 0; i < 6; i++) {

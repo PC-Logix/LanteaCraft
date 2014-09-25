@@ -3,6 +3,12 @@ package lc.common.base;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
+/**
+ * Tile entity rendering hook.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class LCTileRenderHook extends TileEntitySpecialRenderer {
 
 	@Override

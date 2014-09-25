@@ -5,6 +5,12 @@ import java.lang.annotation.RetentionPolicy;
 
 import lc.api.components.IntegrationType;
 
+/**
+ * Device driver annotations and markers for at-runtime use.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class DeviceDrivers {
 
 	/**

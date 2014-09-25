@@ -12,6 +12,12 @@ import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
 import lc.core.LCRuntime;
 
+/**
+ * Implementation of definitions for items and blocks
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class BlockItemDefinition implements ILanteaCraftDefinition {
 
 	private final ComponentType ownerType;
@@ -28,6 +34,18 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 
 	private Class<? extends LCTile> tileType;
 
+	/**
+	 * Create a new block or item definition
+	 * 
+	 * @param ownerType
+	 *            The type of owner
+	 * @param defName
+	 *            The definition name
+	 * @param blockType
+	 *            The block class
+	 * @param itemType
+	 *            The item class
+	 */
 	@SuppressWarnings("unchecked")
 	public BlockItemDefinition(ComponentType ownerType, String defName, Class<? extends LCBlock> blockType,
 			Class<? extends Item> itemType) {
@@ -43,6 +61,13 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 		this.blockType = blockType;
 	}
 
+	/**
+	 * Set the tile provider type
+	 * 
+	 * @param type
+	 *            The tile type
+	 * @return This definition.
+	 */
 	public BlockItemDefinition setTileType(Class<? extends LCTile> type) {
 		tileType = type;
 		return this;

@@ -9,6 +9,12 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 
+/**
+ * NBT packet type implementation
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public abstract class LCNBTPacket extends LCTargetPacket {
 
 	@Override

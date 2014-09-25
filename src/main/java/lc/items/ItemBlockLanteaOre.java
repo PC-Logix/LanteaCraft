@@ -7,6 +7,12 @@ import lc.common.base.LCItemBlock;
 
 public class ItemBlockLanteaOre extends LCItemBlock {
 
+	/**
+	 * Create a new ItemBlock wrapper around a block type
+	 * 
+	 * @param block
+	 *            The block type
+	 */
 	public ItemBlockLanteaOre(Block block) {
 		super(block);
 		// TODO Auto-generated constructor stub

@@ -5,15 +5,33 @@ import lc.core.BuildInfo;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Logger implementation
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class LCLog {
 
 	private static Logger log;
 	private static Logger cmLog;
 
+	/**
+	 * Set the global logger
+	 * 
+	 * @param log
+	 *            The new global logger
+	 */
 	public static void setLogger(Logger log) {
 		LCLog.log = log;
 	}
-	
+
+	/**
+	 * Set the coremod logger
+	 * 
+	 * @param log
+	 *            The new coremod logger
+	 */
 	public static void setCoremodLogger(Logger log) {
 		LCLog.cmLog = log;
 	}
@@ -61,28 +79,61 @@ public class LCLog {
 		}
 	}
 
+	/**
+	 * Push a fatal log entry to the log
+	 * 
+	 * @param args
+	 *            The log entry arguments
+	 */
 	public static void fatal(Object... args) {
 		push(Level.FATAL, args);
 	}
 
+	/**
+	 * Push a warn log entry to the log
+	 * 
+	 * @param args
+	 *            The log entry arguments
+	 */
 	public static void warn(Object... args) {
 		push(Level.WARN, args);
 	}
 
+	/**
+	 * Push an info log entry to the log
+	 * 
+	 * @param args
+	 *            The log entry arguments
+	 */
 	public static void info(Object... args) {
 		push(Level.INFO, args);
 	}
 
+	/**
+	 * Push a debug log entry to the log
+	 * 
+	 * @param args
+	 *            The log entry arguments
+	 */
 	public static void debug(Object... args) {
 		if (BuildInfo.DEBUG)
 			push((BuildInfo.DEBUG_MASQ) ? Level.INFO : Level.DEBUG, args);
 	}
 
+	/**
+	 * Push a trace log entry to the log
+	 * 
+	 * @param args
+	 *            The log entry arguments
+	 */
 	public static void trace(Object... args) {
 		if (BuildInfo.DEBUG)
 			push((BuildInfo.DEBUG_MASQ) ? Level.INFO : Level.TRACE, args);
 	}
 
+	/**
+	 * Display the run-time information about the mod.
+	 */
 	public static void showRuntimeInfo() {
 		info("Loading LanteaCraft build %s (debugging: %s, masq: %s).", BuildInfo.getBuildNumber(), BuildInfo.DEBUG,
 				BuildInfo.DEBUG_MASQ);

@@ -1,5 +1,28 @@
 package lc.api.components;
 
+/**
+ * List of all component types.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public enum ComponentType {
-	CORE, STARGATE, POWER, MACHINE, WORLDGEN, CRITTERS, DECOR, INTEGRATION, GALAXY;
+	/** Core */
+	CORE,
+	/** Stargate */
+	STARGATE,
+	/** Power */
+	POWER,
+	/** Machines */
+	MACHINE,
+	/** Worldgen */
+	WORLDGEN,
+	/** Critters */
+	CRITTERS,
+	/** Decor */
+	DECOR,
+	/** Integration */
+	INTEGRATION,
+	/** Galaxy */
+	GALAXY;
 }

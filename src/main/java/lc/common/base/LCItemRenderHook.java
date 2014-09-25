@@ -3,6 +3,12 @@ package lc.common.base;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
+/**
+ * Item rendering hook.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class LCItemRenderHook implements IItemRenderer {
 
 	@Override

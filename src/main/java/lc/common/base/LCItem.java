@@ -3,6 +3,12 @@ package lc.common.base;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Generic item implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class LCItem extends Item {
 
 	@Override
