@@ -22,7 +22,7 @@ import lc.tiles.TileStargateBase;
 public class BlockStargateBase extends LCBlock {
 
 	private static final int blockCount = StargateType.count();
-	
+
 	private static final IBlockRenderInfo renderInfo = new IBlockRenderInfo() {
 
 		@Override
@@ -36,7 +36,7 @@ public class BlockStargateBase extends LCBlock {
 			// TODO Auto-generated method stub
 			return true;
 		}
-		
+
 	};
 
 	protected IIcon topAndBottomTexture[] = new IIcon[StargateType.count()];
@@ -97,7 +97,9 @@ public class BlockStargateBase extends LCBlock {
 	public int damageDropped(int metadata) {
 		return getBaseType(metadata);
 	}
-	
+
 	@Override
-	public IBlockRenderInfo block() { return BlockStargateBase.renderInfo; }
+	public IBlockRenderInfo block() {
+		return BlockStargateBase.renderInfo;
+	}
 }
