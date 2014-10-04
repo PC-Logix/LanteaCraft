@@ -16,7 +16,8 @@ public class BlockFilter {
 		targetMetadata = metadata;
 	}
 
-	public boolean matches(World world, Block blockOf, int x, int y, int z) {
+	public boolean matches(World world, int x, int y, int z) {
+		Block blockOf = world.getBlock(x, y, z);
 		if (blockOf.equals(targetBlock) && targetMetadata == -1)
 			return true;
 		if (blockOf.equals(targetBlock) && targetMetadata == world.getBlockMetadata(x, y, z))

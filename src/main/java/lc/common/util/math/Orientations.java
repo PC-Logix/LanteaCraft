@@ -8,24 +8,34 @@ package lc.common.util.math;
  */
 public enum Orientations {
 	/** Cardinal north */
-	NORTH,
+	NORTH(Matrix3.ident),
 	/** Cardinal south */
-	SOUTH,
+	SOUTH(Matrix3.ident),
 	/** Cardinal east */
-	EAST,
+	EAST(Matrix3.ident),
 	/** Cardinal west */
-	WEST,
+	WEST(Matrix3.ident),
 	/** Cardinal northeast */
-	NORTHEAST,
+	NORTHEAST(Matrix3.ident),
 	/** Cardinal southeast */
-	SOUTHEAST,
+	SOUTHEAST(Matrix3.ident),
 	/** Cardinal southwest */
-	SOUTHWEST,
+	SOUTHWEST(Matrix3.ident),
 	/** Cardinal northwest */
-	NORTHWEST,
+	NORTHWEST(Matrix3.ident),
 	/** Facing north-south */
-	NORTHSOUTH,
+	NORTHSOUTH(Matrix3.ident),
 	/** Facing east-west */
-	EASTWEST;
+	EASTWEST(Matrix3.ident);
+
+	private final Matrix3 rotation;
+
+	Orientations(Matrix3 rotation) {
+		this.rotation = rotation;
+	}
+
+	public Matrix3 rotation() {
+		return rotation;
+	}
 
 }

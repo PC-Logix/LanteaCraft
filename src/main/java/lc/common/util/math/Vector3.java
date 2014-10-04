@@ -71,17 +71,17 @@ public class Vector3 {
 	/**
 	 * The x-component of the vector.
 	 */
-	public double x;
+	public final double x;
 
 	/**
 	 * The y-component of the vector.
 	 */
-	public double y;
+	public final double y;
 
 	/**
 	 * The z-component of the vector.
 	 */
-	public double z;
+	public final double z;
 
 	/**
 	 * Creates a new vector.
@@ -144,11 +144,12 @@ public class Vector3 {
 	 * 
 	 * @param compound
 	 *            The NBT Compound.
+	 * @return The resulting vector element.
 	 */
-	public Vector3(NBTTagCompound compound) {
+	public static Vector3 from(NBTTagCompound compound) {
 		if (!compound.hasKey("x") || !compound.hasKey("y") || !compound.hasKey("z"))
 			throw new IllegalArgumentException("Compound is not a packed Vector3!");
-		new Vector3(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z"));
+		return new Vector3(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z"));
 	}
 
 	/**
