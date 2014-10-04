@@ -1,4 +1,4 @@
-package lc.common.base;
+package lc.common.base.multiblock;
 
 import lc.common.util.data.ImmutableTuple;
 import lc.common.util.game.BlockFilter;
@@ -9,7 +9,7 @@ import lc.common.util.game.BlockFilter;
  * @author AfterLifeLochie
  * 
  */
-public interface IStructureConfiguration {
+public abstract class StructureConfiguration {
 
 	/**
 	 * Get the absolute XYZ dimensions of the structure layout. The values of
@@ -20,7 +20,7 @@ public interface IStructureConfiguration {
 	 * 
 	 * @return The XYZ dimensions of the structure layout.
 	 */
-	public ImmutableTuple<Integer, Integer, Integer> getStructureDimensions();
+	public abstract ImmutableTuple<Integer, Integer, Integer> getStructureDimensions();
 
 	/**
 	 * Get the absolute XYZ center of the structure layout. In the event the
@@ -31,23 +31,23 @@ public interface IStructureConfiguration {
 	 * 
 	 * @return The XYZ coordinate of the structure layout.
 	 */
-	public ImmutableTuple<Integer, Integer, Integer> getStructureCenter();
+	public abstract ImmutableTuple<Integer, Integer, Integer> getStructureCenter();
 
 	/**
 	 * Get the layout of the structure. Returns a three-dimensional collection
 	 * of integers which represent identifiers, not block identifiers, for the
 	 * structure. The number of entries in each dimension should match that of @link
-	 * {@link IStructureConfiguration#getStructureDimensions()}.
+	 * {@link StructureConfiguration#getStructureDimensions()}.
 	 * 
 	 * @return The structure layout
 	 */
-	public int[][][] getStructureLayout();
+	public abstract int[][][] getStructureLayout();
 
 	/**
 	 * Get the mappings between IDs and Block objects
 	 * 
 	 * @return The mappings of the structure
 	 */
-	public BlockFilter[] getBlockMapping();
+	public abstract BlockFilter[] getBlockMapping();
 
 }

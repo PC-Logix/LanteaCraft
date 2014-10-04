@@ -128,8 +128,16 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	/** Called to perform update logic on the client. */
 	public abstract void thinkClient();
 
+	/** Called to perform update logic on the client. */
+	public void thinkClientPost() {
+	}
+
 	/** Called to perform update logic on the server. */
 	public abstract void thinkServer();
+
+	/** Called to perform update logic on the server. */
+	public void thinkServerPost() {
+	}
 
 	/**
 	 * Called to handle a packet.
@@ -225,10 +233,12 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	@Override
 	public void updateEntity() {
 		if (worldObj != null) {
-			if (worldObj.isRemote)
+			if (worldObj.isRemote) {
 				thinkClient();
-			else {
+				thinkClientPost();
+			} else {
 				thinkServer();
+				thinkServerPost();
 				if (nbtDirty) {
 					nbtDirty = false;
 					LCTileSync packet = new LCTileSync(new DimensionPos(this), compound);
