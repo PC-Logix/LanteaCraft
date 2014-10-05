@@ -105,7 +105,7 @@ item.lanteadebug.name=星际之门调试器
 tile.integration.computercraft.name=电脑模组适配器
 
 # Death messages
-death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
+death.attack.wormhole_transient=%1$s被“视界”撕得粉碎.
 
 # Clipboard operations; used as a single string only (no context).
 lc.clipboard.put_success.text=复制到剪贴板!
