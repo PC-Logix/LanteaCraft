@@ -32,4 +32,11 @@ public class BlockFilter {
 	public int getMetadata() {
 		return targetMetadata;
 	}
+
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		result.append("(b: ").append(targetBlock.getClass().getName()).append(",");
+		result.append(" m: ").append(targetMetadata).append(")");
+		return result.toString();
+	}
 }

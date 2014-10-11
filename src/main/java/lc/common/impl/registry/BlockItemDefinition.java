@@ -2,6 +2,7 @@ package lc.common.impl.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import lc.api.components.ComponentType;
@@ -27,10 +28,10 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 	private LCBlock blockObject;
 
 	private final Class<? extends LCItem> itemType;
-	private LCItem itemObject;
+	private Item itemObject;
 
 	private final Class<? extends LCItemBlock> itemBlockType;
-	private LCItemBlock itemBlockObject;
+	private ItemBlock itemBlockObject;
 
 	private Class<? extends LCTile> tileType;
 

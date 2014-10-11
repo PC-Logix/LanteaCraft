@@ -1,5 +1,6 @@
 package lc.tiles;
 
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +23,11 @@ public class TileStargateRing extends LCTile {
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public LCPacket[] sendPackets() throws LCNetworkException {
+		return null;
 	}
 
 	@Override
@@ -52,6 +58,12 @@ public class TileStargateRing extends LCTile {
 	public void load(NBTTagCompound compound) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public String[] debug(Side side) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

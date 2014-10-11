@@ -86,6 +86,15 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 	}
 
 	/**
+	 * Get the tile provided from the block
+	 * 
+	 * @return The tile class
+	 */
+	public Class<? extends LCTile> getTileType() {
+		return tileType;
+	}
+
+	/**
 	 * Set inventory provider state of the block
 	 * 
 	 * @param b

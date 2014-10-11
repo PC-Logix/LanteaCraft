@@ -59,7 +59,7 @@ public class HintProviderClient extends HintProviderServer {
 			ClientRegistry.bindTileEntitySpecialRenderer(theTile, tileRenderingHook);
 		}
 
-		if (definition.getItem() != null) {
+		if (definition.getItem() != null && definition.getItem() instanceof LCItem) {
 			LCItem theItem = (LCItem) definition.getItem();
 			MinecraftForgeClient.registerItemRenderer(theItem, itemRenderingHook);
 		}

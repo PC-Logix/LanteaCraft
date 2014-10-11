@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lc.common.LCLog;
+import lc.common.network.packets.LCMultiblockPacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.network.packets.abs.LCTargetPacket;
 import lc.common.util.math.DimensionPos;
@@ -44,6 +45,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	public void init(String channelName) {
 		channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
 		registerPacket(LCTileSync.class);
+		registerPacket(LCMultiblockPacket.class);
 	}
 
 	@Override
@@ -148,5 +150,12 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET)
 				.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 		channels.get(Side.CLIENT).writeAndFlush(message);
+	}
+
+	public void sendScoped(LCPacket packet, double range) {
+		if (packet instanceof LCTargetPacket)
+			sendToAllAround((LCTargetPacket) packet, ((LCTargetPacket) packet).target, range);
+		else
+			sendToAll(packet);
 	}
 }

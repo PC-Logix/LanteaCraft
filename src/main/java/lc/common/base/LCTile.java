@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cpw.mods.fml.relauncher.Side;
 import lc.api.event.IBlockEventHandler;
 import lc.common.LCLog;
 import lc.common.network.IPacketHandler;
@@ -16,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -152,6 +154,16 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	public abstract void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException;
 
 	/**
+	 * Called to get a description packet from the server.
+	 * 
+	 * @return A list of network packets to send to the client which describe
+	 *         this tile.
+	 * @throws LCNetworkException
+	 *             Any network exception when preparing the packets
+	 */
+	public abstract LCPacket[] sendPackets() throws LCNetworkException;
+
+	/**
 	 * Called to request the save of any tile data to a provided NBT compound.
 	 * 
 	 * @param compound
@@ -166,6 +178,15 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 *            The compound to load from.
 	 */
 	public abstract void load(NBTTagCompound compound);
+
+	/**
+	 * Called to request debugging information about the tile.
+	 * 
+	 * @param side
+	 *            The side the debug is being called on.
+	 * @return Debugging information about the tile.
+	 */
+	public abstract String[] debug(Side side);
 
 	/**
 	 * Get the default compound.
@@ -357,6 +378,19 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		if (getInventory() == null)
 			return false;
 		return getInventory().isItemValidForSlot(p_94041_1_, p_94041_2_);
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		try {
+			LCPacket[] packets = sendPackets();
+			if (packets != null)
+				for (LCPacket packet : packets)
+					LCRuntime.runtime.network().sendScoped(packet, 128.0d);
+		} catch (LCNetworkException e) {
+			LCLog.warn("Error sending network update.", e);
+		}
+		return null;
 	}
 
 }

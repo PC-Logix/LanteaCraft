@@ -6,7 +6,9 @@ import lc.blocks.BlockLanteaOre;
 import lc.blocks.BlockStargateBase;
 import lc.blocks.BlockStargateRing;
 import lc.common.impl.registry.DefinitionWrapperProvider;
+import lc.items.ItemGlasses;
 import lc.items.ItemLanteaOre;
+import li.cil.oc.api.driver.Item;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -47,6 +49,7 @@ public class RegistrationContainer {
 		blocks.stargateBaseBlock = DefinitionWrapperProvider.provide(BlockStargateBase.class);
 		blocks.lanteaOreBlock = DefinitionWrapperProvider.provide(BlockLanteaOre.class);
 
+		items.glasses = DefinitionWrapperProvider.provide(ItemGlasses.class);
 		items.lanteaOreItem = DefinitionWrapperProvider.provide(ItemLanteaOre.class);
 	}
 

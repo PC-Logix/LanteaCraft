@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
+import lc.common.LCLog;
 import lc.common.util.data.ImmutableTuple;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.math.Orientations;
@@ -81,15 +82,16 @@ public abstract class StructureConfiguration {
 		Vector3 dimensions = getStructureDimensions();
 		VectorAABB box = VectorAABB.box(dimensions.sub(offset), dimensions);
 		box.apply(origin.add(getStructureCenter()), orientation.rotation());
-		List<Vector3> elems = box.contents();
-		Iterator<Vector3> each = elems.iterator();
+		Iterator<Vector3> each = box.contents().iterator();
 		while (each.hasNext()) {
 			Vector3 me = each.next();
 			Vector3 mapping = me.sub(origin);
 			int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
 			BlockFilter filter = mappings[cell];
-			if (!filter.matches(world, me.floorX(), me.floorY(), me.floorZ()))
+			if (!filter.matches(world, me.floorX(), me.floorY(), me.floorZ())) {
+				LCLog.info("Failed match on %s at %s %s %s", filter, me.floorX(), me.floorY(), me.floorZ());
 				return false;
+			}
 		}
 		return true;
 	}

@@ -3,21 +3,34 @@ package lc.common.base.multiblock;
 import lc.common.base.LCTile;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
+import lc.common.network.packets.LCMultiblockPacket;
+import lc.common.util.math.DimensionPos;
+import lc.core.LCRuntime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class LCMultiblockTile extends LCTile {
 
-	private MultiblockState state;
-	private MultiblockState state_next;
+	private NBTTagCompound multiblockCompound = new NBTTagCompound();
+	private boolean multiblockNbtDirty = false;
 
 	protected void changeState(MultiblockState next) {
-		if (state != next)
-			state_next = next;
+		if (multiblockCompound.hasKey("state")
+				&& MultiblockState.fromOrdinal(multiblockCompound.getInteger("state")) == next)
+			return;
+		multiblockCompound.setInteger("state_next", next.ordinal());
 	}
 
 	public MultiblockState getState() {
-		return state;
+		if (!multiblockCompound.hasKey("state"))
+			return MultiblockState.NONE;
+		return MultiblockState.fromOrdinal(multiblockCompound.getInteger("state"));
+	}
+
+	public MultiblockState nextState() {
+		if (!multiblockCompound.hasKey("state_next"))
+			return null;
+		return MultiblockState.fromOrdinal(multiblockCompound.getInteger("state_next"));
 	}
 
 	/**
@@ -34,8 +47,11 @@ public abstract class LCMultiblockTile extends LCTile {
 	public void thinkServerPost() {
 		super.thinkServerPost();
 		thinkMultiblock();
-		if (state_next != state) {
-			// TODO: Send update state packet
+		MultiblockState next = nextState();
+		if (next != null && next != getState()) {
+			multiblockCompound.setInteger("state", next.ordinal());
+			LCMultiblockPacket update = new LCMultiblockPacket(new DimensionPos(this), multiblockCompound);
+			LCRuntime.runtime.network().sendToAllAround(update, update.target, 128.0d);
 		}
 	}
 
@@ -43,6 +59,11 @@ public abstract class LCMultiblockTile extends LCTile {
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public LCPacket[] sendPackets() throws LCNetworkException {
+		return new LCPacket[] { new LCMultiblockPacket(new DimensionPos(this), multiblockCompound) };
 	}
 
 	@Override

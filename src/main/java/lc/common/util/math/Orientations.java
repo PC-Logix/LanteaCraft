@@ -1,5 +1,9 @@
 package lc.common.util.math;
 
+import java.util.EnumSet;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 /**
  * Vector orientation map.
  * 
@@ -7,6 +11,8 @@ package lc.common.util.math;
  * 
  */
 public enum Orientations {
+	/** Not an orientation */
+	VOID(null),
 	/** Cardinal north */
 	NORTH(Matrix3.ident),
 	/** Cardinal south */
@@ -36,6 +42,28 @@ public enum Orientations {
 
 	public Matrix3 rotation() {
 		return rotation;
+	}
+
+	public static Orientations from(ForgeDirection dir) {
+		switch (dir) {
+		case NORTH:
+			return Orientations.NORTH;
+		case SOUTH:
+			return Orientations.SOUTH;
+		case EAST:
+			return Orientations.EAST;
+		case WEST:
+			return Orientations.WEST;
+			default: return Orientations.VOID;
+		}
+	}
+
+	public static EnumSet<Orientations> getCardinals() {
+		return EnumSet.of(NORTH, EAST, SOUTH, WEST);
+	}
+
+	public static EnumSet<Orientations> getFacings() {
+		return EnumSet.of(NORTH, EAST);
 	}
 
 }
