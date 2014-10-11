@@ -1,5 +1,7 @@
 package lc.tiles;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -26,8 +28,8 @@ public class TileStargateRing extends LCTile {
 	}
 
 	@Override
-	public LCPacket[] sendPackets() throws LCNetworkException {
-		return null;
+	public void sendPackets(List<LCPacket> packets) throws LCNetworkException {
+		super.sendPackets(packets);
 	}
 
 	@Override

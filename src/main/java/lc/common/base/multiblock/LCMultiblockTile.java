@@ -1,9 +1,12 @@
 package lc.common.base.multiblock;
 
+import java.util.List;
+
 import lc.common.base.LCTile;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCMultiblockPacket;
+import lc.common.network.packets.LCTileSync;
 import lc.common.util.math.DimensionPos;
 import lc.core.LCRuntime;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,13 +60,18 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	@Override
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
-		// TODO Auto-generated method stub
-
+		if (packet instanceof LCMultiblockPacket) {
+			if (worldObj.isRemote) {
+				multiblockCompound = ((LCMultiblockPacket) packet).compound;
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
+		}
 	}
 
 	@Override
-	public LCPacket[] sendPackets() throws LCNetworkException {
-		return new LCPacket[] { new LCMultiblockPacket(new DimensionPos(this), multiblockCompound) };
+	public void sendPackets(List<LCPacket> packets) throws LCNetworkException {
+		super.sendPackets(packets);
+		packets.add(new LCMultiblockPacket(new DimensionPos(this), multiblockCompound));
 	}
 
 	@Override

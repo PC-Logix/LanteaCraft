@@ -1,5 +1,7 @@
 package lc.tiles;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -90,9 +92,8 @@ public class TileStargateBase extends LCMultiblockTile {
 	}
 
 	@Override
-	public LCPacket[] sendPackets() throws LCNetworkException {
-		LCPacket[] packets = super.sendPackets();
-		return packets;
+	public void sendPackets(List<LCPacket> packets) throws LCNetworkException {
+		super.sendPackets(packets);
 	}
 
 	@Override

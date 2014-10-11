@@ -3,6 +3,7 @@ package lc.common.base;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
 import lc.api.event.IBlockEventHandler;
@@ -156,12 +157,12 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	/**
 	 * Called to get a description packet from the server.
 	 * 
-	 * @return A list of network packets to send to the client which describe
-	 *         this tile.
 	 * @throws LCNetworkException
 	 *             Any network exception when preparing the packets
 	 */
-	public abstract LCPacket[] sendPackets() throws LCNetworkException;
+	public void sendPackets(List<LCPacket> packets) throws LCNetworkException {
+		packets.add(new LCTileSync(new DimensionPos(this), compound));
+	}
 
 	/**
 	 * Called to request the save of any tile data to a provided NBT compound.
@@ -383,10 +384,10 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	@Override
 	public Packet getDescriptionPacket() {
 		try {
-			LCPacket[] packets = sendPackets();
-			if (packets != null)
-				for (LCPacket packet : packets)
-					LCRuntime.runtime.network().sendScoped(packet, 128.0d);
+			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
+			sendPackets(packets);
+			for (LCPacket packet : packets)
+				LCRuntime.runtime.network().sendScoped(packet, 128.0d);
 		} catch (LCNetworkException e) {
 			LCLog.warn("Error sending network update.", e);
 		}
