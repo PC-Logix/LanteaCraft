@@ -3,6 +3,7 @@ package lc.common.base.multiblock;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
 import lc.common.LCLog;
@@ -11,6 +12,7 @@ import lc.common.util.game.BlockFilter;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.common.util.math.VectorAABB;
+import lc.common.base.multiblock.LCMultiblockTile;
 
 /**
  * Represents a configuration setup for a particular multiblock structure.
@@ -76,16 +78,17 @@ public abstract class StructureConfiguration {
 	 * @return If the configuration is valid.
 	 */
 	public boolean test(World world, int x, int y, int z, Orientations orientation) {
-		Vector3 origin = new Vector3(x, y, z);
+		VectorAABB box = VectorAABB.boxOf(new Vector3(x, y, z), getStructureDimensions());
+		box = box.translate(Vector3.zero.sub(getStructureCenter()));
+		// box.apply(getStructureCenter(), orientation.rotation());
+
 		BlockFilter[] mappings = getBlockMappings();
-		Vector3 offset = origin.sub(getStructureCenter());
-		Vector3 dimensions = getStructureDimensions();
-		VectorAABB box = VectorAABB.box(dimensions.sub(offset), dimensions);
-		box.apply(origin.add(getStructureCenter()), orientation.rotation());
-		Iterator<Vector3> each = box.contents().iterator();
+
+		List<Vector3> elems = box.contents();
+		Iterator<Vector3> each = elems.iterator();
 		while (each.hasNext()) {
 			Vector3 me = each.next();
-			Vector3 mapping = me.sub(origin);
+			Vector3 mapping = me.sub(new Vector3(x, y, z)).add(getStructureCenter());
 			int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
 			BlockFilter filter = mappings[cell];
 			if (!filter.matches(world, me.floorX(), me.floorY(), me.floorZ())) {
@@ -93,7 +96,26 @@ public abstract class StructureConfiguration {
 				return false;
 			}
 		}
+		LCLog.info("All is OK: checked %s items", elems.size());
 		return true;
+	}
+
+	/**
+	 * Apply a configuration to a set of blocks in the structure.
+	 * 
+	 * @param world
+	 *            The world object.
+	 * @param x
+	 *            The x-coordinate to test
+	 * @param y
+	 *            The y-coordinate to test
+	 * @param z
+	 *            The z-coordinate to test
+	 * @param orientation
+	 *            The orientation
+	 */
+	public void apply(World world, int x, int y, int z, Orientations orientation, LCMultiblockTile owner) {
+		// FIXME
 	}
 
 }

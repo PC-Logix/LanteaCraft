@@ -9,6 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import lc.api.components.IntegrationType;
 import lc.api.drivers.DeviceDrivers.DriverCandidate;
 import lc.common.base.LCTile;
+import lc.common.base.multiblock.LCMultiblockTile;
+import lc.common.base.multiblock.StructureConfiguration;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 
@@ -19,17 +21,21 @@ import lc.common.network.LCPacket;
  * 
  */
 @DriverCandidate(types = { IntegrationType.POWER })
-public class TileStargateRing extends LCTile {
+public class TileStargateRing extends LCMultiblockTile {
 
-	@Override
-	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
-		// TODO Auto-generated method stub
-
+	public TileStargateRing() {
+		setSlave(true);
 	}
 
 	@Override
-	public void sendPackets(List<LCPacket> packets) throws LCNetworkException {
-		super.sendPackets(packets);
+	public StructureConfiguration getConfiguration() {
+		return null;
+	}
+
+	@Override
+	public void thinkMultiblock() {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -51,21 +57,8 @@ public class TileStargateRing extends LCTile {
 	}
 
 	@Override
-	public void save(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void load(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public String[] debug(Side side) {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[] { String.format("Multiblock: %s", getState()) };
 	}
 
 }

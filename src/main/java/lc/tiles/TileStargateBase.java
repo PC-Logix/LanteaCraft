@@ -40,7 +40,7 @@ public class TileStargateBase extends LCMultiblockTile {
 
 		@Override
 		public Vector3 getStructureCenter() {
-			return new Vector3(0, 0, 4);
+			return new Vector3(0, 0, 3);
 		}
 
 		@Override
@@ -64,12 +64,16 @@ public class TileStargateBase extends LCMultiblockTile {
 	public void thinkMultiblock() {
 		if (getState() == MultiblockState.NONE) {
 			Orientations rotation = Orientations.from(getRotation());
-			if (structure.test(getWorldObj(), xCoord, yCoord, zCoord, rotation))
+			if (structure.test(getWorldObj(), xCoord, yCoord, zCoord, rotation)) {
 				changeState(MultiblockState.FORMED);
+				structure.apply(getWorldObj(), xCoord, yCoord, zCoord, rotation, this);
+			}
 		} else {
 			Orientations rotation = Orientations.from(getRotation());
-			if (!structure.test(getWorldObj(), xCoord, yCoord, zCoord, rotation))
+			if (!structure.test(getWorldObj(), xCoord, yCoord, zCoord, rotation)) {
 				changeState(MultiblockState.NONE);
+				structure.apply(getWorldObj(), xCoord, yCoord, zCoord, rotation, null);
+			}
 		}
 	}
 
