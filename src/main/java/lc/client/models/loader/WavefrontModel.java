@@ -7,14 +7,31 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.client.model.obj.GroupObject;
 
 import org.lwjgl.opengl.GL11;
 
+/**
+ * Wavefront model container. Originally from FML, apparently being removed from
+ * FML due to Minecraft's new 'model format'.
+ * 
+ * FIXME: This needs to be rewritten as a proper lexer-parser combo. Using
+ * patterns is exceptionally expensive (even when they're cached) which is the
+ * exact reason *why* we use parser tools (such as look-ahead).
+ * 
+ * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
+ * 
+ */
 public class WavefrontModel {
 
+	/**
+	 * Wavefront model exception container.
+	 * 
+	 * @author AfterLifeLochie
+	 */
 	public static class WavefrontModelException extends Exception {
 		public WavefrontModelException(String reason) {
 			super(reason);
@@ -29,6 +46,11 @@ public class WavefrontModel {
 		}
 	}
 
+	/**
+	 * Model vertex container.
+	 * 
+	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
+	 */
 	public static class Vertex {
 		public float x, y, z;
 
@@ -57,6 +79,11 @@ public class WavefrontModel {
 		}
 	}
 
+	/**
+	 * Model face container.
+	 * 
+	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
+	 */
 	public static class Face {
 		public Vertex[] vertices;
 		public TextureCoord[] texCoords;
@@ -112,6 +139,11 @@ public class WavefrontModel {
 		}
 	}
 
+	/**
+	 * Model element group container.
+	 * 
+	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
+	 */
 	public static class ElementGroup {
 		public final String name;
 		public final ArrayList<Face> faces = new ArrayList<Face>();
@@ -159,15 +191,51 @@ public class WavefrontModel {
 	private static Pattern ruleFace_V = Pattern.compile("(f( \\d+){3,4} *\\n)|(f( \\d+){3,4} *$)");
 	private static Pattern ruleObjGroup = Pattern.compile("([go]( [\\w\\d]+) *\\n)|([go]( [\\w\\d]+) *$)");
 
+	/** The model name */
 	public final String name;
+	/** If the model is ready */
+	public boolean ready = false;
+	/** The stored vertex heap */
 	public final ArrayList<Vertex> vertexHeap = new ArrayList<Vertex>();
+	/** The stored vertext normal heap */
 	public final ArrayList<Vertex> normalHeap = new ArrayList<Vertex>();
+	/** The stored texture coordinate heap */
 	public final ArrayList<TextureCoord> texCoordHeap = new ArrayList<TextureCoord>();
+	/** The stored element group heap */
 	public final ArrayList<ElementGroup> groupHeap = new ArrayList<ElementGroup>();
+	/** The last element group written */
 	public ElementGroup lastGroup;
 
-	public WavefrontModel(String name, InputStream input) {
+	/**
+	 * Create and load a new Wavefront Model.
+	 * 
+	 * @param resource
+	 *            The ResourceLocation of the model file.
+	 * @throws WavefrontModelException
+	 *             Any parse exception.
+	 */
+	public WavefrontModel(ResourceLocation resource) throws WavefrontModelException {
+		try {
+			this.name = resource.toString();
+			loadObjModel(Minecraft.getMinecraft().getResourceManager().getResource(resource).getInputStream());
+		} catch (IOException ex) {
+			throw new WavefrontModelException("Can't read input model file.", ex);
+		}
+	}
+
+	/**
+	 * Create and load a new Wavefront Model.
+	 * 
+	 * @param name
+	 *            The file name.
+	 * @param input
+	 *            The input stream
+	 * @throws WavefrontModelException
+	 *             Any parse exception.
+	 */
+	public WavefrontModel(String name, InputStream input) throws WavefrontModelException {
 		this.name = name;
+		loadObjModel(input);
 	}
 
 	public void renderAll() {
@@ -273,6 +341,7 @@ public class WavefrontModel {
 			}
 
 			groupHeap.add(lastGroup);
+			ready = true;
 		} catch (IOException e) {
 			throw new WavefrontModelException("Stream error.", e);
 		} finally {
