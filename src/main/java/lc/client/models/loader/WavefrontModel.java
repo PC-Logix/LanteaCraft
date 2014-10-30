@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
 
@@ -35,29 +37,77 @@ public class WavefrontModel {
 		public Face() {
 		}
 
+		public void addFaceForRender(Tessellator tessellator) {
+			addFaceForRender(tessellator, 0.0005F);
+		}
+
+		public void addFaceForRender(Tessellator tessellator, float textureOffset) {
+			if (faceNormal == null)
+				faceNormal = this.calculateFaceNormal();
+			tessellator.setNormal(faceNormal.x, faceNormal.y, faceNormal.z);
+
+			float averageU = 0F, averageV = 0F;
+			if ((texCoords != null) && (texCoords.length > 0)) {
+				for (int i = 0; i < texCoords.length; ++i) {
+					averageU += texCoords[i].u;
+					averageV += texCoords[i].v;
+				}
+				averageU = averageU / texCoords.length;
+				averageV = averageV / texCoords.length;
+			}
+
+			float offsetU, offsetV;
+
+			for (int i = 0; i < vertices.length; ++i) {
+				if ((texCoords != null) && (texCoords.length > 0)) {
+					offsetU = textureOffset;
+					offsetV = textureOffset;
+					if (texCoords[i].u > averageU)
+						offsetU = -offsetU;
+					if (texCoords[i].v > averageV)
+						offsetV = -offsetV;
+					tessellator.addVertexWithUV(vertices[i].x, vertices[i].y, vertices[i].z, texCoords[i].u + offsetU,
+							texCoords[i].v + offsetV);
+				} else
+					tessellator.addVertex(vertices[i].x, vertices[i].y, vertices[i].z);
+			}
+		}
+
 		public Vertex calculateFaceNormal() {
-			// TODO Auto-generated method stub
-			return null;
+			Vec3 v1 = Vec3.createVectorHelper(vertices[1].x - vertices[0].x, vertices[1].y - vertices[0].y,
+					vertices[1].z - vertices[0].z);
+			Vec3 v2 = Vec3.createVectorHelper(vertices[2].x - vertices[0].x, vertices[2].y - vertices[0].y,
+					vertices[2].z - vertices[0].z);
+			Vec3 normalVector = v1.crossProduct(v2).normalize();
+			return new Vertex((float) normalVector.xCoord, (float) normalVector.yCoord, (float) normalVector.zCoord);
 		}
 	}
 
 	public static class TextureCoord {
+		public float u, v, w;
+
 		public TextureCoord(float u, float v) {
-			// TODO Auto-generated constructor stub
+			this(u, v, 0F);
 		}
 
-		public TextureCoord(float u, float v, float x) {
-			// TODO Auto-generated constructor stub
+		public TextureCoord(float u, float v, float w) {
+			this.u = u;
+			this.v = v;
+			this.w = w;
 		}
 	}
 
 	public static class Vertex {
-		public Vertex(float x, float y, float z) {
-			// TODO Auto-generated constructor stub
-		}
+		public float x, y, z;
 
 		public Vertex(float x, float y) {
-			// TODO Auto-generated constructor stub
+			this(x, y, 0F);
+		}
+
+		public Vertex(float x, float y, float z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
 		}
 	}
 
