@@ -5,13 +5,15 @@ LanteaCraft is a mod created for Minecraft by MichiyoRavencroft and AfterLifeLoc
 
 License
 ================
-LanteaCraft may be distributed by anyone - this includes modpacks - under the following conditions:
-* You don't make money from downloads - be this pay-gating (AdFly) or other revenue;
+
+LanteaCraft is provided to all persons for free (free as in beer; gratis). 
+
+In short, LanteaCraft may be distributed by anyone - this includes modpacks - under the following conditions:
+* You don't make money (profits or remuneration) from downloads - be this pay-gating (AdFly) or other revenue;
 * You distribute LanteaCraft un-modified and in whole; and
 * We'd much like it if you linked back to our topic (or the Github repository).
 
-
-The textures & 3D models in LanteaCraft are proprietarily produced by DeltaStrium and are the property of DeltaStrium & PC-Logix. You are not permitted to distribute or copy any textures and/or 3D models in any manner outside the official distribution form(s) without prior written permission.
+For more information about what is permitted and what is not permitted by the license, please see [license.md](LICENSE.md).
 
 
 Credits:
