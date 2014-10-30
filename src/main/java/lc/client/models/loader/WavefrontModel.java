@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.client.model.obj.GroupObject;
 
 import org.lwjgl.opengl.GL11;
 
@@ -25,6 +26,34 @@ public class WavefrontModel {
 
 		public WavefrontModelException(String reason, int idx, String line) {
 			super(String.format("[line %s]: %s (`%s`)", idx, reason, line));
+		}
+	}
+
+	public static class Vertex {
+		public float x, y, z;
+
+		public Vertex(float x, float y) {
+			this(x, y, 0F);
+		}
+
+		public Vertex(float x, float y, float z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+	}
+
+	public static class TextureCoord {
+		public float u, v, w;
+
+		public TextureCoord(float u, float v) {
+			this(u, v, 0F);
+		}
+
+		public TextureCoord(float u, float v, float w) {
+			this.u = u;
+			this.v = v;
+			this.w = w;
 		}
 	}
 
@@ -83,40 +112,37 @@ public class WavefrontModel {
 		}
 	}
 
-	public static class TextureCoord {
-		public float u, v, w;
-
-		public TextureCoord(float u, float v) {
-			this(u, v, 0F);
-		}
-
-		public TextureCoord(float u, float v, float w) {
-			this.u = u;
-			this.v = v;
-			this.w = w;
-		}
-	}
-
-	public static class Vertex {
-		public float x, y, z;
-
-		public Vertex(float x, float y) {
-			this(x, y, 0F);
-		}
-
-		public Vertex(float x, float y, float z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
-	}
-
 	public static class ElementGroup {
+		public final String name;
 		public final ArrayList<Face> faces = new ArrayList<Face>();
 		public int glDrawingMode;
 
-		public ElementGroup(String label) {
-			// TODO Auto-generated constructor stub
+		public ElementGroup() {
+			this("");
+		}
+
+		public ElementGroup(String name) {
+			this(name, -1);
+		}
+
+		public ElementGroup(String name, int glDrawingMode) {
+			this.name = name;
+			this.glDrawingMode = glDrawingMode;
+		}
+
+		public void render() {
+			if (faces.size() > 0) {
+				Tessellator tessellator = Tessellator.instance;
+				tessellator.startDrawing(glDrawingMode);
+				render(tessellator);
+				tessellator.draw();
+			}
+		}
+
+		public void render(Tessellator tessellator) {
+			if (faces.size() > 0)
+				for (Face face : faces)
+					face.addFaceForRender(tessellator);
 		}
 	}
 
@@ -138,16 +164,79 @@ public class WavefrontModel {
 	public final ArrayList<Vertex> normalHeap = new ArrayList<Vertex>();
 	public final ArrayList<TextureCoord> texCoordHeap = new ArrayList<TextureCoord>();
 	public final ArrayList<ElementGroup> groupHeap = new ArrayList<ElementGroup>();
+	public ElementGroup lastGroup;
 
 	public WavefrontModel(String name, InputStream input) {
 		this.name = name;
+	}
+
+	public void renderAll() {
+		Tessellator tessellator = Tessellator.instance;
+		if (lastGroup != null)
+			tessellator.startDrawing(lastGroup.glDrawingMode);
+		else
+			tessellator.startDrawing(GL11.GL_TRIANGLES);
+		tessellateAll(tessellator);
+		tessellator.draw();
+	}
+
+	public void tessellateAll(Tessellator tessellator) {
+		for (ElementGroup groupObject : groupHeap)
+			groupObject.render(tessellator);
+	}
+
+	public void renderOnly(String... groupNames) {
+		for (ElementGroup groupObject : groupHeap)
+			for (String groupName : groupNames)
+				if (groupName.equalsIgnoreCase(groupObject.name))
+					groupObject.render();
+	}
+
+	public void tessellateOnly(Tessellator tessellator, String... groupNames) {
+		for (ElementGroup groupObject : groupHeap)
+			for (String groupName : groupNames)
+				if (groupName.equalsIgnoreCase(groupObject.name))
+					groupObject.render(tessellator);
+	}
+
+	public void renderPart(String partName) {
+		for (ElementGroup groupObject : groupHeap)
+			if (partName.equalsIgnoreCase(groupObject.name))
+				groupObject.render();
+	}
+
+	public void tessellatePart(Tessellator tessellator, String partName) {
+		for (ElementGroup groupObject : groupHeap)
+			if (partName.equalsIgnoreCase(groupObject.name))
+				groupObject.render(tessellator);
+	}
+
+	public void renderAllExcept(String... excludedGroupNames) {
+		for (ElementGroup groupObject : groupHeap) {
+			boolean flag = false;
+			for (String excludedGroupName : excludedGroupNames)
+				if (excludedGroupName.equalsIgnoreCase(groupObject.name))
+					flag = true;
+			if (!flag)
+				groupObject.render();
+		}
+	}
+
+	public void tessellateAllExcept(Tessellator tessellator, String... excludedGroupNames) {
+		for (ElementGroup groupObject : groupHeap) {
+			boolean flag = false;
+			for (String excludedGroupName : excludedGroupNames)
+				if (excludedGroupName.equalsIgnoreCase(groupObject.name))
+					flag = true;
+			if (!flag)
+				groupObject.render(tessellator);
+		}
 	}
 
 	private void loadObjModel(InputStream inputStream) throws WavefrontModelException {
 		BufferedReader reader = null;
 		String currentLine = null;
 		int lineCount = 0;
-		ElementGroup currentGroupObject = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(inputStream));
 			while ((currentLine = reader.readLine()) != null) {
@@ -169,21 +258,21 @@ public class WavefrontModel {
 					if (textureCoordinate != null)
 						texCoordHeap.add(textureCoordinate);
 				} else if (currentLine.startsWith("f ")) {
-					if (currentGroupObject == null)
-						currentGroupObject = new ElementGroup("Default");
-					Face face = ofFace(currentLine, lineCount, currentGroupObject);
+					if (lastGroup == null)
+						lastGroup = new ElementGroup("Default");
+					Face face = ofFace(currentLine, lineCount);
 					if (face != null)
-						currentGroupObject.faces.add(face);
+						lastGroup.faces.add(face);
 				} else if (currentLine.startsWith("g ") | currentLine.startsWith("o ")) {
 					ElementGroup group = ofElementGroup(currentLine, lineCount);
 					if (group != null)
-						if (currentGroupObject != null)
-							groupHeap.add(currentGroupObject);
-					currentGroupObject = group;
+						if (lastGroup != null)
+							groupHeap.add(lastGroup);
+					lastGroup = group;
 				}
 			}
 
-			groupHeap.add(currentGroupObject);
+			groupHeap.add(lastGroup);
 		} catch (IOException e) {
 			throw new WavefrontModelException("Stream error.", e);
 		} finally {
@@ -210,7 +299,7 @@ public class WavefrontModel {
 			throw new WavefrontModelException("Not a valid element group.", idx, line);
 	}
 
-	private Face ofFace(String line, int idx, ElementGroup group) throws WavefrontModelException {
+	private Face ofFace(String line, int idx) throws WavefrontModelException {
 		if (ruleFace_V_VT_VN.matcher(line).matches() || ruleFace_V_VT.matcher(line).matches()
 				|| ruleFace_V_VN.matcher(line).matches() || ruleFace_V.matcher(line).matches()) {
 			Face face = new Face();
@@ -219,15 +308,15 @@ public class WavefrontModel {
 			String[] subTokens = null;
 
 			if (tokens.length == 3) {
-				if (group.glDrawingMode == -1) {
-					group.glDrawingMode = GL11.GL_TRIANGLES;
-				} else if (group.glDrawingMode != GL11.GL_TRIANGLES)
+				if (lastGroup.glDrawingMode == -1) {
+					lastGroup.glDrawingMode = GL11.GL_TRIANGLES;
+				} else if (lastGroup.glDrawingMode != GL11.GL_TRIANGLES)
 					throw new WavefrontModelException(String.format("Invalid points for face: expected 4, got %s.",
 							tokens.length), idx, line);
 			} else if (tokens.length == 4) {
-				if (group.glDrawingMode == -1) {
-					group.glDrawingMode = GL11.GL_QUADS;
-				} else if (group.glDrawingMode != GL11.GL_QUADS)
+				if (lastGroup.glDrawingMode == -1) {
+					lastGroup.glDrawingMode = GL11.GL_QUADS;
+				} else if (lastGroup.glDrawingMode != GL11.GL_QUADS)
 					throw new WavefrontModelException(String.format("Invalid points for face: expected 3, got %s.",
 							tokens.length), idx, line);
 			}
