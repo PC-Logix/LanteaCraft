@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
  * patterns is exceptionally expensive (even when they're cached) which is the
  * exact reason *why* we use parser tools (such as look-ahead).
  * 
- * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
+ * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar, cpw
  * 
  */
 public class WavefrontModel {
@@ -86,8 +86,8 @@ public class WavefrontModel {
 	 */
 	public static class Face {
 		public Vertex[] vertices;
-		public TextureCoord[] texCoords;
 		public Vertex[] normals;
+		public TextureCoord[] texCoords;
 		public Vertex faceNormal;
 
 		public Face() {
@@ -99,14 +99,14 @@ public class WavefrontModel {
 
 		public void addFaceForRender(Tessellator tessellator, float textureOffset) {
 			if (faceNormal == null)
-				faceNormal = this.calculateFaceNormal();
+				faceNormal = calculateFaceNormal();
 			tessellator.setNormal(faceNormal.x, faceNormal.y, faceNormal.z);
 
 			float averageU = 0F, averageV = 0F;
 			if ((texCoords != null) && (texCoords.length > 0)) {
-				for (int i = 0; i < texCoords.length; ++i) {
-					averageU += texCoords[i].u;
-					averageV += texCoords[i].v;
+				for (TextureCoord texCoord : texCoords) {
+					averageU += texCoord.u;
+					averageV += texCoord.v;
 				}
 				averageU = averageU / texCoords.length;
 				averageV = averageV / texCoords.length;
@@ -114,7 +114,7 @@ public class WavefrontModel {
 
 			float offsetU, offsetV;
 
-			for (int i = 0; i < vertices.length; ++i) {
+			for (int i = 0; i < vertices.length; ++i)
 				if ((texCoords != null) && (texCoords.length > 0)) {
 					offsetU = textureOffset;
 					offsetV = textureOffset;
@@ -126,7 +126,6 @@ public class WavefrontModel {
 							texCoords[i].v + offsetV);
 				} else
 					tessellator.addVertex(vertices[i].x, vertices[i].y, vertices[i].z);
-			}
 		}
 
 		public Vertex calculateFaceNormal() {
@@ -197,7 +196,7 @@ public class WavefrontModel {
 	public boolean ready = false;
 	/** The stored vertex heap */
 	public final ArrayList<Vertex> vertexHeap = new ArrayList<Vertex>();
-	/** The stored vertext normal heap */
+	/** The stored vertex normal heap */
 	public final ArrayList<Vertex> normalHeap = new ArrayList<Vertex>();
 	/** The stored texture coordinate heap */
 	public final ArrayList<TextureCoord> texCoordHeap = new ArrayList<TextureCoord>();
@@ -216,7 +215,7 @@ public class WavefrontModel {
 	 */
 	public WavefrontModel(ResourceLocation resource) throws WavefrontModelException {
 		try {
-			this.name = resource.toString();
+			name = resource.toString();
 			loadObjModel(Minecraft.getMinecraft().getResourceManager().getResource(resource).getInputStream());
 		} catch (IOException ex) {
 			throw new WavefrontModelException("Can't read input model file.", ex);
@@ -311,9 +310,9 @@ public class WavefrontModel {
 				lineCount++;
 				currentLine = currentLine.replaceAll("\\s+", " ").trim();
 
-				if (currentLine.startsWith("#") || currentLine.length() == 0) {
+				if (currentLine.startsWith("#") || currentLine.length() == 0)
 					continue;
-				} else if (currentLine.startsWith("v ")) {
+				else if (currentLine.startsWith("v ")) {
 					Vertex vertex = ofVertex(currentLine, lineCount);
 					if (vertex != null)
 						vertexHeap.add(vertex);
@@ -377,18 +376,17 @@ public class WavefrontModel {
 			String[] subTokens = null;
 
 			if (tokens.length == 3) {
-				if (lastGroup.glDrawingMode == -1) {
+				if (lastGroup.glDrawingMode == -1)
 					lastGroup.glDrawingMode = GL11.GL_TRIANGLES;
-				} else if (lastGroup.glDrawingMode != GL11.GL_TRIANGLES)
+				else if (lastGroup.glDrawingMode != GL11.GL_TRIANGLES)
 					throw new WavefrontModelException(String.format("Invalid points for face: expected 4, got %s.",
 							tokens.length), idx, line);
-			} else if (tokens.length == 4) {
-				if (lastGroup.glDrawingMode == -1) {
+			} else if (tokens.length == 4)
+				if (lastGroup.glDrawingMode == -1)
 					lastGroup.glDrawingMode = GL11.GL_QUADS;
-				} else if (lastGroup.glDrawingMode != GL11.GL_QUADS)
+				else if (lastGroup.glDrawingMode != GL11.GL_QUADS)
 					throw new WavefrontModelException(String.format("Invalid points for face: expected 3, got %s.",
 							tokens.length), idx, line);
-			}
 
 			if (ruleFace_V_VT_VN.matcher(line).matches()) {
 				face.vertices = new Vertex[tokens.length];
@@ -427,9 +425,8 @@ public class WavefrontModel {
 				for (int i = 0; i < tokens.length; ++i)
 					face.vertices[i] = vertexHeap.get(Integer.parseInt(tokens[i]) - 1);
 				face.faceNormal = face.calculateFaceNormal();
-			} else {
+			} else
 				throw new WavefrontModelException("Unknown instruction on line.", idx, line);
-			}
 
 			return face;
 		} else
@@ -453,11 +450,9 @@ public class WavefrontModel {
 			return textureCoordinate;
 		} else
 			throw new WavefrontModelException("Not a valid texture coordinate.", idx, line);
-
 	}
 
 	private Vertex ofNormal(String line, int idx) throws WavefrontModelException {
-
 		if (ruleNormal.matcher(line).matches()) {
 			line = line.substring(line.indexOf(" ") + 1);
 			String[] tokens = line.split(" ");
@@ -490,5 +485,4 @@ public class WavefrontModel {
 		} else
 			throw new WavefrontModelException("Not a valid vertex.", idx, line);
 	}
-
 }
