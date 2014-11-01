@@ -33,6 +33,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	double uscale, vscale;
 	float red = 1.0F, green = 1.0F, blue = 1.0F;
+	/** Texture color */
 	protected int textColor = defaultTextColor;
 	boolean textShadow = false;
 
@@ -46,6 +47,11 @@ public abstract class LCContainerGUI extends GuiContainer {
 		this(container, container.xSize, container.ySize);
 	}
 
+	/**
+	 * Get a HashMap of all tabs in the interface.
+	 * 
+	 * @return A list of all tabs in the interface.
+	 */
 	protected abstract HashMap<Integer, LCContainerTab> getTabs();
 
 	public void switchTab(int to) {
@@ -96,11 +102,15 @@ public abstract class LCContainerGUI extends GuiContainer {
 		resetColor();
 		textColor = defaultTextColor;
 		textShadow = false;
-		// FIXME: Some clever overriding is required here in order to change the way
+		// FIXME: Some clever overriding is required here in order to change the
+		// way
 		// slots are rendered (visibility, ghost items, etc)
 		super.drawScreen(par1, par2, par3);
 	}
 
+	/**
+	 * Close the interface.
+	 */
 	protected void close() {
 		if (activeTab != null)
 			activeTab.onTabClosed(this);

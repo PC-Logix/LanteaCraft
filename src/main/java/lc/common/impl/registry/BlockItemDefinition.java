@@ -74,10 +74,22 @@ public class BlockItemDefinition implements ILanteaCraftDefinition {
 		return this;
 	}
 
+	/**
+	 * Get the component-type owner of this definition object.
+	 * 
+	 * @return The component-type owner of this definition.
+	 */
 	public ComponentType getComponentOwner() {
 		return ownerType;
 	}
 
+	/**
+	 * Initialize the definition with real objects as per the definition
+	 * descriptor.
+	 * 
+	 * @param registry
+	 *            The definition registry to apply changes to.
+	 */
 	public void init(DefinitionRegistry registry) {
 		if (!LCRuntime.runtime.registries().components().isEnabled(ownerType))
 			return;

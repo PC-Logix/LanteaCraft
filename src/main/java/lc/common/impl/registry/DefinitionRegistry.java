@@ -43,6 +43,12 @@ import lc.common.util.LCCreativeTabManager;
 import lc.core.BuildInfo;
 import lc.core.LCRuntime;
 
+/**
+ * Global definition registry implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
@@ -51,7 +57,12 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 * @author AfterLifeLochie
 	 */
 	public static enum RendererType {
-		BLOCK, ENTITY, TILE;
+		/** Block type */
+		BLOCK,
+		/** Entity type */
+		ENTITY,
+		/** Tile type */
+		TILE;
 	}
 
 	/** Pool of all known definitions. */
@@ -65,6 +76,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	/** Internal list of all initialized renderers. */
 	private final Map<RendererType, Map<Class<?>, ILanteaCraftRenderer>> initializedRenderers;
 
+	/** Default constructor */
 	public DefinitionRegistry() {
 		definitionPool = new HashMap<String, ILanteaCraftDefinition>();
 		registeredContainers = new HashMap<Integer, Class<? extends Container>>();
@@ -85,6 +97,14 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 		return definitionPool.get(name.toLowerCase());
 	}
 
+	/**
+	 * Initializes the registry
+	 * 
+	 * @param runtime
+	 *            The LanteaCraft runtime instance
+	 * @param event
+	 *            The FML event initializing the runtime
+	 */
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
 		IComponentRegistry components = runtime.registries().components();
 		LCLog.debug("Evaluating %s definitions for candidacy.", definitionPool.size());
@@ -351,22 +371,56 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 		ClientRegistry.bindTileEntitySpecialRenderer(teClass, (TileEntitySpecialRenderer) renderer);
 	}
 
+	/**
+	 * Registers a block renderer with the definition registry
+	 * 
+	 * @param block
+	 *            The block class
+	 * @param renderer
+	 *            The block renderer to bind
+	 */
 	public void registerBlockRenderer(Class<? extends LCBlock> block, Class<? extends LCBlockRenderer> renderer) {
 		if (!registeredRenderers.containsKey(RendererType.BLOCK))
 			registeredRenderers.put(RendererType.BLOCK, new HashMap<Class<?>, Class<? extends ILanteaCraftRenderer>>());
 		registeredRenderers.get(RendererType.BLOCK).put(block, renderer);
 	}
 
+	/**
+	 * Registers a tile entity renderer with the definition registry
+	 * 
+	 * @param tile
+	 *            The tile class
+	 * @param renderer
+	 *            The tile renderer to bind
+	 */
 	public void registerTileRenderer(Class<? extends LCTile> tile, Class<? extends LCTileRenderer> renderer) {
 		if (!registeredRenderers.containsKey(RendererType.TILE))
 			registeredRenderers.put(RendererType.TILE, new HashMap<Class<?>, Class<? extends ILanteaCraftRenderer>>());
 		registeredRenderers.get(RendererType.TILE).put(tile, renderer);
 	}
 
+	/**
+	 * Registers an entity renderer with the game registry
+	 * 
+	 * @param entity
+	 *            The entity class
+	 * @param renderer
+	 *            The renderer object
+	 */
 	public void registerEntityRenderer(Class<? extends Entity> entity, Object renderer) {
 		RenderingRegistry.registerEntityRenderingHandler(entity, (Render) renderer);
 	}
 
+	/**
+	 * Get a renderer for a class. If a dedicated renderer doesn't exist, null
+	 * is returned.
+	 * 
+	 * @param typeof
+	 *            The element type.
+	 * @param clazz
+	 *            The element class.
+	 * @return A dedicated renderer, or null if none is known.
+	 */
 	public ILanteaCraftRenderer getRendererFor(RendererType typeof, Class<?> clazz) {
 		if (initializedRenderers.containsKey(typeof))
 			for (Entry<Class<?>, ILanteaCraftRenderer> renderer : initializedRenderers.get(typeof).entrySet())
@@ -391,6 +445,15 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 		return null;
 	}
 
+	/**
+	 * Get a renderer from a class object.
+	 * 
+	 * @param typeof
+	 *            The type of renderer.
+	 * @param type
+	 *            The renderer's class
+	 * @return The singleton of the renderer, or null if it doesn't exist.
+	 */
 	public ILanteaCraftRenderer getRenderer(RendererType typeof, Class<? extends ILanteaCraftRenderer> type) {
 		if (initializedRenderers.containsKey(typeof))
 			for (Entry<Class<?>, ILanteaCraftRenderer> renderer : initializedRenderers.get(typeof).entrySet())
@@ -399,20 +462,50 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 		return null;
 	}
 
+	/**
+	 * Register a container with the definition registry.
+	 * 
+	 * @param id
+	 *            The container ID
+	 * @param cls
+	 *            The container class
+	 */
 	public void registerContainer(int id, Class<? extends Container> cls) {
 		LCLog.debug("Registering container with ID " + id + ", class " + cls.getCanonicalName());
 		registeredContainers.put(id, cls);
 	}
 
+	/**
+	 * Register a GUI with the definition registry.
+	 * 
+	 * @param id
+	 *            The GUI ID
+	 * @param cls
+	 *            The GUI class
+	 */
 	public void registerGui(int id, Class<? extends GuiScreen> cls) {
 		LCLog.debug("Registering GUI with ID " + id + ", class " + cls.getCanonicalName());
 		registeredGUIs.put(id, cls);
 	}
 
+	/**
+	 * Get a registered container class
+	 * 
+	 * @param id
+	 *            The container ID
+	 * @return The container class
+	 */
 	public Class<? extends Container> getRegisteredContainer(int id) {
 		return registeredContainers.get(id);
 	}
 
+	/**
+	 * Get a registered GUI class
+	 * 
+	 * @param id
+	 *            The GUI ID
+	 * @return The GUI class
+	 */
 	public Class<? extends GuiScreen> getRegisteredGui(int id) {
 		return registeredGUIs.get(id);
 	}

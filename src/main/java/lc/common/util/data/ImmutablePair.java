@@ -15,15 +15,33 @@ public class ImmutablePair<A, B> {
 	private final A a;
 	private final B b;
 
+	/**
+	 * Creates an ImmutablePair
+	 * 
+	 * @param a
+	 *            The A object
+	 * @param b
+	 *            The B object
+	 */
 	public ImmutablePair(A a, B b) {
 		this.a = a;
 		this.b = b;
 	}
 
+	/**
+	 * Fetch the A object
+	 * 
+	 * @return The A object
+	 */
 	public A getA() {
 		return a;
 	}
 
+	/**
+	 * Fetch the B object
+	 * 
+	 * @return The B object
+	 */
 	public B getB() {
 		return b;
 	}

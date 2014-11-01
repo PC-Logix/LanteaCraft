@@ -12,8 +12,23 @@ import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
 import lc.core.LCRuntime;
 
+/**
+ * Definition wrapper provider. Wraps classes with definitions into
+ * ILanteaCraftDefintions automagically.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class DefinitionWrapperProvider {
 
+	/**
+	 * Converts a class with a definition into an ILanteaCraftDefinition, if the
+	 * definition is correctly formed.
+	 * 
+	 * @param clazz
+	 *            The class to read
+	 * @return A formed definition, or null if no valid definition is found.
+	 */
 	@SuppressWarnings("unchecked")
 	public static ILanteaCraftDefinition provide(Class<?> clazz) {
 		LCLog.debug("Attempting to provide definition for class %s.", clazz);
@@ -36,8 +51,8 @@ public class DefinitionWrapperProvider {
 					if (!definition.tileClass().equals(Void.class))
 						tileClass = (Class<? extends LCTile>) definition.tileClass();
 					result = new BlockItemDefinition(type, name, blockClass, itemBlockClass).setTileType(tileClass);
-					LCLog.trace("Providing definition: %s: %s, block: %s, itemblock: %s, tile: %s", type, name, blockClass,
-							itemBlockClass, tileClass);
+					LCLog.trace("Providing definition: %s: %s, block: %s, itemblock: %s, tile: %s", type, name,
+							blockClass, itemBlockClass, tileClass);
 				} else if (!definition.itemClass().equals(Void.class)) {
 					itemClass = (Class<? extends LCItem>) definition.itemClass();
 					result = new BlockItemDefinition(type, name, null, itemClass);

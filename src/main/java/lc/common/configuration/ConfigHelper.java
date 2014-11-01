@@ -2,6 +2,12 @@ package lc.common.configuration;
 
 import java.util.ArrayList;
 
+/**
+ * Configuration file helper class
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class ConfigHelper {
 
 	/**
@@ -99,6 +105,23 @@ public class ConfigHelper {
 		return targetNode.parameters().get(paramName);
 	}
 
+	/**
+	 * Gets or set a boolean parameter on a node in a list if it does not exist.
+	 * 
+	 * @param list
+	 *            The list object.
+	 * @param clazz
+	 *            The class of object
+	 * @param name
+	 *            The name of the qualifier
+	 * @param paramName
+	 *            The name of the parameter
+	 * @param comment
+	 *            The parameter comment, if any
+	 * @param state
+	 *            The value to set
+	 * @return The value which exists or was set
+	 */
 	public static boolean getOrSetBooleanParam(ConfigList list, String clazz, String name, String paramName,
 			String comment, Boolean state) {
 		ConfigNode targetNode = null;

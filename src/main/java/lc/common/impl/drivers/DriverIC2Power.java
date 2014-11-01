@@ -103,6 +103,12 @@ public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmi
 		return acceptEnergy(amount, false);
 	}
 
+	/**
+	 * Called when the tile is placed or added
+	 * 
+	 * @param tile
+	 *            The self tile
+	 */
 	@DeviceDrivers.DriverRTCallback(event = "blockPlace")
 	public void ic2AddTile(LCTile tile) {
 		try {
@@ -113,6 +119,12 @@ public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmi
 		}
 	}
 
+	/**
+	 * Called when the tile is removed or broken
+	 * 
+	 * @param tile
+	 *            The self tile
+	 */
 	@DeviceDrivers.DriverRTCallback(event = "blockBreak")
 	public void ic2RemoveTile(LCTile tile) {
 		if (driverIC2Power_onEnergyNet)

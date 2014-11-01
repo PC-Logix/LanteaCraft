@@ -4,7 +4,33 @@ import lc.core.ResourceAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 
+/**
+ * IconButton element. TODO: Clean up, can extend GUIButton(?) instead.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class IconButton {
+	/**
+	 * Draw a button on the screen
+	 * 
+	 * @param mc
+	 *            The game
+	 * @param iconName
+	 *            The icon name
+	 * @param hover
+	 *            If the button is hovered
+	 * @param pressed
+	 *            If the button is pressed
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param scale
+	 *            The scale factor
+	 * @param zLevel
+	 *            The z-depth
+	 */
 	public static void drawButton(Minecraft mc, String iconName, boolean hover, boolean pressed, int x, int y,
 			double scale, float zLevel) {
 		bindAndClamp(mc, "button_" + ((pressed) ? "down" : (hover) ? "hover" : "up") + ".png");
