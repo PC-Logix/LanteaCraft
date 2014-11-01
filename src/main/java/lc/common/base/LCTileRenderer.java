@@ -1,6 +1,5 @@
 package lc.common.base;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import lc.api.defs.ILanteaCraftRenderer;
 
 /**

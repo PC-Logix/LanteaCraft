@@ -9,7 +9,6 @@ import lc.common.base.LCTile;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCMultiblockPacket;
-import lc.common.network.packets.LCTileSync;
 import lc.common.util.math.DimensionPos;
 import lc.common.util.math.Vector3;
 import lc.core.LCRuntime;

@@ -3,11 +3,8 @@ package lc.common.base.multiblock;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
 import lc.common.LCLog;
-import lc.common.util.data.ImmutableTuple;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;

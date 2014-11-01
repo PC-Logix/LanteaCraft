@@ -8,7 +8,6 @@ import lc.blocks.BlockStargateRing;
 import lc.common.impl.registry.DefinitionWrapperProvider;
 import lc.items.ItemGlasses;
 import lc.items.ItemLanteaOre;
-import li.cil.oc.api.driver.Item;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

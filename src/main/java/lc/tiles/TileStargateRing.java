@@ -1,18 +1,11 @@
 package lc.tiles;
 
-import java.util.List;
-
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
 import lc.api.components.IntegrationType;
 import lc.api.drivers.DeviceDrivers.DriverCandidate;
-import lc.common.base.LCTile;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.StructureConfiguration;
-import lc.common.network.LCNetworkException;
-import lc.common.network.LCPacket;
 
 /**
  * Stargate Ring tile implementation.
