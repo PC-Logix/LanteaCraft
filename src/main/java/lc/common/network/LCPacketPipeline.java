@@ -30,11 +30,24 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * LanteaCraft network connection driver.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 @ChannelHandler.Sharable
 public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPacket> {
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
 	private LinkedList<Class<? extends LCPacket>> packets = new LinkedList<Class<? extends LCPacket>>();
 
+	/**
+	 * Register a packet
+	 * 
+	 * @param clazz
+	 *            The packet class
+	 * @return If the packet was registered successfully.
+	 */
 	public boolean registerPacket(Class<? extends LCPacket> clazz) {
 		if (packets.size() > 256 || packets.contains(clazz))
 			return false;
@@ -42,6 +55,12 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		return true;
 	}
 
+	/**
+	 * Initializes the network handler
+	 * 
+	 * @param channelName
+	 *            The channel name to listen on
+	 */
 	public void init(String channelName) {
 		channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
 		registerPacket(LCTileSync.class);
@@ -112,11 +131,25 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		return Minecraft.getMinecraft().thePlayer;
 	}
 
+	/**
+	 * Send a packet to all players
+	 * 
+	 * @param message
+	 *            The packet
+	 */
 	public void sendToAll(LCPacket message) {
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
+	/**
+	 * Send a packet to a player
+	 * 
+	 * @param message
+	 *            The packet
+	 * @param player
+	 *            The player
+	 */
 	public void sendTo(LCPacket message, EntityPlayerMP player) {
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
 				.set(FMLOutboundHandler.OutboundTarget.PLAYER);
@@ -124,6 +157,14 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
+	/**
+	 * Send an FML packet to a player
+	 * 
+	 * @param message
+	 *            The packet
+	 * @param player
+	 *            The player
+	 */
 	public void sendForgeMessageTo(ForgeMessage message, EntityPlayerMP player) {
 		FMLEmbeddedChannel channel = NetworkRegistry.INSTANCE.getChannel("FORGE", Side.SERVER);
 		channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
@@ -131,6 +172,16 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		channel.writeAndFlush(message);
 	}
 
+	/**
+	 * Send a packet to all players in range of a location
+	 * 
+	 * @param message
+	 *            The packet
+	 * @param location
+	 *            The location
+	 * @param range
+	 *            The range
+	 */
 	public void sendToAllAround(LCPacket message, DimensionPos location, double range) {
 		TargetPoint point = new TargetPoint(location.dimension, location.x, location.y, location.z, range);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
@@ -139,6 +190,14 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
+	/**
+	 * Send a packet to all players in a dimension
+	 * 
+	 * @param message
+	 *            The packet
+	 * @param dimensionId
+	 *            The dimension ID
+	 */
 	public void sendToDimension(LCPacket message, int dimensionId) {
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
 				.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
@@ -146,12 +205,27 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
+	/**
+	 * Send a packet to the server
+	 * 
+	 * @param message
+	 *            The packet
+	 */
 	public void sendToServer(LCPacket message) {
 		channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET)
 				.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 		channels.get(Side.CLIENT).writeAndFlush(message);
 	}
 
+	/**
+	 * Send a packet to all players or to players in range if the packet
+	 * supports a target
+	 * 
+	 * @param packet
+	 *            The packet
+	 * @param range
+	 *            The maximum range if supported
+	 */
 	public void sendScoped(LCPacket packet, double range) {
 		if (packet instanceof LCTargetPacket)
 			sendToAllAround((LCTargetPacket) packet, ((LCTargetPacket) packet).target, range);

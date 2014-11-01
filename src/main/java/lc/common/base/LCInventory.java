@@ -5,6 +5,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Internal base inventory stub.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public abstract class LCInventory implements ISidedInventory {
 
 	/** The items in the inventory */
@@ -12,15 +18,36 @@ public abstract class LCInventory implements ISidedInventory {
 	/** The slot rules in the inventory */
 	protected SlotFilter[] rules;
 
+	/**
+	 * Create an inventory
+	 * 
+	 * @param size
+	 *            The size of the inventory in slots.
+	 */
 	public LCInventory(int size) {
 		items = new ItemStack[size];
 		rules = new SlotFilter[size];
 	}
 
+	/**
+	 * Set a filter rule on a slot number
+	 * 
+	 * @param slot
+	 *            The slot number
+	 * @param rule
+	 *            The filtering rule
+	 */
 	public void setFilterRule(int slot, SlotFilter rule) {
 		rules[slot] = rule;
 	}
 
+	/**
+	 * Fetch a filter rule for a slot number
+	 * 
+	 * @param slot
+	 *            The slot number
+	 * @return The filtering rule
+	 */
 	public SlotFilter getFilterRule(int slot) {
 		return rules[slot];
 	}

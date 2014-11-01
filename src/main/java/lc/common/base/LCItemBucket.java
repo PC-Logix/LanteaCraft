@@ -51,6 +51,12 @@ public class LCItemBucket extends ItemBucket {
 		// "${ASSET_KEY}:bucket_%s_${TEX_QUALITY}", iconName));
 	}
 
+	/**
+	 * Set the target texture of the bucket.
+	 * 
+	 * @param bucketTextureName
+	 *            The texture name for the bucket.
+	 */
 	public void setTargetTexture(String bucketTextureName) {
 		iconName = bucketTextureName;
 	}

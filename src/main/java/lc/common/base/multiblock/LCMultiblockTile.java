@@ -16,16 +16,33 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
+/**
+ * Internal multi-block implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public abstract class LCMultiblockTile extends LCTile {
 
 	private NBTTagCompound multiblockCompound = new NBTTagCompound();
 	private boolean multiblockNbtDirty = false;
 	private boolean isSlave = false;
 
+	/**
+	 * Set this multi-block to a slave state
+	 * 
+	 * @param state
+	 *            The state to set
+	 */
 	public void setSlave(boolean state) {
 		isSlave = state;
 	}
 
+	/**
+	 * Get this multi-block's slave state
+	 * 
+	 * @return The state
+	 */
 	public boolean isSlave() {
 		return isSlave;
 	}
@@ -47,6 +64,12 @@ public abstract class LCMultiblockTile extends LCTile {
 		}
 	}
 
+	/**
+	 * Set the owner location of this block
+	 * 
+	 * @param owner
+	 *            The owner location
+	 */
 	public void setOwner(Vector3 owner) {
 		if (!isSlave)
 			LCLog.fatal(new OperationNotSupportedException("Not allowed to setOwner on a master."));
@@ -59,6 +82,11 @@ public abstract class LCMultiblockTile extends LCTile {
 		}
 	}
 
+	/**
+	 * Get the state of this multi-block
+	 * 
+	 * @return The state of this multi-block
+	 */
 	public MultiblockState getState() {
 		if (isSlave) {
 			if (!multiblockCompound.hasKey("owner"))
@@ -75,12 +103,20 @@ public abstract class LCMultiblockTile extends LCTile {
 		}
 	}
 
+	/**
+	 * Get the next-state of the multi-block.
+	 * 
+	 * @return The next state.
+	 */
 	public MultiblockState nextState() {
 		if (!multiblockCompound.hasKey("state_next"))
 			return null;
 		return MultiblockState.fromOrdinal(multiblockCompound.getInteger("state_next"));
 	}
 
+	/**
+	 * Mark the multi-block dirty.
+	 */
 	public void markMultiblockDirty() {
 		multiblockNbtDirty = true;
 	}

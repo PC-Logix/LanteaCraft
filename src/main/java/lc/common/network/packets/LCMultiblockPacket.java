@@ -9,6 +9,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import lc.common.network.packets.abs.LCNBTPacket;
 import lc.common.util.math.DimensionPos;
 
+/**
+ * Multi-block network sync packet.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class LCMultiblockPacket extends LCNBTPacket {
 
 	/** The tag compound */
