@@ -6,13 +6,14 @@ import lc.common.IHintProvider;
 import lc.common.LCLog;
 
 /**
- * Server-side hint provider
+ * Server-side hint provider implementation
  * 
  * @author AfterLifeLochie
  * 
  */
 public class HintProviderServer implements IHintProvider {
 
+	/** Default constructor */
 	public HintProviderServer() {
 		LCLog.debug("HintProviderServer providing server-side hints");
 	}

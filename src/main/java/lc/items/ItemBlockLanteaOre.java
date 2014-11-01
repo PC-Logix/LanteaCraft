@@ -5,6 +5,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import lc.common.base.LCItemBlock;
 
+/**
+ * LanteaCraft global ore as item implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class ItemBlockLanteaOre extends LCItemBlock {
 
 	/**

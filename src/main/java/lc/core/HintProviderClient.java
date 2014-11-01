@@ -13,12 +13,19 @@ import lc.common.base.LCItemRenderHook;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
 
+/**
+ * Client-side hint provider implementation
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class HintProviderClient extends HintProviderServer {
 
 	private LCBlockRenderHook blockRenderingHook;
 	private LCTileRenderHook tileRenderingHook;
 	private LCItemRenderHook itemRenderingHook;
 
+	/** Default constructor */
 	public HintProviderClient() {
 		super();
 		LCLog.debug("HintProviderClient providing client-side hints");
