@@ -7,7 +7,9 @@ import net.minecraft.item.ItemStack;
 
 public abstract class LCInventory implements ISidedInventory {
 
+	/** The items in the inventory */
 	protected ItemStack[] items;
+	/** The slot rules in the inventory */
 	protected SlotFilter[] rules;
 
 	public LCInventory(int size) {

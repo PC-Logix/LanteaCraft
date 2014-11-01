@@ -347,11 +347,13 @@ public class WavefrontModel {
 			try {
 				reader.close();
 			} catch (IOException e) {
+				/* Do nothing */
 			}
 
 			try {
 				inputStream.close();
 			} catch (IOException e) {
+				/* Do nothing */
 			}
 		}
 	}

@@ -8,6 +8,12 @@ import org.lwjgl.opengl.GL11;
 
 import lc.api.rendering.IGraphicsBuffer;
 
+/**
+ * OpenGL to texture buffering mode.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class BufferTexture implements IGraphicsBuffer {
 
 	private boolean assigned = false;
@@ -17,6 +23,14 @@ public class BufferTexture implements IGraphicsBuffer {
 	private int texture, fbo, depth;
 	private int width, height;
 
+	/**
+	 * Create a new texture buffer.
+	 * 
+	 * @param width
+	 *            The virtual texture width.
+	 * @param height
+	 *            The virtual texture height.
+	 */
 	public BufferTexture(int width, int height) {
 		this.width = width;
 		this.height = height;

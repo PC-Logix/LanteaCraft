@@ -133,6 +133,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/** Called to perform update logic on the client. */
 	public void thinkClientPost() {
+		/* No action by default */
 	}
 
 	/** Called to perform update logic on the server. */
@@ -140,6 +141,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/** Called to perform update logic on the server. */
 	public void thinkServerPost() {
+		/* No action by default */
 	}
 
 	/**

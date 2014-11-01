@@ -64,5 +64,6 @@ public abstract class LCContainer extends Container {
 
 	@Override
 	public void updateProgressBar(int i, int value) {
+		// TODO: Handle update events
 	}
 }

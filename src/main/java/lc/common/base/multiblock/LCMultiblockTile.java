@@ -31,6 +31,12 @@ public abstract class LCMultiblockTile extends LCTile {
 		return isSlave;
 	}
 
+	/**
+	 * Change the multi-block state.
+	 * 
+	 * @param next
+	 *            The state to transition to.
+	 */
 	protected void changeState(MultiblockState next) {
 		if (isSlave)
 			LCLog.fatal(new OperationNotSupportedException("Not allowed to changeState on a slave."));

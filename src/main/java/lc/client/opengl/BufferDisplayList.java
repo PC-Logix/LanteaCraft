@@ -4,6 +4,12 @@ import org.lwjgl.opengl.GL11;
 
 import lc.api.rendering.IGraphicsBuffer;
 
+/**
+ * OpenGL display list buffering mode.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class BufferDisplayList implements IGraphicsBuffer {
 
 	private boolean assigned = false;

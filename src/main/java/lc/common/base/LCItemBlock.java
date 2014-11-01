@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 
 public class LCItemBlock extends ItemBlock {
 
+	/** The block type */
 	protected final LCBlock blockType;
 
 	public LCItemBlock(Block block) {
