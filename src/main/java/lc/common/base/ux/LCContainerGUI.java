@@ -11,6 +11,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
+/**
+ * Internal base container GUI class.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public abstract class LCContainerGUI extends GuiContainer {
 
 	private final static int defaultTextColor = 0x404040;
@@ -24,12 +30,28 @@ public abstract class LCContainerGUI extends GuiContainer {
 	protected int textColor = defaultTextColor;
 	boolean textShadow = false;
 
+	/**
+	 * Create a new container GUI
+	 * 
+	 * @param container
+	 *            The parent container
+	 * @param width
+	 *            The width
+	 * @param height
+	 *            The height
+	 */
 	public LCContainerGUI(Container container, int width, int height) {
 		super(container);
 		xSize = width;
 		ySize = height;
 	}
 
+	/**
+	 * Create a new container GUI
+	 * 
+	 * @param container
+	 *            The parent container
+	 */
 	public LCContainerGUI(LCContainer container) {
 		this(container, container.xSize, container.ySize);
 	}
@@ -41,6 +63,12 @@ public abstract class LCContainerGUI extends GuiContainer {
 	 */
 	protected abstract HashMap<Integer, LCContainerTab> getTabs();
 
+	/**
+	 * Switch to a tab
+	 * 
+	 * @param to
+	 *            The tab number.
+	 */
 	public void switchTab(int to) {
 		LCContainerTab nextTab = tabList.get(to);
 		if (nextTab == null)

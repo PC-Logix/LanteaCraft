@@ -23,6 +23,7 @@ import lc.core.ResourceAccess;
 public class ItemLanteaOre extends LCItem {
 	private IIcon missing;
 
+	/** Default constructor */
 	public ItemLanteaOre() {
 		super();
 		setHasSubtypes(true);

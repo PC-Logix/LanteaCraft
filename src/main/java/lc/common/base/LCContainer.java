@@ -8,18 +8,30 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Internal base container class.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public abstract class LCContainer extends Container {
+	/** Container width */
 	public int xSize;
+	/** Container height */
 	public int ySize;
 
+	/**
+	 * Create a new container
+	 * 
+	 * @param width
+	 *            The width
+	 * @param height
+	 *            The height
+	 */
 	public LCContainer(int width, int height) {
 		super();
 		xSize = width;
 		ySize = height;
-	}
-
-	public void addPlayerSlots(EntityPlayer player) {
-		addPlayerSlots(player, (xSize - 160) / 2, ySize - 82);
 	}
 
 	@Override
@@ -27,6 +39,26 @@ public abstract class LCContainer extends Container {
 		return null;
 	}
 
+	/**
+	 * Add the player slots to the container in the default location
+	 * 
+	 * @param player
+	 *            The player slots
+	 */
+	public void addPlayerSlots(EntityPlayer player) {
+		addPlayerSlots(player, (xSize - 160) / 2, ySize - 82);
+	}
+
+	/**
+	 * Add the player slots to the container at the specified location
+	 * 
+	 * @param player
+	 *            The player slots
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 */
 	public void addPlayerSlots(EntityPlayer player, int x, int y) {
 		InventoryPlayer inventory = player.inventory;
 		for (int i = 0; i < 3; ++i)
@@ -60,6 +92,12 @@ public abstract class LCContainer extends Container {
 		}
 	}
 
+	/**
+	 * Send an update state to a crafter
+	 * 
+	 * @param crafter
+	 *            The crafter person
+	 */
 	public abstract void sendStateTo(ICrafting crafter);
 
 	@Override

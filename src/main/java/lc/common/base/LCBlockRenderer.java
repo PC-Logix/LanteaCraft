@@ -10,6 +10,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
+/**
+ * Internal block renderer base class.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 
 	/**
