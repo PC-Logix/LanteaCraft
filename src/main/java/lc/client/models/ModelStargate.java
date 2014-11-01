@@ -2,7 +2,10 @@ package lc.client.models;
 
 import org.lwjgl.opengl.GL11;
 
+import lc.client.TileStargateBaseRenderer;
 import lc.client.opengl.BufferDisplayList;
+import lc.common.util.math.Orientations;
+import lc.tiles.TileStargateBase;
 import static lc.client.opengl.GLHelper.*;
 import static lc.client.models.ModelStargate.ModelStargateConstants.cos;
 import static lc.client.models.ModelStargate.ModelStargateConstants.sin;
@@ -97,6 +100,13 @@ public class ModelStargate {
 		listRing.exit();
 	}
 
+	public void render(TileStargateBaseRenderer renderer, TileStargateBase tile) {
+		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
+		renderer.bind(renderer.texture);
+		listShell.bind();
+		listShell.release();
+	}
+
 	private void renderShellImmediate() {
 		double radiusInner = ModelStargateConstants.ringInnerRadius;
 		double radiusOuter = ModelStargateConstants.ringOuterRadius;
@@ -104,6 +114,7 @@ public class ModelStargate {
 		double radiusMidOuter = ModelStargateConstants.ringMidRadius;
 		double ringDepth = ModelStargateConstants.ringDepth;
 		double bevelDepth = ModelStargateConstants.ringDepth - (1d / 16d);
+		GL11.glNormal3f(0, 1, 0);
 		GL11.glBegin(GL11.GL_QUADS);
 		for (int i = 0; i < ModelStargateConstants.numRingSegments; i++) {
 
@@ -274,7 +285,7 @@ public class ModelStargate {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
-	public void renderRingImmediate() {
+	private void renderRingImmediate() {
 		double radiusMidInner = ModelStargateConstants.ringInnerMovingRadius - (1 / 128d);
 		double radiusMidOuter = ModelStargateConstants.ringMidRadius + (1 / 128d);
 		double z = ModelStargateConstants.ringDepth - (1d / 128d);
