@@ -1,6 +1,7 @@
 package lc.client;
 
 import lc.common.base.LCTile;
+import lc.common.base.LCTileRenderHook;
 import lc.common.base.LCTileRenderer;
 import lc.core.ResourceAccess;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -23,12 +24,9 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 	}
 
 	@Override
-	public boolean renderTileEntityAt(LCTile tile, double x, double y, double z, float partialTickTime) {
+	public boolean renderTileEntityAt(LCTile tile, LCTileRenderHook renderer, double x, double y, double z,
+			float partialTickTime) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	public void bind(ResourceLocation resource) {
-		bindTexture(resource);
 	}
 }

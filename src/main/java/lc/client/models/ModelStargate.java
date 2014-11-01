@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import lc.client.TileStargateBaseRenderer;
 import lc.client.opengl.BufferDisplayList;
+import lc.common.base.LCTileRenderHook;
 import lc.common.util.math.Orientations;
 import lc.tiles.TileStargateBase;
 import static lc.client.opengl.GLHelper.*;
@@ -100,9 +101,9 @@ public class ModelStargate {
 		listRing.exit();
 	}
 
-	public void render(TileStargateBaseRenderer renderer, TileStargateBase tile) {
+	public void render(TileStargateBaseRenderer renderer, LCTileRenderHook tesr, TileStargateBase tile) {
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
-		renderer.bind(renderer.texture);
+		tesr.bind(renderer.texture);
 		listShell.bind();
 		listShell.release();
 	}
