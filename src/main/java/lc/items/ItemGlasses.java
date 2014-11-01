@@ -3,7 +3,6 @@ package lc.items;
 import java.util.ArrayList;
 
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.common.LCLog;
@@ -21,10 +20,18 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+/**
+ * Debugging glasses implementation
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 @Definition(name = "debugGlasses", type = ComponentType.CORE, itemClass = ItemGlasses.class)
 public class ItemGlasses extends ItemArmor {
+	/** Display icon */
 	public IIcon icon;
 
+	/** Default constructor */
 	public ItemGlasses() {
 		super(ArmorMaterial.DIAMOND, 0, 0);
 	}

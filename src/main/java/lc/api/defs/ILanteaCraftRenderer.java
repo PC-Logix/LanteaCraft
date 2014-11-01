@@ -8,4 +8,6 @@ package lc.api.defs;
  */
 public interface ILanteaCraftRenderer {
 
+	/* No contract elements */
+
 }

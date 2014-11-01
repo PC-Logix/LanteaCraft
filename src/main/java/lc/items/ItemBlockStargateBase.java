@@ -7,8 +7,20 @@ import lc.common.base.LCBlock;
 import lc.common.base.LCItemBlock;
 import lc.core.ResourceAccess;
 
+/**
+ * Stargate base block item implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class ItemBlockStargateBase extends LCItemBlock {
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param block
+	 *            The parent block type.
+	 */
 	public ItemBlockStargateBase(Block block) {
 		super((LCBlock) block);
 	}

@@ -7,7 +7,9 @@ package lc.api.defs;
  * 
  */
 public class Items {
+	/** Debugging glasses */
 	public ILanteaCraftDefinition glasses;
+	/** Lantea global ore item */
 	public ILanteaCraftDefinition lanteaOreItem;
 
 }
