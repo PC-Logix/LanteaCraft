@@ -66,14 +66,30 @@ public class LCRuntime implements ILCAPIProxy {
 		return registries;
 	}
 
+	/**
+	 * Get the network pipeline
+	 * 
+	 * @return The network pipeline
+	 */
 	public LCPacketPipeline network() {
 		return network;
 	}
 
+	/**
+	 * Get the current hint provider.
+	 * 
+	 * @return The current hint provider.
+	 */
 	public IHintProvider hints() {
 		return hints;
 	}
 
+	/**
+	 * Called during pre-initialization
+	 * 
+	 * @param event
+	 *            The FML pre initialization event.
+	 */
 	public void preinit(FMLPreInitializationEvent event) {
 		LCLog.debug("LCRuntime entering phase preinit");
 		LCCreativeTabManager.registerTab("LanteaCraft", null);
@@ -81,6 +97,12 @@ public class LCRuntime implements ILCAPIProxy {
 		hints.preInit();
 	}
 
+	/**
+	 * Called during initialization
+	 * 
+	 * @param event
+	 *            The FML initialization event.
+	 */
 	public void init(FMLInitializationEvent event) {
 		LCLog.debug("LCRuntime entering phase init");
 		container.init(this, event);
@@ -90,6 +112,12 @@ public class LCRuntime implements ILCAPIProxy {
 		hints.init();
 	}
 
+	/**
+	 * Called during post-initialization
+	 * 
+	 * @param event
+	 *            The FML post initialization event.
+	 */
 	public void postinit(FMLPostInitializationEvent event) {
 		LCLog.debug("LCRuntime entering phase postinit");
 		container.postinit(this, event);

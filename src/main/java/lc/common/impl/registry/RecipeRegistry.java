@@ -25,6 +25,7 @@ public class RecipeRegistry implements IRecipeRegistry {
 	/** Pool of all known definitions. */
 	private final Map<String, IRecipeDefinition> definitionPool;
 
+	/** Default constructor */
 	public RecipeRegistry() {
 		definitionPool = new HashMap<String, IRecipeDefinition>();
 	}
@@ -41,6 +42,14 @@ public class RecipeRegistry implements IRecipeRegistry {
 		return definitionPool.get(name.toLowerCase());
 	}
 
+	/**
+	 * Initializes the registry
+	 * 
+	 * @param runtime
+	 *            The LanteaCraft runtime instance
+	 * @param event
+	 *            The FML event initializing the runtime
+	 */
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
 		for (Entry<String, IRecipeDefinition> entry : definitionPool.entrySet()) {
 			IRecipeDefinition definition = entry.getValue();

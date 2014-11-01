@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
 
+/**
+ * Inventory slot filter implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class SlotFilter {
 	private ArrayList<ItemStack> accept = new ArrayList<ItemStack>();
 	private ArrayList<ItemStack> deny = new ArrayList<ItemStack>();

@@ -41,6 +41,12 @@ public class SpecialBucketHandler {
 		buckets.put(blockOf, itemResult);
 	}
 
+	/**
+	 * Called when a bucket is filled in the world
+	 * 
+	 * @param event
+	 *            The fill bucket event
+	 */
 	@SubscribeEvent
 	public void onBucketFill(FillBucketEvent event) {
 		ItemStack result = fillCustomBucket(event.world, event.target);

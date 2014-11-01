@@ -159,6 +159,8 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	/**
 	 * Called to get a description packet from the server.
 	 * 
+	 * @param packets
+	 *            The list of packets to be sent.
 	 * @throws LCNetworkException
 	 *             Any network exception when preparing the packets
 	 */

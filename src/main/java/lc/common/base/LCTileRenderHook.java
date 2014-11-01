@@ -39,6 +39,12 @@ public class LCTileRenderHook extends TileEntitySpecialRenderer {
 		}
 	}
 
+	/**
+	 * Bind a texture in OpenGL
+	 * 
+	 * @param texture
+	 *            The texture resource.
+	 */
 	public void bind(ResourceLocation texture) {
 		bindTexture(texture);
 	}

@@ -13,12 +13,14 @@ import java.lang.annotation.Target;
  */
 public final class RuntimeAnnotation {
 
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target(ElementType.METHOD)
 	/**
-	 * Represents an interface to import at runtime if the mod specified is loaded.
+	 * Represents an interface to import at runtime if the mod specified is
+	 * loaded.
+	 * 
 	 * @author AfterLifeLochie
 	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.METHOD)
 	public @interface RuntimeInterface {
 		/**
 		 * @return The mod ID to require.
