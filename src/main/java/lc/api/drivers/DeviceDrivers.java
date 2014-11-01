@@ -45,8 +45,19 @@ public class DeviceDrivers {
 		IntegrationType[] types();
 	}
 
+	/**
+	 * Annotation for methods which should be called on internal event firing.
+	 * 
+	 * @author AfterLifeLochie
+	 * 
+	 */
 	@Retention(RetentionPolicy.RUNTIME)
 	public static @interface DriverRTCallback {
+		/**
+		 * The event name
+		 * 
+		 * @return The event name
+		 */
 		String event();
 	}
 

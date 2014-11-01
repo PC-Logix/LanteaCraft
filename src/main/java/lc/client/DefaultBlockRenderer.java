@@ -10,6 +10,12 @@ import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
 import lc.common.util.math.Trans3;
 
+/**
+ * Default block renderer implementation
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public class DefaultBlockRenderer extends LCBlockRenderer {
 
 	/** Map of ForgeDirection to rotations on axis 0 */

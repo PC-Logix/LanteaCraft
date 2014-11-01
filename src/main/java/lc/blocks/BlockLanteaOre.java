@@ -17,10 +17,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+/**
+ * LanteaCraft standard ore block implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 @Definition(name = "blockLanteaOre", type = ComponentType.CORE, blockClass = BlockLanteaOre.class, itemBlockClass = ItemBlockLanteaOre.class)
 public class BlockLanteaOre extends LCBlock {
 	private IIcon missing;
 
+	/** Default constructor */
 	public BlockLanteaOre() {
 		super(Material.ground);
 		setHardness(5.0F);

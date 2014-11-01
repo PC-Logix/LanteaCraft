@@ -16,6 +16,12 @@ import lc.core.ResourceAccess;
 import lc.items.ItemBlockStargateRing;
 import lc.tiles.TileStargateRing;
 
+/**
+ * Stargate ring implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 @Definition(name = "stargateRing", type = ComponentType.STARGATE, blockClass = BlockStargateRing.class, itemBlockClass = ItemBlockStargateRing.class, tileClass = TileStargateRing.class)
 public class BlockStargateRing extends LCBlock {
 
@@ -34,6 +40,7 @@ public class BlockStargateRing extends LCBlock {
 	/** Side textures */
 	IIcon sideTextures[][] = new IIcon[StargateType.count()][blockMask];
 
+	/** Default constructor */
 	public BlockStargateRing() {
 		super(Material.ground);
 		setHardness(3F).setResistance(2000F);
@@ -78,6 +85,13 @@ public class BlockStargateRing extends LCBlock {
 			list.add(new ItemStack(item, 1, i));
 	}
 
+	/**
+	 * Get the base type of this Stargate ring block
+	 * 
+	 * @param metadata
+	 *            The block metadata
+	 * @return The base type
+	 */
 	public int getBaseType(int metadata) {
 		return (int) Math.floor(metadata / blockMask);
 	}

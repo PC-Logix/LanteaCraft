@@ -18,6 +18,12 @@ import lc.core.ResourceAccess;
 import lc.items.ItemBlockStargateBase;
 import lc.tiles.TileStargateBase;
 
+/**
+ * Stargate base implementation.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 @Definition(name = "stargateBase", type = ComponentType.STARGATE, blockClass = BlockStargateBase.class, itemBlockClass = ItemBlockStargateBase.class, tileClass = TileStargateBase.class)
 public class BlockStargateBase extends LCBlock {
 
@@ -39,10 +45,14 @@ public class BlockStargateBase extends LCBlock {
 
 	};
 
+	/** Top and bottom texture map */
 	protected IIcon topAndBottomTexture[] = new IIcon[StargateType.count()];
+	/** Front texture map */
 	protected IIcon frontTexture[] = new IIcon[StargateType.count()];
+	/** Side texture map */
 	protected IIcon sideTexture[] = new IIcon[StargateType.count()];
 
+	/** Default constructor */
 	public BlockStargateBase() {
 		super(Material.ground);
 		setHardness(3F).setResistance(2000F);
@@ -71,6 +81,13 @@ public class BlockStargateBase extends LCBlock {
 		}
 	}
 
+	/**
+	 * Get the type of this Stargate base block
+	 * 
+	 * @param metadata
+	 *            The metadata
+	 * @return The base type
+	 */
 	public int getBaseType(int metadata) {
 		return metadata;
 	}

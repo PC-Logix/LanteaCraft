@@ -8,4 +8,6 @@ package lc.api.rendering;
  */
 public interface ITileRenderInfo {
 
+	/* No contract elements */
+
 }

@@ -1,5 +1,11 @@
 package lc.api.rendering;
 
+/**
+ * OpenGL graphics buffering class contract interface.
+ * 
+ * @author AfterLifeLochie
+ * 
+ */
 public interface IGraphicsBuffer {
 
 	/**
