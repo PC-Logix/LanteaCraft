@@ -1,5 +1,6 @@
 package lc.common.base;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import lc.api.defs.ILanteaCraftRenderer;
 
 /**
@@ -27,6 +28,8 @@ public abstract class LCTileRenderer implements ILanteaCraftRenderer {
 	 * 
 	 * @param tile
 	 *            The tile entity object
+	 * @param renderer
+	 *            The tile entity special rendering hook
 	 * @param x
 	 *            The x-coordinate of the tile
 	 * @param y
@@ -38,6 +41,7 @@ public abstract class LCTileRenderer implements ILanteaCraftRenderer {
 	 * @return If the rendering was completed
 	 * @see lc.common.base.LCBlockRenderer#getParent()
 	 */
-	public abstract boolean renderTileEntityAt(LCTile tile, double x, double y, double z, float partialTickTime);
+	public abstract boolean renderTileEntityAt(LCTile tile, LCTileRenderHook renderer, double x, double y, double z,
+			float partialTickTime);
 
 }
