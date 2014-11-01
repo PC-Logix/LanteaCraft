@@ -12,32 +12,34 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public enum Orientations {
 	/** Not an orientation */
-	VOID(null),
+	VOID(null, 0.0f),
 	/** Cardinal north */
-	NORTH(Matrix3.ident),
+	NORTH(Matrix3.ident, 0.0f),
 	/** Cardinal south */
-	SOUTH(Matrix3.ident),
+	SOUTH(Matrix3.ident, 90.0f),
 	/** Cardinal east */
-	EAST(Matrix3.ident),
+	EAST(Matrix3.ident, 180.0f),
 	/** Cardinal west */
-	WEST(Matrix3.ident),
+	WEST(Matrix3.ident, 270.0f),
 	/** Cardinal northeast */
-	NORTHEAST(Matrix3.ident),
+	NORTHEAST(Matrix3.ident, 45.0f),
 	/** Cardinal southeast */
-	SOUTHEAST(Matrix3.ident),
+	SOUTHEAST(Matrix3.ident, 135.0f),
 	/** Cardinal southwest */
-	SOUTHWEST(Matrix3.ident),
+	SOUTHWEST(Matrix3.ident, 225.0f),
 	/** Cardinal northwest */
-	NORTHWEST(Matrix3.ident),
+	NORTHWEST(Matrix3.ident, 315.0f),
 	/** Facing north-south */
-	NORTHSOUTH(Matrix3.ident),
+	NORTHSOUTH(Matrix3.ident, 0.0f),
 	/** Facing east-west */
-	EASTWEST(Matrix3.ident);
+	EASTWEST(Matrix3.ident, 90.0f);
 
 	private final Matrix3 rotation;
+	private final float angle;
 
-	Orientations(Matrix3 rotation) {
+	Orientations(Matrix3 rotation, float angle) {
 		this.rotation = rotation;
+		this.angle = angle;
 	}
 
 	public Matrix3 rotation() {
@@ -54,7 +56,8 @@ public enum Orientations {
 			return Orientations.EAST;
 		case WEST:
 			return Orientations.WEST;
-			default: return Orientations.VOID;
+		default:
+			return Orientations.VOID;
 		}
 	}
 
@@ -64,6 +67,10 @@ public enum Orientations {
 
 	public static EnumSet<Orientations> getFacings() {
 		return EnumSet.of(NORTH, EAST);
+	}
+
+	public float angle() {
+		return angle;
 	}
 
 }
