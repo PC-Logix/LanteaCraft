@@ -21,7 +21,7 @@ public class BlockFilter {
 	 *            The block type
 	 */
 	public BlockFilter(Block block) {
-		new BlockFilter(block, -1);
+		this(block, -1);
 	}
 
 	/**
