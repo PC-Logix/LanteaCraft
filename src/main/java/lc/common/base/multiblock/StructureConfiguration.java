@@ -89,7 +89,7 @@ public abstract class StructureConfiguration {
 			int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
 			BlockFilter filter = mappings[cell];
 			if (!filter.matches(world, me.floorX(), me.floorY(), me.floorZ())) {
-				LCLog.info("Failed match on %s at %s %s %s", filter, me.floorX(), me.floorY(), me.floorZ());
+				//LCLog.info("Failed match on %s at %s %s %s", filter, me.floorX(), me.floorY(), me.floorZ());
 				return false;
 			}
 		}

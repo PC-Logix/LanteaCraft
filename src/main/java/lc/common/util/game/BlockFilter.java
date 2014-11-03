@@ -61,9 +61,9 @@ public class BlockFilter {
 		if (blockOf.equals(targetBlock) && targetMetadata == world.getBlockMetadata(x, y, z))
 			return true;
 
-		if (blockOf != null && world != null && targetBlock != null)
-			LCLog.info("No match: got (%s %s) expected (%s %s)", blockOf.getClass().getName(),
-					world.getBlockMetadata(x, y, z), targetBlock.getClass().getName(), targetMetadata);
+		//if (blockOf != null && world != null && targetBlock != null)
+		//	LCLog.info("No match: got (%s %s) expected (%s %s)", blockOf.getClass().getName(),
+		//			world.getBlockMetadata(x, y, z), targetBlock.getClass().getName(), targetMetadata);
 		return false;
 	}
 
