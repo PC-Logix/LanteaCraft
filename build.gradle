@@ -50,11 +50,21 @@ jar.manifest = manifest { attributes(
 	"FMLCorePluginContainsFMLMod": "icanhazfmlmodpweeze"
 ) }
 apply plugin: 'curseforge'
+def curseforge_key = 0
+if (project.hasProperty('openprinter_curseforge_key')) {
+	curseforge_key = project.openprinter_curseforge_key
+}
+
 curse {
-	apiKey = project.curseforge_key
+	apiKey = curseforge_key
 	projectId = "77342"
 	releaseType = "beta"
-	changelog = file("changelog.txt").text
+	changelog = 'default'
+	def changelogFile = file('changelog.txt')
+	if (changelogFile.exists()) {
+		changelog = changelogFile.text
+	}
+	addGameVersion project.minecraft.version
 }
 processResources {
 	from(sourceSets.main.resources.srcDirs) {
