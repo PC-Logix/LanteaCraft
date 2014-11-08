@@ -51,8 +51,8 @@ jar.manifest = manifest { attributes(
 ) }
 apply plugin: 'curseforge'
 def curseforge_key = 0
-if (project.hasProperty('openprinter_curseforge_key')) {
-	curseforge_key = project.openprinter_curseforge_key
+if (project.hasProperty('curseforge_key')) {
+	curseforge_key = project.curseforge_key
 }
 
 curse {
