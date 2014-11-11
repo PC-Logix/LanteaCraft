@@ -836,6 +836,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
+		loadEnergyStore(nbt);
 		getAsStructure().invalidate();
 	}
 
