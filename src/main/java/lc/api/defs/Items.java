@@ -11,5 +11,7 @@ public class Items {
 	public ILanteaCraftDefinition glasses;
 	/** Lantea global ore item */
 	public ILanteaCraftDefinition lanteaOreItem;
+	/** Lantea global alloy ingot item */
+	public ILanteaCraftDefinition lanteaAlloyItem;
 
 }
