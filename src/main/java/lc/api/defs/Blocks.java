@@ -9,29 +9,29 @@ package lc.api.defs;
 public class Blocks {
 
 	/** LanteaCraft global ore block */
-	public ILanteaCraftDefinition lanteaOreBlock;
+	public IContainerDefinition lanteaOreBlock;
 	/** Alloy block */
-	public ILanteaCraftDefinition lanteaAlloyBlock;
+	public IContainerDefinition lanteaAlloyBlock;
 
 	/** Stargate ring block */
-	public ILanteaCraftDefinition stargateRingBlock;
+	public IContainerDefinition stargateRingBlock;
 	/** Stargate base block */
-	public ILanteaCraftDefinition stargateBaseBlock;
+	public IContainerDefinition stargateBaseBlock;
 	/** Stargate DHD block */
-	public ILanteaCraftDefinition stargateDHDBlock;
+	public IContainerDefinition stargateDHDBlock;
 	/** Transporter ring block */
-	public ILanteaCraftDefinition transporterBlock;
+	public IContainerDefinition transporterBlock;
 
 	/** Decorative global block */
-	public ILanteaCraftDefinition lanteaDecorBlock;
+	public IContainerDefinition lanteaDecorBlock;
 	/** Decorative glass global block */
-	public ILanteaCraftDefinition lanteaGlassBlock;
+	public IContainerDefinition lanteaGlassBlock;
 
 	/** Crystal infuser machine */
-	public ILanteaCraftDefinition machineCrystalInfuser;
+	public IContainerDefinition machineCrystalInfuser;
 	/** Table press machine */
-	public ILanteaCraftDefinition machineTablePress;
+	public IContainerDefinition machineTablePress;
 	/** Naquadah generator machine */
-	public ILanteaCraftDefinition machineNaquadahGenerator;
+	public IContainerDefinition machineNaquadahGenerator;
 
 }

@@ -8,10 +8,10 @@ package lc.api.defs;
  */
 public class Items {
 	/** Debugging glasses */
-	public ILanteaCraftDefinition glasses;
+	public IContainerDefinition glasses;
 	/** Lantea global ore item */
-	public ILanteaCraftDefinition lanteaOreItem;
+	public IContainerDefinition lanteaOreItem;
 	/** Lantea global alloy ingot item */
-	public ILanteaCraftDefinition lanteaAlloyItem;
+	public IContainerDefinition lanteaAlloyItem;
 
 }

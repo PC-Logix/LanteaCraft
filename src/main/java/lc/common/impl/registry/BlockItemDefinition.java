@@ -6,7 +6,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import lc.api.components.ComponentType;
-import lc.api.defs.ILanteaCraftDefinition;
+import lc.api.defs.IContainerDefinition;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
 import lc.common.base.LCItemBlock;
@@ -19,7 +19,7 @@ import lc.core.LCRuntime;
  * @author AfterLifeLochie
  * 
  */
-public class BlockItemDefinition implements ILanteaCraftDefinition {
+public class BlockItemDefinition implements IContainerDefinition {
 
 	private final ComponentType ownerType;
 	private final String defName;

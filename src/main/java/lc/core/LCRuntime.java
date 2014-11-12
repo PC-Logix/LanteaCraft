@@ -5,7 +5,9 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import lc.api.ILCAPIProxy;
 import lc.api.components.IRegistryContainer;
+import lc.api.defs.Biomes;
 import lc.api.defs.Blocks;
+import lc.api.defs.Dimensions;
 import lc.api.defs.HintProvider;
 import lc.api.defs.Items;
 import lc.common.IHintProvider;
@@ -33,6 +35,10 @@ public class LCRuntime implements ILCAPIProxy {
 	private Items items = new Items();
 	/** Container of all API registries */
 	private RegistryContainer registries = new RegistryContainer();
+	/** The LC biomes container */
+	private Biomes biomes = new Biomes();
+	/** The LC dimensions container */
+	private Dimensions dimensions = new Dimensions();
 
 	/** Container of all registrations */
 	private RegistrationContainer container = new RegistrationContainer();
@@ -64,6 +70,16 @@ public class LCRuntime implements ILCAPIProxy {
 	@Override
 	public IRegistryContainer registries() {
 		return registries;
+	}
+
+	@Override
+	public Biomes biomes() {
+		return biomes;
+	}
+
+	@Override
+	public Dimensions dimensions() {
+		return dimensions;
 	}
 
 	/**

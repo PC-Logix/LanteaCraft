@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
  * @author AfterLifeLochie
  * 
  */
-public interface ILanteaCraftDefinition {
+public interface IContainerDefinition {
 
 	/**
 	 * @return The name of this definition

@@ -3,7 +3,7 @@ package lc.core;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import lc.api.defs.ILanteaCraftDefinition;
+import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
@@ -54,7 +54,7 @@ public class HintProviderClient extends HintProviderServer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void provideHints(ILanteaCraftDefinition definition) {
+	public void provideHints(IContainerDefinition definition) {
 		super.provideHints(definition);
 		if (definition.getBlock() != null) {
 			LCBlock theBlock = (LCBlock) definition.getBlock();

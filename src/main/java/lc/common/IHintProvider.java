@@ -1,6 +1,6 @@
 package lc.common;
 
-import lc.api.defs.ILanteaCraftDefinition;
+import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 
 /**
@@ -26,7 +26,7 @@ public interface IHintProvider {
 	 * @param definition
 	 *            A definition element
 	 */
-	public void provideHints(ILanteaCraftDefinition definition);
+	public void provideHints(IContainerDefinition definition);
 
 	/**
 	 * Provide hints on a recipe

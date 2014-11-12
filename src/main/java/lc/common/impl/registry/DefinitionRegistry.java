@@ -31,7 +31,7 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import lc.api.components.IComponentRegistry;
 import lc.api.components.IDefinitionRegistry;
-import lc.api.defs.ILanteaCraftDefinition;
+import lc.api.defs.IContainerDefinition;
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
@@ -66,7 +66,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	}
 
 	/** Pool of all known definitions. */
-	private final Map<String, ILanteaCraftDefinition> definitionPool;
+	private final Map<String, IContainerDefinition> definitionPool;
 	/** Internal list of all registered Container instances. */
 	private final Map<Integer, Class<? extends Container>> registeredContainers;
 	/** Internal list of all registered GUI instances. */
@@ -78,7 +78,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/** Default constructor */
 	public DefinitionRegistry() {
-		definitionPool = new HashMap<String, ILanteaCraftDefinition>();
+		definitionPool = new HashMap<String, IContainerDefinition>();
 		registeredContainers = new HashMap<Integer, Class<? extends Container>>();
 		registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
 		registeredRenderers = new HashMap<RendererType, Map<Class<?>, Class<? extends ILanteaCraftRenderer>>>();
@@ -86,14 +86,14 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	}
 
 	@Override
-	public void addDefinition(ILanteaCraftDefinition definition) {
+	public void addDefinition(IContainerDefinition definition) {
 		if (definitionPool.containsKey(definition.getName().toLowerCase()))
 			throw new RuntimeException("Attempt to overwrite existing definition " + definition.getName());
 		definitionPool.put(definition.getName().toLowerCase(), definition);
 	}
 
 	@Override
-	public ILanteaCraftDefinition getDefinition(String name) {
+	public IContainerDefinition getDefinition(String name) {
 		return definitionPool.get(name.toLowerCase());
 	}
 
@@ -108,7 +108,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
 		IComponentRegistry components = runtime.registries().components();
 		LCLog.debug("Evaluating %s definitions for candidacy.", definitionPool.size());
-		for (ILanteaCraftDefinition definition : definitionPool.values()) {
+		for (IContainerDefinition definition : definitionPool.values()) {
 			if (definition instanceof BlockItemDefinition) {
 				BlockItemDefinition element = (BlockItemDefinition) definition;
 				if (components.isEnabled(element.getComponentOwner())) {

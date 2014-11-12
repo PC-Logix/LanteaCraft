@@ -1,6 +1,6 @@
 package lc.core;
 
-import lc.api.defs.ILanteaCraftDefinition;
+import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
@@ -37,7 +37,7 @@ public class HintProviderServer implements IHintProvider {
 	}
 
 	@Override
-	public void provideHints(ILanteaCraftDefinition definition) {
+	public void provideHints(IContainerDefinition definition) {
 		// TODO Auto-generated method stub
 
 	}

@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
-import lc.api.defs.ILanteaCraftDefinition;
+import lc.api.defs.IContainerDefinition;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
@@ -30,9 +30,9 @@ public class DefinitionWrapperProvider {
 	 * @return A formed definition, or null if no valid definition is found.
 	 */
 	@SuppressWarnings("unchecked")
-	public static ILanteaCraftDefinition provide(Class<?> clazz) {
+	public static IContainerDefinition provide(Class<?> clazz) {
 		LCLog.debug("Attempting to provide definition for class %s.", clazz);
-		ILanteaCraftDefinition result = null;
+		IContainerDefinition result = null;
 		Annotation[] annotations = clazz.getDeclaredAnnotations();
 		for (int i = 0, j = annotations.length; i < j; i++) {
 			Annotation annotation = annotations[i];

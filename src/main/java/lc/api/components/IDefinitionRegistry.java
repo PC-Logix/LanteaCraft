@@ -1,6 +1,6 @@
 package lc.api.components;
 
-import lc.api.defs.ILanteaCraftDefinition;
+import lc.api.defs.IContainerDefinition;
 
 /**
  * Definition registry interface
@@ -16,7 +16,7 @@ public interface IDefinitionRegistry {
 	 * @param definition
 	 *            The definition element
 	 */
-	public void addDefinition(ILanteaCraftDefinition definition);
+	public void addDefinition(IContainerDefinition definition);
 
 	/**
 	 * Get a named definition from this registry
@@ -25,6 +25,6 @@ public interface IDefinitionRegistry {
 	 *            The definition name
 	 * @return The definition or null if it does not exist
 	 */
-	public ILanteaCraftDefinition getDefinition(String name);
+	public IContainerDefinition getDefinition(String name);
 
 }

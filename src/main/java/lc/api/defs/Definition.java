@@ -10,7 +10,7 @@ import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
 
 /**
- * Annotation to describe elements for {@link ILanteaCraftDefinition}
+ * Annotation to describe elements for {@link IContainerDefinition}
  * definitions.
  * 
  * @author AfterLifeLochie

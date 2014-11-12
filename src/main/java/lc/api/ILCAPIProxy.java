@@ -1,7 +1,9 @@
 package lc.api;
 
 import lc.api.components.IRegistryContainer;
+import lc.api.defs.Biomes;
 import lc.api.defs.Blocks;
+import lc.api.defs.Dimensions;
 import lc.api.defs.Items;
 
 /**
@@ -39,5 +41,19 @@ public interface ILCAPIProxy {
 	 * @return The registry container
 	 */
 	public IRegistryContainer registries();
+
+	/**
+	 * Get the list of biomes
+	 * 
+	 * @return The list of biomes
+	 */
+	public Biomes biomes();
+
+	/**
+	 * Get the list of dimensions
+	 * 
+	 * @return The list of dimensions
+	 */
+	public Dimensions dimensions();
 
 }
