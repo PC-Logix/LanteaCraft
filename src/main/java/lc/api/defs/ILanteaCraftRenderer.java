@@ -6,7 +6,7 @@ package lc.api.defs;
  * @author AfterLifeLochie
  * 
  */
-public interface ILanteaCraftRenderer {
+public interface ILanteaCraftRenderer extends IGameDef {
 
 	/* No contract elements */
 

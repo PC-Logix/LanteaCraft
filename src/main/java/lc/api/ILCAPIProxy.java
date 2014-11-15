@@ -5,6 +5,7 @@ import lc.api.defs.Biomes;
 import lc.api.defs.Blocks;
 import lc.api.defs.Dimensions;
 import lc.api.defs.Items;
+import lc.api.defs.Recipes;
 
 /**
  * API proxy interfacve
@@ -55,5 +56,12 @@ public interface ILCAPIProxy {
 	 * @return The list of dimensions
 	 */
 	public Dimensions dimensions();
+
+	/**
+	 * Get the list of recipes
+	 * 
+	 * @return The list of recipes
+	 */
+	public Recipes recipes();
 
 }

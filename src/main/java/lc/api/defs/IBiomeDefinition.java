@@ -6,7 +6,7 @@ package lc.api.defs;
  * @author AfterLifeLochie
  *
  */
-public interface IBiomeDefinition {
+public interface IBiomeDefinition extends IGameDef {
 
 	public abstract String getName();
 

@@ -10,6 +10,7 @@ import lc.api.defs.Blocks;
 import lc.api.defs.Dimensions;
 import lc.api.defs.HintProvider;
 import lc.api.defs.Items;
+import lc.api.defs.Recipes;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionRegistry;
@@ -39,6 +40,8 @@ public class LCRuntime implements ILCAPIProxy {
 	private Biomes biomes = new Biomes();
 	/** The LC dimensions container */
 	private Dimensions dimensions = new Dimensions();
+	/** The LC recipes container */
+	private Recipes recipes = new Recipes();
 
 	/** Container of all registrations */
 	private RegistrationContainer container = new RegistrationContainer();
@@ -80,6 +83,11 @@ public class LCRuntime implements ILCAPIProxy {
 	@Override
 	public Dimensions dimensions() {
 		return dimensions;
+	}
+
+	@Override
+	public Recipes recipes() {
+		return recipes;
 	}
 
 	/**

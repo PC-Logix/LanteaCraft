@@ -52,6 +52,8 @@ public class RecipeRegistry implements IRecipeRegistry {
 	 */
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
 		for (Entry<String, IRecipeDefinition> entry : definitionPool.entrySet()) {
+			entry.getValue().evaluateRecipe();
+			LCLog.info("Setting up recipe %s (type: %s)", entry.getValue().getName(), entry.getValue().getType());
 			IRecipeDefinition definition = entry.getValue();
 			RecipeType type = definition.getType();
 			if (type == RecipeType.SHAPELESS) {
@@ -60,7 +62,9 @@ public class RecipeRegistry implements IRecipeRegistry {
 				if (out.size() != 1 || !out.containsKey(0))
 					LCLog.fatal("Bad recipe %s: expected 1 output stack for shapeless, got %s.", definition.getName(),
 							out.size());
-				CraftingManager.getInstance().addShapelessRecipe(out.get(0), in.values().toArray());
+				ItemStack[] inputs = in.values().toArray(new ItemStack[0]);
+				LCLog.info("Creating shapless recipe: in %s, out %s", inputs, out.get(0));
+				CraftingManager.getInstance().addShapelessRecipe(out.get(0), inputs);
 			} else if (type == RecipeType.SHAPED) {
 				Map<Integer, ItemStack> in = definition.getInputStacks();
 				Map<Integer, ItemStack> out = definition.getOutputStacks();
@@ -82,5 +86,4 @@ public class RecipeRegistry implements IRecipeRegistry {
 			}
 		}
 	}
-
 }

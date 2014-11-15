@@ -2,25 +2,32 @@ package lc.common.impl.registry;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 import lc.api.components.RecipeType;
+import lc.api.defs.IContainerDefinition;
+import lc.api.defs.IGameDef;
 import lc.api.defs.IRecipeDefinition;
+import lc.common.LCLog;
 
 public class SimpleRecipeDefinition implements IRecipeDefinition {
 
 	private String name;
 	private RecipeType type;
 
-	private HashMap<Integer, ItemStack> inputs;
-	private HashMap<Integer, ItemStack> outputs;
+	private HashMap<Integer, Object> inputs;
+	private HashMap<Integer, Object> outputs;
+
+	private HashMap<Integer, ItemStack> stackInputs;
+	private HashMap<Integer, ItemStack> stackOutputs;
 	private HashMap<Integer, Boolean> use;
 
-	public SimpleRecipeDefinition(String name, RecipeType type, ItemStack output, String grid, ItemStack... inputs) {
+	public SimpleRecipeDefinition(String name, RecipeType type, Object output, String grid, Object... inputs) {
 		this.name = name;
 		this.type = type;
-		this.inputs = new HashMap<Integer, ItemStack>();
-		this.outputs = new HashMap<Integer, ItemStack>();
+		this.inputs = new HashMap<Integer, Object>();
+		this.outputs = new HashMap<Integer, Object>();
 		this.use = new HashMap<Integer, Boolean>();
 
 		for (int i = 0; i < 9; i++)
@@ -35,6 +42,51 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 	}
 
 	@Override
+	public void evaluateRecipe() {
+		stackInputs = new HashMap<Integer, ItemStack>();
+		for (int i = 0; i < inputs.size(); i++) {
+			Object val = inputs.get(i);
+			if (!(val instanceof ItemStack))
+				stackInputs.put(i, resolve(val));
+			else
+				stackInputs.put(i, (ItemStack) val);
+		}
+
+		stackOutputs = new HashMap<Integer, ItemStack>();
+		for (int i = 0; i < outputs.size(); i++) {
+			Object val = outputs.get(i);
+			if (!(val instanceof ItemStack))
+				stackOutputs.put(i, resolve(val));
+			else
+				stackOutputs.put(i, (ItemStack) val);
+		}
+	}
+
+	private ItemStack resolve(Object val) {
+		if (val instanceof DefinitionReference) {
+			DefinitionReference reference = (DefinitionReference) val;
+			IGameDef def = reference.reference();
+			Object[] params = reference.parameters();
+			Integer count = null, metadata = null;
+			if (params.length >= 1)
+				count = (Integer) params[0];
+			if (params.length == 2)
+				metadata = (Integer) params[1];
+			if (def instanceof IContainerDefinition) {
+				IContainerDefinition blockItemDef = (IContainerDefinition) def;
+				if (blockItemDef.getBlock() != null)
+					return new ItemStack(blockItemDef.getBlock(), (count == null) ? 1 : count, (metadata == null) ? 0
+							: metadata);
+				else if (blockItemDef.getItem() != null)
+					return new ItemStack(blockItemDef.getItem(), (count == null) ? 1 : count, (metadata == null) ? 0
+							: metadata);
+			}
+		}
+		LCLog.fatal("Cannot resolve object of type %s into ItemStack.", val.getClass().getName());
+		return null;
+	}
+
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -46,7 +98,7 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 
 	@Override
 	public Map<Integer, ItemStack> getInputStacks() {
-		return inputs;
+		return stackInputs;
 	}
 
 	@Override
@@ -56,7 +108,7 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 
 	@Override
 	public Map<Integer, ItemStack> getOutputStacks() {
-		return outputs;
+		return stackOutputs;
 	}
 
 }

@@ -11,7 +11,7 @@ import lc.api.components.RecipeType;
  * @author AfterLifeLochie
  * 
  */
-public interface IRecipeDefinition {
+public interface IRecipeDefinition extends IGameDef {
 
 	/**
 	 * @return The name of the recipe
@@ -22,6 +22,12 @@ public interface IRecipeDefinition {
 	 * @return The type of the recipe
 	 */
 	public RecipeType getType();
+
+	/**
+	 * Called by the system to force the evaluation of this recipe so that it
+	 * may be used.
+	 */
+	public void evaluateRecipe();
 
 	/**
 	 * Get the input stacks of the recipe

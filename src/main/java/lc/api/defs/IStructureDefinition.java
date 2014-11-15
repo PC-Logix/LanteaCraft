@@ -8,7 +8,7 @@ import net.minecraft.world.gen.structure.MapGenStructure;
  * @author AfterLifeLochie
  *
  */
-public interface IStructureDefinition {
+public interface IStructureDefinition extends IGameDef {
 
 	public abstract String getName();
 
