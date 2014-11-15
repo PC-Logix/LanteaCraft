@@ -8,9 +8,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenDesertWells;
 
-public class AbydosBiome extends BiomeGenBase implements IBiomeDefinition {
+public class BiomeAbydosDesert extends BiomeGenBase implements IBiomeDefinition {
 
-	public AbydosBiome(int biomeId) {
+	public BiomeAbydosDesert(int biomeId) {
 		super(biomeId, false);
 		topBlock = Blocks.sand;
 		biomeName = getName();

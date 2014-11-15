@@ -1,6 +1,6 @@
 package lc.dimensions.abydos;
 
-import lc.biomes.AbydosBiome;
+import lc.biomes.BiomeAbydosDesert;
 import lc.core.LCRuntime;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
@@ -11,10 +11,10 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class AbydosWorldProvider extends WorldProvider {
 
 	private float[] colorsSunriseSunset = new float[4];
-	private AbydosBiome abydosBiome;
+	private BiomeAbydosDesert abydosBiome;
 
 	public AbydosWorldProvider() {
-		abydosBiome = (AbydosBiome) LCRuntime.runtime.biomes().abydosDesert;
+		abydosBiome = (BiomeAbydosDesert) LCRuntime.runtime.biomes().abydosDesert;
 		worldChunkMgr = new AbydosChunkManager(abydosBiome, 0);
 		hasNoSky = false;
 	}
