@@ -5,9 +5,9 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Hint provider class marker
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HintProvider {

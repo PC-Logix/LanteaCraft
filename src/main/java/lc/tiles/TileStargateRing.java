@@ -1,17 +1,17 @@
 package lc.tiles;
 
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.inventory.IInventory;
 import lc.api.components.IntegrationType;
 import lc.api.drivers.DeviceDrivers.DriverCandidate;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.StructureConfiguration;
+import net.minecraft.inventory.IInventory;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * Stargate Ring tile implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @DriverCandidate(types = { IntegrationType.POWER })
 public class TileStargateRing extends LCMultiblockTile {

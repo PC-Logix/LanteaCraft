@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
  * The main IFMLLoadingPlugin hook. Forge should be told through arguments or
  * through the MANIFEST file that this code should be treated as a tweak in
  * Forge.
- * 
+ *
  * @author AfterLifeLochie
  */
 @IFMLLoadingPlugin.TransformerExclusions({ "lc.coremod" })

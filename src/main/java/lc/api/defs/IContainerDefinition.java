@@ -7,9 +7,9 @@ import net.minecraft.tileentity.TileEntity;
 
 /**
  * Game definition container interface
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public interface IContainerDefinition extends IGameDef {
 
@@ -35,7 +35,7 @@ public interface IContainerDefinition extends IGameDef {
 
 	/**
 	 * Create a stack of a specified size of the item or item-block.
-	 * 
+	 *
 	 * @param size
 	 *            The size (quantity) in the stack.
 	 * @return An item stack of this definitions' item.

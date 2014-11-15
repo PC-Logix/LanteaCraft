@@ -4,15 +4,15 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * OpenGL helpers.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class GLHelper {
 
 	/**
 	 * Push an immediate texture coordinate and vertex to the graphics card.
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate
 	 * @param y

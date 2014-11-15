@@ -7,16 +7,16 @@ import java.lang.annotation.Target;
 
 /**
  * Annotations for run-time tagging.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public final class RuntimeAnnotation {
 
 	/**
 	 * Represents an interface to import at runtime if the mod specified is
 	 * loaded.
-	 * 
+	 *
 	 * @author AfterLifeLochie
 	 */
 	@Retention(RetentionPolicy.RUNTIME)

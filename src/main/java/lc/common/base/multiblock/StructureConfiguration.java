@@ -3,19 +3,18 @@ package lc.common.base.multiblock;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.world.World;
 import lc.common.LCLog;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.common.util.math.VectorAABB;
-import lc.common.base.multiblock.LCMultiblockTile;
+import net.minecraft.world.World;
 
 /**
  * Represents a configuration setup for a particular multiblock structure.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class StructureConfiguration {
 
@@ -25,7 +24,7 @@ public abstract class StructureConfiguration {
 	 * dimensions of the structure. Dimensions should be real, positive numbers,
 	 * such that the dimensions represent the magnitude of the structure's
 	 * dimension vector.
-	 * 
+	 *
 	 * @return The XYZ dimensions of the structure layout.
 	 */
 	public abstract Vector3 getStructureDimensions();
@@ -36,7 +35,7 @@ public abstract class StructureConfiguration {
 	 * middle of the structure), this should return a vector dimension from the
 	 * normal (0, 0, 0) to the center of the structure. If the structure is
 	 * baseline (has no center), return the normal instead.
-	 * 
+	 *
 	 * @return The XYZ coordinate of the structure layout.
 	 */
 	public abstract Vector3 getStructureCenter();
@@ -46,14 +45,14 @@ public abstract class StructureConfiguration {
 	 * of integers which represent identifiers, not block identifiers, for the
 	 * structure. The number of entries in each dimension should match that of @link
 	 * {@link StructureConfiguration#getStructureDimensions()}.
-	 * 
+	 *
 	 * @return The structure layout
 	 */
 	public abstract int[][][] getStructureLayout();
 
 	/**
 	 * Get the mappings between IDs and Block objects
-	 * 
+	 *
 	 * @return The mappings of the structure
 	 */
 	public abstract BlockFilter[] getBlockMappings();
@@ -61,7 +60,7 @@ public abstract class StructureConfiguration {
 	/**
 	 * Test to see if this structure configuration is valid in a world at a
 	 * particular set of coordinates.
-	 * 
+	 *
 	 * @param world
 	 *            The world object.
 	 * @param x
@@ -88,10 +87,10 @@ public abstract class StructureConfiguration {
 			Vector3 mapping = me.sub(new Vector3(x, y, z)).add(getStructureCenter());
 			int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
 			BlockFilter filter = mappings[cell];
-			if (!filter.matches(world, me.floorX(), me.floorY(), me.floorZ())) {
-				//LCLog.info("Failed match on %s at %s %s %s", filter, me.floorX(), me.floorY(), me.floorZ());
+			if (!filter.matches(world, me.floorX(), me.floorY(), me.floorZ()))
+				// LCLog.info("Failed match on %s at %s %s %s", filter,
+				// me.floorX(), me.floorY(), me.floorZ());
 				return false;
-			}
 		}
 		LCLog.info("All is OK: checked %s items", elems.size());
 		return true;
@@ -99,7 +98,7 @@ public abstract class StructureConfiguration {
 
 	/**
 	 * Apply a configuration to a set of blocks in the structure.
-	 * 
+	 *
 	 * @param world
 	 *            The world object.
 	 * @param x

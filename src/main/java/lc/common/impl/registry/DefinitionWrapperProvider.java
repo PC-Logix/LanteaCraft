@@ -15,16 +15,16 @@ import lc.core.LCRuntime;
 /**
  * Definition wrapper provider. Wraps classes with definitions into
  * ILanteaCraftDefintions automagically.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class DefinitionWrapperProvider {
 
 	/**
 	 * Converts a class with a definition into an ILanteaCraftDefinition, if the
 	 * definition is correctly formed.
-	 * 
+	 *
 	 * @param clazz
 	 *            The class to read
 	 * @return A formed definition, or null if no valid definition is found.
@@ -34,8 +34,7 @@ public class DefinitionWrapperProvider {
 		LCLog.debug("Attempting to provide definition for class %s.", clazz);
 		IContainerDefinition result = null;
 		Annotation[] annotations = clazz.getDeclaredAnnotations();
-		for (int i = 0, j = annotations.length; i < j; i++) {
-			Annotation annotation = annotations[i];
+		for (Annotation annotation : annotations) {
 			if (annotation.annotationType().equals(Definition.class)) {
 				Definition definition = (Definition) annotation;
 				String name = definition.name();
@@ -57,9 +56,8 @@ public class DefinitionWrapperProvider {
 					itemClass = (Class<? extends LCItem>) definition.itemClass();
 					result = new BlockItemDefinition(type, name, null, itemClass);
 					LCLog.trace("Providing definition: %s: %s, item: %s", type, name, itemClass);
-				} else {
+				} else
 					LCLog.warn("No valid definition found, ignoring.");
-				}
 			}
 		}
 		if (result != null)

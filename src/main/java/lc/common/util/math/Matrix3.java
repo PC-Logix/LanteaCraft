@@ -2,9 +2,9 @@ package lc.common.util.math;
 
 /**
  * 3D matrix implementation
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class Matrix3 {
 
@@ -16,19 +16,19 @@ public class Matrix3 {
 
 	/** Side rotation map */
 	public static Matrix3[] sideRotations = {
-	/* 0, -Y, DOWN */ident,
-	/* 1, +Y, UP */rotX(180),
-	/* 2, -Z, NORTH */rotX(90),
-	/* 3, +Z, SOUTH */rotX(-90).mul(rotY(180)),
-	/* 4, -X, WEST */rotZ(-90).mul(rotY(90)),
-	/* 5, +X, EAST */rotZ(90).mul(rotY(-90)) };
+		/* 0, -Y, DOWN */ident,
+		/* 1, +Y, UP */rotX(180),
+		/* 2, -Z, NORTH */rotX(90),
+		/* 3, +Z, SOUTH */rotX(-90).mul(rotY(180)),
+		/* 4, -X, WEST */rotZ(-90).mul(rotY(90)),
+		/* 5, +X, EAST */rotZ(90).mul(rotY(-90)) };
 
 	/** Unit matricies */
 	public double m[][] = new double[][] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
 
 	/**
 	 * Rotation over x axis
-	 * 
+	 *
 	 * @param deg
 	 *            The angle in degrees
 	 * @return A rotation matrix for the angle specified
@@ -39,7 +39,7 @@ public class Matrix3 {
 
 	/**
 	 * Rotation over y axis
-	 * 
+	 *
 	 * @param deg
 	 *            The angle in degrees
 	 * @return A rotation matrix for the angle specified
@@ -50,7 +50,7 @@ public class Matrix3 {
 
 	/**
 	 * Rotation over z axis
-	 * 
+	 *
 	 * @param deg
 	 *            The angle in degrees
 	 * @return A rotation matrix for the angle specified
@@ -73,7 +73,7 @@ public class Matrix3 {
 
 	/**
 	 * Multiply this matrix against another matrix
-	 * 
+	 *
 	 * @param n
 	 *            The other matrix
 	 * @return The product matrix
@@ -97,7 +97,7 @@ public class Matrix3 {
 
 	/**
 	 * Multiply this matrix against a vector.
-	 * 
+	 *
 	 * @param x
 	 *            The x of the vector
 	 * @param y
@@ -113,7 +113,7 @@ public class Matrix3 {
 
 	/**
 	 * Multiply this matrix by inverse against a vector
-	 * 
+	 *
 	 * @param x
 	 *            The x of the vector
 	 * @param y
@@ -130,7 +130,7 @@ public class Matrix3 {
 
 	/**
 	 * Multiply this matrix against a vector
-	 * 
+	 *
 	 * @param v
 	 *            The vector
 	 * @return The product of matrix * vector result
@@ -141,7 +141,7 @@ public class Matrix3 {
 
 	/**
 	 * Multiply this matrix by inverse against a vector
-	 * 
+	 *
 	 * @param v
 	 *            The vector
 	 * @return The product of matrix * vector result

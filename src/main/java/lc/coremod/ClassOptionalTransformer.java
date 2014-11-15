@@ -19,7 +19,7 @@ import cpw.mods.fml.common.ModContainer;
 /**
  * Takes {@link RuntimeAnnotation} optional rules in a load-time binary base
  * class and evaluates them.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class ClassOptionalTransformer implements IClassTransformer {
@@ -109,7 +109,7 @@ public class ClassOptionalTransformer implements IClassTransformer {
 					if (o1 instanceof String)
 						continue; // can't compare strings reliably
 					else if (o1 instanceof Integer)
-						if (((Integer) o2) > ((Integer) o1))
+						if ((Integer) o2 > (Integer) o1)
 							return false;
 						else
 							return false;
@@ -120,7 +120,7 @@ public class ClassOptionalTransformer implements IClassTransformer {
 					if (o1 instanceof String)
 						continue; // can't compare strings reliably
 					else if (o1 instanceof Integer)
-						if (((Integer) o2) < ((Integer) o1))
+						if ((Integer) o2 < (Integer) o1)
 							return false;
 						else
 							return false;
@@ -140,7 +140,7 @@ public class ClassOptionalTransformer implements IClassTransformer {
 		else
 			sep = '-';
 		while (true) {
-			flag0 = (!Character.isDigit(data[0]));
+			flag0 = !Character.isDigit(data[0]);
 			if (flag0) {
 				StringBuilder b0 = new StringBuilder();
 				while (c2 < data.length && data[c2] != sep)

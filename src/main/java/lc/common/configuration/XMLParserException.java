@@ -2,14 +2,14 @@ package lc.common.configuration;
 
 /**
  * XML parse exception container
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class XMLParserException extends Exception {
 	/**
 	 * Creates a new XML parse exception
-	 * 
+	 *
 	 * @param reason
 	 *            The reason for the failure
 	 */
@@ -19,7 +19,7 @@ public class XMLParserException extends Exception {
 
 	/**
 	 * Creates a new XML parse exception
-	 * 
+	 *
 	 * @param reason
 	 *            The reason for the failure
 	 * @param inner

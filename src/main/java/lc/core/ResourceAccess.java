@@ -12,9 +12,9 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Resource access controller.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ResourceAccess {
 	private static HashMap<String, ResourceLocation> resourceMap = new HashMap<String, ResourceLocation>();
@@ -28,7 +28,7 @@ public class ResourceAccess {
 
 	/**
 	 * Get the system asset key.
-	 * 
+	 *
 	 * @return The system asset key.
 	 */
 	public static String getAssetKey() {
@@ -37,7 +37,7 @@ public class ResourceAccess {
 
 	/**
 	 * Get a resource based on a fully-qualified name.
-	 * 
+	 *
 	 * @param resourceName
 	 *            The resource name.
 	 * @return A path to the resource
@@ -62,7 +62,7 @@ public class ResourceAccess {
 
 	/**
 	 * Formats a resource name using pattern matching.
-	 * 
+	 *
 	 * @param format
 	 *            The format string.
 	 * @param args

@@ -5,9 +5,9 @@ import java.util.HashMap;
 /**
  * Represents an Observer for values which are themselves observable. Each
  * Observer views a particular set of states at any time.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ObserverContext {
 
@@ -18,7 +18,7 @@ public class ObserverContext {
 
 	/**
 	 * Get a new observer UID
-	 * 
+	 *
 	 * @return A new Observer UID
 	 */
 	private static int getUID() {

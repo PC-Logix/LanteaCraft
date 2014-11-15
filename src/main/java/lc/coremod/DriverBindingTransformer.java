@@ -1,7 +1,5 @@
 package lc.coremod;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,10 +10,11 @@ import lc.api.components.DriverMap;
 import lc.api.components.IntegrationType;
 import lc.api.drivers.DeviceDrivers;
 import lc.common.LCLog;
-import lc.core.BuildInfo;
+import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -28,14 +27,11 @@ import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
-import org.objectweb.asm.Opcodes;
-
-import net.minecraft.launchwrapper.IClassTransformer;
 
 /**
  * Takes {@link DeviceDrivers} rules in a load-time binary base class and
  * evaluates them.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class DriverBindingTransformer implements IClassTransformer {
@@ -48,7 +44,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 	 * into feeding us the byte[] of the class we're interested in if we haven't
 	 * seen them yet. If we have seen them, we can just return what we already
 	 * have.
-	 * 
+	 *
 	 * @param className
 	 *            The class to find.
 	 * @return The byte[] of the class definition or null if the class doesn't
@@ -66,7 +62,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 
 	/**
 	 * Generate a signature for a method.
-	 * 
+	 *
 	 * @param aMethod
 	 *            The method.
 	 * @return A signature.
@@ -77,7 +73,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 
 	/**
 	 * Generate a signature for a field.
-	 * 
+	 *
 	 * @param aField
 	 *            The field.
 	 * @return A signature.
@@ -88,7 +84,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 
 	/**
 	 * Dump a class' methods.
-	 * 
+	 *
 	 * @param clazz
 	 *            The classnode to dump.
 	 */
@@ -107,13 +103,13 @@ public class DriverBindingTransformer implements IClassTransformer {
 			while (instructions.hasNext()) {
 				AbstractInsnNode instruction = instructions.next();
 				System.out.println(" * " + instruction.toString());
-				if (instruction instanceof LdcInsnNode) {
+				if (instruction instanceof LdcInsnNode)
 					System.out.println("  =>> " + ((LdcInsnNode) instruction).cst.toString());
-				} else if (instruction instanceof InsnNode) {
+				else if (instruction instanceof InsnNode)
 					System.out.println("  =>> " + ((InsnNode) instruction).getOpcode());
-				} else if (instruction instanceof VarInsnNode) {
+				else if (instruction instanceof VarInsnNode)
 					System.out.println("  =>> " + ((VarInsnNode) instruction).getOpcode());
-				} else if (instruction instanceof MethodInsnNode) {
+				else if (instruction instanceof MethodInsnNode) {
 					MethodInsnNode callable = (MethodInsnNode) instruction;
 					System.out.println("  =>> " + callable.name + callable.desc);
 					System.out.println("  =>> " + callable.owner);
@@ -126,7 +122,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 	 * Determines if a class provided already has a method of the type
 	 * specified. This doesn't check for exceptions, but will detect identical
 	 * signature issues.
-	 * 
+	 *
 	 * @param theMethod
 	 *            The method node
 	 * @param theClass
@@ -138,16 +134,15 @@ public class DriverBindingTransformer implements IClassTransformer {
 		if (theClass.methods == null || theClass.methods.size() == 0)
 			return false;
 		String signature = signature(theMethod);
-		for (MethodNode method : theClass.methods) {
+		for (MethodNode method : theClass.methods)
 			if (signature(method).equalsIgnoreCase(signature))
 				return true;
-		}
 		return false;
 	}
 
 	/**
 	 * Determines if a class provided already has a field of the type specified.
-	 * 
+	 *
 	 * @param theField
 	 *            The field node
 	 * @param theClass
@@ -159,17 +154,16 @@ public class DriverBindingTransformer implements IClassTransformer {
 		if (theClass.fields == null || theClass.fields.size() == 0)
 			return false;
 		String signature = signature(theField);
-		for (FieldNode field : theClass.fields) {
+		for (FieldNode field : theClass.fields)
 			if (signature(field).equalsIgnoreCase(signature))
 				return true;
-		}
 		return false;
 	}
 
 	/**
 	 * Remap a method from one owner container to another owner container.
 	 * Performs all operations on the MethodNode provided directly (no copy).
-	 * 
+	 *
 	 * @param sourceName
 	 *            The source container type.
 	 * @param destName
@@ -196,7 +190,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param sourceName
 	 * @param destName
 	 * @param master
@@ -217,8 +211,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 		classReader.accept(classNode, 0);
 		List<AnnotationNode> annotations = classNode.visibleAnnotations;
 		if (annotations != null)
-			for (Iterator<AnnotationNode> i = annotations.iterator(); i.hasNext();) {
-				AnnotationNode annotation = i.next();
+			for (AnnotationNode annotation : annotations) {
 				if (annotation.desc.equals("Llc/api/drivers/DeviceDrivers$DriverProvider;")) {
 					LCLog.debug("Found definition driver class %s.", name);
 					driverImplCache.put(name, basicClass.clone());
@@ -226,7 +219,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 				} else if (annotation.desc.equals("Llc/api/drivers/DeviceDrivers$DriverCandidate;")) {
 					ArrayList<IntegrationType> types = new ArrayList<IntegrationType>();
 					HashMap<String, String> events = new HashMap<String, String>();
-					for (Object o : (ArrayList<Object>) annotation.values.get(annotation.values.indexOf("types") + 1)) {
+					for (Object o : (ArrayList<Object>) annotation.values.get(annotation.values.indexOf("types") + 1))
 						if (o instanceof String[]) {
 							String[] params = (String[]) o;
 							for (int q = 1; q < params.length; q += 2) {
@@ -235,7 +228,6 @@ public class DriverBindingTransformer implements IClassTransformer {
 									types.add(type);
 							}
 						}
-					}
 					for (IntegrationType type : types) {
 						LCLog.debug("Adding drivers for type %s.", type);
 						for (DriverMap mapping : DriverMap.mapOf(type)) {
@@ -259,13 +251,12 @@ public class DriverBindingTransformer implements IClassTransformer {
 								for (MethodNode method : driverClass.methods)
 									if (!hasDuplicateMethod(method, classNode)) {
 										classNode.methods.add(remapMethod(driverClass.name, classNode.name, method));
-										if (method.visibleAnnotations != null) {
+										if (method.visibleAnnotations != null)
 											for (AnnotationNode methodTag : method.visibleAnnotations)
 												if (methodTag.desc
 														.equals("Llc/api/drivers/DeviceDrivers$DriverRTCallback;"))
 													events.put(method.name, (String) methodTag.values
 															.get(methodTag.values.indexOf("event") + 1));
-										}
 									} else
 										LCLog.warn("Skipping method %s, already present!", signature(method));
 							if (driverClass.fields != null)

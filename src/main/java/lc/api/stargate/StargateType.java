@@ -2,9 +2,9 @@ package lc.api.stargate;
 
 /**
  * Stargate type list
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public enum StargateType {
 	/** Standard */
@@ -22,7 +22,7 @@ public enum StargateType {
 
 	/**
 	 * Get the name of the type
-	 * 
+	 *
 	 * @return The name of the type
 	 */
 	public String getName() {
@@ -31,7 +31,7 @@ public enum StargateType {
 
 	/**
 	 * Get the data suffix of the type
-	 * 
+	 *
 	 * @return The suffix of the type
 	 */
 	public String getSuffix() {
@@ -40,7 +40,7 @@ public enum StargateType {
 
 	/**
 	 * Get a type from an ordinal
-	 * 
+	 *
 	 * @param ordinal
 	 *            The numeric ordinal
 	 * @return The type
@@ -51,7 +51,7 @@ public enum StargateType {
 
 	/**
 	 * Get a count of all types
-	 * 
+	 *
 	 * @return The count of all types
 	 */
 	public static int count() {

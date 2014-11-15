@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 /**
  * A list of modules in a configuration file
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ModuleList extends ConfigNode {
 
@@ -17,7 +17,7 @@ public class ModuleList extends ConfigNode {
 
 	/**
 	 * A list with one name
-	 * 
+	 *
 	 * @param name
 	 *            The module name
 	 */
@@ -27,7 +27,7 @@ public class ModuleList extends ConfigNode {
 
 	/**
 	 * A list with one name and a comment
-	 * 
+	 *
 	 * @param name
 	 *            The module name
 	 * @param comment
@@ -44,7 +44,7 @@ public class ModuleList extends ConfigNode {
 
 	/**
 	 * Get the children of the object.
-	 * 
+	 *
 	 * @return The children of the object.
 	 */
 	public ArrayList<ModuleConfig> children() {
@@ -53,7 +53,7 @@ public class ModuleList extends ConfigNode {
 
 	/**
 	 * Set the children of the object.
-	 * 
+	 *
 	 * @param children
 	 *            The children of the object.
 	 */

@@ -4,7 +4,7 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 
 /**
  * Game world-generation structure container interface
- * 
+ *
  * @author AfterLifeLochie
  *
  */

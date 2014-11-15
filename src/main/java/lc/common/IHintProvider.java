@@ -5,9 +5,9 @@ import lc.api.defs.IRecipeDefinition;
 
 /**
  * Hint provider contract interface.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public interface IHintProvider {
 
@@ -22,7 +22,7 @@ public interface IHintProvider {
 
 	/**
 	 * Provide hints on a definition
-	 * 
+	 *
 	 * @param definition
 	 *            A definition element
 	 */
@@ -30,7 +30,7 @@ public interface IHintProvider {
 
 	/**
 	 * Provide hints on a recipe
-	 * 
+	 *
 	 * @param definition
 	 *            A recipe definition element
 	 */

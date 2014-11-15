@@ -9,7 +9,7 @@ import cpw.mods.fml.common.ModMetadata;
 /**
  * Forge expects us to return a ModContainer when loading core-mod code. This is
  * it.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class LCCoreModContainer extends DummyModContainer {

@@ -1,8 +1,5 @@
 package lc.core;
 
-import net.minecraftforge.client.MinecraftForgeClient;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
@@ -12,12 +9,15 @@ import lc.common.base.LCItem;
 import lc.common.base.LCItemRenderHook;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
+import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 
 /**
  * Client-side hint provider implementation
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class HintProviderClient extends HintProviderServer {
 

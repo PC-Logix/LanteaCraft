@@ -6,9 +6,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Inventory slot filter implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class SlotFilter {
 	private ArrayList<ItemStack> accept = new ArrayList<ItemStack>();
@@ -26,7 +26,7 @@ public class SlotFilter {
 
 	/**
 	 * Creates a new SlotFilter with the provided Lists of accept and deny rules
-	 * 
+	 *
 	 * @param accept
 	 *            The list of accept rules
 	 * @param deny
@@ -39,7 +39,7 @@ public class SlotFilter {
 	/**
 	 * Creates a new SlotFilter with the provided Lists of accept and deny
 	 * rules, and a given mode
-	 * 
+	 *
 	 * @param accept
 	 *            The list of accept rules
 	 * @param deny
@@ -63,7 +63,7 @@ public class SlotFilter {
 	/**
 	 * Adds an item to the accept list. This also removes the item from the deny
 	 * list.
-	 * 
+	 *
 	 * @param item
 	 *            The item to accept
 	 */
@@ -75,7 +75,7 @@ public class SlotFilter {
 	/**
 	 * Adds an item to the deny list. This also removes the item from the accept
 	 * list.
-	 * 
+	 *
 	 * @param item
 	 *            The item to deny
 	 */
@@ -86,7 +86,7 @@ public class SlotFilter {
 
 	/**
 	 * Removes an item from all accept and deny rules.
-	 * 
+	 *
 	 * @param item
 	 *            The item to remove
 	 */
@@ -97,7 +97,7 @@ public class SlotFilter {
 
 	/**
 	 * Sets the SlotFilter white-list rule-set mode
-	 * 
+	 *
 	 * @param whitelist
 	 *            If this FilterRule is a white-list rule-set
 	 */
@@ -108,7 +108,7 @@ public class SlotFilter {
 	/**
 	 * Tests an ItemStack of any size to see if the underlying Item is permitted
 	 * in this particular rule-set.
-	 * 
+	 *
 	 * @param testing
 	 *            The ItemStack to test
 	 * @return If the ItemStack matches the rule-set

@@ -24,17 +24,15 @@ public class LCScatteredFeatureStructure extends MapGenStructure {
 		if (j < 0)
 			j -= maxStructDensity - 1;
 		int imul = i, jmul = j;
-		Random var7 = worldObj.setRandomSeed(i / maxStructDensity, j
-				/ maxStructDensity, 14357617);
+		Random var7 = worldObj.setRandomSeed(i / maxStructDensity, j / maxStructDensity, 14357617);
 		imul += var7.nextInt(maxStructDensity - minStructDensity);
 		jmul += var7.nextInt(maxStructDensity - minStructDensity);
-		return (iv == imul && jv == jmul);
+		return iv == imul && jv == jmul;
 	}
 
 	@Override
 	protected StructureStart getStructureStart(int i, int j) {
-		return new LCScatteredFeatureStart(LanteaSurfaceStargate.class,
-				worldObj, rand, i, j);
+		return new LCScatteredFeatureStart(LanteaSurfaceStargate.class, worldObj, rand, i, j);
 	}
 
 }

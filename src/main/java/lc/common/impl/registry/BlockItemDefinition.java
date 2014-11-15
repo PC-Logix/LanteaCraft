@@ -1,10 +1,5 @@
 package lc.common.impl.registry;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import lc.api.components.ComponentType;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IDefinitionReference;
@@ -13,12 +8,17 @@ import lc.common.base.LCItem;
 import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
 import lc.core.LCRuntime;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * Implementation of definitions for items and blocks
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class BlockItemDefinition implements IContainerDefinition {
 
@@ -38,7 +38,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 
 	/**
 	 * Create a new block or item definition
-	 * 
+	 *
 	 * @param ownerType
 	 *            The type of owner
 	 * @param defName
@@ -55,17 +55,17 @@ public class BlockItemDefinition implements IContainerDefinition {
 		this.defName = defName;
 		if (LCItemBlock.class.isAssignableFrom(itemType)) {
 			this.itemType = null;
-			this.itemBlockType = (Class<? extends LCItemBlock>) itemType;
+			itemBlockType = (Class<? extends LCItemBlock>) itemType;
 		} else {
 			this.itemType = (Class<? extends LCItem>) itemType;
-			this.itemBlockType = null;
+			itemBlockType = null;
 		}
 		this.blockType = blockType;
 	}
 
 	/**
 	 * Set the tile provider type
-	 * 
+	 *
 	 * @param type
 	 *            The tile type
 	 * @return This definition.
@@ -77,7 +77,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 
 	/**
 	 * Get the component-type owner of this definition object.
-	 * 
+	 *
 	 * @return The component-type owner of this definition.
 	 */
 	public ComponentType getComponentOwner() {
@@ -87,7 +87,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 	/**
 	 * Initialize the definition with real objects as per the definition
 	 * descriptor.
-	 * 
+	 *
 	 * @param registry
 	 *            The definition registry to apply changes to.
 	 */
@@ -120,7 +120,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 
 	@Override
 	public Item getItem() {
-		return (itemBlockType != null) ? itemBlockObject : itemObject;
+		return itemBlockType != null ? itemBlockObject : itemObject;
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 
 	@Override
 	public ItemStack getStackOf(int size) {
-		return (itemBlockType != null) ? new ItemStack(blockObject, size) : new ItemStack(itemObject, size);
+		return itemBlockType != null ? new ItemStack(blockObject, size) : new ItemStack(itemObject, size);
 	}
 
 	@Override

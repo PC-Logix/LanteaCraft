@@ -14,7 +14,7 @@ public class DefinitionReference implements IDefinitionReference {
 		if (def == null)
 			throw new RuntimeException("Cannot create a null definition reference.");
 		this.def = def;
-		this.params = new ArrayList<Object>();
+		params = new ArrayList<Object>();
 	}
 
 	public DefinitionReference(IGameDef def, Object... params) {
@@ -30,20 +30,20 @@ public class DefinitionReference implements IDefinitionReference {
 
 	@Override
 	public Object[] parameters() {
-		return (params == null || params.size() == 0) ? null : params.toArray();
+		return params == null || params.size() == 0 ? null : params.toArray();
 	}
 
 	@Override
 	public DefinitionReference push(int i, Object v) {
-		this.params.set(i, v);
+		params.set(i, v);
 		return this;
 	}
 
 	@Override
 	public DefinitionReference pushAll(Object... paramList) {
-		this.params.clear();
+		params.clear();
 		for (Object obj : paramList)
-			this.params.add(obj);
+			params.add(obj);
 		return this;
 	}
 

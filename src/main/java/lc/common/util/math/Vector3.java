@@ -8,7 +8,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Represents a Vector in three-dimensional space.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class Vector3 {
@@ -85,7 +85,7 @@ public class Vector3 {
 
 	/**
 	 * Creates a new vector.
-	 * 
+	 *
 	 * @param x
 	 *            The x-component of the vector.
 	 * @param y
@@ -101,7 +101,7 @@ public class Vector3 {
 
 	/**
 	 * Creates a new vector.
-	 * 
+	 *
 	 * @param v
 	 *            The Minecraft Vec3 object.
 	 */
@@ -111,7 +111,7 @@ public class Vector3 {
 
 	/**
 	 * Creates a new vector from an entity position.
-	 * 
+	 *
 	 * @param entity
 	 *            The entity.
 	 */
@@ -121,7 +121,7 @@ public class Vector3 {
 
 	/**
 	 * Creates a new vector from a tile entity position.
-	 * 
+	 *
 	 * @param tileentity
 	 *            The tile entity.
 	 */
@@ -131,7 +131,7 @@ public class Vector3 {
 
 	/**
 	 * Creates a new vector from a Forge direction.
-	 * 
+	 *
 	 * @param direction
 	 *            The forge direction.
 	 */
@@ -141,7 +141,7 @@ public class Vector3 {
 
 	/**
 	 * Creates a new vector from an NBT Compound.
-	 * 
+	 *
 	 * @param compound
 	 *            The NBT Compound.
 	 * @return The resulting vector element.
@@ -154,7 +154,7 @@ public class Vector3 {
 
 	/**
 	 * Converts a Vector3 to a Minecraft Vec3 object.
-	 * 
+	 *
 	 * @return A Minecraft Vec3 object.
 	 */
 	public Vec3 toVec3() {
@@ -163,7 +163,7 @@ public class Vector3 {
 
 	/**
 	 * Returns this Vector3 as an NBT Compound.
-	 * 
+	 *
 	 * @return This Vector3 as an NBT Compound.
 	 */
 	public NBTTagCompound toNBT() {
@@ -181,7 +181,7 @@ public class Vector3 {
 
 	/**
 	 * Copy the Vector3.
-	 * 
+	 *
 	 * @return A copy of this Vector3.
 	 */
 	public Vector3 copy() {
@@ -191,7 +191,7 @@ public class Vector3 {
 	/**
 	 * Adds the specified components to this Vector3, returns a new Vector3
 	 * product.
-	 * 
+	 *
 	 * @param x
 	 *            The x-component.
 	 * @param y
@@ -207,7 +207,7 @@ public class Vector3 {
 	/**
 	 * Adds the specified Vector3 to this Vector3, returns a new Vector3
 	 * product.
-	 * 
+	 *
 	 * @param v
 	 *            The foreign Vector3.
 	 * @return The Vector3 product.
@@ -218,7 +218,7 @@ public class Vector3 {
 
 	/**
 	 * Add a specified offset from a ForgeDirection.
-	 * 
+	 *
 	 * @param direction
 	 *            The ForgeDirection to translate.
 	 * @return The Vector3 product.
@@ -230,7 +230,7 @@ public class Vector3 {
 	/**
 	 * Subtracts the specified components to this Vector3, returns a new Vector3
 	 * product.
-	 * 
+	 *
 	 * @param x
 	 *            The x-component.
 	 * @param y
@@ -246,7 +246,7 @@ public class Vector3 {
 	/**
 	 * Subtracts the specified Vector3 to this Vector3, returns a new Vector3
 	 * product.
-	 * 
+	 *
 	 * @param v
 	 *            The foreign Vector3.
 	 * @return The Vector3 product.
@@ -258,7 +258,7 @@ public class Vector3 {
 	/**
 	 * Multiplies the components of this Vector3 by the constant c, returns a
 	 * new Vector3 multiplication product.
-	 * 
+	 *
 	 * @param c
 	 *            The constant.
 	 * @return The Vector3 multiplication product.
@@ -270,7 +270,7 @@ public class Vector3 {
 	/**
 	 * Divides the components of this Vector3 by the constant c, returns a new
 	 * Vector3 division product.
-	 * 
+	 *
 	 * @param c
 	 *            The constant.
 	 * @return The Vector3 division product.
@@ -282,7 +282,7 @@ public class Vector3 {
 	/**
 	 * Determine the dot-product of this Vector3 with respect to another
 	 * Vector3.
-	 * 
+	 *
 	 * @param v
 	 *            The foreign Vector3 object.
 	 * @return The dot product (this.x * that.x + y * that.y + this.z * that.z).
@@ -294,7 +294,7 @@ public class Vector3 {
 	/**
 	 * Determine the minimum vector components of this Vector3 and another
 	 * Vector3, returns a new Vector3 minimum.
-	 * 
+	 *
 	 * @param v
 	 *            The foreign Vector3.
 	 * @return The smallest Vector3 object.
@@ -306,7 +306,7 @@ public class Vector3 {
 	/**
 	 * Determine the maximum vector components of this Vector3 and another
 	 * Vector3, returns a new Vector3 maximum.
-	 * 
+	 *
 	 * @param v
 	 *            The foreign Vector3.
 	 * @return The largest Vector3 object.
@@ -317,7 +317,7 @@ public class Vector3 {
 
 	/**
 	 * Determine the distance between this Vector3 and another Vector3.
-	 * 
+	 *
 	 * @param v
 	 *            The foreign Vector3.
 	 * @return The distance between this Vector3 and the foreign Vector3.
@@ -329,7 +329,7 @@ public class Vector3 {
 
 	/**
 	 * Determines the length of this Vector3.
-	 * 
+	 *
 	 * @return The length of this Vector3.
 	 */
 	public double mag() {
@@ -338,7 +338,7 @@ public class Vector3 {
 
 	/**
 	 * Returns the unit vector for this vector.
-	 * 
+	 *
 	 * @return The unit vector for this vector.
 	 */
 	public Vector3 unitV() {
@@ -347,7 +347,7 @@ public class Vector3 {
 
 	/**
 	 * Calculates the floored x-component of this Vector3.
-	 * 
+	 *
 	 * @return The floored x-component of this Vector3.
 	 */
 	public int floorX() {
@@ -356,7 +356,7 @@ public class Vector3 {
 
 	/**
 	 * Calculates the floored y-component of this Vector3.
-	 * 
+	 *
 	 * @return The floored y-component of this Vector3.
 	 */
 	public int floorY() {
@@ -365,7 +365,7 @@ public class Vector3 {
 
 	/**
 	 * Calculates the floored z-component of this Vector3.
-	 * 
+	 *
 	 * @return The floored z-component of this Vector3.
 	 */
 	public int floorZ() {
@@ -374,7 +374,7 @@ public class Vector3 {
 
 	/**
 	 * Computes the angle pre normal.
-	 * 
+	 *
 	 * @param mul
 	 *            The other Vector3.
 	 * @return The angle pre normal.
@@ -388,6 +388,6 @@ public class Vector3 {
 		if (!(o instanceof Vector3))
 			return false;
 		Vector3 that = (Vector3) o;
-		return (x == that.x && y == that.y && z == that.z);
+		return x == that.x && y == that.y && z == that.z;
 	}
 }

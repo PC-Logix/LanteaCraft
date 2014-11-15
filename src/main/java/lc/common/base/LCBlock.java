@@ -1,12 +1,10 @@
 package lc.common.base;
 
-import lc.api.defs.IDefinitionReference;
 import lc.api.event.IBlockEventHandler;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.api.rendering.IEntityRenderInfo;
 import lc.api.rendering.IRenderInfo;
 import lc.api.rendering.ITileRenderInfo;
-import lc.common.impl.registry.DefinitionReference;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -20,15 +18,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Generic block implementation
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/** Rotation direction map across Y-axis */
 	protected static final ForgeDirection[] directions = new ForgeDirection[] { ForgeDirection.SOUTH,
-			ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.EAST };
+		ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.EAST };
 
 	/** If the block instance is opaque */
 	protected boolean isOpaque = false;
@@ -45,7 +43,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Block with material constructor
-	 * 
+	 *
 	 * @param material
 	 *            The material to set
 	 */
@@ -55,7 +53,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Set opaqueness of the block
-	 * 
+	 *
 	 * @param b
 	 *            Is opaque?
 	 * @return This block
@@ -67,7 +65,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Set renderer of the block
-	 * 
+	 *
 	 * @param i
 	 *            Render ID
 	 * @return This block
@@ -79,7 +77,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Set tile provided of the block
-	 * 
+	 *
 	 * @param tile
 	 *            The tile class
 	 */
@@ -89,7 +87,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Get the tile provided from the block
-	 * 
+	 *
 	 * @return The tile class
 	 */
 	public Class<? extends LCTile> getTileType() {
@@ -98,7 +96,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Set inventory provider state of the block
-	 * 
+	 *
 	 * @param b
 	 *            Is inventory provider?
 	 * @return This block
@@ -110,7 +108,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Set rotatedness of the block
-	 * 
+	 *
 	 * @param b
 	 *            Is rotate-able?
 	 * @return This block
@@ -122,7 +120,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Set type provider mode of the block
-	 * 
+	 *
 	 * @param b
 	 *            Is providing types?
 	 * @return This block
@@ -134,7 +132,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Get rotation capabilities
-	 * 
+	 *
 	 * @return If this block can rotate
 	 */
 	public boolean canRotate() {
@@ -143,7 +141,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Get the blocks' rotation
-	 * 
+	 *
 	 * @param world
 	 *            The world object
 	 * @param x
@@ -163,7 +161,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/**
 	 * Set the block's rotation
-	 * 
+	 *
 	 * @param world
 	 *            The world object
 	 * @param x
@@ -203,7 +201,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 	public final TileEntity createNewTileEntity(World world, int data) {
 		if (tileType != null)
 			try {
-				return (TileEntity) tileType.newInstance();
+				return tileType.newInstance();
 			} catch (Throwable t) {
 				throw new RuntimeException(t);
 			}
@@ -214,7 +212,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, player, stack);
 		if (canRotate() && !world.isRemote) {
-			int heading = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			int heading = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 			setRotation(world, x, y, z, directions[heading]);
 			world.markBlockForUpdate(x, y, z);
 		}

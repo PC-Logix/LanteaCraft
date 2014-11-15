@@ -2,9 +2,9 @@ package lc.common.configuration;
 
 /**
  * Module configuration node
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ModuleConfig extends ConfigList {
 
@@ -15,7 +15,7 @@ public class ModuleConfig extends ConfigList {
 
 	/**
 	 * Named configuration node constructor
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 */
@@ -25,7 +25,7 @@ public class ModuleConfig extends ConfigList {
 
 	/**
 	 * Named and commented configuration node constructor
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 * @param comment
@@ -37,7 +37,7 @@ public class ModuleConfig extends ConfigList {
 
 	/**
 	 * Named and parented configuration node constructor
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 * @param parent

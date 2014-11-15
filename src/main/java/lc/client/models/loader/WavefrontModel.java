@@ -17,19 +17,19 @@ import org.lwjgl.opengl.GL11;
 /**
  * Wavefront model container. Originally from FML, apparently being removed from
  * FML due to Minecraft's new 'model format'.
- * 
+ *
  * FIXME: This needs to be rewritten as a proper lexer-parser combo. Using
  * patterns is exceptionally expensive (even when they're cached) which is the
  * exact reason *why* we use parser tools (such as look-ahead).
- * 
+ *
  * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar, cpw
- * 
+ *
  */
 public class WavefrontModel {
 
 	/**
 	 * Wavefront model exception container.
-	 * 
+	 *
 	 * @author AfterLifeLochie
 	 */
 	public static class WavefrontModelException extends Exception {
@@ -48,7 +48,7 @@ public class WavefrontModel {
 
 	/**
 	 * Model vertex container.
-	 * 
+	 *
 	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
 	 */
 	public static class Vertex {
@@ -81,7 +81,7 @@ public class WavefrontModel {
 
 	/**
 	 * Model face container.
-	 * 
+	 *
 	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
 	 */
 	public static class Face {
@@ -103,7 +103,7 @@ public class WavefrontModel {
 			tessellator.setNormal(faceNormal.x, faceNormal.y, faceNormal.z);
 
 			float averageU = 0F, averageV = 0F;
-			if ((texCoords != null) && (texCoords.length > 0)) {
+			if (texCoords != null && texCoords.length > 0) {
 				for (TextureCoord texCoord : texCoords) {
 					averageU += texCoord.u;
 					averageV += texCoord.v;
@@ -115,7 +115,7 @@ public class WavefrontModel {
 			float offsetU, offsetV;
 
 			for (int i = 0; i < vertices.length; ++i)
-				if ((texCoords != null) && (texCoords.length > 0)) {
+				if (texCoords != null && texCoords.length > 0) {
 					offsetU = textureOffset;
 					offsetV = textureOffset;
 					if (texCoords[i].u > averageU)
@@ -140,7 +140,7 @@ public class WavefrontModel {
 
 	/**
 	 * Model element group container.
-	 * 
+	 *
 	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
 	 */
 	public static class ElementGroup {
@@ -207,7 +207,7 @@ public class WavefrontModel {
 
 	/**
 	 * Create and load a new Wavefront Model.
-	 * 
+	 *
 	 * @param resource
 	 *            The ResourceLocation of the model file.
 	 * @throws WavefrontModelException
@@ -224,7 +224,7 @@ public class WavefrontModel {
 
 	/**
 	 * Create and load a new Wavefront Model.
-	 * 
+	 *
 	 * @param name
 	 *            The file name.
 	 * @param input

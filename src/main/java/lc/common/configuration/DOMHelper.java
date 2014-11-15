@@ -10,7 +10,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * XML DOM checking helper. Dutifully borrowed from one of my other projects.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class DOMHelper {
@@ -18,7 +18,7 @@ public class DOMHelper {
 	/**
 	 * Attempts to match the provided node to the Element type with the tag name
 	 * provided.
-	 * 
+	 *
 	 * @param node
 	 *            The node object.
 	 * @param tagName
@@ -43,7 +43,7 @@ public class DOMHelper {
 	 * Attempts to pop the first node of type Element from the list with the
 	 * provided tag name using the
 	 * {@link DOMHelper#isNodeOfType(Node, String, boolean)} checker.
-	 * 
+	 *
 	 * @param list
 	 *            The NodeList object.
 	 * @param tagName
@@ -66,7 +66,7 @@ public class DOMHelper {
 	 * Attempts to list all of the nodes of type Element from the list with the
 	 * provided tag name using the
 	 * {@link DOMHelper#isNodeOfType(Node, String, boolean)} checker.
-	 * 
+	 *
 	 * @param list
 	 *            The NodeList object.
 	 * @param tagName
@@ -89,7 +89,7 @@ public class DOMHelper {
 	/**
 	 * Attempts to find a leading comment above this node until either a Comment
 	 * is encountered or another Element is found instead.
-	 * 
+	 *
 	 * @param node
 	 *            The node to search for a leading comment to.
 	 * @return A leading comment or null.
@@ -106,7 +106,7 @@ public class DOMHelper {
 	/**
 	 * Checks if the Element contains all of the attributes contained in the
 	 * list of labels.
-	 * 
+	 *
 	 * @param element
 	 *            The Element object.
 	 * @param labels
@@ -123,7 +123,7 @@ public class DOMHelper {
 	/**
 	 * Checks if the Element contains any of the attributes contained in the
 	 * list of labels.
-	 * 
+	 *
 	 * @param element
 	 *            The Element object.
 	 * @param labels
@@ -140,7 +140,7 @@ public class DOMHelper {
 	/**
 	 * Checks if the Element contains all of the attributes contained in the
 	 * list of labels, or throws an {@link XMLParserException} if it does not.
-	 * 
+	 *
 	 * @param element
 	 *            The Element object.
 	 * @param labels
@@ -161,7 +161,7 @@ public class DOMHelper {
 	/**
 	 * Checks if the Element contains any of the attributes contained in the
 	 * list of labels, or throws an {@link XMLParserException} if it does not.
-	 * 
+	 *
 	 * @param element
 	 *            The Element object.
 	 * @param labels
@@ -181,7 +181,7 @@ public class DOMHelper {
 
 	/**
 	 * Converts the list of labels to a string.
-	 * 
+	 *
 	 * @param labels
 	 *            The list of labels.
 	 * @return The string version of the list.
@@ -196,7 +196,7 @@ public class DOMHelper {
 
 	/**
 	 * Converts the list of labels to a string.
-	 * 
+	 *
 	 * @param labels
 	 *            The list of labels.
 	 * @return The string version of the list.
@@ -208,7 +208,7 @@ public class DOMHelper {
 	/**
 	 * Attempts to pop a boolean from a string, matching a literal set of legal
 	 * values that equal logical true. All other inputs are considered false.
-	 * 
+	 *
 	 * @param input
 	 *            The input string.
 	 * @param caseSensitive

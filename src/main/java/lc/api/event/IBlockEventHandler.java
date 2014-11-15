@@ -2,9 +2,9 @@ package lc.api.event;
 
 /**
  * Contract interface for block-event handlers
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public interface IBlockEventHandler {
 

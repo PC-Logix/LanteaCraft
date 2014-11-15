@@ -12,7 +12,7 @@ import net.minecraft.launchwrapper.IClassTransformer;
 /**
  * {@link LCCoreTransformer} acts as a proxy for children transformers in the
  * {@link LCCoreMod} instance.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class LCCoreTransformer implements IClassTransformer {
@@ -90,7 +90,7 @@ public class LCCoreTransformer implements IClassTransformer {
 		 * successful, put result into transformed and update result with the
 		 * last transformation.
 		 */
-		for (IClassTransformer transformer : transformers) {
+		for (IClassTransformer transformer : transformers)
 			try {
 				result = transformer.transform(name, transformedName, transformed);
 				if (result == null)
@@ -106,7 +106,6 @@ public class LCCoreTransformer implements IClassTransformer {
 						"Transformer %s failed to transform class %s (exception raised), ignoring transformer result. ",
 						transformer, name, e);
 			}
-		}
 
 		if (BuildInfo.DEBUG && name.startsWith("lc."))
 			try {

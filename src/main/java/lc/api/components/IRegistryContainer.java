@@ -2,9 +2,9 @@ package lc.api.components;
 
 /**
  * Registry container interface
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public interface IRegistryContainer {
 

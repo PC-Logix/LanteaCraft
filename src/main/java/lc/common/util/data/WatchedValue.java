@@ -2,9 +2,9 @@ package lc.common.util.data;
 
 /**
  * Represents a Value which is Observable.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  * @param <T>
  *            The type of the Value object to contain.
  */
@@ -22,7 +22,7 @@ public class WatchedValue<T extends Object> extends Observable {
 
 	/**
 	 * Creates a new WatchedValue container with an initial value of type T.
-	 * 
+	 *
 	 * @param initial
 	 *            The initial state value.
 	 */
@@ -34,7 +34,7 @@ public class WatchedValue<T extends Object> extends Observable {
 	/**
 	 * Creates a new WatchedValue container with a parent Observable and an
 	 * initial value of type T.
-	 * 
+	 *
 	 * @param parent
 	 *            The parent Observable object.
 	 * @param initial
@@ -61,7 +61,7 @@ public class WatchedValue<T extends Object> extends Observable {
 
 	/**
 	 * Gets the value of this WatchedValue at the moment of invocation.
-	 * 
+	 *
 	 * @return The value of the container.
 	 */
 	public T get() {
@@ -71,7 +71,7 @@ public class WatchedValue<T extends Object> extends Observable {
 	/**
 	 * Sets the value of this WatchedValue immediately. This notifies the
 	 * Observable that a state change has occurred.
-	 * 
+	 *
 	 * @param value
 	 *            The value to set
 	 */
@@ -94,7 +94,7 @@ public class WatchedValue<T extends Object> extends Observable {
 	/**
 	 * Returns the hash-code of the last value in this WatchedValue. This value
 	 * may be <code>null</code> if the last value was a <code>null</code> value.
-	 * 
+	 *
 	 * @return The last hash-code value.
 	 */
 	public int last() {
@@ -117,7 +117,7 @@ public class WatchedValue<T extends Object> extends Observable {
 	@Override
 	public String toString() {
 		return new StringBuilder().append("WatchedValue: { ")
-				.append((this.get() != null) ? this.get().toString() : "null").append(" }").toString();
+				.append(this.get() != null ? this.get().toString() : "null").append(" }").toString();
 	}
 
 }

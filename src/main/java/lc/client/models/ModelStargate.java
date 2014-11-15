@@ -1,21 +1,21 @@
 package lc.client.models;
 
-import org.lwjgl.opengl.GL11;
-
+import static lc.client.models.ModelStargate.ModelStargateConstants.cos;
+import static lc.client.models.ModelStargate.ModelStargateConstants.sin;
+import static lc.client.opengl.GLHelper.pushTexVertex;
 import lc.client.TileStargateBaseRenderer;
 import lc.client.opengl.BufferDisplayList;
 import lc.common.base.LCTileRenderHook;
 import lc.common.util.math.Orientations;
 import lc.tiles.TileStargateBase;
-import static lc.client.opengl.GLHelper.*;
-import static lc.client.models.ModelStargate.ModelStargateConstants.cos;
-import static lc.client.models.ModelStargate.ModelStargateConstants.sin;
+
+import org.lwjgl.opengl.GL11;
 
 /**
  * Stargate model factory
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ModelStargate {
 
@@ -29,8 +29,8 @@ public class ModelStargate {
 		public final static double ringInnerRadius = 3.0;
 		public final static double ringInnerMovingRadius = ringInnerRadius + 0.1;
 		public final static double ringOuterRadius = 3.5;
-		public final static double ringMidRadius = ringInnerMovingRadius
-				+ ((ringOuterRadius - ringInnerMovingRadius) / 2);
+		public final static double ringMidRadius = ringInnerMovingRadius + (ringOuterRadius - ringInnerMovingRadius)
+				/ 2;
 
 		public final static double ringDepth = 0.15;
 
@@ -114,7 +114,7 @@ public class ModelStargate {
 		double radiusMidInner = ModelStargateConstants.ringInnerMovingRadius;
 		double radiusMidOuter = ModelStargateConstants.ringMidRadius;
 		double ringDepth = ModelStargateConstants.ringDepth;
-		double bevelDepth = ModelStargateConstants.ringDepth - (1d / 16d);
+		double bevelDepth = ModelStargateConstants.ringDepth - 1d / 16d;
 		GL11.glNormal3f(0, 1, 0);
 		GL11.glBegin(GL11.GL_QUADS);
 		for (int i = 0; i < ModelStargateConstants.numRingSegments; i++) {
@@ -186,9 +186,9 @@ public class ModelStargate {
 	}
 
 	public void renderChevronImmediate(boolean lit) {
-		double r1 = ModelStargateConstants.chevronInnerRadius - (1d / 18d);
+		double r1 = ModelStargateConstants.chevronInnerRadius - 1d / 18d;
 		double r2 = ModelStargateConstants.chevronOuterRadius;
-		double z2 = ModelStargateConstants.ringDepth - (1d / 32d);
+		double z2 = ModelStargateConstants.ringDepth - 1d / 32d;
 
 		double z1 = z2 + ModelStargateConstants.chevronDepth;
 		double w1 = ModelStargateConstants.chevronBorderWidth;
@@ -287,9 +287,9 @@ public class ModelStargate {
 	}
 
 	private void renderRingImmediate() {
-		double radiusMidInner = ModelStargateConstants.ringInnerMovingRadius - (1 / 128d);
-		double radiusMidOuter = ModelStargateConstants.ringMidRadius + (1 / 128d);
-		double z = ModelStargateConstants.ringDepth - (1d / 128d);
+		double radiusMidInner = ModelStargateConstants.ringInnerMovingRadius - 1 / 128d;
+		double radiusMidOuter = ModelStargateConstants.ringMidRadius + 1 / 128d;
+		double z = ModelStargateConstants.ringDepth - 1d / 128d;
 		GL11.glNormal3f(0, 0, 1);
 		GL11.glBegin(GL11.GL_QUADS);
 		selectTile(ModelStargateConstants.ringSymbolTextureIndex);

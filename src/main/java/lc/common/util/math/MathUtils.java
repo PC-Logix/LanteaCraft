@@ -2,15 +2,15 @@ package lc.common.util.math;
 
 /**
  * Math utilities
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class MathUtils {
 
 	/**
 	 * Normalize an angle between 0.0 and 360.0 degrees
-	 * 
+	 *
 	 * @param a
 	 *            The angle
 	 * @return A normalized angle between 0.0 (0PIr) and 360.0 (2PIr) degrees
@@ -24,7 +24,7 @@ public class MathUtils {
 
 	/**
 	 * Add and normalize two angles
-	 * 
+	 *
 	 * @param a
 	 *            An angle
 	 * @param b
@@ -38,7 +38,7 @@ public class MathUtils {
 
 	/**
 	 * Calculate the difference between two angles
-	 * 
+	 *
 	 * @param a
 	 *            An angle
 	 * @param b
@@ -56,7 +56,7 @@ public class MathUtils {
 
 	/**
 	 * Relax an angle towards a target angle at a given rate
-	 * 
+	 *
 	 * @param a
 	 *            The source angle
 	 * @param target
@@ -71,7 +71,7 @@ public class MathUtils {
 
 	/**
 	 * Interpolate two angles
-	 * 
+	 *
 	 * @param a
 	 *            The source angle
 	 * @param b

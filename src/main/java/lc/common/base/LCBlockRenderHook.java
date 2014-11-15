@@ -12,9 +12,9 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 /**
  * Block rendering hook.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
 
@@ -24,21 +24,23 @@ public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
 
 	/**
 	 * Create a new rendering hook.
-	 * @param renderIdx The renderer ID of this hook
+	 *
+	 * @param renderIdx
+	 *            The renderer ID of this hook
 	 */
 	public LCBlockRenderHook(int renderIdx) {
 		this.renderIdx = renderIdx;
-		this.registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
-		this.defaultBlockRenderer = new DefaultBlockRenderer();
+		registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
+		defaultBlockRenderer = new DefaultBlockRenderer();
 	}
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
 		boolean flag = true;
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.BLOCK, block.getClass());
-		if (worker == null || !(worker instanceof LCBlockRenderer)) {
+		if (worker == null || !(worker instanceof LCBlockRenderer))
 			flag = false;
-		} else {
+		else {
 			LCBlockRenderer blockRenderer = (LCBlockRenderer) worker;
 			while (blockRenderer != null && !blockRenderer.renderInventoryBlock(block, renderer, metadata)) {
 				worker = registry.getRenderer(RendererType.BLOCK, blockRenderer.getParent());
@@ -58,9 +60,9 @@ public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
 			RenderBlocks renderer) {
 		boolean flag = true;
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.BLOCK, block.getClass());
-		if (worker == null || !(worker instanceof LCBlockRenderer)) {
+		if (worker == null || !(worker instanceof LCBlockRenderer))
 			flag = false;
-		} else {
+		else {
 			LCBlockRenderer blockRenderer = (LCBlockRenderer) worker;
 			while (blockRenderer != null && !blockRenderer.renderWorldBlock(block, renderer, world, x, y, z)) {
 				worker = registry.getRenderer(RendererType.BLOCK, blockRenderer.getParent());

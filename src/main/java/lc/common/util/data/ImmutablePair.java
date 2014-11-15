@@ -3,9 +3,9 @@ package lc.common.util.data;
 /**
  * A instance of an immutable pair. The A-B pair represented by this object are
  * immutable, but may not be immutable themselves.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  * @param <A>
  *            The first type of value in the immutable pair
  * @param <B>
@@ -17,7 +17,7 @@ public class ImmutablePair<A, B> {
 
 	/**
 	 * Creates an ImmutablePair
-	 * 
+	 *
 	 * @param a
 	 *            The A object
 	 * @param b
@@ -30,7 +30,7 @@ public class ImmutablePair<A, B> {
 
 	/**
 	 * Fetch the A object
-	 * 
+	 *
 	 * @return The A object
 	 */
 	public A getA() {
@@ -39,7 +39,7 @@ public class ImmutablePair<A, B> {
 
 	/**
 	 * Fetch the B object
-	 * 
+	 *
 	 * @return The B object
 	 */
 	public B getB() {
@@ -57,7 +57,7 @@ public class ImmutablePair<A, B> {
 	public boolean equals(Object other) {
 		if (other instanceof ImmutablePair) {
 			ImmutablePair<?, ?> that = (ImmutablePair<?, ?>) other;
-			return (this.a.equals(that.a) && this.b.equals(that.b));
+			return this.a.equals(that.a) && this.b.equals(that.b);
 		}
 		return false;
 	}

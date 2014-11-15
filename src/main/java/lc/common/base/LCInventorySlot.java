@@ -8,9 +8,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Internal base inventory slot stub.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCInventorySlot extends Slot {
 
@@ -19,7 +19,7 @@ public class LCInventorySlot extends Slot {
 
 	/**
 	 * Create a new stub inventory slot
-	 * 
+	 *
 	 * @param host
 	 *            The host inventory
 	 * @param slotIndex

@@ -2,7 +2,7 @@ package lc.api.defs;
 
 /**
  * Game biome container interface
- * 
+ *
  * @author AfterLifeLochie
  *
  */

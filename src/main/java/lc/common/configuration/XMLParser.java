@@ -19,9 +19,9 @@ import org.xml.sax.SAXException;
 
 /**
  * XML configuration parser
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class XMLParser {
 
@@ -35,7 +35,7 @@ public class XMLParser {
 
 	/**
 	 * Attempts to read a configuration file structure from the file
-	 * 
+	 *
 	 * @param chunk
 	 *            The chunk to read.
 	 * @return The ConfigList root object.
@@ -62,7 +62,7 @@ public class XMLParser {
 
 	/**
 	 * Attempts to read a root config container object.
-	 * 
+	 *
 	 * @param modRoot
 	 *            The ModConfig root container.
 	 * @return The ModConfig root container, usually containing a list of

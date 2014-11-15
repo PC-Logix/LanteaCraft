@@ -2,17 +2,17 @@ package lc.client.opengl;
 
 import java.nio.ByteBuffer;
 
+import lc.api.rendering.IGraphicsBuffer;
+
 import org.lwjgl.opengl.ARBFramebufferObject;
 import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.GL11;
 
-import lc.api.rendering.IGraphicsBuffer;
-
 /**
  * OpenGL to texture buffering mode.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class BufferTexture implements IGraphicsBuffer {
 
@@ -25,7 +25,7 @@ public class BufferTexture implements IGraphicsBuffer {
 
 	/**
 	 * Create a new texture buffer.
-	 * 
+	 *
 	 * @param width
 	 *            The virtual texture width.
 	 * @param height

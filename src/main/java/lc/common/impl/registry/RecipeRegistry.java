@@ -4,21 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 import lc.api.components.IRecipeRegistry;
 import lc.api.components.RecipeType;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
 import lc.core.LCRuntime;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 
 /**
  * Recipe registry implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class RecipeRegistry implements IRecipeRegistry {
 
@@ -44,7 +44,7 @@ public class RecipeRegistry implements IRecipeRegistry {
 
 	/**
 	 * Initializes the registry
-	 * 
+	 *
 	 * @param runtime
 	 *            The LanteaCraft runtime instance
 	 * @param event

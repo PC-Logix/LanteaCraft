@@ -2,9 +2,9 @@ package lc.common.base.multiblock;
 
 /**
  * Multi-block state list
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public enum MultiblockState {
 	/** No valid state */
@@ -14,7 +14,7 @@ public enum MultiblockState {
 
 	/**
 	 * Get a state from an ordinal
-	 * 
+	 *
 	 * @param ord
 	 *            The ordinal
 	 * @return A state, or none if not valid.

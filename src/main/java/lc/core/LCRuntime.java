@@ -1,8 +1,5 @@
 package lc.core;
 
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import lc.api.ILCAPIProxy;
 import lc.api.components.IRegistryContainer;
 import lc.api.defs.HintProvider;
@@ -18,12 +15,15 @@ import lc.common.impl.registry.RecipeRegistry;
 import lc.common.impl.registry.RegistryContainer;
 import lc.common.network.LCPacketPipeline;
 import lc.common.util.LCCreativeTabManager;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 /**
  * LanteaCraft main mod container
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCRuntime implements ILCAPIProxy {
 
@@ -92,7 +92,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Get the network pipeline
-	 * 
+	 *
 	 * @return The network pipeline
 	 */
 	public LCPacketPipeline network() {
@@ -101,7 +101,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Get the current hint provider.
-	 * 
+	 *
 	 * @return The current hint provider.
 	 */
 	public IHintProvider hints() {
@@ -110,7 +110,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Called during pre-initialization
-	 * 
+	 *
 	 * @param event
 	 *            The FML pre initialization event.
 	 */
@@ -123,7 +123,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Called during initialization
-	 * 
+	 *
 	 * @param event
 	 *            The FML initialization event.
 	 */
@@ -138,7 +138,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Called during post-initialization
-	 * 
+	 *
 	 * @param event
 	 *            The FML post initialization event.
 	 */

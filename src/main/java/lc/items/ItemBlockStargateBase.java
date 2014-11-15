@@ -1,23 +1,23 @@
 package lc.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItemBlock;
 import lc.core.ResourceAccess;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 /**
  * Stargate base block item implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ItemBlockStargateBase extends LCItemBlock {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param block
 	 *            The parent block type.
 	 */

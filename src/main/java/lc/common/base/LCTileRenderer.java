@@ -6,16 +6,16 @@ import lc.common.impl.registry.DefinitionReference;
 
 /**
  * Generic tile rendering stub.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCTileRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Get the parent renderer. Called when a render function cannot be
 	 * completed by the current renderer.
-	 * 
+	 *
 	 * @return The parent renderer.
 	 */
 	public abstract LCTileRenderer getParent();
@@ -26,7 +26,7 @@ public abstract class LCTileRenderer implements ILanteaCraftRenderer {
 	 * be completed, the renderer must return <code>true</code>. If the
 	 * rendering is not completed, the parent renderer will be called to render
 	 * the block.
-	 * 
+	 *
 	 * @param tile
 	 *            The tile entity object
 	 * @param renderer

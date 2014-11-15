@@ -1,9 +1,5 @@
 package lc.client;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import lc.api.defs.IDefinitionReference;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.api.rendering.IRenderInfo;
@@ -11,12 +7,16 @@ import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.util.math.Trans3;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Default block renderer implementation
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class DefaultBlockRenderer extends LCBlockRenderer {
 

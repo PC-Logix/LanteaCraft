@@ -69,8 +69,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 			}
 	}
 
-	public void func_147424_a(int p_147424_1_, int p_147424_2_,
-			Block[] p_147424_3_) {
+	public void func_147424_a(int p_147424_1_, int p_147424_2_, Block[] p_147424_3_) {
 		byte heightWater = 42;
 		func_147423_a(p_147424_1_ * 4, 0, p_147424_2_ * 4);
 		for (int k = 0; k < 4; ++k) {
@@ -100,8 +99,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 						double d13 = (d4 - d2) * d9;
 
 						for (int i3 = 0; i3 < 4; ++i3) {
-							int j3 = i3 + k * 4 << 12 | 0 + j1 * 4 << 8 | k2
-									* 8 + l2;
+							int j3 = i3 + k * 4 << 12 | 0 + j1 * 4 << 8 | k2 * 8 + l2;
 							short short1 = 256;
 							j3 -= short1;
 							double d14 = 0.25D;
@@ -130,16 +128,15 @@ public class AbydosChunkProvider implements IChunkProvider {
 		}
 	}
 
-	public void replaceBlocksForBiome(int p_147422_1_, int p_147422_2_,
-			Block[] p_147422_3_, byte[] p_147422_4_, BiomeGenBase p_147422_5_) {
+	public void replaceBlocksForBiome(int p_147422_1_, int p_147422_2_, Block[] p_147422_3_, byte[] p_147422_4_,
+			BiomeGenBase p_147422_5_) {
 		double d0 = 0.03125D;
-		stoneNoise = field_147430_m.func_151599_a(stoneNoise, p_147422_1_ * 16,
-				p_147422_2_ * 16, 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+		stoneNoise = field_147430_m.func_151599_a(stoneNoise, p_147422_1_ * 16, p_147422_2_ * 16, 16, 16, d0 * 2.0D,
+				d0 * 2.0D, 1.0D);
 
 		for (int k = 0; k < 16; ++k)
 			for (int l = 0; l < 16; ++l)
-				p_147422_5_.genTerrainBlocks(worldObj, rand, p_147422_3_,
-						p_147422_4_, p_147422_1_ * 16 + k,
+				p_147422_5_.genTerrainBlocks(worldObj, rand, p_147422_3_, p_147422_4_, p_147422_1_ * 16 + k,
 						p_147422_2_ * 16 + l, stoneNoise[l + k * 16]);
 	}
 
@@ -177,17 +174,14 @@ public class AbydosChunkProvider implements IChunkProvider {
 	}
 
 	private void func_147423_a(int p_147423_1_, int p_147423_2_, int p_147423_3_) {
-		field_147426_g = noiseGen6.generateNoiseOctaves(field_147426_g,
-				p_147423_1_, p_147423_3_, 5, 5, 200.0D, 200.0D, 0.5D);
-		field_147427_d = field_147429_l.generateNoiseOctaves(field_147427_d,
-				p_147423_1_, p_147423_2_, p_147423_3_, 5, 33, 5,
-				8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
-		field_147428_e = field_147431_j.generateNoiseOctaves(field_147428_e,
-				p_147423_1_, p_147423_2_, p_147423_3_, 5, 33, 5, 684.412D,
-				684.412D, 684.412D);
-		field_147425_f = field_147432_k.generateNoiseOctaves(field_147425_f,
-				p_147423_1_, p_147423_2_, p_147423_3_, 5, 33, 5, 684.412D,
-				684.412D, 684.412D);
+		field_147426_g = noiseGen6.generateNoiseOctaves(field_147426_g, p_147423_1_, p_147423_3_, 5, 5, 200.0D, 200.0D,
+				0.5D);
+		field_147427_d = field_147429_l.generateNoiseOctaves(field_147427_d, p_147423_1_, p_147423_2_, p_147423_3_, 5,
+				33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
+		field_147428_e = field_147431_j.generateNoiseOctaves(field_147428_e, p_147423_1_, p_147423_2_, p_147423_3_, 5,
+				33, 5, 684.412D, 684.412D, 684.412D);
+		field_147425_f = field_147432_k.generateNoiseOctaves(field_147425_f, p_147423_1_, p_147423_2_, p_147423_3_, 5,
+				33, 5, 684.412D, 684.412D, 684.412D);
 		int l = 0;
 		int i1 = 0;
 		for (int j1 = 0; j1 < 5; ++j1)
@@ -203,8 +197,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 						BiomeGenBase biomegenbase1 = biomeForGeneration;
 						float f3 = biomegenbase1.rootHeight;
 						float f4 = biomegenbase1.heightVariation;
-						float f5 = parabolicField[l1 + 2 + (i2 + 2) * 5]
-								/ (f3 + 2.0F);
+						float f5 = parabolicField[l1 + 2 + (i2 + 2) * 5] / (f3 + 2.0F);
 						if (biomegenbase1.rootHeight > biomegenbase.rootHeight)
 							f5 /= 2.0F;
 						f += f4 * f5;
@@ -283,15 +276,13 @@ public class AbydosChunkProvider implements IChunkProvider {
 		BlockFalling.fallInstantly = true;
 		int k = par2 * 16;
 		int l = par3 * 16;
-		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(k + 16,
-				l + 16);
+		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(k + 16, l + 16);
 		rand.setSeed(worldObj.getSeed());
 		long i1 = rand.nextLong() / 2L * 2L + 1L;
 		long j1 = rand.nextLong() / 2L * 2L + 1L;
 		rand.setSeed(par2 * i1 + par3 * j1 ^ worldObj.getSeed());
 		biomegenbase.decorate(worldObj, rand, k, l);
-		structureController.generateStructuresInChunk(worldObj, rand, par2,
-				par3);
+		structureController.generateStructuresInChunk(worldObj, rand, par2, par3);
 		BlockFalling.fallInstantly = false;
 	}
 
@@ -344,15 +335,14 @@ public class AbydosChunkProvider implements IChunkProvider {
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType,
-			int par2, int par3, int par4) {
+	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int par2, int par3, int par4) {
 		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(par2, par4);
 		return biomegenbase.getSpawnableList(par1EnumCreatureType);
 	}
 
 	@Override
-	public ChunkPosition func_147416_a(World p_147416_1_, String p_147416_2_,
-			int p_147416_3_, int p_147416_4_, int p_147416_5_) {
+	public ChunkPosition func_147416_a(World p_147416_1_, String p_147416_2_, int p_147416_3_, int p_147416_4_,
+			int p_147416_5_) {
 		return null;
 	}
 

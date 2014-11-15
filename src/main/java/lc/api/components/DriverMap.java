@@ -6,9 +6,9 @@ import cpw.mods.fml.common.Loader;
 
 /**
  * Driver list and wrapper class
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public enum DriverMap {
 	/** IC2 power drivers */
@@ -34,7 +34,7 @@ public enum DriverMap {
 
 	/**
 	 * Get a map of all drivers for a type of integration
-	 * 
+	 *
 	 * @param typeof
 	 *            The type of drivers
 	 * @return A list of drivers which should be loaded

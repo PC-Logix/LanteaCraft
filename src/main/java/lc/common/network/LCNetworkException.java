@@ -2,15 +2,15 @@ package lc.common.network;
 
 /**
  * Network exception class.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCNetworkException extends Exception {
 
 	/**
 	 * Create a new network exception.
-	 * 
+	 *
 	 * @param reason
 	 *            The reason for the exception.
 	 */
@@ -20,7 +20,7 @@ public class LCNetworkException extends Exception {
 
 	/**
 	 * Create a new network exception.
-	 * 
+	 *
 	 * @param reason
 	 *            The reason for the exception.
 	 * @param t

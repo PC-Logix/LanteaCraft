@@ -10,9 +10,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Internal base container class.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCContainer extends Container {
 	/** Container width */
@@ -22,7 +22,7 @@ public abstract class LCContainer extends Container {
 
 	/**
 	 * Create a new container
-	 * 
+	 *
 	 * @param width
 	 *            The width
 	 * @param height
@@ -41,7 +41,7 @@ public abstract class LCContainer extends Container {
 
 	/**
 	 * Add the player slots to the container in the default location
-	 * 
+	 *
 	 * @param player
 	 *            The player slots
 	 */
@@ -51,7 +51,7 @@ public abstract class LCContainer extends Container {
 
 	/**
 	 * Add the player slots to the container at the specified location
-	 * 
+	 *
 	 * @param player
 	 *            The player slots
 	 * @param x
@@ -94,7 +94,7 @@ public abstract class LCContainer extends Container {
 
 	/**
 	 * Send an update state to a crafter
-	 * 
+	 *
 	 * @param crafter
 	 *            The crafter person
 	 */

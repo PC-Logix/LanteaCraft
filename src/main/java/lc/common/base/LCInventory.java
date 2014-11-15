@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Internal base inventory stub.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCInventory implements ISidedInventory {
 
@@ -20,7 +20,7 @@ public abstract class LCInventory implements ISidedInventory {
 
 	/**
 	 * Create an inventory
-	 * 
+	 *
 	 * @param size
 	 *            The size of the inventory in slots.
 	 */
@@ -31,7 +31,7 @@ public abstract class LCInventory implements ISidedInventory {
 
 	/**
 	 * Set a filter rule on a slot number
-	 * 
+	 *
 	 * @param slot
 	 *            The slot number
 	 * @param rule
@@ -43,7 +43,7 @@ public abstract class LCInventory implements ISidedInventory {
 
 	/**
 	 * Fetch a filter rule for a slot number
-	 * 
+	 *
 	 * @param slot
 	 *            The slot number
 	 * @return The filtering rule

@@ -25,10 +25,8 @@ public class LCFeatureStructure extends MapGenStructure {
 		while (var2.hasNext()) {
 			Map.Entry var3 = (Map.Entry) var2.next();
 			if (((String) var3.getKey()).equals("distance"))
-				maxDistanceBetweenScatteredFeatures = MathHelper
-						.parseIntWithDefaultAndMax((String) var3.getValue(),
-								maxDistanceBetweenScatteredFeatures,
-								minDistanceBetweenScatteredFeatures + 1);
+				maxDistanceBetweenScatteredFeatures = MathHelper.parseIntWithDefaultAndMax((String) var3.getValue(),
+						maxDistanceBetweenScatteredFeatures, minDistanceBetweenScatteredFeatures + 1);
 		}
 	}
 
@@ -53,12 +51,10 @@ public class LCFeatureStructure extends MapGenStructure {
 		Random var7 = worldObj.setRandomSeed(var5, var6, 14357617);
 		var5 *= maxDistanceBetweenScatteredFeatures;
 		var6 *= maxDistanceBetweenScatteredFeatures;
-		var5 += var7.nextInt(maxDistanceBetweenScatteredFeatures
-				- minDistanceBetweenScatteredFeatures);
-		var6 += var7.nextInt(maxDistanceBetweenScatteredFeatures
-				- minDistanceBetweenScatteredFeatures);
+		var5 += var7.nextInt(maxDistanceBetweenScatteredFeatures - minDistanceBetweenScatteredFeatures);
+		var6 += var7.nextInt(maxDistanceBetweenScatteredFeatures - minDistanceBetweenScatteredFeatures);
 
-		if ((var3 == var5) && (var4 == var6))
+		if (var3 == var5 && var4 == var6)
 			return true;
 
 		return false;

@@ -2,9 +2,9 @@ package lc.api.components;
 
 /**
  * List of all component types.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public enum ComponentType {
 	/** Core */

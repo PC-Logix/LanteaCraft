@@ -2,13 +2,6 @@ package lc.blocks;
 
 import java.util.List;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.rendering.IBlockRenderInfo;
@@ -17,12 +10,19 @@ import lc.common.base.LCBlock;
 import lc.core.ResourceAccess;
 import lc.items.ItemBlockStargateBase;
 import lc.tiles.TileStargateBase;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * Stargate base implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @Definition(name = "stargateBase", type = ComponentType.STARGATE, blockClass = BlockStargateBase.class, itemBlockClass = ItemBlockStargateBase.class, tileClass = TileStargateBase.class)
 public class BlockStargateBase extends LCBlock {
@@ -83,7 +83,7 @@ public class BlockStargateBase extends LCBlock {
 
 	/**
 	 * Get the type of this Stargate base block
-	 * 
+	 *
 	 * @param metadata
 	 *            The metadata
 	 * @return The base type

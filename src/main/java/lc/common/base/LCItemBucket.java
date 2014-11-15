@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * LCItemBucket is a special bucket implementation which allows Fluids to create
  * custom bucket types generically.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class LCItemBucket extends ItemBucket {
@@ -25,7 +25,7 @@ public class LCItemBucket extends ItemBucket {
 	/**
 	 * Creates an instance of an LCItemBucket and initializes it with default
 	 * properties and with the {@link SpecialBucketHandler} registry.
-	 * 
+	 *
 	 * @param hostBlock
 	 *            The fluid block this Bucket is hosting.
 	 */
@@ -53,7 +53,7 @@ public class LCItemBucket extends ItemBucket {
 
 	/**
 	 * Set the target texture of the bucket.
-	 * 
+	 *
 	 * @param bucketTextureName
 	 *            The texture name for the bucket.
 	 */

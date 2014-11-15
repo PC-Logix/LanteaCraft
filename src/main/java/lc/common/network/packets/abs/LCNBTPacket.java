@@ -11,9 +11,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * NBT packet type implementation
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCNBTPacket extends LCTargetPacket {
 
@@ -26,7 +26,7 @@ public abstract class LCNBTPacket extends LCTargetPacket {
 	/**
 	 * Read an NBT tag compound from the byte buffer input at the current read
 	 * pointer.
-	 * 
+	 *
 	 * @param buffer
 	 *            The buffer
 	 * @return A tag compound
@@ -45,7 +45,7 @@ public abstract class LCNBTPacket extends LCTargetPacket {
 	/**
 	 * Write an NBT tag compound to the byte buffer output at the current write
 	 * pointer.
-	 * 
+	 *
 	 * @param buffer
 	 *            The buffer
 	 * @param tag

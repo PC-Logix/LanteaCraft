@@ -2,9 +2,9 @@ package lc.api.rendering;
 
 /**
  * Contract interface for rendering information providers.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public interface IRenderInfo {
 

@@ -29,7 +29,7 @@ import cpw.mods.fml.relauncher.Side;
 /**
  * Takes {@link HintProvider} rules in a load-time binary base class and
  * evaluates them.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class HintInjectionTransformer implements IClassTransformer {
@@ -106,9 +106,8 @@ public class HintInjectionTransformer implements IClassTransformer {
 									"Llc/common/IHintProvider;"));
 				}
 
-				if (initMethod.maxStack < fieldToClazzMap.size() * 4) {
+				if (initMethod.maxStack < fieldToClazzMap.size() * 4)
 					initMethod.maxStack += fieldToClazzMap.size() * 4;
-				}
 			}
 		}
 

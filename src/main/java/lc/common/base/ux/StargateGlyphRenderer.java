@@ -16,8 +16,8 @@ public class StargateGlyphRenderer {
 		int cellSize = 64 / scale;
 		if (address.length() > 7) {
 			cellSize = (int) Math.floor(448 / address.length()) / scale;
-			if (448 / scale > (address.length() * cellSize)) {
-				double freeLeftRight = 448 / scale - (address.length() * cellSize);
+			if (448 / scale > address.length() * cellSize) {
+				double freeLeftRight = 448 / scale - address.length() * cellSize;
 				double freeTopBottom = 64 / scale - cellSize;
 				paddingLeft += (int) Math.floor(freeLeftRight / address.length());
 				paddingTop += (int) Math.floor(freeTopBottom / 2);
@@ -26,7 +26,7 @@ public class StargateGlyphRenderer {
 
 		for (int i = 0; i < address.length(); i++) {
 			int s = StargateCharsetHelper.singleton().index(address.charAt(i));
-			double u = uscale * ((s / (length - 1)) * 32), v = vscale * ((s % (length - 1)) * 32);
+			double u = uscale * (s / (length - 1) * 32), v = vscale * (s % (length - 1) * 32);
 			double u2 = uscale * 32, v2 = vscale * 32;
 			drawTexturedRectUV(x + borderSize + i * cellSize + paddingLeft, y + borderSize + paddingTop, cellSize,
 					cellSize, u, v, u2, v2, zLevel);

@@ -5,9 +5,9 @@ import net.minecraft.tileentity.TileEntity;
 
 /**
  * Represents a position in terms of 2D chunk space
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ChunkPos {
 
@@ -20,7 +20,7 @@ public class ChunkPos {
 
 	/**
 	 * Derive a chunk position from a tile entity
-	 * 
+	 *
 	 * @param te
 	 *            The tile entity
 	 */
@@ -30,7 +30,7 @@ public class ChunkPos {
 
 	/**
 	 * Create a new chunk position
-	 * 
+	 *
 	 * @param dimension
 	 *            The dimension ID
 	 * @param x
@@ -46,7 +46,7 @@ public class ChunkPos {
 
 	/**
 	 * Create a new chunk position
-	 * 
+	 *
 	 * @param x
 	 *            The chunk x-coordinate
 	 * @param z
@@ -59,7 +59,7 @@ public class ChunkPos {
 
 	/**
 	 * Derive a chunk position from an NBT tag compound
-	 * 
+	 *
 	 * @param nbt
 	 *            The tag compound
 	 */
@@ -71,7 +71,7 @@ public class ChunkPos {
 
 	/**
 	 * Convert this chunk position to an NBT tag compound
-	 * 
+	 *
 	 * @return The chunk position saved into an NBT tag compound
 	 */
 	public NBTTagCompound toNBT() {
@@ -84,7 +84,7 @@ public class ChunkPos {
 
 	/**
 	 * Convert this chunk position to a dimension position
-	 * 
+	 *
 	 * @return A dimension position representing the origin of this chunk
 	 */
 	public DimensionPos toWorldLocation() {
@@ -93,7 +93,7 @@ public class ChunkPos {
 
 	/**
 	 * Set the dimension of this chunk position
-	 * 
+	 *
 	 * @param dimension
 	 *            The new dimension ID
 	 */
@@ -113,7 +113,7 @@ public class ChunkPos {
 		if (!(o instanceof ChunkPos))
 			return false;
 		ChunkPos location = (ChunkPos) o;
-		return (location.dimension == dimension && location.cx == cx && location.cz == cz);
+		return location.dimension == dimension && location.cx == cx && location.cz == cz;
 	}
 
 }

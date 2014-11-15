@@ -1,9 +1,5 @@
 package lc.common.impl.drivers;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyAcceptor;
@@ -11,16 +7,20 @@ import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import lc.api.components.IntegrationType;
-import lc.api.drivers.IPowerDriver;
 import lc.api.drivers.DeviceDrivers;
+import lc.api.drivers.IPowerDriver;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * IC2 power driver.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @DeviceDrivers.DriverProvider(type = IntegrationType.POWER)
 public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmitter, IEnergySink, IEnergySource {
@@ -105,7 +105,7 @@ public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmi
 
 	/**
 	 * Called when the tile is placed or added
-	 * 
+	 *
 	 * @param tile
 	 *            The self tile
 	 */
@@ -121,7 +121,7 @@ public class DriverIC2Power implements IPowerDriver, IEnergyAcceptor, IEnergyEmi
 
 	/**
 	 * Called when the tile is removed or broken
-	 * 
+	 *
 	 * @param tile
 	 *            The self tile
 	 */

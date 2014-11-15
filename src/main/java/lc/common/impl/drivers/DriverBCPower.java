@@ -1,5 +1,8 @@
 package lc.common.impl.drivers;
 
+import lc.api.components.IntegrationType;
+import lc.api.drivers.DeviceDrivers;
+import lc.api.drivers.IPowerDriver;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import buildcraft.api.power.IPowerEmitter;
@@ -7,15 +10,12 @@ import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.power.PowerHandler.Type;
-import lc.api.components.IntegrationType;
-import lc.api.drivers.DeviceDrivers;
-import lc.api.drivers.IPowerDriver;
 
 /**
  * Buildcraft power driver.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @DeviceDrivers.DriverProvider(type = IntegrationType.POWER)
 public class DriverBCPower implements IPowerDriver, IPowerEmitter, IPowerReceptor {

@@ -4,9 +4,9 @@ import net.minecraft.util.IIcon;
 
 /**
  * Ore type list
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public enum OreType {
 	/** Naquadah */
@@ -29,7 +29,7 @@ public enum OreType {
 
 	/**
 	 * Get an ore type from an ordinal
-	 * 
+	 *
 	 * @param ord
 	 *            The ordinal number
 	 * @return The ore type
@@ -42,7 +42,7 @@ public enum OreType {
 
 	/**
 	 * Get an ore type from a string
-	 * 
+	 *
 	 * @param string
 	 *            The ore name
 	 * @return The ore type
@@ -56,7 +56,7 @@ public enum OreType {
 
 	/**
 	 * Get the texture name
-	 * 
+	 *
 	 * @return The texture name
 	 */
 	public String tex() {
@@ -65,7 +65,7 @@ public enum OreType {
 
 	/**
 	 * Get the ore texture
-	 * 
+	 *
 	 * @return The ore texture
 	 */
 	public IIcon getOreTexture() {
@@ -74,7 +74,7 @@ public enum OreType {
 
 	/**
 	 * Set the ore texture
-	 * 
+	 *
 	 * @param texture
 	 *            The ore texture
 	 */
@@ -84,7 +84,7 @@ public enum OreType {
 
 	/**
 	 * Get the item texture
-	 * 
+	 *
 	 * @return The item texture
 	 */
 	public IIcon getItemTexture() {
@@ -93,7 +93,7 @@ public enum OreType {
 
 	/**
 	 * Set the item texture
-	 * 
+	 *
 	 * @param texture
 	 *            The item texture
 	 */
@@ -103,7 +103,7 @@ public enum OreType {
 
 	/**
 	 * Get the ingot texture
-	 * 
+	 *
 	 * @return The ingot texture
 	 */
 	public IIcon getIngotItemTexture() {
@@ -112,7 +112,7 @@ public enum OreType {
 
 	/**
 	 * Set the ingot texture
-	 * 
+	 *
 	 * @param texture
 	 *            The ingot texture
 	 */
@@ -122,7 +122,7 @@ public enum OreType {
 
 	/**
 	 * Get the itemblock texture
-	 * 
+	 *
 	 * @return The itemblock texture
 	 */
 	public IIcon getItemAsBlockTexture() {
@@ -131,7 +131,7 @@ public enum OreType {
 
 	/**
 	 * Set the itemblock texture
-	 * 
+	 *
 	 * @param texture
 	 *            The itemblock texture
 	 */

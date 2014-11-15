@@ -5,15 +5,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Contract interface for power drivers and drivees.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public interface IPowerDriver extends IDriver {
 
 	/**
 	 * Ask if interfacing is allowed in a specified direction.
-	 * 
+	 *
 	 * @param direction
 	 *            The direction
 	 * @return If interfacing is allowed
@@ -32,7 +32,7 @@ public interface IPowerDriver extends IDriver {
 
 	/**
 	 * Accept a quantity of energy
-	 * 
+	 *
 	 * @param quantity
 	 *            The quantity
 	 * @param simulated
@@ -43,7 +43,7 @@ public interface IPowerDriver extends IDriver {
 
 	/**
 	 * Extract a quantity of energy
-	 * 
+	 *
 	 * @param quantity
 	 *            The desired quantity
 	 * @param simulated

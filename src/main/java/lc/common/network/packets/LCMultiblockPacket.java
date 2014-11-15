@@ -5,15 +5,15 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 
-import net.minecraft.nbt.NBTTagCompound;
 import lc.common.network.packets.abs.LCNBTPacket;
 import lc.common.util.math.DimensionPos;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Multi-block network sync packet.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCMultiblockPacket extends LCNBTPacket {
 
@@ -26,7 +26,7 @@ public class LCMultiblockPacket extends LCNBTPacket {
 
 	/**
 	 * Create a new sync packet
-	 * 
+	 *
 	 * @param target
 	 *            The target element
 	 * @param compound

@@ -19,9 +19,9 @@ import net.minecraft.util.IIcon;
 
 /**
  * LanteaCraft standard ore block implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @Definition(name = "blockLanteaOre", type = ComponentType.CORE, blockClass = BlockLanteaOre.class, itemBlockClass = ItemBlockLanteaOre.class)
 public class BlockLanteaOre extends LCBlock {

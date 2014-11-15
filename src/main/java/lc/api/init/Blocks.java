@@ -4,9 +4,9 @@ import lc.api.defs.IContainerDefinition;
 
 /**
  * Block definition list.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class Blocks {
 

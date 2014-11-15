@@ -1,20 +1,21 @@
 package lc.core;
 
+import lc.common.LCLog;
+
 import org.apache.logging.log4j.Level;
 
-import lc.common.LCLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.FMLRelaunchLog;
 
 /**
  * LanteaCraft FML mod interface
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @Mod(modid = BuildInfo.modID, name = BuildInfo.modName, version = BuildInfo.versionNumber + "-" + BuildInfo.buildNumber, dependencies = "after:ComputerCraft;after:OpenComputers;after:BuildCraft|Core;after:IC2;after:SGCraft")
 public class LanteaCraft {
@@ -30,7 +31,7 @@ public class LanteaCraft {
 
 	/**
 	 * Handler for FML preInit event
-	 * 
+	 *
 	 * @param event
 	 *            An event
 	 */
@@ -45,7 +46,7 @@ public class LanteaCraft {
 
 	/**
 	 * Handler for FML init event
-	 * 
+	 *
 	 * @param event
 	 *            An event
 	 */
@@ -56,7 +57,7 @@ public class LanteaCraft {
 
 	/**
 	 * Handler for FML postInit event
-	 * 
+	 *
 	 * @param event
 	 *            An event
 	 */

@@ -1,9 +1,9 @@
 package lc.items;
 
+import lc.common.base.LCItemBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import lc.common.base.LCItemBlock;
 
 public class ItemBlockDecorative extends LCItemBlock {
 

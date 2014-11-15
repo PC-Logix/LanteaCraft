@@ -2,16 +2,16 @@ package lc.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.world.OreType;
 import lc.common.base.LCItem;
 import lc.core.ResourceAccess;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 @Definition(name = "lanteaAlloyIngot", type = ComponentType.CORE, itemClass = ItemLanteaAlloyIngot.class)
 public class ItemLanteaAlloyIngot extends LCItem {
@@ -32,23 +32,18 @@ public class ItemLanteaAlloyIngot extends LCItem {
 
 	@Override
 	public void registerIcons(IIconRegister register) {
-		missing = register.registerIcon(ResourceAccess
-				.formatResourceName("${ASSET_KEY}:missing"));
-		OreType.NAQUADAH.setIngotItemTexture(register
-				.registerIcon(ResourceAccess.formatResourceName(
-						"${ASSET_KEY}:%s_ingot_${TEX_QUALITY}", "naquadah")));
-		OreType.NAQUADRIAH.setIngotItemTexture(register
-				.registerIcon(ResourceAccess.formatResourceName(
-						"${ASSET_KEY}:%s_ingot_${TEX_QUALITY}", "naquadriah")));
-		OreType.TRINIUM.setIngotItemTexture(register
-				.registerIcon(ResourceAccess.formatResourceName(
-						"${ASSET_KEY}:%s_ingot_${TEX_QUALITY}", "trinium")));
+		missing = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:missing"));
+		OreType.NAQUADAH.setIngotItemTexture(register.registerIcon(ResourceAccess.formatResourceName(
+				"${ASSET_KEY}:%s_ingot_${TEX_QUALITY}", "naquadah")));
+		OreType.NAQUADRIAH.setIngotItemTexture(register.registerIcon(ResourceAccess.formatResourceName(
+				"${ASSET_KEY}:%s_ingot_${TEX_QUALITY}", "naquadriah")));
+		OreType.TRINIUM.setIngotItemTexture(register.registerIcon(ResourceAccess.formatResourceName(
+				"${ASSET_KEY}:%s_ingot_${TEX_QUALITY}", "trinium")));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs,
-			List par3List) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int i = 0; i < OreType.values().length; i++)
 			par3List.add(new ItemStack(this, 1, i));
 	}

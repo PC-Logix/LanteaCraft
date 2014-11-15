@@ -8,24 +8,24 @@ import net.minecraft.item.Item;
 
 /**
  * Creative Tab manager
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCCreativeTabManager {
 
 	/**
 	 * Creative tab stub class
-	 * 
+	 *
 	 * @author AfterLifeLochie
-	 * 
+	 *
 	 */
 	public static class CreativeTabImpl extends CreativeTabs {
 		private Item par3Item;
 
 		/**
 		 * Creative tab stub constructor
-		 * 
+		 *
 		 * @param par1
 		 *            The tabID
 		 * @param par2Str
@@ -40,12 +40,12 @@ public class LCCreativeTabManager {
 
 		/**
 		 * Update the tab icon
-		 * 
+		 *
 		 * @param item
 		 *            The new item to show on the tab
 		 */
 		public void setTabIconItem(Item item) {
-			this.par3Item = item;
+			par3Item = item;
 		}
 
 		@Override
@@ -67,7 +67,7 @@ public class LCCreativeTabManager {
 	/**
 	 * Create a new Creative tab element with the specified name and item. If
 	 * the item is null, a potato will be selected for the item instead.
-	 * 
+	 *
 	 * @param name
 	 *            The Tab name.
 	 * @param item
@@ -79,7 +79,7 @@ public class LCCreativeTabManager {
 
 	/**
 	 * Fetch an existing Creative tab element with the specified name.
-	 * 
+	 *
 	 * @param name
 	 *            The name.
 	 * @return The Tab element.

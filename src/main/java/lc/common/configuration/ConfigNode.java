@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 /**
  * Represents a generic configuration node.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ConfigNode {
 
@@ -43,7 +43,7 @@ public class ConfigNode {
 
 	/**
 	 * Named configuration node
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 */
@@ -53,7 +53,7 @@ public class ConfigNode {
 
 	/**
 	 * Named and parented configuration node
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 * @param parent
@@ -65,7 +65,7 @@ public class ConfigNode {
 
 	/**
 	 * Named and commented configuration node
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 * @param comment
@@ -77,7 +77,7 @@ public class ConfigNode {
 
 	/**
 	 * Named, commented and parented configuration node
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 * @param comment
@@ -94,7 +94,7 @@ public class ConfigNode {
 
 	/**
 	 * Get the name of the node.
-	 * 
+	 *
 	 * @return The node name
 	 */
 	public String name() {
@@ -103,7 +103,7 @@ public class ConfigNode {
 
 	/**
 	 * Set the node name.
-	 * 
+	 *
 	 * @param name
 	 *            The new name.
 	 */
@@ -113,7 +113,7 @@ public class ConfigNode {
 
 	/**
 	 * Get the comment for the node.
-	 * 
+	 *
 	 * @return The node comment
 	 */
 	public String comment() {
@@ -122,7 +122,7 @@ public class ConfigNode {
 
 	/**
 	 * Set the comment for the node.
-	 * 
+	 *
 	 * @param comment
 	 *            The new comment
 	 */
@@ -132,7 +132,7 @@ public class ConfigNode {
 
 	/**
 	 * Get the node parameters
-	 * 
+	 *
 	 * @return A list of parameters
 	 */
 	public HashMap<String, Object> parameters() {
@@ -141,7 +141,7 @@ public class ConfigNode {
 
 	/**
 	 * Set the node parameters
-	 * 
+	 *
 	 * @param parameters
 	 *            A list of parameters
 	 */
@@ -158,7 +158,7 @@ public class ConfigNode {
 
 	/**
 	 * Get the modified node state.
-	 * 
+	 *
 	 * @return If the node has been modified
 	 */
 	public boolean modified() {

@@ -17,9 +17,9 @@ import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Version checking thread.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class VersionHelper extends Thread {
 
@@ -111,7 +111,7 @@ public class VersionHelper extends Thread {
 			String[] versionAndBuild = section[0].split("-");
 			StringBuilder version = new StringBuilder();
 			for (int i = 0; i < versionAndBuild.length; i++)
-				if (i == (versionAndBuild.length - 1))
+				if (i == versionAndBuild.length - 1)
 					remoteBuild = Integer.parseInt(versionAndBuild[i]);
 				else
 					version.append(versionAndBuild[i]).append("-");

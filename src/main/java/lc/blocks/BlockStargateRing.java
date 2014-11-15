@@ -2,12 +2,6 @@ package lc.blocks;
 
 import java.util.List;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.stargate.StargateType;
@@ -15,12 +9,18 @@ import lc.common.base.LCBlock;
 import lc.core.ResourceAccess;
 import lc.items.ItemBlockStargateRing;
 import lc.tiles.TileStargateRing;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 /**
  * Stargate ring implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @Definition(name = "stargateRing", type = ComponentType.STARGATE, blockClass = BlockStargateRing.class, itemBlockClass = ItemBlockStargateRing.class, tileClass = TileStargateRing.class)
 public class BlockStargateRing extends LCBlock {
@@ -87,7 +87,7 @@ public class BlockStargateRing extends LCBlock {
 
 	/**
 	 * Get the base type of this Stargate ring block
-	 * 
+	 *
 	 * @param metadata
 	 *            The block metadata
 	 * @return The base type

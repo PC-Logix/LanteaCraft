@@ -4,9 +4,9 @@ import lc.api.defs.IRecipeDefinition;
 
 /**
  * Recipe definition list
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class Recipes {
 

@@ -4,9 +4,9 @@ import lc.api.defs.IDimensionDefinition;
 
 /**
  * Dimension definition list.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class Dimensions {
 

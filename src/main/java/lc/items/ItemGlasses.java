@@ -2,7 +2,6 @@ package lc.items;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.relauncher.Side;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.common.LCLog;
@@ -19,12 +18,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * Debugging glasses implementation
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @Definition(name = "debugGlasses", type = ComponentType.CORE, itemClass = ItemGlasses.class)
 public class ItemGlasses extends ItemArmor {
@@ -46,14 +46,14 @@ public class ItemGlasses extends ItemArmor {
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int p_77648_7_,
 			float p_77648_8_, float p_77648_9_, float p_77648_10_) {
 		ArrayList<String> messages = new ArrayList<String>();
-		Side gameSide = (world.isRemote) ? Side.CLIENT : Side.SERVER;
+		Side gameSide = world.isRemote ? Side.CLIENT : Side.SERVER;
 		Block block = world.getBlock(x, y, z);
 		if (block instanceof LCBlock) {
 			LCBlock ownBlock = (LCBlock) block;
 			messages.add(String.format("Type: %s", ownBlock.getClass().getName()));
 			messages.add(String.format("Tile: %s", ownBlock.getTileType().getName()));
 			TileEntity tile = world.getTileEntity(x, y, z);
-			if (tile != null) {
+			if (tile != null)
 				if (tile instanceof LCTile) {
 					LCTile ownTile = (LCTile) tile;
 					try {
@@ -67,7 +67,6 @@ public class ItemGlasses extends ItemArmor {
 					}
 				} else
 					messages.add(String.format("Unsupported tile type: %s", tile.getClass().getName()));
-			}
 		} else
 			messages.add(String.format("Unsupported block type: %s", block.getClass().getName()));
 		player.addChatMessage(new ChatComponentText(String.format("------ %s ------", gameSide)));
@@ -83,12 +82,12 @@ public class ItemGlasses extends ItemArmor {
 
 	@Override
 	public IIcon getIconFromDamageForRenderPass(int p_77618_1_, int p_77618_2_) {
-		return this.icon;
+		return icon;
 	}
 
 	@Override
 	public IIcon getIconFromDamage(int p_77617_1_) {
-		return this.icon;
+		return icon;
 	}
 
 	@Override

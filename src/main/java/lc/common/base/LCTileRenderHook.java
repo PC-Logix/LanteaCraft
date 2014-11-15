@@ -10,9 +10,9 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Tile entity rendering hook.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCTileRenderHook extends TileEntitySpecialRenderer {
 
@@ -22,7 +22,7 @@ public class LCTileRenderHook extends TileEntitySpecialRenderer {
 	 * Create a new rendering hook.
 	 */
 	public LCTileRenderHook() {
-		this.registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
+		registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class LCTileRenderHook extends TileEntitySpecialRenderer {
 
 	/**
 	 * Bind a texture in OpenGL
-	 * 
+	 *
 	 * @param texture
 	 *            The texture resource.
 	 */

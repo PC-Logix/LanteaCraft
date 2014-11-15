@@ -5,9 +5,9 @@ import net.minecraftforge.client.IItemRenderer;
 
 /**
  * Item rendering hook.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCItemRenderHook implements IItemRenderer {
 

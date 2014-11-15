@@ -14,16 +14,13 @@ public class LCScatteredFeatureStart extends StructureStart {
 	}
 
 	@SuppressWarnings("unchecked")
-	public LCScatteredFeatureStart(
-			Class<? extends LCScatteredFeatureComponent> clazz, World worldObj,
-			Random random, int chunkX, int chunkZ) {
+	public LCScatteredFeatureStart(Class<? extends LCScatteredFeatureComponent> clazz, World worldObj, Random random,
+			int chunkX, int chunkZ) {
 
 		Constructor<? extends LCScatteredFeatureComponent> ctr;
 		try {
-			ctr = clazz.getConstructor(new Class<?>[] { Random.class,
-					Integer.class, Integer.class });
-			LCScatteredFeatureComponent feature = ctr.newInstance(random, chunkX,
-					chunkZ);
+			ctr = clazz.getConstructor(new Class<?>[] { Random.class, Integer.class, Integer.class });
+			LCScatteredFeatureComponent feature = ctr.newInstance(random, chunkX, chunkZ);
 			components.add(feature);
 		} catch (Throwable e) {
 			LCLog.warn("Could not add LanteaScatteredFeature.", e);

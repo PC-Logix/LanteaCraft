@@ -5,9 +5,9 @@ import net.minecraft.tileentity.TileEntity;
 
 /**
  * A position in four-dimensional space (dimension, x, y, z)
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class DimensionPos {
 
@@ -22,7 +22,7 @@ public class DimensionPos {
 
 	/**
 	 * Create a new position based on a tile
-	 * 
+	 *
 	 * @param te
 	 *            The tile entity
 	 */

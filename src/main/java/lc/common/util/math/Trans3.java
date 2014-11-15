@@ -6,9 +6,9 @@ import net.minecraft.util.AxisAlignedBB;
 
 /**
  * Represents a Transformation in three-dimensional space.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class Trans3 {
 
@@ -34,7 +34,7 @@ public class Trans3 {
 
 	/**
 	 * Creates a new Trans3.
-	 * 
+	 *
 	 * @param v
 	 *            The offset vector.
 	 * @param m
@@ -50,7 +50,7 @@ public class Trans3 {
 
 	/**
 	 * Creates a new Trans3.
-	 * 
+	 *
 	 * @param dx
 	 *            The offset on the x-axis.
 	 * @param dy
@@ -65,7 +65,7 @@ public class Trans3 {
 	/**
 	 * Translates this Trans3 into a new Trans3, applying the local canRotate
 	 * and local offset factors.
-	 * 
+	 *
 	 * @param dx
 	 *            The offset on the x-axis.
 	 * @param dy
@@ -80,7 +80,7 @@ public class Trans3 {
 
 	/**
 	 * Rotates this Trans3 around a Matrix3.
-	 * 
+	 *
 	 * @param m
 	 *            The canRotate matrix.
 	 * @return The new Trans3.
@@ -91,7 +91,7 @@ public class Trans3 {
 
 	/**
 	 * Scales this Trans3 by a factor s.
-	 * 
+	 *
 	 * @param s
 	 *            The scaling factor.
 	 * @return The new Trans3.

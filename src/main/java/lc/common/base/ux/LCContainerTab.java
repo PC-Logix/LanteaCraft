@@ -6,13 +6,13 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Container tab stub
- * 
+ *
  * @author AfterLifeLochie
  */
 public abstract class LCContainerTab {
 	/**
 	 * Called by the LCContainerGUI parent when the tab is selected.
-	 * 
+	 *
 	 * @param container
 	 *            The LCContainerGUI parent.
 	 */
@@ -20,7 +20,7 @@ public abstract class LCContainerTab {
 
 	/**
 	 * Called by the LCContainerGUI when the tab is deselected.
-	 * 
+	 *
 	 * @param container
 	 *            The LCContainerGUI parent.
 	 */
@@ -28,28 +28,28 @@ public abstract class LCContainerTab {
 
 	/**
 	 * Get an un-translated tab name.
-	 * 
+	 *
 	 * @return An un-translated tab name.
 	 */
 	protected abstract String getTabName();
 
 	/**
 	 * Get the tab's icon location.
-	 * 
+	 *
 	 * @return An absolute resourcelocation to the tab's icon.
 	 */
 	protected abstract ResourceLocation getTabIcon();
 
 	/**
 	 * Get the dimensions of the internal panel area of this tab.
-	 * 
+	 *
 	 * @return The internal panel area of this tab.
 	 */
 	protected abstract Rectangle getTabDimensions();
 
 	/**
 	 * Draw the background layer of the tab.
-	 * 
+	 *
 	 * @param partialTickCount
 	 *            Partial render ticks
 	 * @param mouseX
@@ -61,7 +61,7 @@ public abstract class LCContainerTab {
 
 	/**
 	 * Draw the foreground layer of the tab.
-	 * 
+	 *
 	 * @param mouseX
 	 *            Mouse x-coord
 	 * @param mouseY
@@ -71,7 +71,7 @@ public abstract class LCContainerTab {
 
 	/**
 	 * Called when the mouse is clicked
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate of the click
 	 * @param y
@@ -83,7 +83,7 @@ public abstract class LCContainerTab {
 
 	/**
 	 * Called when the mouse is released
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate of the release
 	 * @param y
@@ -95,7 +95,7 @@ public abstract class LCContainerTab {
 
 	/**
 	 * Called when a key is typed
-	 * 
+	 *
 	 * @param c
 	 *            The charcode of the key if any
 	 * @param key

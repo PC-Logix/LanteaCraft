@@ -12,16 +12,13 @@ public class LCFeatureStart extends StructureStart {
 	}
 
 	@SuppressWarnings("unchecked")
-	public LCFeatureStart(World worldObj, Random random,
-			int chunkX, int chunkZ) {
+	public LCFeatureStart(World worldObj, Random random, int chunkX, int chunkZ) {
 		/*
 		 * TODO: Need to make a way to make MapGenFeatureStructureStart abstract
 		 * to allow multiple types of generators!
 		 */
-		AbydosPyramid pyramid = new AbydosPyramid(random, chunkX * 16,
-				chunkZ * 16);
-		LCLog.info(String.format("Placing pyramid at (%s, %s)", (chunkX * 16),
-				(chunkZ * 16)));
+		AbydosPyramid pyramid = new AbydosPyramid(random, chunkX * 16, chunkZ * 16);
+		LCLog.info(String.format("Placing pyramid at (%s, %s)", chunkX * 16, chunkZ * 16));
 		components.add(pyramid);
 		updateBoundingBox();
 	}

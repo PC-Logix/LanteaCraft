@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
 import lc.api.event.IBlockEventHandler;
 import lc.common.LCLog;
 import lc.common.network.IPacketHandler;
@@ -21,10 +20,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * Generic tile-entity implementation with default handlers.
- * 
+ *
  * @author AfterLifeLochie
  */
 public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler, IBlockEventHandler {
@@ -34,7 +34,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	/**
 	 * Register an event callback on a class. Must provide the method name, the
 	 * event name and the self class.
-	 * 
+	 *
 	 * @param me
 	 *            The self class.
 	 * @param method
@@ -57,7 +57,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Perform a set of callbacks now, if any are registered for an event.
-	 * 
+	 *
 	 * @param me
 	 *            The self object
 	 * @param type
@@ -74,7 +74,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Get a list of callbacks for the self class.
-	 * 
+	 *
 	 * @param me
 	 *            The self class
 	 * @param type
@@ -93,7 +93,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	/**
 	 * Perform a list of callbacks on a provided type, the self class and a list
 	 * of methods.
-	 * 
+	 *
 	 * @param me
 	 *            The self class
 	 * @param meObject
@@ -103,18 +103,16 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 */
 	public static void doCallbacks(Class<? extends LCTile> me, Object meObject, ArrayList<String> methods) {
 		Method[] meMethods = me.getMethods();
-		for (String methodName : methods) {
-			for (int i = 0; i < meMethods.length; i++)
-				if (meMethods[i].getName().equalsIgnoreCase(methodName)) {
+		for (String methodName : methods)
+			for (Method invoke : meMethods)
+				if (invoke.getName().equalsIgnoreCase(methodName)) {
 					try {
-						Method invoke = meMethods[i];
 						invoke.invoke(meObject, new Object[] { (LCTile) meObject });
 					} catch (Throwable t) {
 						LCLog.warn("Error when processing callback %s!", methodName, t);
 					}
 					break;
 				}
-		}
 	}
 
 	private NBTTagCompound compound;
@@ -123,7 +121,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	/**
 	 * Get the hasInventory of the tile. If the tile has no hasInventory,
 	 * <code>null</code> may be returned.
-	 * 
+	 *
 	 * @return The tile's hasInventory, or <code>null</code>
 	 */
 	public abstract IInventory getInventory();
@@ -146,7 +144,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Called to handle a packet.
-	 * 
+	 *
 	 * @param packet
 	 *            The packet element
 	 * @param player
@@ -158,7 +156,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Called to get a description packet from the server.
-	 * 
+	 *
 	 * @param packets
 	 *            The list of packets to be sent.
 	 * @throws LCNetworkException
@@ -170,7 +168,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Called to request the save of any tile data to a provided NBT compound.
-	 * 
+	 *
 	 * @param compound
 	 *            The compound to save to.
 	 */
@@ -178,7 +176,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Called to request the load of any tile data from a provided NBT compound.
-	 * 
+	 *
 	 * @param compound
 	 *            The compound to load from.
 	 */
@@ -186,7 +184,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Called to request debugging information about the tile.
-	 * 
+	 *
 	 * @param side
 	 *            The side the debug is being called on.
 	 * @return Debugging information about the tile.
@@ -195,7 +193,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Get the default compound.
-	 * 
+	 *
 	 * @return The default NBT compound for the tile.
 	 */
 	public NBTTagCompound getBaseCompound() {
@@ -204,7 +202,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Get the canRotate of the block. The default is NORTH.
-	 * 
+	 *
 	 * @return The canRotate of the block.
 	 */
 	public ForgeDirection getRotation() {
@@ -215,7 +213,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	/**
 	 * Set the canRotate of the block.
-	 * 
+	 *
 	 * @param direction
 	 *            The canRotate.
 	 */
@@ -237,14 +235,14 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	}
 
 	private void markNbtDirty() {
-		this.nbtDirty = true;
+		nbtDirty = true;
 	}
 
 	@Override
 	public void handlePacket(LCPacket packetOf, EntityPlayer player) throws LCNetworkException {
 		if (packetOf instanceof LCTileSync) {
 			if (worldObj.isRemote) {
-				this.compound = ((LCTileSync) packetOf).compound;
+				compound = ((LCTileSync) packetOf).compound;
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 		} else
@@ -258,7 +256,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	@Override
 	public void updateEntity() {
-		if (worldObj != null) {
+		if (worldObj != null)
 			if (worldObj.isRemote) {
 				thinkClient();
 				thinkClientPost();
@@ -271,16 +269,15 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 					LCRuntime.runtime.network().sendToAllAround(packet, packet.target, 128.0d);
 				}
 			}
-		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound p_145839_1_) {
 		super.readFromNBT(p_145839_1_);
 		if (p_145839_1_.hasKey("base-tag"))
-			this.compound = p_145839_1_.getCompoundTag("base-tag");
+			compound = p_145839_1_.getCompoundTag("base-tag");
 		else
-			this.compound = new NBTTagCompound();
+			compound = new NBTTagCompound();
 		markNbtDirty();
 		try {
 			load(p_145839_1_);
@@ -292,8 +289,8 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	@Override
 	public void writeToNBT(NBTTagCompound p_145841_1_) {
 		super.writeToNBT(p_145841_1_);
-		if (this.compound != null)
-			p_145841_1_.setTag("base-tag", this.compound);
+		if (compound != null)
+			p_145841_1_.setTag("base-tag", compound);
 		try {
 			save(p_145841_1_);
 		} catch (Throwable t) {

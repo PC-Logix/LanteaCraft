@@ -14,16 +14,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Internal block renderer base class.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Get the parent renderer. Called when a render function cannot be
 	 * completed by the current renderer.
-	 * 
+	 *
 	 * @return The parent renderer.
 	 */
 	public abstract Class<? extends LCBlockRenderer> getParent();
@@ -34,7 +34,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 	 * rendering can be completed, the renderer must return <code>true</code>.
 	 * If the rendering is not completed, the parent renderer will be called to
 	 * render the block.
-	 * 
+	 *
 	 * @param block
 	 *            The block
 	 * @param renderer
@@ -51,7 +51,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 	 * renderer, it must return <code>false</code>. If the rendering can be
 	 * completed, the renderer must return <code>true</code>. If the rendering
 	 * is not completed, the parent renderer will be called to render the block.
-	 * 
+	 *
 	 * @param block
 	 *            The block
 	 * @param renderer
@@ -72,7 +72,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 	/**
 	 * Asks if this block renderer renders blocks in 3D or 2D inside
 	 * inventories.
-	 * 
+	 *
 	 * @return If this block renderer renders blocks in 3D or 2D inside
 	 *         inventories.
 	 */
@@ -89,7 +89,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Render a default inventory block
-	 * 
+	 *
 	 * @param block
 	 *            The block
 	 * @param metadata
@@ -103,7 +103,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Render a default inventory block
-	 * 
+	 *
 	 * @param block
 	 *            The block
 	 * @param metadata
@@ -125,7 +125,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Render a default world block
-	 * 
+	 *
 	 * @param world
 	 *            The world
 	 * @param x
@@ -146,7 +146,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Render a default world block
-	 * 
+	 *
 	 * @param world
 	 *            The world
 	 * @param x
@@ -207,16 +207,16 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 
 	/** The cube face map */
 	protected static double cubeMap[][] = { { -0.5, -0.5, 0.5, 0, 0, -1, 1, 0, 0, 0, -1, 0 }, // DOWN
-			{ -0.5, 0.5, -0.5, 0, 0, 1, 1, 0, 0, 0, 1, 0 }, // UP
-			{ 0.5, 0.5, -0.5, 0, -1, 0, -1, 0, 0, 0, 0, -1 }, // NORTH
-			{ -0.5, 0.5, 0.5, 0, -1, 0, 1, 0, 0, 0, 0, 1 }, // SOUTH
-			{ -0.5, 0.5, -0.5, 0, -1, 0, 0, 0, 1, -1, 0, 0 }, // WEST
-			{ 0.5, 0.5, 0.5, 0, -1, 0, 0, 0, -1, 1, 0, 0 }, // EAST
+		{ -0.5, 0.5, -0.5, 0, 0, 1, 1, 0, 0, 0, 1, 0 }, // UP
+		{ 0.5, 0.5, -0.5, 0, -1, 0, -1, 0, 0, 0, 0, -1 }, // NORTH
+		{ -0.5, 0.5, 0.5, 0, -1, 0, 1, 0, 0, 0, 0, 1 }, // SOUTH
+		{ -0.5, 0.5, -0.5, 0, -1, 0, 0, 0, 1, -1, 0, 0 }, // WEST
+		{ 0.5, 0.5, 0.5, 0, -1, 0, 0, 0, -1, 1, 0, 0 }, // EAST
 	};
 
 	/**
 	 * Render a cube on screen
-	 * 
+	 *
 	 * @param tess
 	 *            The tesselator
 	 * @param t

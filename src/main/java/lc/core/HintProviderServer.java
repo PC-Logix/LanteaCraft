@@ -7,9 +7,9 @@ import lc.common.LCLog;
 
 /**
  * Server-side hint provider implementation
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class HintProviderServer implements IHintProvider {
 

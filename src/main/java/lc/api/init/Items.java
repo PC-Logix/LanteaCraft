@@ -4,9 +4,9 @@ import lc.api.defs.IContainerDefinition;
 
 /**
  * Item definition list
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class Items {
 	/** Debugging glasses */

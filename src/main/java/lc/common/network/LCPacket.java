@@ -7,15 +7,15 @@ import java.io.IOException;
 
 /**
  * Generic packet implementation
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCPacket {
 
 	/**
 	 * Encode a packet into the network stream.
-	 * 
+	 *
 	 * @param ctx
 	 *            The handler context
 	 * @param buffer
@@ -27,7 +27,7 @@ public abstract class LCPacket {
 
 	/**
 	 * Decode a packet from the network stream.
-	 * 
+	 *
 	 * @param ctx
 	 *            The handler context
 	 * @param buffer

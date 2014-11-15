@@ -2,7 +2,7 @@ package lc.common.util.math;
 
 /**
  * Represents a facing value in three-dimensions.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class Facing3 {
@@ -14,7 +14,7 @@ public class Facing3 {
 
 	/**
 	 * Create a new Facing value
-	 * 
+	 *
 	 * @param yaw
 	 *            The yaw angle
 	 * @param pitch

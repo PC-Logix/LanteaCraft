@@ -13,9 +13,9 @@ import net.minecraft.util.StatCollector;
 
 /**
  * Internal base container GUI class.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCContainerGUI extends GuiContainer {
 
@@ -32,7 +32,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Create a new container GUI
-	 * 
+	 *
 	 * @param container
 	 *            The parent container
 	 * @param width
@@ -48,7 +48,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Create a new container GUI
-	 * 
+	 *
 	 * @param container
 	 *            The parent container
 	 */
@@ -58,14 +58,14 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Get a HashMap of all tabs in the interface.
-	 * 
+	 *
 	 * @return A list of all tabs in the interface.
 	 */
 	protected abstract HashMap<Integer, LCContainerTab> getTabs();
 
 	/**
 	 * Switch to a tab
-	 * 
+	 *
 	 * @param to
 	 *            The tab number.
 	 */
@@ -135,8 +135,8 @@ public abstract class LCContainerGUI extends GuiContainer {
 	public void drawFramedSymbols(int x, int y, String address) {
 		int scale = 2;
 		bindTexture(ResourceAccess.getNamedResource("textures/gui/symbol_frame.png"), 512 / scale, 128 / scale);
-		drawTexturedRect(x - (472 / scale) / 2, y, 472 / scale, 88 / scale, 0, 0);
-		StargateGlyphRenderer.drawAddress(mc, address, x - (472 / scale) / 2, y, 9, scale, zLevel);
+		drawTexturedRect(x - 472 / scale / 2, y, 472 / scale, 88 / scale, 0, 0);
+		StargateGlyphRenderer.drawAddress(mc, address, x - 472 / scale / 2, y, 9, scale, zLevel);
 	}
 
 	public void drawAddressString(int x, int y, String address, int len, String padding, String caret) {

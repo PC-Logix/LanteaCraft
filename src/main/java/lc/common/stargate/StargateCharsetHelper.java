@@ -2,9 +2,9 @@ package lc.common.stargate;
 
 /**
  * Stargate address parser.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class StargateCharsetHelper {
 
@@ -15,7 +15,7 @@ public class StargateCharsetHelper {
 
 	/**
 	 * Fetches the singleton StargateCharsetHelper object.
-	 * 
+	 *
 	 * @return The singleton {@link StargateCharsetHelper} object.
 	 */
 	public static StargateCharsetHelper singleton() {
@@ -32,7 +32,7 @@ public class StargateCharsetHelper {
 	/**
 	 * Radix declaration; order sensitive.
 	 */
-	private final char[] radix = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-+").toCharArray();
+	private final char[] radix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-+".toCharArray();
 
 	/**
 	 * Radix size reference.
@@ -65,7 +65,7 @@ public class StargateCharsetHelper {
 	 */
 	public boolean isLegal(char c) {
 		try {
-			return (index(c) > -1);
+			return index(c) > -1;
 		} catch (Throwable t) {
 			return false;
 		}
@@ -110,7 +110,7 @@ public class StargateCharsetHelper {
 		boolean[] result = new boolean[4];
 		int accum = stoi(value);
 		for (int i = 0; i < 4; i++)
-			if ((accum & (1 << i)) != 0)
+			if ((accum & 1 << i) != 0)
 				result[i] = true;
 		return result;
 	}

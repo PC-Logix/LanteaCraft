@@ -5,9 +5,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Generic item implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCItem extends Item {
 

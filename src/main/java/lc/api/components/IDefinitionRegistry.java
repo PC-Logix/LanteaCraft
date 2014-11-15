@@ -4,15 +4,15 @@ import lc.api.defs.IContainerDefinition;
 
 /**
  * Definition registry interface
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public interface IDefinitionRegistry {
 
 	/**
 	 * Add a new game definition
-	 * 
+	 *
 	 * @param definition
 	 *            The definition element
 	 */
@@ -20,7 +20,7 @@ public interface IDefinitionRegistry {
 
 	/**
 	 * Get a named definition from this registry
-	 * 
+	 *
 	 * @param name
 	 *            The definition name
 	 * @return The definition or null if it does not exist

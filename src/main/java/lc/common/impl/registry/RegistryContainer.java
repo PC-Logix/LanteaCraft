@@ -7,9 +7,9 @@ import lc.api.components.IRegistryContainer;
 
 /**
  * Registry container implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class RegistryContainer implements IRegistryContainer {
 

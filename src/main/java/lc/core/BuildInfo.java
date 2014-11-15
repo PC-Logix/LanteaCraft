@@ -3,7 +3,7 @@ package lc.core;
 /**
  * This file is automatically updated by Jenkins as part of the CI build script
  * in Gradle. Don't put any pre-set values here.
- * 
+ *
  * @author AfterLifeLochie
  */
 public class BuildInfo {
@@ -41,7 +41,7 @@ public class BuildInfo {
 
 	/**
 	 * Get the build number of the mod
-	 * 
+	 *
 	 * @return The build number
 	 */
 	public static int getBuildNumber() {
@@ -54,7 +54,7 @@ public class BuildInfo {
 
 	/**
 	 * Get if this build is a development version
-	 * 
+	 *
 	 * @return If this build is a development version
 	 */
 	public static boolean isDevelopmentEnvironment() {

@@ -5,15 +5,15 @@ import net.minecraft.entity.player.EntityPlayer;
 /**
  * Contract interface for classes which can handle {@link LCPacket} packets at
  * runtime.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public interface IPacketHandler {
 
 	/**
 	 * Handle an incoming packet from the server or client.
-	 * 
+	 *
 	 * @param packetOf
 	 *            The network packet object.
 	 * @param player

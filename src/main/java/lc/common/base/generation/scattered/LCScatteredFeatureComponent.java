@@ -9,7 +9,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 
 /**
  * LanteaCraft scattered feature generation stub.
- * 
+ *
  * @author AfterLifeLochie
  */
 public abstract class LCScatteredFeatureComponent extends StructureComponent {

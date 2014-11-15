@@ -5,6 +5,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lc.api.components.IComponentRegistry;
+import lc.api.components.IDefinitionRegistry;
+import lc.api.defs.IContainerDefinition;
+import lc.api.defs.ILanteaCraftRenderer;
+import lc.common.LCLog;
+import lc.common.base.LCBlock;
+import lc.common.base.LCBlockRenderer;
+import lc.common.base.LCItemBucket;
+import lc.common.base.LCTile;
+import lc.common.base.LCTileRenderer;
+import lc.common.util.LCCreativeTabManager;
+import lc.core.BuildInfo;
+import lc.core.LCRuntime;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.Render;
@@ -29,31 +42,18 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-import lc.api.components.IComponentRegistry;
-import lc.api.components.IDefinitionRegistry;
-import lc.api.defs.IContainerDefinition;
-import lc.api.defs.ILanteaCraftRenderer;
-import lc.common.LCLog;
-import lc.common.base.LCBlock;
-import lc.common.base.LCBlockRenderer;
-import lc.common.base.LCItemBucket;
-import lc.common.base.LCTile;
-import lc.common.base.LCTileRenderer;
-import lc.common.util.LCCreativeTabManager;
-import lc.core.BuildInfo;
-import lc.core.LCRuntime;
 
 /**
  * Global definition registry implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Types of renderers managed by this registry.
-	 * 
+	 *
 	 * @author AfterLifeLochie
 	 */
 	public static enum RendererType {
@@ -99,7 +99,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Initializes the registry
-	 * 
+	 *
 	 * @param runtime
 	 *            The LanteaCraft runtime instance
 	 * @param event
@@ -108,7 +108,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
 		IComponentRegistry components = runtime.registries().components();
 		LCLog.debug("Evaluating %s definitions for candidacy.", definitionPool.size());
-		for (IContainerDefinition definition : definitionPool.values()) {
+		for (IContainerDefinition definition : definitionPool.values())
 			if (definition instanceof BlockItemDefinition) {
 				BlockItemDefinition element = (BlockItemDefinition) definition;
 				if (components.isEnabled(element.getComponentOwner())) {
@@ -120,14 +120,13 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 							element.getComponentOwner());
 			} else
 				LCLog.warn("Strange definition type %s, ignoring it.", definition.getClass().getName());
-		}
 	}
 
 	/**
 	 * Register a Block with a given class and unlocalized name. The block will
 	 * use the default {@link ItemBlock} structure when held as an item. The
 	 * block will display in the default Creative tabs.
-	 * 
+	 *
 	 * @param classOf
 	 *            The class of the block.
 	 * @param unlocalizedName
@@ -141,7 +140,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	/**
 	 * Register a block with a given class, a given item class and an
 	 * unlocalized name. The block will display in the default Creative tabs.
-	 * 
+	 *
 	 * @param classOf
 	 *            The class of the block.
 	 * @param itemClassOf
@@ -158,7 +157,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	/**
 	 * Register a block with a given class, a given item class, an unlocalized
 	 * name and a display preference in CreativeTabs.
-	 * 
+	 *
 	 * @param classOf
 	 *            The class of the block.
 	 * @param itemClassOf
@@ -187,7 +186,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers an item with a given class and an unlocalized name.
-	 * 
+	 *
 	 * @param classOf
 	 *            The class of the item.
 	 * @param unlocalizedName
@@ -200,7 +199,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers an item with a given class and an unlocalized name.
-	 * 
+	 *
 	 * @param classOf
 	 *            The class of the item.
 	 * @param unlocalizedName
@@ -225,7 +224,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers a special bucket.
-	 * 
+	 *
 	 * @param hostOf
 	 *            The host fluid.
 	 * @param unlocalizedName
@@ -248,7 +247,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers a trade handler for a type of villager.
-	 * 
+	 *
 	 * @param villagerID
 	 *            The villager type ID.
 	 * @param handler
@@ -261,7 +260,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers an ore with the ore dictionary.
-	 * 
+	 *
 	 * @param name
 	 *            The ore name.
 	 * @param item
@@ -274,7 +273,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Creates a new shaped recipe.
-	 * 
+	 *
 	 * @param product
 	 *            The product ItemStack.
 	 * @param params
@@ -287,7 +286,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Creates a new shapeless recipe.
-	 * 
+	 *
 	 * @param product
 	 *            The product ItemStack.
 	 * @param params
@@ -300,7 +299,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers a new smelting recipe.
-	 * 
+	 *
 	 * @param in
 	 *            The input stack
 	 * @param out
@@ -315,7 +314,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers a new chest item handler.
-	 * 
+	 *
 	 * @param stack
 	 *            The ItemStack to add.
 	 * @param minQty
@@ -337,7 +336,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Register a block renderer
-	 * 
+	 *
 	 * @param renderer
 	 *            A block renderer
 	 */
@@ -349,7 +348,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers a TileEntity
-	 * 
+	 *
 	 * @param tileType
 	 *            The tile class type.
 	 * @param tileName
@@ -361,7 +360,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers a tile entity renderer
-	 * 
+	 *
 	 * @param teClass
 	 *            The tile entity class
 	 * @param renderer
@@ -373,7 +372,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers a block renderer with the definition registry
-	 * 
+	 *
 	 * @param block
 	 *            The block class
 	 * @param renderer
@@ -387,7 +386,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers a tile entity renderer with the definition registry
-	 * 
+	 *
 	 * @param tile
 	 *            The tile class
 	 * @param renderer
@@ -401,7 +400,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers an entity renderer with the game registry
-	 * 
+	 *
 	 * @param entity
 	 *            The entity class
 	 * @param renderer
@@ -414,7 +413,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	/**
 	 * Get a renderer for a class. If a dedicated renderer doesn't exist, null
 	 * is returned.
-	 * 
+	 *
 	 * @param typeof
 	 *            The element type.
 	 * @param clazz
@@ -430,7 +429,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 			return null;
 		Map<Class<?>, Class<? extends ILanteaCraftRenderer>> typemap = registeredRenderers.get(typeof);
 		for (Entry<Class<?>, Class<? extends ILanteaCraftRenderer>> type : typemap.entrySet())
-			if (type.getKey().equals(clazz)) {
+			if (type.getKey().equals(clazz))
 				try {
 					ILanteaCraftRenderer renderer = type.getValue().getConstructor().newInstance();
 					if (!initializedRenderers.containsKey(typeof))
@@ -441,13 +440,12 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 					LCLog.warn("Failed to initialize renderer.", t);
 					return null;
 				}
-			}
 		return null;
 	}
 
 	/**
 	 * Get a renderer from a class object.
-	 * 
+	 *
 	 * @param typeof
 	 *            The type of renderer.
 	 * @param type
@@ -464,7 +462,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Register a container with the definition registry.
-	 * 
+	 *
 	 * @param id
 	 *            The container ID
 	 * @param cls
@@ -477,7 +475,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Register a GUI with the definition registry.
-	 * 
+	 *
 	 * @param id
 	 *            The GUI ID
 	 * @param cls
@@ -490,7 +488,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Get a registered container class
-	 * 
+	 *
 	 * @param id
 	 *            The container ID
 	 * @return The container class
@@ -501,7 +499,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Get a registered GUI class
-	 * 
+	 *
 	 * @param id
 	 *            The GUI ID
 	 * @return The GUI class

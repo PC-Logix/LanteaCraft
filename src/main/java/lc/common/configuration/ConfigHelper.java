@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 /**
  * Configuration file helper class
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ConfigHelper {
 
 	/**
 	 * Find or create a configuration set for a module by name, case
 	 * insensitive.
-	 * 
+	 *
 	 * @param list
 	 *            The list of modules
 	 * @param name
@@ -35,7 +35,7 @@ public class ConfigHelper {
 
 	/**
 	 * Find a configuration node by a class
-	 * 
+	 *
 	 * @param list
 	 *            The list
 	 * @param clazz
@@ -52,7 +52,7 @@ public class ConfigHelper {
 
 	/**
 	 * Find all configuration nodes of a class
-	 * 
+	 *
 	 * @param list
 	 *            The list
 	 * @param clazz
@@ -69,7 +69,7 @@ public class ConfigHelper {
 
 	/**
 	 * Gets or set a parameter on a node in a list if it does not exist.
-	 * 
+	 *
 	 * @param list
 	 *            The list object.
 	 * @param clazz
@@ -107,7 +107,7 @@ public class ConfigHelper {
 
 	/**
 	 * Gets or set a boolean parameter on a node in a list if it does not exist.
-	 * 
+	 *
 	 * @param list
 	 *            The list object.
 	 * @param clazz

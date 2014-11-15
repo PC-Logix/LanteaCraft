@@ -4,24 +4,24 @@ import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import lc.common.base.LCTile;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.util.math.DimensionPos;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * Contract class for packets with specific targets in a world.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCTargetPacket extends LCPacket {
 
 	/**
 	 * Handle an incoming packet
-	 * 
+	 *
 	 * @param packet
 	 *            The packet
 	 * @param player
@@ -47,7 +47,7 @@ public abstract class LCTargetPacket extends LCPacket {
 
 	/**
 	 * Read a dimension from the input buffer at the current read pointer.
-	 * 
+	 *
 	 * @param buffer
 	 *            The buffer
 	 * @return A dimension target
@@ -60,7 +60,7 @@ public abstract class LCTargetPacket extends LCPacket {
 
 	/**
 	 * Write a dimension to the output buffer at the current write pointer.
-	 * 
+	 *
 	 * @param buffer
 	 *            The buffer
 	 * @param target

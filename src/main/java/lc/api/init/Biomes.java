@@ -4,7 +4,7 @@ import lc.api.defs.IBiomeDefinition;
 
 /**
  * Biome definition list.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

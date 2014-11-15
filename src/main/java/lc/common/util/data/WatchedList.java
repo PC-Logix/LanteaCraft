@@ -11,9 +11,9 @@ import java.util.Set;
  * and removing of key-pair values does not guarantee garbage-collection until
  * the key additions and removals have been acknowledged by any Observable
  * observer.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  * @param <A>
  *            The type A of keys.
  * @param <B>
@@ -57,7 +57,7 @@ public class WatchedList<A, B> extends Observable {
 
 	/**
 	 * Creates a new WatchedList with an Observable parent.
-	 * 
+	 *
 	 * @param parent
 	 *            The parent Observable object.
 	 */
@@ -192,7 +192,7 @@ public class WatchedList<A, B> extends Observable {
 	/**
 	 * Gets the history of all key values which have been added this Observable
 	 * session.
-	 * 
+	 *
 	 * @return A list of all added keys
 	 */
 	public ArrayList<A> added() {
@@ -202,7 +202,7 @@ public class WatchedList<A, B> extends Observable {
 	/**
 	 * Gets the history of all key values which have been removed this
 	 * Observable session.
-	 * 
+	 *
 	 * @return A list of all removed keys
 	 */
 	public ArrayList<A> removed() {
@@ -212,7 +212,7 @@ public class WatchedList<A, B> extends Observable {
 	/**
 	 * Gets the history of all key values which have had their associated value
 	 * modified this Observable session.
-	 * 
+	 *
 	 * @return A list of all modified keys
 	 */
 	public ArrayList<A> modified() {

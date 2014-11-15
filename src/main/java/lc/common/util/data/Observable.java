@@ -4,9 +4,9 @@ package lc.common.util.data;
  * Observable is a container for objects which have values for which we care
  * about the contents of, but do not want to cache the old/new values in a
  * non-persistent or non-volatile way.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class Observable {
 
@@ -35,7 +35,7 @@ public class Observable {
 
 	/**
 	 * Returns the state of this Observable.
-	 * 
+	 *
 	 * @param context
 	 *            The Observer context.
 	 * @return The state of this Observable.
@@ -43,7 +43,7 @@ public class Observable {
 	public boolean modified(ObserverContext context) {
 		if (!context.states.containsKey(System.identityHashCode(this)))
 			return true;
-		if (context.states.get(System.identityHashCode(this)) != ((modified) ? 1 : 0))
+		if (context.states.get(System.identityHashCode(this)) != (modified ? 1 : 0))
 			return true;
 		return false;
 	}
@@ -51,13 +51,13 @@ public class Observable {
 	/**
 	 * Resets the state of this Observable. If the Observable has any meta-data
 	 * about the change in the Observable state, it should also be reset.
-	 * 
+	 *
 	 * @param context
 	 *            The observer context.
 	 */
 	public void clearModified(ObserverContext context) {
 		modified = false;
-		context.states.put(System.identityHashCode(this), ((modified) ? 1 : 0));
+		context.states.put(System.identityHashCode(this), modified ? 1 : 0);
 	}
 
 }

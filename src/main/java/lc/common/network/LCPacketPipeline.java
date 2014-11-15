@@ -32,9 +32,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * LanteaCraft network connection driver.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 @ChannelHandler.Sharable
 public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPacket> {
@@ -43,7 +43,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 
 	/**
 	 * Register a packet
-	 * 
+	 *
 	 * @param clazz
 	 *            The packet class
 	 * @return If the packet was registered successfully.
@@ -57,7 +57,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 
 	/**
 	 * Initializes the network handler
-	 * 
+	 *
 	 * @param channelName
 	 *            The channel name to listen on
 	 */
@@ -133,7 +133,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 
 	/**
 	 * Send a packet to all players
-	 * 
+	 *
 	 * @param message
 	 *            The packet
 	 */
@@ -144,7 +144,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 
 	/**
 	 * Send a packet to a player
-	 * 
+	 *
 	 * @param message
 	 *            The packet
 	 * @param player
@@ -152,14 +152,14 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	 */
 	public void sendTo(LCPacket message, EntityPlayerMP player) {
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.PLAYER);
+		.set(FMLOutboundHandler.OutboundTarget.PLAYER);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	/**
 	 * Send an FML packet to a player
-	 * 
+	 *
 	 * @param message
 	 *            The packet
 	 * @param player
@@ -174,7 +174,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 
 	/**
 	 * Send a packet to all players in range of a location
-	 * 
+	 *
 	 * @param message
 	 *            The packet
 	 * @param location
@@ -185,14 +185,14 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	public void sendToAllAround(LCPacket message, DimensionPos location, double range) {
 		TargetPoint point = new TargetPoint(location.dimension, location.x, location.y, location.z, range);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+		.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	/**
 	 * Send a packet to all players in a dimension
-	 * 
+	 *
 	 * @param message
 	 *            The packet
 	 * @param dimensionId
@@ -200,27 +200,27 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	 */
 	public void sendToDimension(LCPacket message, int dimensionId) {
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+		.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	/**
 	 * Send a packet to the server
-	 * 
+	 *
 	 * @param message
 	 *            The packet
 	 */
 	public void sendToServer(LCPacket message) {
 		channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+		.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 		channels.get(Side.CLIENT).writeAndFlush(message);
 	}
 
 	/**
 	 * Send a packet to all players or to players in range if the packet
 	 * supports a target
-	 * 
+	 *
 	 * @param packet
 	 *            The packet
 	 * @param range
@@ -228,7 +228,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	 */
 	public void sendScoped(LCPacket packet, double range) {
 		if (packet instanceof LCTargetPacket)
-			sendToAllAround((LCTargetPacket) packet, ((LCTargetPacket) packet).target, range);
+			sendToAllAround(packet, ((LCTargetPacket) packet).target, range);
 		else
 			sendToAll(packet);
 	}

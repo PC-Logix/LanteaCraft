@@ -5,15 +5,15 @@ import java.util.List;
 
 /**
  * Reflection utilities
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ReflectionHelper {
 
 	/**
 	 * Gets a list of all interfaces a class currently implements.
-	 * 
+	 *
 	 * @param clazz
 	 *            The class.
 	 * @param recursive

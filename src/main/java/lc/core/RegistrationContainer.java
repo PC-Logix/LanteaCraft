@@ -1,6 +1,5 @@
 package lc.core;
 
-import net.minecraft.item.ItemStack;
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
 import lc.api.init.Blocks;
@@ -19,21 +18,22 @@ import lc.items.ItemCraftingReagent;
 import lc.items.ItemGlasses;
 import lc.items.ItemLanteaAlloyIngot;
 import lc.items.ItemLanteaOre;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 /**
  * Registration initializer
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class RegistrationContainer {
 
 	/**
 	 * Called during pre-initialization
-	 * 
+	 *
 	 * @param runtime
 	 *            The runtime
 	 * @param event
@@ -45,7 +45,7 @@ public class RegistrationContainer {
 
 	/**
 	 * Called during initialization
-	 * 
+	 *
 	 * @param runtime
 	 *            The runtime
 	 * @param event
@@ -126,7 +126,7 @@ public class RegistrationContainer {
 
 	/**
 	 * Called during post-initialization
-	 * 
+	 *
 	 * @param runtime
 	 *            The runtime
 	 * @param event

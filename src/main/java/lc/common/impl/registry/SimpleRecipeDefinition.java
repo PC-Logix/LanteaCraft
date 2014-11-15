@@ -2,15 +2,14 @@ package lc.common.impl.registry;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import net.minecraft.item.ItemStack;
 import lc.api.components.RecipeType;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IGameDef;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
+import net.minecraft.item.ItemStack;
 
 public class SimpleRecipeDefinition implements IRecipeDefinition {
 
@@ -28,12 +27,12 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 		this.name = name;
 		this.type = type;
 		this.inputs = new HashMap<Integer, Object>();
-		this.outputs = new HashMap<Integer, Object>();
-		this.use = new HashMap<Integer, Boolean>();
+		outputs = new HashMap<Integer, Object>();
+		use = new HashMap<Integer, Boolean>();
 
 		for (int i = 0; i < 9; i++)
 			use.put(i, true);
-		this.outputs.put(0, output);
+		outputs.put(0, output);
 		char[] cells = grid.toCharArray();
 		for (int i = 0; i < cells.length; i++) {
 			char cell = cells[i];
@@ -82,10 +81,10 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 			if (def instanceof IContainerDefinition) {
 				IContainerDefinition blockItemDef = (IContainerDefinition) def;
 				if (blockItemDef.getBlock() != null)
-					return new ItemStack(blockItemDef.getBlock(), (count == null) ? 1 : count, (metadata == null) ? 0
+					return new ItemStack(blockItemDef.getBlock(), count == null ? 1 : count, metadata == null ? 0
 							: metadata);
 				else if (blockItemDef.getItem() != null)
-					return new ItemStack(blockItemDef.getItem(), (count == null) ? 1 : count, (metadata == null) ? 0
+					return new ItemStack(blockItemDef.getItem(), count == null ? 1 : count, metadata == null ? 0
 							: metadata);
 			} else {
 				LCLog.fatal("Unsupported definition type %s.", def.getClass().getName());

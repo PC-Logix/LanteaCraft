@@ -5,9 +5,9 @@ import java.util.ArrayList;
 /**
  * Represents a configuration node which contains children nodes of any count
  * and type.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ConfigList extends ConfigNode {
 
@@ -18,7 +18,7 @@ public class ConfigList extends ConfigNode {
 
 	/**
 	 * Named configuration node
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 */
@@ -28,7 +28,7 @@ public class ConfigList extends ConfigNode {
 
 	/**
 	 * Named and commented configuration node
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 * @param comment
@@ -40,7 +40,7 @@ public class ConfigList extends ConfigNode {
 
 	/**
 	 * Named and parented configuration node
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 * @param parent
@@ -52,7 +52,7 @@ public class ConfigList extends ConfigNode {
 
 	/**
 	 * Named, commented and parented configuration node
-	 * 
+	 *
 	 * @param name
 	 *            The name
 	 * @param comment
@@ -71,7 +71,7 @@ public class ConfigList extends ConfigNode {
 
 	/**
 	 * Get the children of this node.
-	 * 
+	 *
 	 * @return The children of this node.
 	 */
 	public ArrayList<ConfigNode> children() {
@@ -80,7 +80,7 @@ public class ConfigList extends ConfigNode {
 
 	/**
 	 * Set the children of this node.
-	 * 
+	 *
 	 * @param children
 	 *            The children of this node.
 	 */

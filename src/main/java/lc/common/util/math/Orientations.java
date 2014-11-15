@@ -6,9 +6,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Vector orientation map.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public enum Orientations {
 	/** Not an orientation */

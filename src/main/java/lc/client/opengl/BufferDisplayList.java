@@ -1,14 +1,14 @@
 package lc.client.opengl;
 
-import org.lwjgl.opengl.GL11;
-
 import lc.api.rendering.IGraphicsBuffer;
+
+import org.lwjgl.opengl.GL11;
 
 /**
  * OpenGL display list buffering mode.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class BufferDisplayList implements IGraphicsBuffer {
 

@@ -16,9 +16,9 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * SpecialBucketHandler handles Forge onBucketFill from {@link ItemBucket}.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class SpecialBucketHandler {
 
@@ -30,7 +30,7 @@ public class SpecialBucketHandler {
 	/**
 	 * Register a new mapping of {@link Block} type blockOf with an
 	 * {@link LCItemBucket} itemResult.
-	 * 
+	 *
 	 * @param blockOf
 	 *            The fluid host block type.
 	 * @param itemResult
@@ -43,7 +43,7 @@ public class SpecialBucketHandler {
 
 	/**
 	 * Called when a bucket is filled in the world
-	 * 
+	 *
 	 * @param event
 	 *            The fill bucket event
 	 */
@@ -58,7 +58,7 @@ public class SpecialBucketHandler {
 
 	/**
 	 * Attempts to fill a bucket from the source described.
-	 * 
+	 *
 	 * @param world
 	 *            The world object.
 	 * @param pos

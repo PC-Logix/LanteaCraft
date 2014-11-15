@@ -18,9 +18,9 @@ import net.minecraft.tileentity.TileEntity;
 
 /**
  * Internal multi-block implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public abstract class LCMultiblockTile extends LCTile {
 
@@ -30,7 +30,7 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	/**
 	 * Set this multi-block to a slave state
-	 * 
+	 *
 	 * @param state
 	 *            The state to set
 	 */
@@ -40,7 +40,7 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	/**
 	 * Get this multi-block's slave state
-	 * 
+	 *
 	 * @return The state
 	 */
 	public boolean isSlave() {
@@ -49,7 +49,7 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	/**
 	 * Change the multi-block state.
-	 * 
+	 *
 	 * @param next
 	 *            The state to transition to.
 	 */
@@ -66,7 +66,7 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	/**
 	 * Set the owner location of this block
-	 * 
+	 *
 	 * @param owner
 	 *            The owner location
 	 */
@@ -84,7 +84,7 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	/**
 	 * Get the state of this multi-block
-	 * 
+	 *
 	 * @return The state of this multi-block
 	 */
 	public MultiblockState getState() {
@@ -105,7 +105,7 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	/**
 	 * Get the next-state of the multi-block.
-	 * 
+	 *
 	 * @return The next state.
 	 */
 	public MultiblockState nextState() {
@@ -123,7 +123,7 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	/**
 	 * Get the structure configuration for this multiblock.
-	 * 
+	 *
 	 * @return The structure configuration instance.
 	 */
 	public abstract StructureConfiguration getConfiguration();
@@ -150,12 +150,11 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	@Override
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
-		if (packet instanceof LCMultiblockPacket) {
+		if (packet instanceof LCMultiblockPacket)
 			if (worldObj.isRemote) {
 				multiblockCompound = ((LCMultiblockPacket) packet).compound;
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
-		}
 	}
 
 	@Override

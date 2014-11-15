@@ -2,9 +2,9 @@ package lc.api.rendering;
 
 /**
  * OpenGL graphics buffering class contract interface.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public interface IGraphicsBuffer {
 
@@ -28,7 +28,7 @@ public interface IGraphicsBuffer {
 	 * Called to bind the graphics buffer data to OpenGL. In the case of display
 	 * lists, this causes the display lists to render. In the case of
 	 * texture-buffers, the texture is bound.
-	 * 
+	 *
 	 * @param args
 	 *            Any arguments to the bind operation - dependant on the
 	 *            implementation.

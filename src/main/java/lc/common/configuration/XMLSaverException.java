@@ -2,14 +2,14 @@ package lc.common.configuration;
 
 /**
  * XML save exception container
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class XMLSaverException extends Exception {
 	/**
 	 * Creates a new XML save exception
-	 * 
+	 *
 	 * @param reason
 	 *            The reason for the failure
 	 */
@@ -19,7 +19,7 @@ public class XMLSaverException extends Exception {
 
 	/**
 	 * Creates a new XML save exception
-	 * 
+	 *
 	 * @param reason
 	 *            The reason for the failure
 	 * @param inner

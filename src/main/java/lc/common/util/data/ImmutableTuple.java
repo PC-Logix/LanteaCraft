@@ -3,9 +3,9 @@ package lc.common.util.data;
 /**
  * A instance of an immutable tuple. The A-B-C pair represented by this object
  * are immutable, but may not be immutable themselves.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  * @param <A>
  *            The first type of value in the immutable tuple
  * @param <B>
@@ -24,7 +24,7 @@ public class ImmutableTuple<A, B, C> {
 
 	/**
 	 * Create a new tuple
-	 * 
+	 *
 	 * @param a
 	 *            The a value
 	 * @param b
@@ -40,7 +40,7 @@ public class ImmutableTuple<A, B, C> {
 
 	/**
 	 * Fetch the A value of this tuple
-	 * 
+	 *
 	 * @return The first value of this tuple
 	 */
 	public A getA() {
@@ -49,7 +49,7 @@ public class ImmutableTuple<A, B, C> {
 
 	/**
 	 * Fetch the B value of this tuple
-	 * 
+	 *
 	 * @return The second value of this tuple
 	 */
 	public B getB() {
@@ -58,7 +58,7 @@ public class ImmutableTuple<A, B, C> {
 
 	/**
 	 * Fetch the C value of this tuple
-	 * 
+	 *
 	 * @return The third value of this tuple
 	 */
 	public C getC() {
@@ -70,14 +70,14 @@ public class ImmutableTuple<A, B, C> {
 		int aa = a != null ? a.hashCode() : 0;
 		int bb = b != null ? b.hashCode() : 0;
 		int cc = c != null ? c.hashCode() : 0;
-		return (aa * bb * cc) * (aa + bb + cc);
+		return aa * bb * cc * (aa + bb + cc);
 	}
 
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof ImmutableTuple) {
 			ImmutableTuple<?, ?, ?> that = (ImmutableTuple<?, ?, ?>) other;
-			return (this.a.equals(that.a) && this.b.equals(that.b) && this.c.equals(that.c));
+			return this.a.equals(that.a) && this.b.equals(that.b) && this.c.equals(that.c);
 		}
 		return false;
 	}

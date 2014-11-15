@@ -9,9 +9,9 @@ import net.minecraft.world.World;
 
 /**
  * World scanning helpers
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ScanningHelper {
 
@@ -19,7 +19,7 @@ public class ScanningHelper {
 	 * Scans a given AxisAlignedBB bound zone for all matching TileEntity of the
 	 * specified class. If no matching tile-entities are found, this will return
 	 * an empty ArrayList
-	 * 
+	 *
 	 * @param world
 	 *            The fully qualified world object.
 	 * @param clazz
@@ -38,9 +38,9 @@ public class ScanningHelper {
 	public static ArrayList<Vector3> findAllTileEntitesOf(World world, Class<? extends TileEntity> clazz, int x, int y,
 			int z, AxisAlignedBB bounds) {
 		ArrayList<Vector3> poolMatching = new ArrayList<Vector3>();
-		for (int ix = (x + (int) Math.floor(bounds.minX)); ix < (x + bounds.maxX); ix++)
-			for (int iy = (y + (int) Math.floor(bounds.minY)); iy < (y + bounds.maxY); iy++)
-				for (int iz = (z + (int) Math.floor(bounds.minZ)); iz < (z + bounds.maxZ); iz++) {
+		for (int ix = x + (int) Math.floor(bounds.minX); ix < x + bounds.maxX; ix++)
+			for (int iy = y + (int) Math.floor(bounds.minY); iy < y + bounds.maxY; iy++)
+				for (int iz = z + (int) Math.floor(bounds.minZ); iz < z + bounds.maxZ; iz++) {
 					TileEntity object = world.getTileEntity(ix, iy, iz);
 					if (object != null && object.getClass().equals(clazz))
 						poolMatching.add(new Vector3(ix - x, iy - y, iz - z));
@@ -52,7 +52,7 @@ public class ScanningHelper {
 	 * Scans a given AxisAlignedBB bound zone for the best matching TileEntity
 	 * of the specified class. If no matching tile-entities are found, this will
 	 * return null.
-	 * 
+	 *
 	 * @param world
 	 *            The fully qualified world object.
 	 * @param clazz

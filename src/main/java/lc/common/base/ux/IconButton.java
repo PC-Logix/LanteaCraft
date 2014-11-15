@@ -6,14 +6,14 @@ import net.minecraft.client.renderer.Tessellator;
 
 /**
  * IconButton element. TODO: Clean up, can extend GUIButton(?) instead.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class IconButton {
 	/**
 	 * Draw a button on the screen
-	 * 
+	 *
 	 * @param mc
 	 *            The game
 	 * @param iconName
@@ -33,10 +33,10 @@ public class IconButton {
 	 */
 	public static void drawButton(Minecraft mc, String iconName, boolean hover, boolean pressed, int x, int y,
 			double scale, float zLevel) {
-		bindAndClamp(mc, "button_" + ((pressed) ? "down" : (hover) ? "hover" : "up") + ".png");
+		bindAndClamp(mc, "button_" + (pressed ? "down" : hover ? "hover" : "up") + ".png");
 		drawTexturedRectUV(x, y, 24 * scale, 24 * scale, 0, 0, 1, 1, zLevel);
 		bindAndClamp(mc, "icons/" + iconName + ".png");
-		drawTexturedRectUV(x + (4 * scale), y + (4 * scale), 16 * scale, 16 * scale, 0, 0, 1, 1, zLevel);
+		drawTexturedRectUV(x + 4 * scale, y + 4 * scale, 16 * scale, 16 * scale, 0, 0, 1, 1, zLevel);
 	}
 
 	private static void bindAndClamp(Minecraft mc, String name) {

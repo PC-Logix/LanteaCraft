@@ -5,9 +5,9 @@ import lc.api.components.IComponentRegistry;
 
 /**
  * Component registry implementation.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class ComponentRegistry implements IComponentRegistry {
 

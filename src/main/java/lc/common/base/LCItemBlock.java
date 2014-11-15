@@ -6,9 +6,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Internal base item-block stub.
- * 
+ *
  * @author AfterLifeLochie
- * 
+ *
  */
 public class LCItemBlock extends ItemBlock {
 
@@ -17,7 +17,7 @@ public class LCItemBlock extends ItemBlock {
 
 	/**
 	 * Create the item block
-	 * 
+	 *
 	 * @param block
 	 *            The block type
 	 */
@@ -27,19 +27,19 @@ public class LCItemBlock extends ItemBlock {
 
 	/**
 	 * Create the item block
-	 * 
+	 *
 	 * @param block
 	 *            The LC block type
 	 */
 	public LCItemBlock(LCBlock block) {
 		super(block);
-		this.blockType = block;
+		blockType = block;
 		setHasSubtypes(block.isTyped);
 	}
 
 	@Override
 	public int getMetadata(int data) {
-		return (this.hasSubtypes) ? data : 0;
+		return hasSubtypes ? data : 0;
 	}
 
 	@Override
