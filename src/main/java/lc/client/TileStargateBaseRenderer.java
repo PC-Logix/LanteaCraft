@@ -1,8 +1,10 @@
 package lc.client;
 
+import lc.api.defs.IDefinitionReference;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
 import lc.common.base.LCTileRenderer;
+import lc.common.impl.registry.DefinitionReference;
 import lc.core.ResourceAccess;
 import net.minecraft.util.ResourceLocation;
 

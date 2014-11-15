@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import net.minecraft.item.ItemStack;
 import lc.api.components.RecipeType;
 import lc.api.defs.IContainerDefinition;
+import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IGameDef;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
@@ -116,6 +117,11 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 	@Override
 	public Map<Integer, ItemStack> getOutputStacks() {
 		return stackOutputs;
+	}
+
+	@Override
+	public IDefinitionReference ref() {
+		return new DefinitionReference(this);
 	}
 
 }

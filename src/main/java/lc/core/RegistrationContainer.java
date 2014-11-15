@@ -3,6 +3,7 @@ package lc.core;
 import net.minecraft.item.ItemStack;
 import lc.api.components.RecipeType;
 import lc.api.defs.Blocks;
+import lc.api.defs.IDefinitionReference;
 import lc.api.defs.Items;
 import lc.api.defs.Recipes;
 import lc.api.world.OreType;
@@ -65,17 +66,12 @@ public class RegistrationContainer {
 		items.lanteaOreItem = DefinitionWrapperProvider.provide(ItemLanteaOre.class);
 		items.lanteaAlloyItem = DefinitionWrapperProvider.provide(ItemLanteaAlloyIngot.class);
 
-		DefinitionReference naquadah = new DefinitionReference(items.lanteaOreItem, 1, OreType.NAQUADAH.ordinal());
-		DefinitionReference trinium = new DefinitionReference(items.lanteaOreItem, 1, OreType.TRINIUM.ordinal());
-
-		DefinitionReference naquadahIngot = new DefinitionReference(items.lanteaAlloyItem, 1,
-				OreType.NAQUADAH.ordinal());
-		DefinitionReference triniumIngot = new DefinitionReference(items.lanteaAlloyItem, 1, OreType.TRINIUM.ordinal());
-
-		DefinitionReference naquadahAlloyBlock = new DefinitionReference(blocks.lanteaAlloyBlock, 1,
-				OreType.NAQUADAH.ordinal());
-		DefinitionReference triniumAlloyBlock = new DefinitionReference(blocks.lanteaAlloyBlock, 1,
-				OreType.TRINIUM.ordinal());
+		IDefinitionReference naquadah = items.lanteaOreItem.ref().pushAll(1, OreType.NAQUADAH.ordinal());
+		IDefinitionReference trinium = items.lanteaOreItem.ref().pushAll(1, OreType.TRINIUM.ordinal());
+		IDefinitionReference naquadahIngot = items.lanteaAlloyItem.ref().pushAll(1, OreType.NAQUADAH.ordinal());
+		IDefinitionReference triniumIngot = new DefinitionReference(items.lanteaAlloyItem, 1, OreType.TRINIUM.ordinal());
+		IDefinitionReference naquadahAlloyBlock = blocks.lanteaAlloyBlock.ref().pushAll(1, OreType.NAQUADAH.ordinal());
+		IDefinitionReference triniumAlloyBlock = blocks.lanteaAlloyBlock.ref().pushAll(1, OreType.TRINIUM.ordinal());
 
 		recipes.naquadahIngot = new SimpleRecipeDefinition("naquadah_ingot", RecipeType.SHAPELESS, naquadahIngot, "01",
 				new ItemStack(net.minecraft.init.Items.iron_ingot, 1), naquadah);
@@ -89,14 +85,14 @@ public class RegistrationContainer {
 				naquadahAlloyBlock, "000000000", naquadahIngot);
 		runtime.registries().recipes().addRecipe(recipes.naquadahAlloyBlock);
 		recipes.naquadahAlloyToIngots = new SimpleRecipeDefinition("naquadah_alloy_to_ingot", RecipeType.SHAPELESS,
-				naquadahIngot.copy().setParameter(0, 9), "0", naquadahAlloyBlock);
+				naquadahIngot.copy().push(0, 9), "0", naquadahAlloyBlock);
 		runtime.registries().recipes().addRecipe(recipes.naquadahAlloyToIngots);
 
 		recipes.triniumAlloyBlock = new SimpleRecipeDefinition("trinium_alloy_block", RecipeType.SHAPED,
 				triniumAlloyBlock, "000000000", triniumIngot);
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyBlock);
 		recipes.triniumAlloyToIngots = new SimpleRecipeDefinition("trinium_alloy_to_ingot", RecipeType.SHAPELESS,
-				triniumIngot.copy().setParameter(0, 9), "0", triniumAlloyBlock);
+				triniumIngot.copy().push(0, 9), "0", triniumAlloyBlock);
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyToIngots);
 
 	}

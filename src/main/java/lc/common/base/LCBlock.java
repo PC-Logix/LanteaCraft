@@ -1,10 +1,12 @@
 package lc.common.base;
 
+import lc.api.defs.IDefinitionReference;
 import lc.api.event.IBlockEventHandler;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.api.rendering.IEntityRenderInfo;
 import lc.api.rendering.IRenderInfo;
 import lc.api.rendering.ITileRenderInfo;
+import lc.common.impl.registry.DefinitionReference;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

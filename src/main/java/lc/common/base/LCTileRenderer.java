@@ -1,6 +1,8 @@
 package lc.common.base;
 
+import lc.api.defs.IDefinitionReference;
 import lc.api.defs.ILanteaCraftRenderer;
+import lc.common.impl.registry.DefinitionReference;
 
 /**
  * Generic tile rendering stub.
@@ -42,5 +44,10 @@ public abstract class LCTileRenderer implements ILanteaCraftRenderer {
 	 */
 	public abstract boolean renderTileEntityAt(LCTile tile, LCTileRenderHook renderer, double x, double y, double z,
 			float partialTickTime);
+
+	@Override
+	public IDefinitionReference ref() {
+		return new DefinitionReference(this);
+	}
 
 }

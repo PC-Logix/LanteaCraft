@@ -1,6 +1,8 @@
 package lc.common.base;
 
+import lc.api.defs.IDefinitionReference;
 import lc.api.defs.ILanteaCraftRenderer;
+import lc.common.impl.registry.DefinitionReference;
 import lc.common.util.math.Trans3;
 import lc.common.util.math.Vector3;
 import net.minecraft.block.Block;
@@ -75,6 +77,11 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 	 *         inventories.
 	 */
 	public abstract boolean renderInventoryItemAs3d();
+
+	@Override
+	public IDefinitionReference ref() {
+		return new DefinitionReference(this);
+	}
 
 	private double u0, v0, u1, v1, us, vs;
 	private boolean textureOverridden;

@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import lc.api.components.ComponentType;
 import lc.api.defs.IContainerDefinition;
+import lc.api.defs.IDefinitionReference;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
 import lc.common.base.LCItemBlock;
@@ -130,6 +131,11 @@ public class BlockItemDefinition implements IContainerDefinition {
 	@Override
 	public ItemStack getStackOf(int size) {
 		return (itemBlockType != null) ? new ItemStack(blockObject, size) : new ItemStack(itemObject, size);
+	}
+
+	@Override
+	public IDefinitionReference ref() {
+		return new DefinitionReference(this);
 	}
 
 }
