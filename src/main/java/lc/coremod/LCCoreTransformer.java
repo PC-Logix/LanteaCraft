@@ -51,7 +51,22 @@ public class LCCoreTransformer implements IClassTransformer {
 				transformers.add((IClassTransformer) Class.forName(transformer).newInstance());
 				LCLog.debug("Instantiated transformer %s.", transformer);
 			} catch (Throwable e) {
-				LCLog.warn("Could not instantiate transformer %s.", transformer, e);
+				LCLog.fatal("Could not instantiate transformer %s.", transformer, e);
+			}
+		if (BuildInfo.DEBUG)
+			try {
+				File vmdir = new File("vm/");
+				if (vmdir.exists()) {
+					File[] files = vmdir.listFiles();
+					for (File f : files)
+						if (f.isFile() && f.exists() && !f.equals(vmdir))
+							try {
+								f.delete();
+							} catch (Throwable t) {
+							}
+				}
+			} catch (Throwable t) {
+				LCLog.fatal("Failed to set up VM runtime save-to-disk debugger.", t);
 			}
 	}
 
@@ -60,20 +75,40 @@ public class LCCoreTransformer implements IClassTransformer {
 	 * pass this through all our children, then return the result.
 	 */
 	@Override
-	public byte[] transform(String name, String transformedName, byte[] bytes) {
+	public byte[] transform(String name, String transformedName, final byte[] bytes) {
 		if (bytes == null)
 			return bytes;
 
-		for (IClassTransformer transformer : transformers)
-			try {
-				bytes = transformer.transform(name, transformedName, bytes);
-				if (bytes == null)
-					LCLog.fatal("Transformer %s corrupted class %s!", transformer, name);
-			} catch (Throwable e) {
-				LCLog.fatal("Could not transform class %s using %s!", name, transformer, e);
-			}
+		/* Blank result array, initial transformed array */
+		byte[] result = null, transformed = new byte[bytes.length];
+		/* Set initial transformed array = bytes of original source */
+		System.arraycopy(bytes, 0, transformed, 0, transformed.length);
 
-		if (BuildInfo.DEBUG)
+		/*
+		 * Store the result of the transformation on transformed in result. If
+		 * the transformation fails, don't care about the result in result. If
+		 * successful, put result into transformed and update result with the
+		 * last transformation.
+		 */
+		for (IClassTransformer transformer : transformers) {
+			try {
+				result = transformer.transform(name, transformedName, transformed);
+				if (result == null)
+					LCLog.fatal("Transformer %s has corrupted class %s, ignoring the transformer's result.",
+							transformer, name);
+				else {
+					transformed = result;
+					result = new byte[transformed.length];
+					System.arraycopy(transformed, 0, result, 0, result.length);
+				}
+			} catch (Throwable e) {
+				LCLog.fatal(
+						"Transformer %s failed to transform class %s (exception raised), ignoring transformer result. ",
+						transformer, name, e);
+			}
+		}
+
+		if (BuildInfo.DEBUG && name.startsWith("lc."))
 			try {
 				File vmdir = new File("vm/");
 				File saveObj = new File(vmdir, name.replace("/", "_").replace(".", "_") + ".class");
@@ -82,12 +117,13 @@ public class LCCoreTransformer implements IClassTransformer {
 				if (saveObj.exists())
 					saveObj.delete();
 				FileOutputStream output = new FileOutputStream(saveObj, false);
-				output.write(bytes);
+				output.write(transformed);
 				output.close();
 			} catch (Throwable t) {
-				LCLog.fatal("Failed to save runtime implementation of class %s.", t);
+				LCLog.fatal("Failed to save runtime implementation of class %s.", name, t);
 			}
-		return bytes;
+
+		return transformed;
 	}
 
 }
