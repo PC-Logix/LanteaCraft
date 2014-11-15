@@ -36,6 +36,8 @@ public class DefinitionReference {
 	}
 
 	public DefinitionReference copy() {
-		return new DefinitionReference(def, (ArrayList<Object>) params.clone());
+		if (params != null && params.size() > 0)
+			return new DefinitionReference(def, parameters());
+		return new DefinitionReference(def);
 	}
 }
