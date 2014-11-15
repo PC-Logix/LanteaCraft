@@ -11,4 +11,9 @@ public class Recipes {
 	public IRecipeDefinition naquadahIngot;
 	public IRecipeDefinition triniumIngot;
 
+	public IRecipeDefinition triniumAlloyBlock;
+	public IRecipeDefinition triniumAlloyToIngots;
+	public IRecipeDefinition naquadahAlloyBlock;
+	public IRecipeDefinition naquadahAlloyToIngots;
+
 }

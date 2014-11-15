@@ -66,6 +66,10 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 		if (val instanceof DefinitionReference) {
 			DefinitionReference reference = (DefinitionReference) val;
 			IGameDef def = reference.reference();
+			if (def == null) {
+				LCLog.fatal("Invalid reference, cannot resolve recipe.");
+				return null;
+			}
 			Object[] params = reference.parameters();
 			Integer count = null, metadata = null;
 			if (params.length >= 1)
@@ -80,6 +84,9 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 				else if (blockItemDef.getItem() != null)
 					return new ItemStack(blockItemDef.getItem(), (count == null) ? 1 : count, (metadata == null) ? 0
 							: metadata);
+			} else {
+				LCLog.fatal("Unsupported definition type %s.", def.getClass().getName());
+				return null;
 			}
 		}
 		LCLog.fatal("Cannot resolve object of type %s into ItemStack.", val.getClass().getName());

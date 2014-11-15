@@ -12,7 +12,6 @@ import lc.blocks.BlockStargateBase;
 import lc.blocks.BlockStargateRing;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.impl.registry.DefinitionWrapperProvider;
-import lc.common.impl.registry.RecipeRegistry;
 import lc.common.impl.registry.SimpleRecipeDefinition;
 import lc.items.ItemGlasses;
 import lc.items.ItemLanteaAlloyIngot;
@@ -64,11 +63,39 @@ public class RegistrationContainer {
 		items.lanteaOreItem = DefinitionWrapperProvider.provide(ItemLanteaOre.class);
 		items.lanteaAlloyItem = DefinitionWrapperProvider.provide(ItemLanteaAlloyIngot.class);
 
-		recipes.naquadahIngot = new SimpleRecipeDefinition("naquadah_ingot", RecipeType.SHAPELESS,
-				new DefinitionReference(items.lanteaAlloyItem, 1, OreType.NAQUADAH.ordinal()), "01", new ItemStack(
-						net.minecraft.init.Items.iron_ingot, 1), new DefinitionReference(items.lanteaOreItem, 1,
-						OreType.NAQUADAH.ordinal()));
+		DefinitionReference naquadah = new DefinitionReference(items.lanteaOreItem, 1, OreType.NAQUADAH.ordinal());
+		DefinitionReference trinium = new DefinitionReference(items.lanteaOreItem, 1, OreType.TRINIUM.ordinal());
+
+		DefinitionReference naquadahIngot = new DefinitionReference(items.lanteaAlloyItem, 1,
+				OreType.NAQUADAH.ordinal());
+		DefinitionReference triniumIngot = new DefinitionReference(items.lanteaAlloyItem, 1, OreType.TRINIUM.ordinal());
+
+		DefinitionReference naquadahAlloyBlock = new DefinitionReference(blocks.lanteaAlloyBlock, 1,
+				OreType.NAQUADAH.ordinal());
+		DefinitionReference triniumAlloyBlock = new DefinitionReference(blocks.lanteaAlloyBlock, 1,
+				OreType.TRINIUM.ordinal());
+
+		recipes.naquadahIngot = new SimpleRecipeDefinition("naquadah_ingot", RecipeType.SHAPELESS, naquadahIngot, "01",
+				new ItemStack(net.minecraft.init.Items.iron_ingot, 1), naquadah);
 		runtime.registries().recipes().addRecipe(recipes.naquadahIngot);
+
+		recipes.triniumIngot = new SimpleRecipeDefinition("trinium_ingot", RecipeType.SHAPELESS, triniumIngot, "01",
+				new ItemStack(net.minecraft.init.Items.iron_ingot, 1), trinium);
+		runtime.registries().recipes().addRecipe(recipes.triniumIngot);
+
+		recipes.naquadahAlloyBlock = new SimpleRecipeDefinition("naquadah_alloy_block", RecipeType.SHAPED,
+				naquadahAlloyBlock, "000000000", naquadahIngot);
+		runtime.registries().recipes().addRecipe(recipes.naquadahAlloyBlock);
+		recipes.naquadahAlloyToIngots = new SimpleRecipeDefinition("naquadah_alloy_to_ingot", RecipeType.SHAPELESS,
+				naquadahIngot.copy().setParameter(0, 9), "0", naquadahAlloyBlock);
+		runtime.registries().recipes().addRecipe(recipes.naquadahAlloyToIngots);
+
+		recipes.triniumAlloyBlock = new SimpleRecipeDefinition("trinium_alloy_block", RecipeType.SHAPED,
+				triniumAlloyBlock, "000000000", triniumIngot);
+		runtime.registries().recipes().addRecipe(recipes.triniumAlloyBlock);
+		recipes.triniumAlloyToIngots = new SimpleRecipeDefinition("trinium_alloy_to_ingot", RecipeType.SHAPELESS,
+				triniumIngot.copy().setParameter(0, 9), "0", triniumAlloyBlock);
+		runtime.registries().recipes().addRecipe(recipes.triniumAlloyToIngots);
 
 	}
 
