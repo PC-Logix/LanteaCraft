@@ -1,11 +1,11 @@
 package lc.api;
 
 import lc.api.components.IRegistryContainer;
-import lc.api.defs.Biomes;
-import lc.api.defs.Blocks;
-import lc.api.defs.Dimensions;
-import lc.api.defs.Items;
-import lc.api.defs.Recipes;
+import lc.api.init.Biomes;
+import lc.api.init.Blocks;
+import lc.api.init.Dimensions;
+import lc.api.init.Items;
+import lc.api.init.Recipes;
 
 /**
  * API proxy interfacve

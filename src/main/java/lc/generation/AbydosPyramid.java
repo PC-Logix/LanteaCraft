@@ -44,7 +44,7 @@ public class AbydosPyramid extends LCFeatureComponent {
 				Blocks.sandstone, Blocks.sandstone, false);
 		int i;
 
-		lc.api.defs.Blocks modBlocks = LCRuntime.runtime.blocks();
+		lc.api.init.Blocks modBlocks = LCRuntime.runtime.blocks();
 
 		for (i = 1; i <= 18; ++i) {
 			fillWithMetadataBlocks(par1World, par3StructureBoundingBox, i, i,

@@ -1,4 +1,6 @@
-package lc.api.defs;
+package lc.api.init;
+
+import lc.api.defs.IContainerDefinition;
 
 /**
  * Block definition list.

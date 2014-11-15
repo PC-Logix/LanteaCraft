@@ -2,10 +2,10 @@ package lc.core;
 
 import net.minecraft.item.ItemStack;
 import lc.api.components.RecipeType;
-import lc.api.defs.Blocks;
 import lc.api.defs.IDefinitionReference;
-import lc.api.defs.Items;
-import lc.api.defs.Recipes;
+import lc.api.init.Blocks;
+import lc.api.init.Items;
+import lc.api.init.Recipes;
 import lc.api.world.OreType;
 import lc.blocks.BlockDecorative;
 import lc.blocks.BlockLanteaAlloy;
