@@ -18,4 +18,8 @@ public class Recipes {
 	public IRecipeDefinition naquadahAlloyBlock;
 	public IRecipeDefinition naquadahAlloyToIngots;
 
+	public IRecipeDefinition stargateBase;
+	public IRecipeDefinition stargateRing;
+	public IRecipeDefinition stargateChevron;
+
 }
