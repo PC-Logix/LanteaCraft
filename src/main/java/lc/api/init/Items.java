@@ -16,6 +16,6 @@ public class Items {
 	/** Lantea global alloy ingot item */
 	public IContainerDefinition lanteaAlloyItem;
 	/** Lantea global crystal item */
-	public IContainerDefinition lanteaCrystalItem;
+	public IContainerDefinition lanteaCraftingItem;
 
 }

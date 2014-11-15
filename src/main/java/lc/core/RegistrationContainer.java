@@ -15,6 +15,7 @@ import lc.blocks.BlockStargateRing;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.impl.registry.DefinitionWrapperProvider;
 import lc.common.impl.registry.SimpleRecipeDefinition;
+import lc.items.ItemCraftingReagent;
 import lc.items.ItemGlasses;
 import lc.items.ItemLanteaAlloyIngot;
 import lc.items.ItemLanteaOre;
@@ -65,6 +66,7 @@ public class RegistrationContainer {
 		items.glasses = DefinitionWrapperProvider.provide(ItemGlasses.class);
 		items.lanteaOreItem = DefinitionWrapperProvider.provide(ItemLanteaOre.class);
 		items.lanteaAlloyItem = DefinitionWrapperProvider.provide(ItemLanteaAlloyIngot.class);
+		items.lanteaCraftingItem = DefinitionWrapperProvider.provide(ItemCraftingReagent.class);
 
 		IDefinitionReference ringBlock = blocks.stargateRingBlock.ref();
 		IDefinitionReference chevronBlock = blocks.stargateRingBlock.ref().pushAll(1, 1);
@@ -75,9 +77,12 @@ public class RegistrationContainer {
 		IDefinitionReference triniumIngot = new DefinitionReference(items.lanteaAlloyItem, 1, OreType.TRINIUM.ordinal());
 		IDefinitionReference naquadahAlloyBlock = blocks.lanteaAlloyBlock.ref().pushAll(1, OreType.NAQUADAH.ordinal());
 		IDefinitionReference triniumAlloyBlock = blocks.lanteaAlloyBlock.ref().pushAll(1, OreType.TRINIUM.ordinal());
-		IDefinitionReference blankCrystal = items.lanteaCrystalItem.ref().pushAll(1, 0);
-		IDefinitionReference coreCrystal = items.lanteaCrystalItem.ref().pushAll(1, 1);
-		IDefinitionReference controlCrystal = items.lanteaCrystalItem.ref().pushAll(1, 2);
+		IDefinitionReference blankCrystal = items.lanteaCraftingItem.ref().pushAll(1,
+				ItemCraftingReagent.ReagentList.BLANKCRYSTAL.ordinal());
+		IDefinitionReference coreCrystal = items.lanteaCraftingItem.ref().pushAll(1,
+				ItemCraftingReagent.ReagentList.CORECRYSTAL.ordinal());
+		IDefinitionReference controlCrystal = items.lanteaCraftingItem.ref().pushAll(1,
+				ItemCraftingReagent.ReagentList.CONTROLCRYSTAL.ordinal());
 
 		ItemStack cSandstone = new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1);
 		ItemStack ironIngot = new ItemStack(net.minecraft.init.Items.iron_ingot, 1);

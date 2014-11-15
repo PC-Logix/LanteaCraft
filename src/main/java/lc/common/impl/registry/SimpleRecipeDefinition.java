@@ -73,10 +73,12 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 			}
 			Object[] params = reference.parameters();
 			Integer count = null, metadata = null;
-			if (params.length >= 1)
-				count = (Integer) params[0];
-			if (params.length == 2)
-				metadata = (Integer) params[1];
+			if (params != null) {
+				if (params.length >= 1)
+					count = (Integer) params[0];
+				if (params.length == 2)
+					metadata = (Integer) params[1];
+			}
 			if (def instanceof IContainerDefinition) {
 				IContainerDefinition blockItemDef = (IContainerDefinition) def;
 				if (blockItemDef.getBlock() != null)
