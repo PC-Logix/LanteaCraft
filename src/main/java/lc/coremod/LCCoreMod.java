@@ -46,16 +46,6 @@ public class LCCoreMod implements IFMLLoadingPlugin {
 		// TODO: Auto-generated method stub
 	}
 
-	/**
-	 * Get a list of transformers to be run at run-time.
-	 * 
-	 * @return A list of transformer classes.
-	 */
-	public static String[] getTransformers() {
-		return new String[] { "lc.coremod.ClassOptionalTransformer", "lc.coremod.HintInjectionTransformer",
-				"lc.coremod.DriverBindingTransformer" };
-	}
-
 	@Override
 	public String getAccessTransformerClass() {
 		// TODO Auto-generated method stub

@@ -314,20 +314,6 @@ public class DriverBindingTransformer implements IClassTransformer {
 
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(writer);
-		if (BuildInfo.DEBUG)
-			try {
-				File vmdir = new File("vm/");
-				File saveObj = new File(vmdir, name.replace("/", "_").replace(".", "_") + ".class");
-				if (!vmdir.exists())
-					vmdir.mkdir();
-				if (saveObj.exists())
-					saveObj.delete();
-				FileOutputStream output = new FileOutputStream(saveObj, false);
-				output.write(writer.toByteArray());
-				output.close();
-			} catch (Throwable t) {
-				LCLog.fatal("Failed to save runtime implementation of class %s.", t);
-			}
 		return writer.toByteArray();
 	}
 }
