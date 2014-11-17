@@ -29,13 +29,17 @@ public class BlockLanteaOre extends BlockOre {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		// TODO: This can be flattened.
-		missing = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:missing"));
-		OreTypes.NAQUADAH.setOreTexture(register.registerIcon(ResourceAccess.formatResourceName(
-				"${ASSET_KEY}:%s_${TEX_QUALITY}", "naquadah_ore")));
-		OreTypes.NAQUADRIAH.setOreTexture(register.registerIcon(ResourceAccess.formatResourceName(
-				"${ASSET_KEY}:%s_${TEX_QUALITY}", "naquadriah_ore")));
-		OreTypes.TRINIUM.setOreTexture(register.registerIcon(ResourceAccess.formatResourceName(
-				"${ASSET_KEY}:%s_${TEX_QUALITY}", "trinium_ore")));
+		missing = register.registerIcon(ResourceAccess
+				.formatResourceName("${ASSET_KEY}:missing"));
+		OreTypes.NAQUADAH.setOreTexture(register.registerIcon(ResourceAccess
+				.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+						"naquadah_ore")));
+		OreTypes.NAQUADRIAH.setOreTexture(register.registerIcon(ResourceAccess
+				.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+						"naquadriah_ore")));
+		OreTypes.TRINIUM.setOreTexture(register.registerIcon(ResourceAccess
+				.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+						"trinium_ore")));
 	}
 
 	@Override
@@ -46,8 +50,14 @@ public class BlockLanteaOre extends BlockOre {
 	}
 
 	@Override
-	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
+	public Item getItemDropped(int p_149650_1_, Random p_149650_2_,
+			int p_149650_3_) {
 		return ModuleCore.Items.lanteaOreItem;
+	}
+
+	@Override
+	public int damageDropped(int metadata) {
+		return metadata;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
