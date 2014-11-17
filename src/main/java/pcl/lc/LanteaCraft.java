@@ -139,11 +139,9 @@ public class LanteaCraft {
 
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload evt) {
-		LanteaCraft.getLogger().log(Level.INFO, String.format("World unloading: %s", evt.world.provider.dimensionId));
 	}
 
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load evt) {
-		LanteaCraft.getLogger().log(Level.INFO, String.format("World loading: %s", evt.world.provider.dimensionId));
 	}
 }
