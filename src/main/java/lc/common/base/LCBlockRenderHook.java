@@ -2,6 +2,7 @@ package lc.common.base;
 
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.client.DefaultBlockRenderer;
+import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.DefinitionRegistry.RendererType;
 import lc.core.LCRuntime;
@@ -41,14 +42,19 @@ public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
 		if (worker == null || !(worker instanceof LCBlockRenderer))
 			flag = false;
 		else {
-			LCBlockRenderer blockRenderer = (LCBlockRenderer) worker;
-			while (blockRenderer != null && !blockRenderer.renderInventoryBlock(block, renderer, metadata)) {
-				worker = registry.getRenderer(RendererType.BLOCK, blockRenderer.getParent());
-				if (worker == null || !(worker instanceof LCBlockRenderer)) {
-					flag = false;
-					break;
+			try {
+				LCBlockRenderer blockRenderer = (LCBlockRenderer) worker;
+				while (blockRenderer != null && !blockRenderer.renderInventoryBlock(block, renderer, metadata)) {
+					worker = registry.getRenderer(RendererType.BLOCK, blockRenderer.getParent());
+					if (worker == null || !(worker instanceof LCBlockRenderer)) {
+						flag = false;
+						break;
+					}
+					blockRenderer = (LCBlockRenderer) worker;
 				}
-				blockRenderer = (LCBlockRenderer) worker;
+			} catch (Throwable t) {
+				LCLog.warn("Uncaught block rendering exception.", t);
+				flag = false;
 			}
 		}
 		if (!flag)

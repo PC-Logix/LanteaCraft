@@ -135,8 +135,9 @@ public class LCLog {
 	 * Display the run-time information about the mod.
 	 */
 	public static void showRuntimeInfo() {
-		info("Loading LanteaCraft build %s (debugging: %s, masq: %s).", BuildInfo.getBuildNumber(), BuildInfo.DEBUG,
-				BuildInfo.DEBUG_MASQ);
+		info("Hello, I'm LanteaCraft build %s for Minecraft %s!", BuildInfo.getBuildNumber(), BuildInfo.versionNumber);
+		if (BuildInfo.DEBUG)
+			info("Debugging is ON (log masquerading: %s).", BuildInfo.DEBUG_MASQ);
 	}
 
 }
