@@ -56,13 +56,17 @@ public class HintInjectionTransformer implements IClassTransformer {
 						if (annotation.desc.equals("Llc/api/defs/HintProvider;")) {
 							Side theSide = FMLCommonHandler.instance().getSide();
 							if (theSide == Side.CLIENT) {
-								String className = (String) annotation.values.get(annotation.values
-										.indexOf("clientClass") + 1);
-								fieldToClazzMap.put(field.name, className.replace(".", "/"));
+								if (annotation.values.indexOf("clientClass") != -1) {
+									String className = (String) annotation.values.get(annotation.values
+											.indexOf("clientClass") + 1);
+									fieldToClazzMap.put(field.name, className.replace(".", "/"));
+								}
 							} else {
-								String className = (String) annotation.values.get(annotation.values
-										.indexOf("serverClass") + 1);
-								fieldToClazzMap.put(field.name, className.replace(".", "/"));
+								if (annotation.values.indexOf("serverClass") != -1) {
+									String className = (String) annotation.values.get(annotation.values
+											.indexOf("serverClass") + 1);
+									fieldToClazzMap.put(field.name, className.replace(".", "/"));
+								}
 							}
 						}
 					}
