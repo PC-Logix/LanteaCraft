@@ -43,6 +43,12 @@ public class BlockStargateBase extends LCBlock {
 			return true;
 		}
 
+		@Override
+		public boolean doProperty(String property, IBlockAccess access, int data, int x, int y, int z, boolean def) {
+			// TODO Auto-generated method stub
+			return def;
+		}
+
 	};
 
 	/** Top and bottom texture map */
