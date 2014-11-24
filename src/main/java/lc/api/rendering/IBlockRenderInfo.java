@@ -36,4 +36,26 @@ public interface IBlockRenderInfo {
 	 */
 	public boolean doInventoryRender(int data);
 
+	/**
+	 * Ask the renderer info if a render property should be observed or executed
+	 * 
+	 * @param property
+	 *            The property name
+	 *
+	 * @param access
+	 *            The world access
+	 * @param data
+	 *            The block data
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 * @param def
+	 *            The default response if unknown
+	 * @return If the property should be observed or executed.
+	 */
+	public boolean doProperty(String property, IBlockAccess access, int data, int x, int y, int z, boolean def);
+
 }
