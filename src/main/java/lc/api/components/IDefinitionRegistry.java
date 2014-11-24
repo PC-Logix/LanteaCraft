@@ -3,7 +3,8 @@ package lc.api.components;
 import lc.api.defs.IContainerDefinition;
 
 /**
- * Definition registry interface
+ * Definition registry interface. Stores copies of all known definitions at
+ * runtime.
  *
  * @author AfterLifeLochie
  *

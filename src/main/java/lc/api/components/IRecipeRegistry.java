@@ -3,7 +3,7 @@ package lc.api.components;
 import lc.api.defs.IRecipeDefinition;
 
 /**
- * Recipe registry interface
+ * Recipe registry interface. Stores all declared recipes at runtime.
  *
  * @author AfterLifeLochie
  *

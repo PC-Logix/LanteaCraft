@@ -11,6 +11,8 @@ import lc.common.base.LCTile;
 
 /**
  * Annotation to describe elements for {@link IContainerDefinition} definitions.
+ * Elements with these annotations are initialized by the runtime and
+ * transformed into definitions which LanteaCraft can interpret.
  *
  * @author AfterLifeLochie
  */
@@ -18,7 +20,7 @@ import lc.common.base.LCTile;
 public @interface Definition {
 
 	/**
-	 * The name of the definition. Must be unique.
+	 * The name of the definition. Must be unique, cannot be null.
 	 *
 	 * @return The name of the definition.
 	 */
@@ -26,7 +28,7 @@ public @interface Definition {
 
 	/**
 	 * The component type of this definition. Must be one of
-	 * {@link ComponentType}.
+	 * {@link ComponentType}. Cannot be null.
 	 *
 	 * @return The component type of this definition.
 	 */
@@ -34,7 +36,9 @@ public @interface Definition {
 
 	/**
 	 * The block class of this definition. May be any child class of
-	 * {@link LCBlock} or {@link Void} (implicit).
+	 * {@link LCBlock} or {@link Void} (implicit). If a block class is
+	 * configured, an {@link Definition#itemBlockClass()} must also be
+	 * configured.
 	 *
 	 * @return The block class of this definition.
 	 */
@@ -42,7 +46,8 @@ public @interface Definition {
 
 	/**
 	 * The item-block class of this definition. May be any child class of
-	 * {@link LCItemBlock} or {@link Void} (implicit).
+	 * {@link LCItemBlock} or {@link Void} (implicit). If an item block class is
+	 * configured, an {@link Definition#blockClass()} must also be configured.
 	 *
 	 * @return The item-block class of this definition.
 	 */
@@ -58,7 +63,8 @@ public @interface Definition {
 
 	/**
 	 * The tile class of this definition. May be any child class of
-	 * {@link LCTile} or {@link Void} (implicit).
+	 * {@link LCTile} or {@link Void} (implicit). If a tile class is configured,
+	 * a {@link Definition#blockClass()} must also be configured.
 	 *
 	 * @return The tile class of this definition.
 	 */
