@@ -1,7 +1,5 @@
 package lc.client.models;
 
-import static lc.client.models.ModelStargate.ModelStargateConstants.cos;
-import static lc.client.models.ModelStargate.ModelStargateConstants.sin;
 import static lc.client.opengl.GLHelper.pushTexVertex;
 import lc.client.TileStargateBaseRenderer;
 import lc.client.opengl.BufferDisplayList;
@@ -19,48 +17,49 @@ import org.lwjgl.opengl.GL11;
  */
 public class ModelStargate {
 
-	public static class ModelStargateConstants {
-		public final static int numRingSegments = 38;
-		public final static double ringSymbolAngle = 360.0 / 38;
-		public final static double ringSymbolTextureLength = 38 * 8;
-		public final static double ringSymbolTextureHeight = 12;
-		public final static double ringSymbolSegmentWidth = ringSymbolTextureLength / numRingSegments;
+	public final static int numRingSegments = 38;
+	public final static double ringSymbolAngle = 360.0 / 38;
+	public final static double ringSymbolTextureLength = 38 * 8;
+	public final static double ringSymbolTextureHeight = 12;
+	public final static double ringSymbolSegmentWidth = ringSymbolTextureLength / numRingSegments;
 
-		public final static double ringInnerRadius = 3.0;
-		public final static double ringInnerMovingRadius = ringInnerRadius + 0.1;
-		public final static double ringOuterRadius = 3.5;
-		public final static double ringMidRadius = ringInnerMovingRadius + (ringOuterRadius - ringInnerMovingRadius)
-				/ 2;
+	public final static double ringInnerRadius = 3.0;
+	public final static double ringInnerMovingRadius = ringInnerRadius + 0.1;
+	public final static double ringOuterRadius = 3.5;
+	public final static double ringMidRadius = ringInnerMovingRadius + (ringOuterRadius - ringInnerMovingRadius) / 2;
 
-		public final static double ringDepth = 0.15;
+	public final static double ringDepth = 0.15;
+	public final static int numChevrons = 9;
+	public final static double chevronInnerRadius = ringMidRadius;
+	public final static double chevronOuterRadius = ringOuterRadius + 1 / 16.0;
+	public final static double chevronWidth = 0.5;
+	public final static double chevronDepth = 0.0625d;
+	public final static double chevronBorderWidth = chevronWidth / 6;
+	public final static double chevronMotionDistance = 1 / 16.0d;
+	public final static double chevronAngle = 360.0 / numChevrons;
+	public final static double chevronAngleOffset = -90.0 + chevronWidth;
 
-		public final static int numChevrons = 9;
-		public final static double chevronAngle = 360.0 / numChevrons;
-		public final static double chevronAngleOffset = -90.0;
-		public final static double chevronInnerRadius = ringMidRadius;
-		public final static double chevronOuterRadius = ringOuterRadius + 1 / 16.0;
-		public final static double chevronWidth = 0.5;
-		public final static double chevronDepth = 0.0625d;
-		public final static double chevronBorderWidth = chevronWidth / 6;
-		public final static double chevronMotionDistance = 1 / 16.0d;
+	public final static int ringFaceTextureIndex = 0x14;
+	public final static int ringTextureIndex = 0x15;
+	public final static int ringSymbolTextureIndex = 0x20;
+	public final static int chevronTextureIndex = 0x05;
+	public final static int chevronLitTextureIndex = 0x16;
 
-		public final static int ringFaceTextureIndex = 0x14;
-		public final static int ringTextureIndex = 0x15;
-		public final static int ringSymbolTextureIndex = 0x20;
-		public final static int chevronTextureIndex = 0x05;
-		public final static int chevronLitTextureIndex = 0x16;
+	public static double sin[] = new double[numRingSegments + 1];
+	public static double cos[] = new double[numRingSegments + 1];
 
-		public static double sin[] = new double[numRingSegments + 1];
-		public static double cos[] = new double[numRingSegments + 1];
+	public static double chevronRotations[] = new double[numChevrons + 1];
 
-		static {
-			for (int i = 0; i <= numRingSegments; i++) {
-				double a = 2 * Math.PI * i / numRingSegments;
-				sin[i] = Math.sin(a);
-				cos[i] = Math.cos(a);
-			}
+	static {
+		for (int i = 0; i <= numRingSegments; i++) {
+			double a = 2 * Math.PI * i / numRingSegments;
+			sin[i] = Math.sin(a);
+			cos[i] = Math.cos(a);
 		}
 
+		for (int i = 0; i < numChevrons; i++) {
+			chevronRotations[i] = (i * chevronAngle) - chevronAngleOffset;
+		}
 	}
 
 	/** Display buffer for outer shell */
@@ -102,104 +101,110 @@ public class ModelStargate {
 	}
 
 	public void render(TileStargateBaseRenderer renderer, LCTileRenderHook tesr, TileStargateBase tile) {
-		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
-		tesr.bind(renderer.texture);
+		GL11.glRotatef(90 + Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
+		tesr.bind(renderer.texFrame);
 		listShell.bind();
 		listShell.release();
+
+		for (int i = 0; i < numChevrons; i++) {
+			GL11.glPushMatrix();
+			GL11.glRotated(chevronRotations[i], 0.0f, 0.0f, 1.0f);
+			listChevron.bind();
+			listChevron.release();
+			GL11.glPopMatrix();
+		}
+
+		tesr.bind(renderer.texGlyphs);
+		listRing.bind();
+		listRing.release();
 	}
 
 	private void renderShellImmediate() {
-		double radiusInner = ModelStargateConstants.ringInnerRadius;
-		double radiusOuter = ModelStargateConstants.ringOuterRadius;
-		double radiusMidInner = ModelStargateConstants.ringInnerMovingRadius;
-		double radiusMidOuter = ModelStargateConstants.ringMidRadius;
-		double ringDepth = ModelStargateConstants.ringDepth;
-		double bevelDepth = ModelStargateConstants.ringDepth - 1d / 16d;
+		double bevelDepth = ringDepth - 1d / 16d;
 		GL11.glNormal3f(0, 1, 0);
 		GL11.glBegin(GL11.GL_QUADS);
-		for (int i = 0; i < ModelStargateConstants.numRingSegments; i++) {
-
+		for (int i = 0; i < numRingSegments; i++) {
 			// Outside surface
 			selectTile(0x4);
 			GL11.glNormal3d(-cos[i], -sin[i], 0);
-			vertex(radiusOuter * cos[i], radiusOuter * sin[i], ringDepth, 0, 0);
-			vertex(radiusOuter * cos[i], radiusOuter * sin[i], -ringDepth, 0, 16);
-			vertex(radiusOuter * cos[i + 1], radiusOuter * sin[i + 1], -ringDepth, 16, 16);
-			vertex(radiusOuter * cos[i + 1], radiusOuter * sin[i + 1], ringDepth, 16, 0);
+			vertex(ringOuterRadius * cos[i], ringOuterRadius * sin[i], ringDepth, 0, 0);
+			vertex(ringOuterRadius * cos[i], ringOuterRadius * sin[i], -ringDepth, 0, 16);
+			vertex(ringOuterRadius * cos[i + 1], ringOuterRadius * sin[i + 1], -ringDepth, 16, 16);
+			vertex(ringOuterRadius * cos[i + 1], ringOuterRadius * sin[i + 1], ringDepth, 16, 0);
 
 			// Outside ring inside filler (shear prevention chevron layer)
-			selectTile(ModelStargateConstants.ringFaceTextureIndex);
-			vertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], ringDepth, 0, 0);
-			vertex(radiusMidOuter * cos[i + 1], radiusMidOuter * sin[i + 1], ringDepth, 16, 0);
-			vertex(radiusMidOuter * cos[i + 1], radiusMidOuter * sin[i + 1], -ringDepth, 16, 16);
-			vertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], -ringDepth, 0, 16);
+			selectTile(ringFaceTextureIndex);
+			vertex(ringMidRadius * cos[i], ringMidRadius * sin[i], ringDepth, 0, 0);
+			vertex(ringMidRadius * cos[i + 1], ringMidRadius * sin[i + 1], ringDepth, 16, 0);
+			vertex(ringMidRadius * cos[i + 1], ringMidRadius * sin[i + 1], -ringDepth, 16, 16);
+			vertex(ringMidRadius * cos[i], ringMidRadius * sin[i], -ringDepth, 0, 16);
 
 			// Inside surface
 			selectTile(0x17);
 			GL11.glNormal3d(-cos[i], -sin[i], 0);
-			vertex(radiusInner * cos[i], radiusInner * sin[i], bevelDepth, 0, 0);
-			vertex(radiusInner * cos[i + 1], radiusInner * sin[i + 1], bevelDepth, 16, 0);
-			vertex(radiusInner * cos[i + 1], radiusInner * sin[i + 1], -bevelDepth, 16, 16);
-			vertex(radiusInner * cos[i], radiusInner * sin[i], -bevelDepth, 0, 16);
+			vertex(ringInnerRadius * cos[i], ringInnerRadius * sin[i], bevelDepth, 0, 0);
+			vertex(ringInnerRadius * cos[i + 1], ringInnerRadius * sin[i + 1], bevelDepth, 16, 0);
+			vertex(ringInnerRadius * cos[i + 1], ringInnerRadius * sin[i + 1], -bevelDepth, 16, 16);
+			vertex(ringInnerRadius * cos[i], ringInnerRadius * sin[i], -bevelDepth, 0, 16);
 
 			// Inside ring inside filler (shear prevention chevron layer)
-			selectTile(ModelStargateConstants.ringFaceTextureIndex);
-			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], ringDepth, 0, 0);
-			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], -ringDepth, 0, 16);
-			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], -ringDepth, 16, 16);
-			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], ringDepth, 16, 0);
+			selectTile(ringFaceTextureIndex);
+			vertex(ringInnerMovingRadius * cos[i], ringInnerMovingRadius * sin[i], ringDepth, 0, 0);
+			vertex(ringInnerMovingRadius * cos[i], ringInnerMovingRadius * sin[i], -ringDepth, 0, 16);
+			vertex(ringInnerMovingRadius * cos[i + 1], ringInnerMovingRadius * sin[i + 1], -ringDepth, 16, 16);
+			vertex(ringInnerMovingRadius * cos[i + 1], ringInnerMovingRadius * sin[i + 1], ringDepth, 16, 0);
 
 			// Back
 			GL11.glNormal3f(0, 0, -1);
-			selectTile(ModelStargateConstants.ringFaceTextureIndex);
+			selectTile(ringFaceTextureIndex);
 
 			// Inner back flat outer ring
-			vertex(radiusInner * cos[i], radiusInner * sin[i], -bevelDepth, 0, 16);
-			vertex(radiusInner * cos[i + 1], radiusInner * sin[i + 1], -bevelDepth, 16, 16);
-			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], -ringDepth, 16, 0);
-			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], -ringDepth, 0, 0);
+			vertex(ringInnerRadius * cos[i], ringInnerRadius * sin[i], -bevelDepth, 0, 16);
+			vertex(ringInnerRadius * cos[i + 1], ringInnerRadius * sin[i + 1], -bevelDepth, 16, 16);
+			vertex(ringInnerMovingRadius * cos[i + 1], ringInnerMovingRadius * sin[i + 1], -ringDepth, 16, 0);
+			vertex(ringInnerMovingRadius * cos[i], ringInnerMovingRadius * sin[i], -ringDepth, 0, 0);
 
 			// Outer back bevel inner ring
-			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], -ringDepth, 0, 16);
-			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], -ringDepth, 16, 16);
-			vertex(radiusOuter * cos[i + 1], radiusOuter * sin[i + 1], -ringDepth, 16, 0);
-			vertex(radiusOuter * cos[i], radiusOuter * sin[i], -ringDepth, 0, 0);
+			vertex(ringInnerMovingRadius * cos[i], ringInnerMovingRadius * sin[i], -ringDepth, 0, 16);
+			vertex(ringInnerMovingRadius * cos[i + 1], ringInnerMovingRadius * sin[i + 1], -ringDepth, 16, 16);
+			vertex(ringOuterRadius * cos[i + 1], ringOuterRadius * sin[i + 1], -ringDepth, 16, 0);
+			vertex(ringOuterRadius * cos[i], ringOuterRadius * sin[i], -ringDepth, 0, 0);
 
 			// Front
 			GL11.glNormal3f(0, 0, 1);
-			selectTile(ModelStargateConstants.ringFaceTextureIndex);
+			selectTile(ringFaceTextureIndex);
 
 			// Inner front flat inner ring
 			GL11.glNormal3f(0, 0, 1);
-			vertex(radiusInner * cos[i], radiusInner * sin[i], bevelDepth, 16, 16);
-			vertex(radiusMidInner * cos[i], radiusMidInner * sin[i], ringDepth, 16, 0);
-			vertex(radiusMidInner * cos[i + 1], radiusMidInner * sin[i + 1], ringDepth, 0, 0);
-			vertex(radiusInner * cos[i + 1], radiusInner * sin[i + 1], bevelDepth, 0, 16);
+			vertex(ringInnerRadius * cos[i], ringInnerRadius * sin[i], bevelDepth, 16, 16);
+			vertex(ringInnerMovingRadius * cos[i], ringInnerMovingRadius * sin[i], ringDepth, 16, 0);
+			vertex(ringInnerMovingRadius * cos[i + 1], ringInnerMovingRadius * sin[i + 1], ringDepth, 0, 0);
+			vertex(ringInnerRadius * cos[i + 1], ringInnerRadius * sin[i + 1], bevelDepth, 0, 16);
 
 			// Outer front flat outer ring
-			vertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], ringDepth, 16, 16);
-			vertex(radiusOuter * cos[i], radiusOuter * sin[i], ringDepth, 16, 0);
-			vertex(radiusOuter * cos[i + 1], radiusOuter * sin[i + 1], ringDepth, 0, 0);
-			vertex(radiusMidOuter * cos[i + 1], radiusMidOuter * sin[i + 1], ringDepth, 0, 16);
+			vertex(ringMidRadius * cos[i], ringMidRadius * sin[i], ringDepth, 16, 16);
+			vertex(ringOuterRadius * cos[i], ringOuterRadius * sin[i], ringDepth, 16, 0);
+			vertex(ringOuterRadius * cos[i + 1], ringOuterRadius * sin[i + 1], ringDepth, 0, 0);
+			vertex(ringMidRadius * cos[i + 1], ringMidRadius * sin[i + 1], ringDepth, 0, 16);
 		}
 		GL11.glEnd();
 	}
 
 	public void renderChevronImmediate(boolean lit) {
-		double r1 = ModelStargateConstants.chevronInnerRadius - 1d / 18d;
-		double r2 = ModelStargateConstants.chevronOuterRadius;
-		double z2 = ModelStargateConstants.ringDepth - 1d / 32d;
+		double r1 = chevronInnerRadius - 1d / 18d;
+		double r2 = chevronOuterRadius;
+		double z2 = ringDepth - 1d / 32d;
 
-		double z1 = z2 + ModelStargateConstants.chevronDepth;
-		double w1 = ModelStargateConstants.chevronBorderWidth;
+		double z1 = z2 + chevronDepth;
+		double w1 = chevronBorderWidth;
 		double w2 = w1 * 1.25;
 
-		double x1 = r1, y1 = ModelStargateConstants.chevronWidth / 4;
-		double x2 = r2, y2 = ModelStargateConstants.chevronWidth / 2;
+		double x1 = r1, y1 = chevronWidth / 4;
+		double x2 = r2, y2 = chevronWidth / 2;
 
 		GL11.glBegin(GL11.GL_QUADS);
 
-		selectTile(ModelStargateConstants.chevronTextureIndex);
+		selectTile(chevronTextureIndex);
 
 		// Face 1
 		vertex(x2, y2, z1, 0, 2);
@@ -257,7 +262,7 @@ public class ModelStargate {
 
 		GL11.glEnd();
 
-		selectTile(ModelStargateConstants.chevronLitTextureIndex);
+		selectTile(chevronLitTextureIndex);
 		if (!lit)
 			GL11.glColor3d(0.5, 0.5, 0.5);
 		else
@@ -287,16 +292,16 @@ public class ModelStargate {
 	}
 
 	private void renderRingImmediate() {
-		double radiusMidInner = ModelStargateConstants.ringInnerMovingRadius - 1 / 128d;
-		double radiusMidOuter = ModelStargateConstants.ringMidRadius + 1 / 128d;
-		double z = ModelStargateConstants.ringDepth - 1d / 128d;
+		double radiusMidInner = ringInnerMovingRadius - 1 / 128d;
+		double radiusMidOuter = ringMidRadius + 1 / 128d;
+		double z = ringDepth - 1d / 128d;
 		GL11.glNormal3f(0, 0, 1);
 		GL11.glBegin(GL11.GL_QUADS);
-		selectTile(ModelStargateConstants.ringSymbolTextureIndex);
+		selectTile(ringSymbolTextureIndex);
 		double u = 0, du = 0, dv = 0;
-		for (int i = 0; i < ModelStargateConstants.numRingSegments; i++) {
-			u = i * (1.0d / ModelStargateConstants.numRingSegments);
-			du = 1.0d / ModelStargateConstants.numRingSegments;
+		for (int i = 0; i < numRingSegments; i++) {
+			u = i * (1.0d / numRingSegments);
+			du = 1.0d / numRingSegments;
 			dv = 0.66d;
 			pushTexVertex(radiusMidInner * cos[i], radiusMidInner * sin[i], z, u + du, dv);
 			pushTexVertex(radiusMidOuter * cos[i], radiusMidOuter * sin[i], z, u + du, 0);

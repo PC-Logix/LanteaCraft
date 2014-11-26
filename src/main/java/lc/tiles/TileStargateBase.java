@@ -13,6 +13,7 @@ import lc.common.util.game.BlockFilter;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.core.LCRuntime;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import cpw.mods.fml.relauncher.Side;
@@ -54,6 +55,9 @@ public class TileStargateBase extends LCMultiblockTile {
 			return filters;
 		}
 	};
+	
+	public Block disguiseBlock = Blocks.cobblestone;
+	public int disguiseMetadata = 0;
 
 	@Override
 	public StructureConfiguration getConfiguration() {

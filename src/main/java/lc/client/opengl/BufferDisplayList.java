@@ -37,7 +37,6 @@ public class BufferDisplayList implements IGraphicsBuffer {
 	public void exit() {
 		if (!entered)
 			throw new RuntimeException("Illegal state: cannot exit() while exited.");
-		GL11.glEnd();
 		GL11.glEndList();
 		entered = false;
 	}

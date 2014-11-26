@@ -49,12 +49,12 @@ public class DefaultTileRenderer extends LCTileRenderer {
 		float a0 = (float) (180.0f - Minecraft.getMinecraft().thePlayer.rotationYaw) % 360.0f;
 		float a1 = (float) (-Minecraft.getMinecraft().thePlayer.rotationPitch) % 360.0f;
 
-		GL11.glTranslated(x + 0.5f, y - 0.25f, z + 0.5f);
+		GL11.glTranslated(x + 0.5f, y, z + 0.5f);
 		GL11.glTranslated(0f, 0.5f, 0f);
 		GL11.glRotatef(a0, 0.0f, 1.0f, 0.0f);
 		GL11.glRotatef(a1, 1.0f, 0.0f, 0.0f);
 		GL11.glTranslatef(0f, -0.5f, 0f);
-		GL11.glScalef(0.02f, 0.02f, 0.02f);
+		GL11.glScalef(1.5f, 1.5f, 1.5f);
 		model.renderAll();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_LIGHTING);

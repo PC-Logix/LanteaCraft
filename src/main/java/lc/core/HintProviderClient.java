@@ -2,6 +2,9 @@ package lc.core;
 
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
+import lc.blocks.BlockStargateBase;
+import lc.client.BlockStargateBaseRenderer;
+import lc.client.TileStargateBaseRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderHook;
@@ -9,6 +12,8 @@ import lc.common.base.LCItem;
 import lc.common.base.LCItemRenderHook;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
+import lc.common.impl.registry.DefinitionRegistry;
+import lc.tiles.TileStargateBase;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -43,13 +48,15 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public void init() {
 		super.init();
-		// TODO Auto-generated method stub
+
+		DefinitionRegistry registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
+		registry.registerBlockRenderer(BlockStargateBase.class, BlockStargateBaseRenderer.class);
+		registry.registerTileRenderer(TileStargateBase.class, TileStargateBaseRenderer.class);
 	}
 
 	@Override
 	public void postInit() {
 		super.postInit();
-
 	}
 
 	@SuppressWarnings("unchecked")
