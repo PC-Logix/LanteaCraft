@@ -249,8 +249,8 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 				compound = ((LCTileSync) packetOf).compound;
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
-		} else
-			thinkPacket(packetOf, player);
+		}
+		thinkPacket(packetOf, player);
 	}
 
 	@Override
