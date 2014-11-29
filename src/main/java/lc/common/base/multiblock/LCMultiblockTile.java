@@ -24,6 +24,11 @@ import net.minecraft.tileentity.TileEntity;
  */
 public abstract class LCMultiblockTile extends LCTile {
 
+	/**
+	 * The multi-block metadata compound. If you change this, you should call
+	 * {@link LCMultiblockTile#markMultiblockDirty()} to send the change to all
+	 * clients within range.
+	 */
 	private NBTTagCompound multiblockCompound = new NBTTagCompound();
 	private boolean multiblockNbtDirty = false;
 	private boolean isSlave = false;

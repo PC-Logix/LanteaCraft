@@ -115,7 +115,11 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 				}
 	}
 
-	private NBTTagCompound compound;
+	/**
+	 * The tile entity's NBT compound. If you modify this, you should call
+	 * {@link LCTile#markNbtDirty()} to send the changes to the client.
+	 */
+	protected NBTTagCompound compound;
 	private boolean nbtDirty;
 
 	/**
