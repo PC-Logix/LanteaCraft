@@ -39,8 +39,14 @@ public class LanteaCraft {
 	public void preinit(FMLPreInitializationEvent event) {
 		LCLog.setLogger(event.getModLog());
 		LCLog.showRuntimeInfo();
-		if (!Loader.isModLoaded("LanteaCraft-Core"))
-			throw new RuntimeException("LanteaCraft Core mod is missing. Cannot load the game.");
+		if (!Loader.isModLoaded("LanteaCraft-Core")) {
+			if (BuildInfo.isDevelopmentEnvironment()) {
+				LCLog.fatal("The development envrionment is not configured correctly. Please add");
+				LCLog.fatal("-Dfml.coreMods.load=lc.coremod.LCCoreMod to the VM parameters or");
+				LCLog.fatal("install a dummy JAR with the coremod configuration added. Aborting!");
+			}
+			throw new RuntimeException("LanteaCraft coremod is not loaded. Broken or otherwise modified JAR file.");
+		}
 		LCRuntime.runtime.preinit(event);
 	}
 
