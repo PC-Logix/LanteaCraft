@@ -101,7 +101,7 @@ public class ModelStargate {
 	}
 
 	public void render(TileStargateBaseRenderer renderer, LCTileRenderHook tesr, TileStargateBase tile) {
-		GL11.glRotatef(90 + Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
+		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
 		tesr.bind(renderer.texFrame);
 		listShell.bind();
 		listShell.release();

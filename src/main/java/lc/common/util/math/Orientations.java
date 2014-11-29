@@ -16,9 +16,9 @@ public enum Orientations {
 	/** Cardinal north */
 	NORTH(Matrix3.ident, 0.0f),
 	/** Cardinal south */
-	SOUTH(Matrix3.ident, 90.0f),
+	SOUTH(Matrix3.ident, 180.0f),
 	/** Cardinal east */
-	EAST(Matrix3.ident, 180.0f),
+	EAST(Matrix3.ident, 90.0f),
 	/** Cardinal west */
 	WEST(Matrix3.ident, 270.0f),
 	/** Cardinal northeast */
