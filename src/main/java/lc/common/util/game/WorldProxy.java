@@ -26,13 +26,13 @@ public class WorldProxy implements IBlockAccess {
 	}
 
 	@Override
-	public Block getBlock(int var1, int var2, int var3) {
-		return myWorld.getBlock(var1, var2, var3);
+	public Block getBlock(int x, int y, int z) {
+		return myWorld.getBlock(x, y, z);
 	}
 
 	@Override
-	public TileEntity getTileEntity(int var1, int var2, int var3) {
-		return myWorld.getTileEntity(var1, var2, var3);
+	public TileEntity getTileEntity(int x, int y, int z) {
+		return myWorld.getTileEntity(x, y, z);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -42,19 +42,19 @@ public class WorldProxy implements IBlockAccess {
 	}
 
 	@Override
-	public int getBlockMetadata(int var1, int var2, int var3) {
+	public int getBlockMetadata(int x, int y, int z) {
 		return allMeta;
 	}
 
 	@Override
-	public boolean isAirBlock(int var1, int var2, int var3) {
-		return myWorld.isAirBlock(var1, var2, var3);
+	public boolean isAirBlock(int x, int y, int z) {
+		return myWorld.isAirBlock(x, y, z);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BiomeGenBase getBiomeGenForCoords(int var1, int var2) {
-		return myWorld.getBiomeGenForCoords(var1, var2);
+	public BiomeGenBase getBiomeGenForCoords(int x, int z) {
+		return myWorld.getBiomeGenForCoords(x, z);
 	}
 
 	@SideOnly(Side.CLIENT)
