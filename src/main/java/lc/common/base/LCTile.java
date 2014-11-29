@@ -238,7 +238,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		LCTile.doCallbacksNow(this, "blockBreak");
 	}
 
-	private void markNbtDirty() {
+	protected void markNbtDirty() {
 		nbtDirty = true;
 	}
 
