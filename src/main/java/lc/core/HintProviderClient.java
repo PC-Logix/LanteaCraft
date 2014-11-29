@@ -3,7 +3,6 @@ package lc.core;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.blocks.BlockStargateBase;
-import lc.client.BlockStargateBaseRenderer;
 import lc.client.TileStargateBaseRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
@@ -50,7 +49,6 @@ public class HintProviderClient extends HintProviderServer {
 		super.init();
 
 		DefinitionRegistry registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
-		registry.registerBlockRenderer(BlockStargateBase.class, BlockStargateBaseRenderer.class);
 		registry.registerTileRenderer(TileStargateBase.class, TileStargateBaseRenderer.class);
 	}
 

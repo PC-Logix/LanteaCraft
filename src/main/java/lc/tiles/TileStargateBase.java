@@ -47,7 +47,7 @@ public class TileStargateBase extends LCMultiblockTile {
 		@Override
 		public int[][][] getStructureLayout() {
 			return new int[][][] { { { 1, 2, 1, 3, 1, 2, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 },
-				{ 1, 0, 0, 0, 0, 0, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 2, 1, 2, 1, 2, 1 } } };
+					{ 1, 0, 0, 0, 0, 0, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 2, 1, 2, 1, 2, 1 } } };
 		}
 
 		@Override
@@ -55,9 +55,6 @@ public class TileStargateBase extends LCMultiblockTile {
 			return filters;
 		}
 	};
-	
-	public Block disguiseBlock = Blocks.cobblestone;
-	public int disguiseMetadata = 0;
 
 	@Override
 	public StructureConfiguration getConfiguration() {

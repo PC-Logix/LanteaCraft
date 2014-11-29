@@ -2,13 +2,18 @@ package lc.client;
 
 import lc.api.defs.IDefinitionReference;
 import lc.api.rendering.IBlockRenderInfo;
+import lc.api.rendering.IBlockSkinnable;
 import lc.api.rendering.IRenderInfo;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
+import lc.common.base.LCTile;
 import lc.common.impl.registry.DefinitionReference;
+import lc.common.util.game.BlockContainerProxy;
+import lc.common.util.game.WorldProxy;
 import lc.common.util.math.Trans3;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -56,8 +61,27 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		Trans3 trans = new Trans3(x + 0.5, y + 0.5, z + 0.5);
 		trans = preRenderInWorld(theBlock, info, world, renderer, trans, x, y, z);
 		boolean flag = true;
-		if (info == null || info.doWorldRender(world, world.getBlockMetadata(x, y, z), x, y, z))
-			flag = renderDefaultWorldBlock(world, x, y, z, block, trans, renderer);
+		if (info == null || info.doWorldRender(world, world.getBlockMetadata(x, y, z), x, y, z)) {
+			LCTile tile = (LCTile) world.getTileEntity(x, y, x);
+			if (tile != null && tile instanceof IBlockSkinnable) {
+				IBlockSkinnable skin = (IBlockSkinnable) tile;
+				Block skinBlock = skin.getSkinBlock();
+				int skinBlockMetadata = skin.getSkinBlockMetadata();
+				RenderBlocks proxyRender = new RenderBlocks(new WorldProxy(world, skinBlockMetadata));
+				proxyRender.setRenderBoundsFromBlock(block);
+				if (skinBlockMetadata != 0) {
+					BlockContainerProxy proxyContainer = null;
+					for (int i = 0; i < 6; i++) {
+						proxyRender.setOverrideBlockTexture(skinBlock.getIcon(i, skinBlockMetadata));
+						proxyContainer = new BlockContainerProxy(skinBlock, i);
+						flag = proxyRender.renderStandardBlock(proxyContainer, x, y, z);
+					}
+				} else
+					flag = proxyRender.renderStandardBlock(skinBlock, x, y, z);
+				proxyRender.clearOverrideBlockTexture();
+			} else
+				flag = renderDefaultWorldBlock(world, x, y, z, block, trans, renderer);
+		}
 		flag = postRenderInWorld(theBlock, info, world, renderer, flag, x, y, z);
 		return flag;
 	}
