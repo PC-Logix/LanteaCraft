@@ -63,7 +63,7 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		boolean flag = true;
 		if (info == null || info.doWorldRender(world, world.getBlockMetadata(x, y, z), x, y, z)) {
 			LCTile tile = (LCTile) world.getTileEntity(x, y, z);
-			if (tile != null && tile instanceof IBlockSkinnable) {
+			if (tile != null && tile instanceof IBlockSkinnable && ((IBlockSkinnable) tile).getSkinBlock() != null) {
 				IBlockSkinnable skin = (IBlockSkinnable) tile;
 				Block skinBlock = skin.getSkinBlock();
 				int skinBlockMetadata = skin.getSkinBlockMetadata();

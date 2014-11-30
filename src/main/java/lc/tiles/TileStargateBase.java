@@ -4,6 +4,7 @@ import java.util.List;
 
 import lc.api.components.IntegrationType;
 import lc.api.drivers.DeviceDrivers.DriverCandidate;
+import lc.api.rendering.IBlockSkinnable;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
 import lc.common.base.multiblock.StructureConfiguration;
@@ -25,7 +26,7 @@ import cpw.mods.fml.relauncher.Side;
  *
  */
 @DriverCandidate(types = { IntegrationType.POWER })
-public class TileStargateBase extends LCMultiblockTile {
+public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnable {
 
 	private final static StructureConfiguration structure = new StructureConfiguration() {
 
@@ -36,18 +37,23 @@ public class TileStargateBase extends LCMultiblockTile {
 
 		@Override
 		public Vector3 getStructureDimensions() {
-			return new Vector3(1, 7, 7);
+			return new Vector3(7, 7, 1);
 		}
 
 		@Override
 		public Vector3 getStructureCenter() {
-			return new Vector3(0, 0, 3);
+			return new Vector3(3, 0, 0);
 		}
 
 		@Override
 		public int[][][] getStructureLayout() {
-			return new int[][][] { { { 1, 2, 1, 3, 1, 2, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 },
-					{ 1, 0, 0, 0, 0, 0, 1 }, { 2, 0, 0, 0, 0, 0, 2 }, { 1, 0, 0, 0, 0, 0, 1 }, { 1, 2, 1, 2, 1, 2, 1 } } };
+			return new int[][][] { { { 1 }, { 2 }, { 1 }, { 1 }, { 2 }, { 1 }, { 1 } },
+					{ { 2 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 2 } },
+					{ { 1 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 1 } },
+					{ { 3 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 2 } },
+					{ { 1 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 1 } },
+					{ { 2 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 2 } },
+					{ { 1 }, { 2 }, { 1 }, { 1 }, { 2 }, { 1 }, { 1 } } };
 		}
 
 		@Override
@@ -104,6 +110,23 @@ public class TileStargateBase extends LCMultiblockTile {
 	@Override
 	public String[] debug(Side side) {
 		return new String[] { String.format("Rotation: %s", getRotation()), String.format("Multiblock: %s", getState()) };
+	}
+
+	@Override
+	public Block getSkinBlock() {
+		return Blocks.sandstone;
+	}
+
+	@Override
+	public int getSkinBlockMetadata() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setSkinBlock(Block block, int metadata) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

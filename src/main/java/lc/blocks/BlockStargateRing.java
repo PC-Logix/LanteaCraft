@@ -4,17 +4,22 @@ import java.util.List;
 
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
+import lc.api.rendering.IBlockSkinnable;
 import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
 import lc.core.ResourceAccess;
 import lc.items.ItemBlockStargateRing;
 import lc.tiles.TileStargateRing;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 /**
  * Stargate ring implementation.
@@ -84,6 +89,11 @@ public class BlockStargateRing extends LCBlock {
 		for (int i = 0; i < blockCraftingCount; i += blockCraftingMask)
 			list.add(new ItemStack(item, 1, i));
 	}
+	
+	@Override
+	public int damageDropped(int damage) {
+		return damage;
+	}
 
 	/**
 	 * Get the base type of this Stargate ring block
@@ -94,6 +104,30 @@ public class BlockStargateRing extends LCBlock {
 	 */
 	public int getBaseType(int metadata) {
 		return (int) Math.floor(metadata / blockMask);
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer what, int side, float hx, float hy,
+			float hz) {
+		if (!world.isRemote) {
+			TileEntity tile = world.getTileEntity(x, y, z);
+			if (tile instanceof IBlockSkinnable) {
+				boolean flag = false;
+				if (what.getHeldItem() != null) {
+					ItemStack stack = what.getHeldItem();
+					Block whatBlock = Block.getBlockFromItem(stack.getItem());
+					if (whatBlock != null && whatBlock.isBlockNormalCube()) {
+						int whatMetadata = stack.getItemDamage();
+						((IBlockSkinnable) tile).setSkinBlock(whatBlock, whatMetadata);
+						flag = true;
+					}
+				}
+				if (!flag)
+					((IBlockSkinnable) tile).setSkinBlock(null, 0);
+			}
+		}
+		return true;
+
 	}
 
 }

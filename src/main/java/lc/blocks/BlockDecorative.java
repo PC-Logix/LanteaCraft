@@ -42,6 +42,7 @@ public class BlockDecorative extends LCBlock {
 	public BlockDecorative() {
 		super(Material.ground);
 		setHarvestLevel("pickaxe", 1);
+		setOpaque(true);
 		// TODO Auto-generated constructor stub
 	}
 

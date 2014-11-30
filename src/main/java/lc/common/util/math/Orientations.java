@@ -14,13 +14,13 @@ public enum Orientations {
 	/** Not an orientation */
 	VOID(null, 0.0f),
 	/** Cardinal north */
-	NORTH(Matrix3.ident, 0.0f),
+	NORTH(Matrix3.turnRotations[0], 0.0f),
 	/** Cardinal south */
-	SOUTH(Matrix3.ident, 180.0f),
+	SOUTH(Matrix3.turnRotations[2], 180.0f),
 	/** Cardinal east */
-	EAST(Matrix3.ident, 90.0f),
+	EAST(Matrix3.turnRotations[1], 90.0f),
 	/** Cardinal west */
-	WEST(Matrix3.ident, 270.0f),
+	WEST(Matrix3.turnRotations[3], 270.0f),
 	/** Cardinal northeast */
 	NORTHEAST(Matrix3.ident, 45.0f),
 	/** Cardinal southeast */

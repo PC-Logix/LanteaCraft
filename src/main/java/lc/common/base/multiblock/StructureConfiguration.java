@@ -5,6 +5,7 @@ import java.util.List;
 
 import lc.common.LCLog;
 import lc.common.util.game.BlockFilter;
+import lc.common.util.math.Matrix3;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.common.util.math.VectorAABB;
@@ -74,26 +75,34 @@ public abstract class StructureConfiguration {
 	 * @return If the configuration is valid.
 	 */
 	public boolean test(World world, int x, int y, int z, Orientations orientation) {
-		VectorAABB box = VectorAABB.boxOf(new Vector3(x, y, z), getStructureDimensions());
-		box = box.translate(Vector3.zero.sub(getStructureCenter()));
-		// box.apply(getStructureCenter(), orientation.rotation());
 
 		BlockFilter[] mappings = getBlockMappings();
+		Vector3 origin = new Vector3(x, y, z).sub(getStructureCenter());
+		Matrix3 rotation = orientation.rotation();
+		
+		VectorAABB box = VectorAABB.boxOf(origin, getStructureDimensions());
+		box = box.apply(Vector3.zero, rotation);
 
 		List<Vector3> elems = box.contents();
 		Iterator<Vector3> each = elems.iterator();
 		while (each.hasNext()) {
 			Vector3 me = each.next();
-			Vector3 mapping = me.sub(new Vector3(x, y, z)).add(getStructureCenter());
-			int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
-			BlockFilter filter = mappings[cell];
-			if (!filter.matches(world, me.floorX(), me.floorY(), me.floorZ()))
-				// LCLog.info("Failed match on %s at %s %s %s", filter,
-				// me.floorX(), me.floorY(), me.floorZ());
-				return false;
+			Vector3 tile = origin.add(me);
+			
+			Vector3 mapping = rotation.imul(me);
+			try {
+				int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
+				BlockFilter filter = mappings[cell];
+				if (!filter.matches(world, tile.floorX(), tile.floorY(), tile.floorZ())) {
+					LCLog.info("Failed match on %s at %s %s %s", filter, tile.floorX(), tile.floorY(), tile.floorZ());
+					return false;
+				}
+			} catch (IndexOutOfBoundsException bounds) {
+				LCLog.fatal("Access out of bounds: " + bounds.getMessage() + ": " + String.format("%s %s %s", mapping.floorX(), mapping.floorY(), mapping.floorZ()));
+			}
 		}
-		LCLog.info("All is OK: checked %s items", elems.size());
-		return true;
+		LCLog.info("Items: " + elems.size());
+		return false;
 	}
 
 	/**

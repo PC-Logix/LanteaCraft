@@ -3,17 +3,19 @@ package lc.common.util.math;
 import java.util.ArrayList;
 import java.util.List;
 
+import lc.common.LCLog;
+
 public class VectorAABB {
 
 	private Vector3 origin;
 	private Vector3 size;
 
 	public static VectorAABB boxOf(Vector3 origin, Vector3 dim) {
-		return new VectorAABB(origin, dim);
+		return new VectorAABB(origin.copy(), dim.copy());
 	}
 
 	public static VectorAABB boxOf(Vector3 origin, int width, int height, int length) {
-		return new VectorAABB(origin, new Vector3(width, height, length));
+		return new VectorAABB(origin.copy(), new Vector3(width, height, length));
 	}
 
 	private VectorAABB(Vector3 origin, Vector3 size) {
@@ -29,16 +31,24 @@ public class VectorAABB {
 		return new VectorAABB(origin.add(trans), size);
 	}
 
+	public VectorAABB apply(Vector3 point, Matrix3 rotation) {
+		return new VectorAABB(origin, rotation.mul(size));
+	}
+
 	public List<Vector3> contents() {
 		ArrayList<Vector3> result = new ArrayList<Vector3>();
-		for (int x = 0; x < size.floorX(); x++)
-			for (int z = 0; z < size.floorZ(); z++)
-				for (int y = 0; y < size.floorY(); y++)
-					result.add(new Vector3(origin.floorX() + x, origin.floorY() + y, origin.floorZ() + z));
+		int x0 = Math.min(0, size.floorX()), x1 = Math.max(0, size.floorX());
+		int y0 = Math.min(0, size.floorY()), y1 = Math.max(0, size.floorY());
+		int z0 = Math.min(0, size.floorZ()), z1 = Math.max(0, size.floorZ());
+		for (int x = x0; x < x1; x++)
+			for (int z = z0; z < z1; z++)
+				for (int y = y0; y < y1; y++)
+					result.add(new Vector3(x, y, z));
 		return result;
 	}
 
-	public void apply(Vector3 point, Matrix3 rotation) {
-		// TODO Auto-generated method stub
+	@Override
+	public String toString() {
+		return "VectorAABB (" + origin.toString() + ", " + size.toString() + ")";
 	}
 }
