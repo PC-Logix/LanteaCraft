@@ -18,4 +18,7 @@ public class Items {
 	/** Lantea global crystal item */
 	public IContainerDefinition lanteaCraftingItem;
 
+	/** Lantea decorator tool */
+	public IContainerDefinition lanteaDecoratorTool;
+
 }

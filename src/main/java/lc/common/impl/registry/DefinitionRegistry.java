@@ -12,7 +12,9 @@ import lc.api.defs.ILanteaCraftRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
+import lc.common.base.LCItem;
 import lc.common.base.LCItemBucket;
+import lc.common.base.LCItemRenderer;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.util.LCCreativeTabManager;
@@ -62,7 +64,9 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 		/** Entity type */
 		ENTITY,
 		/** Tile type */
-		TILE;
+		TILE,
+		/** Item type */
+		ITEM;
 	}
 
 	/** Pool of all known definitions. */
@@ -399,6 +403,20 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	}
 
 	/**
+	 * Registers an item renderer with the definition registry
+	 * 
+	 * @param item
+	 *            The item class
+	 * @param renderer
+	 *            The item renderer to bind
+	 */
+	public void registerItemRenderer(Class<? extends LCItem> item, Class<? extends LCItemRenderer> renderer) {
+		if (!registeredRenderers.containsKey(RendererType.ITEM))
+			registeredRenderers.put(RendererType.ITEM, new HashMap<Class<?>, Class<? extends ILanteaCraftRenderer>>());
+		registeredRenderers.get(RendererType.ITEM).put(item, renderer);
+	}
+
+	/**
 	 * Registers an entity renderer with the game registry
 	 *
 	 * @param entity
@@ -425,8 +443,10 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 			for (Entry<Class<?>, ILanteaCraftRenderer> renderer : initializedRenderers.get(typeof).entrySet())
 				if (renderer.getKey().equals(clazz))
 					return renderer.getValue();
+
 		if (!registeredRenderers.containsKey(typeof))
 			return null;
+
 		Map<Class<?>, Class<? extends ILanteaCraftRenderer>> typemap = registeredRenderers.get(typeof);
 		for (Entry<Class<?>, Class<? extends ILanteaCraftRenderer>> type : typemap.entrySet())
 			if (type.getKey().equals(clazz))
@@ -434,7 +454,8 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 					ILanteaCraftRenderer renderer = type.getValue().getConstructor().newInstance();
 					if (!initializedRenderers.containsKey(typeof))
 						initializedRenderers.put(typeof, new HashMap<Class<?>, ILanteaCraftRenderer>());
-					initializedRenderers.get(typeof).put(type.getValue(), renderer);
+					initializedRenderers.get(typeof).put(clazz, renderer);
+					LCLog.trace("Successfully initialized renderer %s (type: %s)", type.getValue().getName(), typeof);
 					return renderer;
 				} catch (Throwable t) {
 					LCLog.warn("Failed to initialize renderer.", t);

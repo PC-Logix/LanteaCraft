@@ -10,6 +10,7 @@ import lc.api.defs.IGameDef;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 
 public class SimpleRecipeDefinition implements IRecipeDefinition {
 
@@ -118,6 +119,16 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 	@Override
 	public Map<Integer, ItemStack> getOutputStacks() {
 		return stackOutputs;
+	}
+
+	@Override
+	public IRecipe getParentObject() {
+		return null;
+	}
+
+	@Override
+	public Class<? extends IRecipe> getParentClass() {
+		return null;
 	}
 
 	@Override

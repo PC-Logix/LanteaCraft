@@ -89,7 +89,7 @@ public class BlockStargateRing extends LCBlock {
 		for (int i = 0; i < blockCraftingCount; i += blockCraftingMask)
 			list.add(new ItemStack(item, 1, i));
 	}
-	
+
 	@Override
 	public int damageDropped(int damage) {
 		return damage;
@@ -104,30 +104,6 @@ public class BlockStargateRing extends LCBlock {
 	 */
 	public int getBaseType(int metadata) {
 		return (int) Math.floor(metadata / blockMask);
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer what, int side, float hx, float hy,
-			float hz) {
-		if (!world.isRemote) {
-			TileEntity tile = world.getTileEntity(x, y, z);
-			if (tile instanceof IBlockSkinnable) {
-				boolean flag = false;
-				if (what.getHeldItem() != null) {
-					ItemStack stack = what.getHeldItem();
-					Block whatBlock = Block.getBlockFromItem(stack.getItem());
-					if (whatBlock != null && whatBlock.isBlockNormalCube()) {
-						int whatMetadata = stack.getItemDamage();
-						((IBlockSkinnable) tile).setSkinBlock(whatBlock, whatMetadata);
-						flag = true;
-					}
-				}
-				if (!flag)
-					((IBlockSkinnable) tile).setSkinBlock(null, 0);
-			}
-		}
-		return true;
-
 	}
 
 }

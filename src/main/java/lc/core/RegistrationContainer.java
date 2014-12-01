@@ -13,11 +13,14 @@ import lc.blocks.BlockStargateBase;
 import lc.blocks.BlockStargateRing;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.impl.registry.DefinitionWrapperProvider;
+import lc.common.impl.registry.RecipeProxy;
 import lc.common.impl.registry.SimpleRecipeDefinition;
 import lc.items.ItemCraftingReagent;
+import lc.items.ItemDecorator;
 import lc.items.ItemGlasses;
 import lc.items.ItemLanteaAlloyIngot;
 import lc.items.ItemLanteaOre;
+import lc.recipe.DecoratorSetterRecipe;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -67,6 +70,7 @@ public class RegistrationContainer {
 		items.lanteaOreItem = DefinitionWrapperProvider.provide(ItemLanteaOre.class);
 		items.lanteaAlloyItem = DefinitionWrapperProvider.provide(ItemLanteaAlloyIngot.class);
 		items.lanteaCraftingItem = DefinitionWrapperProvider.provide(ItemCraftingReagent.class);
+		items.lanteaDecoratorTool = DefinitionWrapperProvider.provide(ItemDecorator.class);
 
 		IDefinitionReference ringBlock = blocks.stargateRingBlock.ref();
 		IDefinitionReference chevronBlock = blocks.stargateRingBlock.ref().pushAll(1, 1);
@@ -90,6 +94,9 @@ public class RegistrationContainer {
 		ItemStack eyeOfEnder = new ItemStack(net.minecraft.init.Items.ender_eye, 1);
 		ItemStack glowstone = new ItemStack(net.minecraft.init.Items.glowstone_dust, 1);
 		ItemStack enderPearl = new ItemStack(net.minecraft.init.Items.ender_pearl, 1);
+
+		recipes.decorSetterRecipe = new RecipeProxy("decor_editor", RecipeType.PROXY, DecoratorSetterRecipe.class);
+		runtime.registries().recipes().addRecipe(recipes.decorSetterRecipe);
 
 		recipes.stargateBase = new SimpleRecipeDefinition("stargate_base", RecipeType.SHAPED, baseBlock, "010232454",
 				cSandstone, redstone, naquadahIngot, eyeOfEnder, ironIngot, coreCrystal);

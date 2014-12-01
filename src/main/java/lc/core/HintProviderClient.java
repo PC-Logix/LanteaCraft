@@ -3,6 +3,7 @@ package lc.core;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.blocks.BlockStargateBase;
+import lc.client.ItemDecoratorRenderer;
 import lc.client.TileStargateBaseRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
@@ -12,6 +13,7 @@ import lc.common.base.LCItemRenderHook;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
 import lc.common.impl.registry.DefinitionRegistry;
+import lc.items.ItemDecorator;
 import lc.tiles.TileStargateBase;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -50,6 +52,7 @@ public class HintProviderClient extends HintProviderServer {
 
 		DefinitionRegistry registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
 		registry.registerTileRenderer(TileStargateBase.class, TileStargateBaseRenderer.class);
+		registry.registerItemRenderer(ItemDecorator.class, ItemDecoratorRenderer.class);
 	}
 
 	@Override

@@ -38,7 +38,6 @@ public class ItemGlasses extends ItemArmor {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-
 		return stack;
 	}
 

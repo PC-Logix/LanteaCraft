@@ -22,4 +22,6 @@ public class Recipes {
 	public IRecipeDefinition stargateRing;
 	public IRecipeDefinition stargateChevron;
 
+	public IRecipeDefinition decorSetterRecipe;
+
 }

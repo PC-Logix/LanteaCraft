@@ -4,6 +4,7 @@ import java.util.Map;
 
 import lc.api.components.RecipeType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 
 /**
  * Recipe defintion container
@@ -49,5 +50,21 @@ public interface IRecipeDefinition extends IGameDef {
 	 * @return The output stacks
 	 */
 	public Map<Integer, ItemStack> getOutputStacks();
+
+	/**
+	 * Get the parent recipe object. If the recipe definition is a proxy recipe
+	 * it will return the owner object instance.
+	 * 
+	 * @return The Minecraft raw recipe object.
+	 */
+	public IRecipe getParentObject();
+
+	/**
+	 * Get the parent recipe class. If the recipe definition is a proxy recipe
+	 * it will return the owner class.
+	 * 
+	 * @return The Minecraft raw recipe class.
+	 */
+	public Class<? extends IRecipe> getParentClass();
 
 }

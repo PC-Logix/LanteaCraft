@@ -13,6 +13,8 @@ public enum RecipeType {
 	/** Shaped recipe */
 	SHAPED,
 	/** Smelting recipe */
-	SMELTING;
+	SMELTING,
+	/** Proxy crafting recipe */
+	PROXY;
 
 }
