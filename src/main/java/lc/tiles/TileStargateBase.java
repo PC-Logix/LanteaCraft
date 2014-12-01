@@ -11,12 +11,14 @@ import lc.common.base.multiblock.StructureConfiguration;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.util.game.BlockFilter;
+import lc.common.util.game.BlockHelper;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.core.LCRuntime;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -61,6 +63,9 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			return filters;
 		}
 	};
+
+	private Block clientSkinBlock;
+	private int clientSkinBlockMetadata;
 
 	@Override
 	public StructureConfiguration getConfiguration() {
@@ -114,19 +119,26 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public Block getSkinBlock() {
-		return Blocks.sandstone;
+		return clientSkinBlock;
 	}
 
 	@Override
 	public int getSkinBlockMetadata() {
-		// TODO Auto-generated method stub
-		return 0;
+		return clientSkinBlockMetadata;
 	}
 
 	@Override
 	public void setSkinBlock(Block block, int metadata) {
-		// TODO Auto-generated method stub
-
+		if (block == null) {
+			if (compound != null && compound.hasKey("skin-block")) {
+				compound.removeTag("skin-block");
+				markNbtDirty();
+			}
+		} else {
+			if (compound != null)
+				compound = new NBTTagCompound();
+			compound.setString("skin-block", BlockHelper.saveBlock(block, metadata));
+			markNbtDirty();
+		}
 	}
-
 }

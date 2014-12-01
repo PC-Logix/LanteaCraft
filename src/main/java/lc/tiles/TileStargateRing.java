@@ -114,7 +114,6 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 			compound.setString("skin-block", BlockHelper.saveBlock(block, metadata));
 			markNbtDirty();
 		}
-
 	}
 
 }
