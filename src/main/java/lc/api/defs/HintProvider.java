@@ -11,9 +11,15 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HintProvider {
-	/** The server class name */
+	/**
+	 * The server class name. If no instance is required on the server, do not
+	 * set this field.
+	 */
 	String serverClass();
 
-	/** The client class name */
+	/**
+	 * The client class name. If no instance is required on the client, do not
+	 * set this field.
+	 */
 	String clientClass();
 }

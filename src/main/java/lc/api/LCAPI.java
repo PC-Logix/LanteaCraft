@@ -1,18 +1,34 @@
 package lc.api;
 
 /**
- * LanteaCraft API access class
+ * <p>
+ * LanteaCraft's main API access class. Use this class to get a reference to the
+ * LanteaCraft mod at runtime.
+ * </p>
+ * <p>
+ * <b>Do not use reflection or other methods to access the runtime instance of
+ * the mod.</b>
+ * </p>
  *
  * @author AfterLifeLochie
  *
  */
 public class LCAPI {
 
-	/** Runtime container */
+	/** Runtime cache container */
 	private static ILCAPIProxy runtime = null;
 
 	/**
-	 * Fetch the current LanteaCraft API runtime element.
+	 * <p>
+	 * Fetch the current LanteaCraft API runtime element. If LanteaCraft has
+	 * been loaded by FML, this will return the current API runtime access
+	 * instance. If LanteaCraft has not been loaded, this will return null.
+	 * </p>
+	 * 
+	 * <p>
+	 * <b>Do not use reflection or other methods to access the runtime instance
+	 * of the mod.</b>
+	 * </p>
 	 *
 	 * @return The current LanteaCraft API runtime.
 	 */

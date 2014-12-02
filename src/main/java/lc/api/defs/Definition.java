@@ -10,9 +10,11 @@ import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
 
 /**
+ * <p>
  * Annotation to describe elements for {@link IContainerDefinition} definitions.
  * Elements with these annotations are initialized by the runtime and
  * transformed into definitions which LanteaCraft can interpret.
+ * </p>
  *
  * @author AfterLifeLochie
  */

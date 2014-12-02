@@ -8,7 +8,7 @@ import lc.api.init.Items;
 import lc.api.init.Recipes;
 
 /**
- * API proxy interfacve
+ * API proxy interface
  *
  * @author AfterLifeLochie
  *
@@ -23,14 +23,14 @@ public interface ILCAPIProxy {
 	public boolean signedState();
 
 	/**
-	 * Get the list of blocks
+	 * Get the current LanteaCraft block registry
 	 *
 	 * @return The list of blocks
 	 */
 	public Blocks blocks();
 
 	/**
-	 * Get the list of items
+	 * Get the current LanteaCraft item registry
 	 *
 	 * @return The list of items
 	 */
