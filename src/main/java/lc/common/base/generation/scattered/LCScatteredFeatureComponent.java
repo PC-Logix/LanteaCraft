@@ -14,6 +14,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
  */
 public abstract class LCScatteredFeatureComponent extends StructureComponent {
 
+	/** Default constructor. */
 	public LCScatteredFeatureComponent() {
 	}
 

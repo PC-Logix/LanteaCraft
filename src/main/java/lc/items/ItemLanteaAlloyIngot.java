@@ -13,11 +13,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+/**
+ * Global alloy ingot item implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 @Definition(name = "lanteaAlloyIngot", type = ComponentType.CORE, itemClass = ItemLanteaAlloyIngot.class)
 public class ItemLanteaAlloyIngot extends LCItem {
 
 	private IIcon missing;
 
+	/** Default constructor */
 	public ItemLanteaAlloyIngot() {
 		setNoRepair();
 		setHasSubtypes(true);

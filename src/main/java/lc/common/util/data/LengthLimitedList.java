@@ -12,6 +12,10 @@ import java.util.ArrayList;
  */
 public class LengthLimitedList<T> extends ArrayList<T> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1925059441036970161L;
 	private final int MAX_SIZE;
 
 	/**

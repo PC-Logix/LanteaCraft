@@ -12,6 +12,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 
+/**
+ * Decorator item tool renderer implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ItemDecoratorRenderer extends LCItemRenderer {
 
 	private static RenderItem renderItem = new RenderItem();

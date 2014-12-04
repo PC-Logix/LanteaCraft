@@ -22,6 +22,12 @@ import lc.common.base.LCItem;
 import lc.common.util.game.BlockHelper;
 import lc.core.ResourceAccess;
 
+/**
+ * Decorator tool item implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 @Definition(name = "decorator", type = ComponentType.CORE, itemClass = ItemDecorator.class)
 public class ItemDecorator extends LCItem {
 

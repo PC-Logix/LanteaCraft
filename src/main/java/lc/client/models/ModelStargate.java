@@ -73,10 +73,11 @@ public class ModelStargate {
 
 	private double u0, v0;
 
+	/** Default constructor */
 	public ModelStargate() {
-
 	}
 
+	/** Initialize the model. */
 	public void init() {
 		listShell.init();
 		listChevron.init();
@@ -100,6 +101,16 @@ public class ModelStargate {
 		listRing.exit();
 	}
 
+	/**
+	 * Render the model
+	 * 
+	 * @param renderer
+	 *            The root renderer
+	 * @param tesr
+	 *            The tile rendering hook
+	 * @param tile
+	 *            The tile entity
+	 */
 	public void render(TileStargateBaseRenderer renderer, LCTileRenderHook tesr, TileStargateBase tile) {
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
 		tesr.bind(renderer.texFrame);

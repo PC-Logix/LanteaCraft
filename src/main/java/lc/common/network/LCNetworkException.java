@@ -9,6 +9,11 @@ package lc.common.network;
 public class LCNetworkException extends Exception {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4524788574933106545L;
+
+	/**
 	 * Create a new network exception.
 	 *
 	 * @param reason

@@ -9,23 +9,36 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
+/**
+ * LanteaCraft feature structure implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class LCFeatureStructure extends MapGenStructure {
 	private int maxDistanceBetweenScatteredFeatures;
 	private int minDistanceBetweenScatteredFeatures;
 
+	/** Default constructor */
 	public LCFeatureStructure() {
 		maxDistanceBetweenScatteredFeatures = 32;
 		minDistanceBetweenScatteredFeatures = 8;
 	}
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param params
+	 *            The parameters
+	 */
 	@SuppressWarnings("rawtypes")
-	public LCFeatureStructure(Map par1Map) {
+	public LCFeatureStructure(Map params) {
 		this();
-		Iterator var2 = par1Map.entrySet().iterator();
-		while (var2.hasNext()) {
-			Map.Entry var3 = (Map.Entry) var2.next();
-			if (((String) var3.getKey()).equals("distance"))
-				maxDistanceBetweenScatteredFeatures = MathHelper.parseIntWithDefaultAndMax((String) var3.getValue(),
+		Iterator i = params.entrySet().iterator();
+		while (i.hasNext()) {
+			Map.Entry param = (Map.Entry) i.next();
+			if (((String) param.getKey()).equals("distance"))
+				maxDistanceBetweenScatteredFeatures = MathHelper.parseIntWithDefaultAndMax((String) param.getValue(),
 						maxDistanceBetweenScatteredFeatures, minDistanceBetweenScatteredFeatures + 1);
 		}
 	}

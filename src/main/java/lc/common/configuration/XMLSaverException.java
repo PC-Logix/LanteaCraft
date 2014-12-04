@@ -8,6 +8,11 @@ package lc.common.configuration;
  */
 public class XMLSaverException extends Exception {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5131700771210355969L;
+
+	/**
 	 * Creates a new XML save exception
 	 *
 	 * @param reason
