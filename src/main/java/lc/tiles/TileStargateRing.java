@@ -8,12 +8,11 @@ import lc.common.base.multiblock.StructureConfiguration;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCTileSync;
+import lc.common.util.data.ImmutablePair;
 import lc.common.util.game.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
 
@@ -69,11 +68,10 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 			if (getWorldObj().isRemote) {
 				boolean flag = false;
 				if (compound != null && compound.hasKey("skin-block")) {
-					ItemStack stack = BlockHelper.loadBlock(compound.getString("skin-block"));
-					Item item = stack.getItem();
-					if (item != null) {
-						clientSkinBlock = Block.getBlockFromItem(item);
-						clientSkinBlockMetadata = item.getDamage(stack);
+					ImmutablePair<Block, Integer> data = BlockHelper.loadBlock(compound.getString("skin-block"));
+					if (data.getA() != null) {
+						clientSkinBlock = data.getA();
+						clientSkinBlockMetadata = data.getB();
 						flag = true;
 					}
 				}
@@ -86,7 +84,12 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public String[] debug(Side side) {
-		return new String[] { String.format("Multiblock: %s", getState()) };
+		return new String[] {
+				String.format("Multiblock: %s", getState()),
+				String.format("Ghost block: %s", (clientSkinBlock != null) ? clientSkinBlock.getUnlocalizedName()
+						: "null"), String.format("Ghost metadata: %s", clientSkinBlockMetadata)
+
+		};
 	}
 
 	@Override
@@ -107,7 +110,7 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 				markNbtDirty();
 			}
 		} else {
-			if (compound != null)
+			if (compound == null)
 				compound = new NBTTagCompound();
 			compound.setString("skin-block", BlockHelper.saveBlock(block, metadata));
 			markNbtDirty();

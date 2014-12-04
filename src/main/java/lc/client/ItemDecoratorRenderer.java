@@ -1,7 +1,9 @@
 package lc.client;
 
 import lc.common.base.LCItemRenderer;
+import lc.common.util.data.ImmutablePair;
 import lc.common.util.game.BlockHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -44,12 +46,13 @@ public class ItemDecoratorRenderer extends LCItemRenderer {
 		renderItem.renderItemIntoGUI(fontRender, textures, stack, 0, 0);
 		if (stack.stackTagCompound == null)
 			return true;
-		ItemStack blockStack = BlockHelper.loadBlock(stack.stackTagCompound.getString("block-name"));
-		if (blockStack == null)
+		ImmutablePair<Block, Integer> blockData = BlockHelper.loadBlock(stack.stackTagCompound.getString("block-name"));
+		if (blockData == null || blockData.getA() == null)
 			return true;
 		GL11.glPushMatrix();
 		GL11.glScalef(0.6f, 0.6f, 0.6f);
 		GL11.glTranslatef(3.0f, -8.0f, 0.0f);
+		ItemStack blockStack = new ItemStack(blockData.getA(), 1, blockData.getB());
 		renderItem.renderItemIntoGUI(fontRender, textures, blockStack, 8, 8);
 		GL11.glPopMatrix();
 		return true;

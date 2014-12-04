@@ -6,6 +6,7 @@ import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.rendering.IBlockSkinnable;
 import lc.common.base.LCItem;
+import lc.common.util.data.ImmutablePair;
 import lc.common.util.game.BlockHelper;
 import lc.core.ResourceAccess;
 import net.minecraft.block.Block;
@@ -58,13 +59,15 @@ public class ItemDecorator extends LCItem {
 			if (tile instanceof IBlockSkinnable) {
 				NBTTagCompound compound = stack.getTagCompound();
 				Block block = null;
+				int metadata = 0;
 				if (compound != null && compound.hasKey("block-name")) {
-					ItemStack blockStack = BlockHelper.loadBlock(compound.getString("block-name"));
-					if (blockStack != null)
-						block = Block.getBlockFromItem(blockStack.getItem());
+					ImmutablePair<Block, Integer> data = BlockHelper.loadBlock(compound.getString("block-name"));
+					if (data.getA() != null) {
+						block = data.getA();
+						metadata = data.getB();
+					}
 				}
-				int whatMetadata = stack != null ? stack.getItemDamage() : 0;
-				((IBlockSkinnable) tile).setSkinBlock(block, whatMetadata);
+				((IBlockSkinnable) tile).setSkinBlock(block, metadata);
 			}
 		}
 		return true;
@@ -77,9 +80,9 @@ public class ItemDecorator extends LCItem {
 		NBTTagCompound compound = stack.getTagCompound();
 		Block block = null;
 		if (compound != null && compound.hasKey("block-name")) {
-			ItemStack blockStack = BlockHelper.loadBlock(compound.getString("block-name"));
-			if (blockStack != null)
-				block = Block.getBlockFromItem(blockStack.getItem());
+			ImmutablePair<Block, Integer> data = BlockHelper.loadBlock(compound.getString("block-name"));
+			if (data.getA() != null)
+				block = data.getA();
 		}
 
 		if (block != null)

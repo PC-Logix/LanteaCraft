@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import lc.client.models.ModelError;
 import lc.client.models.loader.WavefrontModel.WavefrontModelException;
+import lc.client.opengl.BufferDisplayList;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
@@ -23,12 +24,19 @@ public class DefaultTileRenderer extends LCTileRenderer {
 
 	/** The system error model */
 	private ModelError model;
+	/** Display buffer for error model */
+	private final BufferDisplayList listModel = new BufferDisplayList();
+
 	private ArrayList<Class<? extends LCTile>> seenTypes;
 
 	/** Default constructor */
 	public DefaultTileRenderer() {
 		try {
 			model = new ModelError(ResourceAccess.getNamedResource("models/error.obj"));
+			listModel.init();
+			listModel.enter();
+			model.renderAll();
+			listModel.exit();
 		} catch (WavefrontModelException e) {
 			e.printStackTrace();
 		}
@@ -62,7 +70,8 @@ public class DefaultTileRenderer extends LCTileRenderer {
 		GL11.glRotatef(a1, 1.0f, 0.0f, 0.0f);
 		GL11.glTranslatef(0f, -0.5f, 0f);
 		GL11.glScalef(1.5f, 1.5f, 1.5f);
-		model.renderAll();
+		listModel.bind();
+		listModel.release();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();

@@ -1,7 +1,7 @@
 package lc.common.util.game;
 
+import lc.common.util.data.ImmutablePair;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameData;
 
 /**
@@ -34,7 +34,7 @@ public class BlockHelper {
 	 *            The block encoded in a human-readable string
 	 * @return The ItemStack containing the block and metadata (damage)
 	 */
-	public static ItemStack loadBlock(String saved) {
+	public static ImmutablePair<Block, Integer> loadBlock(String saved) {
 		Block block = null;
 		int metadata = 0;
 		if (saved.indexOf(';') != -1) {
@@ -42,6 +42,6 @@ public class BlockHelper {
 			metadata = Integer.parseInt(saved.substring(saved.indexOf(';') + 1));
 		} else
 			block = GameData.getBlockRegistry().getObject(saved);
-		return new ItemStack(block, 1, metadata);
+		return new ImmutablePair<Block, Integer>(block, metadata);
 	}
 }
