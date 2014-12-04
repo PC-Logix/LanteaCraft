@@ -2,7 +2,6 @@ package lc.core;
 
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
-import lc.blocks.BlockStargateBase;
 import lc.client.ItemDecoratorRenderer;
 import lc.client.TileStargateBaseRenderer;
 import lc.common.LCLog;

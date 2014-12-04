@@ -4,7 +4,21 @@ import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.block.Block;
 
+/**
+ * Block utilities class
+ * 
+ * @author AfterLifeLochie
+ */
 public class BlockHelper {
+	/**
+	 * Save a block to a human-readable string
+	 * 
+	 * @param singleton
+	 *            The block instance
+	 * @param metadata
+	 *            The metadata
+	 * @return The block encoded into a human-readable string
+	 */
 	public static String saveBlock(Block singleton, int metadata) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(GameData.getBlockRegistry().getNameForObject(singleton));
@@ -13,6 +27,13 @@ public class BlockHelper {
 		return builder.toString();
 	}
 
+	/**
+	 * Load a block from a human-readable string
+	 * 
+	 * @param saved
+	 *            The block encoded in a human-readable string
+	 * @return The ItemStack containing the block and metadata (damage)
+	 */
 	public static ItemStack loadBlock(String saved) {
 		Block block = null;
 		int metadata = 0;

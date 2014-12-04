@@ -9,8 +9,22 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 
+/**
+ * Abydos dimension implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class AbydosDimension implements IDimensionDefinition {
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param providerId
+	 *            The provider ID to use
+	 * @param dimensionId
+	 *            The dimension ID to use
+	 */
 	public AbydosDimension(final int providerId, final int dimensionId) {
 		DimensionManager.registerProviderType(providerId, getWorldProviderClass(), false);
 		DimensionManager.registerDimension(dimensionId, providerId);

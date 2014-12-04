@@ -6,10 +6,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
-import lc.api.defs.IGameDef;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
 
+/**
+ * Recipe proxy helper. Allows IRecipe objects to be wrapped like LC
+ * definitions.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class RecipeProxy implements IRecipeDefinition {
 
 	private String name;
@@ -18,6 +24,16 @@ public class RecipeProxy implements IRecipeDefinition {
 	private Class<? extends IRecipe> recipeClass;
 	private IRecipe recipeObject;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param name
+	 *            The name of the recipe
+	 * @param type
+	 *            The type of recipe
+	 * @param clazz
+	 *            The IRecipe class
+	 */
 	public RecipeProxy(String name, RecipeType type, Class<? extends IRecipe> clazz) {
 		this.name = name;
 		this.type = type;

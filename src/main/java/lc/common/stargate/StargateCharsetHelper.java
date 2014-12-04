@@ -41,6 +41,9 @@ public class StargateCharsetHelper {
 
 	/**
 	 * test: (each char in s) => (char in radix)
+	 * 
+	 * @param s
+	 *            The string to test
 	 */
 	public void legal(String s) {
 		for (char c : s.toCharArray())
@@ -50,6 +53,10 @@ public class StargateCharsetHelper {
 	/**
 	 * test: (each char in s) => (char in radix); throws no unchecked
 	 * exceptions.
+	 * 
+	 * @param s
+	 *            The string of characters
+	 * @return if the string is legal in the radix
 	 */
 	public boolean isLegal(String s) {
 		try {
@@ -62,6 +69,10 @@ public class StargateCharsetHelper {
 
 	/**
 	 * Test: char c => char in radix; throws no unchecked exceptions.
+	 * 
+	 * @param c
+	 *            The character
+	 * @return If the character is legal in the radix
 	 */
 	public boolean isLegal(char c) {
 		try {
@@ -73,6 +84,10 @@ public class StargateCharsetHelper {
 
 	/**
 	 * index of c in radix; exception if not radix-char
+	 * 
+	 * @param c
+	 *            the character
+	 * @return the index of the character in the radix
 	 */
 	public int index(char c) {
 		for (int i = 0; i < radix.length; i++)
@@ -83,6 +98,10 @@ public class StargateCharsetHelper {
 
 	/**
 	 * value of index i in radix; exception if out of radix bounds
+	 * 
+	 * @param i
+	 *            the index of the character in the radix
+	 * @return the character
 	 */
 	public char index(int i) {
 		if (0 > i || i > radix.length)
@@ -91,7 +110,11 @@ public class StargateCharsetHelper {
 	}
 
 	/**
-	 * boolean[4] to String(1)
+	 * boolean[4] to String(1)]
+	 * 
+	 * @param flags
+	 *            The array of flag states
+	 * @return An encoded character of flag states [4]
 	 */
 	private String btos(boolean[] flags) {
 		int accum = 0;
@@ -105,6 +128,10 @@ public class StargateCharsetHelper {
 
 	/**
 	 * String(1) to boolean[4]
+	 * 
+	 * @param value
+	 *            The encoded character of flag states [4]
+	 * @return An array of flag states
 	 */
 	private boolean[] stob(String value) {
 		boolean[] result = new boolean[4];
@@ -131,6 +158,10 @@ public class StargateCharsetHelper {
 
 	/**
 	 * String(?) to int
+	 * 
+	 * @param value
+	 *            The integer value
+	 * @return An integer value of the radix
 	 */
 	private int stoi(String value) {
 		int result = 0, multmin, digit;

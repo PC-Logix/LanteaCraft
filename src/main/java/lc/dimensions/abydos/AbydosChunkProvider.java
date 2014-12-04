@@ -18,6 +18,12 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
+/**
+ * Abydos chunk provider implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class AbydosChunkProvider implements IChunkProvider {
 
 	/** RNG. */
@@ -48,6 +54,14 @@ public class AbydosChunkProvider implements IChunkProvider {
 	/** Chunk generators */
 	LCFeatureStructure structureController;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param par1World
+	 *            The world to write to
+	 * @param biomeForGeneration
+	 *            The default biome
+	 */
 	public AbydosChunkProvider(World par1World, BiomeGenBase biomeForGeneration) {
 		worldObj = par1World;
 		rand = new Random(par1World.getSeed());

@@ -33,14 +33,35 @@ public class WavefrontModel {
 	 * @author AfterLifeLochie
 	 */
 	public static class WavefrontModelException extends Exception {
+		/** Serializer ID */
+		private static final long serialVersionUID = 5032918858527482568L;
+
+		/**
+		 * @param reason
+		 *            The reason for the exception
+		 */
 		public WavefrontModelException(String reason) {
 			super(reason);
 		}
 
+		/**
+		 * @param reason
+		 *            The reason for the exception
+		 * @param top
+		 *            The cause exception
+		 */
 		public WavefrontModelException(String reason, Throwable top) {
 			super(reason, top);
 		}
 
+		/**
+		 * @param reason
+		 *            The reason for the exception
+		 * @param idx
+		 *            The line number
+		 * @param line
+		 *            The line text
+		 */
 		public WavefrontModelException(String reason, int idx, String line) {
 			super(String.format("[line %s]: %s (`%s`)", idx, reason, line));
 		}
@@ -54,10 +75,24 @@ public class WavefrontModel {
 	public static class Vertex {
 		public float x, y, z;
 
+		/**
+		 * @param x
+		 *            The x-coord of the vertex
+		 * @param y
+		 *            The y-coord of the vertex
+		 */
 		public Vertex(float x, float y) {
 			this(x, y, 0F);
 		}
 
+		/**
+		 * @param x
+		 *            The x-coord of the vertex
+		 * @param y
+		 *            The y-coord of the vertex
+		 * @param z
+		 *            The z-coord of the vertex
+		 */
 		public Vertex(float x, float y, float z) {
 			this.x = x;
 			this.y = y;
@@ -65,13 +100,32 @@ public class WavefrontModel {
 		}
 	}
 
+	/**
+	 * Texture coordinate container
+	 * 
+	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
+	 */
 	public static class TextureCoord {
 		public float u, v, w;
 
+		/**
+		 * @param u
+		 *            The u-coord of the texture
+		 * @param v
+		 *            The v-coord of the texture
+		 */
 		public TextureCoord(float u, float v) {
 			this(u, v, 0F);
 		}
 
+		/**
+		 * @param u
+		 *            The u-coord of the texture
+		 * @param v
+		 *            The v-coord of the texture
+		 * @param w
+		 *            The w-coord of the texture
+		 */
 		public TextureCoord(float u, float v, float w) {
 			this.u = u;
 			this.v = v;
@@ -85,18 +139,37 @@ public class WavefrontModel {
 	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
 	 */
 	public static class Face {
+		/** The list of verticies */
 		public Vertex[] vertices;
+		/** The list of face normals */
 		public Vertex[] normals;
+		/** The list of texture coordinates */
 		public TextureCoord[] texCoords;
+		/** The global face normal */
 		public Vertex faceNormal;
 
+		/** Default constructor */
 		public Face() {
 		}
 
+		/**
+		 * Add the face for rendering
+		 * 
+		 * @param tessellator
+		 *            The tessellator to write to
+		 */
 		public void addFaceForRender(Tessellator tessellator) {
 			addFaceForRender(tessellator, 0.0005F);
 		}
 
+		/**
+		 * Add the face for rendering
+		 * 
+		 * @param tessellator
+		 *            The tessellator to write to
+		 * @param textureOffset
+		 *            The texture coordinate offset
+		 */
 		public void addFaceForRender(Tessellator tessellator, float textureOffset) {
 			if (faceNormal == null)
 				faceNormal = calculateFaceNormal();
@@ -128,6 +201,11 @@ public class WavefrontModel {
 					tessellator.addVertex(vertices[i].x, vertices[i].y, vertices[i].z);
 		}
 
+		/**
+		 * Calculate the face normal of the face
+		 * 
+		 * @return The face normal value
+		 */
 		public Vertex calculateFaceNormal() {
 			Vec3 v1 = Vec3.createVectorHelper(vertices[1].x - vertices[0].x, vertices[1].y - vertices[0].y,
 					vertices[1].z - vertices[0].z);
@@ -144,23 +222,44 @@ public class WavefrontModel {
 	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
 	 */
 	public static class ElementGroup {
+		/** The name of the group */
 		public final String name;
+		/** The list of faces */
 		public final ArrayList<Face> faces = new ArrayList<Face>();
+		/** The opengl drawing mode for this group */
 		public int glDrawingMode;
 
+		/** Default constructor */
 		public ElementGroup() {
 			this("");
 		}
 
+		/**
+		 * Creates a new element group
+		 * 
+		 * @param name
+		 *            The name of the group
+		 */
 		public ElementGroup(String name) {
 			this(name, -1);
 		}
 
+		/**
+		 * Creates a new element group
+		 * 
+		 * @param name
+		 *            The name of the group
+		 * @param glDrawingMode
+		 *            The drawing mode
+		 */
 		public ElementGroup(String name, int glDrawingMode) {
 			this.name = name;
 			this.glDrawingMode = glDrawingMode;
 		}
 
+		/**
+		 * Render the element group
+		 */
 		public void render() {
 			if (faces.size() > 0) {
 				Tessellator tessellator = Tessellator.instance;
@@ -170,6 +269,12 @@ public class WavefrontModel {
 			}
 		}
 
+		/**
+		 * Render the element group
+		 * 
+		 * @param tessellator
+		 *            The tessellator to write to
+		 */
 		public void render(Tessellator tessellator) {
 			if (faces.size() > 0)
 				for (Face face : faces)
@@ -237,6 +342,7 @@ public class WavefrontModel {
 		loadObjModel(input);
 	}
 
+	/** Render all elements in the model */
 	public void renderAll() {
 		Tessellator tessellator = Tessellator.instance;
 		if (lastGroup != null)
@@ -247,11 +353,23 @@ public class WavefrontModel {
 		tessellator.draw();
 	}
 
+	/**
+	 * Tessellate all elements in the model
+	 * 
+	 * @param tessellator
+	 *            The tessellator to write to
+	 */
 	public void tessellateAll(Tessellator tessellator) {
 		for (ElementGroup groupObject : groupHeap)
 			groupObject.render(tessellator);
 	}
 
+	/**
+	 * Render only the elements which match the group name(s)
+	 * 
+	 * @param groupNames
+	 *            The group names
+	 */
 	public void renderOnly(String... groupNames) {
 		for (ElementGroup groupObject : groupHeap)
 			for (String groupName : groupNames)
@@ -259,6 +377,14 @@ public class WavefrontModel {
 					groupObject.render();
 	}
 
+	/**
+	 * Tessellate only the elements which match the group name(s)
+	 * 
+	 * @param tessellator
+	 *            The tessellator to write to
+	 * @param groupNames
+	 *            The group names
+	 */
 	public void tessellateOnly(Tessellator tessellator, String... groupNames) {
 		for (ElementGroup groupObject : groupHeap)
 			for (String groupName : groupNames)
@@ -266,18 +392,38 @@ public class WavefrontModel {
 					groupObject.render(tessellator);
 	}
 
+	/**
+	 * Render a single part
+	 * 
+	 * @param partName
+	 *            The part name
+	 */
 	public void renderPart(String partName) {
 		for (ElementGroup groupObject : groupHeap)
 			if (partName.equalsIgnoreCase(groupObject.name))
 				groupObject.render();
 	}
 
+	/**
+	 * Tessellate a single part
+	 * 
+	 * @param tessellator
+	 *            The tessellator to write to
+	 * @param partName
+	 *            The part name
+	 */
 	public void tessellatePart(Tessellator tessellator, String partName) {
 		for (ElementGroup groupObject : groupHeap)
 			if (partName.equalsIgnoreCase(groupObject.name))
 				groupObject.render(tessellator);
 	}
 
+	/**
+	 * Render all elements except those in a list of groups
+	 * 
+	 * @param excludedGroupNames
+	 *            The list of groups
+	 */
 	public void renderAllExcept(String... excludedGroupNames) {
 		for (ElementGroup groupObject : groupHeap) {
 			boolean flag = false;
@@ -289,6 +435,14 @@ public class WavefrontModel {
 		}
 	}
 
+	/**
+	 * Tessellate all elements except those in a list of groups
+	 * 
+	 * @param tessellator
+	 *            The tessellator to write to
+	 * @param excludedGroupNames
+	 *            The list of groups
+	 */
 	public void tessellateAllExcept(Tessellator tessellator, String... excludedGroupNames) {
 		for (ElementGroup groupObject : groupHeap) {
 			boolean flag = false;

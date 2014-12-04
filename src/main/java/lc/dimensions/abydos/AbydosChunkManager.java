@@ -8,11 +8,25 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 
+/**
+ * Abydos chunk manager implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class AbydosChunkManager extends WorldChunkManager {
 
 	private BiomeGenBase biomeGenerator;
 	private float rainfall;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param biomeGenerator
+	 *            The biome generator
+	 * @param rainfall
+	 *            The quantity of rainfall
+	 */
 	public AbydosChunkManager(BiomeGenBase biomeGenerator, float rainfall) {
 		this.biomeGenerator = biomeGenerator;
 		this.rainfall = rainfall;

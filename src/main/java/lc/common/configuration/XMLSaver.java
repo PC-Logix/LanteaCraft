@@ -19,16 +19,33 @@ import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+/**
+ * XML configuration file writer
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class XMLSaver {
 
 	private final DocumentBuilderFactory factory;
 
+	/** Default constructor */
 	public XMLSaver() {
 		factory = DocumentBuilderFactory.newInstance();
 		factory.setValidating(false);
 		factory.setIgnoringComments(false);
 	}
 
+	/**
+	 * Save the XML document to a file.
+	 * 
+	 * @param list
+	 *            The module top level element
+	 * @param output
+	 *            The output file
+	 * @throws XMLSaverException
+	 *             Any XML writing failure
+	 */
 	public void save(ModuleList list, FileOutputStream output) throws XMLSaverException {
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();

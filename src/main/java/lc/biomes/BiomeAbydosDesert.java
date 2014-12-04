@@ -10,8 +10,20 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenDesertWells;
 
+/**
+ * Abydos desert biome implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class BiomeAbydosDesert extends BiomeGenBase implements IBiomeDefinition {
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param biomeId
+	 *            The biome ID to use
+	 */
 	public BiomeAbydosDesert(int biomeId) {
 		super(biomeId, false);
 		topBlock = Blocks.sand;

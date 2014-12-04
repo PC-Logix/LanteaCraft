@@ -238,6 +238,10 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		LCTile.doCallbacksNow(this, "blockBreak");
 	}
 
+	/**
+	 * Mark the tile's NBT as dirty. On the next network update, the tile NBT
+	 * data will be re-sent to all clients in range of the tile.
+	 */
 	protected void markNbtDirty() {
 		nbtDirty = true;
 	}

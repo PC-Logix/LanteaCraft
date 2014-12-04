@@ -8,17 +8,41 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 
+/**
+ * World proxy class. Allows worlds to behave differently to default (ie, return
+ * fake blocks, etc).
+ * 
+ * @author AfterLifeLochie
+ */
 public class WorldProxy implements IBlockAccess {
 
 	IBlockAccess myWorld;
 	int allMeta;
 	int allBrightness = -1;
 
+	/**
+	 * Create a new world proxy
+	 * 
+	 * @param world
+	 *            The IBlockAccess world
+	 * @param meta
+	 *            The metadata to spoof
+	 */
 	public WorldProxy(IBlockAccess world, int meta) {
 		myWorld = world;
 		allMeta = meta;
 	}
 
+	/**
+	 * Create a new world proxy
+	 * 
+	 * @param world
+	 *            The IBlockAccess world
+	 * @param meta
+	 *            The metadata to spoof
+	 * @param brightness
+	 *            The block brightness to spoof
+	 */
 	public WorldProxy(IBlockAccess world, int meta, int brightness) {
 		myWorld = world;
 		allMeta = meta;

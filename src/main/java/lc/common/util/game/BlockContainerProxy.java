@@ -6,10 +6,25 @@ import net.minecraft.block.Block;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
+/**
+ * Block container access proxy. Allows the spoofing of containers and their
+ * associated special block rendering.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class BlockContainerProxy extends Block {
 	private Block myBlock;
 	private int mySide;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param block
+	 *            The spoofed block
+	 * @param side
+	 *            The spoofed side
+	 */
 	public BlockContainerProxy(Block block, int side) {
 		super(block.getMaterial());
 		myBlock = block;

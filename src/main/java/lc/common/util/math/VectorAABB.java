@@ -3,8 +3,6 @@ package lc.common.util.math;
 import java.util.ArrayList;
 import java.util.List;
 
-import lc.common.LCLog;
-
 public class VectorAABB {
 
 	private Vector3 origin;

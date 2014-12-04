@@ -40,7 +40,12 @@ public class VersionHelper extends Thread {
 	/** Needs notification ? */
 	public boolean requiresNotify = false;
 
-	/** Default constructor */
+	/**
+	 * Default constructor
+	 * 
+	 * @param query
+	 *            The query key set
+	 */
 	public VersionHelper(HashMap<String, String> query) {
 		super();
 		StringBuilder path = new StringBuilder();

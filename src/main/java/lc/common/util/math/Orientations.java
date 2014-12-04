@@ -42,10 +42,23 @@ public enum Orientations {
 		this.angle = angle;
 	}
 
+	/**
+	 * Get the rotation matrix for this Orientation, based around the zero
+	 * rotation
+	 * 
+	 * @return The rotation matrix for this Orientation
+	 */
 	public Matrix3 rotation() {
 		return rotation;
 	}
 
+	/**
+	 * Convert a ForgeDirection facing to an Orientation facing
+	 * 
+	 * @param dir
+	 *            The source direction
+	 * @return The resultant Orientation
+	 */
 	public static Orientations from(ForgeDirection dir) {
 		switch (dir) {
 		case NORTH:
@@ -61,14 +74,23 @@ public enum Orientations {
 		}
 	}
 
+	/**
+	 * @return A list of all cardinal directions
+	 */
 	public static EnumSet<Orientations> getCardinals() {
 		return EnumSet.of(NORTH, EAST, SOUTH, WEST);
 	}
 
+	/**
+	 * @return A list of all unique rotation cardinals
+	 */
 	public static EnumSet<Orientations> getFacings() {
 		return EnumSet.of(NORTH, EAST);
 	}
 
+	/**
+	 * @return The angle of an Orientation's rotation
+	 */
 	public float angle() {
 		return angle;
 	}

@@ -5,11 +5,23 @@ import java.util.ArrayList;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IGameDef;
 
+/**
+ * Definition reference implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class DefinitionReference implements IDefinitionReference {
 
 	private final IGameDef def;
 	private final ArrayList<Object> params;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param def
+	 *            The definition to reference
+	 */
 	public DefinitionReference(IGameDef def) {
 		if (def == null)
 			throw new RuntimeException("Cannot create a null definition reference.");
@@ -17,6 +29,14 @@ public class DefinitionReference implements IDefinitionReference {
 		params = new ArrayList<Object>();
 	}
 
+	/**
+	 * Constructor with initial parameters
+	 * 
+	 * @param def
+	 *            The defintion to reference
+	 * @param params
+	 *            The parameters to store
+	 */
 	public DefinitionReference(IGameDef def, Object... params) {
 		this(def);
 		for (Object o : params)

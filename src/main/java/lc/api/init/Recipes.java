@@ -10,18 +10,28 @@ import lc.api.defs.IRecipeDefinition;
  */
 public class Recipes {
 
+	/** Naquadah ingot recipe */
 	public IRecipeDefinition naquadahIngot;
+	/** Trinium ingot recipe */
 	public IRecipeDefinition triniumIngot;
 
-	public IRecipeDefinition triniumAlloyBlock;
-	public IRecipeDefinition triniumAlloyToIngots;
+	/** Naquadah alloy block recipe */
 	public IRecipeDefinition naquadahAlloyBlock;
+	/** Naquadah alloy block to ingots recipe */
 	public IRecipeDefinition naquadahAlloyToIngots;
+	/** Trinium alloy block recipe */
+	public IRecipeDefinition triniumAlloyBlock;
+	/** Trinium alloy block to ingots recipe */
+	public IRecipeDefinition triniumAlloyToIngots;
 
+	/** Stargate base crafting recipe */
 	public IRecipeDefinition stargateBase;
+	/** Stargate ring crafting recipe */
 	public IRecipeDefinition stargateRing;
+	/** Stargate chevron crafting recipe */
 	public IRecipeDefinition stargateChevron;
 
+	/** Decorator setter recipe */
 	public IRecipeDefinition decorSetterRecipe;
 
 }

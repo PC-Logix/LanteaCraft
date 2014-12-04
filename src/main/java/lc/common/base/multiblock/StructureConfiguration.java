@@ -3,7 +3,6 @@ package lc.common.base.multiblock;
 import java.util.Iterator;
 import java.util.List;
 
-import lc.common.LCLog;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.math.Matrix3;
 import lc.common.util.math.Orientations;
@@ -79,7 +78,7 @@ public abstract class StructureConfiguration {
 		BlockFilter[] mappings = getBlockMappings();
 		Vector3 origin = new Vector3(x, y, z).sub(getStructureCenter());
 		Matrix3 rotation = orientation.rotation();
-		
+
 		VectorAABB box = VectorAABB.boxOf(origin, getStructureDimensions());
 		box = box.apply(Vector3.zero, rotation);
 
@@ -88,20 +87,23 @@ public abstract class StructureConfiguration {
 		while (each.hasNext()) {
 			Vector3 me = each.next();
 			Vector3 tile = origin.add(me);
-			
+
 			Vector3 mapping = rotation.imul(me);
 			try {
 				int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
 				BlockFilter filter = mappings[cell];
 				if (!filter.matches(world, tile.floorX(), tile.floorY(), tile.floorZ())) {
-					//LCLog.info("Failed match on %s at %s %s %s", filter, tile.floorX(), tile.floorY(), tile.floorZ());
+					// LCLog.info("Failed match on %s at %s %s %s", filter,
+					// tile.floorX(), tile.floorY(), tile.floorZ());
 					return false;
 				}
 			} catch (IndexOutOfBoundsException bounds) {
-				//LCLog.fatal("Access out of bounds: " + bounds.getMessage() + ": " + String.format("%s %s %s", mapping.floorX(), mapping.floorY(), mapping.floorZ()));
+				// LCLog.fatal("Access out of bounds: " + bounds.getMessage() +
+				// ": " + String.format("%s %s %s", mapping.floorX(),
+				// mapping.floorY(), mapping.floorZ()));
 			}
 		}
-		//LCLog.info("Items: " + elems.size());
+		// LCLog.info("Items: " + elems.size());
 		return false;
 	}
 
@@ -118,6 +120,8 @@ public abstract class StructureConfiguration {
 	 *            The z-coordinate to test
 	 * @param orientation
 	 *            The orientation
+	 * @param owner
+	 *            The owner tile
 	 */
 	public void apply(World world, int x, int y, int z, Orientations orientation, LCMultiblockTile owner) {
 		// FIXME

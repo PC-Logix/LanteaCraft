@@ -13,7 +13,6 @@ import lc.common.util.game.WorldProxy;
 import lc.common.util.math.Trans3;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 

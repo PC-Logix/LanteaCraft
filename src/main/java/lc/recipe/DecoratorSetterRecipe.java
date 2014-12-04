@@ -3,7 +3,6 @@ package lc.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import lc.common.LCLog;
 import lc.common.util.game.BlockHelper;
 import lc.common.util.game.InventoryHelper;
 import lc.core.LCRuntime;
@@ -15,11 +14,18 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+/**
+ * Decorator block-setting recipe handler
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class DecoratorSetterRecipe implements IRecipe {
 
 	private final int width = 2, height = 2;
 	private final Item decorTool;
 
+	/** Default constructor */
 	public DecoratorSetterRecipe() {
 		this.decorTool = LCRuntime.runtime.items().lanteaDecoratorTool.getItem();
 	}
@@ -45,6 +51,17 @@ public class DecoratorSetterRecipe implements IRecipe {
 		return shapelessItems.size() > 0 && checkShapelessItems(crafting, shapelessItems);
 	}
 
+	/**
+	 * Determine if all items are present in the crafting grid in order to
+	 * complete the recipe correctly
+	 * 
+	 * @param crafting
+	 *            The crafting grid
+	 * @param shapelessItems
+	 *            The shapelss item list
+	 * @return If all items are present in the crafting grid in order to
+	 *         complete the recipe
+	 */
 	public boolean checkShapelessItems(InventoryCrafting crafting, ArrayList<ItemStack> shapelessItems) {
 		boolean flag0 = false, flag2 = false;
 		int p = 0;

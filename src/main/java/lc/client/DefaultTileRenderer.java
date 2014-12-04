@@ -14,11 +14,19 @@ import lc.common.base.LCTileRenderHook;
 import lc.common.base.LCTileRenderer;
 import lc.core.ResourceAccess;
 
+/**
+ * The default tile entity renderer implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class DefaultTileRenderer extends LCTileRenderer {
 
+	/** The system error model */
 	private ModelError model;
 	private ArrayList<Class<? extends LCTile>> seenTypes;
 
+	/** Default constructor */
 	public DefaultTileRenderer() {
 		try {
 			model = new ModelError(ResourceAccess.getNamedResource("models/error.obj"));

@@ -8,6 +8,11 @@ package lc.api.defs;
  */
 public interface IBiomeDefinition extends IGameDef {
 
+	/**
+	 * Get the name of the biome
+	 * 
+	 * @return The name of the biome
+	 */
 	public abstract String getName();
 
 }
