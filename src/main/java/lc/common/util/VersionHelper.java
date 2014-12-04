@@ -124,7 +124,7 @@ public class VersionHelper extends Thread {
 			remoteVersion = versionStr.substring(0, versionStr.length() - 1);
 			remoteLabel = section[1].trim();
 
-			if (remoteBuild > BuildInfo.getBuildNumber())
+			if (remoteBuild > BuildInfo.$.build())
 				requiresNotify = true;
 			finished = true;
 		} catch (Throwable t) {

@@ -22,7 +22,7 @@ public class ResourceAccess {
 	private static HashMap<String, ArrayList<String>> resourceAccesses = new HashMap<String, ArrayList<String>>();
 	private static HashMap<String, ArrayList<String>> nameAccesses = new HashMap<String, ArrayList<String>>();
 
-	private static final boolean logResources = BuildInfo.isDevelopmentEnvironment() && true;
+	private static final boolean logResources = BuildInfo.$.development() && true;
 
 	private static String assetKey = "pcl_lc";
 

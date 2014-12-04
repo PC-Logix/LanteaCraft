@@ -1,6 +1,7 @@
 package lc.core;
 
 import lc.api.ILCAPIProxy;
+import lc.api.IModInfo;
 import lc.api.components.IRegistryContainer;
 import lc.api.defs.HintProvider;
 import lc.api.init.Biomes;
@@ -56,8 +57,13 @@ public class LCRuntime implements ILCAPIProxy {
 	}
 
 	@Override
+	public IModInfo info() {
+		return BuildInfo.$;
+	}
+
+	@Override
 	public boolean signedState() {
-		return !BuildInfo.isDevelopmentEnvironment();
+		return BuildInfo.IS_SIGNED;
 	}
 
 	@Override
