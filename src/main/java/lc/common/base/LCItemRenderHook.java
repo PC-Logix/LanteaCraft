@@ -75,26 +75,18 @@ public class LCItemRenderHook implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		boolean flag = true;
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.ITEM, item.getItem().getClass());
-		if (worker == null && !(worker instanceof LCItemRenderer))
-			flag = false;
-		else {
+		if (worker != null && worker instanceof LCItemRenderer) {
 			try {
 				LCItemRenderer itemRenderer = (LCItemRenderer) worker;
 				while (itemRenderer != null && !itemRenderer.renderItem(type, item, data)) {
 					worker = itemRenderer.getParent();
-					if (worker == null || !(worker instanceof LCTileRenderer)) {
-						flag = false;
+					if (worker == null || !(worker instanceof LCTileRenderer))
 						break;
-					}
 				}
 			} catch (Throwable t) {
 				LCLog.warn("Uncaught item rendering exception.", t);
-				flag = false;
 			}
 		}
-		return;
 	}
-
 }
