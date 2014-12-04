@@ -5,8 +5,20 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+/**
+ * Decorative item block implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ItemBlockDecorative extends LCItemBlock {
 
+	/**
+	 * Default constructor.
+	 * 
+	 * @param block
+	 *            The parent Block object.
+	 */
 	public ItemBlockDecorative(Block block) {
 		super(block);
 		setHasSubtypes(true);

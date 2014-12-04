@@ -7,6 +7,12 @@ import lc.api.rendering.IBlockRenderInfo;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
 
+/**
+ * Voidable block renderer implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public abstract class BlockVoidRenderer extends LCBlockRenderer {
 
 	@Override

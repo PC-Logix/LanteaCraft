@@ -45,7 +45,7 @@ public class ItemBlockStargateRing extends LCItemBlock {
 		return ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", getUnlocalizedName());
 	}
 
-	public static String subItemName(int i) {
+	private static String subItemName(int i) {
 		return "tile.stargateRing." + i;
 	}
 }

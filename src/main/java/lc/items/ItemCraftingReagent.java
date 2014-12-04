@@ -14,16 +14,44 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * Crafting reagent item implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 @Definition(name = "lanteaCraftingReagent", type = ComponentType.CORE, itemClass = ItemCraftingReagent.class)
 public class ItemCraftingReagent extends LCItem {
 
 	private IIcon missing;
 
+	/**
+	 * Enumeration of all reagent item types.
+	 * 
+	 * @author AfterLifeLochie
+	 *
+	 */
 	public static enum ReagentList {
-		BROKENITEM, BLANKCRYSTAL, CORECRYSTAL, CONTROLCRYSTAL, IRONPLATE, NAQUADAHPLATE, TRINIUMPLATE;
+		/** Broken item */
+		BROKENITEM,
+		/** Blank crystal */
+		BLANKCRYSTAL,
+		/** Core crystal */
+		CORECRYSTAL,
+		/** Control crystal */
+		CONTROLCRYSTAL,
+		/** Iron plate */
+		IRONPLATE,
+		/** Naquadah plate */
+		NAQUADAHPLATE,
+		/** Trninium plate */
+		TRINIUMPLATE;
+
+		/** The icon for the reagent */
 		public IIcon icon;
 	}
 
+	/** Default constructor */
 	public ItemCraftingReagent() {
 		super();
 	}

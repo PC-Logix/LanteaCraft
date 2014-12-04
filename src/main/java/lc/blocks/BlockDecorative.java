@@ -14,6 +14,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+/**
+ * Decorative block implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 @Definition(name = "blockDecorative", type = ComponentType.DECOR, blockClass = BlockDecorative.class, itemBlockClass = ItemBlockDecorative.class)
 public class BlockDecorative extends LCBlock {
 
@@ -39,11 +45,11 @@ public class BlockDecorative extends LCBlock {
 
 	private IIcon missing;
 
+	/** Default constructor. */
 	public BlockDecorative() {
 		super(Material.ground);
 		setHarvestLevel("pickaxe", 1);
 		setOpaque(true);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

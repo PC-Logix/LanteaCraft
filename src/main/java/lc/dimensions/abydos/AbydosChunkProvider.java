@@ -26,54 +26,40 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
  */
 public class AbydosChunkProvider implements IChunkProvider {
 
-	/** RNG. */
-	private Random rand;
-	private NoiseGeneratorOctaves field_147431_j;
-	private NoiseGeneratorOctaves field_147432_k;
-	private NoiseGeneratorOctaves field_147429_l;
-	private NoiseGeneratorPerlin field_147430_m;
-	/** A NoiseGeneratorOctaves used in generating terrain */
-	public NoiseGeneratorOctaves noiseGen5;
-	/** A NoiseGeneratorOctaves used in generating terrain */
-	public NoiseGeneratorOctaves noiseGen6;
-	/** Reference to the World object. */
+	private final float[] parabolicField;
+	private final double[] field_147434_q;
+
+	private Random rng;
+	private NoiseGeneratorOctaves ng1, ng2, ng3, ng6;
+	private NoiseGeneratorPerlin ngp4;
+	private BiomeGenBase biomeForGeneration;
+	private LCFeatureStructure structureController;
 	private World worldObj;
 
-	private final double[] field_147434_q;
-	private final float[] parabolicField;
 	private double[] stoneNoise = new double[256];
 
-	/** The biomes that are used to generate the chunk */
-	private BiomeGenBase biomeForGeneration;
-	double[] field_147427_d;
-	double[] field_147428_e;
-	double[] field_147425_f;
-	double[] field_147426_g;
+	double[] d_ng3, d_ng1, d_ng2, d_ng6;
 	int[][] field_73219_j = new int[32][32];
-
-	/** Chunk generators */
-	LCFeatureStructure structureController;
 
 	/**
 	 * Default constructor
 	 * 
-	 * @param par1World
+	 * @param world
 	 *            The world to write to
-	 * @param biomeForGeneration
+	 * @param biome
 	 *            The default biome
 	 */
-	public AbydosChunkProvider(World par1World, BiomeGenBase biomeForGeneration) {
-		worldObj = par1World;
-		rand = new Random(par1World.getSeed());
-		field_147431_j = new NoiseGeneratorOctaves(rand, 16);
-		field_147432_k = new NoiseGeneratorOctaves(rand, 16);
-		field_147429_l = new NoiseGeneratorOctaves(rand, 8);
-		field_147430_m = new NoiseGeneratorPerlin(rand, 4);
-		noiseGen5 = new NoiseGeneratorOctaves(rand, 10);
-		noiseGen6 = new NoiseGeneratorOctaves(rand, 16);
+	public AbydosChunkProvider(World world, BiomeGenBase biome) {
+		worldObj = world;
+		rng = new Random(world.getSeed());
+		ng1 = new NoiseGeneratorOctaves(rng, 16);
+		ng2 = new NoiseGeneratorOctaves(rng, 16);
+		ng3 = new NoiseGeneratorOctaves(rng, 8);
+		ngp4 = new NoiseGeneratorPerlin(rng, 4);
+		ng6 = new NoiseGeneratorOctaves(rng, 16);
 		field_147434_q = new double[825];
 		parabolicField = new float[25];
-		this.biomeForGeneration = biomeForGeneration;
+		this.biomeForGeneration = biome;
 		structureController = new LCFeatureStructure();
 
 		for (int j = -2; j <= 2; ++j)
@@ -83,9 +69,9 @@ public class AbydosChunkProvider implements IChunkProvider {
 			}
 	}
 
-	public void func_147424_a(int p_147424_1_, int p_147424_2_, Block[] p_147424_3_) {
+	private void generateChunk(int cx, int cz, Block[] map) {
 		byte heightWater = 42;
-		func_147423_a(p_147424_1_ * 4, 0, p_147424_2_ * 4);
+		initializeNoise(cx * 4, 0, cz * 4);
 		for (int k = 0; k < 4; ++k) {
 			int l = k * 5;
 			int i1 = (k + 1) * 5;
@@ -122,11 +108,11 @@ public class AbydosChunkProvider implements IChunkProvider {
 
 							for (int k3 = 0; k3 < 4; ++k3)
 								if ((d15 += d16) > 0.0D)
-									p_147424_3_[j3 += short1] = Blocks.stone;
+									map[j3 += short1] = Blocks.stone;
 								else if (k2 * 8 + l2 < heightWater)
-									p_147424_3_[j3 += short1] = Blocks.water;
+									map[j3 += short1] = Blocks.water;
 								else
-									p_147424_3_[j3 += short1] = null;
+									map[j3 += short1] = null;
 
 							d10 += d12;
 							d11 += d13;
@@ -142,16 +128,16 @@ public class AbydosChunkProvider implements IChunkProvider {
 		}
 	}
 
-	public void replaceBlocksForBiome(int p_147422_1_, int p_147422_2_, Block[] p_147422_3_, byte[] p_147422_4_,
+	private void replaceBlocksForBiome(int p_147422_1_, int p_147422_2_, Block[] p_147422_3_, byte[] p_147422_4_,
 			BiomeGenBase p_147422_5_) {
 		double d0 = 0.03125D;
-		stoneNoise = field_147430_m.func_151599_a(stoneNoise, p_147422_1_ * 16, p_147422_2_ * 16, 16, 16, d0 * 2.0D,
-				d0 * 2.0D, 1.0D);
+		stoneNoise = ngp4.func_151599_a(stoneNoise, p_147422_1_ * 16, p_147422_2_ * 16, 16, 16, d0 * 2.0D, d0 * 2.0D,
+				1.0D);
 
 		for (int k = 0; k < 16; ++k)
 			for (int l = 0; l < 16; ++l)
-				p_147422_5_.genTerrainBlocks(worldObj, rand, p_147422_3_, p_147422_4_, p_147422_1_ * 16 + k,
-						p_147422_2_ * 16 + l, stoneNoise[l + k * 16]);
+				p_147422_5_.genTerrainBlocks(worldObj, rng, p_147422_3_, p_147422_4_, p_147422_1_ * 16 + k, p_147422_2_
+						* 16 + l, stoneNoise[l + k * 16]);
 	}
 
 	/**
@@ -169,10 +155,10 @@ public class AbydosChunkProvider implements IChunkProvider {
 	 */
 	@Override
 	public Chunk provideChunk(int chunkX, int chunkZ) {
-		rand.setSeed(chunkX * 341873128712L + chunkZ * 132897987541L);
+		rng.setSeed(chunkX * 341873128712L + chunkZ * 132897987541L);
 		Block[] ablock = new Block[65536];
 		byte[] abyte = new byte[65536];
-		func_147424_a(chunkX, chunkZ, ablock);
+		generateChunk(chunkX, chunkZ, ablock);
 		replaceBlocksForBiome(chunkX, chunkZ, ablock, abyte, biomeForGeneration);
 
 		structureController.func_151539_a(this, worldObj, chunkX, chunkZ, null);
@@ -187,22 +173,17 @@ public class AbydosChunkProvider implements IChunkProvider {
 		return chunk;
 	}
 
-	private void func_147423_a(int p_147423_1_, int p_147423_2_, int p_147423_3_) {
-		field_147426_g = noiseGen6.generateNoiseOctaves(field_147426_g, p_147423_1_, p_147423_3_, 5, 5, 200.0D, 200.0D,
-				0.5D);
-		field_147427_d = field_147429_l.generateNoiseOctaves(field_147427_d, p_147423_1_, p_147423_2_, p_147423_3_, 5,
-				33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
-		field_147428_e = field_147431_j.generateNoiseOctaves(field_147428_e, p_147423_1_, p_147423_2_, p_147423_3_, 5,
-				33, 5, 684.412D, 684.412D, 684.412D);
-		field_147425_f = field_147432_k.generateNoiseOctaves(field_147425_f, p_147423_1_, p_147423_2_, p_147423_3_, 5,
-				33, 5, 684.412D, 684.412D, 684.412D);
+	private void initializeNoise(int x, int y, int z) {
+		d_ng6 = ng6.generateNoiseOctaves(d_ng6, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
+		d_ng3 = ng3.generateNoiseOctaves(d_ng3, x, y, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D,
+				8.555150000000001D);
+		d_ng1 = ng1.generateNoiseOctaves(d_ng1, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
+		d_ng2 = ng2.generateNoiseOctaves(d_ng2, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
 		int l = 0;
 		int i1 = 0;
 		for (int j1 = 0; j1 < 5; ++j1)
 			for (int k1 = 0; k1 < 5; ++k1) {
-				float f = 0.0F;
-				float f1 = 0.0F;
-				float f2 = 0.0F;
+				float f = 0.0F, f1 = 0.0F, f2 = 0.0F;
 				byte b0 = 2;
 				BiomeGenBase biomegenbase = biomeForGeneration;
 
@@ -223,7 +204,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 				f1 /= f2;
 				f = f * 0.9F + 0.1F;
 				f1 = (f1 * 4.0F - 1.0F) / 8.0F;
-				double d12 = field_147426_g[i1] / 8000.0D;
+				double d12 = d_ng6[i1] / 8000.0D;
 
 				if (d12 < 0.0D)
 					d12 = -d12 * 0.3D;
@@ -232,22 +213,18 @@ public class AbydosChunkProvider implements IChunkProvider {
 
 				if (d12 < 0.0D) {
 					d12 /= 2.0D;
-
 					if (d12 < -1.0D)
 						d12 = -1.0D;
-
 					d12 /= 1.4D;
 					d12 /= 2.0D;
 				} else {
 					if (d12 > 1.0D)
 						d12 = 1.0D;
-
 					d12 /= 8.0D;
 				}
 
 				++i1;
-				double d13 = f1;
-				double d14 = f;
+				double d13 = f1, d14 = f;
 				d13 += d12 * 0.2D;
 				d13 = d13 * 8.5D / 8.0D;
 				double d5 = 8.5D + d13 * 4.0D;
@@ -258,9 +235,8 @@ public class AbydosChunkProvider implements IChunkProvider {
 					if (d6 < 0.0D)
 						d6 *= 4.0D;
 
-					double d7 = field_147428_e[l] / 512.0D;
-					double d8 = field_147425_f[l] / 512.0D;
-					double d9 = (field_147427_d[l] / 10.0D + 1.0D) / 2.0D;
+					double d7 = d_ng1[l] / 512.0D, d8 = d_ng2[l] / 512.0D;
+					double d9 = (d_ng3[l] / 10.0D + 1.0D) / 2.0D;
 					double d10 = MathHelper.denormalizeClamp(d7, d8, d9) - d6;
 
 					if (j2 > 29) {
@@ -286,17 +262,17 @@ public class AbydosChunkProvider implements IChunkProvider {
 	 * Populates chunk with ores etc etc
 	 */
 	@Override
-	public void populate(IChunkProvider par1IChunkProvider, int par2, int par3) {
+	public void populate(IChunkProvider par1IChunkProvider, int cx, int cz) {
 		BlockFalling.fallInstantly = true;
-		int k = par2 * 16;
-		int l = par3 * 16;
-		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(k + 16, l + 16);
-		rand.setSeed(worldObj.getSeed());
-		long i1 = rand.nextLong() / 2L * 2L + 1L;
-		long j1 = rand.nextLong() / 2L * 2L + 1L;
-		rand.setSeed(par2 * i1 + par3 * j1 ^ worldObj.getSeed());
-		biomegenbase.decorate(worldObj, rand, k, l);
-		structureController.generateStructuresInChunk(worldObj, rand, par2, par3);
+		int x = cx * 16;
+		int z = cz * 16;
+		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(x + 16, z + 16);
+		rng.setSeed(worldObj.getSeed());
+		long i1 = rng.nextLong() / 2L * 2L + 1L;
+		long j1 = rng.nextLong() / 2L * 2L + 1L;
+		rng.setSeed(cx * i1 + cz * j1 ^ worldObj.getSeed());
+		biomegenbase.decorate(worldObj, rng, x, z);
+		structureController.generateStructuresInChunk(worldObj, rng, cx, cz);
 		BlockFalling.fallInstantly = false;
 	}
 
@@ -349,13 +325,13 @@ public class AbydosChunkProvider implements IChunkProvider {
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int par2, int par3, int par4) {
-		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(par2, par4);
-		return biomegenbase.getSpawnableList(par1EnumCreatureType);
+	public List getPossibleCreatures(EnumCreatureType type, int x, int y, int z) {
+		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(x, z);
+		return biomegenbase.getSpawnableList(type);
 	}
 
 	@Override
-	public ChunkPosition func_147416_a(World p_147416_1_, String p_147416_2_, int p_147416_3_, int p_147416_4_,
+	public ChunkPosition func_147416_a(World world, String p_147416_2_, int p_147416_3_, int p_147416_4_,
 			int p_147416_5_) {
 		return null;
 	}

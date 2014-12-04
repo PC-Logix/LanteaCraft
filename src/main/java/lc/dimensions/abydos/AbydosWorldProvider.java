@@ -8,11 +8,18 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;
 
+/**
+ * Abydos world provider implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class AbydosWorldProvider extends WorldProvider {
 
 	private float[] colorsSunriseSunset = new float[4];
 	private BiomeAbydosDesert abydosBiome;
 
+	/** Default constructor. */
 	public AbydosWorldProvider() {
 		abydosBiome = (BiomeAbydosDesert) LCRuntime.runtime.biomes().abydosDesert;
 		worldChunkMgr = new AbydosChunkManager(abydosBiome, 0);

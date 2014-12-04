@@ -9,29 +9,44 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
+/**
+ * Abydos pyramid scattered feature generator implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class AbydosPyramid extends LCFeatureComponent {
 
+	/** Default constructor */
 	public AbydosPyramid() {
 	}
 
-	public AbydosPyramid(Random par1Random, int par2, int par3) {
-		super(par1Random, par2, 64, par3, 42, 30, 42);
+	/**
+	 * @param rng
+	 *            The random number generator
+	 * @param x
+	 *            The x-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 */
+	public AbydosPyramid(Random rng, int x, int z) {
+		super(rng, x, 64, z, 42, 30, 42);
 	}
 
 	/**
 	 * func_143012_a: saveToNBT(NBTTagCompound compound);
 	 */
 	@Override
-	protected void func_143012_a(NBTTagCompound par1NBTTagCompound) {
-		super.func_143012_a(par1NBTTagCompound);
+	protected void func_143012_a(NBTTagCompound tag) {
+		super.func_143012_a(tag);
 	}
 
 	/**
 	 * func_143011_b: loadFromNBT(NBTTagCompound compound);
 	 */
 	@Override
-	protected void func_143011_b(NBTTagCompound par1NBTTagCompound) {
-		super.func_143011_b(par1NBTTagCompound);
+	protected void func_143011_b(NBTTagCompound tag) {
+		super.func_143011_b(tag);
 	}
 
 	@Override
