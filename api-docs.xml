@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+	<target name="javadoc">
+		<javadoc access="package" 
+			additionalparam="-J-Xmx1024m " author="true" 
+			destdir="./doc/LanteaCraft-api-master" doctitle="LanteaCraft-API-master" 
+			nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" 
+			packagenames="lc.api.*" source="1.6" sourcepath="src/main/resources;src/externs/java;src/main/java" 
+			splitindex="true" use="true" version="true" />
+	</target>
+</project>
