@@ -3,8 +3,8 @@ package lc.core;
 import java.security.CodeSource;
 import java.security.cert.Certificate;
 
-import cpw.mods.fml.common.CertificateHelper;
 import lc.api.IModInfo;
+import cpw.mods.fml.common.CertificateHelper;
 
 /**
  * This file is automatically updated by Jenkins as part of the CI build script

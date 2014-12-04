@@ -58,7 +58,7 @@ public interface IRecipeDefinition extends IGameDef {
 	/**
 	 * Get the parent recipe object. If the recipe definition is a proxy recipe
 	 * it will return the owner object instance.
-	 * 
+	 *
 	 * @return The Minecraft raw recipe object.
 	 */
 	public IRecipe getParentObject();
@@ -66,7 +66,7 @@ public interface IRecipeDefinition extends IGameDef {
 	/**
 	 * Get the parent recipe class. If the recipe definition is a proxy recipe
 	 * it will return the owner class.
-	 * 
+	 *
 	 * @return The Minecraft raw recipe class.
 	 */
 	public Class<? extends IRecipe> getParentClass();

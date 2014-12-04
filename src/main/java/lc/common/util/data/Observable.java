@@ -22,7 +22,7 @@ public class Observable {
 
 	/**
 	 * Create a new observer.
-	 * 
+	 *
 	 * @param parent
 	 *            A parent or null.
 	 */

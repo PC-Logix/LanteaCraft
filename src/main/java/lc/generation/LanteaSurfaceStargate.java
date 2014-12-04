@@ -9,7 +9,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 /**
  * Surface Stargate generator implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

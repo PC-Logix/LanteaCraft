@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.Tessellator;
 
 /**
  * Stargate glyph renderer helper
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -17,7 +17,7 @@ public class StargateGlyphRenderer {
 
 	/**
 	 * Draw an address on screen
-	 * 
+	 *
 	 * @param mc
 	 *            The game
 	 * @param address

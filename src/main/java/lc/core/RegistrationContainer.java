@@ -81,12 +81,10 @@ public class RegistrationContainer {
 		IDefinitionReference triniumIngot = new DefinitionReference(items.lanteaAlloyItem, 1, OreType.TRINIUM.ordinal());
 		IDefinitionReference naquadahAlloyBlock = blocks.lanteaAlloyBlock.ref().pushAll(1, OreType.NAQUADAH.ordinal());
 		IDefinitionReference triniumAlloyBlock = blocks.lanteaAlloyBlock.ref().pushAll(1, OreType.TRINIUM.ordinal());
-		IDefinitionReference blankCrystal = items.lanteaCraftingItem.ref().pushAll(1,
-				ItemCraftingReagent.ReagentList.BLANKCRYSTAL.ordinal());
+		items.lanteaCraftingItem.ref().pushAll(1, ItemCraftingReagent.ReagentList.BLANKCRYSTAL.ordinal());
 		IDefinitionReference coreCrystal = items.lanteaCraftingItem.ref().pushAll(1,
 				ItemCraftingReagent.ReagentList.CORECRYSTAL.ordinal());
-		IDefinitionReference controlCrystal = items.lanteaCraftingItem.ref().pushAll(1,
-				ItemCraftingReagent.ReagentList.CONTROLCRYSTAL.ordinal());
+		items.lanteaCraftingItem.ref().pushAll(1, ItemCraftingReagent.ReagentList.CONTROLCRYSTAL.ordinal());
 
 		ItemStack cSandstone = new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1);
 		ItemStack ironIngot = new ItemStack(net.minecraft.init.Items.iron_ingot, 1);

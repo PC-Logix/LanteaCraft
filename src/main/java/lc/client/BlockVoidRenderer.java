@@ -1,15 +1,15 @@
 package lc.client;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.world.IBlockAccess;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * Voidable block renderer implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

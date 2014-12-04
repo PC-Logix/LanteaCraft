@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
 
 /**
  * XML configuration file writer
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -38,7 +38,7 @@ public class XMLSaver {
 
 	/**
 	 * Save the XML document to a file.
-	 * 
+	 *
 	 * @param list
 	 *            The module top level element
 	 * @param output

@@ -102,7 +102,7 @@ public class Trans3 {
 
 	/**
 	 * Rotate on side i
-	 * 
+	 *
 	 * @param i
 	 *            The side
 	 * @return The rotation matrix
@@ -113,7 +113,7 @@ public class Trans3 {
 
 	/**
 	 * Turn on side i
-	 * 
+	 *
 	 * @param i
 	 *            The side
 	 * @return The rotation matrix
@@ -124,7 +124,7 @@ public class Trans3 {
 
 	/**
 	 * Apply all transformations
-	 * 
+	 *
 	 * @param t
 	 *            The input trans
 	 * @return The result trans
@@ -136,7 +136,7 @@ public class Trans3 {
 
 	/**
 	 * Create a new Vector3 from an xyz coordinate pair
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate
 	 * @param y
@@ -152,7 +152,7 @@ public class Trans3 {
 	/**
 	 * Apply the offset, rotation and scaling of this Translation to the Vector
 	 * provided.
-	 * 
+	 *
 	 * @param u
 	 *            The input Vector2
 	 * @return The resultant Vector3

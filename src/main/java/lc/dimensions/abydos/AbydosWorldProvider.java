@@ -10,7 +10,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 /**
  * Abydos world provider implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

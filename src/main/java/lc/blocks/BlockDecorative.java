@@ -16,7 +16,7 @@ import net.minecraft.util.IIcon;
 
 /**
  * Decorative block implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

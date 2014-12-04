@@ -61,12 +61,10 @@ public class HintInjectionTransformer implements IClassTransformer {
 											.indexOf("clientClass") + 1);
 									fieldToClazzMap.put(field.name, className.replace(".", "/"));
 								}
-							} else {
-								if (annotation.values.indexOf("serverClass") != -1) {
-									String className = (String) annotation.values.get(annotation.values
-											.indexOf("serverClass") + 1);
-									fieldToClazzMap.put(field.name, className.replace(".", "/"));
-								}
+							} else if (annotation.values.indexOf("serverClass") != -1) {
+								String className = (String) annotation.values.get(annotation.values
+										.indexOf("serverClass") + 1);
+								fieldToClazzMap.put(field.name, className.replace(".", "/"));
 							}
 						}
 					}

@@ -1,11 +1,11 @@
 package lc.client.models;
 
-import net.minecraft.util.ResourceLocation;
 import lc.client.models.loader.WavefrontModel;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Error model implementation
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -13,7 +13,7 @@ public class ModelError extends WavefrontModel {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param resource
 	 *            The ResourceLocation of the model
 	 * @throws WavefrontModelException

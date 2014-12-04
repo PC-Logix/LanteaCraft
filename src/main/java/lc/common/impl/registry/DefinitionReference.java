@@ -7,7 +7,7 @@ import lc.api.defs.IGameDef;
 
 /**
  * Definition reference implementation
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -18,7 +18,7 @@ public class DefinitionReference implements IDefinitionReference {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param def
 	 *            The definition to reference
 	 */
@@ -31,7 +31,7 @@ public class DefinitionReference implements IDefinitionReference {
 
 	/**
 	 * Constructor with initial parameters
-	 * 
+	 *
 	 * @param def
 	 *            The defintion to reference
 	 * @param params

@@ -41,7 +41,7 @@ public class StargateCharsetHelper {
 
 	/**
 	 * test: (each char in s) => (char in radix)
-	 * 
+	 *
 	 * @param s
 	 *            The string to test
 	 */
@@ -53,7 +53,7 @@ public class StargateCharsetHelper {
 	/**
 	 * test: (each char in s) => (char in radix); throws no unchecked
 	 * exceptions.
-	 * 
+	 *
 	 * @param s
 	 *            The string of characters
 	 * @return if the string is legal in the radix
@@ -69,7 +69,7 @@ public class StargateCharsetHelper {
 
 	/**
 	 * Test: char c => char in radix; throws no unchecked exceptions.
-	 * 
+	 *
 	 * @param c
 	 *            The character
 	 * @return If the character is legal in the radix
@@ -84,7 +84,7 @@ public class StargateCharsetHelper {
 
 	/**
 	 * index of c in radix; exception if not radix-char
-	 * 
+	 *
 	 * @param c
 	 *            the character
 	 * @return the index of the character in the radix
@@ -98,7 +98,7 @@ public class StargateCharsetHelper {
 
 	/**
 	 * value of index i in radix; exception if out of radix bounds
-	 * 
+	 *
 	 * @param i
 	 *            the index of the character in the radix
 	 * @return the character
@@ -111,7 +111,7 @@ public class StargateCharsetHelper {
 
 	/**
 	 * boolean[4] to String(1)]
-	 * 
+	 *
 	 * @param flags
 	 *            The array of flag states
 	 * @return An encoded character of flag states [4]
@@ -128,7 +128,7 @@ public class StargateCharsetHelper {
 
 	/**
 	 * String(1) to boolean[4]
-	 * 
+	 *
 	 * @param value
 	 *            The encoded character of flag states [4]
 	 * @return An array of flag states
@@ -158,7 +158,7 @@ public class StargateCharsetHelper {
 
 	/**
 	 * String(?) to int
-	 * 
+	 *
 	 * @param value
 	 *            The integer value
 	 * @return An integer value of the radix

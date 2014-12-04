@@ -1,15 +1,15 @@
 package lc.common.util.game;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Block container access proxy. Allows the spoofing of containers and their
  * associated special block rendering.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -19,7 +19,7 @@ public class BlockContainerProxy extends Block {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param block
 	 *            The spoofed block
 	 * @param side

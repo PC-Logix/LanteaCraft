@@ -10,7 +10,7 @@ import net.minecraft.world.biome.WorldChunkManager;
 
 /**
  * Abydos chunk manager implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -21,7 +21,7 @@ public class AbydosChunkManager extends WorldChunkManager {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param biomeGenerator
 	 *            The biome generator
 	 * @param rainfall

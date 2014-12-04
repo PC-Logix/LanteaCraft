@@ -107,7 +107,7 @@ public class WavefrontModel {
 
 	/**
 	 * Texture coordinate container
-	 * 
+	 *
 	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
 	 */
 	public static class TextureCoord {
@@ -164,7 +164,7 @@ public class WavefrontModel {
 
 		/**
 		 * Add the face for rendering
-		 * 
+		 *
 		 * @param tessellator
 		 *            The tessellator to write to
 		 */
@@ -174,7 +174,7 @@ public class WavefrontModel {
 
 		/**
 		 * Add the face for rendering
-		 * 
+		 *
 		 * @param tessellator
 		 *            The tessellator to write to
 		 * @param textureOffset
@@ -213,7 +213,7 @@ public class WavefrontModel {
 
 		/**
 		 * Calculate the face normal of the face
-		 * 
+		 *
 		 * @return The face normal value
 		 */
 		public Vertex calculateFaceNormal() {
@@ -246,7 +246,7 @@ public class WavefrontModel {
 
 		/**
 		 * Creates a new element group
-		 * 
+		 *
 		 * @param name
 		 *            The name of the group
 		 */
@@ -256,7 +256,7 @@ public class WavefrontModel {
 
 		/**
 		 * Creates a new element group
-		 * 
+		 *
 		 * @param name
 		 *            The name of the group
 		 * @param glDrawingMode
@@ -281,7 +281,7 @@ public class WavefrontModel {
 
 		/**
 		 * Render the element group
-		 * 
+		 *
 		 * @param tessellator
 		 *            The tessellator to write to
 		 */
@@ -365,7 +365,7 @@ public class WavefrontModel {
 
 	/**
 	 * Tessellate all elements in the model
-	 * 
+	 *
 	 * @param tessellator
 	 *            The tessellator to write to
 	 */
@@ -376,7 +376,7 @@ public class WavefrontModel {
 
 	/**
 	 * Render only the elements which match the group name(s)
-	 * 
+	 *
 	 * @param groupNames
 	 *            The group names
 	 */
@@ -389,7 +389,7 @@ public class WavefrontModel {
 
 	/**
 	 * Tessellate only the elements which match the group name(s)
-	 * 
+	 *
 	 * @param tessellator
 	 *            The tessellator to write to
 	 * @param groupNames
@@ -404,7 +404,7 @@ public class WavefrontModel {
 
 	/**
 	 * Render a single part
-	 * 
+	 *
 	 * @param partName
 	 *            The part name
 	 */
@@ -416,7 +416,7 @@ public class WavefrontModel {
 
 	/**
 	 * Tessellate a single part
-	 * 
+	 *
 	 * @param tessellator
 	 *            The tessellator to write to
 	 * @param partName
@@ -430,7 +430,7 @@ public class WavefrontModel {
 
 	/**
 	 * Render all elements except those in a list of groups
-	 * 
+	 *
 	 * @param excludedGroupNames
 	 *            The list of groups
 	 */
@@ -447,7 +447,7 @@ public class WavefrontModel {
 
 	/**
 	 * Tessellate all elements except those in a list of groups
-	 * 
+	 *
 	 * @param tessellator
 	 *            The tessellator to write to
 	 * @param excludedGroupNames

@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * Vector axis-aligned bounding box implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -16,7 +16,7 @@ public class VectorAABB {
 
 	/**
 	 * Create a new box
-	 * 
+	 *
 	 * @param origin
 	 *            The origin vector
 	 * @param dim
@@ -29,7 +29,7 @@ public class VectorAABB {
 
 	/**
 	 * Create a new box
-	 * 
+	 *
 	 * @param origin
 	 *            The origin vector
 	 * @param width
@@ -51,7 +51,7 @@ public class VectorAABB {
 
 	/**
 	 * Expand the VectorAABB by a vector size
-	 * 
+	 *
 	 * @param size
 	 *            The size
 	 * @return A copy of the newly transformed VectorAABB
@@ -62,7 +62,7 @@ public class VectorAABB {
 
 	/**
 	 * Translate the VectorAABB by a vector size
-	 * 
+	 *
 	 * @param trans
 	 *            The size
 	 * @return A copy of the newly transformed VectorAABB
@@ -73,7 +73,7 @@ public class VectorAABB {
 
 	/**
 	 * Rotate the box around a point
-	 * 
+	 *
 	 * @param point
 	 *            The point
 	 * @param rotation
@@ -86,7 +86,7 @@ public class VectorAABB {
 
 	/**
 	 * Get a list of all Vector3 points in the box
-	 * 
+	 *
 	 * @return A list of all Vector3 points in bounds
 	 */
 	public List<Vector3> contents() {

@@ -11,7 +11,7 @@ import net.minecraftforge.common.DimensionManager;
 
 /**
  * Abydos dimension implementation
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -19,7 +19,7 @@ public class AbydosDimension implements IDimensionDefinition {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param providerId
 	 *            The provider ID to use
 	 * @param dimensionId

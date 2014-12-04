@@ -2,17 +2,17 @@ package lc.common.impl.registry;
 
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 
 /**
  * Recipe proxy helper. Allows IRecipe objects to be wrapped like LC
  * definitions.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -26,7 +26,7 @@ public class RecipeProxy implements IRecipeDefinition {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param name
 	 *            The name of the recipe
 	 * @param type
@@ -37,7 +37,7 @@ public class RecipeProxy implements IRecipeDefinition {
 	public RecipeProxy(String name, RecipeType type, Class<? extends IRecipe> clazz) {
 		this.name = name;
 		this.type = type;
-		this.recipeClass = clazz;
+		recipeClass = clazz;
 	}
 
 	@Override

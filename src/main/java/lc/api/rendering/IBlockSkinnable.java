@@ -9,7 +9,7 @@ import net.minecraft.block.Block;
 /**
  * Contract interface for tile entities which are capable of being 'painted'
  * with other blocks.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -17,7 +17,7 @@ public interface IBlockSkinnable {
 
 	/**
 	 * Sets the skin block to the provided block and metadata.
-	 * 
+	 *
 	 * @param block
 	 *            The block singleton.
 	 * @param metadata
@@ -27,14 +27,14 @@ public interface IBlockSkinnable {
 
 	/**
 	 * Get the current skin block singleton.
-	 * 
+	 *
 	 * @return The current skin block singleton.
 	 */
 	public Block getSkinBlock();
 
 	/**
 	 * Get the current skin block metadata.
-	 * 
+	 *
 	 * @return The current skin block metadata, or 0 if the block has no
 	 *         metadata.
 	 */

@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 /**
  * Decorator block-setting recipe handler
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -27,16 +27,15 @@ public class DecoratorSetterRecipe implements IRecipe {
 
 	/** Default constructor */
 	public DecoratorSetterRecipe() {
-		this.decorTool = LCRuntime.runtime.items().lanteaDecoratorTool.getItem();
+		decorTool = LCRuntime.runtime.items().lanteaDecoratorTool.getItem();
 	}
 
 	@Override
 	public boolean matches(InventoryCrafting crafting, World world) {
 		for (int x = 0; x <= 3 - width; x++)
-			for (int y = 0; y <= 3 - height; y++) {
+			for (int y = 0; y <= 3 - height; y++)
 				if (checkMatch(crafting, x, y, false) || checkMatch(crafting, x, y, true))
 					return true;
-			}
 		return false;
 	}
 
@@ -54,7 +53,7 @@ public class DecoratorSetterRecipe implements IRecipe {
 	/**
 	 * Determine if all items are present in the crafting grid in order to
 	 * complete the recipe correctly
-	 * 
+	 *
 	 * @param crafting
 	 *            The crafting grid
 	 * @param shapelessItems
@@ -65,7 +64,7 @@ public class DecoratorSetterRecipe implements IRecipe {
 	public boolean checkShapelessItems(InventoryCrafting crafting, ArrayList<ItemStack> shapelessItems) {
 		boolean flag0 = false, flag2 = false;
 		int p = 0;
-		for (ItemStack stack : shapelessItems) {
+		for (ItemStack stack : shapelessItems)
 			if (stack.getItem().equals(decorTool))
 				if (flag0)
 					flag2 = true;
@@ -76,8 +75,7 @@ public class DecoratorSetterRecipe implements IRecipe {
 				if (block != null && block.isBlockNormalCube())
 					p++;
 			}
-		}
-		return (flag0 && (p == 0 || p == 1)) && !flag2;
+		return flag0 && (p == 0 || p == 1) && !flag2;
 	}
 
 	@Override

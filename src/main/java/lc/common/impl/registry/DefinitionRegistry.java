@@ -404,7 +404,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/**
 	 * Registers an item renderer with the definition registry
-	 * 
+	 *
 	 * @param item
 	 *            The item class
 	 * @param renderer

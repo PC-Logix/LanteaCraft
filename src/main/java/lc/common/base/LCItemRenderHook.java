@@ -31,7 +31,7 @@ public class LCItemRenderHook implements IItemRenderer {
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.ITEM, item.getItem().getClass());
 		if (worker == null && !(worker instanceof LCItemRenderer))
 			flag = false;
-		else {
+		else
 			try {
 				LCItemRenderer itemRenderer = (LCItemRenderer) worker;
 				while (itemRenderer != null && !itemRenderer.handleRenderType(item, type)) {
@@ -45,7 +45,6 @@ public class LCItemRenderHook implements IItemRenderer {
 				LCLog.warn("Uncaught item rendering exception.", t);
 				flag = false;
 			}
-		}
 		return flag;
 	}
 
@@ -55,7 +54,7 @@ public class LCItemRenderHook implements IItemRenderer {
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.ITEM, item.getItem().getClass());
 		if (worker == null && !(worker instanceof LCItemRenderer))
 			flag = false;
-		else {
+		else
 			try {
 				LCItemRenderer itemRenderer = (LCItemRenderer) worker;
 				while (itemRenderer != null && !itemRenderer.shouldUseRenderHelper(type, item, helper)) {
@@ -69,14 +68,13 @@ public class LCItemRenderHook implements IItemRenderer {
 				LCLog.warn("Uncaught item rendering exception.", t);
 				flag = false;
 			}
-		}
 		return flag;
 	}
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.ITEM, item.getItem().getClass());
-		if (worker != null && worker instanceof LCItemRenderer) {
+		if (worker != null && worker instanceof LCItemRenderer)
 			try {
 				LCItemRenderer itemRenderer = (LCItemRenderer) worker;
 				while (itemRenderer != null && !itemRenderer.renderItem(type, item, data)) {
@@ -87,6 +85,5 @@ public class LCItemRenderHook implements IItemRenderer {
 			} catch (Throwable t) {
 				LCLog.warn("Uncaught item rendering exception.", t);
 			}
-		}
 	}
 }

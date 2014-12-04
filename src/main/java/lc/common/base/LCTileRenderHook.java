@@ -36,7 +36,7 @@ public class LCTileRenderHook extends TileEntitySpecialRenderer {
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.TILE, lct.getClass());
 		if (worker == null && !(worker instanceof LCTileRenderer))
 			flag = false;
-		else {
+		else
 			try {
 				LCTileRenderer tileRenderer = (LCTileRenderer) worker;
 				while (tileRenderer != null && !tileRenderer.renderTileEntityAt(lct, this, x, y, z, partialTickTime)) {
@@ -50,7 +50,6 @@ public class LCTileRenderHook extends TileEntitySpecialRenderer {
 				LCLog.warn("Uncaught tile rendering exception.", t);
 				flag = false;
 			}
-		}
 		if (!flag)
 			defaultTileRenderer.renderTileEntityAt(lct, this, x, y, z, partialTickTime);
 	}

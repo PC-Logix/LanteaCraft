@@ -32,7 +32,7 @@ public class DimensionPos {
 
 	/**
 	 * Create a new dimension position from fixed values
-	 * 
+	 *
 	 * @param dimension
 	 *            The dimension ID
 	 * @param x
@@ -51,7 +51,7 @@ public class DimensionPos {
 
 	/**
 	 * Create a new position based on a stored NBT compound
-	 * 
+	 *
 	 * @param nbt
 	 *            The NBT compound to load from
 	 */
@@ -64,7 +64,7 @@ public class DimensionPos {
 
 	/**
 	 * Save the position to an NBT compound
-	 * 
+	 *
 	 * @return The saved NBT compound
 	 */
 	public NBTTagCompound toNBT() {
@@ -78,7 +78,7 @@ public class DimensionPos {
 
 	/**
 	 * Convert this dimension position to a chunk location
-	 * 
+	 *
 	 * @return The chunk location
 	 */
 	public ChunkPos toChunkLocation() {
@@ -87,7 +87,7 @@ public class DimensionPos {
 
 	/**
 	 * Converts this position to a vector (disposes the dimension data).
-	 * 
+	 *
 	 * @return The vector position of this dimension position
 	 */
 	public Vector3 toVector3() {

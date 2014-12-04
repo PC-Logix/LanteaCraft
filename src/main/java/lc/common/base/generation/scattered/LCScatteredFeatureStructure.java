@@ -8,7 +8,7 @@ import net.minecraft.world.gen.structure.StructureStart;
 
 /**
  * LanteaCraft scattered feature structure implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

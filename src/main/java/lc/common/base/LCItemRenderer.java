@@ -1,11 +1,11 @@
 package lc.common.base;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.common.impl.registry.DefinitionReference;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 
 /**
  * Generic item rendering stub.
@@ -25,7 +25,7 @@ public abstract class LCItemRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Ask if this renderer should handle a particular render type.
-	 * 
+	 *
 	 * @param item
 	 *            The item stack
 	 * @param type
@@ -36,7 +36,7 @@ public abstract class LCItemRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Ask the renderer if it requires a render helper be used.
-	 * 
+	 *
 	 * @param type
 	 *            The render type
 	 * @param item
@@ -49,7 +49,7 @@ public abstract class LCItemRenderer implements ILanteaCraftRenderer {
 
 	/**
 	 * Called to render the item
-	 * 
+	 *
 	 * @param type
 	 *            The render type
 	 * @param item

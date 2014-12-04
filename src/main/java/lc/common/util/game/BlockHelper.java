@@ -1,18 +1,18 @@
 package lc.common.util.game;
 
-import cpw.mods.fml.common.registry.GameData;
-import net.minecraft.item.ItemStack;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import cpw.mods.fml.common.registry.GameData;
 
 /**
  * Block utilities class
- * 
+ *
  * @author AfterLifeLochie
  */
 public class BlockHelper {
 	/**
 	 * Save a block to a human-readable string
-	 * 
+	 *
 	 * @param singleton
 	 *            The block instance
 	 * @param metadata
@@ -29,7 +29,7 @@ public class BlockHelper {
 
 	/**
 	 * Load a block from a human-readable string
-	 * 
+	 *
 	 * @param saved
 	 *            The block encoded in a human-readable string
 	 * @return The ItemStack containing the block and metadata (damage)

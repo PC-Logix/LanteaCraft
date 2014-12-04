@@ -9,7 +9,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 
 /**
  * LanteaCraft scattered feature component.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -29,7 +29,7 @@ public abstract class LCFeatureComponent extends StructureComponent {
 
 	/**
 	 * Create a new structure component
-	 * 
+	 *
 	 * @param rng
 	 *            The random number generator
 	 * @param x
@@ -81,7 +81,7 @@ public abstract class LCFeatureComponent extends StructureComponent {
 	/**
 	 * Determine if placement is allowed. Calculates the bottom layer of the
 	 * bounding box so that it sits on the surface correctly.
-	 * 
+	 *
 	 * @param world
 	 *            The world
 	 * @param sbb

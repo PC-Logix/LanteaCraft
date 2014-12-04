@@ -42,7 +42,7 @@ public interface IBlockRenderInfo {
 
 	/**
 	 * Ask the renderer info if a render property should be observed or executed
-	 * 
+	 *
 	 * @param property
 	 *            The property name
 	 *

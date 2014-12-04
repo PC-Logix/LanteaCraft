@@ -45,7 +45,7 @@ public enum Orientations {
 	/**
 	 * Get the rotation matrix for this Orientation, based around the zero
 	 * rotation
-	 * 
+	 *
 	 * @return The rotation matrix for this Orientation
 	 */
 	public Matrix3 rotation() {
@@ -54,7 +54,7 @@ public enum Orientations {
 
 	/**
 	 * Convert a ForgeDirection facing to an Orientation facing
-	 * 
+	 *
 	 * @param dir
 	 *            The source direction
 	 * @return The resultant Orientation

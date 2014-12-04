@@ -7,7 +7,7 @@ import net.minecraft.util.IIcon;
 
 /**
  * Decorative item block implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -15,7 +15,7 @@ public class ItemBlockDecorative extends LCItemBlock {
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @param block
 	 *            The parent Block object.
 	 */

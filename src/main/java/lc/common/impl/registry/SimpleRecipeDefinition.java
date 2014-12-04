@@ -14,7 +14,7 @@ import net.minecraft.item.crafting.IRecipe;
 
 /**
  * Simple recipe container implmenetation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -33,7 +33,7 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 	/**
 	 * Create a new simple recipe with n number of unique input types and an
 	 * output type.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the recipe
 	 * @param type

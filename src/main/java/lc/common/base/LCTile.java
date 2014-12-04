@@ -248,12 +248,11 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	@Override
 	public void handlePacket(LCPacket packetOf, EntityPlayer player) throws LCNetworkException {
-		if (packetOf instanceof LCTileSync) {
+		if (packetOf instanceof LCTileSync)
 			if (worldObj.isRemote) {
 				compound = ((LCTileSync) packetOf).compound;
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
-		}
 		thinkPacket(packetOf, player);
 	}
 

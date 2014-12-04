@@ -9,7 +9,7 @@ import net.minecraft.world.gen.structure.StructureStart;
 
 /**
  * LanteaCraft structure generator feature start.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -20,7 +20,7 @@ public class LCFeatureStart extends StructureStart {
 
 	/**
 	 * Create a new Structure Start
-	 * 
+	 *
 	 * @param world
 	 *            The world
 	 * @param rng

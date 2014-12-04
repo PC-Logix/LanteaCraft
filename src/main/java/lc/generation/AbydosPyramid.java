@@ -11,7 +11,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 /**
  * Abydos pyramid scattered feature generator implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

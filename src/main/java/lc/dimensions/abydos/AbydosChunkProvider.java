@@ -20,7 +20,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
 /**
  * Abydos chunk provider implementation
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -43,7 +43,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param world
 	 *            The world to write to
 	 * @param biome
@@ -59,7 +59,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 		ng6 = new NoiseGeneratorOctaves(rng, 16);
 		field_147434_q = new double[825];
 		parabolicField = new float[25];
-		this.biomeForGeneration = biome;
+		biomeForGeneration = biome;
 		structureController = new LCFeatureStructure();
 
 		for (int j = -2; j <= 2; ++j)

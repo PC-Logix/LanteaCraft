@@ -85,11 +85,10 @@ public class RecipeRegistry implements IRecipeRegistry {
 					LCLog.fatal("Bad recipe %s: expected 1 output stack for smelting, got %s.", definition.getName(),
 							out.size());
 				FurnaceRecipes.smelting().func_151394_a(in.get(0), out.get(0), 0.0f);
-			} else if (type == RecipeType.PROXY) {
+			} else if (type == RecipeType.PROXY)
 				GameRegistry.addRecipe(definition.getParentObject());
-			} else {
+			else
 				LCLog.fatal("Cannot handle recipe type %s. Panic!", type);
-			}
 		}
 	}
 }

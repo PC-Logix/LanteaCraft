@@ -11,7 +11,7 @@ import net.minecraft.world.gen.structure.StructureStart;
 
 /**
  * LanteaCraft feature structure implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -27,7 +27,7 @@ public class LCFeatureStructure extends MapGenStructure {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param params
 	 *            The parameters
 	 */

@@ -1,7 +1,5 @@
 package lc.client;
 
-import org.lwjgl.opengl.GL11;
-
 import lc.client.models.ModelStargate;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
@@ -10,9 +8,11 @@ import lc.core.ResourceAccess;
 import lc.tiles.TileStargateBase;
 import net.minecraft.util.ResourceLocation;
 
+import org.lwjgl.opengl.GL11;
+
 /**
  * Stargate base tile renderer.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

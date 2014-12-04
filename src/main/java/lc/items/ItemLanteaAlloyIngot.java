@@ -15,7 +15,7 @@ import net.minecraft.util.IIcon;
 
 /**
  * Global alloy ingot item implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

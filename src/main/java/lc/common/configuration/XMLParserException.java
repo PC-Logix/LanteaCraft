@@ -8,7 +8,7 @@ package lc.common.configuration;
  */
 public class XMLParserException extends Exception {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1454163337752699314L;
 

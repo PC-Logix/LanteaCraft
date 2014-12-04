@@ -2,10 +2,6 @@ package lc.client;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
-
-import org.lwjgl.opengl.GL11;
-
 import lc.client.models.ModelError;
 import lc.client.models.loader.WavefrontModel.WavefrontModelException;
 import lc.common.LCLog;
@@ -13,10 +9,13 @@ import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
 import lc.common.base.LCTileRenderer;
 import lc.core.ResourceAccess;
+import net.minecraft.client.Minecraft;
+
+import org.lwjgl.opengl.GL11;
 
 /**
  * The default tile entity renderer implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -54,8 +53,8 @@ public class DefaultTileRenderer extends LCTileRenderer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor3f(1.0f, 0.0f, 0.0f);
 
-		float a0 = (float) (180.0f - Minecraft.getMinecraft().thePlayer.rotationYaw) % 360.0f;
-		float a1 = (float) (-Minecraft.getMinecraft().thePlayer.rotationPitch) % 360.0f;
+		float a0 = (180.0f - Minecraft.getMinecraft().thePlayer.rotationYaw) % 360.0f;
+		float a1 = -Minecraft.getMinecraft().thePlayer.rotationPitch % 360.0f;
 
 		GL11.glTranslated(x + 0.5f, y, z + 0.5f);
 		GL11.glTranslated(0f, 0.5f, 0f);

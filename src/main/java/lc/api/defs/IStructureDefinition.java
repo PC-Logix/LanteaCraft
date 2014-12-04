@@ -16,14 +16,14 @@ public interface IStructureDefinition extends IGameDef {
 
 	/**
 	 * Get the name of the structure type
-	 * 
+	 *
 	 * @return The name of the structure type
 	 */
 	public abstract String getName();
 
 	/**
 	 * Get the class responsible for the structure generation
-	 * 
+	 *
 	 * @return The class responsible for the structure generation
 	 */
 	public abstract Class<? extends MapGenStructure> getStructureClass();

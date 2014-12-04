@@ -2,10 +2,12 @@ package lc.items;
 
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import lc.api.components.ComponentType;
+import lc.api.defs.Definition;
+import lc.api.rendering.IBlockSkinnable;
+import lc.common.base.LCItem;
+import lc.common.util.game.BlockHelper;
+import lc.core.ResourceAccess;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,16 +17,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import lc.api.components.ComponentType;
-import lc.api.defs.Definition;
-import lc.api.rendering.IBlockSkinnable;
-import lc.common.base.LCItem;
-import lc.common.util.game.BlockHelper;
-import lc.core.ResourceAccess;
+
+import org.lwjgl.input.Keyboard;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Decorator tool item implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -62,7 +63,7 @@ public class ItemDecorator extends LCItem {
 					if (blockStack != null)
 						block = Block.getBlockFromItem(blockStack.getItem());
 				}
-				int whatMetadata = (stack != null) ? stack.getItemDamage() : 0;
+				int whatMetadata = stack != null ? stack.getItemDamage() : 0;
 				((IBlockSkinnable) tile).setSkinBlock(block, whatMetadata);
 			}
 		}
@@ -81,9 +82,9 @@ public class ItemDecorator extends LCItem {
 				block = Block.getBlockFromItem(blockStack.getItem());
 		}
 
-		if (block != null) {
+		if (block != null)
 			strings.add("Block: " + block.getLocalizedName());
-		} else
+		else
 			strings.add("No block configured.");
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {

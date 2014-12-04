@@ -34,7 +34,7 @@ public class DefinitionWrapperProvider {
 		LCLog.debug("Attempting to provide definition for class %s.", clazz);
 		IContainerDefinition result = null;
 		Annotation[] annotations = clazz.getDeclaredAnnotations();
-		for (Annotation annotation : annotations) {
+		for (Annotation annotation : annotations)
 			if (annotation.annotationType().equals(Definition.class)) {
 				Definition definition = (Definition) annotation;
 				String name = definition.name();
@@ -59,7 +59,6 @@ public class DefinitionWrapperProvider {
 				} else
 					LCLog.warn("No valid definition found, ignoring.");
 			}
-		}
 		if (result != null)
 			LCRuntime.runtime.registries().definitions().addDefinition(result);
 		return result;

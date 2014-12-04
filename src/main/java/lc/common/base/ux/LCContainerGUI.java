@@ -134,7 +134,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Draw a set of framed symbols
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate
 	 * @param y
@@ -151,7 +151,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Draw an address string
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate
 	 * @param y
@@ -178,7 +178,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Bind a texture
-	 * 
+	 *
 	 * @param rsrc
 	 *            The texture path
 	 */
@@ -188,7 +188,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Bind a texture
-	 * 
+	 *
 	 * @param rsrc
 	 *            The texture path
 	 * @param usize
@@ -204,7 +204,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Draw a textured rectangle
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate
 	 * @param y
@@ -220,7 +220,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Draw a textured rectangle
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate
 	 * @param y
@@ -240,7 +240,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Draw a textured rectangle
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate
 	 * @param y
@@ -264,7 +264,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Draw an unscaled textured rectangle
-	 * 
+	 *
 	 * @param x
 	 *            The x-coordinate
 	 * @param y
@@ -295,7 +295,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Set the drawing color
-	 * 
+	 *
 	 * @param hex
 	 *            A hex color
 	 */
@@ -305,7 +305,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Set the drawing color
-	 * 
+	 *
 	 * @param r
 	 *            The red component
 	 * @param g
@@ -328,7 +328,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Draw a string
-	 * 
+	 *
 	 * @param s
 	 *            The string
 	 * @param x
@@ -342,7 +342,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Draw a centered string
-	 * 
+	 *
 	 * @param s
 	 *            The string
 	 * @param x
@@ -356,7 +356,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Draw an inventory name
-	 * 
+	 *
 	 * @param inv
 	 *            The inventory
 	 * @param x
@@ -377,7 +377,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Translate an inventory name
-	 * 
+	 *
 	 * @param inv
 	 *            The inventory
 	 * @return The inventory name
@@ -388,7 +388,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Translate the player's inventory name
-	 * 
+	 *
 	 * @return The player's inventory name
 	 */
 	public static String playerInventoryName() {

@@ -41,7 +41,7 @@ public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.BLOCK, block.getClass());
 		if (worker == null || !(worker instanceof LCBlockRenderer))
 			flag = false;
-		else {
+		else
 			try {
 				LCBlockRenderer blockRenderer = (LCBlockRenderer) worker;
 				while (blockRenderer != null && !blockRenderer.renderInventoryBlock(block, renderer, metadata)) {
@@ -56,7 +56,6 @@ public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
 				LCLog.warn("Uncaught block rendering exception.", t);
 				flag = false;
 			}
-		}
 		if (!flag)
 			defaultBlockRenderer.renderInventoryBlock(block, renderer, metadata);
 	}

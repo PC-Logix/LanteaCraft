@@ -211,7 +211,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 		classReader.accept(classNode, 0);
 		List<AnnotationNode> annotations = classNode.visibleAnnotations;
 		if (annotations != null)
-			for (AnnotationNode annotation : annotations) {
+			for (AnnotationNode annotation : annotations)
 				if (annotation.desc.equals("Llc/api/drivers/DeviceDrivers$DriverProvider;")) {
 					LCLog.debug("Found definition driver class %s.", name);
 					driverImplCache.put(name, basicClass.clone());
@@ -301,7 +301,6 @@ public class DriverBindingTransformer implements IClassTransformer {
 						classInitializer.visitEnd();
 					}
 				}
-			}
 
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(writer);

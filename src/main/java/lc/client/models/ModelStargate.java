@@ -57,9 +57,8 @@ public class ModelStargate {
 			cos[i] = Math.cos(a);
 		}
 
-		for (int i = 0; i < numChevrons; i++) {
-			chevronRotations[i] = (i * chevronAngle) - chevronAngleOffset;
-		}
+		for (int i = 0; i < numChevrons; i++)
+			chevronRotations[i] = i * chevronAngle - chevronAngleOffset;
 	}
 
 	/** Display buffer for outer shell */
@@ -103,7 +102,7 @@ public class ModelStargate {
 
 	/**
 	 * Render the model
-	 * 
+	 *
 	 * @param renderer
 	 *            The root renderer
 	 * @param tesr

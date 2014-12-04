@@ -28,7 +28,7 @@ public class LCAPI {
 	 * been loaded by FML, this will return the current API runtime access
 	 * instance. If LanteaCraft has not been loaded, this will return null.
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * <b>Do not use reflection or other methods to access the runtime instance
 	 * of the mod.</b>

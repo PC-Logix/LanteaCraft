@@ -42,7 +42,7 @@ public class VersionHelper extends Thread {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param query
 	 *            The query key set
 	 */

@@ -1,17 +1,17 @@
 package lc.common.util.game;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * World proxy class. Allows worlds to behave differently to default (ie, return
  * fake blocks, etc).
- * 
+ *
  * @author AfterLifeLochie
  */
 public class WorldProxy implements IBlockAccess {
@@ -22,7 +22,7 @@ public class WorldProxy implements IBlockAccess {
 
 	/**
 	 * Create a new world proxy
-	 * 
+	 *
 	 * @param world
 	 *            The IBlockAccess world
 	 * @param meta
@@ -35,7 +35,7 @@ public class WorldProxy implements IBlockAccess {
 
 	/**
 	 * Create a new world proxy
-	 * 
+	 *
 	 * @param world
 	 *            The IBlockAccess world
 	 * @param meta

@@ -9,7 +9,7 @@ import net.minecraft.world.gen.structure.StructureStart;
 
 /**
  * LanteaCraft scattered feature start
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -22,7 +22,7 @@ public class LCScatteredFeatureStart extends StructureStart {
 
 	/**
 	 * Construct a new feature start.
-	 * 
+	 *
 	 * @param clazz
 	 *            The feature component class
 	 * @param world

@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Crafting reagent item implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */
@@ -27,7 +27,7 @@ public class ItemCraftingReagent extends LCItem {
 
 	/**
 	 * Enumeration of all reagent item types.
-	 * 
+	 *
 	 * @author AfterLifeLochie
 	 *
 	 */

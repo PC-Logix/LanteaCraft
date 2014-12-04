@@ -1,7 +1,5 @@
 package lc.client;
 
-import org.lwjgl.opengl.GL11;
-
 import lc.common.base.LCItemRenderer;
 import lc.common.util.game.BlockHelper;
 import net.minecraft.client.Minecraft;
@@ -12,9 +10,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 
+import org.lwjgl.opengl.GL11;
+
 /**
  * Decorator item tool renderer implementation.
- * 
+ *
  * @author AfterLifeLochie
  *
  */

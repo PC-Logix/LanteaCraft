@@ -92,11 +92,10 @@ public abstract class StructureConfiguration {
 			try {
 				int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
 				BlockFilter filter = mappings[cell];
-				if (!filter.matches(world, tile.floorX(), tile.floorY(), tile.floorZ())) {
+				if (!filter.matches(world, tile.floorX(), tile.floorY(), tile.floorZ()))
 					// LCLog.info("Failed match on %s at %s %s %s", filter,
 					// tile.floorX(), tile.floorY(), tile.floorZ());
 					return false;
-				}
 			} catch (IndexOutOfBoundsException bounds) {
 				// LCLog.fatal("Access out of bounds: " + bounds.getMessage() +
 				// ": " + String.format("%s %s %s", mapping.floorX(),

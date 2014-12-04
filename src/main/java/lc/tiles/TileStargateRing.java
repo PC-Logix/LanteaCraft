@@ -65,7 +65,7 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
 		super.thinkPacket(packet, player);
-		if (packet instanceof LCTileSync) {
+		if (packet instanceof LCTileSync)
 			if (getWorldObj().isRemote) {
 				boolean flag = false;
 				if (compound != null && compound.hasKey("skin-block")) {
@@ -82,7 +82,6 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 					clientSkinBlockMetadata = 0;
 				}
 			}
-		}
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public interface ILCAPIProxy {
 
 	/**
 	 * Get the current LanteaCraft build and runtime information.
-	 * 
+	 *
 	 * @return The current LanteaCraft build and runtime information proxy.
 	 */
 	public IModInfo info();
