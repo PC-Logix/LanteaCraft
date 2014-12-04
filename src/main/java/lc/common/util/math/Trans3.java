@@ -100,23 +100,63 @@ public class Trans3 {
 		return new Trans3(offset, rotation, scaling * s);
 	}
 
+	/**
+	 * Rotate on side i
+	 * 
+	 * @param i
+	 *            The side
+	 * @return The rotation matrix
+	 */
 	public Trans3 side(int i) {
 		return rotate(Matrix3.sideRotations[i]);
 	}
 
+	/**
+	 * Turn on side i
+	 * 
+	 * @param i
+	 *            The side
+	 * @return The rotation matrix
+	 */
 	public Trans3 turn(int i) {
 		return rotate(Matrix3.turnRotations[i]);
 	}
 
+	/**
+	 * Apply all transformations
+	 * 
+	 * @param t
+	 *            The input trans
+	 * @return The result trans
+	 */
 	public Trans3 t(Trans3 t) {
 		return new Trans3(offset.add(rotation.mul(t.offset).mul(scaling)), rotation.mul(t.rotation), scaling
 				* t.scaling);
 	}
 
+	/**
+	 * Create a new Vector3 from an xyz coordinate pair
+	 * 
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 * @return The resultant Vector3
+	 */
 	public Vector3 p(double x, double y, double z) {
 		return p(new Vector3(x, y, z));
 	}
 
+	/**
+	 * Apply the offset, rotation and scaling of this Translation to the Vector
+	 * provided.
+	 * 
+	 * @param u
+	 *            The input Vector2
+	 * @return The resultant Vector3
+	 */
 	public Vector3 p(Vector3 u) {
 		return offset.add(rotation.mul(u.mul(scaling)));
 	}

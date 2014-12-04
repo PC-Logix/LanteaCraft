@@ -10,12 +10,23 @@ import lc.core.ResourceAccess;
 import lc.tiles.TileStargateBase;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Stargate base tile renderer.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class TileStargateBaseRenderer extends LCTileRenderer {
 
+	/** The frame texture resource */
 	public final ResourceLocation texFrame;
+	/** The glyph texture resource */
 	public final ResourceLocation texGlyphs;
+
+	/** The Stargate model */
 	public final ModelStargate model;
 
+	/** Default constructor */
 	public TileStargateBaseRenderer() {
 		texFrame = ResourceAccess.getNamedResource(ResourceAccess
 				.formatResourceName("textures/tileentity/stargate_${TEX_QUALITY}.png"));

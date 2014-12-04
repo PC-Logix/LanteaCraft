@@ -29,6 +29,7 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 	private Block clientSkinBlock;
 	private int clientSkinBlockMetadata;
 
+	/** Default constructor */
 	public TileStargateRing() {
 		setSlave(true);
 	}

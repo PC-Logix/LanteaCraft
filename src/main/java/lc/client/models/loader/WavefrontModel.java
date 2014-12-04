@@ -73,7 +73,12 @@ public class WavefrontModel {
 	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
 	 */
 	public static class Vertex {
-		public float x, y, z;
+		/** The x-coordinate of the vertex */
+		public float x;
+		/** The y-coordinate of the vertex */
+		public float y;
+		/** The z-coordinate of the vertex */
+		public float z;
 
 		/**
 		 * @param x
@@ -106,7 +111,12 @@ public class WavefrontModel {
 	 * @author AfterLifeLochie, LexManos, AbrarSyed, pahimar
 	 */
 	public static class TextureCoord {
-		public float u, v, w;
+		/** The u-coordinate of the texture coordinate */
+		public float u;
+		/** The v-coordinate of the texture coordinate */
+		public float v;
+		/** The w-coordinate of the texture coordinate */
+		public float w;
 
 		/**
 		 * @param u

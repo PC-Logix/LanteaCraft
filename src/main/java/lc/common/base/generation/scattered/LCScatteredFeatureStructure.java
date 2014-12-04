@@ -6,6 +6,12 @@ import lc.generation.LanteaSurfaceStargate;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
+/**
+ * LanteaCraft scattered feature structure implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class LCScatteredFeatureStructure extends MapGenStructure {
 
 	private int maxStructDensity = 32;

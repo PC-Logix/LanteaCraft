@@ -17,38 +17,38 @@ import org.lwjgl.opengl.GL11;
  */
 public class ModelStargate {
 
-	public final static int numRingSegments = 38;
-	public final static double ringSymbolAngle = 360.0 / 38;
-	public final static double ringSymbolTextureLength = 38 * 8;
-	public final static double ringSymbolTextureHeight = 12;
-	public final static double ringSymbolSegmentWidth = ringSymbolTextureLength / numRingSegments;
+	private final static int numRingSegments = 38;
+	private final static double ringSymbolAngle = 360.0 / 38;
+	private final static double ringSymbolTextureLength = 38 * 8;
+	private final static double ringSymbolTextureHeight = 12;
+	private final static double ringSymbolSegmentWidth = ringSymbolTextureLength / numRingSegments;
 
-	public final static double ringInnerRadius = 3.0;
-	public final static double ringInnerMovingRadius = ringInnerRadius + 0.1;
-	public final static double ringOuterRadius = 3.5;
-	public final static double ringMidRadius = ringInnerMovingRadius + (ringOuterRadius - ringInnerMovingRadius) / 2;
+	private final static double ringInnerRadius = 3.0;
+	private final static double ringInnerMovingRadius = ringInnerRadius + 0.1;
+	private final static double ringOuterRadius = 3.5;
+	private final static double ringMidRadius = ringInnerMovingRadius + (ringOuterRadius - ringInnerMovingRadius) / 2;
 
-	public final static double ringDepth = 0.15;
-	public final static int numChevrons = 9;
-	public final static double chevronInnerRadius = ringMidRadius;
-	public final static double chevronOuterRadius = ringOuterRadius + 1 / 16.0;
-	public final static double chevronWidth = 0.5;
-	public final static double chevronDepth = 0.0625d;
-	public final static double chevronBorderWidth = chevronWidth / 6;
-	public final static double chevronMotionDistance = 1 / 16.0d;
-	public final static double chevronAngle = 360.0 / numChevrons;
-	public final static double chevronAngleOffset = -90.0 + chevronWidth;
+	private final static double ringDepth = 0.15;
+	private final static int numChevrons = 9;
+	private final static double chevronInnerRadius = ringMidRadius;
+	private final static double chevronOuterRadius = ringOuterRadius + 1 / 16.0;
+	private final static double chevronWidth = 0.5;
+	private final static double chevronDepth = 0.0625d;
+	private final static double chevronBorderWidth = chevronWidth / 6;
+	private final static double chevronMotionDistance = 1 / 16.0d;
+	private final static double chevronAngle = 360.0 / numChevrons;
+	private final static double chevronAngleOffset = -90.0 + chevronWidth;
 
-	public final static int ringFaceTextureIndex = 0x14;
-	public final static int ringTextureIndex = 0x15;
-	public final static int ringSymbolTextureIndex = 0x20;
-	public final static int chevronTextureIndex = 0x05;
-	public final static int chevronLitTextureIndex = 0x16;
+	private final static int ringFaceTextureIndex = 0x14;
+	private final static int ringTextureIndex = 0x15;
+	private final static int ringSymbolTextureIndex = 0x20;
+	private final static int chevronTextureIndex = 0x05;
+	private final static int chevronLitTextureIndex = 0x16;
 
-	public static double sin[] = new double[numRingSegments + 1];
-	public static double cos[] = new double[numRingSegments + 1];
+	private static double sin[] = new double[numRingSegments + 1];
+	private static double cos[] = new double[numRingSegments + 1];
 
-	public static double chevronRotations[] = new double[numChevrons + 1];
+	private static double chevronRotations[] = new double[numChevrons + 1];
 
 	static {
 		for (int i = 0; i <= numRingSegments; i++) {
@@ -201,7 +201,7 @@ public class ModelStargate {
 		GL11.glEnd();
 	}
 
-	public void renderChevronImmediate(boolean lit) {
+	private void renderChevronImmediate(boolean lit) {
 		double r1 = chevronInnerRadius - 1d / 18d;
 		double r2 = chevronOuterRadius;
 		double z2 = ringDepth - 1d / 32d;

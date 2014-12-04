@@ -12,6 +12,12 @@ import lc.common.LCLog;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
+/**
+ * Simple recipe container implmenetation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class SimpleRecipeDefinition implements IRecipeDefinition {
 
 	private String name;
@@ -24,6 +30,21 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 	private HashMap<Integer, ItemStack> stackOutputs;
 	private HashMap<Integer, Boolean> use;
 
+	/**
+	 * Create a new simple recipe with n number of unique input types and an
+	 * output type.
+	 * 
+	 * @param name
+	 *            The name of the recipe
+	 * @param type
+	 *            The type of the recipe
+	 * @param output
+	 *            The output result of the recipe
+	 * @param grid
+	 *            The crafting grid layout (0 - n)
+	 * @param inputs
+	 *            The list of inputs (0 - n)
+	 */
 	public SimpleRecipeDefinition(String name, RecipeType type, Object output, String grid, Object... inputs) {
 		this.name = name;
 		this.type = type;

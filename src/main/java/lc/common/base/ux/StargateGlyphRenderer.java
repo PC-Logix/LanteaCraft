@@ -5,10 +5,34 @@ import lc.core.ResourceAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 
+/**
+ * Stargate glyph renderer helper
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class StargateGlyphRenderer {
 
 	private static double uscale, vscale;
 
+	/**
+	 * Draw an address on screen
+	 * 
+	 * @param mc
+	 *            The game
+	 * @param address
+	 *            The address
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param length
+	 *            The length of the string
+	 * @param scale
+	 *            The scale to render at
+	 * @param zLevel
+	 *            The z-depth
+	 */
 	public static void drawAddress(Minecraft mc, String address, int x, int y, int length, int scale, float zLevel) {
 		bindSGTexture(mc, "symbols.png", 512 / scale, 320 / scale);
 		int paddingTop = 0, paddingLeft = 0;

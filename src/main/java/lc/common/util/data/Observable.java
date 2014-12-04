@@ -20,6 +20,12 @@ public class Observable {
 	 */
 	private volatile Observable parent;
 
+	/**
+	 * Create a new observer.
+	 * 
+	 * @param parent
+	 *            A parent or null.
+	 */
 	public Observable(Observable parent) {
 		this.parent = parent;
 	}
