@@ -14,7 +14,7 @@ import net.minecraft.world.gen.structure.StructureStart;
  * @author AfterLifeLochie
  *
  */
-public class LCFeatureStart extends StructureStart {
+public final class LCFeatureStart extends StructureStart {
 	/** Default constructor */
 	public LCFeatureStart() {
 	}

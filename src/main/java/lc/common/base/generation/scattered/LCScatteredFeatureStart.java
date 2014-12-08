@@ -14,7 +14,7 @@ import net.minecraft.world.gen.structure.StructureStart;
  * @author AfterLifeLochie
  *
  */
-public class LCScatteredFeatureStart extends StructureStart {
+public final class LCScatteredFeatureStart extends StructureStart {
 
 	/** Default constructor. */
 	public LCScatteredFeatureStart() {

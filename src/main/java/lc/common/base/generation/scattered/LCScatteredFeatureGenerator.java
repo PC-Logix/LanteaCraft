@@ -12,7 +12,7 @@ import net.minecraft.world.gen.structure.StructureStart;
  * @author AfterLifeLochie
  *
  */
-public class LCScatteredFeatureGenerator extends MapGenStructure {
+public final class LCScatteredFeatureGenerator extends MapGenStructure {
 
 	private int maxStructDensity = 32;
 	private int minStructDensity = 8;

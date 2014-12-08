@@ -4,7 +4,8 @@
  */
 package lc.api.defs;
 
-import net.minecraft.world.gen.structure.MapGenStructure;
+import net.minecraft.world.gen.structure.StructureStart;
+
 
 /**
  * Game world-generation structure container interface
@@ -26,6 +27,6 @@ public interface IStructureDefinition extends IGameDef {
 	 *
 	 * @return The class responsible for the structure generation
 	 */
-	public abstract Class<? extends MapGenStructure> getStructureClass();
+	public abstract Class<? extends StructureStart> getStructureClass();
 
 }

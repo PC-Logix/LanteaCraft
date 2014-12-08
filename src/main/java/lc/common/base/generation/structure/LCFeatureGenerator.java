@@ -15,7 +15,7 @@ import net.minecraft.world.gen.structure.StructureStart;
  * @author AfterLifeLochie
  *
  */
-public class LCFeatureGenerator extends MapGenStructure {
+public final class LCFeatureGenerator extends MapGenStructure {
 	private int maxDistanceBetweenScatteredFeatures;
 	private int minDistanceBetweenScatteredFeatures;
 
