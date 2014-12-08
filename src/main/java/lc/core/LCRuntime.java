@@ -45,7 +45,7 @@ public class LCRuntime implements ILCAPIProxy {
 	private Recipes recipes = new Recipes();
 
 	/** Container of all registrations */
-	private RegistrationContainer container = new RegistrationContainer();
+	private LCInit container = new LCInit();
 	/** Network driver */
 	private LCPacketPipeline network = new LCPacketPipeline();
 

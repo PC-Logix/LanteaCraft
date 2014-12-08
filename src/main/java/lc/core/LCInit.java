@@ -32,7 +32,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  * @author AfterLifeLochie
  *
  */
-public class RegistrationContainer {
+public class LCInit {
 
 	/**
 	 * Called during pre-initialization
