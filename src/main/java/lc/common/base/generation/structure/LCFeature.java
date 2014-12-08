@@ -8,12 +8,13 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 /**
- * LanteaCraft scattered feature component.
+ * LanteaCraft feature stub class. Used for the creation of structures using
+ * addComponentParts.
  *
  * @author AfterLifeLochie
  *
  */
-public abstract class LCFeatureComponent extends StructureComponent {
+public abstract class LCFeature extends StructureComponent {
 	/** The size of the bounding box for this feature in the X axis */
 	protected int scatteredFeatureSizeX;
 	/** The size of the bounding box for this feature in the Y axis */
@@ -24,7 +25,7 @@ public abstract class LCFeatureComponent extends StructureComponent {
 	protected int hPos = -1;
 
 	/** Default constructor */
-	public LCFeatureComponent() {
+	public LCFeature() {
 	}
 
 	/**
@@ -45,7 +46,7 @@ public abstract class LCFeatureComponent extends StructureComponent {
 	 * @param sz
 	 *            The size on the z-axis
 	 */
-	protected LCFeatureComponent(Random rng, int x, int y, int z, int sx, int sy, int sz) {
+	protected LCFeature(Random rng, int x, int y, int z, int sx, int sy, int sz) {
 		super(0);
 		scatteredFeatureSizeX = sx;
 		scatteredFeatureSizeY = sy;

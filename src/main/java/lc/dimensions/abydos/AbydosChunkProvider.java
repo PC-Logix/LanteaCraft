@@ -3,7 +3,7 @@ package lc.dimensions.abydos;
 import java.util.List;
 import java.util.Random;
 
-import lc.common.base.generation.structure.LCFeatureStructure;
+import lc.common.base.generation.structure.LCFeatureGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -33,7 +33,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 	private NoiseGeneratorOctaves ng1, ng2, ng3, ng6;
 	private NoiseGeneratorPerlin ngp4;
 	private BiomeGenBase biomeForGeneration;
-	private LCFeatureStructure structureController;
+	private LCFeatureGenerator structureController;
 	private World worldObj;
 
 	private double[] stoneNoise = new double[256];
@@ -60,7 +60,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 		field_147434_q = new double[825];
 		parabolicField = new float[25];
 		biomeForGeneration = biome;
-		structureController = new LCFeatureStructure();
+		structureController = new LCFeatureGenerator();
 
 		for (int j = -2; j <= 2; ++j)
 			for (int k = -2; k <= 2; ++k) {

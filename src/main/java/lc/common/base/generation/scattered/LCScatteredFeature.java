@@ -8,14 +8,15 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 /**
- * LanteaCraft scattered feature generation stub.
+ * LanteaCraft scattered feature stub class. Used for the creation of scattered
+ * structures using addComponentParts.
  *
  * @author AfterLifeLochie
  */
-public abstract class LCScatteredFeatureComponent extends StructureComponent {
+public abstract class LCScatteredFeature extends StructureComponent {
 
 	/** Default constructor. */
-	public LCScatteredFeatureComponent() {
+	public LCScatteredFeature() {
 	}
 
 	/**

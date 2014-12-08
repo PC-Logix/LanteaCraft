@@ -2,7 +2,7 @@ package lc.generation;
 
 import java.util.Random;
 
-import lc.common.base.generation.structure.LCFeatureComponent;
+import lc.common.base.generation.structure.LCFeature;
 import lc.core.LCRuntime;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,7 +15,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
  * @author AfterLifeLochie
  *
  */
-public class AbydosPyramid extends LCFeatureComponent {
+public class AbydosPyramid extends LCFeature {
 
 	/** Default constructor */
 	public AbydosPyramid() {

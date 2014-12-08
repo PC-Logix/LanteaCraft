@@ -2,7 +2,7 @@ package lc.generation;
 
 import java.util.Random;
 
-import lc.common.base.generation.scattered.LCScatteredFeatureComponent;
+import lc.common.base.generation.scattered.LCScatteredFeature;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -13,7 +13,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
  * @author AfterLifeLochie
  *
  */
-public class LanteaSurfaceStargate extends LCScatteredFeatureComponent {
+public class LanteaSurfaceStargate extends LCScatteredFeature {
 
 	@Override
 	protected void func_143012_a(NBTTagCompound nbttagcompound) {

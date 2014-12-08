@@ -7,12 +7,12 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
 /**
- * LanteaCraft scattered feature structure implementation.
+ * LanteaCraft scattered feature map generator class.
  *
  * @author AfterLifeLochie
  *
  */
-public class LCScatteredFeatureStructure extends MapGenStructure {
+public class LCScatteredFeatureGenerator extends MapGenStructure {
 
 	private int maxStructDensity = 32;
 	private int minStructDensity = 8;

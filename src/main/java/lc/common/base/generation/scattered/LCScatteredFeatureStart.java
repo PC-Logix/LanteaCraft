@@ -8,7 +8,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureStart;
 
 /**
- * LanteaCraft scattered feature start
+ * LanteaCraft scattered feature start. You should create and generate
+ * components here.
  *
  * @author AfterLifeLochie
  *
@@ -35,13 +36,13 @@ public class LCScatteredFeatureStart extends StructureStart {
 	 *            The chunk z-coordinate
 	 */
 	@SuppressWarnings("unchecked")
-	public LCScatteredFeatureStart(Class<? extends LCScatteredFeatureComponent> clazz, World world, Random rng,
-			int chunkX, int chunkZ) {
+	public LCScatteredFeatureStart(Class<? extends LCScatteredFeature> clazz, World world, Random rng, int chunkX,
+			int chunkZ) {
 
-		Constructor<? extends LCScatteredFeatureComponent> ctr;
+		Constructor<? extends LCScatteredFeature> ctr;
 		try {
 			ctr = clazz.getConstructor(new Class<?>[] { Random.class, Integer.class, Integer.class });
-			LCScatteredFeatureComponent feature = ctr.newInstance(rng, chunkX, chunkZ);
+			LCScatteredFeature feature = ctr.newInstance(rng, chunkX, chunkZ);
 			components.add(feature);
 		} catch (Throwable e) {
 			LCLog.warn("Could not add LanteaScatteredFeature.", e);

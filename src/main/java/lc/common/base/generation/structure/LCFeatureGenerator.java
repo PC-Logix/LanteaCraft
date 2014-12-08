@@ -10,17 +10,17 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
 /**
- * LanteaCraft feature structure implementation.
+ * LanteaCraft feature map generator class.
  *
  * @author AfterLifeLochie
  *
  */
-public class LCFeatureStructure extends MapGenStructure {
+public class LCFeatureGenerator extends MapGenStructure {
 	private int maxDistanceBetweenScatteredFeatures;
 	private int minDistanceBetweenScatteredFeatures;
 
 	/** Default constructor */
-	public LCFeatureStructure() {
+	public LCFeatureGenerator() {
 		maxDistanceBetweenScatteredFeatures = 32;
 		minDistanceBetweenScatteredFeatures = 8;
 	}
@@ -32,7 +32,7 @@ public class LCFeatureStructure extends MapGenStructure {
 	 *            The parameters
 	 */
 	@SuppressWarnings("rawtypes")
-	public LCFeatureStructure(Map params) {
+	public LCFeatureGenerator(Map params) {
 		this();
 		Iterator i = params.entrySet().iterator();
 		while (i.hasNext()) {
