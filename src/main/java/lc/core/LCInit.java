@@ -5,6 +5,7 @@ import lc.api.defs.IDefinitionReference;
 import lc.api.init.Blocks;
 import lc.api.init.Items;
 import lc.api.init.Recipes;
+import lc.api.init.Structures;
 import lc.api.world.OreType;
 import lc.blocks.BlockDecorative;
 import lc.blocks.BlockLanteaAlloy;
@@ -15,6 +16,9 @@ import lc.common.impl.registry.DefinitionReference;
 import lc.common.impl.registry.DefinitionWrapperProvider;
 import lc.common.impl.registry.RecipeProxy;
 import lc.common.impl.registry.SimpleRecipeDefinition;
+import lc.common.impl.registry.StructureDefinition;
+import lc.generation.AbydosPyramid;
+import lc.generation.AbydosPyramid.AbydosPyramidFeature;
 import lc.items.ItemCraftingReagent;
 import lc.items.ItemDecorator;
 import lc.items.ItemGlasses;
@@ -58,6 +62,7 @@ public class LCInit {
 		Blocks blocks = runtime.blocks();
 		Items items = runtime.items();
 		Recipes recipes = runtime.recipes();
+		Structures structures = runtime.structures();
 
 		blocks.stargateRingBlock = DefinitionWrapperProvider.provide(BlockStargateRing.class);
 		blocks.stargateBaseBlock = DefinitionWrapperProvider.provide(BlockStargateBase.class);
@@ -126,6 +131,10 @@ public class LCInit {
 				triniumIngot.copy().push(0, 9), "0", triniumAlloyBlock);
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyBlock);
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyToIngots);
+
+		structures.scatteredAbydosPyramid = new StructureDefinition("AbydosPyramid", AbydosPyramid.class).addComp(
+				"AbydosPyramid", AbydosPyramidFeature.class);
+		runtime.registries().structures().register(structures.scatteredAbydosPyramid);
 
 	}
 

@@ -4,6 +4,7 @@ import lc.api.components.IComponentRegistry;
 import lc.api.components.IDefinitionRegistry;
 import lc.api.components.IRecipeRegistry;
 import lc.api.components.IRegistryContainer;
+import lc.api.components.IStructureRegistry;
 
 /**
  * Registry container implementation.
@@ -16,6 +17,7 @@ public class RegistryContainer implements IRegistryContainer {
 	private ComponentRegistry components = new ComponentRegistry();
 	private DefinitionRegistry definitions = new DefinitionRegistry();
 	private RecipeRegistry recipes = new RecipeRegistry();
+	private StructureRegistry structures = new StructureRegistry();
 
 	@Override
 	public IComponentRegistry components() {
@@ -30,6 +32,11 @@ public class RegistryContainer implements IRegistryContainer {
 	@Override
 	public IRecipeRegistry recipes() {
 		return recipes;
+	}
+
+	@Override
+	public IStructureRegistry structures() {
+		return structures;
 	}
 
 }

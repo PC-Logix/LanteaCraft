@@ -1,7 +1,11 @@
 package lc.common.impl.registry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
+import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 import lc.api.defs.IDefinitionReference;
@@ -17,7 +21,7 @@ public class StructureDefinition implements IStructureDefinition {
 
 	private final String name;
 	private final Class<? extends StructureStart> startClazz;
-	private final ArrayList<Class<? extends StructureComponent>> components;
+	private final HashMap<String, Class<? extends StructureComponent>> components;
 
 	/**
 	 * Default constructor
@@ -30,7 +34,7 @@ public class StructureDefinition implements IStructureDefinition {
 	public StructureDefinition(String name, Class<? extends StructureStart> startClazz) {
 		this.name = name;
 		this.startClazz = startClazz;
-		this.components = new ArrayList<Class<? extends StructureComponent>>();
+		this.components = new HashMap<String, Class<? extends StructureComponent>>();
 	}
 
 	/**
@@ -40,9 +44,8 @@ public class StructureDefinition implements IStructureDefinition {
 	 *            The component type
 	 * @return The self definition
 	 */
-	public StructureDefinition addComp(Class<? extends StructureComponent> component) {
-		if (!components.contains(component))
-			components.add(component);
+	public StructureDefinition addComp(String name, Class<? extends StructureComponent> component) {
+		components.put(name, component);
 		return this;
 	}
 
@@ -62,8 +65,14 @@ public class StructureDefinition implements IStructureDefinition {
 	}
 
 	@Override
-	public Class<? extends StructureComponent>[] getAllComponents() {
-		return components.toArray(new Class[0]);
+	public Map<String, Class<? extends StructureComponent>> getAllComponents() {
+		return components;
+	}
+
+	@Override
+	public boolean canGenerateAt(World world, Random rng, int x, int z) {
+		world.getProviderName();
+		return false;
 	}
 
 }

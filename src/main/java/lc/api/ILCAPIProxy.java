@@ -10,6 +10,7 @@ import lc.api.init.Blocks;
 import lc.api.init.Dimensions;
 import lc.api.init.Items;
 import lc.api.init.Recipes;
+import lc.api.init.Structures;
 
 /**
  * API proxy interface
@@ -74,5 +75,12 @@ public interface ILCAPIProxy {
 	 * @return The list of recipes
 	 */
 	public Recipes recipes();
+
+	/**
+	 * Get the list of structures
+	 *
+	 * @return The list of structures
+	 */
+	public Structures structures();
 
 }

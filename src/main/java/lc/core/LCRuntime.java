@@ -9,6 +9,7 @@ import lc.api.init.Blocks;
 import lc.api.init.Dimensions;
 import lc.api.init.Items;
 import lc.api.init.Recipes;
+import lc.api.init.Structures;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionRegistry;
@@ -32,22 +33,24 @@ public class LCRuntime implements ILCAPIProxy {
 	public static final LCRuntime runtime = new LCRuntime();
 
 	/** The LC blocks container */
-	private Blocks blocks = new Blocks();
+	private final Blocks blocks = new Blocks();
 	/** The LC items container */
-	private Items items = new Items();
+	private final Items items = new Items();
 	/** Container of all API registries */
-	private RegistryContainer registries = new RegistryContainer();
+	private final RegistryContainer registries = new RegistryContainer();
 	/** The LC biomes container */
-	private Biomes biomes = new Biomes();
+	private final Biomes biomes = new Biomes();
 	/** The LC dimensions container */
-	private Dimensions dimensions = new Dimensions();
+	private final Dimensions dimensions = new Dimensions();
 	/** The LC recipes container */
-	private Recipes recipes = new Recipes();
+	private final Recipes recipes = new Recipes();
+	/** The LC structures container */
+	private final Structures structures = new Structures();
 
 	/** Container of all registrations */
-	private LCInit container = new LCInit();
+	private final LCInit container = new LCInit();
 	/** Network driver */
-	private LCPacketPipeline network = new LCPacketPipeline();
+	private final LCPacketPipeline network = new LCPacketPipeline();
 
 	/** Hints provider */
 	@HintProvider(serverClass = "lc.core.HintProviderServer", clientClass = "lc.core.HintProviderClient")
@@ -94,6 +97,11 @@ public class LCRuntime implements ILCAPIProxy {
 	@Override
 	public Recipes recipes() {
 		return recipes;
+	}
+
+	@Override
+	public Structures structures() {
+		return structures;
 	}
 
 	/**

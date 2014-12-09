@@ -27,4 +27,9 @@ public interface IRegistryContainer {
 	 */
 	public IRecipeRegistry recipes();
 
+	/**
+	 * @return The structure registry interface
+	 */
+	public IStructureRegistry structures();
+
 }

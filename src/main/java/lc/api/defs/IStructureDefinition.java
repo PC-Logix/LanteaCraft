@@ -4,6 +4,10 @@
  */
 package lc.api.defs;
 
+import java.util.Map;
+import java.util.Random;
+
+import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 
@@ -34,6 +38,21 @@ public interface IStructureDefinition extends IGameDef {
 	 * 
 	 * @return A list of all valid structure component classes
 	 */
-	public abstract Class<? extends StructureComponent>[] getAllComponents();
+	public abstract Map<String, Class<? extends StructureComponent>> getAllComponents();
+
+	/**
+	 * Ask the definition if generation is possible using this structure class
+	 * 
+	 * @param world
+	 *            The world to generate in
+	 * @param rng
+	 *            The random number generator
+	 * @param x
+	 *            The x-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 * @return If world generation is allowed at this coordinate
+	 */
+	public abstract boolean canGenerateAt(World world, Random rng, int x, int z);
 
 }

@@ -1,9 +1,7 @@
 package lc.common.base.generation.scattered;
 
-import java.lang.reflect.Constructor;
 import java.util.Random;
 
-import lc.common.LCLog;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureStart;
 
@@ -14,7 +12,7 @@ import net.minecraft.world.gen.structure.StructureStart;
  * @author AfterLifeLochie
  *
  */
-public final class LCScatteredFeatureStart extends StructureStart {
+public abstract class LCScatteredFeatureStart extends StructureStart {
 
 	/** Default constructor. */
 	public LCScatteredFeatureStart() {
@@ -24,8 +22,6 @@ public final class LCScatteredFeatureStart extends StructureStart {
 	/**
 	 * Construct a new feature start.
 	 *
-	 * @param clazz
-	 *            The feature component class
 	 * @param world
 	 *            The world object
 	 * @param rng
@@ -35,19 +31,10 @@ public final class LCScatteredFeatureStart extends StructureStart {
 	 * @param chunkZ
 	 *            The chunk z-coordinate
 	 */
-	@SuppressWarnings("unchecked")
-	public LCScatteredFeatureStart(Class<? extends LCScatteredFeature> clazz, World world, Random rng, int chunkX,
-			int chunkZ) {
-
-		Constructor<? extends LCScatteredFeature> ctr;
-		try {
-			ctr = clazz.getConstructor(new Class<?>[] { Random.class, Integer.class, Integer.class });
-			LCScatteredFeature feature = ctr.newInstance(rng, chunkX, chunkZ);
-			components.add(feature);
-		} catch (Throwable e) {
-			LCLog.warn("Could not add LanteaScatteredFeature.", e);
-		}
+	public LCScatteredFeatureStart(World world, Random rng, int chunkX, int chunkZ) {
+		addComponents(world, rng, chunkX, chunkZ);
 		updateBoundingBox();
 	}
 
+	protected abstract void addComponents(World world, Random rng, int cx, int cz);
 }

@@ -2,8 +2,6 @@ package lc.common.base.generation.structure;
 
 import java.util.Random;
 
-import lc.common.LCLog;
-import lc.generation.AbydosPyramid;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureStart;
 
@@ -14,7 +12,7 @@ import net.minecraft.world.gen.structure.StructureStart;
  * @author AfterLifeLochie
  *
  */
-public final class LCFeatureStart extends StructureStart {
+public abstract class LCFeatureStart extends StructureStart {
 	/** Default constructor */
 	public LCFeatureStart() {
 	}
@@ -33,13 +31,9 @@ public final class LCFeatureStart extends StructureStart {
 	 */
 	@SuppressWarnings("unchecked")
 	public LCFeatureStart(World world, Random rng, int chunkX, int chunkZ) {
-		/*
-		 * TODO: Need to make a way to make MapGenFeatureStructureStart abstract
-		 * to allow multiple types of generators!
-		 */
-		AbydosPyramid pyramid = new AbydosPyramid(rng, chunkX * 16, chunkZ * 16);
-		LCLog.info(String.format("Placing pyramid at (%s, %s)", chunkX * 16, chunkZ * 16));
-		components.add(pyramid);
+		addComponents(world, rng, chunkX, chunkZ);
 		updateBoundingBox();
 	}
+
+	protected abstract void addComponents(World world, Random rng, int cx, int cz);
 }
