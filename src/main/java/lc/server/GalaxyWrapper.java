@@ -1,5 +1,7 @@
 package lc.server;
 
+import java.util.ArrayList;
+
 import com.lanteacraft.astrodat.AddressBlock;
 import com.lanteacraft.astrodat.GalaxyFile;
 
@@ -20,8 +22,12 @@ public class GalaxyWrapper {
 					return block.address;
 		}
 		char[] alloc = manager.getFreeAddress();
-		if (alloc != null)
+		if (alloc != null) {
+			if (galaxy.addresses == null)
+				galaxy.addresses = new ArrayList<AddressBlock>();
+			galaxy.addresses.add(new AddressBlock(alloc, chunkX, chunkY));
 			return alloc;
+		}
 		return null;
 	}
 
