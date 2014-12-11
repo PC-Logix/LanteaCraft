@@ -2,8 +2,10 @@ package lc.common.base.ux;
 
 import java.util.HashMap;
 
+import lc.client.opengl.BufferTexture;
 import lc.common.base.LCContainer;
 import lc.core.ResourceAccess;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.Container;
@@ -23,11 +25,12 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	private HashMap<Integer, LCContainerTab> tabList;
 	private LCContainerTab activeTab;
+	
+	private BufferTexture tabVboBuffer;
 
 	double uscale, vscale;
 	float red = 1.0F, green = 1.0F, blue = 1.0F;
-	/** Texture color */
-	protected int textColor = defaultTextColor;
+	int textColor = defaultTextColor;
 	boolean textShadow = false;
 
 	/**
@@ -35,25 +38,10 @@ public abstract class LCContainerGUI extends GuiContainer {
 	 *
 	 * @param container
 	 *            The parent container
-	 * @param width
-	 *            The width
-	 * @param height
-	 *            The height
 	 */
-	public LCContainerGUI(Container container, int width, int height) {
+	public LCContainerGUI(Container container) {
 		super(container);
-		xSize = width;
-		ySize = height;
-	}
-
-	/**
-	 * Create a new container GUI
-	 *
-	 * @param container
-	 *            The parent container
-	 */
-	public LCContainerGUI(LCContainer container) {
-		this(container, container.xSize, container.ySize);
+		tabVboBuffer = new BufferTexture(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	}
 
 	/**
@@ -76,6 +64,8 @@ public abstract class LCContainerGUI extends GuiContainer {
 		if (activeTab != null)
 			activeTab.onTabClosed(this);
 		activeTab = nextTab;
+		this.width = activeTab.getTabDimensions().width;
+		this.height = activeTab.getTabDimensions().height;
 		activeTab.onTabOpened(this);
 	}
 

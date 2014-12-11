@@ -59,6 +59,31 @@ public class BufferTexture implements IGraphicsBuffer {
 		assigned = true;
 	}
 
+	/**
+	 * Resize the buffer texture. This will erase all content on the buffer.
+	 * 
+	 * @param width
+	 *            The new width to apply
+	 * @param height
+	 *            The new height to apply
+	 */
+	public void resize(int width, int height) {
+		if (!assigned)
+			throw new RuntimeException("Illegal state: cannot resize() while not assigned.");
+		if (this.width == width && this.height == height)
+			return;
+		this.width = width;
+		this.height = height;
+		EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, fbo);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_INT,
+				(java.nio.ByteBuffer) null);
+		EXTFramebufferObject.glBindRenderbufferEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT, depth);
+		EXTFramebufferObject.glRenderbufferStorageEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT,
+				ARBFramebufferObject.GL_DEPTH24_STENCIL8, width, height);
+		EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, 0);
+	}
+
 	@Override
 	public void enter() {
 		if (entered)
