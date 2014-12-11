@@ -135,7 +135,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				markNbtDirty();
 			}
 		} else {
-			if (compound != null)
+			if (compound == null)
 				compound = new NBTTagCompound();
 			compound.setString("skin-block", BlockHelper.saveBlock(block, metadata));
 			markNbtDirty();
