@@ -12,10 +12,10 @@ public class GalaxyWrapper {
 		this.manager = manager;
 		this.galaxy = galaxy;
 	}
-	
+
 	public char[] getAddressForChunk(int chunkX, int chunkY) {
 		if (galaxy.addresses != null && galaxy.addresses.size() != 0) {
-			for (AddressBlock block : galaxy.addresses) 
+			for (AddressBlock block : galaxy.addresses)
 				if (block.chunkx == chunkX && block.chunky == chunkY)
 					return block.address;
 		}
@@ -23,6 +23,18 @@ public class GalaxyWrapper {
 		if (alloc != null)
 			return alloc;
 		return null;
+	}
+
+	public boolean hasAddress(char[] next) {
+		if (galaxy.addresses != null && galaxy.addresses.size() != 0) {
+			main: for (AddressBlock block : galaxy.addresses) {
+				for (int i = 0; i < block.address.length; i++)
+					if (block.address[i] != next[i])
+						continue main;
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

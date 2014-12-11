@@ -3,8 +3,10 @@ package lc.server;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import lc.common.LCLog;
+import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.ImmutablePair;
 import lc.core.BuildInfo;
 import net.minecraft.world.WorldServer;
@@ -119,7 +121,7 @@ public class UniverseManager {
 		}
 		galaxy.name = load.world.getWorldInfo().getWorldName();
 		galaxies.put(load.world.provider.dimensionId, new ImmutablePair<File, GalaxyFile>(galFile, galaxy));
-		wrappers.put(load.world.provider.dimensionId, new GalaxyWrapper(galaxy));
+		wrappers.put(load.world.provider.dimensionId, new GalaxyWrapper(this, galaxy));
 	}
 
 	/**
@@ -167,8 +169,22 @@ public class UniverseManager {
 	}
 
 	public char[] getFreeAddress() {
-		// TODO Auto-generated method stub
-		return null;
+		Random rng = new Random();
+		StargateCharsetHelper helper = StargateCharsetHelper.singleton();
+		while (true) {
+			boolean flag = true;
+			char[] next = new char[9];
+			for (int i = 0; i < 9; i++)
+				next[i] = helper.index(rng.nextInt(helper.radixSize));
+			for (GalaxyWrapper wrapper : wrappers.values()) {
+				if (wrapper.hasAddress(next)) {
+					flag = false;
+					break;
+				}
+			}
+			if (flag)
+				return next;
+		}
 	}
 
 }
