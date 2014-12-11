@@ -54,9 +54,10 @@ public class BuildInfo implements IModInfo {
 	public static final boolean IS_SIGNED;
 
 	static {
-		$ = new BuildInfo().init();
+		$ = new BuildInfo();
 		IS_DEV_ENV = $.build() == 0;
 		IS_SIGNED = $.signed();
+		$.init();
 	}
 
 	private BuildInfo init() {
