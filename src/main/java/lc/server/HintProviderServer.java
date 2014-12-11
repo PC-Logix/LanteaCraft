@@ -1,5 +1,6 @@
 package lc.server;
 
+import net.minecraftforge.common.MinecraftForge;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
@@ -13,15 +14,18 @@ import lc.common.LCLog;
  */
 public class HintProviderServer implements IHintProvider {
 
+	/** The server hook bus */
+	private final ServerEventHooks serverHookBus;
+
 	/** Default constructor */
 	public HintProviderServer() {
 		LCLog.debug("HintProviderServer providing server-side hints");
+		this.serverHookBus = new ServerEventHooks();
 	}
 
 	@Override
 	public void preInit() {
-		// TODO Auto-generated method stub
-
+		MinecraftForge.EVENT_BUS.register(serverHookBus);
 	}
 
 	@Override
