@@ -4,8 +4,11 @@ import java.util.List;
 
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
+import lc.api.rendering.IBlockRenderInfo;
 import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
+import lc.common.base.LCTile;
+import lc.common.base.multiblock.MultiblockState;
 import lc.core.ResourceAccess;
 import lc.items.ItemBlockStargateRing;
 import lc.tiles.TileStargateRing;
@@ -15,6 +18,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * Stargate ring implementation.
@@ -39,6 +43,28 @@ public class BlockStargateRing extends LCBlock {
 	IIcon topAndBottomTexture[] = new IIcon[StargateType.count()];
 	/** Side textures */
 	IIcon sideTextures[][] = new IIcon[StargateType.count()][blockMask];
+
+	private static IBlockRenderInfo renderInfo = new IBlockRenderInfo() {
+		@Override
+		public boolean doWorldRender(IBlockAccess access, int data, int x, int y, int z) {
+			return true;
+		}
+
+		@Override
+		public boolean doProperty(String property, IBlockAccess access, int data, int x, int y, int z, boolean def) {
+			if (property.equalsIgnoreCase("noRender")) {
+				LCTile t = (LCTile) access.getTileEntity(x, y, z);
+				if (t != null && t instanceof TileStargateRing)
+					return ((TileStargateRing) t).getState() != MultiblockState.FORMED;
+			}
+			return def;
+		}
+
+		@Override
+		public boolean doInventoryRender(int data) {
+			return true;
+		}
+	};
 
 	/** Default constructor */
 	public BlockStargateRing() {
@@ -99,6 +125,11 @@ public class BlockStargateRing extends LCBlock {
 	 */
 	public int getBaseType(int metadata) {
 		return (int) Math.floor(metadata / blockMask);
+	}
+
+	@Override
+	public IBlockRenderInfo block() {
+		return BlockStargateRing.renderInfo;
 	}
 
 }

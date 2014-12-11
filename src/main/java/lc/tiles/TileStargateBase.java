@@ -10,12 +10,15 @@ import lc.common.base.multiblock.MultiblockState;
 import lc.common.base.multiblock.StructureConfiguration;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
+import lc.common.network.packets.LCTileSync;
+import lc.common.util.data.ImmutablePair;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.game.BlockHelper;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.core.LCRuntime;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -110,6 +113,27 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public void sendPackets(List<LCPacket> packets) throws LCNetworkException {
 		super.sendPackets(packets);
+	}
+
+	@Override
+	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
+		super.thinkPacket(packet, player);
+		if (packet instanceof LCTileSync)
+			if (getWorldObj().isRemote) {
+				boolean flag = false;
+				if (compound != null && compound.hasKey("skin-block")) {
+					ImmutablePair<Block, Integer> data = BlockHelper.loadBlock(compound.getString("skin-block"));
+					if (data.getA() != null) {
+						clientSkinBlock = data.getA();
+						clientSkinBlockMetadata = data.getB();
+						flag = true;
+					}
+				}
+				if (!flag) {
+					clientSkinBlock = null;
+					clientSkinBlockMetadata = 0;
+				}
+			}
 	}
 
 	@Override

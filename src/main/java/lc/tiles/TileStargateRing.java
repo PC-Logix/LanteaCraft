@@ -87,9 +87,7 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 		return new String[] {
 				String.format("Multiblock: %s", getState()),
 				String.format("Ghost block: %s", (clientSkinBlock != null) ? clientSkinBlock.getUnlocalizedName()
-						: "null"), String.format("Ghost metadata: %s", clientSkinBlockMetadata)
-
-		};
+						: "null"), String.format("Ghost metadata: %s", clientSkinBlockMetadata) };
 	}
 
 	@Override

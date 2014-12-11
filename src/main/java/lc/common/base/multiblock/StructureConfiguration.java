@@ -3,11 +3,13 @@ package lc.common.base.multiblock;
 import java.util.Iterator;
 import java.util.List;
 
+import lc.common.LCLog;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.math.Matrix3;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.common.util.math.VectorAABB;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 /**
@@ -74,36 +76,28 @@ public abstract class StructureConfiguration {
 	 * @return If the configuration is valid.
 	 */
 	public boolean test(World world, int x, int y, int z, Orientations orientation) {
-
 		BlockFilter[] mappings = getBlockMappings();
-		Vector3 origin = new Vector3(x, y, z).sub(getStructureCenter());
 		Matrix3 rotation = orientation.rotation();
-
+		Vector3 origin = new Vector3(x, y, z).sub(rotation.mul(getStructureCenter()));
 		VectorAABB box = VectorAABB.boxOf(origin, getStructureDimensions());
-		box = box.apply(Vector3.zero, rotation);
-
 		List<Vector3> elems = box.contents();
 		Iterator<Vector3> each = elems.iterator();
 		while (each.hasNext()) {
-			Vector3 me = each.next();
-			Vector3 tile = origin.add(me);
+			Vector3 mapping = each.next();
+			Vector3 tile = origin.add(rotation.mul(mapping));
 
-			Vector3 mapping = rotation.imul(me);
 			try {
 				int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
 				BlockFilter filter = mappings[cell];
 				if (!filter.matches(world, tile.floorX(), tile.floorY(), tile.floorZ()))
-					// LCLog.info("Failed match on %s at %s %s %s", filter,
-					// tile.floorX(), tile.floorY(), tile.floorZ());
 					return false;
 			} catch (IndexOutOfBoundsException bounds) {
-				// LCLog.fatal("Access out of bounds: " + bounds.getMessage() +
-				// ": " + String.format("%s %s %s", mapping.floorX(),
-				// mapping.floorY(), mapping.floorZ()));
+				LCLog.fatal("Access out of bounds: " + bounds.getMessage() + ": "
+						+ String.format("%s %s %s", mapping.floorX(), mapping.floorY(), mapping.floorZ()));
+				return false;
 			}
 		}
-		// LCLog.info("Items: " + elems.size());
-		return false;
+		return true;
 	}
 
 	/**
@@ -123,7 +117,27 @@ public abstract class StructureConfiguration {
 	 *            The owner tile
 	 */
 	public void apply(World world, int x, int y, int z, Orientations orientation, LCMultiblockTile owner) {
-		// FIXME
+		Vector3 ownerVec = (owner != null) ? new Vector3(owner) : null;
+		Matrix3 rotation = orientation.rotation();
+		Vector3 origin = new Vector3(x, y, z).sub(rotation.mul(getStructureCenter()));
+		VectorAABB box = VectorAABB.boxOf(origin, getStructureDimensions());
+		List<Vector3> elems = box.contents();
+		Iterator<Vector3> each = elems.iterator();
+		while (each.hasNext()) {
+			Vector3 mapping = each.next();
+			Vector3 tile = origin.add(rotation.mul(mapping));
+			try {
+				TileEntity wTile = world.getTileEntity(tile.floorX(), tile.floorY(), tile.floorZ());
+				if (wTile != null && wTile instanceof LCMultiblockTile) {
+					LCMultiblockTile multiTile = (LCMultiblockTile) wTile;
+					if (multiTile.isSlave())
+						multiTile.setOwner(ownerVec);
+				}
+			} catch (IndexOutOfBoundsException bounds) {
+				LCLog.fatal("Access out of bounds: " + bounds.getMessage() + ": "
+						+ String.format("%s %s %s", mapping.floorX(), mapping.floorY(), mapping.floorZ()));
+			}
+		}
 	}
 
 }

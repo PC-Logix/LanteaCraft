@@ -79,7 +79,8 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 				} else
 					flag = proxyRender.renderStandardBlock(skinBlock, x, y, z);
 				proxyRender.clearOverrideBlockTexture();
-			} else
+			} else if (info == null
+					|| info.doProperty("noRender", world, world.getBlockMetadata(x, y, z), x, y, z, true))
 				flag = renderDefaultWorldBlock(world, x, y, z, block, trans, renderer);
 		}
 		flag = postRenderInWorld(theBlock, info, world, renderer, flag, x, y, z);

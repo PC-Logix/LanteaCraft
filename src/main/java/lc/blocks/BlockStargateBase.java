@@ -7,9 +7,12 @@ import lc.api.defs.Definition;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
+import lc.common.base.LCTile;
+import lc.common.base.multiblock.MultiblockState;
 import lc.core.ResourceAccess;
 import lc.items.ItemBlockStargateBase;
 import lc.tiles.TileStargateBase;
+import lc.tiles.TileStargateRing;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,26 +32,26 @@ public class BlockStargateBase extends LCBlock {
 
 	private static final int blockCount = StargateType.count();
 
-	private static final IBlockRenderInfo renderInfo = new IBlockRenderInfo() {
-
+	private static IBlockRenderInfo renderInfo = new IBlockRenderInfo() {
 		@Override
 		public boolean doWorldRender(IBlockAccess access, int data, int x, int y, int z) {
-			// TODO Auto-generated method stub
-			return true;
-		}
-
-		@Override
-		public boolean doInventoryRender(int data) {
-			// TODO Auto-generated method stub
 			return true;
 		}
 
 		@Override
 		public boolean doProperty(String property, IBlockAccess access, int data, int x, int y, int z, boolean def) {
-			// TODO Auto-generated method stub
+			if (property.equalsIgnoreCase("noRender")) {
+				LCTile t = (LCTile) access.getTileEntity(x, y, z);
+				if (t != null && t instanceof TileStargateBase)
+					return ((TileStargateBase) t).getState() != MultiblockState.FORMED;
+			}
 			return def;
 		}
 
+		@Override
+		public boolean doInventoryRender(int data) {
+			return true;
+		}
 	};
 
 	/** Top and bottom texture map */
