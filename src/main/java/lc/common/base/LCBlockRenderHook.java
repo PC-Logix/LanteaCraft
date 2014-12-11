@@ -1,7 +1,7 @@
 package lc.common.base;
 
 import lc.api.defs.ILanteaCraftRenderer;
-import lc.client.DefaultBlockRenderer;
+import lc.client.render.DefaultBlockRenderer;
 import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.DefinitionRegistry.RendererType;

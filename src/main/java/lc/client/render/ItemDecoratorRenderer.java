@@ -1,4 +1,4 @@
-package lc.client;
+package lc.client.render;
 
 import lc.common.base.LCItemRenderer;
 import lc.common.util.data.ImmutablePair;

@@ -1,4 +1,4 @@
-package lc.client;
+package lc.client.render;
 
 import java.util.ArrayList;
 

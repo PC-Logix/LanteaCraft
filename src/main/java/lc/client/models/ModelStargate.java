@@ -1,8 +1,8 @@
 package lc.client.models;
 
 import static lc.client.opengl.GLHelper.pushTexVertex;
-import lc.client.TileStargateBaseRenderer;
 import lc.client.opengl.BufferDisplayList;
+import lc.client.render.TileStargateBaseRenderer;
 import lc.common.base.LCTileRenderHook;
 import lc.common.util.math.Orientations;
 import lc.tiles.TileStargateBase;

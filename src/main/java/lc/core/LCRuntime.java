@@ -53,7 +53,7 @@ public class LCRuntime implements ILCAPIProxy {
 	private final LCPacketPipeline network = new LCPacketPipeline();
 
 	/** Hints provider */
-	@HintProvider(serverClass = "lc.core.HintProviderServer", clientClass = "lc.core.HintProviderClient")
+	@HintProvider(serverClass = "lc.server.HintProviderServer", clientClass = "lc.client.HintProviderClient")
 	private IHintProvider hints;
 
 	private LCRuntime() {

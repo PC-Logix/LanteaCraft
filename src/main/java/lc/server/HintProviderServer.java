@@ -1,4 +1,4 @@
-package lc.core;
+package lc.server;
 
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;

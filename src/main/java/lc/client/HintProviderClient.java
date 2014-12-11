@@ -1,9 +1,9 @@
-package lc.core;
+package lc.client;
 
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
-import lc.client.ItemDecoratorRenderer;
-import lc.client.TileStargateBaseRenderer;
+import lc.client.render.ItemDecoratorRenderer;
+import lc.client.render.TileStargateBaseRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderHook;
@@ -12,7 +12,9 @@ import lc.common.base.LCItemRenderHook;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderHook;
 import lc.common.impl.registry.DefinitionRegistry;
+import lc.core.LCRuntime;
 import lc.items.ItemDecorator;
+import lc.server.HintProviderServer;
 import lc.tiles.TileStargateBase;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
