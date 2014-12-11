@@ -1,4 +1,4 @@
-package lc.client;
+package lc.client.render;
 
 import lc.client.models.ModelStargate;
 import lc.common.base.LCTile;

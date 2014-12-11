@@ -22,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -108,6 +109,18 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	public void thinkServer() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public boolean shouldRender() {
+		return true;
+	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		Vector3 dim = structure.getStructureDimensions();
+		Vector3 min = new Vector3(this).sub(dim), max = new Vector3(this).add(dim);
+		return Vector3.makeAABB(min, max);
 	}
 
 	@Override

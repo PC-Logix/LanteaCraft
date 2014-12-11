@@ -62,6 +62,11 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	@Override
+	public boolean shouldRender() {
+		return false;
+	}
+
+	@Override
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
 		super.thinkPacket(packet, player);
 		if (packet instanceof LCTileSync)

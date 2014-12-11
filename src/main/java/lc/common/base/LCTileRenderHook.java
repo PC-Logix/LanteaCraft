@@ -1,7 +1,7 @@
 package lc.common.base;
 
 import lc.api.defs.ILanteaCraftRenderer;
-import lc.client.DefaultTileRenderer;
+import lc.client.render.DefaultTileRenderer;
 import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.DefinitionRegistry.RendererType;
@@ -31,8 +31,10 @@ public class LCTileRenderHook extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTickTime) {
-		boolean flag = true;
 		LCTile lct = (LCTile) tile;
+		if (!lct.shouldRender())
+			return;
+		boolean flag = true;
 		ILanteaCraftRenderer worker = registry.getRendererFor(RendererType.TILE, lct.getClass());
 		if (worker == null && !(worker instanceof LCTileRenderer))
 			flag = false;

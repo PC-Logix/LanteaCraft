@@ -3,6 +3,7 @@ package lc.common.util.math;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -150,6 +151,19 @@ public class Vector3 {
 		if (!compound.hasKey("x") || !compound.hasKey("y") || !compound.hasKey("z"))
 			throw new IllegalArgumentException("Compound is not a packed Vector3!");
 		return new Vector3(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z"));
+	}
+
+	/**
+	 * Convert a vector pair to an AABB
+	 *
+	 * @param min
+	 *            The min vector
+	 * @param max
+	 *            The max vector
+	 * @return An AABB
+	 */
+	public static AxisAlignedBB makeAABB(Vector3 min, Vector3 max) {
+		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
 	/**

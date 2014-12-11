@@ -171,6 +171,13 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	}
 
 	/**
+	 * Called to ask if the tile entity should render. This result is cached.
+	 * 
+	 * @return If the tile entity should be rendered.
+	 */
+	public abstract boolean shouldRender();
+
+	/**
 	 * Called to request the save of any tile data to a provided NBT compound.
 	 *
 	 * @param compound
