@@ -1,5 +1,7 @@
 package lc.common;
 
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 
@@ -35,4 +37,8 @@ public interface IHintProvider {
 	 *            A recipe definition element
 	 */
 	public void provideHints(IRecipeDefinition definition);
+
+	public void onServerStarting(FMLServerStartingEvent event);
+
+	public void onServerStopping(FMLServerStoppingEvent event);
 }

@@ -9,6 +9,8 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.relauncher.FMLRelaunchLog;
 
 /**
@@ -75,6 +77,28 @@ public class LanteaCraft {
 	@Mod.EventHandler
 	public void postinit(FMLPostInitializationEvent event) {
 		LCRuntime.runtime.postinit(event);
+	}
+
+	/**
+	 * Handler for FML onServerStarting event
+	 * 
+	 * @param event
+	 *            An event
+	 */
+	@Mod.EventHandler
+	public void serverStarting(FMLServerStartingEvent event) {
+		LCRuntime.runtime.serverStarting(event);
+	}
+
+	/**
+	 * Handler for FML onServerStopping event
+	 * 
+	 * @param event
+	 *            An event
+	 */
+	@Mod.EventHandler
+	public void serverStopping(FMLServerStoppingEvent event) {
+		LCRuntime.runtime.serverStopping(event);
 	}
 
 }

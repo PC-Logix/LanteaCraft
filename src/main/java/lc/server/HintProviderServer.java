@@ -1,5 +1,8 @@
 package lc.server;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
@@ -25,6 +28,8 @@ public class HintProviderServer implements IHintProvider {
 
 	@Override
 	public void preInit() {
+		LCLog.debug("Providing base initialization helpers.");
+		FMLCommonHandler.instance().bus().register(serverHookBus);
 		MinecraftForge.EVENT_BUS.register(serverHookBus);
 	}
 
@@ -50,6 +55,16 @@ public class HintProviderServer implements IHintProvider {
 	public void provideHints(IRecipeDefinition definition) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onServerStarting(FMLServerStartingEvent event) {
+		serverHookBus.onServerStarting(event);
+	}
+
+	@Override
+	public void onServerStopping(FMLServerStoppingEvent event) {
+		serverHookBus.onServerStopping(event);
 	}
 
 }

@@ -20,6 +20,8 @@ import lc.common.util.LCCreativeTabManager;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
 /**
  * LanteaCraft main mod container
@@ -160,6 +162,22 @@ public class LCRuntime implements ILCAPIProxy {
 		LCLog.debug("LCRuntime entering phase postinit");
 		container.postinit(this, event);
 		hints.postInit();
+	}
+
+	/**
+	 * Called when a server is started
+	 * @param event The server.
+	 */
+	public void serverStarting(FMLServerStartingEvent event) {
+		hints.onServerStarting(event);
+	}
+
+	/**
+	 * Called when a server is stopped
+	 * @param event The server.
+	 */
+	public void serverStopping(FMLServerStoppingEvent event) {
+		hints.onServerStopping(event);
 	}
 
 }
