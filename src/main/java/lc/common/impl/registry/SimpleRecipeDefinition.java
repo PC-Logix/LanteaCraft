@@ -2,6 +2,7 @@ package lc.common.impl.registry;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import lc.api.components.RecipeType;
 import lc.api.defs.IContainerDefinition;
@@ -9,6 +10,7 @@ import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IGameDef;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
+import lc.core.BuildInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
@@ -66,12 +68,13 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 	@Override
 	public void evaluateRecipe() {
 		stackInputs = new HashMap<Integer, ItemStack>();
-		for (int i = 0; i < inputs.size(); i++) {
-			Object val = inputs.get(i);
-			if (!(val instanceof ItemStack))
-				stackInputs.put(i, resolve(val));
+		for (Entry<Integer, Object> entry : inputs.entrySet()) {
+			if (entry.getValue() == null)
+				continue;
+			else if (!(entry.getValue() instanceof ItemStack))
+				stackInputs.put(entry.getKey(), resolve(entry.getValue()));
 			else
-				stackInputs.put(i, (ItemStack) val);
+				stackInputs.put(entry.getKey(), (ItemStack) entry.getValue());
 		}
 
 		stackOutputs = new HashMap<Integer, ItemStack>();
@@ -155,6 +158,32 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 	@Override
 	public IDefinitionReference ref() {
 		return new DefinitionReference(this);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder def = new StringBuilder();
+		def.append(name).append(": {");
+		def.append(type).append(", ");
+
+		if (stackInputs == null) {
+			def.append("[");
+			for (Entry<Integer, Object> input : this.inputs.entrySet())
+				def.append(input.getKey()).append("=").append(input.getValue()).append(",");
+			def.append("] => [");
+			for (Entry<Integer, Object> outputs : this.outputs.entrySet())
+				def.append(outputs.getKey()).append("=").append(outputs.getValue()).append(",");
+			def.append("], UNRESOLVED }");
+		} else {
+			def.append("[");
+			for (Entry<Integer, ItemStack> input : this.stackInputs.entrySet())
+				def.append(input.getKey()).append("=").append(input.getValue()).append(",");
+			def.append("] => [");
+			for (Entry<Integer, ItemStack> outputs : this.stackOutputs.entrySet())
+				def.append(outputs.getKey()).append("=").append(outputs.getValue()).append(",");
+			def.append("], RESOLVED }");
+		}
+		return def.toString();
 	}
 
 }

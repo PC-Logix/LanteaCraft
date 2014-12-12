@@ -5,11 +5,12 @@ import java.util.HashMap;
 import net.minecraft.inventory.Container;
 import lc.common.base.ux.LCContainerGUI;
 import lc.common.base.ux.LCContainerTab;
+import lc.container.ContainerStargate;
 
 public class GUIStargate extends LCContainerGUI {
 
 	public GUIStargate() {
-		super(new ContainerStargate(width, height), width, height);
+		super(new ContainerStargate(0, 0));
 	}
 
 	@Override

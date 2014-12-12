@@ -1,5 +1,6 @@
 package lc.common.impl.registry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -70,11 +71,29 @@ public class RecipeRegistry implements IRecipeRegistry {
 				Map<Integer, ItemStack> in = definition.getInputStacks();
 				Map<Integer, ItemStack> out = definition.getOutputStacks();
 				if (out.size() != 1 || !out.containsKey(0))
-					LCLog.fatal("Bad recipe %s: expected 1 output stack for shapeless, got %s.", definition.getName(),
+					LCLog.fatal("Bad recipe %s: expected 1 output stack for shaped, got %s.", definition.getName(),
 							out.size());
-				CraftingManager.getInstance().addRecipe(out.get(0), "012", "345", "678", '0', in.get(0), '1',
-						in.get(1), '2', in.get(2), '3', in.get(3), '4', in.get(4), '5', in.get(5), '6', in.get(6), '7',
-						in.get(7), '8', in.get(8));
+
+				StringBuilder[] grid = new StringBuilder[3];
+				ArrayList<Object> qt = new ArrayList<Object>();
+				for (int i = 0; i < 3; i++) {
+					grid[i] = new StringBuilder();
+					for (int j = 0; j < 3; j++) {
+						int q = (3 * i) + j;
+						if (in.get(q) != null) {
+							grid[i].append(q);
+							qt.add(Integer.toString(q).charAt(0));
+							qt.add(in.get(q));
+						} else
+							grid[i].append(" ");
+					}
+				}
+				ArrayList<Object> varargs = new ArrayList<Object>();
+				varargs.add(grid[0].toString());
+				varargs.add(grid[1].toString());
+				varargs.add(grid[2].toString());
+				varargs.addAll(qt);
+				CraftingManager.getInstance().addRecipe(out.get(0), varargs.toArray());
 			} else if (type == RecipeType.SMELTING) {
 				Map<Integer, ItemStack> in = definition.getInputStacks();
 				if (in.size() != 1 || !in.containsKey(0))

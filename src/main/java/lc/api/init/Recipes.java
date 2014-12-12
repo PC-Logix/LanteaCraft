@@ -35,6 +35,8 @@ public class Recipes {
 	/** Stargate chevron crafting recipe */
 	public IRecipeDefinition stargateChevron;
 
+	/** Decorator crafting recipe */
+	public IRecipeDefinition decorCrafterRecipe;
 	/** Decorator setter recipe */
 	public IRecipeDefinition decorSetterRecipe;
 

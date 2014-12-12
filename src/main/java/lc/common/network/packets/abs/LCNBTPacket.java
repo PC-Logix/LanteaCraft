@@ -37,6 +37,8 @@ public abstract class LCNBTPacket extends LCTargetPacket {
 		short size = buffer.readShort();
 		if (size < 0)
 			return null;
+		if (size == 0)
+			return new NBTTagCompound();
 		byte[] bytes = new byte[size];
 		buffer.readBytes(bytes);
 		return CompressedStreamTools.func_152457_a(bytes, new NBTSizeTracker(2097152L));
@@ -56,6 +58,8 @@ public abstract class LCNBTPacket extends LCTargetPacket {
 	public void writeNBTTagCompoundToBuffer(ByteBuf buffer, NBTTagCompound tag) throws IOException {
 		if (tag == null)
 			buffer.writeShort(-1);
+		else if (tag.hasNoTags())
+			buffer.writeShort(0);
 		else {
 			byte[] bytes = CompressedStreamTools.compress(tag);
 			buffer.writeShort((short) bytes.length);

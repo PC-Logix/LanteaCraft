@@ -80,7 +80,7 @@ public abstract class LCMultiblockTile extends LCTile {
 			LCLog.fatal(new OperationNotSupportedException("Not allowed to setOwner on a master."));
 		else {
 			if (owner == null)
-				multiblockCompound.setTag("owner", null);
+				multiblockCompound.removeTag("owner");
 			else
 				multiblockCompound.setTag("owner", owner.toNBT());
 			markMultiblockDirty();

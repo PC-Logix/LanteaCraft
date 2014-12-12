@@ -98,6 +98,13 @@ public class LCInit {
 		ItemStack glowstone = new ItemStack(net.minecraft.init.Items.glowstone_dust, 1);
 		ItemStack enderPearl = new ItemStack(net.minecraft.init.Items.ender_pearl, 1);
 
+		IDefinitionReference decorator = items.lanteaDecoratorTool.ref();
+		ItemStack wool = new ItemStack(net.minecraft.init.Blocks.wool, 1);
+		ItemStack stick = new ItemStack(net.minecraft.init.Items.stick, 1);
+		recipes.decorCrafterRecipe = new SimpleRecipeDefinition("decorator", RecipeType.SHAPED, decorator, "000 1  1 ",
+				wool, stick);
+		runtime.registries().recipes().addRecipe(recipes.decorCrafterRecipe);
+
 		recipes.decorSetterRecipe = new RecipeProxy("decor_editor", RecipeType.PROXY, DecoratorSetterRecipe.class);
 		runtime.registries().recipes().addRecipe(recipes.decorSetterRecipe);
 

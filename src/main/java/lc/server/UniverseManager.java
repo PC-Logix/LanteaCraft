@@ -31,8 +31,6 @@ public class UniverseManager {
 	private final GalaxyFileReader galaxyReader = new GalaxyFileReader();
 	private final GalaxyFileWriter galaxyWriter = new GalaxyFileWriter();
 
-	private File cwd;
-
 	private File registry;
 	private UniverseFile universe;
 	private HashMap<Integer, ImmutablePair<File, GalaxyFile>> galaxies = new HashMap<Integer, ImmutablePair<File, GalaxyFile>>();
@@ -51,7 +49,7 @@ public class UniverseManager {
 	 */
 	public void loadUniverse(FMLServerStartingEvent event) {
 		WorldServer overworld = event.getServer().worldServerForDimension(0);
-		cwd = overworld.getSaveHandler().getWorldDirectory();
+		File cwd = overworld.getSaveHandler().getWorldDirectory();
 		registry = new File(cwd, "lanteacraft.uni");
 		if (!registry.exists()) {
 			universe = new UniverseFile();
@@ -102,18 +100,20 @@ public class UniverseManager {
 	 *            The load event.
 	 */
 	public void loadGalaxy(WorldEvent.Load load) {
-		File worldDir = cwd;
+		File worldDir = load.world.getSaveHandler().getWorldDirectory();
 		if (load.world.provider.getSaveFolder() != null)
-			worldDir = new File(cwd, load.world.provider.getSaveFolder());
+			LCLog.info("World save directory: %s", worldDir.getAbsolutePath());
 		File galFile = new File(worldDir, "world.gal");
 		LCLog.debug("Dimension %s loaded (file: %s)", load.world.provider.dimensionId, galFile);
 		GalaxyFile galaxy = null;
 		if (!galFile.exists()) {
+			LCLog.debug("Creating new descriptor for galaxy file %s.", galFile);
 			galaxy = new GalaxyFile();
 			galaxy.comment = String.format("Created with LanteaCraft build %s.", BuildInfo.versionNumber);
 		} else {
 			try {
 				galaxy = galaxyReader.read(galFile);
+				LCLog.debug("Read descriptor %s from file %s.", galaxy, galFile);
 			} catch (GalaxyFileException exception) {
 				LCLog.fatal("Problem reading galaxy file %s.", galFile, exception);
 				galaxy = new GalaxyFile();
