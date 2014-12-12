@@ -304,7 +304,7 @@ public class ModelStargate {
 	private void renderRingImmediate() {
 		double radiusMidInner = ringInnerMovingRadius - 1 / 128d;
 		double radiusMidOuter = ringMidRadius + 1 / 128d;
-		double z = ringDepth - 1d / 128d;
+		double z = ringDepth - 1d / 64d;
 		GL11.glNormal3f(0, 0, 1);
 		GL11.glBegin(GL11.GL_QUADS);
 		selectTile(ringSymbolTextureIndex);
