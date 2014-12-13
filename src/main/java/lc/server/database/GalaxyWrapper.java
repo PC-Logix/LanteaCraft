@@ -1,4 +1,4 @@
-package lc.server;
+package lc.server.database;
 
 import java.util.ArrayList;
 

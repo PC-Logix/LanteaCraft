@@ -1,4 +1,4 @@
-package lc.server;
+package lc.server.database;
 
 import java.io.File;
 import java.util.HashMap;
