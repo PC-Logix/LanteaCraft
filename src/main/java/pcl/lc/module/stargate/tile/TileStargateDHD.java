@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
+import pcl.lc.api.access.IStargateControllerAccess;
 import pcl.lc.base.PoweredTileEntity;
 import pcl.lc.base.energy.IEnergyStore;
 import pcl.lc.base.energy.IItemEnergyStore;
@@ -27,7 +28,7 @@ import pcl.lc.util.Trans3;
 import pcl.lc.util.Vector3;
 import pcl.lc.util.WorldLocation;
 
-public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
+public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore, IStargateControllerAccess {
 
 	public static int linkRangeX = 10;
 	public static int linkRangeY = 10;
@@ -184,7 +185,7 @@ public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 	@Override
 	public void think() {
 		if (!worldObj.isRemote) {
-			
+
 			if (!addedToEnergyNet) {
 				List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
 				if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
@@ -350,5 +351,36 @@ public class TileStargateDHD extends PoweredTileEntity implements IEnergyStore {
 	public void detectAndSendChanges() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public boolean isValid() {
+		return getLinkedStargateTE() != null;
+	}
+
+	@Override
+	public boolean isBusy() {
+		if (getLinkedStargateTE() == null)
+			return false;
+		return getLinkedStargateTE().isBusy();
+	}
+
+	@Override
+	public boolean ownsCurrentConnection() {
+		return false;
+	}
+
+	@Override
+	public String getDialledAddress() {
+		if (getLinkedStargateTE() == null)
+			return null;
+		return getLinkedStargateTE().getConnectionAddress();
+	}
+
+	@Override
+	public boolean disconnect() {
+		if (getLinkedStargateTE() == null)
+			return false;
+		return getLinkedStargateTE().disconnect();
 	}
 }
