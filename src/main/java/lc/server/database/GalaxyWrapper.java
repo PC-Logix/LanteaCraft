@@ -2,6 +2,8 @@ package lc.server.database;
 
 import java.util.ArrayList;
 
+import lc.common.util.data.PrimitiveCompare;
+
 import com.lanteacraft.astrodat.AddressBlock;
 import com.lanteacraft.astrodat.GalaxyFile;
 
@@ -32,14 +34,10 @@ public class GalaxyWrapper {
 	}
 
 	public boolean hasAddress(char[] next) {
-		if (galaxy.addresses != null && galaxy.addresses.size() != 0) {
-			main: for (AddressBlock block : galaxy.addresses) {
-				for (int i = 0; i < block.address.length; i++)
-					if (block.address[i] != next[i])
-						continue main;
-				return true;
-			}
-		}
+		if (galaxy.addresses != null && galaxy.addresses.size() != 0)
+			for (AddressBlock block : galaxy.addresses)
+				if (PrimitiveCompare.compareChar(next, block.address))
+					return true;
 		return false;
 	}
 

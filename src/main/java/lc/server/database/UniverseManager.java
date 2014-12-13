@@ -8,10 +8,12 @@ import java.util.Random;
 import lc.common.LCLog;
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.ImmutablePair;
+import lc.common.util.data.PrimitiveCompare;
 import lc.core.BuildInfo;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
 
+import com.lanteacraft.astrodat.AddressBlock;
 import com.lanteacraft.astrodat.GalaxyFile;
 import com.lanteacraft.astrodat.GalaxyFileException;
 import com.lanteacraft.astrodat.UniverseFile;
@@ -171,19 +173,20 @@ public class UniverseManager {
 	public char[] getFreeAddress() {
 		Random rng = new Random();
 		StargateCharsetHelper helper = StargateCharsetHelper.singleton();
-		while (true) {
+		main: while (true) {
 			boolean flag = true;
 			char[] next = new char[9];
 			for (int i = 0; i < 9; i++)
 				next[i] = helper.index(rng.nextInt(helper.radixSize));
-			for (GalaxyWrapper wrapper : wrappers.values()) {
-				if (wrapper.hasAddress(next)) {
-					flag = false;
-					break;
-				}
-			}
-			if (flag)
-				return next;
+			
+			for (AddressBlock reserved : universe.reserved_addresses)
+				if (PrimitiveCompare.compareChar(next, reserved.address))
+					continue main;
+			for (GalaxyWrapper wrapper : wrappers.values())
+				if (wrapper.hasAddress(next))
+					continue main;
+
+			return next;
 		}
 	}
 
