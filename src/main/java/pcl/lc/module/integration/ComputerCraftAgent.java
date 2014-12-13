@@ -57,13 +57,13 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 			registerHandler.invoke(null, provider);
 		} catch (Throwable t) {
 			LanteaCraft.getLogger().log(Level.INFO, "ComputerCraft not found!");
-			return;
 		}
 		block_connector = RegistrationHelper.registerBlock(BlockComputerCraftConnector.class,
 				"integration.computercraft");
 		GameRegistry.registerTileEntity(TileEntityComputerCraftConnector.class, "tileEntityComputercraftAdapter");
-		RegistrationHelper.newRecipe(new ItemStack(ModuleStargates.Blocks.BlockComputerCraftConnector, 1), "OOO", "OcO", "OrO",
-				'O', net.minecraft.init.Blocks.obsidian, 'r', net.minecraft.init.Items.redstone, 'c', ReagentList.CONTROLCRYSTAL.ordinal());
+		RegistrationHelper.newRecipe(new ItemStack(block_connector, 1), "OOO", "OcO", "OrO", 'O',
+				net.minecraft.init.Blocks.obsidian, 'r', net.minecraft.init.Items.redstone, 'c',
+				ReagentList.CONTROLCRYSTAL.ordinal());
 	}
 
 	@Override
