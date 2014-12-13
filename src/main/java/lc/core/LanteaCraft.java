@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.FMLRelaunchLog;
 public class LanteaCraft {
 
 	/** The mod instanceof */
-	public static LanteaCraft instance;
+	public static volatile LanteaCraft instance;
 
 	/** Default constructor */
 	public LanteaCraft() {
