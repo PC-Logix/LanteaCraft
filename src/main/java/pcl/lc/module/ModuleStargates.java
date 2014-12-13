@@ -21,6 +21,7 @@ import pcl.lc.module.stargate.block.BlockStargateBase;
 import pcl.lc.module.stargate.block.BlockStargateDHD;
 import pcl.lc.module.stargate.block.BlockStargateRing;
 import pcl.lc.module.stargate.block.BlockTransporterRing;
+import pcl.lc.module.integration.computercraft.BlockComputerCraftConnector;
 import pcl.lc.module.stargate.gui.ContainerStargateBase;
 import pcl.lc.module.stargate.gui.ContainerStargateDHDEnergy;
 import pcl.lc.module.stargate.item.ItemGDO;
@@ -59,6 +60,7 @@ public class ModuleStargates implements IModule {
 		public static BlockStargateRing stargateRingBlock;
 		public static BlockStargateDHD stargateControllerBlock;
 		public static BlockTransporterRing transporterRing;
+		public static BlockComputerCraftConnector BlockComputerCraftConnector;
 	}
 
 	public static class Items {

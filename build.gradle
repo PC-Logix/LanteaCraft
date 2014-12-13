@@ -27,6 +27,19 @@ version = "1.0.0"
 group = "pcl.LanteaCraft"
 archivesBaseName = "LanteaCraft"
 
+
+repositories {
+    maven {
+        name = "OC repo"
+        url = "http://maven.cil.li/"
+    }
+}
+
+dependencies {
+    compile "li.cil.oc:OpenComputers:MC1.7.10-1.4.1.14:dev"
+}
+
+
 minecraft {
 	version = "1.7.10-10.13.0.1180"
 	replace "@VERSION@", project.version
@@ -49,7 +62,23 @@ jar.manifest = manifest { attributes(
 	"FMLCorePlugin": "pcl.lc.coremod.LCCoreMod",
 	"FMLCorePluginContainsFMLMod": "icanhazfmlmodpweeze"
 ) }
+apply plugin: 'curseforge'
+def curseforge_key = 0
+if (project.hasProperty('curseforge_key')) {
+	curseforge_key = project.curseforge_key
+}
 
+curse {
+	apiKey = curseforge_key
+	projectId = "77342"
+	releaseType = "beta"
+	changelog = 'default'
+	def changelogFile = file('changelog.txt')
+	if (changelogFile.exists()) {
+		changelog = changelogFile.text
+	}
+	addGameVersion project.minecraft.version
+}
 processResources {
 	from(sourceSets.main.resources.srcDirs) {
 		include 'mcmod.info'

@@ -4,11 +4,14 @@ import java.lang.reflect.Method;
 
 import org.apache.logging.log4j.Level;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.internal.Agent;
 import pcl.lc.api.internal.IIntegrationAgent;
+import pcl.lc.module.ModuleStargates;
+import pcl.lc.module.core.item.ItemCraftingReagent.ReagentList;
 import pcl.lc.module.integration.computercraft.BlockComputerCraftConnector;
 import pcl.lc.module.integration.computercraft.TileEntityComputerCraftConnector;
 import pcl.lc.util.RegistrationHelper;
@@ -59,7 +62,8 @@ public class ComputerCraftAgent implements IIntegrationAgent {
 		block_connector = RegistrationHelper.registerBlock(BlockComputerCraftConnector.class,
 				"integration.computercraft");
 		GameRegistry.registerTileEntity(TileEntityComputerCraftConnector.class, "tileEntityComputercraftAdapter");
-
+		RegistrationHelper.newRecipe(new ItemStack(ModuleStargates.Blocks.BlockComputerCraftConnector, 1), "OOO", "OcO", "OrO",
+				'O', net.minecraft.init.Blocks.obsidian, 'r', net.minecraft.init.Items.redstone, 'c', ReagentList.CONTROLCRYSTAL.ordinal());
 	}
 
 	@Override
