@@ -1,7 +1,9 @@
-package lc.common.base;
+package lc.common.base.pipeline;
 
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.common.LCLog;
+import lc.common.base.LCItemRenderer;
+import lc.common.base.LCTileRenderer;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.DefinitionRegistry.RendererType;
 import lc.core.LCRuntime;
@@ -14,14 +16,14 @@ import net.minecraftforge.client.IItemRenderer;
  * @author AfterLifeLochie
  *
  */
-public class LCItemRenderHook implements IItemRenderer {
+public class LCItemRenderPipeline implements IItemRenderer {
 
 	private DefinitionRegistry registry;
 
 	/**
 	 * Create a new rendering hook.
 	 */
-	public LCItemRenderHook() {
+	public LCItemRenderPipeline() {
 		registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
 	}
 

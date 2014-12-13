@@ -7,8 +7,8 @@ import lc.client.models.loader.WavefrontModel.WavefrontModelException;
 import lc.client.opengl.BufferDisplayList;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
-import lc.common.base.LCTileRenderHook;
 import lc.common.base.LCTileRenderer;
+import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.core.ResourceAccess;
 import net.minecraft.client.Minecraft;
 
@@ -49,7 +49,7 @@ public class DefaultTileRenderer extends LCTileRenderer {
 	}
 
 	@Override
-	public boolean renderTileEntityAt(LCTile tile, LCTileRenderHook renderer, double x, double y, double z,
+	public boolean renderTileEntityAt(LCTile tile, LCTileRenderPipeline renderer, double x, double y, double z,
 			float partialTickTime) {
 		if (!seenTypes.contains(tile.getClass())) {
 			Class<? extends LCTile> clazz = tile.getClass();

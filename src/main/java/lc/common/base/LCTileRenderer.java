@@ -2,6 +2,7 @@ package lc.common.base;
 
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.ILanteaCraftRenderer;
+import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.impl.registry.DefinitionReference;
 
 /**
@@ -42,7 +43,7 @@ public abstract class LCTileRenderer implements ILanteaCraftRenderer {
 	 * @return If the rendering was completed
 	 * @see lc.common.base.LCBlockRenderer#getParent()
 	 */
-	public abstract boolean renderTileEntityAt(LCTile tile, LCTileRenderHook renderer, double x, double y, double z,
+	public abstract boolean renderTileEntityAt(LCTile tile, LCTileRenderPipeline renderer, double x, double y, double z,
 			float partialTickTime);
 
 	@Override

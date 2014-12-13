@@ -1,8 +1,10 @@
-package lc.common.base;
+package lc.common.base.pipeline;
 
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.client.render.DefaultTileRenderer;
 import lc.common.LCLog;
+import lc.common.base.LCTile;
+import lc.common.base.LCTileRenderer;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.DefinitionRegistry.RendererType;
 import lc.core.LCRuntime;
@@ -16,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
  * @author AfterLifeLochie
  *
  */
-public class LCTileRenderHook extends TileEntitySpecialRenderer {
+public class LCTileRenderPipeline extends TileEntitySpecialRenderer {
 
 	private DefinitionRegistry registry;
 	private final DefaultTileRenderer defaultTileRenderer;
@@ -24,7 +26,7 @@ public class LCTileRenderHook extends TileEntitySpecialRenderer {
 	/**
 	 * Create a new rendering hook.
 	 */
-	public LCTileRenderHook() {
+	public LCTileRenderPipeline() {
 		registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
 		defaultTileRenderer = new DefaultTileRenderer();
 	}

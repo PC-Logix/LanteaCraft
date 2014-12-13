@@ -3,7 +3,7 @@ package lc.client.models;
 import static lc.client.opengl.GLHelper.pushTexVertex;
 import lc.client.opengl.BufferDisplayList;
 import lc.client.render.TileStargateBaseRenderer;
-import lc.common.base.LCTileRenderHook;
+import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.util.math.Orientations;
 import lc.tiles.TileStargateBase;
 
@@ -110,7 +110,7 @@ public class ModelStargate {
 	 * @param tile
 	 *            The tile entity
 	 */
-	public void render(TileStargateBaseRenderer renderer, LCTileRenderHook tesr, TileStargateBase tile) {
+	public void render(TileStargateBaseRenderer renderer, LCTileRenderPipeline tesr, TileStargateBase tile) {
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
 		tesr.bind(renderer.texFrame);
 		listShell.bind();

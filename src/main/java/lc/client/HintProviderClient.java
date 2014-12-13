@@ -6,11 +6,11 @@ import lc.client.render.ItemDecoratorRenderer;
 import lc.client.render.TileStargateBaseRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
-import lc.common.base.LCBlockRenderHook;
 import lc.common.base.LCItem;
-import lc.common.base.LCItemRenderHook;
 import lc.common.base.LCTile;
-import lc.common.base.LCTileRenderHook;
+import lc.common.base.pipeline.LCBlockRenderPipeline;
+import lc.common.base.pipeline.LCItemRenderPipeline;
+import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.core.LCRuntime;
 import lc.items.ItemDecorator;
@@ -28,9 +28,9 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
  */
 public class HintProviderClient extends HintProviderServer {
 
-	private LCBlockRenderHook blockRenderingHook;
-	private LCTileRenderHook tileRenderingHook;
-	private LCItemRenderHook itemRenderingHook;
+	private LCBlockRenderPipeline blockRenderingHook;
+	private LCTileRenderPipeline tileRenderingHook;
+	private LCItemRenderPipeline itemRenderingHook;
 
 	/** Default constructor */
 	public HintProviderClient() {
@@ -41,9 +41,9 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public void preInit() {
 		super.preInit();
-		blockRenderingHook = new LCBlockRenderHook(RenderingRegistry.getNextAvailableRenderId());
-		tileRenderingHook = new LCTileRenderHook();
-		itemRenderingHook = new LCItemRenderHook();
+		blockRenderingHook = new LCBlockRenderPipeline(RenderingRegistry.getNextAvailableRenderId());
+		tileRenderingHook = new LCTileRenderPipeline();
+		itemRenderingHook = new LCItemRenderPipeline();
 		RenderingRegistry.registerBlockHandler(blockRenderingHook.getRenderId(), blockRenderingHook);
 	}
 

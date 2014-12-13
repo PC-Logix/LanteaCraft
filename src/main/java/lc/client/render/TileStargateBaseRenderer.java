@@ -2,8 +2,8 @@ package lc.client.render;
 
 import lc.client.models.ModelStargate;
 import lc.common.base.LCTile;
-import lc.common.base.LCTileRenderHook;
 import lc.common.base.LCTileRenderer;
+import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.core.ResourceAccess;
 import lc.tiles.TileStargateBase;
 import net.minecraft.util.ResourceLocation;
@@ -43,7 +43,7 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 	}
 
 	@Override
-	public boolean renderTileEntityAt(LCTile tile, LCTileRenderHook renderer, double x, double y, double z,
+	public boolean renderTileEntityAt(LCTile tile, LCTileRenderPipeline renderer, double x, double y, double z,
 			float partialTickTime) {
 		if (tile instanceof TileStargateBase) {
 			GL11.glPushMatrix();

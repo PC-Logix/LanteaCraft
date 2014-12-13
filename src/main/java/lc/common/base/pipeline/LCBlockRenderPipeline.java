@@ -1,8 +1,9 @@
-package lc.common.base;
+package lc.common.base.pipeline;
 
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.client.render.DefaultBlockRenderer;
 import lc.common.LCLog;
+import lc.common.base.LCBlockRenderer;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.DefinitionRegistry.RendererType;
 import lc.core.LCRuntime;
@@ -17,7 +18,7 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
  * @author AfterLifeLochie
  *
  */
-public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
+public class LCBlockRenderPipeline implements ISimpleBlockRenderingHandler {
 
 	private final int renderIdx;
 	private final DefinitionRegistry registry;
@@ -29,7 +30,7 @@ public class LCBlockRenderHook implements ISimpleBlockRenderingHandler {
 	 * @param renderIdx
 	 *            The renderer ID of this hook
 	 */
-	public LCBlockRenderHook(int renderIdx) {
+	public LCBlockRenderPipeline(int renderIdx) {
 		this.renderIdx = renderIdx;
 		registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
 		defaultBlockRenderer = new DefaultBlockRenderer();
