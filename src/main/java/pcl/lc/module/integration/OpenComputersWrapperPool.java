@@ -211,6 +211,16 @@ public class OpenComputersWrapperPool {
 			return dialTheGate(args.checkString(0).toUpperCase());
 		}
 
+		@Callback
+		public Object[] isValid(Context context, Arguments args) {
+			return new Object[] { access.isValid() };
+		}
+		
+		@Callback
+		public Object[] isBusy(Context context, Arguments args) {
+			return new Object[] { access.isBusy() };
+		}
+		
 		public Object[] dialTheGate(String address) throws Exception {
 			if (address.length() != 7 && address.length() != 9)
 				throw new Exception("Stargate addresses must be 7 or 9 characters.");
