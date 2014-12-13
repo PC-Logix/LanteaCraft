@@ -2,7 +2,7 @@
  * This file is part of the official LanteaCraft API. Please see the usage guide and
  * restrictions on use in the package-info file.
  */
-package lc.api.drivers;
+package lc.api.jit;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

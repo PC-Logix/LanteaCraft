@@ -1,8 +1,8 @@
 package lc.common.impl.drivers;
 
 import lc.api.components.IntegrationType;
-import lc.api.drivers.DeviceDrivers;
 import lc.api.drivers.IPowerDriver;
+import lc.api.jit.DeviceDrivers;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import buildcraft.api.power.IPowerEmitter;

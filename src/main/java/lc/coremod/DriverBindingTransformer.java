@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 import lc.api.components.DriverMap;
 import lc.api.components.IntegrationType;
-import lc.api.drivers.DeviceDrivers;
+import lc.api.jit.DeviceDrivers;
 import lc.common.LCLog;
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -212,11 +212,11 @@ public class DriverBindingTransformer implements IClassTransformer {
 		List<AnnotationNode> annotations = classNode.visibleAnnotations;
 		if (annotations != null)
 			for (AnnotationNode annotation : annotations)
-				if (annotation.desc.equals("Llc/api/drivers/DeviceDrivers$DriverProvider;")) {
+				if (annotation.desc.equals("Llc/api/jit/DeviceDrivers$DriverProvider;")) {
 					LCLog.debug("Found definition driver class %s.", name);
 					driverImplCache.put(name, basicClass.clone());
 					return basicClass;
-				} else if (annotation.desc.equals("Llc/api/drivers/DeviceDrivers$DriverCandidate;")) {
+				} else if (annotation.desc.equals("Llc/api/jit/DeviceDrivers$DriverCandidate;")) {
 					ArrayList<IntegrationType> types = new ArrayList<IntegrationType>();
 					HashMap<String, String> events = new HashMap<String, String>();
 					for (Object o : (ArrayList<Object>) annotation.values.get(annotation.values.indexOf("types") + 1))
@@ -254,7 +254,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 										if (method.visibleAnnotations != null)
 											for (AnnotationNode methodTag : method.visibleAnnotations)
 												if (methodTag.desc
-														.equals("Llc/api/drivers/DeviceDrivers$DriverRTCallback;"))
+														.equals("Llc/api/jit/DeviceDrivers$DriverRTCallback;"))
 													events.put(method.name, (String) methodTag.values
 															.get(methodTag.values.indexOf("event") + 1));
 									} else

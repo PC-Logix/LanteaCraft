@@ -3,7 +3,7 @@ package lc.tiles;
 import java.util.List;
 
 import lc.api.components.IntegrationType;
-import lc.api.drivers.DeviceDrivers.DriverCandidate;
+import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
