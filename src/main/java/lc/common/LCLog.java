@@ -13,8 +13,8 @@ import org.apache.logging.log4j.Logger;
  */
 public class LCLog {
 
-	private static Logger log;
-	private static Logger cmLog;
+	private static volatile Logger log;
+	private static volatile Logger cmLog;
 
 	/**
 	 * Set the global logger
