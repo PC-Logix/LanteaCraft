@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import li.cil.oc.api.Network;
 import li.cil.oc.api.driver.MethodWhitelist;
+import li.cil.oc.api.driver.NamedBlock;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
@@ -141,7 +142,7 @@ public class OpenComputersWrapperPool {
 		}
 	}
 
-	public static class StargateAccessWrapper extends OpenComputersHostStub {
+	public static class StargateAccessWrapper extends OpenComputersHostStub implements NamedBlock {
 
 		private final IStargateAccess access;
 		private EnumStargateState stateWatcher;
@@ -271,9 +272,19 @@ public class OpenComputersWrapperPool {
 		public String[] whitelistedMethods() {
 			return getMethods(this.getClass());
 		}
+
+		@Override
+		public String preferredName() {
+			return "stargate";
+		}
+
+		@Override
+		public int priority() {
+			return 1;
+		}
 	}
 
-	public static class StargateControllerAccessWrapper extends OpenComputersHostStub {
+	public static class StargateControllerAccessWrapper extends OpenComputersHostStub implements NamedBlock {
 		private final IStargateControllerAccess access;
 
 		public StargateControllerAccessWrapper(IStargateControllerAccess access) {
@@ -328,9 +339,19 @@ public class OpenComputersWrapperPool {
 		public String[] whitelistedMethods() {
 			return getMethods(this.getClass());
 		}
+
+		@Override
+		public String preferredName() {
+			return "stargate_controller";
+		}
+
+		@Override
+		public int priority() {
+			return 1;
+		}
 	}
 
-	public static class NaquadahGeneratorAccessWrapper extends OpenComputersHostStub {
+	public static class NaquadahGeneratorAccessWrapper extends OpenComputersHostStub implements NamedBlock {
 
 		private final INaquadahGeneratorAccess access;
 
@@ -380,6 +401,16 @@ public class OpenComputersWrapperPool {
 		@Override
 		public String[] whitelistedMethods() {
 			return getMethods(this.getClass());
+		}
+
+		@Override
+		public String preferredName() {
+			return "naquadah_generator";
+		}
+
+		@Override
+		public int priority() {
+			return 1;
 		}
 	}
 
