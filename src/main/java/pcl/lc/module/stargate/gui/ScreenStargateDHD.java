@@ -50,7 +50,7 @@ public class ScreenStargateDHD extends GenericScreen {
 		this.controller = controller;
 		dhdLayer = ResourceAccess.getNamedResource("textures/gui/dhd_gui.png");
 		dhdButtonLayer = ResourceAccess.getNamedResource("textures/gui/dhd_centre.png");
-		soundHost = new SoundHost(controller, new AudioPosition(controller.getWorld(), new Vector3(controller)));
+		soundHost = new SoundHost(controller, new AudioPosition(controller.getWorldObj(), new Vector3(controller)));
 		soundHost.registerChannel("click", "stargate/milkyway/milkyway_dhd_button.ogg", 1.0f, 0);
 	}
 

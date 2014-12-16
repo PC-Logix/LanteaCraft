@@ -14,10 +14,6 @@ import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.coremod.RuntimeAnnotation.RuntimeInterface;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
 import cpw.mods.fml.common.Loader;
 
 /**
@@ -49,25 +45,7 @@ public abstract class PoweredTileEntity extends TileManaged {
 	 * we're not actually importing any sort of energy - BC will go so far as to
 	 * throw NPE's.
 	 */
-	public PoweredTileEntity() {
-		// If BuildCraft is loaded, we must create export and import rules.
-		if (Loader.isModLoaded("BuildCraft|Core")) {
-			PowerHandler b = new PowerHandler((IPowerReceptor) this, Type.MACHINE);
-
-			/*
-			 * TODO: It's exceptionally likely that, due to the way BC
-			 * calculates power sinks, this could cause strangeness with respect
-			 * to engines and power generation sources. It might be wise to
-			 * clamp a maximum prescribed value, if there is one in the BC API.
-			 */
-			float maxRecieveQuantity = (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.MinecraftJoules,
-					getMaximumReceiveEnergy());
-			b.configure(0.0f, maxRecieveQuantity, (maxRecieveQuantity == 0.0f) ? 99999.0f : 1.0f,
-					(maxRecieveQuantity == 0.0f) ? 0.0f : 1000.0f);
-			b.configurePowerPerdition(0, 0);
-			receiverBuffer = b;
-		}
-	}
+	public PoweredTileEntity() { }
 
 	/**
 	 * Determines if this TileEntity is capable of receiving energy from
@@ -157,19 +135,6 @@ public abstract class PoweredTileEntity extends TileManaged {
 
 	// Don't look beyond here unless you want your eyes severely violated.
 
-	/**
-	 * Allows the entity to update its state.
-	 * 
-	 * It is critical that in overridden implementation that this method be
-	 * invoked using super. Failure to do so prevents the exporting of energy to
-	 * nearby BuildCraft systems.
-	 */
-	public void updateEntity() {
-		super.updateEntity();
-		if (canExportEnergy() && !worldObj.isRemote && receiverBuffer != null)
-			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
-				emitEnergy(direction);
-	}
 
 	/**
 	 * Determine if this host emits IC2 EU to a forge direction and a receiver.
@@ -178,48 +143,6 @@ public abstract class PoweredTileEntity extends TileManaged {
 	@RuntimeInterface(modid = "IC2", clazz = "ic2.api.energy.tile.IEnergyEmitter")
 	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
 		return canEnergyFormatConnectToSide(EnumUnits.EnergyUnit, direction) && canExportEnergy();
-	}
-
-	/**
-	 * Determine if this host emits BuildCraft MJ to a forge direction. Return a
-	 * {@link PoweredTileEntity#canExportEnergy()} result.
-	 */
-	@RuntimeInterface(modid = "BuildCraft|Core", clazz = "buildcraft.api.power.IPowerEmitter")
-	public boolean canEmitPowerFrom(ForgeDirection side) {
-		return canEnergyFormatConnectToSide(EnumUnits.MinecraftJoules, side) && canExportEnergy();
-	}
-
-	/**
-	 * Return the BuildCraft power receiver object. This must never be null, nor
-	 * never return null.
-	 * 
-	 * @see {@link PoweredTileEntity#PoweredTileEntity()} for more reasons on
-	 *      why BuildCraft's API hurts souls.
-	 */
-	@RuntimeInterface(modid = "BuildCraft|Core", clazz = "buildcraft.api.power.IPowerReceptor")
-	public PowerReceiver getPowerReceiver(ForgeDirection side) {
-		return ((PowerHandler) receiverBuffer).getPowerReceiver();
-	}
-
-	/**
-	 * BuildCraft arbitrarily returns this value when it decides the stored
-	 * energy exceeds the activation energy, as setup in the configuration. It
-	 * may even decide to not call this method at all. I don't know.
-	 */
-	@RuntimeInterface(modid = "BuildCraft|Core", clazz = "buildcraft.api.power.IPowerReceptor")
-	public void doWork(PowerHandler workProvider) {
-		float reqd = (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.MinecraftJoules, getMaximumReceiveEnergy());
-		float quantity = (float) workProvider.useEnergy(reqd, reqd, true);
-		double naqQuantity = EnumUnits.convertToNaquadahUnit(EnumUnits.MinecraftJoules, quantity);
-		receiveEnergy(naqQuantity);
-	}
-
-	/**
-	 * BuildCraft eat world?
-	 */
-	@RuntimeInterface(modid = "BuildCraft|Core", clazz = "buildcraft.api.power.IPowerReceptor")
-	public World getWorld() {
-		return worldObj;
 	}
 
 	/**
@@ -296,35 +219,6 @@ public abstract class PoweredTileEntity extends TileManaged {
 			}
 		} catch (Throwable t) {
 			LanteaCraft.getLogger().log(Level.WARN, "Could not push IC2 energy event. IC2 tiles may not be supported.", t);
-		}
-	}
-
-	/**
-	 * Attempts to emit BC energy to nearby BC IPowerReceptor objects. Holy
-	 * crap, this is bad. I couldn't find any BC API method to do this, so do we
-	 * just `gung-ho and do shit`, or is there some other fancy way of doing
-	 * this?
-	 * 
-	 * @param direction
-	 *            The direction to try and emit to.
-	 */
-	private void emitEnergy(ForgeDirection direction) {
-		int x = direction.offsetX + xCoord;
-		int y = direction.offsetY + yCoord;
-		int z = direction.offsetZ + zCoord;
-		TileEntity tile = worldObj.getTileEntity(x, y, z);
-		if (tile != null && tile instanceof IPowerReceptor
-				&& ((IPowerReceptor) tile).getPowerReceiver(direction.getOpposite()) != null) {
-			PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(direction.getOpposite());
-
-			float maxQuantity = (float) receptor.getMaxEnergyReceived();
-			float maxAvailQuantity = (float) EnumUnits.convertFromNaquadahUnit(EnumUnits.MinecraftJoules,
-					getAvailableExportEnergy());
-
-			float send = Math.min(maxQuantity, maxAvailQuantity);
-			float quantityUsed = (float) receptor.receiveEnergy(PowerHandler.Type.MACHINE, send,
-					direction.getOpposite());
-			exportEnergy(EnumUnits.convertToNaquadahUnit(EnumUnits.MinecraftJoules, quantityUsed));
 		}
 	}
 
