@@ -1,42 +1,117 @@
+# Stargate DHD controller
 tile.stargateController.name=星门控制器
-tile.stargateBase.name=星门底座
-tile.stargateRing.0.name=星门环之节
+
+# 星门底座 & settings screens
+tile.stargateBase.0.name=星门底座
+tile.stargateBase.4.name=飞马座星门底座
+tile.stargateBase.8.name=幻影族星门底座
+tile.stargateBase.12.name=夜灵族星门底座
+screen.stargate_base.title=星门控制器
+
+# Stargate Ring and Chevrons
+tile.stargateRing.0.name=星门环节
 tile.stargateRing.1.name=星门V字方块
-item.coreCrystal.name=星门核心水晶
-item.controllerCrystal.name=星门控制水晶
+tile.stargateRing.2.name=飞马座星门环节
+tile.stargateRing.3.name=飞马座星门V字方块
+tile.stargateRing.4.name=幻影族星门环节
+tile.stargateRing.5.name=幻影族星门V字方块
+tile.stargateRing.6.name=夜灵族星门环节
+tile.stargateRing.7.name=夜灵族星门V字方块
+
+# Iris items & tags
+item.iris.name=星门之虹
+item.gdo.name=虹门启动器
+# Iris types
+iris.mechanical.name=机械
+iris.energy.name=能量
+# Label used to display iris type, 1 param
+iris.type.text=%s之虹
+# Label used to display iris %damage, 1 param
+iris.damage.text=%s点伤害
+
+# Power-related items
 item.energyCrystal.name=能量水晶
+item.zpm.name=零点模块(ZPM)
+# Label used to display energy, 1 param
+energy.text=能量: %s
+# Label used to display used entropy, 1 param
+entropy.text=能量熵: %s
 
-tile.blockLiquidNaquadah.name=液态硅岩金
-item.liquidNaquadahBucket.name=桶装液态硅岩金
+# Crafting reagents
+item.craftingReagent.0.name=损坏反应物
+item.craftingReagent.1.name=空白水晶
+item.craftingReagent.2.name=星门核心水晶
+item.craftingReagent.3.name=星门控制水晶
+item.craftingReagent.4.name=铁板
+item.craftingReagent.5.name=硅岩金属合金板
+item.craftingReagent.6.name=特林合金板
 
-tile.lanteaDecor.1.name=兰特雕琢钢块
-tile.lanteaDecor.2.name=兰特钢块
-tile.lanteaDecor.3.name=格劳德雕琢金块
-tile.lanteaDecor.4.name=格劳德金块
+% Fluids
+tile.blockLiquidNaquadah.name=液态硅岩金属
+item.liquidNaquadahBucket.name=桶装液态硅岩金属
 
-tile.goauldPatternedGoldDecorStair.name=格劳德金楼梯
-tile.goauldGoldDecorStair.name=格劳德雕琢金楼梯
-tile.lanteaPatternedSteelDecorStair.name=兰特钢楼梯
-tile.lanteaSteelDecorStair.name=兰特雕琢钢楼梯
+# Decor blocks
+tile.lanteaDecor.1.name=古人族印花钢
+tile.lanteaDecor.2.name=古人族金
+tile.lanteaDecor.3.name=海神族印花钢
+tile.lanteaDecor.4.name=海神族金
 
-tile.lanteaGlassDecor.1.name=兰特玻璃
+# Decor stairs
+tile.goauldPatternedGoldDecorStair.name=海神族金楼梯
+tile.goauldGoldDecorStair.name=海神族印花金楼梯
+tile.lanteaPatternedSteelDecorStair.name=古人族钢楼梯
+tile.lanteaSteelDecorStair.name=古人族印花钢楼梯
 
-tile.lanteaOre.0.name=硅岩金矿石
-item.lanteaOre.0.name=硅岩金
-item.lanteaOreIngot.0.name=硅岩金锭
-tile.lanteaOreIngotBlock.0.name=硅岩金方块
+# Decor glass
+tile.lanteaGlassDecor.1.name=古人族玻璃
 
-tile.lanteaOre.2.name=特林矿石
-item.lanteaOre.2.name=特林矿
-item.lanteaOreIngot.2.name=特林锭
-tile.lanteaOreIngotBlock.2.name=特林方块
+# Naquadah Ore / Ingots / Blocks
+tile.lanteaOre.0.name=硅岩金属矿石
+item.lanteaOre.0.name=硅岩金属
+item.lanteaOreIngot.0.name=硅岩金属锭
+tile.lanteaOreIngotBlock.0.name=硅岩金属方块
 
-tile.naquadahGenerator.name=硅岩金发电机
-tile.ringPlatform.name=传送环
-item.zpm.name=ZPM
-item.transportRingActivator.name=传送环激活器
+# Naquadriah Ore / Ingots / Blocks
+tile.lanteaOre.1.name=高能硅岩金属矿石
+item.lanteaOre.1.name=高能硅岩金属
+item.lanteaOreIngot.1.name=高能硅岩金属锭
+tile.lanteaOreIngotBlock.1.name=高能硅岩金属方块
 
-item.tokraSpawnEgg.name=陶格拉人刷怪蛋
-item.lanteadebug.name=兰特调试器
-tile.integration.computercraft.name=电脑适配器
-death.attack.wormhole_transient=%1$s被“视界”撕得粉碎。
+# Trinium Ore / Ingots / Blocks
+tile.lanteaOre.2.name=凯金矿石
+item.lanteaOre.2.name=凯金
+item.lanteaOreIngot.2.name=凯金锭
+tile.lanteaOreIngotBlock.2.name=凯金方块
+
+# Machines
+tile.naquadahGenerator.name=硅岩金属发电机
+# Label used to display fill level of fluid tanks, 1 param
+tank.text=储罐: %s
+tile.blockCrystalInfuser.name=水晶灌注机
+
+# Help Notebook
+item.jacksonNotebook.name=Daniel Jackson的笔记本
+
+# Transporter Rings
+tile.transporterRing.0.name=传输环框架
+tile.transporterRing.1.name=传输环控制器
+item.transportRingActivator.name=传输环启动器
+
+# Debug and other items
+item.tokraSpawnEgg.name=生成 双生族人
+item.lanteadebug.name=星际之门调试器
+
+# Integration blocks and items
+tile.integration.computercraft.name=电脑模组适配器
+
+# Death messages
+death.attack.wormhole_transient=%1$s被“视界”撕得粉碎.
+
+# Clipboard operations; used as a single string only (no context).
+lc.clipboard.put_success.text=复制到剪贴板!
+lc.clipboard.put_address.text=复制地址
+
+# Stargate error messages; used as a single string only (no context).
+lc.stargate.coord_out_of_range.text=超出星门坐标范围
+lc.stargate.dimension_out_of_range.text=超出星门可及为面
+lc.stargate.general_address_error.text=星门地址错误;请检查日志!
