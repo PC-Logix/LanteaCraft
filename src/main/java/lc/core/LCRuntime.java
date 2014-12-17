@@ -12,9 +12,12 @@ import lc.api.init.Recipes;
 import lc.api.init.Structures;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
+import lc.common.base.generation.scattered.LCScatteredFeatureGenerator;
+import lc.common.base.generation.structure.LCFeatureGenerator;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.RecipeRegistry;
 import lc.common.impl.registry.RegistryContainer;
+import lc.common.impl.registry.StructureRegistry;
 import lc.common.network.LCPacketPipeline;
 import lc.common.util.LCCreativeTabManager;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -149,6 +152,7 @@ public class LCRuntime implements ILCAPIProxy {
 		network.init(BuildInfo.modID);
 		((DefinitionRegistry) registries().definitions()).init(this, event);
 		((RecipeRegistry) registries().recipes()).init(this, event);
+		((StructureRegistry) registries().structures()).init(this, event);
 		hints.init();
 	}
 
@@ -166,7 +170,9 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Called when a server is started
-	 * @param event The server.
+	 * 
+	 * @param event
+	 *            The server.
 	 */
 	public void serverStarting(FMLServerStartingEvent event) {
 		hints.onServerStarting(event);
@@ -174,7 +180,9 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Called when a server is stopped
-	 * @param event The server.
+	 * 
+	 * @param event
+	 *            The server.
 	 */
 	public void serverStopping(FMLServerStoppingEvent event) {
 		hints.onServerStopping(event);

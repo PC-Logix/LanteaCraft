@@ -6,9 +6,11 @@ import java.util.Map.Entry;
 
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureComponent;
+import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import lc.api.components.IStructureRegistry;
 import lc.api.defs.IStructureDefinition;
+import lc.common.LCLog;
 import lc.core.LCRuntime;
 
 public class StructureRegistry implements IStructureRegistry {
@@ -33,15 +35,19 @@ public class StructureRegistry implements IStructureRegistry {
 
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
 		for (Entry<String, IStructureDefinition> entry : definitionPool.entrySet()) {
+			LCLog.debug("Registering structure %s (class: %s)", entry.getValue().getName(), entry.getValue()
+					.getStructureClass().getName());
 			MapGenStructureIO.registerStructure(entry.getValue().getStructureClass(), entry.getValue().getName());
 			Map<String, Class<? extends StructureComponent>> comps = entry.getValue().getAllComponents();
-			for (Entry<String, Class<? extends StructureComponent>> comp : comps.entrySet())
+			for (Entry<String, Class<? extends StructureComponent>> comp : comps.entrySet()) {
+				LCLog.debug("Registring component %s (class: %s)", comp.getKey(), comp.getValue().getName());
 				MapGenStructureIO.func_143031_a(comp.getValue(), comp.getKey());
+			}
 		}
 	}
 
 	public IStructureDefinition[] allDefs() {
-		return definitionPool.entrySet().toArray(new IStructureDefinition[0]);
+		return definitionPool.values().toArray(new IStructureDefinition[0]);
 	}
 
 }

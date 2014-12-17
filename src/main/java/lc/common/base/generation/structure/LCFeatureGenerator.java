@@ -12,6 +12,7 @@ import lc.common.impl.registry.StructureRegistry;
 import lc.core.LCRuntime;
 import lc.core.ResourceAccess;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
@@ -69,10 +70,10 @@ public final class LCFeatureGenerator extends MapGenStructure {
 		if (def != null)
 			try {
 				Class<? extends StructureStart> start = def.getStructureClass();
-				Constructor<? extends StructureStart> ctr = start.getConstructor(Random.class, Integer.class,
-						Integer.class);
+				Constructor<? extends StructureStart> ctr = start.getConstructor(World.class, Random.class, int.class,
+						int.class);
 				if (ctr != null)
-					return ctr.newInstance(rand, cx, cz);
+					return ctr.newInstance(worldObj, rand, cx, cz);
 			} catch (Throwable t) {
 				LCLog.fatal("Couldn't initialize new structure start for type %s.", def.getName(), t);
 

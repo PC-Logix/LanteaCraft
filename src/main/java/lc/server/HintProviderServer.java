@@ -3,11 +3,15 @@ package lc.server;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
+import lc.common.base.generation.LCMasterWorldGen;
+import lc.common.base.generation.scattered.LCScatteredFeatureGenerator;
+import lc.common.base.generation.structure.LCFeatureGenerator;
 
 /**
  * Server-side hint provider implementation
@@ -19,6 +23,9 @@ public class HintProviderServer implements IHintProvider {
 
 	/** The server hook bus */
 	private final ServerEventHooks serverHookBus;
+
+	/** The master world generator service */
+	private LCMasterWorldGen worldGenerator;
 
 	/** Default constructor */
 	public HintProviderServer() {
@@ -35,7 +42,8 @@ public class HintProviderServer implements IHintProvider {
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
+		worldGenerator = new LCMasterWorldGen();
+		GameRegistry.registerWorldGenerator(worldGenerator, 0);
 
 	}
 

@@ -1,6 +1,5 @@
 package lc.common.impl.registry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -10,6 +9,8 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IStructureDefinition;
+import lc.common.LCLog;
+import lc.common.util.data.AnyPredicate;
 
 /**
  * Structure definition implementation
@@ -17,7 +18,7 @@ import lc.api.defs.IStructureDefinition;
  * @author AfterLifeLochie
  *
  */
-public class StructureDefinition implements IStructureDefinition {
+public abstract class StructureDefinition implements IStructureDefinition {
 
 	private final String name;
 	private final Class<? extends StructureStart> startClazz;
@@ -71,8 +72,17 @@ public class StructureDefinition implements IStructureDefinition {
 
 	@Override
 	public boolean canGenerateAt(World world, Random rng, int x, int z) {
-		world.getProviderName();
-		return false;
+		AnyPredicate test = getGeneratorPredicate();
+		if (test == null)
+			return false;
+		try {
+			return test.test(new Object[] { world, rng, x, z });
+		} catch (Throwable t) {
+			LCLog.warn("Failed to test AnyPredicate rule for generation.", t);
+			return false;
+		}
 	}
+
+	protected abstract AnyPredicate getGeneratorPredicate();
 
 }

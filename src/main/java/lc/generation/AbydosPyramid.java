@@ -21,6 +21,11 @@ public class AbydosPyramid extends LCFeatureStart {
 	/** Default constructor */
 	public AbydosPyramid() {
 	}
+	
+	public AbydosPyramid(World world, Random rand, int x, int y) { 
+		super(world, rand, x, y);
+		
+	}
 
 	@Override
 	protected void addComponents(World world, Random rng, int cx, int cz) {

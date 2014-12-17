@@ -31,7 +31,7 @@ public abstract class LCFeatureStart extends StructureStart {
 	 */
 	@SuppressWarnings("unchecked")
 	public LCFeatureStart(World world, Random rng, int chunkX, int chunkZ) {
-		addComponents(world, rng, chunkX, chunkZ);
+		addComponents(world, rng, 16 * chunkX, 16 * chunkZ);
 		updateBoundingBox();
 	}
 

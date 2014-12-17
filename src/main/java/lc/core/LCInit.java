@@ -12,11 +12,13 @@ import lc.blocks.BlockLanteaAlloy;
 import lc.blocks.BlockLanteaOre;
 import lc.blocks.BlockStargateBase;
 import lc.blocks.BlockStargateRing;
+import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.impl.registry.DefinitionWrapperProvider;
 import lc.common.impl.registry.RecipeProxy;
 import lc.common.impl.registry.SimpleRecipeDefinition;
 import lc.common.impl.registry.StructureDefinition;
+import lc.common.util.data.AnyPredicate;
 import lc.generation.AbydosPyramid;
 import lc.generation.AbydosPyramid.AbydosPyramidFeature;
 import lc.items.ItemCraftingReagent;
@@ -26,6 +28,7 @@ import lc.items.ItemLanteaAlloyIngot;
 import lc.items.ItemLanteaOre;
 import lc.recipe.DecoratorSetterRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -139,8 +142,23 @@ public class LCInit {
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyBlock);
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyToIngots);
 
-		structures.scatteredAbydosPyramid = new StructureDefinition("AbydosPyramid", AbydosPyramid.class).addComp(
-				"AbydosPyramid", AbydosPyramidFeature.class);
+		structures.scatteredAbydosPyramid = new StructureDefinition("AbydosPyramid", AbydosPyramid.class) {
+			AnyPredicate $predictate = new AnyPredicate() {
+				@Override
+				public boolean test(Object[] t) {
+					if (((Integer) t[2]) % 4 != 0 || ((Integer) t[3]) % 4 != 0)
+						return false;
+					return (t[0] instanceof World) && (((World) t[0]).provider.dimensionId == 0);
+				}
+			};
+
+			@Override
+			protected AnyPredicate getGeneratorPredicate() {
+				return $predictate;
+			}
+		};
+		((StructureDefinition) structures.scatteredAbydosPyramid).addComp("AbydosPyramid", AbydosPyramidFeature.class);
+
 		runtime.registries().structures().register(structures.scatteredAbydosPyramid);
 
 	}
