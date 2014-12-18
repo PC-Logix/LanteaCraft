@@ -68,6 +68,7 @@ public abstract class LCScatteredFeature extends StructureComponent {
 		tag.setInteger("Width", scatteredFeatureSizeX);
 		tag.setInteger("Height", scatteredFeatureSizeY);
 		tag.setInteger("Depth", scatteredFeatureSizeZ);
+		tag.setInteger("CoordMode", coordBaseMode);
 		tag.setInteger("HPos", hPos);
 	}
 
@@ -76,6 +77,7 @@ public abstract class LCScatteredFeature extends StructureComponent {
 		scatteredFeatureSizeX = tag.getInteger("Width");
 		scatteredFeatureSizeY = tag.getInteger("Height");
 		scatteredFeatureSizeZ = tag.getInteger("Depth");
+		coordBaseMode = tag.getInteger("CoordMode");
 		hPos = tag.getInteger("HPos");
 	}
 
