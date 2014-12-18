@@ -2,6 +2,8 @@ package lc.common.base.generation.scattered;
 
 import java.util.Random;
 
+import lc.common.util.math.Vector3;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -120,5 +122,31 @@ public abstract class LCScatteredFeature extends StructureComponent {
 	 */
 	@Override
 	public abstract boolean addComponentParts(World world, Random random, StructureBoundingBox structureboundingbox);
+
+	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0) {
+		fill(w, bb, v0, v1, b0, b0);
+	}
+
+	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, int m0) {
+		fill(w, bb, v0, v1, b0, m0, b0, m0);
+	}
+
+	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, Block b1) {
+		fill(w, bb, v0, v1, b0, b1, true);
+	}
+
+	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, int m0, Block b1, int m1) {
+		fill(w, bb, v0, v1, b0, m0, b1, m1, true);
+	}
+
+	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, Block b1, boolean rep) {
+		fillWithBlocks(w, bb, v0.floorX(), v0.floorY(), v0.floorZ(), v1.floorX(), v1.floorY(), v1.floorZ(), b0, b1, rep);
+	}
+
+	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, int m0, Block b1, int m1,
+			boolean rep) {
+		fillWithMetadataBlocks(w, bb, v0.floorX(), v0.floorY(), v0.floorZ(), v1.floorX(), v1.floorY(), v1.floorZ(), b0,
+				m0, b1, m1, rep);
+	}
 
 }
