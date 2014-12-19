@@ -83,42 +83,6 @@ public class DriverBindingTransformer implements IClassTransformer {
 	}
 
 	/**
-	 * Dump a class' methods.
-	 *
-	 * @param clazz
-	 *            The classnode to dump.
-	 */
-	private void dumpMethods(ClassNode clazz) {
-		Iterator<MethodNode> methods = clazz.methods.iterator();
-		while (methods.hasNext()) {
-			MethodNode method = methods.next();
-			StringBuilder data = new StringBuilder();
-			data.append(method.name).append(method.desc).append(":: ");
-			data.append("access: ").append(method.access).append(", ");
-			data.append("maxLocals: ").append(method.maxLocals).append(", ");
-			data.append("maxStack: ").append(method.maxStack).append(", ");
-			data.append("#instructions: ").append(method.instructions.size()).append(", ");
-			System.out.println(data.toString());
-			Iterator<AbstractInsnNode> instructions = method.instructions.iterator();
-			while (instructions.hasNext()) {
-				AbstractInsnNode instruction = instructions.next();
-				System.out.println(" * " + instruction.toString());
-				if (instruction instanceof LdcInsnNode)
-					System.out.println("  =>> " + ((LdcInsnNode) instruction).cst.toString());
-				else if (instruction instanceof InsnNode)
-					System.out.println("  =>> " + ((InsnNode) instruction).getOpcode());
-				else if (instruction instanceof VarInsnNode)
-					System.out.println("  =>> " + ((VarInsnNode) instruction).getOpcode());
-				else if (instruction instanceof MethodInsnNode) {
-					MethodInsnNode callable = (MethodInsnNode) instruction;
-					System.out.println("  =>> " + callable.name + callable.desc);
-					System.out.println("  =>> " + callable.owner);
-				}
-			}
-		}
-	}
-
-	/**
 	 * Determines if a class provided already has a method of the type
 	 * specified. This doesn't check for exceptions, but will detect identical
 	 * signature issues.
@@ -210,97 +174,98 @@ public class DriverBindingTransformer implements IClassTransformer {
 		ClassReader classReader = new ClassReader(basicClass);
 		classReader.accept(classNode, 0);
 		List<AnnotationNode> annotations = classNode.visibleAnnotations;
-		if (annotations != null)
-			for (AnnotationNode annotation : annotations)
-				if (annotation.desc.equals("Llc/api/jit/DeviceDrivers$DriverProvider;")) {
-					LCLog.debug("Found definition driver class %s.", name);
-					driverImplCache.put(name, basicClass.clone());
-					return basicClass;
-				} else if (annotation.desc.equals("Llc/api/jit/DeviceDrivers$DriverCandidate;")) {
-					ArrayList<IntegrationType> types = new ArrayList<IntegrationType>();
-					HashMap<String, String> events = new HashMap<String, String>();
-					for (Object o : (ArrayList<Object>) annotation.values.get(annotation.values.indexOf("types") + 1))
-						if (o instanceof String[]) {
-							String[] params = (String[]) o;
-							for (int q = 1; q < params.length; q += 2) {
-								IntegrationType type = IntegrationType.valueOf(params[q]);
-								if (!types.contains(type))
-									types.add(type);
-							}
-						}
-					for (IntegrationType type : types) {
-						LCLog.debug("Adding drivers for type %s.", type);
-						for (DriverMap mapping : DriverMap.mapOf(type)) {
-							LCLog.debug("Binding mapping %s (mod %s)", mapping, mapping.modName);
-							byte[] driverSrc = findClass(mapping.className);
-							if (driverSrc == null) {
-								LCLog.warn("Can't find class %s for driver %s, skipping...", mapping.className, mapping);
-								continue;
-							}
-							ClassNode driverClass = new ClassNode();
-							ClassReader reader = new ClassReader(driverSrc);
-							reader.accept(driverClass, 0);
-							if (driverClass.interfaces != null)
-								for (String iface : driverClass.interfaces) {
-									if (classNode.interfaces == null)
-										classNode.interfaces = new ArrayList<String>();
-									if (!classNode.interfaces.contains(iface))
-										classNode.interfaces.add(iface);
-								}
-							if (driverClass.methods != null)
-								for (MethodNode method : driverClass.methods)
-									if (!hasDuplicateMethod(method, classNode)) {
-										classNode.methods.add(remapMethod(driverClass.name, classNode.name, method));
-										if (method.visibleAnnotations != null)
-											for (AnnotationNode methodTag : method.visibleAnnotations)
-												if (methodTag.desc
-														.equals("Llc/api/jit/DeviceDrivers$DriverRTCallback;"))
-													events.put(method.name, (String) methodTag.values
-															.get(methodTag.values.indexOf("event") + 1));
-									} else
-										LCLog.warn("Skipping method %s, already present!", signature(method));
-							if (driverClass.fields != null)
-								for (FieldNode field : driverClass.fields)
-									if (!hasDuplicateField(field, classNode))
-										classNode.fields.add(remapField(driverClass.name, classNode.name, field));
-									else
-										LCLog.warn("Skipping field %s, already present!", signature(field));
+		if (annotations == null)
+			return basicClass;
+
+		for (AnnotationNode annotation : annotations)
+			if (annotation.desc.equals("Llc/api/jit/DeviceDrivers$DriverProvider;")) {
+				LCLog.debug("Found definition driver class %s.", name);
+				driverImplCache.put(name, basicClass.clone());
+				return basicClass;
+			} else if (annotation.desc.equals("Llc/api/jit/DeviceDrivers$DriverCandidate;")) {
+				ArrayList<IntegrationType> types = new ArrayList<IntegrationType>();
+				HashMap<String, String> events = new HashMap<String, String>();
+				for (Object o : (ArrayList<Object>) annotation.values.get(annotation.values.indexOf("types") + 1))
+					if (o instanceof String[]) {
+						String[] params = (String[]) o;
+						for (int q = 1; q < params.length; q += 2) {
+							IntegrationType type = IntegrationType.valueOf(params[q]);
+							if (!types.contains(type))
+								types.add(type);
 						}
 					}
-
-					if (events.size() > 0) {
-						LCLog.debug("Adding %s event hooks.", events.size());
-						boolean hasUserInit = false;
-						for (Object o : classNode.methods) {
-							MethodNode method = (MethodNode) o;
-							if (method.name.equals("<clinit>")) {
-								LCLog.debug("Moving user's <clinit> block to user_clinit...");
-								method.name = "user_clinit";
-								method.access = Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC;
-								hasUserInit = true;
-								break;
+				for (IntegrationType type : types) {
+					LCLog.debug("Adding drivers for type %s.", type);
+					for (DriverMap mapping : DriverMap.mapOf(type)) {
+						LCLog.debug("Binding mapping %s (mod %s)", mapping, mapping.modName);
+						byte[] driverSrc = findClass(mapping.className);
+						if (driverSrc == null) {
+							LCLog.warn("Can't find class %s for driver %s, skipping...", mapping.className, mapping);
+							continue;
+						}
+						ClassNode driverClass = new ClassNode();
+						ClassReader reader = new ClassReader(driverSrc);
+						reader.accept(driverClass, 0);
+						if (driverClass.interfaces != null)
+							for (String iface : driverClass.interfaces) {
+								if (classNode.interfaces == null)
+									classNode.interfaces = new ArrayList<String>();
+								if (!classNode.interfaces.contains(iface))
+									classNode.interfaces.add(iface);
 							}
-						}
-
-						MethodNode classInitializer = new MethodNode(Opcodes.ACC_STATIC, "<clinit>",
-								Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]), null, null);
-						classNode.methods.add(0, classInitializer);
-						classInitializer.visitCode();
-						for (Entry<String, String> eventMapItem : events.entrySet()) {
-							classInitializer.visitLdcInsn(Type.getObjectType(name.replace(".", "/")));
-							classInitializer.visitLdcInsn(eventMapItem.getKey());
-							classInitializer.visitLdcInsn(eventMapItem.getValue());
-							classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, "lc/common/base/LCTile",
-									"registerCallback", "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)V");
-						}
-						if (hasUserInit)
-							classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, classNode.name, "user_clinit",
-									Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]));
-						classInitializer.visitInsn(Opcodes.RETURN);
-						classInitializer.visitMaxs(3, 0);
-						classInitializer.visitEnd();
+						if (driverClass.methods != null)
+							for (MethodNode method : driverClass.methods)
+								if (!hasDuplicateMethod(method, classNode)) {
+									classNode.methods.add(remapMethod(driverClass.name, classNode.name, method));
+									if (method.visibleAnnotations != null)
+										for (AnnotationNode methodTag : method.visibleAnnotations)
+											if (methodTag.desc.equals("Llc/api/jit/DeviceDrivers$DriverRTCallback;"))
+												events.put(method.name, (String) methodTag.values.get(methodTag.values
+														.indexOf("event") + 1));
+								} else
+									LCLog.warn("Skipping method %s, already present!", signature(method));
+						if (driverClass.fields != null)
+							for (FieldNode field : driverClass.fields)
+								if (!hasDuplicateField(field, classNode))
+									classNode.fields.add(remapField(driverClass.name, classNode.name, field));
+								else
+									LCLog.warn("Skipping field %s, already present!", signature(field));
 					}
 				}
+
+				if (events.size() > 0) {
+					LCLog.debug("Adding %s event hooks.", events.size());
+					boolean hasUserInit = false;
+					for (Object o : classNode.methods) {
+						MethodNode method = (MethodNode) o;
+						if (method.name.equals("<clinit>")) {
+							LCLog.debug("Moving user's <clinit> block to user_clinit...");
+							method.name = "user_clinit";
+							method.access = Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC;
+							hasUserInit = true;
+							break;
+						}
+					}
+
+					MethodNode classInitializer = new MethodNode(Opcodes.ACC_STATIC, "<clinit>",
+							Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]), null, null);
+					classNode.methods.add(0, classInitializer);
+					classInitializer.visitCode();
+					for (Entry<String, String> eventMapItem : events.entrySet()) {
+						classInitializer.visitLdcInsn(Type.getObjectType(name.replace(".", "/")));
+						classInitializer.visitLdcInsn(eventMapItem.getKey());
+						classInitializer.visitLdcInsn(eventMapItem.getValue());
+						classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, "lc/common/base/LCTile",
+								"registerCallback", "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)V");
+					}
+					if (hasUserInit)
+						classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, classNode.name, "user_clinit",
+								Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]));
+					classInitializer.visitInsn(Opcodes.RETURN);
+					classInitializer.visitMaxs(3, 0);
+					classInitializer.visitEnd();
+				}
+			}
 
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(writer);
