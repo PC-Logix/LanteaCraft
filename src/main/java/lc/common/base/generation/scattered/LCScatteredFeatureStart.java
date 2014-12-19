@@ -32,7 +32,7 @@ public abstract class LCScatteredFeatureStart extends StructureStart {
 	 *            The chunk z-coordinate
 	 */
 	public LCScatteredFeatureStart(World world, Random rng, int chunkX, int chunkZ) {
-		addComponents(world, rng, chunkX, chunkZ);
+		addComponents(world, rng, 16 * chunkX, 16 * chunkZ);
 		updateBoundingBox();
 	}
 

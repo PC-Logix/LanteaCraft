@@ -21,6 +21,8 @@ import lc.common.impl.registry.StructureDefinition;
 import lc.common.util.data.AnyPredicate;
 import lc.generation.AbydosPyramid;
 import lc.generation.AbydosPyramid.AbydosPyramidFeature;
+import lc.generation.LanteaSurfaceStargate;
+import lc.generation.LanteaSurfaceStargate.SurfaceStargateFeature;
 import lc.items.ItemCraftingReagent;
 import lc.items.ItemDecorator;
 import lc.items.ItemGlasses;
@@ -142,7 +144,7 @@ public class LCInit {
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyBlock);
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyToIngots);
 
-		structures.scatteredAbydosPyramid = new StructureDefinition("AbydosPyramid", AbydosPyramid.class) {
+		structures.scatteredSurfaceStargate = new StructureDefinition("SurfaceStargate", LanteaSurfaceStargate.class) {
 			AnyPredicate $predictate = new AnyPredicate() {
 				@Override
 				public boolean test(Object[] t) {
@@ -157,9 +159,9 @@ public class LCInit {
 				return $predictate;
 			}
 		};
-		((StructureDefinition) structures.scatteredAbydosPyramid).addComp("AbydosPyramid", AbydosPyramidFeature.class);
-
-		runtime.registries().structures().register(structures.scatteredAbydosPyramid);
+		((StructureDefinition) structures.scatteredSurfaceStargate).addComp("SurfaceStargate",
+				SurfaceStargateFeature.class);
+		runtime.registries().structures().register(structures.scatteredSurfaceStargate);
 
 	}
 

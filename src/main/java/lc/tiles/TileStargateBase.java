@@ -24,6 +24,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Stargate Base tile implementation.
@@ -34,7 +35,7 @@ import cpw.mods.fml.relauncher.Side;
 @DriverCandidate(types = { IntegrationType.POWER })
 public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnable {
 
-	private final static StructureConfiguration structure = new StructureConfiguration() {
+	public final static StructureConfiguration structure = new StructureConfiguration() {
 
 		private final BlockFilter[] filters = new BlockFilter[] { new BlockFilter(Blocks.air),
 				new BlockFilter(LCRuntime.runtime.blocks().stargateRingBlock.getBlock(), 0),
@@ -121,6 +122,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		Vector3 dim = structure.getStructureDimensions();
 		Vector3 min = new Vector3(this).sub(dim), max = new Vector3(this).add(dim);
 		return Vector3.makeAABB(min, max);
+	}
+
+	public double getMaxRenderDistanceSquared() {
+		return 999999999.0D;
 	}
 
 	@Override

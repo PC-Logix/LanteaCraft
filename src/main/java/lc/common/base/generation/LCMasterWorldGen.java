@@ -31,7 +31,6 @@ public class LCMasterWorldGen implements IWorldGenerator {
 		boolean flag = scatteredGenerator.generateStructuresInChunk(world, random, chunkX, chunkZ);
 		if (!flag)
 			flag = featureGenerator.generateStructuresInChunk(world, random, chunkX, chunkZ);
-		LCLog.debug("Populated chunk: (%s, %s) result %s", chunkX, chunkZ, flag);
 	}
 
 }

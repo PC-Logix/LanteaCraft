@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lc.common.LCLog;
+import lc.common.network.packets.LCClientUpdate;
 import lc.common.network.packets.LCMultiblockPacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.network.packets.abs.LCTargetPacket;
@@ -65,6 +66,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
 		registerPacket(LCTileSync.class);
 		registerPacket(LCMultiblockPacket.class);
+		registerPacket(LCClientUpdate.class);
 	}
 
 	@Override
@@ -121,8 +123,8 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 				throw new LCNetworkException(String.format("Unable to handle packet type %s.", clazz.getName()));
 
 		} catch (Exception e) {
-			LCLog.fatal("Network decode exception.", e);
-			throw e;
+			LCLog.fatal("Network decode exception on side %s, packet dropped.", FMLCommonHandler.instance()
+					.getEffectiveSide(), e);
 		}
 	}
 
@@ -152,7 +154,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	 */
 	public void sendTo(LCPacket message, EntityPlayerMP player) {
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-		.set(FMLOutboundHandler.OutboundTarget.PLAYER);
+				.set(FMLOutboundHandler.OutboundTarget.PLAYER);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
@@ -185,7 +187,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	public void sendToAllAround(LCPacket message, DimensionPos location, double range) {
 		TargetPoint point = new TargetPoint(location.dimension, location.x, location.y, location.z, range);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-		.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+				.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
@@ -200,7 +202,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	 */
 	public void sendToDimension(LCPacket message, int dimensionId) {
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-		.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+				.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
 		channels.get(Side.SERVER).writeAndFlush(message);
 	}
@@ -213,7 +215,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	 */
 	public void sendToServer(LCPacket message) {
 		channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-		.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+				.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 		channels.get(Side.CLIENT).writeAndFlush(message);
 	}
 

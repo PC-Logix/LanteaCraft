@@ -2,6 +2,7 @@ package lc.common.base.generation.scattered;
 
 import java.util.Random;
 
+import lc.common.LCLog;
 import lc.common.util.math.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +29,7 @@ public abstract class LCScatteredFeature extends StructureComponent {
 
 	/** Default constructor. */
 	public LCScatteredFeature() {
+		coordBaseMode = 0;
 	}
 
 	/**
@@ -50,19 +52,12 @@ public abstract class LCScatteredFeature extends StructureComponent {
 	 */
 	protected LCScatteredFeature(Random rng, int x, int y, int z, int sx, int sy, int sz) {
 		super(0);
+		coordBaseMode = 0;
 		scatteredFeatureSizeX = sx;
 		scatteredFeatureSizeY = sy;
 		scatteredFeatureSizeZ = sz;
-		coordBaseMode = rng.nextInt(4);
+		boundingBox = new StructureBoundingBox(x, y, z, x + sz - 1, y + sy - 1, z + sx - 1);
 
-		switch (coordBaseMode) {
-		case 0:
-		case 2:
-			boundingBox = new StructureBoundingBox(x, y, z, x + sx - 1, y + sy - 1, z + sz - 1);
-			break;
-		default:
-			boundingBox = new StructureBoundingBox(x, y, z, x + sz - 1, y + sy - 1, z + sx - 1);
-		}
 	}
 
 	@Override
@@ -70,7 +65,6 @@ public abstract class LCScatteredFeature extends StructureComponent {
 		tag.setInteger("Width", scatteredFeatureSizeX);
 		tag.setInteger("Height", scatteredFeatureSizeY);
 		tag.setInteger("Depth", scatteredFeatureSizeZ);
-		tag.setInteger("CoordMode", coordBaseMode);
 		tag.setInteger("HPos", hPos);
 	}
 
@@ -79,13 +73,12 @@ public abstract class LCScatteredFeature extends StructureComponent {
 		scatteredFeatureSizeX = tag.getInteger("Width");
 		scatteredFeatureSizeY = tag.getInteger("Height");
 		scatteredFeatureSizeZ = tag.getInteger("Depth");
-		coordBaseMode = tag.getInteger("CoordMode");
 		hPos = tag.getInteger("HPos");
 	}
 
 	/**
-	 * Determine if placement is allowed. Calculates the bottom layer of the
-	 * bounding box so that it sits on the surface correctly.
+	 * Calculates the bottom layer of the bounding box so that it sits on the
+	 * surface correctly.
 	 *
 	 * @param world
 	 *            The world
@@ -93,27 +86,21 @@ public abstract class LCScatteredFeature extends StructureComponent {
 	 *            The bounding box
 	 * @param offset
 	 *            The height offset
-	 * @return If the placement is legal
 	 */
-	protected boolean canPlaceAt(World world, StructureBoundingBox sbb, int offset) {
+	protected void recalcHeightOffsets(World world, StructureBoundingBox sbb, int offset) {
 		if (hPos >= 0)
-			return true;
-		else {
-			int j = 0, k = 0;
-			for (int z = boundingBox.minZ; z <= boundingBox.maxZ; ++z)
-				for (int x = boundingBox.minX; x <= boundingBox.maxX; ++x)
-					if (sbb.isVecInside(x, 64, z)) {
-						j += Math.max(world.getTopSolidOrLiquidBlock(x, z), world.provider.getAverageGroundLevel());
-						++k;
-					}
-			if (k == 0)
-				return false;
-			else {
-				hPos = j / k;
-				boundingBox.offset(0, hPos - boundingBox.minY + offset, 0);
-				return true;
+			return;
+		int seenBlocks = 0, totalHeight = 0;
+		for (int z = boundingBox.minZ; z <= boundingBox.maxZ; ++z) {
+			for (int x = boundingBox.minX; x <= boundingBox.maxX; ++x) {
+				totalHeight += Math.max(world.getTopSolidOrLiquidBlock(x, z), world.provider.getAverageGroundLevel());
+				seenBlocks++;
 			}
 		}
+		if (seenBlocks == 0)
+			return;
+		hPos = totalHeight / seenBlocks;
+		boundingBox.offset(0, hPos - boundingBox.minY + offset, 0);
 	}
 
 	/**
@@ -132,11 +119,11 @@ public abstract class LCScatteredFeature extends StructureComponent {
 	}
 
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, Block b1) {
-		fill(w, bb, v0, v1, b0, b1, true);
+		fill(w, bb, v0, v1, b0, b1, false);
 	}
 
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, int m0, Block b1, int m1) {
-		fill(w, bb, v0, v1, b0, m0, b1, m1, true);
+		fill(w, bb, v0, v1, b0, m0, b1, m1, false);
 	}
 
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, Block b1, boolean rep) {

@@ -12,7 +12,7 @@ public class Matrix3 {
 	public static Matrix3 ident = new Matrix3();
 
 	/** Rotation map */
-	public static Matrix3[] turnRotations = { rotY(0), rotY(90), rotY(180), rotY(270) };
+	public static Matrix3[] turnRotations = { rotY(0), rotY(90), rotY(180), rotY(-90) };
 
 	/** Side rotation map */
 	public static Matrix3[] sideRotations = {

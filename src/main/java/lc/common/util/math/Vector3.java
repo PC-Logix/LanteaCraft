@@ -20,6 +20,11 @@ public class Vector3 {
 	public static final Vector3 zero = new Vector3(0, 0, 0);
 
 	/**
+	 * The identity vector.
+	 */
+	public static Vector3 ident = new Vector3(1, 1, 1);
+
+	/**
 	 * The unit vector in the x-axis.
 	 */
 
@@ -365,7 +370,7 @@ public class Vector3 {
 	 * @return The floored x-component of this Vector3.
 	 */
 	public int floorX() {
-		return (int) Math.floor(x);
+		return (int) Math.round(x);
 	}
 
 	/**
@@ -374,7 +379,7 @@ public class Vector3 {
 	 * @return The floored y-component of this Vector3.
 	 */
 	public int floorY() {
-		return (int) Math.floor(y);
+		return (int) Math.round(y);
 	}
 
 	/**
@@ -383,7 +388,7 @@ public class Vector3 {
 	 * @return The floored z-component of this Vector3.
 	 */
 	public int floorZ() {
-		return (int) Math.floor(z);
+		return (int) Math.round(z);
 	}
 
 	/**

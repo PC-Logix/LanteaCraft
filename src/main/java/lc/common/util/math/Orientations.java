@@ -1,6 +1,7 @@
 package lc.common.util.math;
 
 import java.util.EnumSet;
+import java.util.Random;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -80,6 +81,13 @@ public enum Orientations {
 	public static EnumSet<Orientations> getCardinals() {
 		return EnumSet.of(NORTH, EAST, SOUTH, WEST);
 	}
+	
+	/**
+	 * @return A random cardinal
+	 */
+	public static Orientations randomCardinal(Random r) {
+		return Orientations.values()[1 + r.nextInt(4)];
+	}
 
 	/**
 	 * @return A list of all unique rotation cardinals
@@ -93,6 +101,24 @@ public enum Orientations {
 	 */
 	public float angle() {
 		return angle;
+	}
+
+	/**
+	 * @return The ForgeDirection of this Orientation
+	 */
+	public ForgeDirection forge() {
+		switch (this) {
+		case NORTH:
+			return ForgeDirection.NORTH;
+		case SOUTH:
+			return ForgeDirection.SOUTH;
+		case EAST:
+			return ForgeDirection.EAST;
+		case WEST:
+			return ForgeDirection.WEST;
+		default:
+			return null;
+		}
 	}
 
 }

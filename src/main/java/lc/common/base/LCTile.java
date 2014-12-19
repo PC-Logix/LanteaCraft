@@ -10,10 +10,12 @@ import lc.common.LCLog;
 import lc.common.network.IPacketHandler;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
+import lc.common.network.packets.LCClientUpdate;
 import lc.common.network.packets.LCTileSync;
 import lc.common.util.math.DimensionPos;
 import lc.core.LCRuntime;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -121,6 +123,8 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 */
 	protected NBTTagCompound compound;
 	private boolean nbtDirty;
+	private boolean clientDataDirty = true;
+	private int clientDataCooldown;
 
 	/**
 	 * Get the hasInventory of the tile. If the tile has no hasInventory,
@@ -253,13 +257,41 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		nbtDirty = true;
 	}
 
+	private void sendUpdatesToClients() {
+		try {
+			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
+			sendPackets(packets);
+			for (LCPacket packet : packets)
+				LCRuntime.runtime.network().sendScoped(packet, 128.0d);
+		} catch (LCNetworkException e) {
+			LCLog.warn("Error sending network update.", e);
+		}
+	}
+
+	private void sendUpdatesToClient(EntityPlayerMP player) {
+		try {
+			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
+			sendPackets(packets);
+			for (LCPacket packet : packets)
+				LCRuntime.runtime.network().sendTo(packet, player);
+		} catch (LCNetworkException e) {
+			LCLog.warn("Error sending network update.", e);
+		}
+	}
+
 	@Override
 	public void handlePacket(LCPacket packetOf, EntityPlayer player) throws LCNetworkException {
 		if (packetOf instanceof LCTileSync)
 			if (worldObj.isRemote) {
+				clientDataDirty = false;
 				compound = ((LCTileSync) packetOf).compound;
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
+		if (packetOf instanceof LCClientUpdate)
+			if (!worldObj.isRemote)
+				sendUpdatesToClient((EntityPlayerMP) player);
+			else
+				throw new LCNetworkException("Can't handle LCClientUpdates on the client!");
 		thinkPacket(packetOf, player);
 	}
 
@@ -274,6 +306,14 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 			if (worldObj.isRemote) {
 				thinkClient();
 				thinkClientPost();
+				if (clientDataDirty) {
+					if (clientDataCooldown > 0)
+						clientDataCooldown--;
+					if (clientDataCooldown <= 0) {
+						LCRuntime.runtime.network().sendToServer(new LCClientUpdate(new DimensionPos(this)));
+						clientDataCooldown += (30 * 20);
+					}
+				}
 			} else {
 				thinkServer();
 				thinkServerPost();
@@ -398,14 +438,8 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	@Override
 	public Packet getDescriptionPacket() {
-		try {
-			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
-			sendPackets(packets);
-			for (LCPacket packet : packets)
-				LCRuntime.runtime.network().sendScoped(packet, 128.0d);
-		} catch (LCNetworkException e) {
-			LCLog.warn("Error sending network update.", e);
-		}
+		if (worldObj.isRemote)
+			LCRuntime.runtime.network().sendToServer(new LCClientUpdate(new DimensionPos(this)));
 		return null;
 	}
 
