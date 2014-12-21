@@ -49,25 +49,17 @@ public class HintInjectionTransformer implements IClassTransformer {
 		Iterator<FieldNode> iq = fields.iterator();
 		while (iq.hasNext()) {
 			FieldNode field = iq.next();
-			if (field.visibleAnnotations != null && field.visibleAnnotations.size() != 0) {
-				List<AnnotationNode> annotations = field.visibleAnnotations;
-				Iterator<AnnotationNode> ir = annotations.iterator();
-				while (ir.hasNext()) {
-					AnnotationNode annotation = ir.next();
-					if (annotation.desc.equals("Llc/api/defs/HintProvider;")) {
-						Side theSide = FMLCommonHandler.instance().getSide();
-						if (theSide == Side.CLIENT) {
-							if (annotation.values.indexOf("clientClass") != -1) {
-								String className = (String) annotation.values.get(annotation.values
-										.indexOf("clientClass") + 1);
-								fieldToClazzMap.put(field.name, className.replace(".", "/"));
-							}
-						} else if (annotation.values.indexOf("serverClass") != -1) {
-							String className = (String) annotation.values
-									.get(annotation.values.indexOf("serverClass") + 1);
-							fieldToClazzMap.put(field.name, className.replace(".", "/"));
-						}
-					}
+			AnnotationNode hintNode = ASMAssist.findAnnotation(field, "Llc/api/defs/HintProvider;");
+			if (hintNode != null) {
+				Side theSide = FMLCommonHandler.instance().getSide();
+				if (theSide == Side.CLIENT) {
+					String className = ASMAssist.findValue(hintNode, "clientClass");
+					if (className != null)
+						fieldToClazzMap.put(field.name, className.replace(".", "/"));
+				} else {
+					String className = ASMAssist.findValue(hintNode, "serverClass");
+					if (className != null)
+						fieldToClazzMap.put(field.name, className.replace(".", "/"));
 				}
 			}
 		}
