@@ -7,14 +7,17 @@ import lc.api.defs.HintProvider;
 import lc.api.init.Biomes;
 import lc.api.init.Blocks;
 import lc.api.init.Dimensions;
+import lc.api.init.Interfaces;
 import lc.api.init.Items;
 import lc.api.init.Recipes;
 import lc.api.init.Structures;
+import lc.common.GUIHandler;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
 import lc.common.base.generation.scattered.LCScatteredFeatureGenerator;
 import lc.common.base.generation.structure.LCFeatureGenerator;
 import lc.common.impl.registry.DefinitionRegistry;
+import lc.common.impl.registry.InterfaceRegistry;
 import lc.common.impl.registry.RecipeRegistry;
 import lc.common.impl.registry.RegistryContainer;
 import lc.common.impl.registry.StructureRegistry;
@@ -25,6 +28,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 
 /**
  * LanteaCraft main mod container
@@ -51,11 +55,16 @@ public class LCRuntime implements ILCAPIProxy {
 	private final Recipes recipes = new Recipes();
 	/** The LC structures container */
 	private final Structures structures = new Structures();
+	/** The LC interfaces container */
+	private final Interfaces interfaces = new Interfaces();
 
 	/** Container of all registrations */
 	private final LCInit container = new LCInit();
 	/** Network driver */
 	private final LCPacketPipeline network = new LCPacketPipeline();
+
+	/** The LC GUI handler hook */
+	private final GUIHandler interfaceHook = new GUIHandler();
 
 	/** Hints provider */
 	@HintProvider(serverClass = "lc.server.HintProviderServer", clientClass = "lc.client.HintProviderClient")
@@ -109,6 +118,11 @@ public class LCRuntime implements ILCAPIProxy {
 		return structures;
 	}
 
+	@Override
+	public Interfaces interfaces() {
+		return interfaces;
+	}
+
 	/**
 	 * Get the network pipeline
 	 *
@@ -153,6 +167,8 @@ public class LCRuntime implements ILCAPIProxy {
 		((DefinitionRegistry) registries().definitions()).init(this, event);
 		((RecipeRegistry) registries().recipes()).init(this, event);
 		((StructureRegistry) registries().structures()).init(this, event);
+		((InterfaceRegistry) registries().interfaces()).init(this, event);
+		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.instance, interfaceHook);
 		hints.init();
 	}
 

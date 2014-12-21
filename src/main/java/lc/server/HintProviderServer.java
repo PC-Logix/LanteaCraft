@@ -10,8 +10,7 @@ import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
 import lc.common.base.generation.LCMasterWorldGen;
-import lc.common.base.generation.scattered.LCScatteredFeatureGenerator;
-import lc.common.base.generation.structure.LCFeatureGenerator;
+import lc.server.database.UniverseManager;
 
 /**
  * Server-side hint provider implementation
@@ -22,15 +21,23 @@ import lc.common.base.generation.structure.LCFeatureGenerator;
 public class HintProviderServer implements IHintProvider {
 
 	/** The server hook bus */
-	private final ServerEventHooks serverHookBus;
+	final ServerEventHooks serverHookBus;
+
+	/** The server universe manager global instance */
+	final UniverseManager universeMgr;
+
+	/** The server Stargate manager */
+	final StargateManager stargateMgr;
 
 	/** The master world generator service */
-	private LCMasterWorldGen worldGenerator;
+	LCMasterWorldGen worldGenerator;
 
 	/** Default constructor */
 	public HintProviderServer() {
 		LCLog.debug("HintProviderServer providing server-side hints");
-		this.serverHookBus = new ServerEventHooks();
+		this.serverHookBus = new ServerEventHooks(this);
+		this.stargateMgr = new StargateManager(this);
+		this.universeMgr = new UniverseManager();
 	}
 
 	@Override

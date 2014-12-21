@@ -1,12 +1,14 @@
 package lc.container;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import lc.common.base.LCContainer;
+import lc.tiles.TileStargateBase;
 
 public class ContainerStargate extends LCContainer {
 
-	public ContainerStargate(int width, int height) {
-		super(width, height);
+	public ContainerStargate(TileStargateBase tile, EntityPlayer player) {
+		super(800, 600);
 		// TODO Auto-generated constructor stub
 	}
 

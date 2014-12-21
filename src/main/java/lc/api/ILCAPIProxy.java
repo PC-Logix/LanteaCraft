@@ -8,6 +8,7 @@ import lc.api.components.IRegistryContainer;
 import lc.api.init.Biomes;
 import lc.api.init.Blocks;
 import lc.api.init.Dimensions;
+import lc.api.init.Interfaces;
 import lc.api.init.Items;
 import lc.api.init.Recipes;
 import lc.api.init.Structures;
@@ -82,5 +83,12 @@ public interface ILCAPIProxy {
 	 * @return The list of structures
 	 */
 	public Structures structures();
+
+	/**
+	 * Get the list of interfaces
+	 *
+	 * @return The list of interfaces
+	 */
+	public Interfaces interfaces();
 
 }

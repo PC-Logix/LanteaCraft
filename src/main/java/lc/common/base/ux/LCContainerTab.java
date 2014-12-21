@@ -1,6 +1,6 @@
 package lc.common.base.ux;
 
-import java.awt.Rectangle;
+import java.awt.Dimension;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -45,11 +45,13 @@ public abstract class LCContainerTab {
 	 *
 	 * @return The internal panel area of this tab.
 	 */
-	protected abstract Rectangle getTabDimensions();
+	protected abstract Dimension getTabDimensions();
 
 	/**
 	 * Draw the background layer of the tab.
 	 *
+	 * @param container
+	 *            The parent container
 	 * @param partialTickCount
 	 *            Partial render ticks
 	 * @param mouseX
@@ -57,21 +59,25 @@ public abstract class LCContainerTab {
 	 * @param mouseY
 	 *            Mouse y-coord
 	 */
-	protected abstract void drawBackgroundLayer(float partialTickCount, int mouseX, int mouseY);
+	protected abstract void drawBackgroundLayer(LCContainerGUI container, float partialTickCount, int mouseX, int mouseY);
 
 	/**
 	 * Draw the foreground layer of the tab.
 	 *
+	 * @param container
+	 *            The parent container
 	 * @param mouseX
 	 *            Mouse x-coord
 	 * @param mouseY
 	 *            Mouse y-coord
 	 */
-	protected abstract void drawForegroundLayer(int mouseX, int mouseY);
+	protected abstract void drawForegroundLayer(LCContainerGUI container, int mouseX, int mouseY);
 
 	/**
 	 * Called when the mouse is clicked
 	 *
+	 * @param container
+	 *            The parent container
 	 * @param x
 	 *            The x-coordinate of the click
 	 * @param y
@@ -79,11 +85,13 @@ public abstract class LCContainerTab {
 	 * @param mouseButton
 	 *            Which button was clicked
 	 */
-	protected abstract void mouseClicked(int x, int y, int mouseButton);
+	protected abstract void mouseClicked(LCContainerGUI container, int x, int y, int mouseButton);
 
 	/**
 	 * Called when the mouse is released
 	 *
+	 * @param container
+	 *            The parent container
 	 * @param x
 	 *            The x-coordinate of the release
 	 * @param y
@@ -91,15 +99,17 @@ public abstract class LCContainerTab {
 	 * @param mouseButton
 	 *            Which button was released
 	 */
-	protected abstract void mouseMovedOrUp(int x, int y, int mouseButton);
+	protected abstract void mouseMovedOrUp(LCContainerGUI container, int x, int y, int mouseButton);
 
 	/**
 	 * Called when a key is typed
 	 *
+	 * @param container
+	 *            The parent container
 	 * @param c
 	 *            The charcode of the key if any
 	 * @param key
 	 *            The key number
 	 */
-	protected abstract void keyTyped(char c, int key);
+	protected abstract void keyTyped(LCContainerGUI container, char c, int key);
 }

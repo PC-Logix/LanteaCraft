@@ -32,4 +32,9 @@ public interface IRegistryContainer {
 	 */
 	public IStructureRegistry structures();
 
+	/**
+	 * @return The interface registry interface
+	 */
+	public IInterfaceRegistry interfaces();
+
 }

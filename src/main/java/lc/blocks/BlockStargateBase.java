@@ -9,6 +9,8 @@ import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
 import lc.common.base.LCTile;
 import lc.common.base.multiblock.MultiblockState;
+import lc.core.LCRuntime;
+import lc.core.LanteaCraft;
 import lc.core.ResourceAccess;
 import lc.items.ItemBlockStargateBase;
 import lc.tiles.TileStargateBase;
@@ -16,10 +18,12 @@ import lc.tiles.TileStargateRing;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 /**
  * Stargate base implementation.
@@ -127,5 +131,16 @@ public class BlockStargateBase extends LCBlock {
 	@Override
 	public IBlockRenderInfo block() {
 		return BlockStargateBase.renderInfo;
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
+			float cy, float cz) {
+		TileStargateBase te = (TileStargateBase) world.getTileEntity(x, y, z);
+		if (te != null && te.getState() == MultiblockState.FORMED) {
+			player.openGui(LanteaCraft.instance, LCRuntime.runtime.interfaces().stargateUI.getGUIID(), world, x, y, z);
+			return true;
+		}
+		return false;
 	}
 }

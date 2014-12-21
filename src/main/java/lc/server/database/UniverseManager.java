@@ -9,6 +9,7 @@ import lc.common.LCLog;
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.data.PrimitiveCompare;
+import lc.common.util.math.DimensionPos;
 import lc.core.BuildInfo;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
@@ -188,6 +189,11 @@ public class UniverseManager {
 
 			return next;
 		}
+	}
+
+	public char[] findAddress(DimensionPos dimensionPos) {
+		// TODO: fetch address
+		return null;
 	}
 
 }

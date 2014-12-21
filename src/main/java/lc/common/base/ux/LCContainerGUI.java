@@ -3,6 +3,7 @@ package lc.common.base.ux;
 import java.util.HashMap;
 
 import lc.client.opengl.BufferTexture;
+import lc.common.LCLog;
 import lc.common.base.LCContainer;
 import lc.core.ResourceAccess;
 import net.minecraft.client.Minecraft;
@@ -22,10 +23,8 @@ import net.minecraft.util.StatCollector;
 public abstract class LCContainerGUI extends GuiContainer {
 
 	private final static int defaultTextColor = 0x404040;
-
-	private HashMap<Integer, LCContainerTab> tabList;
 	private LCContainerTab activeTab;
-	
+
 	private BufferTexture tabVboBuffer;
 
 	double uscale, vscale;
@@ -58,9 +57,9 @@ public abstract class LCContainerGUI extends GuiContainer {
 	 *            The tab number.
 	 */
 	public void switchTab(int to) {
-		LCContainerTab nextTab = tabList.get(to);
+		LCContainerTab nextTab = getTabs().get(to);
 		if (nextTab == null)
-			nextTab = tabList.get(0);
+			nextTab = getTabs().get(0);
 		if (activeTab != null)
 			activeTab.onTabClosed(this);
 		activeTab = nextTab;
@@ -73,7 +72,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float partialTickCount, int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
 		if (activeTab != null)
-			activeTab.drawBackgroundLayer(partialTickCount, mouseX, mouseY);
+			activeTab.drawBackgroundLayer(this, partialTickCount, mouseX, mouseY);
 
 	}
 
@@ -81,25 +80,25 @@ public abstract class LCContainerGUI extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
 		if (activeTab != null)
-			activeTab.drawForegroundLayer(mouseX, mouseY);
+			activeTab.drawForegroundLayer(this, mouseX, mouseY);
 	}
 
 	@Override
 	protected void keyTyped(char c, int key) {
 		if (activeTab != null)
-			activeTab.keyTyped(c, key);
+			activeTab.keyTyped(this, c, key);
 	}
 
 	@Override
 	protected void mouseClicked(int x, int y, int mouseButton) {
 		if (activeTab != null)
-			activeTab.mouseClicked(x, y, mouseButton);
+			activeTab.mouseClicked(this, x, y, mouseButton);
 	}
 
 	@Override
 	protected void mouseMovedOrUp(int x, int y, int mouseButton) {
 		if (activeTab != null)
-			activeTab.mouseMovedOrUp(x, y, mouseButton);
+			activeTab.mouseMovedOrUp(this, x, y, mouseButton);
 	}
 
 	@Override

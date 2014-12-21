@@ -3,6 +3,7 @@ package lc.core;
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
 import lc.api.init.Blocks;
+import lc.api.init.Interfaces;
 import lc.api.init.Items;
 import lc.api.init.Recipes;
 import lc.api.init.Structures;
@@ -15,6 +16,7 @@ import lc.blocks.BlockStargateRing;
 import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.impl.registry.DefinitionWrapperProvider;
+import lc.common.impl.registry.InterfaceDefinition;
 import lc.common.impl.registry.RecipeProxy;
 import lc.common.impl.registry.SimpleRecipeDefinition;
 import lc.common.impl.registry.StructureDefinition;
@@ -68,6 +70,7 @@ public class LCInit {
 		Items items = runtime.items();
 		Recipes recipes = runtime.recipes();
 		Structures structures = runtime.structures();
+		Interfaces interfaces = runtime.interfaces();
 
 		blocks.stargateRingBlock = DefinitionWrapperProvider.provide(BlockStargateRing.class);
 		blocks.stargateBaseBlock = DefinitionWrapperProvider.provide(BlockStargateBase.class);
@@ -162,6 +165,10 @@ public class LCInit {
 		((StructureDefinition) structures.scatteredSurfaceStargate).addComp("SurfaceStargate",
 				SurfaceStargateFeature.class);
 		runtime.registries().structures().register(structures.scatteredSurfaceStargate);
+
+		interfaces.stargateUI = new InterfaceDefinition("stargateUI", "lc.container.ContainerStargate",
+				"lc.gui.GUIStargate");
+		runtime.registries().interfaces().addDefinition(interfaces.stargateUI);
 
 	}
 

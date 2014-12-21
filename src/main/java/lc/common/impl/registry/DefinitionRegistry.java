@@ -71,20 +71,16 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 
 	/** Pool of all known definitions. */
 	private final Map<String, IContainerDefinition> definitionPool;
-	/** Internal list of all registered Container instances. */
-	private final Map<Integer, Class<? extends Container>> registeredContainers;
-	/** Internal list of all registered GUI instances. */
-	private final Map<Integer, Class<? extends GuiScreen>> registeredGUIs;
+
 	/** Internal list of all registered renderers. */
 	private final Map<RendererType, Map<Class<?>, Class<? extends ILanteaCraftRenderer>>> registeredRenderers;
+
 	/** Internal list of all initialized renderers. */
 	private final Map<RendererType, Map<Class<?>, ILanteaCraftRenderer>> initializedRenderers;
 
 	/** Default constructor */
 	public DefinitionRegistry() {
 		definitionPool = new HashMap<String, IContainerDefinition>();
-		registeredContainers = new HashMap<Integer, Class<? extends Container>>();
-		registeredGUIs = new HashMap<Integer, Class<? extends GuiScreen>>();
 		registeredRenderers = new HashMap<RendererType, Map<Class<?>, Class<? extends ILanteaCraftRenderer>>>();
 		initializedRenderers = new HashMap<DefinitionRegistry.RendererType, Map<Class<?>, ILanteaCraftRenderer>>();
 	}
@@ -480,53 +476,4 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 					return renderer.getValue();
 		return null;
 	}
-
-	/**
-	 * Register a container with the definition registry.
-	 *
-	 * @param id
-	 *            The container ID
-	 * @param cls
-	 *            The container class
-	 */
-	public void registerContainer(int id, Class<? extends Container> cls) {
-		LCLog.debug("Registering container with ID " + id + ", class " + cls.getCanonicalName());
-		registeredContainers.put(id, cls);
-	}
-
-	/**
-	 * Register a GUI with the definition registry.
-	 *
-	 * @param id
-	 *            The GUI ID
-	 * @param cls
-	 *            The GUI class
-	 */
-	public void registerGui(int id, Class<? extends GuiScreen> cls) {
-		LCLog.debug("Registering GUI with ID " + id + ", class " + cls.getCanonicalName());
-		registeredGUIs.put(id, cls);
-	}
-
-	/**
-	 * Get a registered container class
-	 *
-	 * @param id
-	 *            The container ID
-	 * @return The container class
-	 */
-	public Class<? extends Container> getRegisteredContainer(int id) {
-		return registeredContainers.get(id);
-	}
-
-	/**
-	 * Get a registered GUI class
-	 *
-	 * @param id
-	 *            The GUI ID
-	 * @return The GUI class
-	 */
-	public Class<? extends GuiScreen> getRegisteredGui(int id) {
-		return registeredGUIs.get(id);
-	}
-
 }
