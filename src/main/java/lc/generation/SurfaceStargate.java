@@ -22,13 +22,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
-public class LanteaSurfaceStargate extends LCScatteredFeatureStart {
+public class SurfaceStargate extends LCScatteredFeatureStart {
 
 	/** Default constructor */
-	public LanteaSurfaceStargate() {
+	public SurfaceStargate() {
 	}
 
-	public LanteaSurfaceStargate(World world, Random rand, int x, int y) {
+	public SurfaceStargate(World world, Random rand, int x, int y) {
 		super(world, rand, x, y);
 
 	}

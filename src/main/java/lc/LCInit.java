@@ -23,8 +23,8 @@ import lc.common.impl.registry.StructureDefinition;
 import lc.common.util.data.AnyPredicate;
 import lc.generation.AbydosPyramid;
 import lc.generation.AbydosPyramid.AbydosPyramidFeature;
-import lc.generation.LanteaSurfaceStargate;
-import lc.generation.LanteaSurfaceStargate.SurfaceStargateFeature;
+import lc.generation.SurfaceStargate;
+import lc.generation.SurfaceStargate.SurfaceStargateFeature;
 import lc.items.ItemCraftingReagent;
 import lc.items.ItemDecorator;
 import lc.items.ItemGlasses;
@@ -72,6 +72,7 @@ public class LCInit {
 		Structures structures = runtime.structures();
 		Interfaces interfaces = runtime.interfaces();
 
+		/* Initialize game blocks and items */
 		blocks.stargateRingBlock = DefinitionWrapperProvider.provide(BlockStargateRing.class);
 		blocks.stargateBaseBlock = DefinitionWrapperProvider.provide(BlockStargateBase.class);
 		blocks.lanteaOreBlock = DefinitionWrapperProvider.provide(BlockLanteaOre.class);
@@ -85,6 +86,7 @@ public class LCInit {
 		items.lanteaCraftingItem = DefinitionWrapperProvider.provide(ItemCraftingReagent.class);
 		items.lanteaDecoratorTool = DefinitionWrapperProvider.provide(ItemDecorator.class);
 
+		/* Initialize recipes */
 		IDefinitionReference ringBlock = blocks.stargateRingBlock.ref();
 		IDefinitionReference chevronBlock = blocks.stargateRingBlock.ref().pushAll(1, 1);
 		IDefinitionReference baseBlock = blocks.stargateBaseBlock.ref();
@@ -94,10 +96,12 @@ public class LCInit {
 		IDefinitionReference triniumIngot = new DefinitionReference(items.lanteaAlloyItem, 1, OreType.TRINIUM.ordinal());
 		IDefinitionReference naquadahAlloyBlock = blocks.lanteaAlloyBlock.ref().pushAll(1, OreType.NAQUADAH.ordinal());
 		IDefinitionReference triniumAlloyBlock = blocks.lanteaAlloyBlock.ref().pushAll(1, OreType.TRINIUM.ordinal());
-		items.lanteaCraftingItem.ref().pushAll(1, ItemCraftingReagent.ReagentList.BLANKCRYSTAL.ordinal());
+		IDefinitionReference blankCrystal = items.lanteaCraftingItem.ref().pushAll(1,
+				ItemCraftingReagent.ReagentList.BLANKCRYSTAL.ordinal());
 		IDefinitionReference coreCrystal = items.lanteaCraftingItem.ref().pushAll(1,
 				ItemCraftingReagent.ReagentList.CORECRYSTAL.ordinal());
-		items.lanteaCraftingItem.ref().pushAll(1, ItemCraftingReagent.ReagentList.CONTROLCRYSTAL.ordinal());
+		IDefinitionReference controlCrystal = items.lanteaCraftingItem.ref().pushAll(1,
+				ItemCraftingReagent.ReagentList.CONTROLCRYSTAL.ordinal());
 
 		ItemStack cSandstone = new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1);
 		ItemStack ironIngot = new ItemStack(net.minecraft.init.Items.iron_ingot, 1);
@@ -147,7 +151,8 @@ public class LCInit {
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyBlock);
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyToIngots);
 
-		structures.scatteredSurfaceStargate = new StructureDefinition("SurfaceStargate", LanteaSurfaceStargate.class) {
+		/* Initialize structures */
+		structures.scatteredSurfaceStargate = new StructureDefinition("SurfaceStargate", SurfaceStargate.class) {
 			AnyPredicate $predictate = new AnyPredicate() {
 				@Override
 				public boolean test(Object[] t) {
@@ -161,11 +166,25 @@ public class LCInit {
 			protected AnyPredicate getGeneratorPredicate() {
 				return $predictate;
 			}
-		};
-		((StructureDefinition) structures.scatteredSurfaceStargate).addComp("SurfaceStargate",
-				SurfaceStargateFeature.class);
+		}.addComp("SurfaceStargate", SurfaceStargateFeature.class);
 		runtime.registries().structures().register(structures.scatteredSurfaceStargate);
 
+		structures.scatteredAbydosPyramid = new StructureDefinition("AbydosPyramid", AbydosPyramid.class) {
+			AnyPredicate $predictate = new AnyPredicate() {
+				@Override
+				public boolean test(Object[] t) {
+					return false;
+				}
+			};
+
+			@Override
+			protected AnyPredicate getGeneratorPredicate() {
+				return $predictate;
+			}
+		}.addComp("AbydosPyramid", AbydosPyramidFeature.class);
+		runtime.registries().structures().register(structures.scatteredAbydosPyramid);
+
+		/* Initialize interfaces */
 		interfaces.stargateUI = new InterfaceDefinition("stargateUI", "lc.container.ContainerStargate",
 				"lc.gui.GUIStargate");
 		runtime.registries().interfaces().addDefinition(interfaces.stargateUI);
