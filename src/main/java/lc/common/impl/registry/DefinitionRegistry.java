@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lc.BuildInfo;
+import lc.LCRuntime;
 import lc.api.components.IComponentRegistry;
 import lc.api.components.IDefinitionRegistry;
 import lc.api.defs.IContainerDefinition;
@@ -18,8 +20,6 @@ import lc.common.base.LCItemRenderer;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.util.LCCreativeTabManager;
-import lc.core.BuildInfo;
-import lc.core.LCRuntime;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.Render;

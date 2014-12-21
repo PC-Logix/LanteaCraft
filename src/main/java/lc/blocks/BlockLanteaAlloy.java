@@ -2,11 +2,11 @@ package lc.blocks;
 
 import java.util.List;
 
+import lc.ResourceAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.world.OreType;
 import lc.common.base.LCBlock;
-import lc.core.ResourceAccess;
 import lc.items.ItemBlockLanteaAlloy;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;

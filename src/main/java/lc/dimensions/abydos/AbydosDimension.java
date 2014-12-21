@@ -1,9 +1,9 @@
 package lc.dimensions.abydos;
 
+import lc.ResourceAccess;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IDimensionDefinition;
 import lc.common.impl.registry.DefinitionReference;
-import lc.core.ResourceAccess;
 import lc.generation.AbydosPyramid;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.structure.MapGenStructureIO;

@@ -1,5 +1,6 @@
 package lc.client;
 
+import lc.LCRuntime;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.client.render.ItemDecoratorRenderer;
@@ -12,7 +13,6 @@ import lc.common.base.pipeline.LCBlockRenderPipeline;
 import lc.common.base.pipeline.LCItemRenderPipeline;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.impl.registry.DefinitionRegistry;
-import lc.core.LCRuntime;
 import lc.items.ItemDecorator;
 import lc.server.HintProviderServer;
 import lc.tiles.TileStargateBase;

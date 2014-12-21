@@ -5,8 +5,8 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import lc.BuildInfo;
 import lc.common.LCLog;
-import lc.core.BuildInfo;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 /**

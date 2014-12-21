@@ -3,10 +3,10 @@ package lc.common.base.generation.scattered;
 import java.lang.reflect.Constructor;
 import java.util.Random;
 
+import lc.LCRuntime;
 import lc.api.defs.IStructureDefinition;
 import lc.common.LCLog;
 import lc.common.impl.registry.StructureRegistry;
-import lc.core.LCRuntime;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;

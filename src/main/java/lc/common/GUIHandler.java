@@ -2,9 +2,9 @@ package lc.common;
 
 import java.lang.reflect.Constructor;
 
+import lc.LCRuntime;
 import lc.api.components.IInterfaceRegistry;
 import lc.api.defs.IInterfaceDefinition;
-import lc.core.LCRuntime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

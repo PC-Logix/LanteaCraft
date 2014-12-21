@@ -2,11 +2,11 @@ package lc.items;
 
 import java.util.List;
 
+import lc.ResourceAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.world.OreType;
 import lc.common.base.LCItem;
-import lc.core.ResourceAccess;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

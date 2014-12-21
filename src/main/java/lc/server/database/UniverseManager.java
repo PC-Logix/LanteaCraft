@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import lc.BuildInfo;
 import lc.common.LCLog;
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.data.PrimitiveCompare;
 import lc.common.util.math.DimensionPos;
-import lc.core.BuildInfo;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
 

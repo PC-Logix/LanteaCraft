@@ -1,12 +1,12 @@
 package lc.common.base.pipeline;
 
+import lc.LCRuntime;
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCItemRenderer;
 import lc.common.base.LCTileRenderer;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.DefinitionRegistry.RendererType;
-import lc.core.LCRuntime;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 

@@ -1,7 +1,7 @@
 package lc.dimensions.abydos;
 
+import lc.LCRuntime;
 import lc.biomes.BiomeAbydosDesert;
-import lc.core.LCRuntime;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;

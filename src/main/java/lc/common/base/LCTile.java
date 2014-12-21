@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import lc.LCRuntime;
 import lc.api.event.IBlockEventHandler;
 import lc.common.LCLog;
 import lc.common.network.IPacketHandler;
@@ -13,7 +14,6 @@ import lc.common.network.LCPacket;
 import lc.common.network.packets.LCClientUpdate;
 import lc.common.network.packets.LCTileSync;
 import lc.common.util.math.DimensionPos;
-import lc.core.LCRuntime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;

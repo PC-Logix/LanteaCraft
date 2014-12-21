@@ -2,6 +2,7 @@ package lc.common.impl.registry;
 
 import java.lang.annotation.Annotation;
 
+import lc.LCRuntime;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.defs.IContainerDefinition;
@@ -10,7 +11,6 @@ import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
 import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
-import lc.core.LCRuntime;
 
 /**
  * Definition wrapper provider. Wraps classes with definitions into

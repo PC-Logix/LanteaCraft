@@ -1,4 +1,4 @@
-package lc.core;
+package lc;
 
 import lc.common.LCLog;
 

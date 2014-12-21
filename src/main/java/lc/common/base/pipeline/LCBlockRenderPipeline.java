@@ -1,12 +1,12 @@
 package lc.common.base.pipeline;
 
+import lc.LCRuntime;
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.client.render.DefaultBlockRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlockRenderer;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.DefinitionRegistry.RendererType;
-import lc.core.LCRuntime;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;

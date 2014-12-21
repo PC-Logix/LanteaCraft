@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lc.BuildInfo;
 import lc.api.components.RecipeType;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IGameDef;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
-import lc.core.BuildInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 

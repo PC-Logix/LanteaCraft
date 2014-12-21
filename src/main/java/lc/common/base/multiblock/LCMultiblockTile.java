@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
+import lc.LCRuntime;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.network.LCNetworkException;
@@ -11,7 +12,6 @@ import lc.common.network.LCPacket;
 import lc.common.network.packets.LCMultiblockPacket;
 import lc.common.util.math.DimensionPos;
 import lc.common.util.math.Vector3;
-import lc.core.LCRuntime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;

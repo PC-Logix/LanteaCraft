@@ -2,10 +2,10 @@ package lc.common.base.ux;
 
 import java.util.HashMap;
 
+import lc.ResourceAccess;
 import lc.client.opengl.BufferTexture;
 import lc.common.LCLog;
 import lc.common.base.LCContainer;
-import lc.core.ResourceAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;

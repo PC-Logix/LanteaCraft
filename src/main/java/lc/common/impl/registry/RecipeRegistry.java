@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lc.LCRuntime;
 import lc.api.components.IRecipeRegistry;
 import lc.api.components.RecipeType;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
-import lc.core.LCRuntime;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;

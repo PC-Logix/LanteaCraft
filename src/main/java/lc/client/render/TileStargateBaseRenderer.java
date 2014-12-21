@@ -1,10 +1,10 @@
 package lc.client.render;
 
+import lc.ResourceAccess;
 import lc.client.models.ModelStargate;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
-import lc.core.ResourceAccess;
 import lc.tiles.TileStargateBase;
 import net.minecraft.util.ResourceLocation;
 

@@ -8,10 +8,10 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureComponent;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import lc.LCRuntime;
 import lc.api.components.IStructureRegistry;
 import lc.api.defs.IStructureDefinition;
 import lc.common.LCLog;
-import lc.core.LCRuntime;
 
 public class StructureRegistry implements IStructureRegistry {
 

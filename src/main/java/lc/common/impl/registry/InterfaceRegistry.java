@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import lc.LCRuntime;
 import lc.api.components.IInterfaceRegistry;
 import lc.api.defs.IInterfaceDefinition;
-import lc.core.LCRuntime;
 
 public class InterfaceRegistry implements IInterfaceRegistry {
 

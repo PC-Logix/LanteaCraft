@@ -2,9 +2,9 @@ package lc.generation;
 
 import java.util.Random;
 
+import lc.LCRuntime;
 import lc.common.base.generation.structure.LCFeature;
 import lc.common.base.generation.structure.LCFeatureStart;
-import lc.core.LCRuntime;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;

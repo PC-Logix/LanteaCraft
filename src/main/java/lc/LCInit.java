@@ -1,4 +1,4 @@
-package lc.core;
+package lc;
 
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;

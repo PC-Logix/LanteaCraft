@@ -39,7 +39,7 @@ public class LCAPI {
 	public static ILCAPIProxy runtime() {
 		if (runtime == null)
 			try {
-				Class<?> rtc = Class.forName("lc.core.LCRuntime");
+				Class<?> rtc = Class.forName("lc.LCRuntime");
 				runtime = (ILCAPIProxy) rtc.getField("runtime").get(rtc);
 			} catch (Throwable e) {
 				return null;

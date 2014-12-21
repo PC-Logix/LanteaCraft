@@ -1,4 +1,4 @@
-package lc.core;
+package lc;
 
 import java.security.CodeSource;
 import java.security.cert.Certificate;

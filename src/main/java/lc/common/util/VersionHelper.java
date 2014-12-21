@@ -11,8 +11,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import lc.BuildInfo;
 import lc.common.LCLog;
-import lc.core.BuildInfo;
 import net.minecraftforge.common.MinecraftForge;
 
 /**

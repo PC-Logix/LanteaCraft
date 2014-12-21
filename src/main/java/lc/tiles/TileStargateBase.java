@@ -2,6 +2,7 @@ package lc.tiles;
 
 import java.util.List;
 
+import lc.LCRuntime;
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
@@ -16,7 +17,6 @@ import lc.common.util.game.BlockFilter;
 import lc.common.util.game.BlockHelper;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
-import lc.core.LCRuntime;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;

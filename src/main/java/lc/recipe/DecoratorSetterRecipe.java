@@ -3,9 +3,9 @@ package lc.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import lc.LCRuntime;
 import lc.common.util.game.BlockHelper;
 import lc.common.util.game.InventoryHelper;
-import lc.core.LCRuntime;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;

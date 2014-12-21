@@ -2,6 +2,9 @@ package lc.blocks;
 
 import java.util.List;
 
+import lc.LCRuntime;
+import lc.LanteaCraft;
+import lc.ResourceAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.rendering.IBlockRenderInfo;
@@ -9,9 +12,6 @@ import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
 import lc.common.base.LCTile;
 import lc.common.base.multiblock.MultiblockState;
-import lc.core.LCRuntime;
-import lc.core.LanteaCraft;
-import lc.core.ResourceAccess;
 import lc.items.ItemBlockStargateBase;
 import lc.tiles.TileStargateBase;
 import lc.tiles.TileStargateRing;

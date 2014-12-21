@@ -1,5 +1,6 @@
 package lc.common.impl.registry;
 
+import lc.LCRuntime;
 import lc.api.components.ComponentType;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IDefinitionReference;
@@ -7,7 +8,6 @@ import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
 import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
-import lc.core.LCRuntime;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
