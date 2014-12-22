@@ -1,12 +1,10 @@
 package lc.gui;
 
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.util.HashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import lc.common.LCLog;
 import lc.common.base.ux.LCContainerGUI;
 import lc.common.base.ux.LCContainerTab;
 import lc.container.ContainerStargate;

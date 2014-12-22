@@ -27,6 +27,7 @@ public class AbydosPyramid extends LCFeatureStart {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void addComponents(World world, Random rng, int cx, int cz) {
 		components.add(new AbydosPyramidFeature(rng, cx, cz));

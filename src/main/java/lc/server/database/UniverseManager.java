@@ -175,7 +175,6 @@ public class UniverseManager {
 		Random rng = new Random();
 		StargateCharsetHelper helper = StargateCharsetHelper.singleton();
 		main: while (true) {
-			boolean flag = true;
 			char[] next = new char[9];
 			for (int i = 0; i < 9; i++)
 				next[i] = helper.index(rng.nextInt(helper.radixSize));

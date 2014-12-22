@@ -14,8 +14,6 @@ import lc.api.init.Structures;
 import lc.common.GUIHandler;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
-import lc.common.base.generation.scattered.LCScatteredFeatureGenerator;
-import lc.common.base.generation.structure.LCFeatureGenerator;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.InterfaceRegistry;
 import lc.common.impl.registry.RecipeRegistry;

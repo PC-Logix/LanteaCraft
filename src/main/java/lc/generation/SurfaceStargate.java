@@ -22,6 +22,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
+/**
+ * Surface Stargate feature implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class SurfaceStargate extends LCScatteredFeatureStart {
 
 	/** Default constructor */
@@ -33,11 +39,18 @@ public class SurfaceStargate extends LCScatteredFeatureStart {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void addComponents(World world, Random rng, int cx, int cz) {
 		components.add(new SurfaceStargateFeature(rng, cx, cz));
 	}
 
+	/**
+	 * Surface Stargate core feature
+	 * 
+	 * @author AfterLifeLochie
+	 *
+	 */
 	public static class SurfaceStargateFeature extends LCScatteredFeature {
 
 		private Orientations rotation;

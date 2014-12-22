@@ -73,6 +73,7 @@ public class ItemDecorator extends LCItem {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List strings, boolean advancedItemTooltips) {

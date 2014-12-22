@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import lc.BuildInfo;
 import lc.api.components.RecipeType;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IDefinitionReference;

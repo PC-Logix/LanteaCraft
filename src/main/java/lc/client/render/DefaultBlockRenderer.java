@@ -4,7 +4,6 @@ import lc.api.defs.IDefinitionReference;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.api.rendering.IBlockSkinnable;
 import lc.api.rendering.IRenderInfo;
-import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
 import lc.common.base.LCTile;

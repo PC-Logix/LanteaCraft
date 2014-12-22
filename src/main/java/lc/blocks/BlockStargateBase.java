@@ -14,7 +14,6 @@ import lc.common.base.LCTile;
 import lc.common.base.multiblock.MultiblockState;
 import lc.items.ItemBlockStargateBase;
 import lc.tiles.TileStargateBase;
-import lc.tiles.TileStargateRing;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;

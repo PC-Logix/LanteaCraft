@@ -1,17 +1,14 @@
 package lc.common.base.generation.structure;
 
 import java.lang.reflect.Constructor;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
 import lc.LCRuntime;
 import lc.ResourceAccess;
 import lc.api.defs.IStructureDefinition;
-import lc.api.init.Structures;
 import lc.common.LCLog;
 import lc.common.impl.registry.StructureRegistry;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
