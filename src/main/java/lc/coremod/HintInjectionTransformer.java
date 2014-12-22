@@ -94,7 +94,7 @@ public class HintInjectionTransformer implements IClassTransformer {
 				initMethod.instructions.insertBefore(lastInsn, new TypeInsnNode(Opcodes.NEW, mapping.getValue()));
 				initMethod.instructions.insertBefore(lastInsn, new InsnNode(Opcodes.DUP));
 				initMethod.instructions.insertBefore(lastInsn,
-						new MethodInsnNode(Opcodes.INVOKESPECIAL, mapping.getValue(), "<init>", "()V"));
+						new MethodInsnNode(Opcodes.INVOKESPECIAL, mapping.getValue(), "<init>", "()V", false));
 				initMethod.instructions.insertBefore(lastInsn,
 						new FieldInsnNode(Opcodes.PUTFIELD, name.replace(".", "/"), mapping.getKey(),
 								"Llc/common/IHintProvider;"));
