@@ -13,8 +13,7 @@ public class UniverseManager {
 	}
 
 	/**
-	 * Called by the system when a server is being started and a Universe should
-	 * be loaded or created.
+	 * Called by the system when a server is being started.
 	 * 
 	 * @param event
 	 *            The server event.
@@ -23,8 +22,7 @@ public class UniverseManager {
 	}
 
 	/**
-	 * Called by the system when a server is being stopped and any open Universe
-	 * should be saved to disk.
+	 * Called by the system when a server is being stopped.
 	 * 
 	 * @param event
 	 *            The server event.
@@ -33,8 +31,7 @@ public class UniverseManager {
 	}
 
 	/**
-	 * Called by the system when a dimension is being loaded and a Galaxy should
-	 * be loaded or created.
+	 * Called by the system when a dimension is being loaded.
 	 * 
 	 * @param load
 	 *            The load event.
@@ -43,19 +40,16 @@ public class UniverseManager {
 	}
 
 	/**
-	 * Called by the system when a dimension is being unloaded and a Galaxy
-	 * should be saved to disk.
+	 * Called by the system when a dimension is being unloaded.
 	 * 
 	 * @param unload
 	 *            The unload event.
 	 */
 	public void unloadGalaxy(WorldEvent.Unload unload) {
-
 	}
 
 	/**
-	 * Called by the system when the dimension is being auto-saved and a Galaxy
-	 * should also be auto-saved.
+	 * Called by the system when the dimension is being auto-saved.
 	 * 
 	 * @param save
 	 *            The save event.
