@@ -25,7 +25,9 @@ public class SlotFilter {
 	}
 
 	/**
-	 * Creates a new SlotFilter with the provided Lists of accept and deny rules
+	 * Creates a new SlotFilter with the provided Lists of accept and deny
+	 * rules. The SlotFilter will behave like a blacklisted filter (will
+	 * disallow items in the deny list).
 	 *
 	 * @param accept
 	 *            The list of accept rules
@@ -38,16 +40,19 @@ public class SlotFilter {
 
 	/**
 	 * Creates a new SlotFilter with the provided Lists of accept and deny
-	 * rules, and a given mode
+	 * rules, and a given mode.
 	 *
 	 * @param accept
 	 *            The list of accept rules
 	 * @param deny
 	 *            The list of deny rules
 	 * @param whitelist
-	 *            If this FilterRule is a white-list rule-set
+	 *            If this FilterRule is a white-list rule-set. If a white-list
+	 *            rule set, the rule will only accept items in the allow list.
+	 *            If a blacklist rule set, the rule will only deny items in the
+	 *            deny list.
 	 * @param metadata
-	 *            If this FilterRule is metadata sensitive.
+	 *            If this FilterRule is meta-data sensitive.
 	 */
 	public SlotFilter(ItemStack[] accept, ItemStack[] deny, boolean whitelist, boolean metadata) {
 		if (accept != null)

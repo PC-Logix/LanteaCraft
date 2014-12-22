@@ -36,5 +36,18 @@ public abstract class LCScatteredFeatureStart extends StructureStart {
 		updateBoundingBox();
 	}
 
+	/**
+	 * Called by the generation controller to place blocks for this structure in
+	 * the world.
+	 * 
+	 * @param world
+	 *            The world to write to
+	 * @param rng
+	 *            The random number generator
+	 * @param cx
+	 *            The x-coordinate
+	 * @param cz
+	 *            The y-coordinate
+	 */
 	protected abstract void addComponents(World world, Random rng, int cx, int cz);
 }

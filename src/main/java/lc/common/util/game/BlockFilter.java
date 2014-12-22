@@ -59,12 +59,6 @@ public class BlockFilter {
 			return true;
 		if (blockOf.equals(targetBlock) && targetMetadata == world.getBlockMetadata(x, y, z))
 			return true;
-
-		// if (blockOf != null && world != null && targetBlock != null)
-		// LCLog.info("No match: got (%s %s) expected (%s %s)",
-		// blockOf.getClass().getName(),
-		// world.getBlockMetadata(x, y, z), targetBlock.getClass().getName(),
-		// targetMetadata);
 		return false;
 	}
 
@@ -89,8 +83,9 @@ public class BlockFilter {
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		result.append("(b: ").append(targetBlock.getClass().getName()).append(",");
-		result.append(" m: ").append(targetMetadata).append(")");
+		result.append("BlockFilter").append("{");
+		result.append(targetBlock.getClass().getName()).append(",");
+		result.append(targetMetadata).append("}");
 		return result.toString();
 	}
 }

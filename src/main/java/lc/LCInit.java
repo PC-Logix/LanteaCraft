@@ -13,7 +13,6 @@ import lc.blocks.BlockLanteaAlloy;
 import lc.blocks.BlockLanteaOre;
 import lc.blocks.BlockStargateBase;
 import lc.blocks.BlockStargateRing;
-import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.impl.registry.DefinitionWrapperProvider;
 import lc.common.impl.registry.InterfaceDefinition;

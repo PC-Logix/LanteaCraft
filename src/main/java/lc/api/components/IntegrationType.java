@@ -12,6 +12,8 @@ package lc.api.components;
  */
 public enum IntegrationType {
 	/** Power drivers */
-	POWER;
+	POWER,
 
+	/** Computer drivers */
+	COMPUTERS;
 }

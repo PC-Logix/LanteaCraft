@@ -83,6 +83,13 @@ public abstract class StructureDefinition implements IStructureDefinition {
 		}
 	}
 
+	/**
+	 * Get the predicate responsible for determining where structure generation
+	 * is permitted
+	 * 
+	 * @return The predicate responsible for determining where structure
+	 *         generation is permitted or disallowed
+	 */
 	protected abstract AnyPredicate getGeneratorPredicate();
 
 }

@@ -81,8 +81,10 @@ public enum Orientations {
 	public static EnumSet<Orientations> getCardinals() {
 		return EnumSet.of(NORTH, EAST, SOUTH, WEST);
 	}
-	
+
 	/**
+	 * @param r
+	 *            The random number generator
 	 * @return A random cardinal
 	 */
 	public static Orientations randomCardinal(Random r) {

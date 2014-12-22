@@ -15,7 +15,12 @@ public class ServerEventHooks {
 
 	private final HintProviderServer serverHints;
 
-	/** Default constructor */
+	/**
+	 * Default constructor
+	 * 
+	 * @param serverHints
+	 *            The server hint provider
+	 */
 	public ServerEventHooks(HintProviderServer serverHints) {
 		this.serverHints = serverHints;
 	}

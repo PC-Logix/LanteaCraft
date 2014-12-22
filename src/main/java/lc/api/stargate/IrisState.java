@@ -1,5 +1,11 @@
 package lc.api.stargate;
 
+/**
+ * Iris state enumeration
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public enum IrisState {
 	/** No iris is present. */
 	None,

@@ -6,6 +6,7 @@ import lc.LCRuntime;
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
+import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
 import lc.common.base.multiblock.StructureConfiguration;
@@ -15,16 +16,17 @@ import lc.common.network.packets.LCTileSync;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.game.BlockHelper;
+import lc.common.util.game.SlotFilter;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Stargate Base tile implementation.
@@ -32,7 +34,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author AfterLifeLochie
  *
  */
-@DriverCandidate(types = { IntegrationType.POWER })
+@DriverCandidate(types = { IntegrationType.POWER, IntegrationType.COMPUTERS })
 public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnable {
 
 	public final static StructureConfiguration structure = new StructureConfiguration() {
@@ -71,6 +73,34 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	private Block clientSkinBlock;
 	private int clientSkinBlockMetadata;
+
+	private FilteredInventory inventory = new FilteredInventory(1) {
+		@Override
+		public void openInventory() {
+			/* Do nothing */
+		}
+
+		@Override
+		public void closeInventory() {
+			/* Do nothing */
+		}
+
+		@Override
+		public void markDirty() {
+			/* Do nothing */
+		}
+
+		@Override
+		public boolean hasCustomInventoryName() {
+			return true;
+		}
+
+		@Override
+		public String getInventoryName() {
+			return "Stargate";
+		}
+	}.setFilterRule(0, new SlotFilter(new ItemStack[] { LCRuntime.runtime.items().lanteaAlloyItem.getStackOf(1) },
+			null, true, true));
 
 	@Override
 	public StructureConfiguration getConfiguration() {

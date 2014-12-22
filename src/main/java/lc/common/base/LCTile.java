@@ -134,18 +134,80 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 */
 	public abstract IInventory getInventory();
 
-	/** Called to perform update logic on the client. */
+	/**
+	 * <p>
+	 * Called to perform update logic on the client. You can perform any
+	 * extended operations here on the tile entity.
+	 * </p>
+	 * <p>
+	 * Invocation of update methods is as follows:
+	 * 
+	 * <pre>
+	 * updateEntity() [Minecraft] {
+	 * - thinkClient()
+	 * - thinkClientPost()
+	 * - requestUpdatePacket()
+	 * }
+	 * </pre>
+	 * 
+	 * </p>
+	 */
 	public abstract void thinkClient();
 
-	/** Called to perform update logic on the client. */
+	/**
+	 * <p>
+	 * Called to perform delayed update logic on the client. You can perform any
+	 * extended delayed operations here on the tile entity.
+	 * </p>
+	 * <p>
+	 * Invocation of update methods is as follows:
+	 * 
+	 * <pre>
+	 * updateEntity() [Minecraft] {
+	 * - thinkClient()
+	 * - thinkClientPost()
+	 * - requestUpdatePacket()
+	 * }
+	 * </pre>
+	 */
 	public void thinkClientPost() {
 		/* No action by default */
 	}
 
-	/** Called to perform update logic on the server. */
+	/**
+	 * <p>
+	 * Called to perform update logic on the server. You can perform any
+	 * extended operations here on the tile entity.
+	 * </p>
+	 * <p>
+	 * Invocation of update methods is as follows:
+	 * 
+	 * <pre>
+	 * updateEntity() [Minecraft] {
+	 * - thinkServer()
+	 * - thinkServerPost()
+	 * - sendUpdatePackets()
+	 * }
+	 * </pre>
+	 */
 	public abstract void thinkServer();
 
-	/** Called to perform update logic on the server. */
+	/**
+	 * <p>
+	 * Called to perform delayed update logic on the server. You can perform any
+	 * extended delayed operations here on the tile entity.
+	 * </p>
+	 * <p>
+	 * Invocation of update methods is as follows:
+	 * 
+	 * <pre>
+	 * updateEntity() [Minecraft] {
+	 * - thinkServer()
+	 * - thinkServerPost()
+	 * - sendUpdatePackets()
+	 * }
+	 * </pre>
+	 */
 	public void thinkServerPost() {
 		/* No action by default */
 	}
@@ -163,7 +225,8 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	public abstract void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException;
 
 	/**
-	 * Called to get a description packet from the server.
+	 * Called to get a description packet from the server. You should add any
+	 * packets you want to send to the client to the list.
 	 *
 	 * @param packets
 	 *            The list of packets to be sent.
@@ -175,7 +238,9 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	}
 
 	/**
-	 * Called to ask if the tile entity should render. This result is cached.
+	 * Called to ask if the tile entity should render. This result is cached, so
+	 * you should not return false unless you never want the tile to be
+	 * rendered.
 	 * 
 	 * @return If the tile entity should be rendered.
 	 */
@@ -300,6 +365,13 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		return true;
 	}
 
+	/**
+	 * <p>
+	 * Called to update the tile entity. <b>You should not override this method
+	 * in your implementation in LCTile;</b> use {@link LCTile#thinkClient} and
+	 * {@link LCTile#thinkServer} instead.
+	 * </p>
+	 */
 	@Override
 	public void updateEntity() {
 		if (worldObj != null)

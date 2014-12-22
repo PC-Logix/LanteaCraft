@@ -2,7 +2,6 @@ package lc.common.base.generation.scattered;
 
 import java.util.Random;
 
-import lc.common.LCLog;
 import lc.common.util.math.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -110,26 +109,132 @@ public abstract class LCScatteredFeature extends StructureComponent {
 	@Override
 	public abstract boolean addComponentParts(World world, Random random, StructureBoundingBox structureboundingbox);
 
+	/**
+	 * Fill a region with blocks
+	 * 
+	 * @param w
+	 *            The world to write to
+	 * @param bb
+	 *            The structure bounding-box
+	 * @param v0
+	 *            The start vector
+	 * @param v1
+	 *            The end vector
+	 * @param b0
+	 *            The block to fill with
+	 */
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0) {
 		fill(w, bb, v0, v1, b0, b0);
 	}
 
+	/**
+	 * Fill a region with blocks
+	 * 
+	 * @param w
+	 *            The world to write to
+	 * @param bb
+	 *            The structure bounding-box
+	 * @param v0
+	 *            The start vector
+	 * @param v1
+	 *            The end vector
+	 * @param b0
+	 *            The block to fill with
+	 * @param m0
+	 *            The metadata to fill with
+	 */
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, int m0) {
 		fill(w, bb, v0, v1, b0, m0, b0, m0);
 	}
 
+	/**
+	 * Fill a region with blocks
+	 * 
+	 * @param w
+	 *            The world to write to
+	 * @param bb
+	 *            The structure bounding-box
+	 * @param v0
+	 *            The start vector
+	 * @param v1
+	 *            The end vector
+	 * @param b0
+	 *            The block to fill with
+	 * @param b1
+	 *            The block to replace blocks with
+	 */
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, Block b1) {
 		fill(w, bb, v0, v1, b0, b1, false);
 	}
 
+	/**
+	 * Fill a region with blocks
+	 * 
+	 * @param w
+	 *            The world to write to
+	 * @param bb
+	 *            The structure bounding-box
+	 * @param v0
+	 *            The start vector
+	 * @param v1
+	 *            The end vector
+	 * @param b0
+	 *            The block to fill with
+	 * @param m0
+	 *            The metadata to fill with
+	 * @param b1
+	 *            The block to replace blocks with
+	 * @param m1
+	 *            The metadata to replace blocks with
+	 */
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, int m0, Block b1, int m1) {
 		fill(w, bb, v0, v1, b0, m0, b1, m1, false);
 	}
 
+	/**
+	 * Fill a region with blocks
+	 * 
+	 * @param w
+	 *            The world to write to
+	 * @param bb
+	 *            The structure bounding-box
+	 * @param v0
+	 *            The start vector
+	 * @param v1
+	 *            The end vector
+	 * @param b0
+	 *            The block to fill with
+	 * @param b1
+	 *            The block to replace with
+	 * @param rep
+	 *            If only replacement is permitted
+	 */
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, Block b1, boolean rep) {
 		fillWithBlocks(w, bb, v0.floorX(), v0.floorY(), v0.floorZ(), v1.floorX(), v1.floorY(), v1.floorZ(), b0, b1, rep);
 	}
 
+	/**
+	 * Fill a region with blocks
+	 * 
+	 * @param w
+	 *            The world to write to
+	 * @param bb
+	 *            The structure bounding-box
+	 * @param v0
+	 *            The start vector
+	 * @param v1
+	 *            The end vector
+	 * @param b0
+	 *            The block to fill with
+	 * @param m0
+	 *            The metadata to fill with
+	 * @param b1
+	 *            The block to replace with
+	 * @param m1
+	 *            The metadata to replace with
+	 * @param rep
+	 *            If only replacement is permitted
+	 */
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, int m0, Block b1, int m1,
 			boolean rep) {
 		fillWithMetadataBlocks(w, bb, v0.floorX(), v0.floorY(), v0.floorZ(), v1.floorX(), v1.floorY(), v1.floorZ(), b0,

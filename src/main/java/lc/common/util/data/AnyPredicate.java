@@ -10,6 +10,26 @@ package lc.common.util.data;
 public interface AnyPredicate {
 
 	/**
+	 * The identity true predicate
+	 */
+	public static final AnyPredicate IDENTITY_TRUE = new AnyPredicate() {
+		@Override
+		public boolean test(Object[] t) {
+			return true;
+		}
+	};
+
+	/**
+	 * The identity false predicate
+	 */
+	public static final AnyPredicate IDENTITY_FALSE = new AnyPredicate() {
+		@Override
+		public boolean test(Object[] t) {
+			return false;
+		}
+	};
+
+	/**
 	 * Evaluates this predicate on the given argument.
 	 * 
 	 * @param t
