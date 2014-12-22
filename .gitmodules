@@ -1,3 +1,0 @@
-[submodule "astrodat-lib"]
-	path = src/astrodat-lib
-	url = https://github.com/PC-Logix/astrodat.git
