@@ -2,7 +2,6 @@ package lc.coremod;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -22,11 +21,8 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
 
 /**
  * Takes {@link DeviceDrivers} rules in a load-time binary base class and
@@ -266,11 +262,11 @@ public class DriverBindingTransformer implements IClassTransformer {
 				classInitializer.visitLdcInsn(eventMapItem.getKey());
 				classInitializer.visitLdcInsn(eventMapItem.getValue());
 				classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, "lc/common/base/LCTile", "registerCallback",
-						"(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)V");
+						"(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)V", false);
 			}
 			if (hasUserInit)
 				classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, classNode.name, "user_clinit",
-						Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]));
+						Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]), false);
 			classInitializer.visitInsn(Opcodes.RETURN);
 			classInitializer.visitMaxs(3, 0);
 			classInitializer.visitEnd();

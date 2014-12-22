@@ -2,8 +2,6 @@ package lc.coremod;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
-
 import lc.common.LCLog;
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -14,7 +12,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
 
 /**
  * Takes {@link RuntimeAnnotation} optional rules in a load-time binary base
