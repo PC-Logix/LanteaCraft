@@ -3,6 +3,8 @@ package lc.server.database;
 import java.io.IOException;
 import java.util.List;
 
+import lc.common.util.math.ChunkPos;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -15,15 +17,32 @@ public class RecordIO {
 
 		@Override
 		public void write(JsonWriter out, StargateRecord value) throws IOException {
-			// TODO: Auto-generated method stub
+			out.beginObject();
+			out.name("type").value(value.type);
+			out.name("address").value(String.valueOf(value.address));
+			out.name("hasCoords").value(value.chunk != null);
+			if (value.chunk != null) {
+				out.name("dimension").value(value.dimension);
+				out.name("x").value(value.chunk.cx);
+				out.name("z").value(value.chunk.cz);
+			}
+			out.endObject();
 		}
 
 		@Override
 		public StargateRecord read(JsonReader in) throws IOException {
-			// TODO Auto-generated method stub
-			return null;
+			in.beginObject();
+			StargateRecord result = new StargateRecord();
+			result.type = in.nextInt();
+			result.address = in.nextString().toCharArray();
+			boolean hasCoords = in.nextBoolean();
+			if (hasCoords) {
+				result.dimension = in.nextInt();
+				result.chunk = new ChunkPos(in.nextInt(), in.nextInt());
+			}
+			in.endObject();
+			return result;
 		}
-
 	}
 
 	public static final RecordTypeAdapter RECORD_ADAPTER = new RecordTypeAdapter();
