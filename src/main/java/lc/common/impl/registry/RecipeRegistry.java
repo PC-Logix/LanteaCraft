@@ -66,7 +66,7 @@ public class RecipeRegistry implements IRecipeRegistry {
 							out.size());
 				ItemStack[] inputs = in.values().toArray(new ItemStack[0]);
 				LCLog.info("Creating shapless recipe: in %s, out %s", inputs, out.get(0));
-				CraftingManager.getInstance().addShapelessRecipe(out.get(0), inputs);
+				CraftingManager.getInstance().addShapelessRecipe(out.get(0), (Object[]) inputs);
 			} else if (type == RecipeType.SHAPED) {
 				Map<Integer, ItemStack> in = definition.getInputStacks();
 				Map<Integer, ItemStack> out = definition.getOutputStacks();
