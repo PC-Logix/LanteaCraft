@@ -113,9 +113,12 @@ public class LCInit {
 		ItemStack cSandstone = new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1);
 		ItemStack ironIngot = new ItemStack(net.minecraft.init.Items.iron_ingot, 1);
 		ItemStack redstone = new ItemStack(net.minecraft.init.Items.redstone, 1);
+		ItemStack diamond = new ItemStack(net.minecraft.init.Items.diamond, 1);
 		ItemStack eyeOfEnder = new ItemStack(net.minecraft.init.Items.ender_eye, 1);
+		ItemStack lapis = new ItemStack(net.minecraft.init.Items.dye, 1, 4);
 		ItemStack glowstone = new ItemStack(net.minecraft.init.Items.glowstone_dust, 1);
 		ItemStack enderPearl = new ItemStack(net.minecraft.init.Items.ender_pearl, 1);
+		ItemStack glassPane = new ItemStack(net.minecraft.init.Blocks.glass_pane, 1);
 
 		ItemStack blockGold = new ItemStack(net.minecraft.init.Blocks.gold_block, 1);
 		ItemStack blockIron = new ItemStack(net.minecraft.init.Blocks.iron_block, 1);
@@ -129,6 +132,16 @@ public class LCInit {
 
 		recipes.decorSetterRecipe = new RecipeProxy("decor_editor", RecipeType.PROXY, DecoratorSetterRecipe.class);
 		runtime.registries().recipes().addRecipe(recipes.decorSetterRecipe);
+
+		recipes.crystalBlankRecipe = new SimpleRecipeDefinition("blank_crystal", RecipeType.SHAPED, blankCrystal,
+				"000010000", glassPane, diamond);
+		recipes.crystalCoreRecipe = new SimpleRecipeDefinition("core_crystal", RecipeType.SHAPED, coreCrystal,
+				"000010000", lapis, blankCrystal);
+		recipes.crystalControlRecipe = new SimpleRecipeDefinition("control_crystal", RecipeType.SHAPED, controlCrystal,
+				"000010000", redstone, blankCrystal);
+		runtime.registries().recipes().addRecipe(recipes.crystalBlankRecipe);
+		runtime.registries().recipes().addRecipe(recipes.crystalCoreRecipe);
+		runtime.registries().recipes().addRecipe(recipes.crystalControlRecipe);
 
 		recipes.stargateBase = new SimpleRecipeDefinition("stargate_base", RecipeType.SHAPED, baseBlock, "010232454",
 				cSandstone, redstone, naquadahIngot, eyeOfEnder, ironIngot, coreCrystal);

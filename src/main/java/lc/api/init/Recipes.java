@@ -27,6 +27,13 @@ public class Recipes {
 	public IRecipeDefinition triniumAlloyBlock;
 	/** Trinium alloy block to ingots recipe */
 	public IRecipeDefinition triniumAlloyToIngots;
+	
+	/** Blank crystal crafting recipe */
+	public IRecipeDefinition crystalBlankRecipe;
+	/** Core crystal crafting recipe */
+	public IRecipeDefinition crystalCoreRecipe;
+	/** Controller crystal crafting recipe */
+	public IRecipeDefinition crystalControlRecipe;
 
 	/** Stargate base crafting recipe */
 	public IRecipeDefinition stargateBase;
