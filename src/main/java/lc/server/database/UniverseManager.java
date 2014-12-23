@@ -1,15 +1,27 @@
 package lc.server.database;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import lc.common.util.math.DimensionPos;
 import net.minecraftforge.event.world.WorldEvent;
-
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
 public class UniverseManager {
 
+	private final RecordIO jsonAgent;
+
+	/** Heap for all registered addresses */
+	private final ArrayList<StargateRecord> recordHeap = new ArrayList<StargateRecord>();
+
+	/** Dictionary of all records to integer dimensions */
+	private final HashMap<Integer, ArrayList<WeakReference<StargateRecord>>> dimensionMap = new HashMap<Integer, ArrayList<WeakReference<StargateRecord>>>();
+
 	/** Default constructor */
 	public UniverseManager() {
+		jsonAgent = new RecordIO();
 	}
 
 	/**
