@@ -109,46 +109,10 @@ public class StargateCharsetHelper {
 		return radix[i];
 	}
 
-	/**
-	 * boolean[4] to String(1)]
-	 *
-	 * @param flags
-	 *            The array of flag states
-	 * @return An encoded character of flag states [4]
-	 */
-	private String btos(boolean[] flags) {
-		int accum = 0;
-		if (flags.length != 4)
-			throw new NumberFormatException("Illegal btos dimension.");
-		for (int i = 0; i < 4; i++)
-			if (flags[i])
-				accum |= 1 << i;
-		return itos(accum, 1);
-	}
-
-	/**
-	 * String(1) to boolean[4]
-	 *
-	 * @param value
-	 *            The encoded character of flag states [4]
-	 * @return An array of flag states
-	 */
-	private boolean[] stob(String value) {
-		boolean[] result = new boolean[4];
-		int accum = stoi(value);
-		for (int i = 0; i < 4; i++)
-			if ((accum & 1 << i) != 0)
-				result[i] = true;
-		return result;
-	}
-
-	/**
-	 * int to String(width)
-	 */
-	private String itos(int value, int width) {
+	private String longToAddress(long value, int width) {
 		final char[] buf = new char[width];
 		while (width > 0) {
-			buf[--width] = index(value % radix.length);
+			buf[--width] = index((int) (value % radix.length));
 			value /= radix.length;
 		}
 		if (value != 0)
@@ -156,20 +120,13 @@ public class StargateCharsetHelper {
 		return new String(buf);
 	}
 
-	/**
-	 * String(?) to int
-	 *
-	 * @param value
-	 *            The integer value
-	 * @return An integer value of the radix
-	 */
-	private int stoi(String value) {
-		int result = 0, multmin, digit;
-		int i = 0, len = value.length(), limit = -Integer.MAX_VALUE;
+	public long addressToLong(char[] address) {
+		long result = 0, limit = -Long.MAX_VALUE, multmin, digit;
+		int i = 0, len = address.length;
 		if (len > 0) {
 			multmin = limit / radix.length;
 			while (i < len) {
-				digit = index(value.charAt(i++));
+				digit = index(address[i++]);
 				if (digit < 0)
 					throw new NumberFormatException("Not a legal radix-38 symbol.");
 				if (result < multmin)

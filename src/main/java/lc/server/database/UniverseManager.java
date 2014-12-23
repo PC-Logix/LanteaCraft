@@ -4,8 +4,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.math.ChunkPos;
 import lc.common.util.math.DimensionPos;
 import net.minecraftforge.event.world.WorldEvent;
@@ -14,6 +16,10 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
 public class UniverseManager {
 
+	/** Default Stargate address size */
+	private final static int ADDRESS_WIDTH = 9;
+	
+	/** Disk IO provider */
 	private final RecordIO jsonAgent;
 
 	/** Heap for all registered addresses */
@@ -21,6 +27,11 @@ public class UniverseManager {
 
 	/** Dictionary of all records to integer dimensions */
 	private final HashMap<Integer, ArrayList<WeakReference<StargateRecord>>> dimensionMap = new HashMap<Integer, ArrayList<WeakReference<StargateRecord>>>();
+
+	/** Dictionary of all allocated character maps */
+	private final ArrayList<Long> characterMap = new ArrayList<Long>();
+
+	private Random worldRandom;
 
 	/** Default constructor */
 	public UniverseManager() {
@@ -34,6 +45,7 @@ public class UniverseManager {
 	 *            The server event.
 	 */
 	public void loadUniverse(FMLServerStartingEvent event) {
+		
 	}
 
 	/**
@@ -83,6 +95,7 @@ public class UniverseManager {
 			if (dimensionMap.get(dimId) == null)
 				dimensionMap.put(dimId, new ArrayList<WeakReference<StargateRecord>>());
 			dimensionMap.get(dimId).add(new WeakReference<StargateRecord>(record));
+			characterMap.add(StargateCharsetHelper.singleton().addressToLong(record.address));
 		}
 	}
 
@@ -106,7 +119,11 @@ public class UniverseManager {
 		}
 	}
 
-	public void putAddress(char[] address, int dimension, ChunkPos chunk) {
+	public boolean isAddressAllocated(char[] address) {
+		return characterMap.contains(StargateCharsetHelper.singleton().addressToLong(address));
+	}
+
+	public char[] putAddress(char[] address, int dimension, ChunkPos chunk) {
 		StargateRecord record = new StargateRecord();
 		record.address = address;
 		record.dimension = dimension;
@@ -115,16 +132,14 @@ public class UniverseManager {
 		if (dimensionMap.get(dimension) == null)
 			dimensionMap.put(dimension, new ArrayList<WeakReference<StargateRecord>>());
 		dimensionMap.get(dimension).add(new WeakReference<StargateRecord>(record));
-	}
-
-	public char[] getFreeAddress() {
-		return null;
+		characterMap.add(StargateCharsetHelper.singleton().addressToLong(address));
+		return record.address;
 	}
 
 	public char[] findAddress(int dimension, ChunkPos chunk) {
 		ArrayList<WeakReference<StargateRecord>> records = dimensionMap.get(dimension);
 		if (records == null)
-			return null;
+			return putAddress(getFreeAddress(ADDRESS_WIDTH), dimension, chunk);
 		for (WeakReference<StargateRecord> record : records) {
 			StargateRecord theRecord = record.get();
 			if (theRecord == null)
@@ -132,7 +147,17 @@ public class UniverseManager {
 			if (theRecord.chunk.equals(chunk))
 				return theRecord.address;
 		}
-		return null;
+		return putAddress(getFreeAddress(ADDRESS_WIDTH), dimension, chunk);
+	}
+
+	public char[] getFreeAddress(int width) {
+		while (true) {
+			char[] address = new char[width];
+			for (int i = 0; i < width; i++)
+				address[i] = StargateCharsetHelper.singleton().index(worldRandom.nextInt(36));
+			if (!isAddressAllocated(address))
+				return address;
+		}
 	}
 
 }
