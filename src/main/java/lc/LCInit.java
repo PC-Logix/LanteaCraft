@@ -2,6 +2,7 @@ package lc;
 
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
+import lc.api.defs.IRecipeDefinition;
 import lc.api.init.Blocks;
 import lc.api.init.Interfaces;
 import lc.api.init.Items;
@@ -9,6 +10,7 @@ import lc.api.init.Recipes;
 import lc.api.init.Structures;
 import lc.api.world.OreType;
 import lc.blocks.BlockDecorative;
+import lc.blocks.BlockDecorative.DecorBlockTypes;
 import lc.blocks.BlockLanteaAlloy;
 import lc.blocks.BlockLanteaOre;
 import lc.blocks.BlockStargateBase;
@@ -102,12 +104,21 @@ public class LCInit {
 		IDefinitionReference controlCrystal = items.lanteaCraftingItem.ref().pushAll(1,
 				ItemCraftingReagent.ReagentList.CONTROLCRYSTAL.ordinal());
 
+		IDefinitionReference decorLantSteel = blocks.lanteaDecorBlock.ref().pushAll(1, DecorBlockTypes.LantSteel.idx);
+		IDefinitionReference decorLantDecSteel = blocks.lanteaDecorBlock.ref().pushAll(1,
+				DecorBlockTypes.LantDecSteel.idx);
+		IDefinitionReference decorGoaGold = blocks.lanteaDecorBlock.ref().pushAll(1, DecorBlockTypes.GoaGold.idx);
+		IDefinitionReference decorGoaPatGold = blocks.lanteaDecorBlock.ref().pushAll(1, DecorBlockTypes.GoaDecGold.idx);
+
 		ItemStack cSandstone = new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1);
 		ItemStack ironIngot = new ItemStack(net.minecraft.init.Items.iron_ingot, 1);
 		ItemStack redstone = new ItemStack(net.minecraft.init.Items.redstone, 1);
 		ItemStack eyeOfEnder = new ItemStack(net.minecraft.init.Items.ender_eye, 1);
 		ItemStack glowstone = new ItemStack(net.minecraft.init.Items.glowstone_dust, 1);
 		ItemStack enderPearl = new ItemStack(net.minecraft.init.Items.ender_pearl, 1);
+
+		ItemStack blockGold = new ItemStack(net.minecraft.init.Blocks.gold_block, 1);
+		ItemStack blockIron = new ItemStack(net.minecraft.init.Blocks.iron_block, 1);
 
 		IDefinitionReference decorator = items.lanteaDecoratorTool.ref();
 		ItemStack wool = new ItemStack(net.minecraft.init.Blocks.wool, 1);
@@ -149,6 +160,20 @@ public class LCInit {
 				triniumIngot.copy().push(0, 9), "0", triniumAlloyBlock);
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyBlock);
 		runtime.registries().recipes().addRecipe(recipes.triniumAlloyToIngots);
+
+		recipes.decorLanteanSteel = new SimpleRecipeDefinition("lantean_steel", RecipeType.SHAPELESS, decorLantSteel
+				.copy().push(0, 16), "01", blockIron, naquadah);
+		recipes.decorLanteanPatternSteel = new SimpleRecipeDefinition("lantean_pattern_steel", RecipeType.SHAPED,
+				decorLantDecSteel.copy().push(0, 4), "00 00    ", decorLantSteel);
+		recipes.decorGoauldGold = new SimpleRecipeDefinition("goauld_gold", RecipeType.SHAPELESS, decorGoaGold.copy()
+				.push(0, 16), "01", blockGold, naquadah);
+		recipes.decorGoauldDecorGold = new SimpleRecipeDefinition("goauld_decor_gold", RecipeType.SHAPED,
+				decorGoaPatGold.copy().push(0, 4), "00 00    ", decorGoaGold);
+
+		runtime.registries().recipes().addRecipe(recipes.decorLanteanSteel);
+		runtime.registries().recipes().addRecipe(recipes.decorLanteanPatternSteel);
+		runtime.registries().recipes().addRecipe(recipes.decorGoauldGold);
+		runtime.registries().recipes().addRecipe(recipes.decorGoauldDecorGold);
 
 		/* Initialize structures */
 		structures.scatteredSurfaceStargate = new StructureDefinition("SurfaceStargate", SurfaceStargate.class) {

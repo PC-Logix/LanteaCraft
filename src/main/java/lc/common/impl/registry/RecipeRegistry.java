@@ -65,7 +65,6 @@ public class RecipeRegistry implements IRecipeRegistry {
 					LCLog.fatal("Bad recipe %s: expected 1 output stack for shapeless, got %s.", definition.getName(),
 							out.size());
 				ItemStack[] inputs = in.values().toArray(new ItemStack[0]);
-				LCLog.info("Creating shapless recipe: in %s, out %s", inputs, out.get(0));
 				CraftingManager.getInstance().addShapelessRecipe(out.get(0), (Object[]) inputs);
 			} else if (type == RecipeType.SHAPED) {
 				Map<Integer, ItemStack> in = definition.getInputStacks();
@@ -93,6 +92,7 @@ public class RecipeRegistry implements IRecipeRegistry {
 				varargs.add(grid[1].toString());
 				varargs.add(grid[2].toString());
 				varargs.addAll(qt);
+				LCLog.debug("Adding shaped recipe: [ '%s', '%s', '%s' ]", grid[0].toString(), grid[1].toString(), grid[2].toString());
 				CraftingManager.getInstance().addRecipe(out.get(0), varargs.toArray());
 			} else if (type == RecipeType.SMELTING) {
 				Map<Integer, ItemStack> in = definition.getInputStacks();

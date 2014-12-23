@@ -59,7 +59,7 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 		char[] cells = grid.toCharArray();
 		for (int i = 0; i < cells.length; i++) {
 			char cell = cells[i];
-			if (Character.isDigit(cell))
+			if (Character.isDigit(cell) && cell != ' ')
 				this.inputs.put(i, inputs[Character.getNumericValue(cell)]);
 		}
 	}

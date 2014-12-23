@@ -23,20 +23,20 @@ import net.minecraft.util.IIcon;
 @Definition(name = "blockDecorative", type = ComponentType.DECOR, blockClass = BlockDecorative.class, itemBlockClass = ItemBlockDecorative.class)
 public class BlockDecorative extends LCBlock {
 
-	private enum BlockTypes {
+	public static enum DecorBlockTypes {
 		LantSteel(1, "lantean_metal"), LantDecSteel(2, "lantean_decor"), GoaGold(3, "goauld_goldplain"), GoaDecGold(4,
 				"goauld_golddecor");
 		public final int idx;
 		public final String resource;
 		public IIcon icon;
 
-		BlockTypes(int i, String s) {
+		DecorBlockTypes(int i, String s) {
 			idx = i;
 			resource = s;
 		}
 
-		public static BlockTypes meta(int q) {
-			for (BlockTypes type : values())
+		public static DecorBlockTypes meta(int q) {
+			for (DecorBlockTypes type : values())
 				if (type.idx == q)
 					return type;
 			return null;
@@ -55,14 +55,14 @@ public class BlockDecorative extends LCBlock {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		missing = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:missing"));
-		for (BlockTypes type : BlockTypes.values())
+		for (DecorBlockTypes type : DecorBlockTypes.values())
 			type.icon = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
 					type.resource));
 	}
 
 	@Override
 	public IIcon getIcon(int side, int data) {
-		BlockTypes type = BlockTypes.meta(data);
+		DecorBlockTypes type = DecorBlockTypes.meta(data);
 		if (type == null)
 			return missing;
 		return type.icon;
@@ -76,7 +76,7 @@ public class BlockDecorative extends LCBlock {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		for (BlockTypes type : BlockTypes.values())
+		for (DecorBlockTypes type : DecorBlockTypes.values())
 			list.add(new ItemStack(item, 1, type.idx));
 	}
 }

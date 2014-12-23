@@ -39,5 +39,16 @@ public class Recipes {
 	public IRecipeDefinition decorCrafterRecipe;
 	/** Decorator setter recipe */
 	public IRecipeDefinition decorSetterRecipe;
+	
+	/** Lantean Steel recipe */
+	public IRecipeDefinition decorLanteanSteel;
+	/** Lantean Patterned Steel recipe */
+	public IRecipeDefinition decorLanteanPatternSteel;
+	
+	/** Goa'uld Gold recipe */
+	public IRecipeDefinition decorGoauldGold;
+	/** Goa'uld Decorative Gold recipe */
+	public IRecipeDefinition decorGoauldDecorGold;
+	
 
 }
