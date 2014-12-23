@@ -54,6 +54,7 @@ public class ItemCraftingReagent extends LCItem {
 	/** Default constructor */
 	public ItemCraftingReagent() {
 		super();
+		setHasSubtypes(true);
 	}
 
 	@Override
