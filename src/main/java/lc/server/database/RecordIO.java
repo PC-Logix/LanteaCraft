@@ -1,7 +1,13 @@
 package lc.server.database;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import lc.common.util.math.ChunkPos;
 
@@ -53,12 +59,18 @@ public class RecordIO {
 		gson = new GsonBuilder().registerTypeAdapter(StargateRecord.class, RECORD_ADAPTER).create();
 	}
 
-	public String writeMap(List<StargateRecord> records) {
-		return gson.toJson(records);
+	public void writeMap(OutputStream stream, List<StargateRecord> records) throws IOException {
+		GZIPOutputStream pack = new GZIPOutputStream(stream);
+		JsonWriter outputStream = new JsonWriter(new OutputStreamWriter(pack, "UTF-8"));
+		gson.toJson(records, List.class, outputStream);
+		pack.close();
 	}
 
-	public void readMap(List<StargateRecord> records, String blob) {
-		records = gson.fromJson(blob, List.class);
+	public void readMap(InputStream stream, List<StargateRecord> records) throws IOException {
+		GZIPInputStream inflate = new GZIPInputStream(stream);
+		JsonReader inputStream = new JsonReader(new InputStreamReader(inflate, "UTF-8"));
+		records = gson.fromJson(inputStream, List.class);
+		inflate.close();
 	}
 
 }
