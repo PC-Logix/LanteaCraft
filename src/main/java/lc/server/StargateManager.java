@@ -3,6 +3,7 @@ package lc.server;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import lc.common.util.math.ChunkPos;
 import lc.common.util.math.DimensionPos;
 import lc.tiles.TileStargateBase;
 
@@ -18,7 +19,7 @@ public class StargateManager {
 	}
 
 	public char[] getStargateAddress(TileStargateBase tile) {
-		return server.universeMgr.findAddress(new DimensionPos(tile));
+		return server.universeMgr.findAddress(tile.getWorldObj().provider.dimensionId, new ChunkPos(tile));
 	}
 
 	public void openConnection(TileStargateBase tile, String address) {
