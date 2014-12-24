@@ -105,8 +105,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 		textColor = defaultTextColor;
 		textShadow = false;
 		// FIXME: Some clever overriding is required here in order to change the
-		// way
-		// slots are rendered (visibility, ghost items, etc)
+		// way slots are rendered (visibility, ghost items, etc)
 		super.drawScreen(par1, par2, par3);
 	}
 

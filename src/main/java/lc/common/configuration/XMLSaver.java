@@ -64,7 +64,7 @@ public class XMLSaver {
 				output.flush();
 				output.close();
 			} catch (Throwable t) {
-				// FIXME: Auto-generated catch block
+				throw new XMLSaverException("Failed to save file to disk.", t);
 			}
 		} catch (ParserConfigurationException e) {
 			throw new XMLSaverException("Can't save; configuration exception.", e);
