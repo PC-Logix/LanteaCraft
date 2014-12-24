@@ -134,7 +134,7 @@ public class BlockStargateBase extends RotationOrientedBlock {
 
 	@Override
 	public int damageDropped(int metadata) {
-		return getBaseType(metadata);
+		return getBaseType(metadata) * blockMutex;
 	}
 	
 	@Override

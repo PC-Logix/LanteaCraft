@@ -144,6 +144,11 @@ public class BlockStargateRing extends GenericContainerBlock {
 	}
 
 	@Override
+	public int damageDropped (int metadata) {
+		return metadata;
+	}
+	
+	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new TileStargateRing();
 	}
