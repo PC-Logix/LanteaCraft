@@ -31,7 +31,7 @@ public final class LCScatteredFeatureGenerator extends MapGenStructure {
 	}
 
 	private IStructureDefinition findStructureStart(int x, int z) {
-		IStructureDefinition[] defs = registry.allDefs();
+		IStructureDefinition[] defs = registry.allDefs(LCScatteredFeatureStart.class);
 		for (IStructureDefinition def : defs)
 			if (def.canGenerateAt(worldObj, rand, x, z))
 				return def;
@@ -49,7 +49,8 @@ public final class LCScatteredFeatureGenerator extends MapGenStructure {
 		if (def != null)
 			try {
 				Class<? extends StructureStart> start = def.getStructureClass();
-				Constructor<? extends StructureStart> ctr = start.getConstructor(World.class, Random.class, int.class, int.class);
+				Constructor<? extends StructureStart> ctr = start.getConstructor(World.class, Random.class, int.class,
+						int.class);
 				if (ctr != null)
 					return ctr.newInstance(worldObj, rand, cx, cz);
 			} catch (Throwable t) {

@@ -1,11 +1,14 @@
 package lc.common.impl.registry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureStart;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import lc.LCRuntime;
 import lc.api.components.IStructureRegistry;
@@ -15,9 +18,11 @@ import lc.common.LCLog;
 public class StructureRegistry implements IStructureRegistry {
 
 	private final Map<String, IStructureDefinition> definitionPool;
+	private final Map<Class<? extends StructureStart>, List<IStructureDefinition>> typeCache;
 
 	public StructureRegistry() {
 		definitionPool = new HashMap<String, IStructureDefinition>();
+		typeCache = new HashMap<Class<? extends StructureStart>, List<IStructureDefinition>>();
 	}
 
 	@Override
@@ -45,8 +50,15 @@ public class StructureRegistry implements IStructureRegistry {
 		}
 	}
 
-	public IStructureDefinition[] allDefs() {
-		return definitionPool.values().toArray(new IStructureDefinition[0]);
+	public IStructureDefinition[] allDefs(Class<? extends StructureStart> type) {
+		if (!typeCache.containsKey(type)) {
+			typeCache.put(type, new ArrayList<IStructureDefinition>());
+			for (IStructureDefinition def : definitionPool.values()) {
+				if (def.getStructureClass().equals(type) || type.isAssignableFrom(def.getStructureClass()))
+					typeCache.get(type).add(def);
+			}
+		}
+		return typeCache.get(type).toArray(new IStructureDefinition[0]);
 	}
 
 }

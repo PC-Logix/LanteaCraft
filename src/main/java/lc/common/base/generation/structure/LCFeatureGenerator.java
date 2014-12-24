@@ -49,7 +49,7 @@ public final class LCFeatureGenerator extends MapGenStructure {
 	}
 
 	private IStructureDefinition findStructureStart(int x, int z) {
-		IStructureDefinition[] defs = registry.allDefs();
+		IStructureDefinition[] defs = registry.allDefs(LCFeatureStart.class);
 		for (IStructureDefinition def : defs)
 			if (def.canGenerateAt(worldObj, rand, x, z))
 				return def;
