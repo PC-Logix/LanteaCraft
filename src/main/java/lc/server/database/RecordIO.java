@@ -52,17 +52,15 @@ public class RecordIO {
 	}
 
 	public static final RecordTypeAdapter RECORD_ADAPTER = new RecordTypeAdapter();
-	private final boolean useGzip;
 	Gson gson = new Gson();
 
-	public RecordIO(boolean compress) {
+	public RecordIO() {
 		gson = new GsonBuilder().registerTypeAdapter(StargateRecord.class, RECORD_ADAPTER).create();
-		useGzip = compress;
 	}
 
-	public void writeMap(OutputStream stream, boolean forceGzip, List<StargateRecord> records) throws IOException {
+	public void writeMap(OutputStream stream, boolean useCompression, List<StargateRecord> records) throws IOException {
 		JsonWriter outputStream;
-		if (useGzip || forceGzip) {
+		if (useCompression) {
 			GZIPOutputStream pack = new GZIPOutputStream(stream);
 			outputStream = new JsonWriter(new OutputStreamWriter(pack, "UTF-8"));
 		} else
@@ -71,9 +69,9 @@ public class RecordIO {
 		outputStream.close();
 	}
 
-	public void readMap(InputStream stream, boolean isGzip, List<StargateRecord> records) throws IOException {
+	public void readMap(InputStream stream, boolean isCompressed, List<StargateRecord> records) throws IOException {
 		JsonReader inputStream;
-		if (useGzip || isGzip) {
+		if (isCompressed) {
 			GZIPInputStream inflate = new GZIPInputStream(stream);
 			inputStream = new JsonReader(new InputStreamReader(inflate, "UTF-8"));
 		} else

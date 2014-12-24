@@ -1,6 +1,8 @@
 package lc.server.database;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+import lc.common.LCLog;
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.PrimitiveCompare;
 import lc.common.util.math.ChunkPos;
@@ -24,11 +27,11 @@ public class UniverseManager {
 
 	/** Disk IO provider */
 	private final RecordIO jsonAgent;
-	/** Disk IO mode */
-	private final boolean useCompression;
 
 	/** Current working file */
 	private File workFile;
+	/** If the working file is currently compressed. */
+	private boolean workIsCompressed;
 	/** The random number generator */
 	private Random worldRandom;
 	/** Heap for all registered addresses */
@@ -37,9 +40,8 @@ public class UniverseManager {
 	private ArrayList<Long> characterMap = new ArrayList<Long>();
 
 	/** Default constructor */
-	public UniverseManager(boolean useCompression) {
-		this.useCompression = useCompression;
-		jsonAgent = new RecordIO(this.useCompression);
+	public UniverseManager() {
+		jsonAgent = new RecordIO();
 	}
 
 	/**
@@ -54,7 +56,37 @@ public class UniverseManager {
 		File dataDir = new File(cwd, "lanteacraft");
 		if (!dataDir.exists())
 			dataDir.mkdir();
-		
+
+		FileInputStream fis = null;
+		File cf = new File(dataDir, "addresses.json.gz");
+		if (cf.exists()) {
+			try {
+				fis = new FileInputStream(cf);
+				recordHeap.clear();
+				jsonAgent.readMap(fis, true, recordHeap);
+			} catch (IOException ioex) {
+				LCLog.fatal("Problem reading Stargate address database.", ioex);
+			}
+		} else {
+			File uf = new File(dataDir, "addresses.json");
+			if (uf.exists()) {
+				try {
+					fis = new FileInputStream(uf);
+					recordHeap.clear();
+					jsonAgent.readMap(fis, false, recordHeap);
+				} catch (IOException ioex) {
+					LCLog.fatal("Problem reading Stargate address database.", ioex);
+				}
+			}
+		}
+
+		try {
+			if (fis != null)
+				fis.close();
+		} catch (IOException ioex) {
+			/* Do nothing */
+		}
+		buildIndex();
 	}
 
 	/**
