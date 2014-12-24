@@ -1,5 +1,6 @@
 package lc.server.database;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +9,10 @@ import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 import lc.common.stargate.StargateCharsetHelper;
+import lc.common.util.data.PrimitiveCompare;
 import lc.common.util.math.ChunkPos;
 import lc.common.util.math.DimensionPos;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
@@ -18,24 +21,25 @@ public class UniverseManager {
 
 	/** Default Stargate address size */
 	private final static int ADDRESS_WIDTH = 9;
-	
+
 	/** Disk IO provider */
 	private final RecordIO jsonAgent;
+	/** Disk IO mode */
+	private final boolean useCompression;
 
-	/** Heap for all registered addresses */
-	private final ArrayList<StargateRecord> recordHeap = new ArrayList<StargateRecord>();
-
-	/** Dictionary of all records to integer dimensions */
-	private final HashMap<Integer, ArrayList<WeakReference<StargateRecord>>> dimensionMap = new HashMap<Integer, ArrayList<WeakReference<StargateRecord>>>();
-
-	/** Dictionary of all allocated character maps */
-	private final ArrayList<Long> characterMap = new ArrayList<Long>();
-
+	/** Current working file */
+	private File workFile;
+	/** The random number generator */
 	private Random worldRandom;
+	/** Heap for all registered addresses */
+	private ArrayList<StargateRecord> recordHeap = new ArrayList<StargateRecord>();
+	/** Dictionary of all allocated character maps */
+	private ArrayList<Long> characterMap = new ArrayList<Long>();
 
 	/** Default constructor */
-	public UniverseManager() {
-		jsonAgent = new RecordIO();
+	public UniverseManager(boolean useCompression) {
+		this.useCompression = useCompression;
+		jsonAgent = new RecordIO(this.useCompression);
 	}
 
 	/**
@@ -45,6 +49,11 @@ public class UniverseManager {
 	 *            The server event.
 	 */
 	public void loadUniverse(FMLServerStartingEvent event) {
+		WorldServer overworld = event.getServer().worldServerForDimension(0);
+		File cwd = overworld.getSaveHandler().getWorldDirectory();
+		File dataDir = new File(cwd, "lanteacraft");
+		if (!dataDir.exists())
+			dataDir.mkdir();
 		
 	}
 
@@ -89,34 +98,9 @@ public class UniverseManager {
 	 * Build the reference cache.
 	 */
 	public void buildIndex() {
-		dimensionMap.clear();
-		for (StargateRecord record : recordHeap) {
-			int dimId = record.dimension;
-			if (dimensionMap.get(dimId) == null)
-				dimensionMap.put(dimId, new ArrayList<WeakReference<StargateRecord>>());
-			dimensionMap.get(dimId).add(new WeakReference<StargateRecord>(record));
+		characterMap.clear();
+		for (StargateRecord record : recordHeap)
 			characterMap.add(StargateCharsetHelper.singleton().addressToLong(record.address));
-		}
-	}
-
-	/**
-	 * Prune the reference cache.
-	 */
-	public void pruneIndex() {
-		ArrayList<WeakReference<StargateRecord>> dead = new ArrayList<WeakReference<StargateRecord>>();
-		Iterator<Integer> dimList = dimensionMap.keySet().iterator();
-		while (dimList.hasNext()) {
-			dead.clear();
-			ArrayList<WeakReference<StargateRecord>> refs = dimensionMap.get(dimList.next());
-			if (refs.size() != 0) {
-				for (WeakReference<StargateRecord> record : refs)
-					if (record.get() == null)
-						dead.add(record);
-				if (dead.size() != 0)
-					for (WeakReference<StargateRecord> deadRef : dead)
-						refs.remove(deadRef);
-			}
-		}
 	}
 
 	public boolean isAddressAllocated(char[] address) {
@@ -129,23 +113,14 @@ public class UniverseManager {
 		record.dimension = dimension;
 		record.chunk = chunk;
 		recordHeap.add(record);
-		if (dimensionMap.get(dimension) == null)
-			dimensionMap.put(dimension, new ArrayList<WeakReference<StargateRecord>>());
-		dimensionMap.get(dimension).add(new WeakReference<StargateRecord>(record));
 		characterMap.add(StargateCharsetHelper.singleton().addressToLong(address));
 		return record.address;
 	}
 
 	public char[] findAddress(int dimension, ChunkPos chunk) {
-		ArrayList<WeakReference<StargateRecord>> records = dimensionMap.get(dimension);
-		if (records == null)
-			return putAddress(getFreeAddress(ADDRESS_WIDTH), dimension, chunk);
-		for (WeakReference<StargateRecord> record : records) {
-			StargateRecord theRecord = record.get();
-			if (theRecord == null)
-				continue;
-			if (theRecord.chunk.equals(chunk))
-				return theRecord.address;
+		for (StargateRecord record : recordHeap) {
+			if (record.chunk.equals(chunk))
+				return record.address;
 		}
 		return putAddress(getFreeAddress(ADDRESS_WIDTH), dimension, chunk);
 	}
@@ -158,6 +133,16 @@ public class UniverseManager {
 			if (!isAddressAllocated(address))
 				return address;
 		}
+	}
+
+	public StargateRecord findRecord(char[] address) {
+		if (!isAddressAllocated(address))
+			return null;
+		for (StargateRecord record : recordHeap) {
+			if (PrimitiveCompare.compareChar(record.address, address))
+				return record;
+		}
+		return null;
 	}
 
 }

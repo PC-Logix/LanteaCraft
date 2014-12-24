@@ -52,25 +52,34 @@ public class RecordIO {
 	}
 
 	public static final RecordTypeAdapter RECORD_ADAPTER = new RecordTypeAdapter();
-
+	private final boolean useGzip;
 	Gson gson = new Gson();
 
-	public RecordIO() {
+	public RecordIO(boolean compress) {
 		gson = new GsonBuilder().registerTypeAdapter(StargateRecord.class, RECORD_ADAPTER).create();
+		useGzip = compress;
 	}
 
-	public void writeMap(OutputStream stream, List<StargateRecord> records) throws IOException {
-		GZIPOutputStream pack = new GZIPOutputStream(stream);
-		JsonWriter outputStream = new JsonWriter(new OutputStreamWriter(pack, "UTF-8"));
+	public void writeMap(OutputStream stream, boolean forceGzip, List<StargateRecord> records) throws IOException {
+		JsonWriter outputStream;
+		if (useGzip || forceGzip) {
+			GZIPOutputStream pack = new GZIPOutputStream(stream);
+			outputStream = new JsonWriter(new OutputStreamWriter(pack, "UTF-8"));
+		} else
+			outputStream = new JsonWriter(new OutputStreamWriter(stream, "UTF-8"));
 		gson.toJson(records, List.class, outputStream);
-		pack.close();
+		outputStream.close();
 	}
 
-	public void readMap(InputStream stream, List<StargateRecord> records) throws IOException {
-		GZIPInputStream inflate = new GZIPInputStream(stream);
-		JsonReader inputStream = new JsonReader(new InputStreamReader(inflate, "UTF-8"));
+	public void readMap(InputStream stream, boolean isGzip, List<StargateRecord> records) throws IOException {
+		JsonReader inputStream;
+		if (useGzip || isGzip) {
+			GZIPInputStream inflate = new GZIPInputStream(stream);
+			inputStream = new JsonReader(new InputStreamReader(inflate, "UTF-8"));
+		} else
+			inputStream = new JsonReader(new InputStreamReader(stream, "UTF-8"));
 		records = gson.fromJson(inputStream, List.class);
-		inflate.close();
+		inputStream.close();
 	}
 
 }

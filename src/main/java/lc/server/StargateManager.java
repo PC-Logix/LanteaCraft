@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import lc.common.util.math.ChunkPos;
 import lc.common.util.math.DimensionPos;
+import lc.server.database.StargateRecord;
 import lc.tiles.TileStargateBase;
 
 public class StargateManager {
@@ -22,11 +23,12 @@ public class StargateManager {
 		return server.universeMgr.findAddress(tile.getWorldObj().provider.dimensionId, new ChunkPos(tile));
 	}
 
-	public void openConnection(TileStargateBase tile, String address) {
-
+	public void openConnection(TileStargateBase tile, char[] address) {
+		StargateRecord what = server.universeMgr.findRecord(address);
+		
 	}
 
-	public void closeConnection(TileStargateBase tile, String address) {
+	public void closeConnection(TileStargateBase tile, char[] address) {
 
 	}
 
