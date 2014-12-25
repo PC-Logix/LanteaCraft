@@ -1,4 +1,4 @@
-tile.stargateController.name=Ovládací panel brány
+tile.stargateDHD.name=Ovládací panel brány
 tile.stargateBase.name=Základní blok brány
 tile.stargateRing.0.name=Segment kruhu brány
 tile.stargateRing.1.name=Zámek brány
