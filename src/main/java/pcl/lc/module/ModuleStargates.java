@@ -192,8 +192,8 @@ public class ModuleStargates implements IModule {
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1,
 				3), "CgC", "NpN", "IrI", 'I',
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
-						ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
-								net.minecraft.init.Blocks.cobblestone, 1, 1), 'g',
+						ModuleCore.Items.lanteaOreIngot), 'C', 
+						net.minecraft.init.Blocks.cobblestone, 'g',
 				net.minecraft.init.Blocks.glowstone, 'r',
 				net.minecraft.init.Items.redstone, 'p',
 				net.minecraft.init.Items.ender_pearl);
@@ -202,7 +202,7 @@ public class ModuleStargates implements IModule {
 				new ItemStack(Blocks.stargateBaseBlock, 1, 4), "CrC", "NeN",
 				"IcI", 'I', net.minecraft.init.Items.iron_ingot, 'N',
 				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
-				new ItemStack(net.minecraft.init.Blocks.cobblestone, 1, 1), 'r',
+				net.minecraft.init.Blocks.cobblestone, 'r',
 				net.minecraft.init.Items.redstone, 'e',
 				net.minecraft.init.Items.ender_eye, 'c', new ItemStack(
 						ModuleCore.Items.reagentItem, 1,
@@ -214,14 +214,14 @@ public class ModuleStargates implements IModule {
 				new ItemStack(Blocks.stargateRingBlock, 1, 4), "ICI", "NNN",
 				"III", 'I', net.minecraft.init.Items.iron_ingot, 'N',
 				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
-				new ItemStack(net.minecraft.init.Blocks.mossy_cobblestone, 1, 1));
+				net.minecraft.init.Blocks.mossy_cobblestone);
 
 		
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1,
 				5), "CgC", "NpN", "IrI", 'I',
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
-						ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
-								net.minecraft.init.Blocks.mossy_cobblestone, 1, 1), 'g',
+						ModuleCore.Items.lanteaOreIngot), 'C', 
+						net.minecraft.init.Blocks.mossy_cobblestone, 'g',
 				net.minecraft.init.Blocks.glowstone, 'r',
 				net.minecraft.init.Items.redstone, 'p',
 				net.minecraft.init.Items.ender_pearl);
@@ -230,7 +230,7 @@ public class ModuleStargates implements IModule {
 				new ItemStack(Blocks.stargateBaseBlock, 1, 8), "CrC", "NeN",
 				"IcI", 'I', net.minecraft.init.Items.iron_ingot, 'N',
 				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
-				new ItemStack(net.minecraft.init.Blocks.mossy_cobblestone, 1, 1), 'r',
+				net.minecraft.init.Blocks.mossy_cobblestone, 'r',
 				net.minecraft.init.Items.redstone, 'e',
 				net.minecraft.init.Items.ender_eye, 'c', new ItemStack(
 						ModuleCore.Items.reagentItem, 1,
@@ -249,8 +249,8 @@ public class ModuleStargates implements IModule {
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1,
 				7), "CgC", "NpN", "IrI", 'I',
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
-						ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
-								net.minecraft.init.Blocks.stone, 1, 1), 'g',
+						ModuleCore.Items.lanteaOreIngot), 'C', 
+						net.minecraft.init.Blocks.stone, 'g',
 				net.minecraft.init.Blocks.glowstone, 'r',
 				net.minecraft.init.Items.redstone, 'p',
 				net.minecraft.init.Items.ender_pearl);
@@ -259,7 +259,7 @@ public class ModuleStargates implements IModule {
 				new ItemStack(Blocks.stargateBaseBlock, 1, 12), "CrC", "NeN",
 				"IcI", 'I', net.minecraft.init.Items.iron_ingot, 'N',
 				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
-				new ItemStack(net.minecraft.init.Blocks.stone, 1, 1), 'r',
+				net.minecraft.init.Blocks.stone, 'r',
 				net.minecraft.init.Items.redstone, 'e',
 				net.minecraft.init.Items.ender_eye, 'c', new ItemStack(
 						ModuleCore.Items.reagentItem, 1,
