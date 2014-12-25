@@ -1,5 +1,5 @@
 # Stargate DHD controller
-tile.stargateController.name=Stargate Controller
+tile.stargateDHD.name=Stargate Controller
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Stargate Base
