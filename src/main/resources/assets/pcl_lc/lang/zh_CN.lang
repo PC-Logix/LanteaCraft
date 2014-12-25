@@ -1,5 +1,5 @@
 # Stargate DHD controller
-tile.stargateController.name=星门控制器
+tile.stargateDHD.name=星门控制器
 
 # 星门底座 & settings screens
 tile.stargateBase.0.name=星门底座
