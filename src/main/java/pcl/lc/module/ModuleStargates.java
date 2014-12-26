@@ -186,7 +186,7 @@ public class ModuleStargates implements IModule {
 				new ItemStack(Blocks.stargateRingBlock, 1, 2), "ICI", "NNN",
 				"III", 'I', net.minecraft.init.Items.iron_ingot, 'N',
 				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
-				new ItemStack(net.minecraft.init.Blocks.cobblestone, 1, 1));
+				net.minecraft.init.Blocks.cobblestone);
 
 		
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1,
@@ -243,7 +243,7 @@ public class ModuleStargates implements IModule {
 				new ItemStack(Blocks.stargateRingBlock, 1, 6), "ICI", "NNN",
 				"III", 'I', net.minecraft.init.Items.iron_ingot, 'N',
 				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
-				new ItemStack(net.minecraft.init.Blocks.stone, 1, 1));
+				net.minecraft.init.Blocks.stone);
 
 		
 		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1,
