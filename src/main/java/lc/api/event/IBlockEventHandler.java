@@ -17,5 +17,8 @@ public interface IBlockEventHandler {
 
 	/** Called when the host block is broken */
 	public void blockBroken();
+	
+	/** Called when a neighbor block is changed */
+	public void neighborChanged();
 
 }

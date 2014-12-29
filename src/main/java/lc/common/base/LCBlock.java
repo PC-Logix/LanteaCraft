@@ -10,6 +10,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -26,7 +27,7 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 
 	/** Rotation direction map across Y-axis */
 	protected static final ForgeDirection[] directions = new ForgeDirection[] { ForgeDirection.SOUTH,
-		ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.EAST };
+			ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.EAST };
 
 	/** If the block instance is opaque */
 	protected boolean isOpaque = false;
@@ -235,6 +236,14 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo {
 			((IBlockEventHandler) tile).blockBroken();
 		super.breakBlock(world, x, y, z, a, b);
 	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block b) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile != null && tile instanceof IBlockEventHandler)
+			((IBlockEventHandler) tile).neighborChanged();
+		super.onNeighborBlockChange(world, x, y, z, b);
+	};
 
 	@Override
 	public IBlockRenderInfo block() {
