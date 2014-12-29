@@ -40,4 +40,7 @@ public class Blocks {
 	/** Naquadah generator machine */
 	public IContainerDefinition machineNaquadahGenerator;
 
+	/** Lantea global door item */
+	public IContainerDefinition lanteaDoor;
+
 }
