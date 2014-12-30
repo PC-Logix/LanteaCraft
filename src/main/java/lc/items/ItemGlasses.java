@@ -50,7 +50,8 @@ public class ItemGlasses extends ItemArmor {
 		if (block instanceof LCBlock) {
 			LCBlock ownBlock = (LCBlock) block;
 			messages.add(String.format("Type: %s", ownBlock.getClass().getName()));
-			messages.add(String.format("Tile: %s", ownBlock.getTileType().getName()));
+			if (ownBlock.getTileType() != null)
+				messages.add(String.format("Tile: %s", ownBlock.getTileType().getName()));
 			TileEntity tile = world.getTileEntity(x, y, z);
 			if (tile != null)
 				if (tile instanceof LCTile) {
