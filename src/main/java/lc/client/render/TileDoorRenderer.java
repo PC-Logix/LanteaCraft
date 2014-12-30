@@ -1,14 +1,11 @@
 package lc.client.render;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import lc.ResourceAccess;
-import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
@@ -27,41 +24,40 @@ public class TileDoorRenderer extends LCTileRenderer {
 			float partialTickTime) {
 
 		TileLanteaDoor door = (TileLanteaDoor) tile;
-		NBTTagCompound doorCompound = door.getBaseCompound();
+		if (door.getDoorState() && door.hasNeighborBlock() && door.clientAnimation == 0)
+			return true;
+		
 		ResourceLocation whatTex = ResourceAccess.getNamedResource(ResourceAccess
 				.formatResourceName("textures/blocks/lantean_door_bottom_128.png"));
-
-		if (doorCompound != null && doorCompound.hasKey("hasBlockBelow") && doorCompound.getBoolean("hasBlockBelow"))
+		if (door.hasBlockBelow())
 			whatTex = ResourceAccess.getNamedResource(ResourceAccess
 					.formatResourceName("textures/blocks/lantean_door_top_128.png"));
 		renderer.bind(whatTex);
 
-		if (door.getDoorState()) {
-			switch (door.getRotation()) {
-			case NORTH:
-
-				break;
-			case SOUTH:
-
-				break;
-			case EAST:
-
-				break;
-			case WEST:
-
-				break;
-			}
-		}
+		
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor3f(1.0f, 1.0f, 1.0f);
+		
+		
 		GL11.glTranslatef(0.5f, 0.0f, 0.5f);
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
 		GL11.glTranslatef(-0.5f, 0.0f, -0.5f);
-		if (door.getDoorState())
-			GL11.glTranslatef(-0.80f, 0.0f, 0.0f);
+
+		
+		float frame = door.clientAnimation;
+		
+		if (door.getDoorState()) {
+			float vq = 0.85f * (20 - frame) / 20.0f;
+			vq *= 1 + door.getNeighborChainSize();
+			GL11.glTranslatef(-vq, 0, 0);
+		} else {
+			float vq = 0.85f * (frame) / 20.0f;
+			vq *= 1 + door.getNeighborChainSize();
+			GL11.glTranslatef(-vq, 0, 0);
+		}
 
 		float w = 0.085f;
 		float d0 = 0.5f - w, d1 = 0.5f + w;

@@ -5,12 +5,16 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import lc.common.base.LCTile;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 
 public class TileLanteaDoor extends LCTile {
+
+	public boolean clientLastState;
+	public int clientAnimation;
 
 	@Override
 	public IInventory getInventory() {
@@ -20,8 +24,8 @@ public class TileLanteaDoor extends LCTile {
 
 	@Override
 	public void thinkClient() {
-		// TODO Auto-generated method stub
-
+		if (clientAnimation != 0)
+			clientAnimation--;
 	}
 
 	@Override
@@ -32,7 +36,12 @@ public class TileLanteaDoor extends LCTile {
 
 	@Override
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
-		// TODO Auto-generated method stub
+		if (worldObj.isRemote) {
+			if (clientLastState != getDoorState()) {
+				clientLastState = getDoorState();
+				clientAnimation += 20;
+			}
+		}
 
 	}
 
@@ -59,9 +68,9 @@ public class TileLanteaDoor extends LCTile {
 				String.format("hasBlockBelow: %s", ((compound == null || !compound.hasKey("hasBlockBelow")) ? "??"
 						: compound.getBoolean("hasBlockBelow"))),
 				String.format("isOpen: %s",
-						((compound == null || !compound.hasKey("isOpen")) ? "??" : compound.getBoolean("isOpen")))
-
-		};
+						((compound == null || !compound.hasKey("isOpen")) ? "??" : compound.getBoolean("isOpen"))),
+				String.format("neighborCount: %s", ((compound == null || !compound.hasKey("neighborCount")) ? "??"
+						: compound.getInteger("neighborCount"))) };
 	}
 
 	private void recalculateState() {
@@ -69,6 +78,18 @@ public class TileLanteaDoor extends LCTile {
 			compound = new NBTTagCompound();
 		compound.setBoolean("hasBlockBelow",
 				worldObj.getTileEntity(xCoord, yCoord - 1, zCoord) instanceof TileLanteaDoor);
+		ForgeDirection qx = getMotionDirection();
+		TileEntity tile = worldObj.getTileEntity(xCoord + qx.offsetX, yCoord + qx.offsetY, zCoord + qx.offsetZ);
+		if (tile == null || !(tile instanceof TileLanteaDoor))
+			compound.setInteger("neighborCount", 0);
+		else {
+			compound.setInteger("neighborCount", ((TileLanteaDoor) tile).getNeighborChainSize() + 1);
+			ForgeDirection qz = qx.getOpposite();
+			TileEntity tz = worldObj.getTileEntity(xCoord + qz.offsetX, yCoord + qz.offsetY, zCoord + qz.offsetZ);
+			if (tz != null && tz instanceof TileLanteaDoor)
+				((TileLanteaDoor) tz).recalculateState();
+
+		}
 		markNbtDirty();
 	}
 
@@ -125,23 +146,55 @@ public class TileLanteaDoor extends LCTile {
 		return compound.hasKey("isOpen") ? compound.getBoolean("isOpen") : false;
 	}
 
+	public boolean hasNeighborBlock() {
+		return getNeighborChainSize() != 0;
+	}
+
+	public int getNeighborChainSize() {
+		if (compound == null)
+			compound = new NBTTagCompound();
+		return compound.hasKey("neighborCount") ? compound.getInteger("neighborCount") : 0;
+	}
+
+	public boolean hasBlockBelow() {
+		if (compound == null)
+			compound = new NBTTagCompound();
+		return compound.hasKey("hasBlockBelow") ? compound.getBoolean("hasBlockBelow") : false;
+	}
+
+	public ForgeDirection getMotionDirection() {
+		switch (getRotation()) {
+		case NORTH:
+			return ForgeDirection.WEST;
+		case EAST:
+			return ForgeDirection.NORTH;
+		case SOUTH:
+			return ForgeDirection.EAST;
+		case WEST:
+			return ForgeDirection.SOUTH;
+		}
+		return ForgeDirection.WEST;
+	}
+
 	public AxisAlignedBB getBoundingBox() {
 		float w = 0.085f;
 		float d0 = 0.5f - w, d1 = 0.5f + w;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+		if (getDoorState() && hasNeighborBlock())
+			return null;
 		switch (getRotation()) {
 		case NORTH:
 		case SOUTH:
 			box = AxisAlignedBB.getBoundingBox(0, 0, d0, 1, 1, d1);
-			if (getDoorState())
-				box.offset(0.85, 0, 0);
 			break;
 		case EAST:
 		case WEST:
 			box = AxisAlignedBB.getBoundingBox(d0, 0, 0, d1, 1, 1);
-			if (getDoorState())
-				box.offset(0, 0, 0.85);
 			break;
+		}
+		if (getDoorState()) {
+			ForgeDirection dir = getMotionDirection();
+			box.offset(dir.offsetX * 0.85f, dir.offsetY * 0.85f, dir.offsetZ * 0.85f);
 		}
 		return box;
 	}
