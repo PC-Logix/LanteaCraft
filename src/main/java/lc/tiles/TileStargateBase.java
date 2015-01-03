@@ -19,6 +19,7 @@ import lc.common.util.game.BlockHelper;
 import lc.common.util.game.SlotFilter;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
+import lc.server.StargateConnection;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.player.EntityPlayer;
@@ -71,6 +72,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 	};
 
+	private StargateConnection currentConnection;
 	private Block clientSkinBlock;
 	private int clientSkinBlockMetadata;
 
@@ -212,5 +214,14 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			compound.setString("skin-block", BlockHelper.saveBlock(block, metadata));
 			markNbtDirty();
 		}
+	}
+
+	public boolean hasState() {
+		return currentConnection != null;
+	}
+
+	public void notifyState(StargateConnection connection) {
+		currentConnection = connection;
+
 	}
 }
