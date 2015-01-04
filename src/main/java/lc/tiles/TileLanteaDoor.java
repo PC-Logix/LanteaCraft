@@ -180,21 +180,34 @@ public class TileLanteaDoor extends LCTile {
 		float w = 0.085f;
 		float d0 = 0.5f - w, d1 = 0.5f + w;
 		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
-		if (getDoorState() && hasNeighborBlock())
+		if (clientAnimation != 0)
 			return null;
-		switch (getRotation()) {
-		case NORTH:
-		case SOUTH:
-			box = AxisAlignedBB.getBoundingBox(0, 0, d0, 1, 1, d1);
-			break;
-		case EAST:
-		case WEST:
-			box = AxisAlignedBB.getBoundingBox(d0, 0, 0, d1, 1, 1);
-			break;
-		}
-		if (getDoorState()) {
-			ForgeDirection dir = getMotionDirection();
-			box.offset(dir.offsetX * 0.85f, dir.offsetY * 0.85f, dir.offsetZ * 0.85f);
+		if (!getDoorState()) {
+			switch (getRotation()) {
+			case NORTH:
+			case SOUTH:
+				box = AxisAlignedBB.getBoundingBox(0, 0, d0, 1, 1, d1);
+				break;
+			case EAST:
+			case WEST:
+				box = AxisAlignedBB.getBoundingBox(d0, 0, 0, d1, 1, 1);
+				break;
+			}
+		} else {
+			switch (getRotation()) {
+			case NORTH:
+				box = AxisAlignedBB.getBoundingBox(0.11d, 0, 0.11d - d0, 0.135d + 0.15d, 1, 0.11d + d1);
+				break;
+			case SOUTH:
+				box = AxisAlignedBB.getBoundingBox(0.85d - 0.135d, 0, d0 - 0.11d, 1.0d - 0.11d, 1, d1 + 0.711d);
+				break;
+			case EAST:
+				box = AxisAlignedBB.getBoundingBox(d0 - 0.11d, 0, 0.11d, d1 + 0.711d, 1, 0.135d + 0.15d);
+				break;
+			case WEST:
+				box = AxisAlignedBB.getBoundingBox(0.11d - d0, 0, 0.85d - 0.135d, d1 + 0.11d, 1, 1.0d - 0.11d);
+				break;
+			}
 		}
 		return box;
 	}
