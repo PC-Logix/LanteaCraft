@@ -1,13 +1,23 @@
 package lc.common.base;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.ILanteaCraftRenderer;
+import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.util.math.Trans3;
 import lc.common.util.math.Vector3;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -174,6 +184,107 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 		return true;
 	}
 
+	public void renderDefaultItem(ItemStack stack) {
+		IIcon iicon = stack.getItem().getIconFromDamage(stack.getItemDamage());
+		if (iicon == null)
+			return;
+		TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
+		texturemanager.bindTexture(texturemanager.getResourceLocation(stack.getItemSpriteNumber()));
+		TextureUtil.func_152777_a(false, false, 1.0F);
+		Tessellator tessellator = Tessellator.instance;
+		float u0 = iicon.getMinU(), u1 = iicon.getMaxU();
+		float v0 = iicon.getMinV(), v1 = iicon.getMaxV();
+		float f4 = 0.0F;
+		float f5 = 0.3F;
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPushMatrix();
+		GL11.glTranslatef(-f4, -f5, 0.0F);
+		float f6 = 1.25F;
+		GL11.glScalef(f6, f6, f6);
+		GL11.glTranslatef(-0.5f, -0.25f, 0.0f);
+		renderItemIn2D(tessellator, u1, v0, u0, v1, iicon.getIconWidth(), iicon.getIconHeight(), 0.0625F);
+		GL11.glPopMatrix();
+		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		TextureUtil.func_147945_b();
+	}
+
+	private void renderItemIn2D(Tessellator t, float u1, float v0, float u0, float v1, int w, int h, float p_78439_7_) {
+		t.startDrawingQuads();
+		t.setNormal(0.0F, 0.0F, 1.0F);
+		t.addVertexWithUV(0.0D, 0.0D, 0.0D, (double) u1, (double) v1);
+		t.addVertexWithUV(1.0D, 0.0D, 0.0D, (double) u0, (double) v1);
+		t.addVertexWithUV(1.0D, 1.0D, 0.0D, (double) u0, (double) v0);
+		t.addVertexWithUV(0.0D, 1.0D, 0.0D, (double) u1, (double) v0);
+		t.draw();
+		t.startDrawingQuads();
+		t.setNormal(0.0F, 0.0F, -1.0F);
+		t.addVertexWithUV(0.0D, 1.0D, (double) (0.0F - p_78439_7_), (double) u1, (double) v0);
+		t.addVertexWithUV(1.0D, 1.0D, (double) (0.0F - p_78439_7_), (double) u0, (double) v0);
+		t.addVertexWithUV(1.0D, 0.0D, (double) (0.0F - p_78439_7_), (double) u0, (double) v1);
+		t.addVertexWithUV(0.0D, 0.0D, (double) (0.0F - p_78439_7_), (double) u1, (double) v1);
+		t.draw();
+		float f5 = 0.5F * (u1 - u0) / (float) w;
+		float f6 = 0.5F * (v1 - v0) / (float) h;
+		t.startDrawingQuads();
+		t.setNormal(-1.0F, 0.0F, 0.0F);
+		int k;
+		float f7;
+		float f8;
+
+		for (k = 0; k < w; ++k) {
+			f7 = (float) k / (float) w;
+			f8 = u1 + (u0 - u1) * f7 - f5;
+			t.addVertexWithUV((double) f7, 0.0D, (double) (0.0F - p_78439_7_), (double) f8, (double) v1);
+			t.addVertexWithUV((double) f7, 0.0D, 0.0D, (double) f8, (double) v1);
+			t.addVertexWithUV((double) f7, 1.0D, 0.0D, (double) f8, (double) v0);
+			t.addVertexWithUV((double) f7, 1.0D, (double) (0.0F - p_78439_7_), (double) f8, (double) v0);
+		}
+
+		t.draw();
+		t.startDrawingQuads();
+		t.setNormal(1.0F, 0.0F, 0.0F);
+		float f9;
+
+		for (k = 0; k < w; ++k) {
+			f7 = (float) k / (float) w;
+			f8 = u1 + (u0 - u1) * f7 - f5;
+			f9 = f7 + 1.0F / (float) w;
+			t.addVertexWithUV((double) f9, 1.0D, (double) (0.0F - p_78439_7_), (double) f8, (double) v0);
+			t.addVertexWithUV((double) f9, 1.0D, 0.0D, (double) f8, (double) v0);
+			t.addVertexWithUV((double) f9, 0.0D, 0.0D, (double) f8, (double) v1);
+			t.addVertexWithUV((double) f9, 0.0D, (double) (0.0F - p_78439_7_), (double) f8, (double) v1);
+		}
+
+		t.draw();
+		t.startDrawingQuads();
+		t.setNormal(0.0F, 1.0F, 0.0F);
+
+		for (k = 0; k < h; ++k) {
+			f7 = (float) k / (float) h;
+			f8 = v1 + (v0 - v1) * f7 - f6;
+			f9 = f7 + 1.0F / (float) h;
+			t.addVertexWithUV(0.0D, (double) f9, 0.0D, (double) u1, (double) f8);
+			t.addVertexWithUV(1.0D, (double) f9, 0.0D, (double) u0, (double) f8);
+			t.addVertexWithUV(1.0D, (double) f9, (double) (0.0F - p_78439_7_), (double) u0, (double) f8);
+			t.addVertexWithUV(0.0D, (double) f9, (double) (0.0F - p_78439_7_), (double) u1, (double) f8);
+		}
+
+		t.draw();
+		t.startDrawingQuads();
+		t.setNormal(0.0F, -1.0F, 0.0F);
+
+		for (k = 0; k < h; ++k) {
+			f7 = (float) k / (float) h;
+			f8 = v1 + (v0 - v1) * f7 - f6;
+			t.addVertexWithUV(1.0D, (double) f7, 0.0D, (double) u0, (double) f8);
+			t.addVertexWithUV(0.0D, (double) f7, 0.0D, (double) u1, (double) f8);
+			t.addVertexWithUV(0.0D, (double) f7, (double) (0.0F - p_78439_7_), (double) u1, (double) f8);
+			t.addVertexWithUV(1.0D, (double) f7, (double) (0.0F - p_78439_7_), (double) u0, (double) f8);
+		}
+
+		t.draw();
+	}
+
 	private void setColorMultiplier(int color) {
 		cmr = (color >> 16 & 0xff) / 255.0F;
 		cmg = (color >> 8 & 0xff) / 255.0F;
@@ -207,11 +318,11 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 
 	/** The cube face map */
 	protected static double cubeMap[][] = { { -0.5, -0.5, 0.5, 0, 0, -1, 1, 0, 0, 0, -1, 0 }, // DOWN
-		{ -0.5, 0.5, -0.5, 0, 0, 1, 1, 0, 0, 0, 1, 0 }, // UP
-		{ 0.5, 0.5, -0.5, 0, -1, 0, -1, 0, 0, 0, 0, -1 }, // NORTH
-		{ -0.5, 0.5, 0.5, 0, -1, 0, 1, 0, 0, 0, 0, 1 }, // SOUTH
-		{ -0.5, 0.5, -0.5, 0, -1, 0, 0, 0, 1, -1, 0, 0 }, // WEST
-		{ 0.5, 0.5, 0.5, 0, -1, 0, 0, 0, -1, 1, 0, 0 }, // EAST
+			{ -0.5, 0.5, -0.5, 0, 0, 1, 1, 0, 0, 0, 1, 0 }, // UP
+			{ 0.5, 0.5, -0.5, 0, -1, 0, -1, 0, 0, 0, 0, -1 }, // NORTH
+			{ -0.5, 0.5, 0.5, 0, -1, 0, 1, 0, 0, 0, 0, 1 }, // SOUTH
+			{ -0.5, 0.5, -0.5, 0, -1, 0, 0, 0, 1, -1, 0, 0 }, // WEST
+			{ 0.5, 0.5, 0.5, 0, -1, 0, 0, 0, -1, 1, 0, 0 }, // EAST
 	};
 
 	/**

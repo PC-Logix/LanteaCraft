@@ -26,10 +26,10 @@ public class TileDoorRenderer extends LCTileRenderer {
 		TileLanteaDoor door = (TileLanteaDoor) tile;
 
 		ResourceLocation whatTex = ResourceAccess.getNamedResource(ResourceAccess
-				.formatResourceName("textures/blocks/lantean_door_bottom_128.png"));
+				.formatResourceName("textures/tileentity/lantean_door_bottom_128.png"));
 		if (door.hasBlockBelow())
 			whatTex = ResourceAccess.getNamedResource(ResourceAccess
-					.formatResourceName("textures/blocks/lantean_door_top_128.png"));
+					.formatResourceName("textures/tileentity/lantean_door_top_128.png"));
 		renderer.bind(whatTex);
 
 		GL11.glPushMatrix();
@@ -46,7 +46,6 @@ public class TileDoorRenderer extends LCTileRenderer {
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
 		GL11.glTranslatef(-0.5f, 0.0f, -0.5f);
 
-		
 		float dt = (20 - frame);
 		float angle = (90.0f / 20.0f) * dt;
 		GL11.glTranslatef(0.2f, 0.5f, 0.5f);
@@ -73,17 +72,17 @@ public class TileDoorRenderer extends LCTileRenderer {
 		GL11.glVertex3f(1, 1, d1);
 		GL11.glTexCoord2f(0, 0);
 		GL11.glVertex3f(0, 1, d1);
-		
+
 		GL11.glVertex3f(1, 0, d0);
 		GL11.glVertex3f(1, 1, d0);
 		GL11.glVertex3f(1, 1, d1);
 		GL11.glVertex3f(1, 0, d1);
-		
+
 		GL11.glVertex3f(0, 0, d0);
 		GL11.glVertex3f(0, 0, d1);
 		GL11.glVertex3f(0, 1, d1);
 		GL11.glVertex3f(0, 1, d0);
-		
+
 		if (door.hasBlockBelow()) {
 			GL11.glVertex3f(0, 1, d0);
 			GL11.glVertex3f(0, 1, d1);

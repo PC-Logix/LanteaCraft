@@ -22,6 +22,8 @@ import lc.tiles.TileLanteaDoor;
 
 @Definition(name = "lanteaDoor", type = ComponentType.DECOR, blockClass = BlockLanteaDoor.class, itemBlockClass = ItemLanteaDoor.class, tileClass = TileLanteaDoor.class)
 public class BlockLanteaDoor extends LCBlock {
+	
+	private IIcon doorIcon;
 
 	public BlockLanteaDoor() {
 		super(Material.ground);
