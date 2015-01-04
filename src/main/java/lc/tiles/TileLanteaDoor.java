@@ -88,7 +88,6 @@ public class TileLanteaDoor extends LCTile {
 			TileEntity tz = worldObj.getTileEntity(xCoord + qz.offsetX, yCoord + qz.offsetY, zCoord + qz.offsetZ);
 			if (tz != null && tz instanceof TileLanteaDoor)
 				((TileLanteaDoor) tz).recalculateState();
-
 		}
 		markNbtDirty();
 	}
@@ -210,6 +209,25 @@ public class TileLanteaDoor extends LCTile {
 			}
 		}
 		return box;
+	}
+
+	public void setRedstoneState(int strength) {
+		if (compound == null)
+			compound = new NBTTagCompound();
+		boolean flag0 = false, flag1 = true;
+		if (!compound.hasKey("redstoneSignal")) {
+			flag0 = true;
+			compound.setInteger("redstoneSignal", strength);
+		} else {
+			int what = compound.getInteger("redstoneSignal");
+			if (what != strength) {
+				flag0 = true;
+				compound.setInteger("redstoneSignal", strength);
+				flag1 = (strength != 0);
+			}
+		}
+		if (flag0)
+			setDoorState(flag1);
 	}
 
 }

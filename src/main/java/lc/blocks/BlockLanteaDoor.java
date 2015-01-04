@@ -2,6 +2,7 @@ package lc.blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -107,6 +108,17 @@ public class BlockLanteaDoor extends LCBlock {
 			w.setBlockToAir(x, y - 1, z);
 		if (w.getBlock(x, y + 1, z) == this)
 			w.setBlockToAir(x, y + 1, z);
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block b) {
+		if (!world.isRemote) {
+			int strength = world.getStrongestIndirectPower(x, y, z);
+			TileLanteaDoor te = (TileLanteaDoor) world.getTileEntity(x, y, z);
+			if (te != null)
+				te.setRedstoneState(strength);
+		}
+
 	}
 
 }
