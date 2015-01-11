@@ -62,6 +62,8 @@ jar.manifest = manifest { attributes(
 	"FMLCorePlugin": "pcl.lc.coremod.LCCoreMod",
 	"FMLCorePluginContainsFMLMod": "icanhazfmlmodpweeze"
 ) }
+
+/*
 apply plugin: 'curseforge'
 def curseforge_key = 0
 if (project.hasProperty('curseforge_key')) {
@@ -78,7 +80,9 @@ curse {
 		changelog = changelogFile.text
 	}
 	addGameVersion project.minecraft.version
-}
+} */
+
+
 processResources {
 	from(sourceSets.main.resources.srcDirs) {
 		include 'mcmod.info'
