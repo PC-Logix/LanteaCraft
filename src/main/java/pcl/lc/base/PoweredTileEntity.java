@@ -10,6 +10,7 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import org.apache.logging.log4j.Level;
 
+import cofh.api.energy.IEnergyHandler;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
@@ -26,7 +27,7 @@ import cpw.mods.fml.common.Loader;
  * 
  * @author AfterLifeLochie
  */
-public abstract class PoweredTileEntity extends TileManaged {
+public abstract class PoweredTileEntity extends TileManaged implements IEnergyHandler {
 
 	/**
 	 * Incoming power buffer, particularly only for BuildCraft.
@@ -45,7 +46,8 @@ public abstract class PoweredTileEntity extends TileManaged {
 	 * we're not actually importing any sort of energy - BC will go so far as to
 	 * throw NPE's.
 	 */
-	public PoweredTileEntity() { }
+	public PoweredTileEntity() {
+	}
 
 	/**
 	 * Determines if this TileEntity is capable of receiving energy from
@@ -135,7 +137,6 @@ public abstract class PoweredTileEntity extends TileManaged {
 
 	// Don't look beyond here unless you want your eyes severely violated.
 
-
 	/**
 	 * Determine if this host emits IC2 EU to a forge direction and a receiver.
 	 * Return a {@link PoweredTileEntity#canExportEnergy()} result.
@@ -218,7 +219,8 @@ public abstract class PoweredTileEntity extends TileManaged {
 				addedToEnergyNet = false;
 			}
 		} catch (Throwable t) {
-			LanteaCraft.getLogger().log(Level.WARN, "Could not push IC2 energy event. IC2 tiles may not be supported.", t);
+			LanteaCraft.getLogger().log(Level.WARN, "Could not push IC2 energy event. IC2 tiles may not be supported.",
+					t);
 		}
 	}
 

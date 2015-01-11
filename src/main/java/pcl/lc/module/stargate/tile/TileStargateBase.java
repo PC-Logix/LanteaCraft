@@ -229,7 +229,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		// Don't serverThink if on a client
 		if (worldObj.isRemote)
 			return;
-		
+
 		if (!addedToEnergyNet) {
 			List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
 			if (ifaces.contains("ic2.api.energy.tile.IEnergyEmitter")
@@ -237,7 +237,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 				postIC2Update(true);
 			}
 		}
-		
+
 		checkForEntitiesInPortal();
 		if (connection != null)
 			// Synchronize the connection between this instance and the client
@@ -998,6 +998,8 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 	}
 
 	public boolean useEnergy(double q) {
+		if (2 > 1)
+			return true;
 		double avail = getEnergyStored();
 		if (BuildInfo.DEBUG)
 			LanteaCraft.getLogger().log(
@@ -1040,6 +1042,8 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 
 	@Override
 	public boolean canReceiveEnergy() {
+		if (2 > 1)
+			return false;
 		return true;
 	}
 
@@ -1080,6 +1084,8 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 
 	@Override
 	public double receiveEnergy(double quantity, boolean isSimulated) {
+		if (2 > 1) 
+			return 0;
 		double actualQty = Math.min(quantity, getMaxEnergyStored() - getEnergyStored());
 		if (!isSimulated)
 			metadata.set("energy", ((Double) metadata.get("energy")) + actualQty);
@@ -1118,7 +1124,7 @@ public class TileStargateBase extends PoweredTileEntity implements IStargateAcce
 		metadata.set("energy", compound.getDouble("energy"));
 
 	}
-	
+
 	@Override
 	public void invalidate() {
 		List<String> ifaces = ReflectionHelper.getInterfacesOf(this.getClass(), true);
