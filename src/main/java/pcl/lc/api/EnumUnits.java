@@ -43,7 +43,7 @@ public enum EnumUnits {
 
 	@Deprecated
 	public static double convertToNaquadahUnit(EnumUnits unitFrom, double quantityFrom) {
-		return (1 / unitFrom.getRate()) * quantityFrom;
+		return unitFrom.getRate() / quantityFrom;
 	}
 
 	/**

@@ -145,7 +145,8 @@ public class ModuleStargates implements IModule {
 			Items.transportRingActivator = RegistrationHelper.registerItem(
 					ItemTransportRingActivator.class, "transportRingActivator",
 					CreativeTabHelper.getTab("LanteaCraft: Stargates"));
-
+		
+//MilkyWay Gate
 		RegistrationHelper.newRecipe(
 				new ItemStack(Blocks.stargateRingBlock, 1), "ICI", "NNN",
 				"III", 'I', net.minecraft.init.Items.iron_ingot, 'N',
@@ -179,7 +180,90 @@ public class ModuleStargates implements IModule {
 				net.minecraft.init.Items.redstone, 'c', new ItemStack(
 						ModuleCore.Items.reagentItem, 1,
 						ReagentList.CORECRYSTAL.ordinal()));
+		
+//Pegasus Gate
+		RegistrationHelper.newRecipe(
+				new ItemStack(Blocks.stargateRingBlock, 1, 2), "ICI", "NNN",
+				"III", 'I', net.minecraft.init.Items.iron_ingot, 'N',
+				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
+				net.minecraft.init.Blocks.cobblestone);
 
+		
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1,
+				3), "CgC", "NpN", "IrI", 'I',
+				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
+						ModuleCore.Items.lanteaOreIngot), 'C', 
+						net.minecraft.init.Blocks.cobblestone, 'g',
+				net.minecraft.init.Blocks.glowstone, 'r',
+				net.minecraft.init.Items.redstone, 'p',
+				net.minecraft.init.Items.ender_pearl);
+
+		RegistrationHelper.newRecipe(
+				new ItemStack(Blocks.stargateBaseBlock, 1, 4), "CrC", "NeN",
+				"IcI", 'I', net.minecraft.init.Items.iron_ingot, 'N',
+				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
+				net.minecraft.init.Blocks.cobblestone, 'r',
+				net.minecraft.init.Items.redstone, 'e',
+				net.minecraft.init.Items.ender_eye, 'c', new ItemStack(
+						ModuleCore.Items.reagentItem, 1,
+						ReagentList.CORECRYSTAL.ordinal()));
+		
+
+//Wraith Gate
+		RegistrationHelper.newRecipe(
+				new ItemStack(Blocks.stargateRingBlock, 1, 4), "ICI", "NNN",
+				"III", 'I', net.minecraft.init.Items.iron_ingot, 'N',
+				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
+				net.minecraft.init.Blocks.mossy_cobblestone);
+
+		
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1,
+				5), "CgC", "NpN", "IrI", 'I',
+				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
+						ModuleCore.Items.lanteaOreIngot), 'C', 
+						net.minecraft.init.Blocks.mossy_cobblestone, 'g',
+				net.minecraft.init.Blocks.glowstone, 'r',
+				net.minecraft.init.Items.redstone, 'p',
+				net.minecraft.init.Items.ender_pearl);
+
+		RegistrationHelper.newRecipe(
+				new ItemStack(Blocks.stargateBaseBlock, 1, 8), "CrC", "NeN",
+				"IcI", 'I', net.minecraft.init.Items.iron_ingot, 'N',
+				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
+				net.minecraft.init.Blocks.mossy_cobblestone, 'r',
+				net.minecraft.init.Items.redstone, 'e',
+				net.minecraft.init.Items.ender_eye, 'c', new ItemStack(
+						ModuleCore.Items.reagentItem, 1,
+						ReagentList.CORECRYSTAL.ordinal()));
+
+		
+//Nox Gate
+
+		RegistrationHelper.newRecipe(
+				new ItemStack(Blocks.stargateRingBlock, 1, 6), "ICI", "NNN",
+				"III", 'I', net.minecraft.init.Items.iron_ingot, 'N',
+				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
+				net.minecraft.init.Blocks.stone);
+
+		
+		RegistrationHelper.newRecipe(new ItemStack(Blocks.stargateRingBlock, 1,
+				7), "CgC", "NpN", "IrI", 'I',
+				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
+						ModuleCore.Items.lanteaOreIngot), 'C', 
+						net.minecraft.init.Blocks.stone, 'g',
+				net.minecraft.init.Blocks.glowstone, 'r',
+				net.minecraft.init.Items.redstone, 'p',
+				net.minecraft.init.Items.ender_pearl);
+
+		RegistrationHelper.newRecipe(
+				new ItemStack(Blocks.stargateBaseBlock, 1, 12), "CrC", "NeN",
+				"IcI", 'I', net.minecraft.init.Items.iron_ingot, 'N',
+				new ItemStack(ModuleCore.Items.lanteaOreIngot), 'C',
+				net.minecraft.init.Blocks.stone, 'r',
+				net.minecraft.init.Items.redstone, 'e',
+				net.minecraft.init.Items.ender_eye, 'c', new ItemStack(
+						ModuleCore.Items.reagentItem, 1,
+						ReagentList.CORECRYSTAL.ordinal()));
 		if (ConfigHelper
 				.getOrSetBooleanParam(
 						config,
