@@ -214,7 +214,7 @@ public class TileLanteaDoor extends LCTile {
 	public void setRedstoneState(int strength) {
 		if (compound == null)
 			compound = new NBTTagCompound();
-		boolean flag0 = false, flag1 = true;
+		boolean flag0 = false, flag1 = false;
 		if (!compound.hasKey("redstoneSignal")) {
 			flag0 = true;
 			compound.setInteger("redstoneSignal", strength);

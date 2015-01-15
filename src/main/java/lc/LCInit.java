@@ -111,6 +111,7 @@ public class LCInit {
 				DecorBlockTypes.LantDecSteel.idx);
 		IDefinitionReference decorGoaGold = blocks.lanteaDecorBlock.ref().pushAll(1, DecorBlockTypes.GoaGold.idx);
 		IDefinitionReference decorGoaPatGold = blocks.lanteaDecorBlock.ref().pushAll(1, DecorBlockTypes.GoaDecGold.idx);
+		IDefinitionReference decorLantDoor = blocks.lanteaDoor.ref();
 
 		ItemStack cSandstone = new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1);
 		ItemStack ironIngot = new ItemStack(net.minecraft.init.Items.iron_ingot, 1);
@@ -185,10 +186,14 @@ public class LCInit {
 		recipes.decorGoauldDecorGold = new SimpleRecipeDefinition("goauld_decor_gold", RecipeType.SHAPED,
 				decorGoaPatGold.copy().push(0, 4), "00 00    ", decorGoaGold);
 
+		recipes.decorLanteanDoor = new SimpleRecipeDefinition("lantean_door", RecipeType.SHAPED, decorLantDoor,
+				" 00 00 11", decorLantDecSteel.copy().push(0, 4), decorLantSteel);
+
 		runtime.registries().recipes().addRecipe(recipes.decorLanteanSteel);
 		runtime.registries().recipes().addRecipe(recipes.decorLanteanPatternSteel);
 		runtime.registries().recipes().addRecipe(recipes.decorGoauldGold);
 		runtime.registries().recipes().addRecipe(recipes.decorGoauldDecorGold);
+		runtime.registries().recipes().addRecipe(recipes.decorLanteanDoor);
 
 		/* Initialize structures */
 		structures.scatteredSurfaceStargate = new StructureDefinition("SurfaceStargate", SurfaceStargate.class) {

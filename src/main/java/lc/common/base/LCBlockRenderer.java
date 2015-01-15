@@ -196,16 +196,16 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 		float v0 = iicon.getMinV(), v1 = iicon.getMaxV();
 		float f4 = 0.0F;
 		float f5 = 0.3F;
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPushMatrix();
+		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glTranslatef(-f4, -f5, 0.0F);
 		float f6 = 1.25F;
 		GL11.glScalef(f6, f6, f6);
 		GL11.glTranslatef(-0.5f, -0.25f, 0.0f);
 		renderItemIn2D(tessellator, u1, v0, u0, v1, iicon.getIconWidth(), iicon.getIconHeight(), 0.0625F);
-		GL11.glPopMatrix();
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glEnable(GL11.GL_LIGHTING);
 		TextureUtil.func_147945_b();
+		GL11.glPopMatrix();
 	}
 
 	private void renderItemIn2D(Tessellator t, float u1, float v0, float u0, float v1, int w, int h, float p_78439_7_) {

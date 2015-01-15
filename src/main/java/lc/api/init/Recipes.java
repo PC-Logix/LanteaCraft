@@ -52,6 +52,9 @@ public class Recipes {
 	/** Lantean Patterned Steel recipe */
 	public IRecipeDefinition decorLanteanPatternSteel;
 	
+	/** Lantean door recipe */
+	public IRecipeDefinition decorLanteanDoor;
+	
 	/** Goa'uld Gold recipe */
 	public IRecipeDefinition decorGoauldGold;
 	/** Goa'uld Decorative Gold recipe */
