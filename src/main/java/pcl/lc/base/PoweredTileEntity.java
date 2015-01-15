@@ -3,19 +3,16 @@ package pcl.lc.base;
 import java.lang.reflect.Constructor;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.WorldEvent;
 
 import org.apache.logging.log4j.Level;
 
-import cofh.api.energy.IEnergyHandler;
 import pcl.lc.BuildInfo;
 import pcl.lc.LanteaCraft;
 import pcl.lc.api.EnumUnits;
 import pcl.lc.coremod.RuntimeAnnotation.RuntimeInterface;
-import cpw.mods.fml.common.Loader;
 
 /**
  * Holy wrappers, Batman. Factory free wrapper for TileEntity objects which
@@ -189,7 +186,7 @@ public abstract class PoweredTileEntity extends TileManaged {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void postIC2Update(boolean actionIsLoad) {
+	protected void postIC2Update(boolean actionIsLoad) {		
 		LanteaCraft.getLogger().log(Level.INFO, String.format("Sending IC2 state."));
 		try {
 			Class<?> clazz_ic2energytile = Class.forName("ic2.api.energy.tile.IEnergyTile", false, getClass()
