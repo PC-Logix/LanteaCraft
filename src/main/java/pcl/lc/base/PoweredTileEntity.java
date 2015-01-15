@@ -27,7 +27,7 @@ import cpw.mods.fml.common.Loader;
  * 
  * @author AfterLifeLochie
  */
-public abstract class PoweredTileEntity extends TileManaged implements IEnergyHandler {
+public abstract class PoweredTileEntity extends TileManaged {
 
 	/**
 	 * Incoming power buffer, particularly only for BuildCraft.
