@@ -3,14 +3,19 @@ package pcl.lc.module.integration.computercraft;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import pcl.lc.core.ResourceAccess;
 import pcl.lc.util.Vector3;
 
 public class BlockComputerCraftConnector extends Block implements ITileEntityProvider {
 
+	private IIcon icon;
+	
 	public BlockComputerCraftConnector() {
 		super(Material.ground);
 	}
@@ -18,6 +23,16 @@ public class BlockComputerCraftConnector extends Block implements ITileEntityPro
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
 		return new TileEntityComputerCraftConnector();
+	}
+	
+	@Override
+	public void registerBlockIcons(IIconRegister reg) {
+		icon = reg.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s", "integration_computercraft"));
+	}
+	
+	@Override
+	public IIcon getIcon(int s, int m) {
+		return icon;
 	}
 
 	private int countAdaptableBlocks(World par1World, int par2, int par3, int par4) {
