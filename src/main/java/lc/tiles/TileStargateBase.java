@@ -19,6 +19,7 @@ import lc.common.util.game.BlockHelper;
 import lc.common.util.game.SlotFilter;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
+import lc.server.StargateAddress;
 import lc.server.StargateConnection;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -73,6 +74,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	};
 
 	private StargateConnection currentConnection;
+	private StargateAddress stargateAddress;
+
 	private Block clientSkinBlock;
 	private int clientSkinBlockMetadata;
 
@@ -101,7 +104,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		public String getInventoryName() {
 			return "Stargate";
 		}
-	}.setFilterRule(0, new SlotFilter(new ItemStack[] { LCRuntime.runtime.items().lanteaAlloyItem.getStackOf(1) },
+	}.setFilterRule(0, new SlotFilter(new ItemStack[] { LCRuntime.runtime.items().lanteaStargateIris.getStackOf(1) },
 			null, true, true));
 
 	@Override
@@ -128,8 +131,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public IInventory getInventory() {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory;
 	}
 
 	@Override

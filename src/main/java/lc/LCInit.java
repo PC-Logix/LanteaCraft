@@ -30,6 +30,7 @@ import lc.generation.SurfaceStargate.SurfaceStargateFeature;
 import lc.items.ItemCraftingReagent;
 import lc.items.ItemDecorator;
 import lc.items.ItemGlasses;
+import lc.items.ItemIrisUpgrade;
 import lc.items.ItemLanteaAlloyIngot;
 import lc.items.ItemLanteaOre;
 import lc.recipe.DecoratorSetterRecipe;
@@ -88,6 +89,7 @@ public class LCInit {
 		items.lanteaAlloyItem = DefinitionWrapperProvider.provide(ItemLanteaAlloyIngot.class);
 		items.lanteaCraftingItem = DefinitionWrapperProvider.provide(ItemCraftingReagent.class);
 		items.lanteaDecoratorTool = DefinitionWrapperProvider.provide(ItemDecorator.class);
+		items.lanteaStargateIris = DefinitionWrapperProvider.provide(ItemIrisUpgrade.class);
 
 		/* Initialize recipes */
 		IDefinitionReference ringBlock = blocks.stargateRingBlock.ref();

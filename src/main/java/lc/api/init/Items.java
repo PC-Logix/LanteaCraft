@@ -22,6 +22,9 @@ public class Items {
 	/** Lantea global crystal item */
 	public IContainerDefinition lanteaCraftingItem;
 
+	/** Stargate iris item */
+	public IContainerDefinition lanteaStargateIris;
+
 	/** Lantea decorator tool */
 	public IContainerDefinition lanteaDecoratorTool;
 
