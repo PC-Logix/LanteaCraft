@@ -25,7 +25,6 @@ public class RecordIO {
 		@Override
 		public void write(JsonWriter out, StargateRecord value) throws IOException {
 			out.beginObject();
-			out.name("type").value(value.type);
 			out.name("address").value(value.address.getAddressString());
 			out.name("hasCoords").value(value.chunk != null);
 			if (value.chunk != null) {
@@ -40,7 +39,6 @@ public class RecordIO {
 		public StargateRecord read(JsonReader in) throws IOException {
 			in.beginObject();
 			StargateRecord result = new StargateRecord();
-			result.type = in.nextInt();
 			result.address = new StargateAddress(in.nextString().toCharArray());
 			boolean hasCoords = in.nextBoolean();
 			if (hasCoords) {

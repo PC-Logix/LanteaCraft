@@ -5,13 +5,16 @@ import lc.server.StargateAddress;
 
 public class StargateRecord {
 
-	public int type;
 	public StargateAddress address;
-	public byte[] xdata;
-
 	public int dimension;
 	public ChunkPos chunk;
 
 	public StargateRecord() {
+	}
+
+	public StargateRecord(StargateAddress address, int dimension, ChunkPos chunk) {
+		this.address = address;
+		this.dimension = dimension;
+		this.chunk = chunk;
 	}
 }

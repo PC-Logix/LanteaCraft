@@ -5,16 +5,13 @@ import lc.tiles.TileStargateBase;
 
 public class StargateConnection {
 
-	public final String source;
-	public final String dest;
-
-	public TileStargateBase tileFrom;
-	public TileStargateBase tileTo;
+	public final StargateAddress source, dest;
+	public TileStargateBase tileFrom, tileTo;
 
 	public StargateState state;
 	public int stateTimeout;
 
-	public StargateConnection(String source, String dest) {
+	public StargateConnection(StargateAddress source, StargateAddress dest) {
 		this.source = source;
 		this.dest = dest;
 		this.state = StargateState.IDLE;
