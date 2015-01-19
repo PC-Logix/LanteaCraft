@@ -2,19 +2,15 @@ package lc.server.database;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.concurrent.Semaphore;
 
 import lc.common.LCLog;
 import lc.common.stargate.StargateCharsetHelper;
-import lc.common.util.data.PrimitiveCompare;
 import lc.common.util.math.ChunkPos;
-import lc.common.util.math.DimensionPos;
+import lc.server.StargateAddress;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
@@ -30,8 +26,6 @@ public class UniverseManager {
 
 	/** Current working file */
 	private File workFile;
-	/** If the working file is currently compressed. */
-	private boolean workIsCompressed;
 	/** The random number generator */
 	private Random worldRandom;
 	/** Heap for all registered addresses */
@@ -57,35 +51,18 @@ public class UniverseManager {
 		if (!dataDir.exists())
 			dataDir.mkdir();
 
-		FileInputStream fis = null;
-		File cf = new File(dataDir, "addresses.json.gz");
-		if (cf.exists()) {
+		workFile = new File(dataDir, "addresses.json");
+		if (workFile.exists()) {
 			try {
-				fis = new FileInputStream(cf);
+				FileInputStream fis = new FileInputStream(workFile);
 				recordHeap.clear();
-				jsonAgent.readMap(fis, true, recordHeap);
+				jsonAgent.readMap(fis, recordHeap);
+				fis.close();
 			} catch (IOException ioex) {
 				LCLog.fatal("Problem reading Stargate address database.", ioex);
 			}
-		} else {
-			File uf = new File(dataDir, "addresses.json");
-			if (uf.exists()) {
-				try {
-					fis = new FileInputStream(uf);
-					recordHeap.clear();
-					jsonAgent.readMap(fis, false, recordHeap);
-				} catch (IOException ioex) {
-					LCLog.fatal("Problem reading Stargate address database.", ioex);
-				}
-			}
 		}
 
-		try {
-			if (fis != null)
-				fis.close();
-		} catch (IOException ioex) {
-			/* Do nothing */
-		}
 		buildIndex();
 	}
 
@@ -96,6 +73,14 @@ public class UniverseManager {
 	 *            The server event.
 	 */
 	public void unloadUniverse(FMLServerStoppingEvent event) {
+		try {
+			FileOutputStream fos = new FileOutputStream(workFile);
+			jsonAgent.writeMap(fos, recordHeap);
+			recordHeap.clear();
+			fos.close();
+		} catch (IOException ioex) {
+			LCLog.fatal("Problem saving Stargate address database.", ioex);
+		}
 	}
 
 	/**
@@ -123,7 +108,6 @@ public class UniverseManager {
 	 *            The save event.
 	 */
 	public void autosaveGalaxy(WorldEvent.Save save) {
-
 	}
 
 	/**
@@ -132,24 +116,24 @@ public class UniverseManager {
 	public void buildIndex() {
 		characterMap.clear();
 		for (StargateRecord record : recordHeap)
-			characterMap.add(StargateCharsetHelper.singleton().addressToLong(record.address));
+			characterMap.add(record.address.getILongValue());
 	}
 
-	public boolean isAddressAllocated(char[] address) {
-		return characterMap.contains(StargateCharsetHelper.singleton().addressToLong(address));
+	public boolean isAddressAllocated(StargateAddress address) {
+		return characterMap.contains(address.getILongValue());
 	}
 
-	public char[] putAddress(char[] address, int dimension, ChunkPos chunk) {
+	public StargateAddress putAddress(StargateAddress address, int dimension, ChunkPos chunk) {
 		StargateRecord record = new StargateRecord();
 		record.address = address;
 		record.dimension = dimension;
 		record.chunk = chunk;
 		recordHeap.add(record);
-		characterMap.add(StargateCharsetHelper.singleton().addressToLong(address));
-		return record.address;
+		characterMap.add(address.getILongValue());
+		return address;
 	}
 
-	public char[] findAddress(int dimension, ChunkPos chunk) {
+	public StargateAddress findAddress(int dimension, ChunkPos chunk) {
 		for (StargateRecord record : recordHeap) {
 			if (record.chunk.equals(chunk))
 				return record.address;
@@ -157,24 +141,28 @@ public class UniverseManager {
 		return putAddress(getFreeAddress(ADDRESS_WIDTH), dimension, chunk);
 	}
 
-	public char[] getFreeAddress(int width) {
+	public StargateAddress getFreeAddress(int width) {
+		ArrayList<Character> address = new ArrayList<Character>();
 		while (true) {
-			char[] address = new char[width];
-			for (int i = 0; i < width; i++)
-				address[i] = StargateCharsetHelper.singleton().index(worldRandom.nextInt(36));
-			if (!isAddressAllocated(address))
-				return address;
+			while (address.size() < width) {
+				char z = StargateCharsetHelper.singleton().index(worldRandom.nextInt(36));
+				if (address.contains(z))
+					continue;
+				address.add(z);
+			}
+			StargateAddress addr = new StargateAddress(address.toArray(new Character[0]));
+			if (!isAddressAllocated(addr))
+				return addr;
 		}
 	}
 
-	public StargateRecord findRecord(char[] address) {
+	public StargateRecord findRecord(StargateAddress address) {
 		if (!isAddressAllocated(address))
 			return null;
 		for (StargateRecord record : recordHeap) {
-			if (PrimitiveCompare.compareChar(record.address, address))
+			if (record.address.equals(address))
 				return record;
 		}
 		return null;
 	}
-
 }
