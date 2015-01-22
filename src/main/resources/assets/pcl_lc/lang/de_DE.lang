@@ -21,13 +21,15 @@ tile.stargateRing.7.name=Nox Stargate Chevron
 # Iris items & tags
 item.iris.name=Stargate Iris
 item.gdo.name=GDO
+item.decorator.name=Dekorateur
+item.lanteaDoor.name=Antiker Tür
 # Iris types
 iris.mechanical.name=Mechanische
 iris.energy.name=Energie
 # Label used to display iris type, 1 param
 iris.type.text=%s Iris
 # Label used to display iris %damage, 1 param
-iris.damage.text=%s Schäden
+iris.damage.text=%s Schaden
 
 # Power-related items
 item.energyCrystal.name=Energie Kristal
@@ -91,7 +93,7 @@ tank.text=Tank: %s
 tile.blockCrystalInfuser.name=Kristal Infuser
 
 # Help Notebook
-item.jacksonNotebook.name=Notebook von Daniel Jackson
+item.jacksonNotebook.name=Notizbuch von Daniel Jackson
 
 # Transporter Rings
 tile.transporterRing.0.name=Ring Stück
