@@ -2,6 +2,7 @@ package lc.common;
 
 import lc.BuildInfo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
@@ -44,38 +45,21 @@ public class LCLog {
 				log = LCLog.cmLog;
 				break;
 			}
-		if (args.length == 1) {
-			if (args[0] instanceof Throwable)
-				log.log(level, args[0]);
-			else
-				log.log(level, args[0]);
-		} else if (args.length == 2 && args[0] instanceof Throwable)
-			log.log(level, (String) args[1], (Throwable) args[0]);
-		else if (args.length == 2 && args[1] instanceof Throwable)
-			log.log(level, (String) args[0], (Throwable) args[1]);
+		Throwable t = null;
+		for (Object arg : args)
+			if (arg instanceof Throwable)
+				t = (Throwable) arg;
+		
+		Object[] format;
+		if (t == null) {
+			log.log(level, StringUtils.join(args, " "));
+		}
 		else {
-			boolean flag = false;
-			for (Object arg : args)
-				if (arg instanceof Throwable)
-					flag = true;
-			Object[] format;
-			if (!flag) {
-				format = new Object[args.length - 1];
-				System.arraycopy(args, 1, format, 0, format.length);
-				log.log(level, String.format((String) args[0], format));
-			} else {
-				format = new Object[args.length - 2];
-				Throwable t = null;
-				for (int i = 1, q = 0; i < args.length; i++)
-					if (!(args[i] instanceof Throwable))
-						format[q++] = args[i];
-					else
-						t = (Throwable) args[i];
-				if (t != null)
-					log.log(level, String.format((String) args[0], format), t);
-				else
-					log.log(level, String.format((String) args[0], format));
-			}
+			format = new Object[args.length - 1];
+			for (int i = 0, q = 0; i < args.length; i++)
+				if (!(args[i] instanceof Throwable))
+					format[q++] = args[i];
+			log.log(level, StringUtils.join(format, " "), t);
 		}
 	}
 
