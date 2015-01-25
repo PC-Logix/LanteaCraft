@@ -3,10 +3,19 @@ package lc.gui;
 import java.awt.Dimension;
 import java.util.HashMap;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import lc.ResourceAccess;
+import lc.api.stargate.StargateType;
+import lc.common.LCLog;
+import lc.common.base.ux.IconButton;
 import lc.common.base.ux.LCContainerGUI;
 import lc.common.base.ux.LCContainerTab;
+import lc.common.base.ux.LCTabbedSlot;
+import lc.common.base.ux.Popover;
 import lc.container.ContainerStargate;
 import lc.tiles.TileStargateBase;
 
@@ -15,7 +24,9 @@ public class GUIStargate extends LCContainerGUI {
 	public static class StargateDefaultTab extends LCContainerTab {
 		@Override
 		protected void onTabOpened(LCContainerGUI container) {
-			// TODO Auto-generated method stub
+			for (Object o : container.inventorySlots.inventorySlots)
+				if (o instanceof LCTabbedSlot)
+					((LCTabbedSlot) o).showSlot();
 		}
 
 		@Override
@@ -25,30 +36,36 @@ public class GUIStargate extends LCContainerGUI {
 
 		@Override
 		protected String getTabName() {
-			// TODO Auto-generated method stub
-			return "Stargate";
+			return I18n.format("lc.interface.stargate.name");
 		}
 
 		@Override
 		protected ResourceLocation getTabIcon() {
-			// TODO Auto-generated method stub
-			return null;
+			return ResourceAccess.getNamedResource(ResourceAccess
+					.formatResourceName("textures/gui/icons/stargate_${TEX_QUALITY}.png"));
 		}
 
 		@Override
 		protected Dimension getTabDimensions() {
-			return new Dimension(800, 600);
+			return new Dimension(256, 208);
 		}
 
 		@Override
 		protected void drawBackgroundLayer(LCContainerGUI container, float partialTickCount, int mouseX, int mouseY) {
-			// TODO Auto-generated method stub
+			container.bindTexture(ResourceAccess.getNamedResource(ResourceAccess
+					.formatResourceName("textures/gui/prefabs/sg_gui_${TEX_QUALITY}.png")), 256, 256);
+			container.drawTexturedRect(0, 0, container.getXSize(), container.getYSize(), 0, 0);
 		}
 
 		@Override
 		protected void drawForegroundLayer(LCContainerGUI container, int mouseX, int mouseY) {
-			// TODO Auto-generated method stub
-			container.drawString("Test!", 0, 0);
+			container.drawAddressString(128, 56, "ABCDEFGHI", 9, "-", "-");
+			container.drawFramedSymbols(128, 8, StargateType.ATLANTIS, "ABCDEFGHI");
+			IconButton.drawButton(Minecraft.getMinecraft(), "copy", 240, 54, mouseX - container.offsetLeft(), mouseY
+					- container.offsetTop(), container.isMouseDown(), 0.5, 1.0f);
+			if (IconButton.buttonHovered(240, 54, mouseX - container.offsetLeft(), mouseY - container.offsetTop(), 0.5))
+				container.drawTooltip(I18n.format("lc.interface.clipboard.write"), mouseX - container.offsetLeft(),
+						mouseY - container.offsetTop());
 		}
 
 		@Override
@@ -58,12 +75,93 @@ public class GUIStargate extends LCContainerGUI {
 
 		@Override
 		protected void mouseMovedOrUp(LCContainerGUI container, int x, int y, int mouseButton) {
-			// TODO Auto-generated method stub
+			if (mouseButton == 0 || mouseButton == 1) {
+				if (IconButton.buttonDepressed(240, 54, x - container.offsetLeft(), y - container.offsetTop(),
+						container.isMouseDown(), 0.5)) {
+					boolean result = container.putTextOnClipboard("");
+					if (result)
+						container.pushPopover(new Popover(I18n.format("lc.interface.clipboard.write_ok"), 120));
+					else
+						container.pushPopover(new Popover(I18n.format("lc.interface.clipboard.write_fail"), 120));
+				}
+			}
 		}
 
 		@Override
 		protected void keyTyped(LCContainerGUI container, char c, int key) {
 			// TODO Auto-generated method stub
+		}
+	}
+
+	public static class StargateRedstoneTab extends LCContainerTab {
+
+		@Override
+		protected void onTabOpened(LCContainerGUI container) {
+			for (Object o : container.inventorySlots.inventorySlots)
+				if (o instanceof LCTabbedSlot)
+					((LCTabbedSlot) o).hideSlot();
+		}
+
+		@Override
+		protected void onTabClosed(LCContainerGUI container) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		protected String getTabName() {
+			return I18n.format("lc.interface.redstone.name");
+		}
+
+		@Override
+		protected ResourceLocation getTabIcon() {
+			return ResourceAccess.getNamedResource(ResourceAccess
+					.formatResourceName("textures/gui/icons/icon_redstone_${TEX_QUALITY}.png"));
+		}
+
+		@Override
+		protected Dimension getTabDimensions() {
+			return new Dimension(100, 50);
+		}
+
+		@Override
+		protected void drawBackgroundLayer(LCContainerGUI container, float partialTickCount, int mouseX, int mouseY) {
+			container.bindTexture(ResourceAccess.getNamedResource(ResourceAccess
+					.formatResourceName("textures/gui/prefabs/blank_gui_${TEX_QUALITY}.png")));
+			container.drawTexturedRect(0, 0, container.getXSize(), container.getYSize());
+		}
+
+		@Override
+		protected void drawForegroundLayer(LCContainerGUI container, int mouseX, int mouseY) {
+			
+			
+			IconButton.drawIcon(Minecraft.getMinecraft(), "icon_iris", 0, 5, 0.5f, 1.0f);
+			container.drawString(I18n.format("lc.interface.redstone.iris_mode"), 12, 7);
+			
+			IconButton.drawButton(Minecraft.getMinecraft(), "icon_rstorchon", 85, 5, mouseX - container.offsetLeft(), mouseY
+					- container.offsetTop(), container.isMouseDown(), 0.5, 1.0f);
+			if (IconButton.buttonHovered(85, 5, mouseX - container.offsetLeft(), mouseY - container.offsetTop(), 0.5))
+				container.drawTooltip(I18n.format("lc.interface.redstone.high"), mouseX - container.offsetLeft(),
+						mouseY - container.offsetTop());
+
+		}
+
+		@Override
+		protected void mouseClicked(LCContainerGUI container, int x, int y, int mouseButton) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		protected void mouseMovedOrUp(LCContainerGUI container, int x, int y, int mouseButton) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		protected void keyTyped(LCContainerGUI container, char c, int key) {
+			// TODO Auto-generated method stub
+
 		}
 
 	}
@@ -71,6 +169,7 @@ public class GUIStargate extends LCContainerGUI {
 	private static final HashMap<Integer, LCContainerTab> tabs = new HashMap<Integer, LCContainerTab>();
 	static {
 		tabs.put(0, new StargateDefaultTab());
+		tabs.put(1, new StargateRedstoneTab());
 	}
 
 	public GUIStargate(TileStargateBase tile, EntityPlayer player) {

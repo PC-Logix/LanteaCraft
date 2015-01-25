@@ -1,12 +1,13 @@
 package lc.common.base.inventory;
 
+import lc.common.base.ux.LCTabbedSlot;
 import lc.common.util.game.SlotFilter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class FilteredSlot extends Slot {
+public class FilteredSlot extends LCTabbedSlot {
 	private final boolean readonly;
 	private final int slotIndex;
 

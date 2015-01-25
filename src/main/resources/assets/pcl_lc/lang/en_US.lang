@@ -46,7 +46,7 @@ item.craftingReagent.4.name=Iron Plate
 item.craftingReagent.5.name=Naquadah Alloy Plate
 item.craftingReagent.6.name=Trinium Alloy Plate
 
-% Fluids
+# Fluids
 tile.blockLiquidNaquadah.name=Liquid Naquadah
 item.liquidNaquadahBucket.name=Liquid Naquadah Bucket
 
@@ -107,11 +107,17 @@ tile.integration.computercraft.name=ComputerCraft Adapter
 # Death messages
 death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
 
-# Clipboard operations; used as a single string only (no context).
-lc.clipboard.put_success.text=Copied to Clipboard!
-lc.clipboard.put_address.text=Copy Address
 
-# Stargate error messages; used as a single string only (no context).
-lc.stargate.coord_out_of_range.text=Coordinates out of stargate range
-lc.stargate.dimension_out_of_range.text=Dimension not reachable by stargate
-lc.stargate.general_address_error.text=Stargate addressing error; check the log!
+# Interfaces
+lc.interface.stargate.name=Stargate
+lc.interface.redstone.name=Redstone
+
+lc.interface.clipboard.write=Copy
+lc.interface.clipboard.write_ok=Copied to clipboard
+lc.interface.clipboard.write_fail=Couldn't copy to clipboard
+
+lc.interface.redstone.iris_mode=Iris Control
+
+lc.interface.redstone.ignore=Ignore Redstone
+lc.interface.redstone.low=Active on Low Signal
+lc.interface.redstone.high=Active on High Signal

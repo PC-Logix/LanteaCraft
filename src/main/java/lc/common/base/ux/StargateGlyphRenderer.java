@@ -1,6 +1,7 @@
 package lc.common.base.ux;
 
 import lc.ResourceAccess;
+import lc.api.stargate.StargateType;
 import lc.common.stargate.StargateCharsetHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -20,6 +21,8 @@ public class StargateGlyphRenderer {
 	 *
 	 * @param mc
 	 *            The game
+	 * @param type
+	 *            The glyph variant
 	 * @param address
 	 *            The address
 	 * @param x
@@ -33,8 +36,12 @@ public class StargateGlyphRenderer {
 	 * @param zLevel
 	 *            The z-depth
 	 */
-	public static void drawAddress(Minecraft mc, String address, int x, int y, int length, int scale, float zLevel) {
-		bindSGTexture(mc, "symbols.png", 512 / scale, 320 / scale);
+	public static void drawAddress(Minecraft mc, StargateType type, String address, int x, int y, int length,
+			int scale, float zLevel) {
+		if (type.getSuffix().length() != 0)
+			bindSGTexture(mc, "symbols_" + type.getSuffix() + ".png", 512 / scale, 320 / scale);
+		else
+			bindSGTexture(mc, "symbols.png", 512 / scale, 320 / scale);
 		int paddingTop = 0, paddingLeft = 0;
 		int borderSize = 12 / scale;
 		int cellSize = 64 / scale;
@@ -50,7 +57,7 @@ public class StargateGlyphRenderer {
 
 		for (int i = 0; i < address.length(); i++) {
 			int s = StargateCharsetHelper.singleton().index(address.charAt(i));
-			double u = uscale * (s / (length - 1) * 32), v = vscale * (s % (length - 1) * 32);
+			double u = uscale * ((s % length) * 32), v = vscale * ((s / length) * 32);
 			double u2 = uscale * 32, v2 = vscale * 32;
 			drawTexturedRectUV(x + borderSize + i * cellSize + paddingLeft, y + borderSize + paddingTop, cellSize,
 					cellSize, u, v, u2, v2, zLevel);
@@ -58,7 +65,7 @@ public class StargateGlyphRenderer {
 	}
 
 	private static void bindSGTexture(Minecraft mc, String name, int usize, int vsize) {
-		mc.getTextureManager().bindTexture(ResourceAccess.getNamedResource("textures/gui/" + name));
+		mc.getTextureManager().bindTexture(ResourceAccess.getNamedResource("textures/gui/symbols/" + name));
 		uscale = 1.0 / usize;
 		vscale = 1.0 / vsize;
 	}

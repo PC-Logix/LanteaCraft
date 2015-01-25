@@ -1,6 +1,7 @@
 package lc.common.base;
 
 import lc.common.LCLog;
+import lc.common.base.ux.LCTabbedSlot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -63,10 +64,10 @@ public abstract class LCContainer extends Container {
 		InventoryPlayer inventory = player.inventory;
 		for (int i = 0; i < 3; ++i)
 			for (int j = 0; j < 9; ++j)
-				addSlotToContainer(new Slot(inventory, j + i * 9 + 9, x + j * 18, y + i * 18));
+				addSlotToContainer(new LCTabbedSlot(inventory, j + i * 9 + 9, x + j * 18, y + i * 18));
 
 		for (int i = 0; i < 9; ++i)
-			addSlotToContainer(new Slot(inventory, i, x + i * 18, y + 58));
+			addSlotToContainer(new LCTabbedSlot(inventory, i, x + i * 18, y + 58));
 	}
 
 	@Override
