@@ -31,6 +31,7 @@ public class ScreenStargateBase extends GenericContainerGUI {
 	private ResourceLocation background;
 	private TileStargateBase te;
 	private String address;
+	private boolean legalAddress = false;
 
 	private boolean mouseDown = false;
 	private int clipboardAction = 0;
@@ -58,7 +59,8 @@ public class ScreenStargateBase extends GenericContainerGUI {
 	protected void drawForegroundLayer(int x, int y) {
 		String address = getAddress();
 		int cx = xSize / 2;
-		drawFramedSymbols(cx, 22, address);
+		if (legalAddress)
+			drawFramedSymbols(cx, 22, address);
 		textColor = 0x004c66;
 		drawCenteredString(I18n.format("screen.stargate_base.title"), cx, 8);
 		drawCenteredString(address, cx, 72);
@@ -130,9 +132,11 @@ public class ScreenStargateBase extends GenericContainerGUI {
 	}
 
 	private String getAddress() {
-		if (address == null)
+		if (address == null) {
+			legalAddress = false;
 			try {
 				address = te.getHomeAddress();
+				legalAddress = true;
 			} catch (CoordRangeError e) {
 				address = I18n.format("lc.stargate.coord_out_of_range.text");
 			} catch (DimensionRangeError e) {
@@ -141,6 +145,7 @@ public class ScreenStargateBase extends GenericContainerGUI {
 				LanteaCraft.getLogger().log(Level.INFO, "Addressing error!", e);
 				address = I18n.format("lc.stargate.general_address_error.text");
 			}
+		}
 		return address;
 	}
 }
