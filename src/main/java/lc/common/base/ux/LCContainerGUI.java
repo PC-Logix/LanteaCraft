@@ -131,6 +131,12 @@ public abstract class LCContainerGUI extends GuiContainer {
 	}
 
 	@Override
+	public void setWorldAndResolution(Minecraft mc, int w, int h) {
+		super.setWorldAndResolution(mc, w, h);
+		rebuildLayout();
+	}
+
+	@Override
 	public void updateScreen() {
 		super.updateScreen();
 		Iterator<Popover> i = popovers.iterator();
