@@ -113,6 +113,8 @@ lc.interface.options.iris_mode=Iris Control
 lc.interface.redstone.active_ignore=Ignore Redstone
 lc.interface.redstone.active_low=Active on Low Signal
 lc.interface.redstone.active_high=Active on High Signal
+lc.interface.redstone.active_ext=Digital Control
+
 lc.interface.redstone.emit_nothing=Do Nothing
 lc.interface.redstone.emit_low=Normally Off
 lc.interface.redstone.emit_high=Normally On

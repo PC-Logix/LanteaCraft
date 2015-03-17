@@ -65,8 +65,8 @@ public class GUIStargate extends LCContainerGUI {
 			container.drawAddressString(128, 56, address, 9, "-", "-");
 			container.drawFramedSymbols(128, 8, stargate.getStargateType(), address);
 			IconButton.drawButton(Minecraft.getMinecraft(), "copy", 240, 54, mouseX - container.offsetLeft(), mouseY
-					- container.offsetTop(), container.isMouseDown(), 0.5, 1.0f);
-			if (IconButton.buttonHovered(240, 54, mouseX - container.offsetLeft(), mouseY - container.offsetTop(), 0.5))
+					- container.offsetTop(), container.isMouseDown(), 0.75, 1.0f);
+			if (IconButton.buttonHovered(240, 54, mouseX - container.offsetLeft(), mouseY - container.offsetTop(), 1.0))
 				container.drawTooltip(I18n.format("lc.interface.clipboard.write"), mouseX - container.offsetLeft(),
 						mouseY - container.offsetTop());
 		}
@@ -80,7 +80,7 @@ public class GUIStargate extends LCContainerGUI {
 		protected void mouseMovedOrUp(LCContainerGUI container, int x, int y, int mouseButton) {
 			if (mouseButton == 0 || mouseButton == 1) {
 				if (IconButton.buttonDepressed(240, 54, x - container.offsetLeft(), y - container.offsetTop(),
-						container.isMouseDown(), 0.5)) {
+						container.isMouseDown(), 1.0)) {
 					IStargateAccess stargate = (IStargateAccess) container.getTile();
 					String address = stargate.getStargateAddress().getAddressString();
 					boolean result = container.putTextOnClipboard(address);
@@ -144,11 +144,11 @@ public class GUIStargate extends LCContainerGUI {
 			// container.drawString("Owner: Player1", 15, 22);
 			IconButton.drawIcon(Minecraft.getMinecraft(), "icon_iris", 0, 5, 0.5f, 1.0f);
 			container.setTextColor(0xFFFFFF);
-			container.drawString(I18n.format("lc.interface.redstone.iris_mode"), 15, 7);
+			container.drawString(I18n.format("lc.interface.options.iris_mode"), 15, 7);
 			IconButton.drawButton(Minecraft.getMinecraft(), "icon_ethernet", 85, 5, mouseX - container.offsetLeft(),
 					mouseY - container.offsetTop(), container.isMouseDown(), 0.5, 1.0f);
 			if (IconButton.buttonHovered(85, 5, mouseX - container.offsetLeft(), mouseY - container.offsetTop(), 0.5))
-				container.drawTooltip(I18n.format("lc.interface.computer"), mouseX - container.offsetLeft(), mouseY
+				container.drawTooltip(I18n.format("lc.interface.redstone.active_ext"), mouseX - container.offsetLeft(), mouseY
 						- container.offsetTop());
 
 		}
