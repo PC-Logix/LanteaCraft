@@ -1,7 +1,7 @@
 package lc.server.database;
 
+import lc.api.stargate.StargateAddress;
 import lc.common.util.math.ChunkPos;
-import lc.server.StargateAddress;
 
 public class StargateRecord {
 

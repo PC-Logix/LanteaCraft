@@ -71,7 +71,7 @@ public class ResourceAccess {
 	 * @return The formatted resource name.
 	 */
 	public static String formatResourceName(String format, Object... args) {
-		format = format.replace("${TEX_QUALITY}", "32");
+		format = format.replace("${TEX_QUALITY}", "128");
 		format = format.replace("${ASSET_KEY}", getAssetKey());
 		String result = String.format(format, args);
 

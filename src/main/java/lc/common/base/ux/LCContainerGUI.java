@@ -18,6 +18,7 @@ import lc.ResourceAccess;
 import lc.api.stargate.StargateType;
 import lc.client.opengl.BufferTexture;
 import lc.common.LCLog;
+import lc.tiles.TileStargateBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -26,6 +27,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -40,7 +42,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 	private final static int defaultTextColor = 0x404040;
 	private LCContainerTab activeTab;
 	private ArrayList<Popover> popovers;
-
+	private TileEntity tile;
 	private BufferTexture tabVboBuffer;
 
 	double uscale, vscale;
@@ -51,12 +53,15 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	/**
 	 * Create a new container GUI
-	 *
+	 * 
+	 * @param tile
+	 *            The parent tile
 	 * @param container
 	 *            The parent container
 	 */
-	public LCContainerGUI(Container container) {
+	public LCContainerGUI(TileEntity tile, Container container) {
 		super(container);
+		this.tile = tile;
 		tabVboBuffer = new BufferTexture(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 		popovers = new ArrayList<Popover>();
 		tabVboBuffer.init();
@@ -475,6 +480,22 @@ public abstract class LCContainerGUI extends GuiContainer {
 		blue = (float) b;
 	}
 
+	public void resetTextColor() {
+		textColor = defaultTextColor;
+	}
+
+	public void setTextColor(double r, double g, double b) {
+		setTextColor(Math.max(0, r) * 255, Math.max(0, g) * 255, Math.max(0, b) * 255);
+	}
+
+	public void setTextColor(int r, int g, int b) {
+		int ucf = (int) ((r << 16) | (g << 8) | b) & 0xFFFFFF;
+	}
+
+	public void setTextColor(int rgb) {
+		textColor = (rgb & 0xFFFFFF);
+	}
+
 	/**
 	 * Reset the drawing color
 	 */
@@ -578,5 +599,13 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	public void pushPopover(Popover over) {
 		popovers.add(over);
+	}
+
+	public TileEntity getTile() {
+		return tile;
+	}
+
+	public void setTile(TileEntity tile) {
+		this.tile = tile;
 	}
 }

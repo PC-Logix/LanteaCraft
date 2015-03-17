@@ -3,6 +3,7 @@ package lc.server;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import lc.api.stargate.StargateAddress;
 import lc.common.util.math.ChunkPos;
 import lc.common.util.math.DimensionPos;
 import lc.server.database.StargateRecord;

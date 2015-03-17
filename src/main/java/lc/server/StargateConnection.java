@@ -1,5 +1,6 @@
 package lc.server;
 
+import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateState;
 import lc.tiles.TileStargateBase;
 

@@ -82,4 +82,8 @@ public class HintProviderServer implements IHintProvider {
 		serverHookBus.onServerStopping(event);
 	}
 
+	public StargateManager stargates() {
+		return stargateMgr;
+	}
+
 }

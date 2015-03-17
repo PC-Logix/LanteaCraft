@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import lc.api.stargate.StargateAddress;
 import lc.common.LCLog;
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.math.ChunkPos;
-import lc.server.StargateAddress;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;

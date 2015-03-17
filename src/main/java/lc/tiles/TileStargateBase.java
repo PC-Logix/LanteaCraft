@@ -3,9 +3,15 @@ package lc.tiles;
 import java.util.List;
 
 import lc.LCRuntime;
+import lc.LanteaCraft;
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
+import lc.api.stargate.IStargateAccess;
+import lc.api.stargate.IrisState;
+import lc.api.stargate.IrisType;
+import lc.api.stargate.StargateAddress;
+import lc.api.stargate.StargateType;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
@@ -19,8 +25,9 @@ import lc.common.util.game.BlockHelper;
 import lc.common.util.game.SlotFilter;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
-import lc.server.StargateAddress;
+import lc.server.HintProviderServer;
 import lc.server.StargateConnection;
+import lc.server.StargateManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,7 +44,7 @@ import cpw.mods.fml.relauncher.Side;
  *
  */
 @DriverCandidate(types = { IntegrationType.POWER, IntegrationType.COMPUTERS })
-public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnable {
+public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnable, IStargateAccess {
 
 	public final static StructureConfiguration structure = new StructureConfiguration() {
 
@@ -225,5 +232,39 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	public void notifyState(StargateConnection connection) {
 		currentConnection = connection;
 
+	}
+
+	@Override
+	public StargateType getStargateType() {
+		// TODO Auto-generated method stub
+		return StargateType.STANDARD;
+	}
+
+	@Override
+	public StargateAddress getStargateAddress() {
+		if (worldObj.isRemote) {
+			if (stargateAddress == null) {
+				
+			} else
+				return stargateAddress;
+		} else {
+			HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
+			StargateManager stargates = server.stargates();
+			stargateAddress = stargates.getStargateAddress(this);
+		}
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IrisType getIrisType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IrisState getIrisState() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

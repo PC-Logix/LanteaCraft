@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import lc.api.stargate.StargateAddress;
 import lc.common.util.math.ChunkPos;
-import lc.server.StargateAddress;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

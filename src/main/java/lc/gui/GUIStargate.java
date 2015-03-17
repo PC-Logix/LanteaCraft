@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import lc.ResourceAccess;
+import lc.api.stargate.IStargateAccess;
 import lc.api.stargate.StargateType;
 import lc.common.LCLog;
 import lc.common.base.ux.IconButton;
@@ -59,8 +60,10 @@ public class GUIStargate extends LCContainerGUI {
 
 		@Override
 		protected void drawForegroundLayer(LCContainerGUI container, int mouseX, int mouseY) {
-			container.drawAddressString(128, 56, "ABCDEFGHI", 9, "-", "-");
-			container.drawFramedSymbols(128, 8, StargateType.ATLANTIS, "ABCDEFGHI");
+			IStargateAccess stargate = (IStargateAccess) container.getTile();
+			String address = stargate.getStargateAddress().getAddressString();
+			container.drawAddressString(128, 56, address, 9, "-", "-");
+			container.drawFramedSymbols(128, 8, stargate.getStargateType(), address);
 			IconButton.drawButton(Minecraft.getMinecraft(), "copy", 240, 54, mouseX - container.offsetLeft(), mouseY
 					- container.offsetTop(), container.isMouseDown(), 0.5, 1.0f);
 			if (IconButton.buttonHovered(240, 54, mouseX - container.offsetLeft(), mouseY - container.offsetTop(), 0.5))
@@ -78,7 +81,9 @@ public class GUIStargate extends LCContainerGUI {
 			if (mouseButton == 0 || mouseButton == 1) {
 				if (IconButton.buttonDepressed(240, 54, x - container.offsetLeft(), y - container.offsetTop(),
 						container.isMouseDown(), 0.5)) {
-					boolean result = container.putTextOnClipboard("");
+					IStargateAccess stargate = (IStargateAccess) container.getTile();
+					String address = stargate.getStargateAddress().getAddressString();
+					boolean result = container.putTextOnClipboard(address);
 					if (result)
 						container.pushPopover(new Popover(I18n.format("lc.interface.clipboard.write_ok"), 120));
 					else
@@ -121,28 +126,30 @@ public class GUIStargate extends LCContainerGUI {
 
 		@Override
 		protected Dimension getTabDimensions() {
-			return new Dimension(100, 50);
+			return new Dimension(220, 50);
 		}
 
 		@Override
 		protected void drawBackgroundLayer(LCContainerGUI container, float partialTickCount, int mouseX, int mouseY) {
 			container.bindTexture(ResourceAccess.getNamedResource(ResourceAccess
-					.formatResourceName("textures/gui/prefabs/blank_gui_${TEX_QUALITY}.png")));
+					.formatResourceName("textures/gui/prefabs/blank_gui_128.png")));
 			container.drawTexturedRect(0, 0, container.getXSize(), container.getYSize());
 		}
 
 		@Override
 		protected void drawForegroundLayer(LCContainerGUI container, int mouseX, int mouseY) {
-			
-			
+			// IconButton.drawIcon(Minecraft.getMinecraft(), "cross", 3, 5, 0.5f, 1.0f);
+			// container.setTextColor(0xFFFFFF);
+			// container.drawString("You don't have permission to configure.", 15, 7);
+			// container.drawString("Owner: Player1", 15, 22);
 			IconButton.drawIcon(Minecraft.getMinecraft(), "icon_iris", 0, 5, 0.5f, 1.0f);
-			container.drawString(I18n.format("lc.interface.redstone.iris_mode"), 12, 7);
-			
-			IconButton.drawButton(Minecraft.getMinecraft(), "icon_rstorchon", 85, 5, mouseX - container.offsetLeft(), mouseY
-					- container.offsetTop(), container.isMouseDown(), 0.5, 1.0f);
+			container.setTextColor(0xFFFFFF);
+			container.drawString(I18n.format("lc.interface.redstone.iris_mode"), 15, 7);
+			IconButton.drawButton(Minecraft.getMinecraft(), "icon_ethernet", 85, 5, mouseX - container.offsetLeft(),
+					mouseY - container.offsetTop(), container.isMouseDown(), 0.5, 1.0f);
 			if (IconButton.buttonHovered(85, 5, mouseX - container.offsetLeft(), mouseY - container.offsetTop(), 0.5))
-				container.drawTooltip(I18n.format("lc.interface.redstone.high"), mouseX - container.offsetLeft(),
-						mouseY - container.offsetTop());
+				container.drawTooltip(I18n.format("lc.interface.computer"), mouseX - container.offsetLeft(), mouseY
+						- container.offsetTop());
 
 		}
 
@@ -173,7 +180,7 @@ public class GUIStargate extends LCContainerGUI {
 	}
 
 	public GUIStargate(TileStargateBase tile, EntityPlayer player) {
-		super(new ContainerStargate(tile, player));
+		super(tile, new ContainerStargate(tile, player));
 		switchTab(0);
 	}
 
