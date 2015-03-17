@@ -1,4 +1,4 @@
-package lc.server;
+package lc.api.stargate;
 
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.PrimitiveCompare;
