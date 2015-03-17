@@ -18,6 +18,7 @@ import lc.common.base.multiblock.MultiblockState;
 import lc.common.base.multiblock.StructureConfiguration;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
+import lc.common.network.packets.LCClientUpdate;
 import lc.common.network.packets.LCTileSync;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.game.BlockFilter;
@@ -81,8 +82,6 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	};
 
 	private StargateConnection currentConnection;
-	private StargateAddress stargateAddress;
-
 	private Block clientSkinBlock;
 	private int clientSkinBlockMetadata;
 
@@ -171,6 +170,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void sendPackets(List<LCPacket> packets) throws LCNetworkException {
+		getStargateAddress();
 		super.sendPackets(packets);
 	}
 
@@ -243,17 +243,20 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public StargateAddress getStargateAddress() {
 		if (worldObj.isRemote) {
-			if (stargateAddress == null) {
-				
-			} else
-				return stargateAddress;
+			if (!compound.hasKey("stargate-address")) {
+				markClientDataDirty();
+				return StargateAddress.VOID_ADDRESS;
+			}
+			return new StargateAddress(compound, "stargate-address");
 		} else {
-			HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
-			StargateManager stargates = server.stargates();
-			stargateAddress = stargates.getStargateAddress(this);
+			if (!compound.hasKey("stargate-address")) {
+				HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
+				StargateManager stargates = server.stargates();
+				stargates.getStargateAddress(this).toNBT(compound, "stargate-address");
+				markNbtDirty();
+			}
+			return new StargateAddress(compound, "stargate-address");
 		}
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

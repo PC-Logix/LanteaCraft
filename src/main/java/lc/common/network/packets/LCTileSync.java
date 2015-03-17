@@ -10,7 +10,8 @@ import lc.common.util.math.DimensionPos;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Tile synchronization packet
+ * Tile synchronization packet. Sent from the server to client(s) to provide the
+ * client(s) with data about the tile entity.
  *
  * @author AfterLifeLochie
  *

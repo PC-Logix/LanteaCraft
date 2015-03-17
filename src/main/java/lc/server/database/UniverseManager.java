@@ -62,7 +62,7 @@ public class UniverseManager {
 				LCLog.fatal("Problem reading Stargate address database.", ioex);
 			}
 		}
-
+		worldRandom = new Random(System.currentTimeMillis());
 		buildIndex();
 	}
 

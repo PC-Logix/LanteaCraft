@@ -327,6 +327,14 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		nbtDirty = true;
 	}
 
+	/**
+	 * Mark the tile's client data as dirty. On the next tick, the client tile
+	 * will request new data from the server.
+	 */
+	protected void markClientDataDirty() {
+		clientDataDirty = true;
+	}
+
 	private void sendUpdatesToClients() {
 		try {
 			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();

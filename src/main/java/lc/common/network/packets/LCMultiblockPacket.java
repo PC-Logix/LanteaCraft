@@ -10,7 +10,8 @@ import lc.common.util.math.DimensionPos;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Multi-block network sync packet.
+ * Multi-block network sync packet. Sent from the server to the client(s) to
+ * provide state and other information about the multi-block structure.
  *
  * @author AfterLifeLochie
  *

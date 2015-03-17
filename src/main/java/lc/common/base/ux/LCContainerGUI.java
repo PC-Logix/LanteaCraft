@@ -98,11 +98,10 @@ public abstract class LCContainerGUI extends GuiContainer {
 	 * Rebuild the interface's layout.
 	 */
 	public void rebuildLayout() {
-		ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft(), width, height);
 		xSize = activeTab.getTabDimensions().width;
 		ySize = activeTab.getTabDimensions().height;
-		guiLeft = (sr.getScaledWidth() - xSize) / 2;
-		guiTop = (sr.getScaledHeight() - ySize) / 2;
+		guiLeft = (width - xSize) / 2;
+		guiTop = (height - ySize) / 2;
 	}
 
 	/**

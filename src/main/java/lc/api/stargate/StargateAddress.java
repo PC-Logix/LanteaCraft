@@ -1,12 +1,19 @@
 package lc.api.stargate;
 
+import net.minecraft.nbt.NBTTagCompound;
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.PrimitiveCompare;
 import lc.common.util.data.PrimitiveHelper;
 
 public class StargateAddress {
 
+	public static final StargateAddress VOID_ADDRESS = new StargateAddress("AAAAAAAAA");
+
 	private char[] bytes;
+
+	public StargateAddress(NBTTagCompound compound, String key) {
+		this(compound.getString(key));
+	}
 
 	public StargateAddress(String address) {
 		this(address.trim().toCharArray());
@@ -28,6 +35,10 @@ public class StargateAddress {
 
 	public String getAddressString() {
 		return new String(bytes);
+	}
+
+	public void toNBT(NBTTagCompound compound, String key) {
+		compound.setString(key, getAddressString());
 	}
 
 	public long getILongValue() {

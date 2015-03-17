@@ -8,6 +8,12 @@ import java.io.IOException;
 import lc.common.network.packets.abs.LCTargetPacket;
 import lc.common.util.math.DimensionPos;
 
+/**
+ * Packet sent from client to server when the client sending the packet doesn't
+ * have information or required information about the object being targeted.
+ * 
+ * @author AfterLifeLochie
+ */
 public class LCClientUpdate extends LCTargetPacket {
 
 	/** Create a blank sync packet */
