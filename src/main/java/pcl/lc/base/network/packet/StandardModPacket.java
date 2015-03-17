@@ -124,8 +124,7 @@ public class StandardModPacket extends ModPacket {
 	 */
 	public void setValue(String name, Object value) {
 		if (value == null)
-			LanteaCraft.getLogger().log(Level.WARN,
-					String.format("Attempt to pack null value into key %s, this is probably bad.", name));
+			LanteaCraft.getLogger().log(Level.DEBUG, String.format("Writing null pointer to key %s.", name));
 		synchronized (values) {
 			values.put(name, value);
 		}
