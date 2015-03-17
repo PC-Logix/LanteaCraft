@@ -38,7 +38,7 @@ public class ItemDecorator extends LCItem {
 
 	@Override
 	public void registerIcons(IIconRegister ir) {
-		icon = ir.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:decorator"));
+		icon = ir.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}", "decorator"));
 	}
 
 	@Override
