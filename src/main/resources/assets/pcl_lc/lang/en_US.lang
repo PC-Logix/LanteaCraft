@@ -21,21 +21,10 @@ tile.stargateRing.7.name=Nox Stargate Chevron
 # Iris items & tags
 item.iris.name=Stargate Iris
 item.gdo.name=Garage Door Opener
-# Iris types
-iris.mechanical.name=Mechanical
-iris.energy.name=Energy
-# Label used to display iris type, 1 param
-iris.type.text=%s iris
-# Label used to display iris %damage, 1 param
-iris.damage.text=%s damaged
 
 # Power-related items
 item.energyCrystal.name=Energy Crystal
 item.zpm.name=ZPM
-# Label used to display energy, 1 param
-energy.text=Energy: %s
-# Label used to display used entropy, 1 param
-entropy.text=Entropy: %s
 
 # Crafting reagents
 item.craftingReagent.0.name=Broken Reagent Item
@@ -46,6 +35,14 @@ item.craftingReagent.4.name=Iron Plate
 item.craftingReagent.5.name=Naquadah Alloy Plate
 item.craftingReagent.6.name=Trinium Alloy Plate
 
+# Ingots and alloys
+item.lanteaAlloy.0.name=Naquadah Alloy Ingot
+tile.lanteaAlloy.0.name=Naquadah Alloy Block
+item.lanteaAlloy.1.name=Naqahdriah Alloy Ingot
+tile.lanteaAlloy.1.name=Naqahdriah Alloy Block
+item.lanteaAlloy.2.name=Trinium Alloy Ingot
+tile.lanteaAlloy.2.name=Trinium Alloy Block
+
 # Fluids
 tile.blockLiquidNaquadah.name=Liquid Naquadah
 item.liquidNaquadahBucket.name=Liquid Naquadah Bucket
@@ -55,6 +52,8 @@ tile.lanteaDecor.1.name=Lantean Patterned Steel
 tile.lanteaDecor.2.name=Lantean Steel
 tile.lanteaDecor.3.name=Goa'uld Patterned Gold
 tile.lanteaDecor.4.name=Goa'uld Gold
+tile.lanteaDoor.0.name=Lantean Door
+tile.lanteaDoor.1.name=Goa'uld Door
 
 # Decor stairs
 tile.goauldPatternedGoldDecorStair.name=Goa'uld Gold Stairs
@@ -65,28 +64,16 @@ tile.lanteaSteelDecorStair.name=Lantean Patterned Steel Stairs
 # Decor glass
 tile.lanteaGlassDecor.1.name=Lantean Glass
 
-# Naquadah Ore / Ingots / Blocks
+# Ore / Ore blocks
 tile.lanteaOre.0.name=Naquadah Ore
 item.lanteaOre.0.name=Naquadah
-item.lanteaOreIngot.0.name=Naquadah Ingot
-tile.lanteaOreIngotBlock.0.name=Block of Naquadah
-
-# Naquadriah Ore / Ingots / Blocks
 tile.lanteaOre.1.name=Naquadriah Ore
 item.lanteaOre.1.name=Naquadriah
-item.lanteaOreIngot.1.name=Naquadriah Ingot
-tile.lanteaOreIngotBlock.1.name=Block of Naquadriah
-
-# Trinium Ore / Ingots / Blocks
 tile.lanteaOre.2.name=Trinium Ore
 item.lanteaOre.2.name=Trinium
-item.lanteaOreIngot.2.name=Trinium Ingot
-tile.lanteaOreIngotBlock.2.name=Block of Trinium
 
 # Machines
 tile.naquadahGenerator.name=Naquadah Generator
-# Label used to display fill level of fluid tanks, 1 param
-tank.text=Tank: %s
 tile.blockCrystalInfuser.name=Crystal Infuser
 
 # Help Notebook
@@ -98,11 +85,11 @@ tile.transporterRing.1.name=Transporter Ring Controller
 item.transportRingActivator.name=Transport Ring Activator
 
 # Debug and other items
-item.tokraSpawnEgg.name=Tok'ra Spawn Egg
-item.lanteadebug.name=LanteaCraft Debugger
+item.debugGlasses.name=AfterLifeLochie's Glasses
 
 # Integration blocks and items
 tile.integration.computercraft.name=ComputerCraft Adapter
+
 
 # Death messages
 death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
@@ -112,12 +99,28 @@ death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
 lc.interface.stargate.name=Stargate
 lc.interface.redstone.name=Redstone
 
+lc.interface.storage.items=Items
+lc.interface.storage.fluids=Fluids
+lc.interface.storage.fluids.level=Tank: %s
+
 lc.interface.clipboard.write=Copy
 lc.interface.clipboard.write_ok=Copied to clipboard
 lc.interface.clipboard.write_fail=Couldn't copy to clipboard
 
-lc.interface.redstone.iris_mode=Iris Control
+lc.interface.options.redstone_mode=Redstone
+lc.interface.options.iris_mode=Iris Control
 
-lc.interface.redstone.ignore=Ignore Redstone
-lc.interface.redstone.low=Active on Low Signal
-lc.interface.redstone.high=Active on High Signal
+lc.interface.redstone.active_ignore=Ignore Redstone
+lc.interface.redstone.active_low=Active on Low Signal
+lc.interface.redstone.active_high=Active on High Signal
+lc.interface.redstone.emit_nothing=Do Nothing
+lc.interface.redstone.emit_low=Normally Off
+lc.interface.redstone.emit_high=Normally On
+
+lc.interface.iris.type.mechanical.name=Mechanical
+lc.interface.iris.type.energy.name=Energy
+
+lc.interface.iris.type.text=%s iris
+lc.interface.iris.damage.text=%s damaged
+lc.interface.energy.text=Energy: %s
+lc.interface.entropy.text=Entropy: %s
