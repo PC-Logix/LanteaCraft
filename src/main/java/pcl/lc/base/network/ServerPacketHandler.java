@@ -22,6 +22,7 @@ public class ServerPacketHandler {
 			logger.logPacket(modPacket);
 		WorldLocation target = modPacket.getOriginLocation();
 		World w = DimensionManager.getWorld(target.dimension);
+		boolean flagHandled = false;
 		if (modPacket instanceof StandardModPacket) {
 			StandardModPacket spacket = (StandardModPacket) modPacket;
 			if (spacket.getType().equals("LanteaPacket.UpdateRequest")) {
@@ -29,6 +30,7 @@ public class ServerPacketHandler {
 				if (tile instanceof TileStargateBase) {
 					TileStargateBase base = (TileStargateBase) tile;
 					base.getDescriptionPacket();
+					flagHandled = true;
 				}
 			} else if (spacket.getType().equals("LanteaPacket.DialRequest")) {
 				TileEntity tile = w.getTileEntity(target.x, target.y, target.z);
@@ -36,14 +38,17 @@ public class ServerPacketHandler {
 					String address = (String) spacket.getValue("Address");
 					TileStargateBase base = (TileStargateBase) tile;
 					base.connectOrDisconnect(address);
+					flagHandled = true;
 				}
 			}
 		}
 
-		TileEntity tile = w.getTileEntity(target.x, target.y, target.z);
-		if (tile instanceof IPacketHandler) {
-			IPacketHandler handler = (IPacketHandler) tile;
-			handler.handlePacket(modPacket, player);
+		if (!flagHandled) {
+			TileEntity tile = w.getTileEntity(target.x, target.y, target.z);
+			if (tile instanceof IPacketHandler) {
+				IPacketHandler handler = (IPacketHandler) tile;
+				handler.handlePacket(modPacket, player);
+			}
 		}
 	}
 
