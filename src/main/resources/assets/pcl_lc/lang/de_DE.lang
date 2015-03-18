@@ -56,15 +56,12 @@ tile.lanteaDecor.1.name=Verzierter Antiker Stahl
 tile.lanteaDecor.2.name=Antiker Stahl
 tile.lanteaDecor.3.name=Verziertes Goa'uld Gold
 tile.lanteaDecor.4.name=Goa'uld Gold
-
-# Decor stairs
 tile.lanteaPatternedSteelDecorStair.name=Antiker Stahltreppe
 tile.lanteaSteelDecorStair.name=Verzierte Antiker Stahltreppe
 tile.goauldPatternedGoldDecorStair.name=Goa'uld Goldtreppe
 tile.goauldGoldDecorStair.name=Verzierte Goa'uld Goldtreppe
-
-# Decor glass
-tile.lanteaGlassDecor.1.name=Antiker-Glas
+tile.lanteaGlassDecor.1.name=Antiker Glas
+item.lanteaDoor.name=Antiker Tür
 
 # Naquadah Ore / Ingots / Blocks
 tile.lanteaOre.0.name=Naquadah Erz
@@ -91,7 +88,7 @@ tank.text=Tank: %s
 tile.blockCrystalInfuser.name=Kristal Infuser
 
 # Help Notebook
-item.jacksonNotebook.name=Notebook von Daniel Jackson
+item.jacksonNotebook.name=Notizbuch von Daniel Jackson
 
 # Transporter Rings
 tile.transporterRing.0.name=Ring Stück
@@ -99,6 +96,7 @@ tile.transporterRing.1.name=Ring Kontroller
 item.transportRingActivator.name=Ring Aktivator
 
 # Debug and other items
+item.decorator.name=Dekorateur
 item.tokraSpawnEgg.name=Erschaffe Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
 
@@ -108,11 +106,15 @@ tile.integration.computercraft.name=ComputerCraft Adapter
 # Death messages
 death.attack.wormhole_transient=%1$s wurde vom Ereignishorizont in Stücke gerissen.
 
-# Clipboard operations; used as a single string only (no context).
-lc.clipboard.put_success.text=In Zwischenablage kopiert!
-lc.clipboard.put_address.text=Adresse kopieren
+# Interfaces
+lc.interface.stargate.name=Stargate
+lc.interface.redstone.name=Redstone
 
-# Stargate error messages; used as a single string only (no context).
-lc.stargate.coord_out_of_range.text=Die Koordinaten sind ausserhalb der Reichweite des Gates.
-lc.stargate.dimension_out_of_range.text=Dimension ist ist nicht anwählbar!
-lc.stargate.general_address_error.text=Addressfehler: Changelog prüfen.
+lc.interface.clipboard.write=Kopieren
+lc.interface.clipboard.write_ok=In Zwischenablage kopiert!
+lc.interface.clipboard.write_fail=Kopieren nicht möglich!
+
+lc.interface.redstone.iris_mode=Iris Kontrolle
+lc.interface.redstone.ignore=Ohne Signal
+lc.interface.redstone.low=Aktiv bei niedrigen Signal
+lc.interface.redstone.high=Aktiv bei hohem Signal
