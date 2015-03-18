@@ -16,6 +16,7 @@ public class ItemLanteaOreIngot extends Item {
 
 	public ItemLanteaOreIngot() {
 		super();
+		setHasSubtypes(true);
 	}
 
 	@Override

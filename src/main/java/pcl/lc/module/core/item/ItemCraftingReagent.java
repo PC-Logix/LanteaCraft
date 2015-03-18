@@ -22,6 +22,7 @@ public class ItemCraftingReagent extends Item {
 
 	public ItemCraftingReagent() {
 		super();
+		setHasSubtypes(true);
 	}
 
 	@Override
