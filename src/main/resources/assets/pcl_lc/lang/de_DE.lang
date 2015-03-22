@@ -1,5 +1,8 @@
 # Stargate DHD controller
-tile.stargateDHD.name=DHD
+tile.DHD0.name=DHD
++tile.DHD1.name=Pegasus DHD
++tile.DHD2.name=Wraith DHD
++tile.DHD3.name=Nox DHD
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Stargate Basis
