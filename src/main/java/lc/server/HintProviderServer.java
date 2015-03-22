@@ -1,5 +1,7 @@
 package lc.server;
 
+import java.util.HashMap;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
@@ -10,6 +12,8 @@ import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
 import lc.common.base.generation.LCMasterWorldGen;
+import lc.common.util.BeaconStreamThread;
+import lc.common.util.StatsProvider;
 import lc.server.database.UniverseManager;
 
 /**
@@ -22,6 +26,9 @@ public class HintProviderServer implements IHintProvider {
 
 	/** The server hook bus */
 	final ServerEventHooks serverHookBus;
+
+	/** The metadata beacon controller */
+	final BeaconStreamThread beaconMgr;
 
 	/** The server universe manager global instance */
 	final UniverseManager universeMgr;
@@ -36,6 +43,7 @@ public class HintProviderServer implements IHintProvider {
 	public HintProviderServer() {
 		LCLog.debug("HintProviderServer providing server-side hints");
 		this.serverHookBus = new ServerEventHooks(this);
+		this.beaconMgr = new BeaconStreamThread(this);
 		this.stargateMgr = new StargateManager(this);
 		this.universeMgr = new UniverseManager();
 	}
@@ -56,8 +64,9 @@ public class HintProviderServer implements IHintProvider {
 
 	@Override
 	public void postInit() {
-		// TODO Auto-generated method stub
-
+		HashMap<String, String> stats = new HashMap<String, String>();
+		StatsProvider.generateStats(stats);
+		beaconMgr.beacon(stats);
 	}
 
 	@Override
