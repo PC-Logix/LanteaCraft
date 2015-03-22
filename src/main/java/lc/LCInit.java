@@ -11,6 +11,7 @@ import lc.api.init.Structures;
 import lc.api.world.OreType;
 import lc.blocks.BlockDecorative;
 import lc.blocks.BlockDecorative.DecorBlockTypes;
+import lc.blocks.BlockDHD;
 import lc.blocks.BlockLanteaAlloy;
 import lc.blocks.BlockLanteaDoor;
 import lc.blocks.BlockLanteaOre;
@@ -78,6 +79,7 @@ public class LCInit {
 		/* Initialize game blocks and items */
 		blocks.stargateRingBlock = DefinitionWrapperProvider.provide(BlockStargateRing.class);
 		blocks.stargateBaseBlock = DefinitionWrapperProvider.provide(BlockStargateBase.class);
+		blocks.stargateDHDBlock = DefinitionWrapperProvider.provide(BlockDHD.class);
 		blocks.lanteaOreBlock = DefinitionWrapperProvider.provide(BlockLanteaOre.class);
 		blocks.lanteaAlloyBlock = DefinitionWrapperProvider.provide(BlockLanteaAlloy.class);
 
