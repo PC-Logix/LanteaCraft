@@ -6,6 +6,7 @@ import lc.api.defs.IRecipeDefinition;
 import lc.blocks.BlockLanteaDoor;
 import lc.client.render.BlockDoorRenderer;
 import lc.client.render.ItemDecoratorRenderer;
+import lc.client.render.TileDHDRenderer;
 import lc.client.render.TileDoorRenderer;
 import lc.client.render.TileStargateBaseRenderer;
 import lc.common.LCLog;
@@ -19,6 +20,7 @@ import lc.common.impl.registry.DefinitionRegistry;
 import lc.items.ItemDecorator;
 import lc.items.ItemLanteaDoor;
 import lc.server.HintProviderServer;
+import lc.tiles.TileDHD;
 import lc.tiles.TileLanteaDoor;
 import lc.tiles.TileStargateBase;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -62,6 +64,7 @@ public class HintProviderClient extends HintProviderServer {
 
 		registry.registerBlockRenderer(BlockLanteaDoor.class, BlockDoorRenderer.class);
 		registry.registerTileRenderer(TileLanteaDoor.class, TileDoorRenderer.class);
+		registry.registerTileRenderer(TileDHD.class, TileDHDRenderer.class);
 	}
 
 	@Override
