@@ -36,8 +36,7 @@ public class TileDHD extends LCTile {
 
 	@Override
 	public boolean shouldRender() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

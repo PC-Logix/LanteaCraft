@@ -8,13 +8,18 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import lc.ResourceAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
+import lc.api.rendering.IBlockRenderInfo;
 import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
+import lc.common.base.LCTile;
+import lc.common.base.multiblock.MultiblockState;
 import lc.items.ItemBlockDHD;
 import lc.tiles.TileDHD;
+import lc.tiles.TileStargateBase;
 
 @Definition(name = "stargateDHD", type = ComponentType.STARGATE, blockClass = BlockDHD.class, itemBlockClass = ItemBlockDHD.class, tileClass = TileDHD.class)
 public class BlockDHD extends LCBlock {
@@ -28,6 +33,27 @@ public class BlockDHD extends LCBlock {
 	private static final int blockCraftingMask = 1;
 	/** Number of total craftable types */
 	private static final int blockCraftingCount = blockCount;
+
+	/** Rendering info */
+	private static IBlockRenderInfo renderInfo = new IBlockRenderInfo() {
+		@Override
+		public boolean doWorldRender(IBlockAccess access, int data, int x, int y, int z) {
+			return true;
+		}
+
+		@Override
+		public boolean doProperty(String property, IBlockAccess access, int data, int x, int y, int z, boolean def) {
+			if (property.equalsIgnoreCase("noRender")) {
+				return false;
+			}
+			return def;
+		}
+
+		@Override
+		public boolean doInventoryRender(int data) {
+			return true;
+		}
+	};
 
 	/** Top textures */
 	IIcon topTexture[] = new IIcon[StargateType.count()];
@@ -86,6 +112,11 @@ public class BlockDHD extends LCBlock {
 	@Override
 	public int damageDropped(int damage) {
 		return damage;
+	}
+
+	@Override
+	public IBlockRenderInfo block() {
+		return BlockDHD.renderInfo;
 	}
 
 	/**
