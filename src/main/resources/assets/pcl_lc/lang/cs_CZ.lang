@@ -1,11 +1,43 @@
+# Stargate DHD controller
 tile.stargateDHD.name=Ovládací panel brány
-tile.stargateBase.name=Základní blok brány
+
+# Stargate Base & settings screens
+tile.stargateBase.0.name=Základní blok brány
+tile.stargateBase.4.name=Základní blok Pegasuské brány
+tile.stargateBase.8.name=Základní blok Wraithské brány
+tile.stargateBase.12.name=Základní blok Noxské brány
+screen.stargate_base.title=Nastavení hvězdné brány
+
+# Stargate Ring and Chevrons
 tile.stargateRing.0.name=Segment kruhu brány
 tile.stargateRing.1.name=Zámek brány
-item.coreCrystal.name=Hlavní krystal
-item.controllerCrystal.name=Řídící krystal
-item.energyCrystal.name=Energetický krystal
+tile.stargateRing.2.name=Segment kruhu Pegasuské brány
+tile.stargateRing.3.name=Zámek Pegasuské brány
+tile.stargateRing.4.name=Segment kruhu Wraithské brány
+tile.stargateRing.5.name=Zámek Wraithské brány
+tile.stargateRing.6.name=Segment kruhu Noxské brány
+tile.stargateRing.7.name=Zámek Noxské brány
 
+# Iris items & tags
+item.iris.name=Obvod iris
+item.gdo.name=Zadavač kódu iris
+# Iris types
+iris.mechanical.name=Mechanická
+iris.energy.name=Energetická
+# Label used to display iris type, 1 param
+iris.type.text=%s iris
+# Label used to display iris %damage, 1 param
+iris.damage.text=%s poškození
+
+# Power-related items
+item.energyCrystal.name=Energetický krystal
+item.zpm.name=ZPM
+# Label used to display energy, 1 param
+energy.text=Energie: %s
+# Label used to display used entropy, 1 param
+entropy.text=Entropie: %s
+
+# Crafting reagents
 item.craftingReagent.0.name=Poškozená ingredience
 item.craftingReagent.1.name=Prázdný krystal
 item.craftingReagent.2.name=Hlavní krystal brány
@@ -14,47 +46,73 @@ item.craftingReagent.4.name=Železný plát
 item.craftingReagent.5.name=Plát z Naquadahové slitiny
 item.craftingReagent.6.name=Plát z Triniové slitiny
 
+% Fluids
 tile.blockLiquidNaquadah.name=Tekutý naquadah
-fluid.liquid_naquadah=Tekutý naquadah
 item.liquidNaquadahBucket.name=Kbelík tekutého naquadahu
+fluid.liquid_naquadah=Tekutý naquadah
 
+# Decor blocks
 tile.lanteaDecor.1.name=Kov předků s ornamenty
 tile.lanteaDecor.2.name=Kov předků
 tile.lanteaDecor.3.name=Goa'uldské zlato s ornamenty
 tile.lanteaDecor.4.name=Goa'uldské zlato
 
+# Decor stairs
 tile.goauldPatternedGoldDecorStair.name=Goa'uldské zlaté schody
 tile.goauldGoldDecorStair.name=Goa'uldské zlaté schody s ornamenty
 tile.lanteaPatternedSteelDecorStair.name=Schody z kovu předků
 tile.lanteaSteelDecorStair.name=Schody z kovu předků s ornamenty
 
+# Decor glass
 tile.lanteaGlassDecor.1.name=Sklo předků
 
+# Naquadah Ore / Ingots / Blocks
 tile.lanteaOre.0.name=Naquadahová ruda
 item.lanteaOre.0.name=Naquadah
 item.lanteaOreIngot.0.name=Ingot naquadahu
 tile.lanteaOreIngotBlock.0.name=Blok naquadahu
 
+# Naquadriah Ore / Ingots / Blocks
 tile.lanteaOre.1.name=Naquadriová ruda
 item.lanteaOre.1.name=Naquadria
 item.lanteaOreIngot.1.name=Naquadriový ingot
 tile.lanteaOreIngotBlock.1.name=Blok naquadrie
 
+# Trinium Ore / Ingots / Blocks
 tile.lanteaOre.2.name=Triniová ruda
 item.lanteaOre.2.name=Trinium
 item.lanteaOreIngot.2.name=Triniový ingot
 tile.lanteaOreIngotBlock.2.name=Blok trinia
 
+# Machines
 tile.naquadahGenerator.name=Naquadahový generátor
-tile.ringPlatform.name=Transportní kruhy
-tile.integration.computercraft.name=Počítačový adaptér k bráně
+# Label used to display fill level of fluid tanks, 1 param
+tank.text=Tank: %s
+tile.blockCrystalInfuser.name=Krystalizátor
 
-item.zpm.name=ZPM
+# Help Notebook
+item.jacksonNotebook.name=Notebook Daniela Jacksona
+
+# Transporter Rings
+tile.transporterRing.0.name=Segment transportních kruhů
+tile.transporterRing.1.name=Řídící segment transportních kruhů
 item.transportRingActivator.name=Aktivátor transportních kruhů
-item.iris.name=Obvod iris
-item.gdo.name=Zadavač kódu iris
 
+# Debug and other items
 item.tokraSpawnEgg.name=Vejce, uvnitř je Tok'ra
 item.lanteadebug.name=LanteaCraft Debugger
 
+# Integration blocks and items
+tile.integration.computercraft.name=Počítačový adaptér k bráně
+
+# Death messages
 death.attack.wormhole_transient=%1$s byl rozložen vírem horizontu událostí.
+
+# Clipboard operations; used as a single string only (no context).
+lc.clipboard.put_success.text=Zkopírováno do schránky!
+lc.clipboard.put_address.text=Kopírovat adresu
+
+# Stargate error messages; used as a single string only (no context).
+lc.stargate.coord_out_of_range.text=Koordináty jsou mimo dosah brány
+lc.stargate.dimension_out_of_range.text=Dimenze není hvězdnou bránou dosažitelná
+lc.stargate.general_address_error.text=Chyba v adresování hvězdných bran; zkontroluj log!
