@@ -1,11 +1,35 @@
-tile.stargateDHD.name=Ovládací panel brány
-tile.stargateBase.name=Základní blok brány
-tile.stargateRing.0.name=Segment kruhu brány
-tile.stargateRing.1.name=Zámek brány
-item.coreCrystal.name=Hlavní krystal
-item.controllerCrystal.name=Řídící krystal
-item.energyCrystal.name=Energetický krystal
+# Stargate DHD controller
+tile.DHD0.name=Ovládací panel brány
+tile.DHD1.name=Ovládací panel pegasuské brány
+tile.DHD2.name=Ovládací panel wraithské brány
+tile.DHD3.name=Ovládací panel noxské brány
 
+# Stargate Base & settings screens
+tile.stargateBase.0.name=Základní segment brány
+tile.stargateBase.4.name=Základní segment pegasuské brány
+tile.stargateBase.8.name=Základní segment wraithské brány
+tile.stargateBase.12.name=Základní segment noxské brány
+screen.stargate_base.title=Nastavení hvězdné brány
+
+# Stargate Ring and Chevrons
+tile.stargateRing.0.name=Segment kruhu brány
+tile.stargateRing.1.name=Segment zámku brány
+tile.stargateRing.2.name=Segment kruhu pegasuské brány
+tile.stargateRing.3.name=Segment zámku pegasuské brány
+tile.stargateRing.4.name=Segment kruhu wraithské brány
+tile.stargateRing.5.name=Segment zámku wraithské brány
+tile.stargateRing.6.name=Segment kruhu noxské brány
+tile.stargateRing.7.name=Segment zámku noxské brány
+
+# Iris items & tags
+item.iris.name=Obvod iris
+item.gdo.name=Zadavač kódu iris (GDO)
+
+# Power-related items
+item.energyCrystal.name=Energetický krystal
+item.zpm.name=ZPM
+
+# Crafting reagents
 item.craftingReagent.0.name=Poškozená ingredience
 item.craftingReagent.1.name=Prázdný krystal
 item.craftingReagent.2.name=Hlavní krystal brány
@@ -14,47 +38,85 @@ item.craftingReagent.4.name=Železný plát
 item.craftingReagent.5.name=Plát z Naquadahové slitiny
 item.craftingReagent.6.name=Plát z Triniové slitiny
 
+# Ingots and alloys
+item.lanteaAlloy.0.name=Ingot naquadahu
+tile.lanteaAlloy.0.name=Blok naquadahu
+item.lanteaAlloy.1.name=Ingot naqahdrie
+tile.lanteaAlloy.1.name=Blok naquadrie
+item.lanteaAlloy.2.name=Ingot trinia
+tile.lanteaAlloy.2.name=Blok trinia
+
+# Fluids
 tile.blockLiquidNaquadah.name=Tekutý naquadah
-fluid.liquid_naquadah=Tekutý naquadah
 item.liquidNaquadahBucket.name=Kbelík tekutého naquadahu
 
-tile.lanteaDecor.1.name=Kov předků s ornamenty
-tile.lanteaDecor.2.name=Kov předků
+# Decor blocks
+tile.lanteaDecor.1.name=Lanteanský kov s ornamenty
+tile.lanteaDecor.2.name=Lanteanský kov
 tile.lanteaDecor.3.name=Goa'uldské zlato s ornamenty
 tile.lanteaDecor.4.name=Goa'uldské zlato
+tile.lanteaDoor.0.name=Lanteanské dveře
+tile.lanteaDoor.1.name=Goa'uldské dveře
 
-tile.goauldPatternedGoldDecorStair.name=Goa'uldské zlaté schody
-tile.goauldGoldDecorStair.name=Goa'uldské zlaté schody s ornamenty
-tile.lanteaPatternedSteelDecorStair.name=Schody z kovu předků
-tile.lanteaSteelDecorStair.name=Schody z kovu předků s ornamenty
+# Decor stairs
+tile.goauldPatternedGoldDecorStair.name=Goa'uldské zlaté schody s ornamenty
+tile.goauldGoldDecorStair.name=Goa'uldské zlaté schody
+tile.lanteaPatternedSteelDecorStair.name=Lanteanské schody s ornamenty
+tile.lanteaSteelDecorStair.name=Lanteanské schody
 
-tile.lanteaGlassDecor.1.name=Sklo předků
+# Decor glass
+tile.lanteaGlassDecor.1.name=Lanteanské sklo
 
+# Ore / Ore blocks
 tile.lanteaOre.0.name=Naquadahová ruda
 item.lanteaOre.0.name=Naquadah
-item.lanteaOreIngot.0.name=Ingot naquadahu
-tile.lanteaOreIngotBlock.0.name=Blok naquadahu
-
 tile.lanteaOre.1.name=Naquadriová ruda
 item.lanteaOre.1.name=Naquadria
-item.lanteaOreIngot.1.name=Naquadriový ingot
-tile.lanteaOreIngotBlock.1.name=Blok naquadrie
-
 tile.lanteaOre.2.name=Triniová ruda
 item.lanteaOre.2.name=Trinium
-item.lanteaOreIngot.2.name=Triniový ingot
-tile.lanteaOreIngotBlock.2.name=Blok trinia
 
+# Machines
 tile.naquadahGenerator.name=Naquadahový generátor
-tile.ringPlatform.name=Transportní kruhy
+tile.blockCrystalInfuser.name=Plnič krystalů
+
+# Help Notebook
+item.jacksonNotebook.name=Notebook Daniela Jacksona
+
+# Transporter Rings
+tile.transporterRing.0.name=Rám transportních kruhů
+tile.transporterRing.1.name=Ovládání transportních kruhů
+item.transportRingActivator.name=Aktivátor transportních kruhů
+
+# Debug and other items
+item.debugGlasses.name=AfterLifeLochieho debugové brejličky
+
+# Integration blocks and items
 tile.integration.computercraft.name=Počítačový adaptér k bráně
 
-item.zpm.name=ZPM
-item.transportRingActivator.name=Aktivátor transportních kruhů
-item.iris.name=Obvod iris
-item.gdo.name=Zadavač kódu iris
-
-item.tokraSpawnEgg.name=Vejce, uvnitř je Tok'ra
-item.lanteadebug.name=LanteaCraft Debugger
-
+# Death messages
 death.attack.wormhole_transient=%1$s byl rozložen vírem horizontu událostí.
+
+# Interfaces
+lc.interface.stargate.name=Hvězdná brána
+lc.interface.redstone.name=Rudit
+lc.interface.storage.items=Předměty
+lc.interface.storage.fluids=Kapaliny
+lc.interface.storage.fluids.level=Nádrž: %s
+lc.interface.clipboard.write=Kopírovat
+lc.interface.clipboard.write_ok=Zkopírováno so schránky
+lc.interface.clipboard.write_fail=Nelze zkopírovat
+lc.interface.options.redstone_mode=Rudit
+lc.interface.options.iris_mode=Ovládání iris
+lc.interface.redstone.active_ignore=Ignorovat rudit
+lc.interface.redstone.active_low=Aktivní při slabém signálu
+lc.interface.redstone.active_high=Aktivní při silném signálu
+lc.interface.redstone.active_ext=Digitální ovládání
+lc.interface.redstone.emit_nothing=Nedělat nic
+lc.interface.redstone.emit_low=Běžně Off
+lc.interface.redstone.emit_high=Běžně On
+lc.interface.iris.type.mechanical.name=Mechanická
+lc.interface.iris.type.energy.name=Energetická
+lc.interface.iris.type.text=%s iris
+lc.interface.iris.damage.text=%s poškození
+lc.interface.energy.text=Energie: %s
+lc.interface.entropy.text=Entropie: %s
