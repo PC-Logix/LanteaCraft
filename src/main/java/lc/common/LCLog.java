@@ -1,5 +1,11 @@
 package lc.common;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import lc.BuildInfo;
 import lc.common.util.data.AnyPredicate;
 
@@ -15,7 +21,18 @@ import org.apache.logging.log4j.Logger;
 public class LCLog {
 
 	private static volatile Logger log;
+	private static volatile PrintStream printLog;
+
 	private static volatile Logger cmLog;
+	private static volatile PrintStream cmPrintLog;
+
+	public static void initPrintLoggers() throws FileNotFoundException {
+		File logDir = new File("./logs/lanteacraft/");
+		if (!logDir.exists())
+			logDir.mkdir();
+		printLog = new PrintStream(new File("./logs/lanteacraft/game.log"));
+		cmPrintLog = new PrintStream(new File("./logs/lanteacraft/core.log"));
+	}
 
 	/**
 	 * Set the global logger
@@ -37,24 +54,32 @@ public class LCLog {
 		LCLog.cmLog = log;
 	}
 
-	private static void push(Level level, Object[] args) {
+	private static boolean isCore() {
 		StackTraceElement[] trackback = Thread.currentThread().getStackTrace();
-		Logger log = LCLog.log;
 		for (StackTraceElement element : trackback)
-			if (element.getClassName().startsWith("lc.coremod")) {
-				log = LCLog.cmLog;
-				break;
-			}
+			if (element.getClassName().startsWith("lc.coremod"))
+				return true;
+		return false;
+	}
+
+	private static void push(Level level, Object[] args) {
+		Logger log = LCLog.log;
+		PrintStream stream = LCLog.printLog;
+		if (isCore()) {
+			log = LCLog.cmLog;
+			stream = LCLog.cmPrintLog;
+		}
+
 		if (args.length == 1) {
 			if (args[0] instanceof Throwable)
-				log.log(level, args[0]);
+				writeAll(log, stream, level, "Uncaught exception, no reason given.", (Throwable) args[0]);
 			else
-				log.log(level, args[0]);
-		} else if (args.length == 2 && args[0] instanceof Throwable)
-			log.log(level, (String) args[1], (Throwable) args[0]);
-		else if (args.length == 2 && args[1] instanceof Throwable)
-			log.log(level, (String) args[0], (Throwable) args[1]);
-		else {
+				writeAll(log, stream, level, (args[0] instanceof String) ? (String) args[0] : args[0].toString(), null);
+		} else if (args.length == 2 && args[0] instanceof Throwable) {
+			writeAll(log, stream, level, (String) args[1], (Throwable) args[0]);
+		} else if (args.length == 2 && args[1] instanceof Throwable) {
+			writeAll(log, stream, level, (String) args[0], (Throwable) args[1]);
+		} else {
 			boolean flag = false;
 			for (Object arg : args)
 				if (arg instanceof Throwable)
@@ -63,7 +88,7 @@ public class LCLog {
 			if (!flag) {
 				format = new Object[args.length - 1];
 				System.arraycopy(args, 1, format, 0, format.length);
-				log.log(level, String.format((String) args[0], format));
+				writeAll(log, stream, level, String.format((String) args[0], format), null);
 			} else {
 				format = new Object[args.length - 2];
 				Throwable t = null;
@@ -73,10 +98,37 @@ public class LCLog {
 					else
 						t = (Throwable) args[i];
 				if (t != null)
-					log.log(level, String.format((String) args[0], format), t);
+					writeAll(log, stream, level, String.format((String) args[0], format), t);
 				else
-					log.log(level, String.format((String) args[0], format));
+					writeAll(log, stream, level, String.format((String) args[0], format), null);
 			}
+		}
+	}
+
+	private static void writeAll(Logger l, PrintStream s, Level l0, String s0, Throwable z) {
+		writeLog(l, l0, s0, z);
+		writeStream(s, l0, s0, z);
+	}
+
+	private static void writeLog(Logger l, Level l0, String s0, Throwable z) {
+		if (z != null)
+			l.log(l0, s0, z);
+		else
+			l.log(l0, s0);
+	}
+
+	private static void writeStream(PrintStream s, Level l0, String s0, Throwable z) {
+		StringBuilder blob = new StringBuilder();
+		blob.append("[").append(l0).append("] ");
+		blob.append(s0);
+		if (z != null) {
+			blob.append(": ").append(z.getClass()).append(": ").append(z.getMessage());
+			StringWriter writer = new StringWriter();
+			z.printStackTrace(new PrintWriter(writer));
+			s.println(blob.toString());
+			s.println(writer.toString());
+		} else {
+			s.println(blob.toString());
 		}
 	}
 
