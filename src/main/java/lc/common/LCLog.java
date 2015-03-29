@@ -152,8 +152,10 @@ public class LCLog {
 	 *            The text parts to display on assertion failure.
 	 */
 	public static void doAssert(boolean condition, Object... params) {
-		if (!condition)
+		if (!condition) {
 			fatal(params);
+			throw new Error("A proxied assertion error in LanteaCraft occurred.");
+		}
 	}
 
 	/**
@@ -169,8 +171,10 @@ public class LCLog {
 	 */
 	public static void doPredicateAssert(AnyPredicate dictate, Object[] conditions, Object... params) {
 		try {
-			if (!dictate.test(conditions))
+			if (!dictate.test(conditions)) {
 				fatal(params);
+				throw new Error("A proxied assertion error in LanteaCraft occurred.");
+			}
 		} catch (Exception e) {
 			fatal(params);
 		}
