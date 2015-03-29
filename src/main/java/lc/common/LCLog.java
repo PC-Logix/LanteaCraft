@@ -1,6 +1,7 @@
 package lc.common;
 
 import lc.BuildInfo;
+import lc.common.util.data.AnyPredicate;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -139,6 +140,75 @@ public class LCLog {
 				BuildInfo.DEBUG);
 		if (BuildInfo.DEBUG)
 			info("Debugging is ON (log masquerading: %s).", BuildInfo.DEBUG_MASQ);
+	}
+
+	/**
+	 * Perform an assertion. If the condition is not {@code true} the assertion
+	 * fails and the application will halt.
+	 * 
+	 * @param condition
+	 *            The assertion condition.
+	 * @param params
+	 *            The text parts to display on assertion failure.
+	 */
+	public static void doAssert(boolean condition, Object... params) {
+		if (!condition)
+			fatal(params);
+	}
+
+	/**
+	 * Perform a predicate-based assertion. If the predicate does not produce
+	 * {@code true} the assertion fails and the application will halt.
+	 * 
+	 * @param dictate
+	 *            The predicate.
+	 * @param conditions
+	 *            The predicate's functional arguments, if any.
+	 * @param params
+	 *            The text parts to display on assertion failure.
+	 */
+	public static void doPredicateAssert(AnyPredicate dictate, Object[] conditions, Object... params) {
+		try {
+			if (!dictate.test(conditions))
+				fatal(params);
+		} catch (Exception e) {
+			fatal(params);
+		}
+	}
+
+	/**
+	 * Perform a soft assertion. If the condition is not {@code true} the
+	 * assertion fails and the application will display a warning message.
+	 * 
+	 * @param condition
+	 *            The assertion condition.
+	 * @param params
+	 *            The text parts to display on assertion failure.
+	 */
+	public static void doSoftAssert(boolean condition, Object... params) {
+		if (!condition)
+			warn(params);
+	}
+
+	/**
+	 * Perform a soft predicate-based assertion. If the predicate does not
+	 * produce {@code true} the assertion fails and the application will display
+	 * a warning message.
+	 * 
+	 * @param dictate
+	 *            The predicate.
+	 * @param conditions
+	 *            The predicate's functional arguments, if any.
+	 * @param params
+	 *            The text parts to display on assertion failure.
+	 */
+	public static void doSoftPredicateAssert(AnyPredicate dictate, Object[] conditions, Object... params) {
+		try {
+			if (!dictate.test(conditions))
+				warn(params);
+		} catch (Exception e) {
+			warn(params);
+		}
 	}
 
 }
