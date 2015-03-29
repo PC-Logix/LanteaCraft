@@ -1,5 +1,6 @@
 package lc.coremod;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 import lc.common.LCLog;
@@ -23,6 +24,11 @@ public class LCCoreMod implements IFMLLoadingPlugin {
 	 */
 	public LCCoreMod() {
 		LCLog.setCoremodLogger(LogManager.getFormatterLogger("LCCoreMod"));
+		try {
+			LCLog.initPrintLoggers();
+		} catch (FileNotFoundException e) {
+			LCLog.warn("Can't open print state loggers, error.", e);
+		}
 		LCLog.info("LCCoreMod ready for action!");
 	}
 

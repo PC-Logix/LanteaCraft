@@ -48,6 +48,7 @@ public class UniverseManager {
 		WorldServer overworld = event.getServer().worldServerForDimension(0);
 		File cwd = overworld.getSaveHandler().getWorldDirectory();
 		File dataDir = new File(cwd, "lanteacraft");
+		LCLog.debug("Mounting universe storage: %s", dataDir);
 		if (!dataDir.exists())
 			dataDir.mkdir();
 
@@ -57,6 +58,7 @@ public class UniverseManager {
 				FileInputStream fis = new FileInputStream(workFile);
 				recordHeap.clear();
 				jsonAgent.readMap(fis, recordHeap);
+				LCLog.debug("Read %s existing address entries.", recordHeap.size());
 				fis.close();
 			} catch (IOException ioex) {
 				LCLog.fatal("Problem reading Stargate address database.", ioex);
@@ -75,6 +77,7 @@ public class UniverseManager {
 	public void unloadUniverse(FMLServerStoppingEvent event) {
 		try {
 			FileOutputStream fos = new FileOutputStream(workFile);
+			LCLog.debug("Writing %s address entries to file.", recordHeap.size());
 			jsonAgent.writeMap(fos, recordHeap);
 			recordHeap.clear();
 			fos.close();
@@ -114,9 +117,11 @@ public class UniverseManager {
 	 * Build the reference cache.
 	 */
 	public void buildIndex() {
+		LCLog.debug("Rebuilding the record index...");
 		characterMap.clear();
 		for (StargateRecord record : recordHeap)
 			characterMap.add(record.address.getILongValue());
+		LCLog.debug("Record index rebuilt.");
 	}
 
 	public boolean isAddressAllocated(StargateAddress address) {

@@ -198,8 +198,9 @@ public class DriverBindingTransformer implements IClassTransformer {
 				}
 			}
 
+		int count = 0;
 		for (IntegrationType type : types) {
-			LCLog.debug("Adding drivers for type %s.", type);
+			LCLog.debug("Adding drivers for type %s on class %s.", type, name);
 			for (DriverMap mapping : DriverMap.mapOf(type)) {
 				LCLog.debug("Binding mapping %s (mod %s)", mapping, mapping.modName);
 				byte[] driverSrc = findClass(mapping.className);
@@ -236,6 +237,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 							classNode.fields.add(remapField(driverClass.name, classNode.name, field));
 						else
 							LCLog.warn("Skipping field %s, already present!", signature(field));
+				count++;
 			}
 		}
 
@@ -271,6 +273,8 @@ public class DriverBindingTransformer implements IClassTransformer {
 			classInitializer.visitMaxs(3, 0);
 			classInitializer.visitEnd();
 		}
+
+		LCLog.debug("Injected %s drivers into class %s.", count, name);
 
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(writer);
