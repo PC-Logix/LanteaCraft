@@ -57,9 +57,10 @@ public class HintProviderServer implements IHintProvider {
 
 	@Override
 	public void init() {
+		LCLog.debug("Providing base initialization.");
 		worldGenerator = new LCMasterWorldGen();
 		GameRegistry.registerWorldGenerator(worldGenerator, 0);
-
+		MinecraftForge.TERRAIN_GEN_BUS.register(worldGenerator);
 	}
 
 	@Override

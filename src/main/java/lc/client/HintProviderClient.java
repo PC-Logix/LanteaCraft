@@ -4,7 +4,9 @@ import lc.LCRuntime;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.blocks.BlockLanteaDoor;
+import lc.blocks.BlockObelisk;
 import lc.client.render.BlockDoorRenderer;
+import lc.client.render.BlockObeliskRenderer;
 import lc.client.render.ItemDecoratorRenderer;
 import lc.client.render.TileDHDRenderer;
 import lc.client.render.TileDoorRenderer;
@@ -63,6 +65,7 @@ public class HintProviderClient extends HintProviderServer {
 		registry.registerItemRenderer(ItemDecorator.class, ItemDecoratorRenderer.class);
 
 		registry.registerBlockRenderer(BlockLanteaDoor.class, BlockDoorRenderer.class);
+		registry.registerBlockRenderer(BlockObelisk.class, BlockObeliskRenderer.class);
 		registry.registerTileRenderer(TileLanteaDoor.class, TileDoorRenderer.class);
 		registry.registerTileRenderer(TileDHD.class, TileDHDRenderer.class);
 	}

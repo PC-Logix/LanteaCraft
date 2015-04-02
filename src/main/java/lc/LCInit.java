@@ -15,6 +15,7 @@ import lc.blocks.BlockDHD;
 import lc.blocks.BlockLanteaAlloy;
 import lc.blocks.BlockLanteaDoor;
 import lc.blocks.BlockLanteaOre;
+import lc.blocks.BlockObelisk;
 import lc.blocks.BlockStargateBase;
 import lc.blocks.BlockStargateRing;
 import lc.common.impl.registry.DefinitionReference;
@@ -85,6 +86,7 @@ public class LCInit {
 
 		blocks.lanteaDecorBlock = DefinitionWrapperProvider.provide(BlockDecorative.class);
 		blocks.lanteaDoor = DefinitionWrapperProvider.provide(BlockLanteaDoor.class);
+		blocks.lanteaObelisk = DefinitionWrapperProvider.provide(BlockObelisk.class);
 
 		items.glasses = DefinitionWrapperProvider.provide(ItemGlasses.class);
 		items.lanteaOreItem = DefinitionWrapperProvider.provide(ItemLanteaOre.class);

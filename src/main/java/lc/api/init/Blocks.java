@@ -32,6 +32,10 @@ public class Blocks {
 	public IContainerDefinition lanteaDecorBlock;
 	/** Decorative glass global block */
 	public IContainerDefinition lanteaGlassBlock;
+	/** Decorative obelisk block */
+	public IContainerDefinition lanteaObelisk;
+	/** Decorative brazier block */
+	public IContainerDefinition lanteaBrazier;
 
 	/** Crystal infuser machine */
 	public IContainerDefinition machineCrystalInfuser;
