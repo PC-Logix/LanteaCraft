@@ -1,5 +1,6 @@
 package lc;
 
+import scala.tools.nsc.doc.model.Def;
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IRecipeDefinition;
@@ -18,6 +19,7 @@ import lc.blocks.BlockLanteaOre;
 import lc.blocks.BlockObelisk;
 import lc.blocks.BlockStargateBase;
 import lc.blocks.BlockStargateRing;
+import lc.blocks.BlockTransportRing;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.impl.registry.DefinitionWrapperProvider;
 import lc.common.impl.registry.InterfaceDefinition;
@@ -81,6 +83,7 @@ public class LCInit {
 		blocks.stargateRingBlock = DefinitionWrapperProvider.provide(BlockStargateRing.class);
 		blocks.stargateBaseBlock = DefinitionWrapperProvider.provide(BlockStargateBase.class);
 		blocks.stargateDHDBlock = DefinitionWrapperProvider.provide(BlockDHD.class);
+		blocks.transporterBlock = DefinitionWrapperProvider.provide(BlockTransportRing.class);
 		blocks.lanteaOreBlock = DefinitionWrapperProvider.provide(BlockLanteaOre.class);
 		blocks.lanteaAlloyBlock = DefinitionWrapperProvider.provide(BlockLanteaAlloy.class);
 
