@@ -84,8 +84,19 @@ public abstract class StructureDefinition implements IStructureDefinition {
 	}
 
 	/**
+	 * <p>
 	 * Get the predicate responsible for determining where structure generation
-	 * is permitted
+	 * is permitted.
+	 * </p>
+	 * <p>
+	 * The predicate should expect the following parameters:
+	 * <ol>
+	 * <li>The world object</li>
+	 * <li>The random number generator</li>
+	 * <li>The x-coordinate of the chunk</li>
+	 * <li>The y-coordinate of the chunk</li>
+	 * </ol>
+	 * </p>
 	 * 
 	 * @return The predicate responsible for determining where structure
 	 *         generation is permitted or disallowed

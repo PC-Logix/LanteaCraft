@@ -1,5 +1,7 @@
 package lc;
 
+import java.util.Random;
+
 import scala.tools.nsc.doc.model.Def;
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
@@ -206,36 +208,42 @@ public class LCInit {
 
 		/* Initialize structures */
 		structures.scatteredSurfaceStargate = new StructureDefinition("SurfaceStargate", SurfaceStargate.class) {
-			AnyPredicate $predictate = new AnyPredicate() {
+			AnyPredicate $predicate = new AnyPredicate() {
 				@Override
 				public boolean test(Object[] t) {
-					if (((Integer) t[2]) % 4 != 0 || ((Integer) t[3]) % 4 != 0)
+					Random rng = (Random) t[1];
+					World world = (World) t[0];
+					int x = (Integer) t[2], y = (Integer) t[3];
+					if (world.provider.dimensionId != 0)
 						return false;
-					return (t[0] instanceof World) && (((World) t[0]).provider.dimensionId == 0);
+					if (x % 16 != 0 || y % 16 != 0)
+						return false;
+					return rng.nextInt(8) == 0;
 				}
 			};
 
 			@Override
 			protected AnyPredicate getGeneratorPredicate() {
-				return $predictate;
+				return $predicate;
 			}
 		}.addComp("SurfaceStargate", SurfaceStargateFeature.class);
 		runtime.registries().structures().register(structures.scatteredSurfaceStargate);
 
 		structures.scatteredAbydosPyramid = new StructureDefinition("AbydosPyramid", AbydosPyramid.class) {
-			AnyPredicate $predictate = new AnyPredicate() {
+			AnyPredicate $predicate = new AnyPredicate() {
 				@Override
 				public boolean test(Object[] t) {
+					/** Do nothing in case some tool registers us */
 					return false;
 				}
 			};
 
 			@Override
 			protected AnyPredicate getGeneratorPredicate() {
-				return $predictate;
+				return $predicate;
 			}
 		}.addComp("AbydosPyramid", AbydosPyramidFeature.class);
-		runtime.registries().structures().register(structures.scatteredAbydosPyramid);
+		// runtime.registries().structures().register(structures.scatteredAbydosPyramid);
 
 		/* Initialize interfaces */
 		interfaces.stargateUI = new InterfaceDefinition("stargateUI", "lc.container.ContainerStargate",
