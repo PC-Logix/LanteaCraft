@@ -45,6 +45,8 @@ public class DefinitionWrapperProvider {
 				Class<? extends LCTile> tileClass = null;
 
 				if (!definition.blockClass().equals(Void.class) && !definition.itemBlockClass().equals(Void.class)) {
+					LCLog.doAssert(definition.itemClass().equals(Void.class),
+							"Definition Block specifies Item, not allowed.");
 					blockClass = (Class<? extends LCBlock>) definition.blockClass();
 					itemBlockClass = (Class<? extends LCItemBlock>) definition.itemBlockClass();
 					if (!definition.tileClass().equals(Void.class))
@@ -53,6 +55,10 @@ public class DefinitionWrapperProvider {
 					LCLog.trace("Providing definition: %s: %s, block: %s, itemblock: %s, tile: %s", type, name,
 							blockClass, itemBlockClass, tileClass);
 				} else if (!definition.itemClass().equals(Void.class)) {
+					LCLog.doAssert(definition.blockClass().equals(Void.class),
+							"Definition Item specifies Block, not allowed.");
+					LCLog.doAssert(definition.tileClass().equals(Void.class),
+							"Definition Item specifies Tile, not allowed.");
 					itemClass = (Class<? extends LCItem>) definition.itemClass();
 					result = new BlockItemDefinition(type, name, null, itemClass);
 					LCLog.trace("Providing definition: %s: %s, item: %s", type, name, itemClass);
@@ -61,6 +67,8 @@ public class DefinitionWrapperProvider {
 			}
 		if (result != null)
 			LCRuntime.runtime.registries().definitions().addDefinition(result);
+		else
+			LCLog.warn("Object %s requested for definition, none made.", clazz.getName());
 		return result;
 	}
 
