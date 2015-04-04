@@ -5,6 +5,7 @@ import java.util.Random;
 import scala.tools.nsc.doc.model.Def;
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
+import lc.api.defs.IInterfaceDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.api.init.Blocks;
 import lc.api.init.Interfaces;
@@ -248,7 +249,9 @@ public class LCInit {
 		/* Initialize interfaces */
 		interfaces.stargateUI = new InterfaceDefinition("stargateUI", "lc.container.ContainerStargate",
 				"lc.gui.GUIStargate");
+		interfaces.dhdUI = new InterfaceDefinition("dhdUI", "lc.container.ContainerDHD", "lc.gui.GUIDHD");
 		runtime.registries().interfaces().addDefinition(interfaces.stargateUI);
+		runtime.registries().interfaces().addDefinition(interfaces.dhdUI);
 
 	}
 

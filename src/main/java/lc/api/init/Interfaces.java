@@ -15,5 +15,6 @@ import lc.api.defs.IInterfaceDefinition;
 public class Interfaces {
 
 	public IInterfaceDefinition stargateUI;
+	public IInterfaceDefinition dhdUI;
 
 }
