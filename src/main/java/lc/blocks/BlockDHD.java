@@ -5,10 +5,14 @@ import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import lc.LCRuntime;
+import lc.LanteaCraft;
 import lc.ResourceAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
@@ -128,5 +132,16 @@ public class BlockDHD extends LCBlock {
 	 */
 	public int getBaseType(int metadata) {
 		return (int) Math.floor(metadata / blockMask);
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
+			float cy, float cz) {
+		TileDHD te = (TileDHD) world.getTileEntity(x, y, z);
+		if (te != null) {
+			player.openGui(LanteaCraft.instance, LCRuntime.runtime.interfaces().dhdUI.getGUIID(), world, x, y, z);
+			return true;
+		}
+		return false;
 	}
 }
