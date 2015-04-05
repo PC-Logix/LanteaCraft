@@ -18,10 +18,10 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.common.MinecraftForge;
-import lc.api.audio.ISound;
-import lc.api.audio.ISoundPosition;
-import lc.api.audio.ISoundProperties;
-import lc.api.audio.ISoundServer;
+import lc.api.audio.streaming.ISound;
+import lc.api.audio.streaming.ISoundPosition;
+import lc.api.audio.streaming.ISoundProperties;
+import lc.api.audio.streaming.ISoundServer;
 import lc.common.LCLog;
 
 public class StreamingSoundServer implements ISoundServer {
@@ -70,7 +70,7 @@ public class StreamingSoundServer implements ISoundServer {
 	private HashMap<SoundOwner, ArrayList<ISound>> sounds = new HashMap<SoundOwner, ArrayList<ISound>>();
 
 	public StreamingSoundServer() {
-		super();
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@Override
@@ -200,7 +200,8 @@ public class StreamingSoundServer implements ISoundServer {
 		return Minecraft.getMinecraft().gameSettings.getSoundLevel(cat);
 	}
 
-	public void advance() {
+	@Override
+	public void think() {
 		if (!enabled)
 			return;
 		if (system == null)

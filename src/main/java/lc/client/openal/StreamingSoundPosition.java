@@ -1,7 +1,7 @@
 package lc.client.openal;
 
 import net.minecraftforge.common.DimensionManager;
-import lc.api.audio.ISoundPosition;
+import lc.api.audio.streaming.ISoundPosition;
 import lc.common.util.math.DimensionPos;
 import lc.common.util.math.Vector3;
 

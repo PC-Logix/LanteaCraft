@@ -1,4 +1,4 @@
-package lc.api.audio;
+package lc.api.audio.streaming;
 
 public interface ISoundPosition {
 

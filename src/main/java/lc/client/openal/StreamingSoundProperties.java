@@ -1,7 +1,7 @@
 package lc.client.openal;
 
 import net.minecraft.client.audio.SoundCategory;
-import lc.api.audio.ISoundProperties;
+import lc.api.audio.streaming.ISoundProperties;
 
 public class StreamingSoundProperties implements ISoundProperties {
 

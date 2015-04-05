@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import lc.api.audio.ISoundController;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
@@ -94,6 +95,11 @@ public class HintProviderServer implements IHintProvider {
 
 	public StargateManager stargates() {
 		return stargateMgr;
+	}
+
+	@Override
+	public ISoundController audio() {
+		return null;
 	}
 
 }

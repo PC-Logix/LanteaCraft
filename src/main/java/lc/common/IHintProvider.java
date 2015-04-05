@@ -2,6 +2,7 @@ package lc.common;
 
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import lc.api.audio.ISoundController;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 
@@ -41,4 +42,6 @@ public interface IHintProvider {
 	public void onServerStarting(FMLServerStartingEvent event);
 
 	public void onServerStopping(FMLServerStoppingEvent event);
+
+	public ISoundController audio();
 }

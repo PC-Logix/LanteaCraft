@@ -1,10 +1,12 @@
 package lc.client;
 
 import lc.LCRuntime;
+import lc.api.audio.ISoundController;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.blocks.BlockLanteaDoor;
 import lc.blocks.BlockObelisk;
+import lc.client.openal.ClientSoundController;
 import lc.client.render.BlockDoorRenderer;
 import lc.client.render.BlockObeliskRenderer;
 import lc.client.render.ItemDecoratorRenderer;
@@ -41,6 +43,8 @@ public class HintProviderClient extends HintProviderServer {
 	private LCTileRenderPipeline tileRenderingHook;
 	private LCItemRenderPipeline itemRenderingHook;
 
+	private ClientSoundController controller;
+
 	/** Default constructor */
 	public HintProviderClient() {
 		super();
@@ -53,6 +57,7 @@ public class HintProviderClient extends HintProviderServer {
 		blockRenderingHook = new LCBlockRenderPipeline(RenderingRegistry.getNextAvailableRenderId());
 		tileRenderingHook = new LCTileRenderPipeline();
 		itemRenderingHook = new LCItemRenderPipeline();
+		controller = new ClientSoundController();
 		RenderingRegistry.registerBlockHandler(blockRenderingHook.getRenderId(), blockRenderingHook);
 	}
 
@@ -101,6 +106,11 @@ public class HintProviderClient extends HintProviderServer {
 		super.provideHints(definition);
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public ISoundController audio() {
+		return controller;
 	}
 
 }

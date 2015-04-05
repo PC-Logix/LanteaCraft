@@ -1,4 +1,4 @@
-package lc.api.audio;
+package lc.api.audio.streaming;
 
 import net.minecraft.client.audio.SoundCategory;
 

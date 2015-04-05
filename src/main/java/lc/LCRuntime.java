@@ -21,6 +21,7 @@ import lc.common.impl.registry.RegistryContainer;
 import lc.common.impl.registry.StructureRegistry;
 import lc.common.network.LCPacketPipeline;
 import lc.common.util.LCCreativeTabManager;
+import lc.common.util.game.LCTickConnector;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -60,6 +61,8 @@ public class LCRuntime implements ILCAPIProxy {
 	private final LCInit container = new LCInit();
 	/** Network driver */
 	private final LCPacketPipeline network = new LCPacketPipeline();
+	/** Tick driver */
+	private final LCTickConnector ticks = new LCTickConnector();
 
 	/** The LC GUI handler hook */
 	private final GUIHandler interfaceHook = new GUIHandler();
@@ -128,6 +131,15 @@ public class LCRuntime implements ILCAPIProxy {
 	 */
 	public LCPacketPipeline network() {
 		return network;
+	}
+
+	/**
+	 * Get the tick connector
+	 * 
+	 * @return The tick connector
+	 */
+	public LCTickConnector ticks() {
+		return ticks;
 	}
 
 	/**
