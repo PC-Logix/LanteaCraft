@@ -12,6 +12,8 @@ public interface ISoundServer {
 
 	float master();
 
+	float falloff();
+
 	float volume(SoundCategory cat);
 
 	ISound assign(Object owner, String f, ISoundPosition pos, ISoundProperties props);

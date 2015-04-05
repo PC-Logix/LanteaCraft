@@ -177,7 +177,7 @@ public class StreamingSoundServer implements ISoundServer {
 		LCLog.doAssert(pos != null, "No sound position specified");
 		LCLog.doAssert(props != null, "No sound properties specified");
 		String tag = StreamingSoundServer.nextSoundTag("StreamingSound");
-		StreamingSound sound = new StreamingSound(system, pos, f, props, tag);
+		StreamingSound sound = new StreamingSound(this, system, pos, f, props, tag);
 		SoundOwner host = new SoundOwner(owner);
 		if (!sounds.containsKey(host))
 			sounds.put(host, new ArrayList<ISound>());
@@ -188,6 +188,11 @@ public class StreamingSoundServer implements ISoundServer {
 	@Override
 	public float master() {
 		return masterVolume;
+	}
+
+	@Override
+	public float falloff() {
+		return falloffDistance;
 	}
 
 	@Override
