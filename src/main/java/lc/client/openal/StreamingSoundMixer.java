@@ -28,24 +28,37 @@ public class StreamingSoundMixer implements IMixer {
 	}
 
 	@Override
-	public void playChannel(String name) {
+	public IMixer playChannel(String name) {
 		ISound sound = channels.get(name);
 		if (sound != null)
 			sound.play();
+		return this;
 	}
 
 	@Override
-	public void pauseChannel(String name) {
+	public IMixer replayChannel(String name) {
+		ISound sound = channels.get(name);
+		if (sound != null) {
+			sound.stop();
+			sound.play();
+		}
+		return this;
+	}
+
+	@Override
+	public IMixer pauseChannel(String name) {
 		ISound sound = channels.get(name);
 		if (sound != null)
 			sound.pause();
+		return this;
 	}
 
 	@Override
-	public void stopChannel(String name) {
+	public IMixer stopChannel(String name) {
 		ISound sound = channels.get(name);
 		if (sound != null)
 			sound.stop();
+		return this;
 	}
 
 	@Override

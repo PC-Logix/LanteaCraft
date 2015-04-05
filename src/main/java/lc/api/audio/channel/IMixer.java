@@ -8,11 +8,13 @@ public interface IMixer {
 
 	void deleteChannel(String name);
 
-	void playChannel(String name);
+	IMixer playChannel(String name);
+	
+	IMixer replayChannel(String name);
 
-	void pauseChannel(String name);
+	IMixer pauseChannel(String name);
 
-	void stopChannel(String name);
+	IMixer stopChannel(String name);
 
 	boolean shutdown(boolean now);
 
