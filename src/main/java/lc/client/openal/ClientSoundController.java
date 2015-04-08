@@ -24,6 +24,7 @@ public class ClientSoundController implements ISoundController, ITickEventHandle
 		this.server = new StreamingSoundServer();
 		this.liveMixers = new WeakHashMap<Object, IMixer>();
 		this.mixers = new ArrayList<IMixer>();
+		this.server.initialize();
 	}
 
 	@Override

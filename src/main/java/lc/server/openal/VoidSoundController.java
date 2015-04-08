@@ -11,6 +11,7 @@ public class VoidSoundController implements ISoundController {
 
 	private VoidSoundController() {
 		/* !!private */
+		server.initialize();
 	}
 
 	@Override
