@@ -75,8 +75,13 @@ public interface IMixer {
 	 * Shuts down the mixer with an optional force flag.
 	 * 
 	 * If the force flag is not set and there are channels playing, the mixer is
-	 * not shut down. If the force flag is set and any channels are active,
-	 * those channels are stopped.
+	 * not shut down until all the sounds have finished playing. If more sounds
+	 * are added to the mixer or sounds are replayed, the mixer will not halt.
+	 * The mixer will not wait for looping sounds to finish.
+	 * 
+	 * If the force flag is set and any channels are active, those channels are
+	 * stopped regardless of the state of the sound. The mixer is immediately
+	 * shut down.
 	 * 
 	 * All channels on the mixer are disposed as per
 	 * {@link IMixer#deleteChannel(String)}.

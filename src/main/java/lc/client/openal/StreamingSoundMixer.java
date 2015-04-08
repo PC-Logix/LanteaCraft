@@ -8,6 +8,7 @@ import lc.api.audio.streaming.ISound;
 public class StreamingSoundMixer implements IMixer {
 
 	private final HashMap<String, ISound> channels;
+	private boolean dead;
 
 	public StreamingSoundMixer() {
 		this.channels = new HashMap<String, ISound>();
@@ -63,10 +64,14 @@ public class StreamingSoundMixer implements IMixer {
 
 	@Override
 	public boolean shutdown(boolean now) {
+		dead = true;
 		if (!now) {
-			for (ISound sound : channels.values())
+			for (ISound sound : channels.values()) {
+				if (sound.properties().loop())
+					continue;
 				if (sound.playing() && sound.realvol() > 0)
 					return false;
+			}
 		}
 		for (ISound sound : channels.values())
 			sound.remove();
@@ -75,8 +80,8 @@ public class StreamingSoundMixer implements IMixer {
 
 	@Override
 	public void think() {
-		// TODO Auto-generated method stub
-
+		if (dead)
+			shutdown(false);
 	}
 
 }
