@@ -14,6 +14,11 @@ public class VoidSoundServer implements ISoundServer {
 	}
 
 	@Override
+	public boolean ready() {
+		return false;
+	}
+
+	@Override
 	public void think() {
 		/* Do nothing */
 	}

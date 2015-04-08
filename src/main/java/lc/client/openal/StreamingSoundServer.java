@@ -91,6 +91,11 @@ public class StreamingSoundServer implements ISoundServer {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	@Override
+	public boolean ready() {
+		return enabled && system != null;
+	}
+
 	private static SoundSystem getSoundSystem(SoundManager soundManager) {
 		for (Field field : SoundManager.class.getDeclaredFields())
 			if (SoundSystem.class.isAssignableFrom(field.getType())) {

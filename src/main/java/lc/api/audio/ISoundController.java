@@ -10,6 +10,12 @@ import lc.api.audio.streaming.ISoundServer;
 public interface ISoundController {
 
 	/**
+	 * @return If the sound controller is ready, initialized and can support
+	 *         audio operations.
+	 */
+	boolean ready();
+
+	/**
 	 * Get the current sound server on the system.
 	 * 
 	 * @return The current sound server which is running and providing audio

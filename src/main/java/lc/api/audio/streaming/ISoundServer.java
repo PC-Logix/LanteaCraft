@@ -14,6 +14,12 @@ public interface ISoundServer {
 	void initialize();
 
 	/**
+	 * @return If the sound server is ready, initialized and can support audio
+	 *         operations.
+	 */
+	boolean ready();
+
+	/**
 	 * Called by the system to cause the sound service to update periodically.
 	 * You should not invoke this yourself; the system will manage the updates
 	 * automatically.

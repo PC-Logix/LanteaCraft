@@ -14,6 +14,11 @@ public class VoidSoundController implements ISoundController {
 	}
 
 	@Override
+	public boolean ready() {
+		return false;
+	}
+
+	@Override
 	public ISoundServer getSoundService() {
 		return VoidSoundController.server;
 	}

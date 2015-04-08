@@ -27,6 +27,11 @@ public class ClientSoundController implements ISoundController, ITickEventHandle
 	}
 
 	@Override
+	public boolean ready() {
+		return server != null && server.ready();
+	}
+
+	@Override
 	public ISoundServer getSoundService() {
 		return server;
 	}
