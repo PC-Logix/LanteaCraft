@@ -20,6 +20,11 @@ public class StreamingSoundMixer implements IMixer {
 	}
 
 	@Override
+	public boolean hasChannel(String name) {
+		return (channels.containsKey(name) && channels.get(name) != null);
+	}
+
+	@Override
 	public void deleteChannel(String name) {
 		ISound sound = channels.remove(name);
 		if (sound != null) {

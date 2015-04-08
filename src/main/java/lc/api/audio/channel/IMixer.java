@@ -21,6 +21,16 @@ public interface IMixer {
 	void createChannel(String name, ISound sound);
 
 	/**
+	 * Ask the mixer if it knows of a channel. If the channel is not deleted and
+	 * has a valid sound assigned, the result is true; else the result is false.
+	 * 
+	 * @param name
+	 *            The name of the channel
+	 * @return If the channel exists
+	 */
+	boolean hasChannel(String name);
+
+	/**
 	 * Delete a channel on the sound mixer. If the channel is currently active,
 	 * the channel is stopped. The underlying sound stream is garbage collected
 	 * and removed from the sound server which allocated it.
