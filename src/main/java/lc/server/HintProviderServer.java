@@ -16,6 +16,7 @@ import lc.common.base.generation.LCMasterWorldGen;
 import lc.common.util.BeaconStreamThread;
 import lc.common.util.StatsProvider;
 import lc.server.database.UniverseManager;
+import lc.server.openal.VoidSoundController;
 
 /**
  * Server-side hint provider implementation
@@ -99,7 +100,7 @@ public class HintProviderServer implements IHintProvider {
 
 	@Override
 	public ISoundController audio() {
-		return null;
+		return VoidSoundController.controller;
 	}
 
 }
