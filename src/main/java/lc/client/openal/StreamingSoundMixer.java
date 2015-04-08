@@ -75,13 +75,14 @@ public class StreamingSoundMixer implements IMixer {
 		}
 		for (ISound sound : channels.values())
 			sound.remove();
+		channels.clear();
 		return true;
 	}
 
 	@Override
 	public void think() {
-		if (dead)
-			shutdown(false);
+		if (dead && shutdown(false))
+			dead = false;
 	}
 
 }

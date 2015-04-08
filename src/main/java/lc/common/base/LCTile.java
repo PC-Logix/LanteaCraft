@@ -131,6 +131,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	private boolean nbtDirty;
 	private boolean clientDataDirty = true;
 	private int clientDataCooldown;
+	private IMixer clientMixer;
 
 	/**
 	 * Get the hasInventory of the tile. If the tile has no hasInventory,
@@ -542,10 +543,13 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 *         available.
 	 */
 	protected IMixer mixer() {
+		if (clientMixer != null)
+			return clientMixer;
 		ISoundController sys = LCRuntime.runtime.hints().audio();
-		if (sys != null && sys.ready())
-			return sys.findMixer(this);
-		return null;
+		if (sys == null || !sys.ready())
+			return null;
+		clientMixer = sys.findMixer(this);
+		return clientMixer;
 	}
 
 	/**
