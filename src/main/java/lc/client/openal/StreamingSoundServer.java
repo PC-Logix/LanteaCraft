@@ -138,7 +138,7 @@ public class StreamingSoundServer implements ISoundServer {
 			}
 		}
 
-		LCLog.info("LanteaCraft audio task starting.");
+		LCLog.debug("StreamingSoundServer starting...");
 		manager = getSoundManager();
 
 		initThread = new Thread(new Runnable() {
@@ -146,21 +146,21 @@ public class StreamingSoundServer implements ISoundServer {
 			public void run() {
 				try {
 					while (!Thread.currentThread().isInterrupted()) {
-						boolean loaded;
+						boolean loaded = false;
 						try {
 							loaded = soundman_state.getBoolean(manager);
 						} catch (Exception e) {
+							LCLog.fatal("StreamingSoundServer startup error: can't read sound management state.", e);
 							throw new RuntimeException(e);
 						}
 
 						if (loaded) {
 							system = StreamingSoundServer.getSoundSystem(manager);
 							if (system == null) {
-								LCLog.warn("Can't get audio system. LanteaCraft sound offline.");
+								LCLog.warn("StreamingSoundServer sound offline: system was marked as ready but can't find it.");
 								enabled = false;
-								break;
-							}
-							LCLog.info("LanteaCraft sound online.");
+							} else
+								LCLog.debug("StreamingSoundServer online.");
 							break;
 						}
 
@@ -170,7 +170,7 @@ public class StreamingSoundServer implements ISoundServer {
 				}
 				initThread = null;
 			}
-		}, "LanteaCraft audio hook task");
+		}, "LanteaCraft-StreamingSoundServer OpenAL fetch task");
 
 		initThread.start();
 	}
