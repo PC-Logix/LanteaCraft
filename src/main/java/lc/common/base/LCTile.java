@@ -6,7 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import lc.LCRuntime;
+import lc.api.audio.ISoundController;
+import lc.api.audio.channel.IMixer;
+import lc.api.audio.streaming.ISound;
+import lc.api.audio.streaming.ISoundProperties;
+import lc.api.audio.streaming.ISoundServer;
 import lc.api.event.IBlockEventHandler;
+import lc.client.openal.StreamingSoundPosition;
 import lc.common.LCLog;
 import lc.common.network.IPacketHandler;
 import lc.common.network.LCNetworkException;
@@ -526,6 +532,41 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		if (worldObj.isRemote)
 			LCRuntime.runtime.network().sendToServer(new LCClientUpdate(new DimensionPos(this)));
 		return null;
+	}
+
+	/**
+	 * Get the mixer for this tile-entity. If the sound engine is ready, a mixer
+	 * is returned; else null is returned.
+	 * 
+	 * @return The sound mixer for this tile-entity, or null if no mixer is
+	 *         available.
+	 */
+	protected IMixer mixer() {
+		ISoundController sys = LCRuntime.runtime.hints().audio();
+		if (sys != null && sys.ready())
+			return sys.findMixer(this);
+		return null;
+	}
+
+	/**
+	 * Ask the sound engine to provide a handle for a sound. The filename and
+	 * playback properties must be specified and not null. If the sound engine
+	 * is not ready, null is returned.
+	 * 
+	 * @param filename
+	 *            The name of the sound to open.
+	 * @param properties
+	 *            The properties to apply to the sound once open.
+	 * @return The sound, or null if the sound engine is not ready.
+	 */
+	protected ISound sound(String filename, ISoundProperties properties) {
+		ISoundController sys = LCRuntime.runtime.hints().audio();
+		if (sys == null || !sys.ready())
+			return null;
+		ISoundServer server = sys.getSoundService();
+		if (server == null || !server.ready())
+			return null;
+		return server.assign(this, filename, new StreamingSoundPosition(new DimensionPos(this)), properties);
 	}
 
 }
