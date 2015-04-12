@@ -4,11 +4,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
+import lc.api.stargate.IDHDAccess;
+import lc.api.stargate.StargateType;
 import lc.common.base.LCTile;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 
-public class TileDHD extends LCTile {
+public class TileDHD extends LCTile implements IDHDAccess {
 
 	@Override
 	public IInventory getInventory() {
@@ -55,6 +57,18 @@ public class TileDHD extends LCTile {
 	public String[] debug(Side side) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public StargateType getDHDType() {
+		// TODO Auto-generated method stub
+		return StargateType.STANDARD;
+	}
+
+	@Override
+	public boolean ownsConnection() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

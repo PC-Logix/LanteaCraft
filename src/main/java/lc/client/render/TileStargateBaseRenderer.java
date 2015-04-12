@@ -4,6 +4,7 @@ import lc.ResourceAccess;
 import lc.client.models.ModelStargate;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
+import lc.common.base.multiblock.MultiblockState;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.tiles.TileStargateBase;
 import net.minecraft.util.ResourceLocation;
@@ -46,10 +47,13 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 	public boolean renderTileEntityAt(LCTile tile, LCTileRenderPipeline renderer, double x, double y, double z,
 			float partialTickTime) {
 		if (tile instanceof TileStargateBase) {
-			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.5d, y + 3.5d, z + 0.5d);
-			model.render(this, renderer, (TileStargateBase) tile);
-			GL11.glPopMatrix();
+			TileStargateBase base = (TileStargateBase) tile;
+			if (base.getState() == MultiblockState.FORMED) {
+				GL11.glPushMatrix();
+				GL11.glTranslated(x + 0.5d, y + 3.5d, z + 0.5d);
+				model.render(this, renderer, (TileStargateBase) tile);
+				GL11.glPopMatrix();
+			}
 		}
 		return true;
 	}

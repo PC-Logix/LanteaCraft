@@ -17,19 +17,6 @@ import lc.tiles.TileDHD;
 
 public class TileDHDRenderer extends LCTileRenderer {
 
-	/** The DHD model */
-	public ModelDHD model;
-
-	/** Default constructor */
-	public TileDHDRenderer() {
-		try {
-			model = new ModelDHD();
-		} catch (WavefrontModelException e) {
-			LCLog.warn("Failed to load ModelDHD.", e);
-			model = null;
-		}
-	}
-
 	@Override
 	public LCTileRenderer getParent() {
 		return null;
@@ -38,19 +25,16 @@ public class TileDHDRenderer extends LCTileRenderer {
 	@Override
 	public boolean renderTileEntityAt(LCTile tile, LCTileRenderPipeline renderer, double x, double y, double z,
 			float partialTickTime) {
-		if (model == null)
+		if (ModelDHD.$ == null)
 			return false;
-		StargateType typeof = StargateType.fromOrdinal(tile.getBlockMetadata());
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glTranslated(x, y, z);
 		GL11.glTranslatef(0.5f, 0.0f, 0.5f);
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
 		GL11.glTranslatef(-0.5f, 0.0f, -0.5f);
-		String typename = (typeof.getSuffix().length() != 0) ? "dhd_%s_" + typeof.getSuffix() : "dhd_%s";
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture(ResourceAccess.getNamedResource(ResourceAccess
-				.formatResourceName("textures/models/%s_${TEX_QUALITY}.png", String.format(typename, "on"))));
-		model.renderAll();
+		TileDHD dhd = (TileDHD) tile;
+		ModelDHD.$.prepareAndRender(StargateType.fromOrdinal(tile.getBlockMetadata()), dhd.ownsConnection());
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 		return true;

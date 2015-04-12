@@ -148,14 +148,6 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public void thinkClient() {
 		// TODO Auto-generated method stub
-		IMixer mixer = mixer();
-		if (!mixer.hasChannel("test")) {
-			LCLog.debug("Creating channel `test`");
-			ISound test = sound("stargate/ambience/event_horizon_ripple.ogg", new StreamingSoundProperties(false,
-					false, 1.0f, 1.0f, SoundCategory.BLOCKS));
-			mixer.createChannel("test", test);
-		}
-		mixer.playChannel("test");
 	}
 
 	@Override

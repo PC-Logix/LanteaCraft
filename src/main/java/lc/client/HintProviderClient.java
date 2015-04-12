@@ -4,9 +4,11 @@ import lc.LCRuntime;
 import lc.api.audio.ISoundController;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
+import lc.blocks.BlockDHD;
 import lc.blocks.BlockLanteaDoor;
 import lc.blocks.BlockObelisk;
 import lc.client.openal.ClientSoundController;
+import lc.client.render.BlockDHDRenderer;
 import lc.client.render.BlockDoorRenderer;
 import lc.client.render.BlockObeliskRenderer;
 import lc.client.render.ItemDecoratorRenderer;
@@ -71,6 +73,7 @@ public class HintProviderClient extends HintProviderServer {
 
 		registry.registerBlockRenderer(BlockLanteaDoor.class, BlockDoorRenderer.class);
 		registry.registerBlockRenderer(BlockObelisk.class, BlockObeliskRenderer.class);
+		registry.registerBlockRenderer(BlockDHD.class, BlockDHDRenderer.class);
 		registry.registerTileRenderer(TileLanteaDoor.class, TileDoorRenderer.class);
 		registry.registerTileRenderer(TileDHD.class, TileDHDRenderer.class);
 	}
