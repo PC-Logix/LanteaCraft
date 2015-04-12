@@ -80,6 +80,7 @@ public class StreamingSound implements ISound, Comparable<StreamingSound> {
 	public void remove() {
 		if (!valid)
 			return;
+		system.stop(tag);
 		system.removeSource(tag);
 		valid = false;
 		tag = null;
