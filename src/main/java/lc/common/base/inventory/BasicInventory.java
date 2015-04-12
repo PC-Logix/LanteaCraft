@@ -4,10 +4,23 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Simple inventory stub.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public abstract class BasicInventory implements IInventory {
 
+	/** The items in the inventory */
 	protected ItemStack[] items;
 
+	/**
+	 * Create a simple inventory
+	 * 
+	 * @param size
+	 *            The size of the inventory
+	 */
 	public BasicInventory(int size) {
 		items = new ItemStack[size];
 	}

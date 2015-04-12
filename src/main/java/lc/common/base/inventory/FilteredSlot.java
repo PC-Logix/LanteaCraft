@@ -7,10 +7,29 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Filtered inventory slot implementation
+ * 
+ * @author AfterLifeLochie
+ */
 public class FilteredSlot extends LCTabbedSlot {
 	private final boolean readonly;
 	private final int slotIndex;
 
+	/**
+	 * Create a new filtered inventory slot
+	 * 
+	 * @param host
+	 *            The host inventory
+	 * @param slotIndex
+	 *            The slot index
+	 * @param xDisplayPosition
+	 *            The x-coordinate to render the slot
+	 * @param yDisplayPosition
+	 *            The y-coordinate to render the slot
+	 * @param readonly
+	 *            If the slot is read-only mode
+	 */
 	public FilteredSlot(IInventory host, int slotIndex, int xDisplayPosition, int yDisplayPosition, boolean readonly) {
 		super(host, slotIndex, xDisplayPosition, yDisplayPosition);
 		this.readonly = readonly;

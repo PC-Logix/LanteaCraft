@@ -12,6 +12,12 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 
+/**
+ * LanteaCraft global GUI callback handler implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class GUIHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {

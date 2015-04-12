@@ -1,22 +1,18 @@
 package lc.common.base;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.ILanteaCraftRenderer;
-import lc.common.LCLog;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.util.math.Trans3;
 import lc.common.util.math.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -184,6 +180,12 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
 		return true;
 	}
 
+	/**
+	 * Render a default item
+	 * 
+	 * @param stack
+	 *            The itemstack to render
+	 */
 	public void renderDefaultItem(ItemStack stack) {
 		IIcon iicon = stack.getItem().getIconFromDamage(stack.getItemDamage());
 		if (iicon == null)

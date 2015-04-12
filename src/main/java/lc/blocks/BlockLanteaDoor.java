@@ -22,7 +22,7 @@ import lc.tiles.TileLanteaDoor;
 
 @Definition(name = "lanteaDoor", type = ComponentType.DECOR, blockClass = BlockLanteaDoor.class, itemBlockClass = ItemLanteaDoor.class, tileClass = TileLanteaDoor.class)
 public class BlockLanteaDoor extends LCBlock {
-	
+
 	private IIcon doorIcon;
 
 	public BlockLanteaDoor() {
@@ -66,6 +66,13 @@ public class BlockLanteaDoor extends LCBlock {
 		return LCRuntime.runtime.blocks().lanteaDoor.getItem();
 	}
 
+	/**
+	 * Set the bounds of the block
+	 * 
+	 * @param aabb
+	 *            The axis-aligned bounding box to update
+	 * @return The updated AABB
+	 */
 	protected AxisAlignedBB setBlockBounds(AxisAlignedBB aabb) {
 		if (aabb == null)
 			aabb = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);

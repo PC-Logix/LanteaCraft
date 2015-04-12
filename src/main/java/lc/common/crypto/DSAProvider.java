@@ -15,6 +15,13 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+/**
+ * Wrapper around Sun's DSA implementation. Includes facilities to generate,
+ * save and load keys and sign/validate payloads.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class DSAProvider {
 
 	/**

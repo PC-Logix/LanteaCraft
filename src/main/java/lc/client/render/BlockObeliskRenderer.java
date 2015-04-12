@@ -5,6 +5,12 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import lc.common.base.LCBlockRenderer;
 
+/**
+ * Obelisk block renderer implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class BlockObeliskRenderer extends LCBlockRenderer {
 
 	@Override

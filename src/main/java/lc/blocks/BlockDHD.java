@@ -25,6 +25,12 @@ import lc.items.ItemBlockDHD;
 import lc.tiles.TileDHD;
 import lc.tiles.TileStargateBase;
 
+/**
+ * Stargate DHD block implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 @Definition(name = "stargateDHD", type = ComponentType.STARGATE, blockClass = BlockDHD.class, itemBlockClass = ItemBlockDHD.class, tileClass = TileDHD.class)
 public class BlockDHD extends LCBlock {
 

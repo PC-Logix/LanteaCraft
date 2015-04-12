@@ -1,13 +1,10 @@
 package lc.client.openal;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.WeakHashMap;
 
 import cpw.mods.fml.relauncher.Side;
-import net.minecraftforge.common.MinecraftForge;
 import lc.LCRuntime;
 import lc.api.audio.ISoundController;
 import lc.api.audio.channel.IMixer;
@@ -16,12 +13,19 @@ import lc.api.event.ITickEventHandler;
 import lc.common.LCLog;
 import lc.common.util.java.DestructableReference;
 
+/**
+ * Client sound controller implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ClientSoundController implements ISoundController, ITickEventHandler {
 
 	private final ISoundServer server;
 
 	private final HashMap<DestructableReference<Object>, IMixer> liveMixers;
 
+	/** Default constructor */
 	public ClientSoundController() {
 		LCRuntime.runtime.ticks().register(this);
 		this.server = new StreamingSoundServer();

@@ -27,12 +27,14 @@ public class BeaconStreamThread extends Thread {
 
 	private final String charset = "UTF-8";
 	private final int maxTries = 3;
-
 	private final String serverPath;
 	private int tries = 0;
-	public boolean finished = false;
 
+	/** If the task has finished */
+	public boolean finished = false;
+	/** The report data */
 	public String report;
+	/** The response data */
 	public JsonElement response;
 
 	/**
@@ -48,6 +50,12 @@ public class BeaconStreamThread extends Thread {
 		serverPath = new StringBuilder().append(BuildInfo.webAPI).append("beacon").toString();
 	}
 
+	/**
+	 * Called by the system to perform the beacon task.
+	 * 
+	 * @param payload
+	 *            The payload data map
+	 */
 	public void beacon(HashMap<String, String> payload) {
 		if (finished)
 			return;

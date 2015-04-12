@@ -6,6 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import lc.common.base.LCBlockRenderer;
 
+/**
+ * Door block renderer implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class BlockDoorRenderer extends LCBlockRenderer {
 
 	@Override

@@ -12,17 +12,33 @@ import cpw.mods.fml.relauncher.Side;
 import lc.api.event.ITickEventHandler;
 import lc.common.LCLog;
 
+/**
+ * Minecraft tick connection manager.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class LCTickConnector {
+	/** The system lock */
 	protected ReentrantLock childLock = new ReentrantLock();
+	/** The list of children in the connection */
 	protected ArrayList<ITickEventHandler> children = new ArrayList<ITickEventHandler>();
+	/** The list of future children in the connection */
 	protected ArrayList<ITickEventHandler> newChildren = new ArrayList<ITickEventHandler>();
-	
-	protected long counter;
 
+	/**
+	 * Create a new tick connector
+	 */
 	public LCTickConnector() {
 		FMLCommonHandler.instance().bus().register(this);
 	}
 
+	/**
+	 * Register a tick event handler with the connector.
+	 * 
+	 * @param host
+	 *            The tick event handler object
+	 */
 	public void register(ITickEventHandler host) {
 		try {
 			childLock.lock();
@@ -36,20 +52,30 @@ public class LCTickConnector {
 		}
 	}
 
+	/**
+	 * Called when a world tick occurs on the server
+	 * 
+	 * @param tick
+	 *            The tick state
+	 */
 	@SubscribeEvent
 	public void onWorldTick(ServerTickEvent tick) {
 		if (tick.phase != Phase.START)
 			return;
 		update();
 		doTick(Side.SERVER);
-		counter++;
 	}
 
+	/**
+	 * Called when a client tick occurs on the client
+	 * 
+	 * @param tick
+	 *            The tick state
+	 */
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent tick) {
 		update();
 		doTick(Side.CLIENT);
-		counter++;
 	}
 
 	private void update() {

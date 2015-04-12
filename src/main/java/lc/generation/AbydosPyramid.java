@@ -22,6 +22,13 @@ public class AbydosPyramid extends LCFeatureStart {
 	public AbydosPyramid() {
 	}
 	
+	/**
+	 * Default constructor
+	 * @param world The world
+	 * @param rand The random number generator
+	 * @param x The x-coordinate of the feature start
+	 * @param y The y-coordinate of the feature start
+	 */
 	public AbydosPyramid(World world, Random rand, int x, int y) { 
 		super(world, rand, x, y);
 		
@@ -33,6 +40,11 @@ public class AbydosPyramid extends LCFeatureStart {
 		components.add(new AbydosPyramidFeature(rng, cx, cz));
 	}
 
+	/**
+	 * Abydos pyramid feature implementation
+	 * @author AfterLifeLochie
+	 *
+	 */
 	public static class AbydosPyramidFeature extends LCFeature {
 
 		/**

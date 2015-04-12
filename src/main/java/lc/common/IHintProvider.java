@@ -39,9 +39,26 @@ public interface IHintProvider {
 	 */
 	public void provideHints(IRecipeDefinition definition);
 
+	/**
+	 * Called by the system when a server instance is starting
+	 * 
+	 * @param event
+	 *            The start event
+	 */
 	public void onServerStarting(FMLServerStartingEvent event);
 
+	/**
+	 * Called by the system when a server instance is stopping
+	 * 
+	 * @param event
+	 *            The stop event
+	 */
 	public void onServerStopping(FMLServerStoppingEvent event);
 
+	/**
+	 * Return the current audio provider in use
+	 * 
+	 * @return The audio provider in use
+	 */
 	public ISoundController audio();
 }

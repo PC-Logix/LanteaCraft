@@ -10,6 +10,12 @@ import lc.api.stargate.StargateType;
 import lc.client.models.ModelDHD;
 import lc.common.base.LCBlockRenderer;
 
+/**
+ * Stargate DHD block renderer
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class BlockDHDRenderer extends LCBlockRenderer {
 
 	@Override

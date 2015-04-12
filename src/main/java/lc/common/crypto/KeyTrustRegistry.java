@@ -5,11 +5,21 @@ import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+/**
+ * Certificate registry. Used to keep a chain of keys and to determine if a
+ * particular key is known by the trust registry.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class KeyTrustRegistry {
 
 	/** The local registry key map */
 	private final HashMap<String, PublicKey> keyMap = new HashMap<String, PublicKey>();
 
+	/**
+	 * Create a new key trust registry with a blank key chain.
+	 */
 	public KeyTrustRegistry() {
 		/* Do nothing */
 	}
