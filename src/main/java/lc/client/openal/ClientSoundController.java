@@ -1,29 +1,31 @@
 package lc.client.openal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
 import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
+import lc.LCRuntime;
 import lc.api.audio.ISoundController;
 import lc.api.audio.channel.IMixer;
 import lc.api.audio.streaming.ISoundServer;
 import lc.api.event.ITickEventHandler;
 import lc.common.LCLog;
+import lc.common.util.java.DestructableReference;
 
 public class ClientSoundController implements ISoundController, ITickEventHandler {
 
 	private final ISoundServer server;
 
-	private final WeakHashMap<Object, IMixer> liveMixers;
-	private final ArrayList<IMixer> mixers;
+	private final HashMap<DestructableReference<Object>, IMixer> liveMixers;
 
 	public ClientSoundController() {
+		LCRuntime.runtime.ticks().register(this);
 		this.server = new StreamingSoundServer();
-		this.liveMixers = new WeakHashMap<Object, IMixer>();
-		this.mixers = new ArrayList<IMixer>();
+		this.liveMixers = new HashMap<DestructableReference<Object>, IMixer>();
 		this.server.initialize();
 	}
 
@@ -39,10 +41,14 @@ public class ClientSoundController implements ISoundController, ITickEventHandle
 
 	@Override
 	public IMixer findMixer(Object key) {
-		if (liveMixers.containsKey(key))
-			return liveMixers.get(key);
+		Iterator<Entry<DestructableReference<Object>, IMixer>> itr = liveMixers.entrySet().iterator();
+		while (itr.hasNext()) {
+			Entry<DestructableReference<Object>, IMixer> mz = itr.next();
+			if (mz.getKey().get().equals(key))
+				return mz.getValue();
+		}
 		StreamingSoundMixer mixer = new StreamingSoundMixer();
-		liveMixers.put(key, mixer);
+		liveMixers.put(new DestructableReference<Object>(key), mixer);
 		return mixer;
 	}
 
@@ -50,18 +56,17 @@ public class ClientSoundController implements ISoundController, ITickEventHandle
 	public void think(Side what) {
 		if (what == Side.CLIENT) {
 			server.think();
-			ArrayList<IMixer> live = new ArrayList<IMixer>();
-			for (Entry<Object, IMixer> mixer : liveMixers.entrySet())
-				live.add(mixer.getValue());
-			Iterator<IMixer> seen = mixers.iterator();
-			while (seen.hasNext()) {
-				IMixer mixer = seen.next();
-				if (!live.contains(seen)) {
-					LCLog.debug("Cleaning up orphaned mixer %s", seen);
-					mixer.shutdown(true);
-					seen.remove();
-				} else
-					mixer.think();
+			Iterator<Entry<DestructableReference<Object>, IMixer>> iter = liveMixers.entrySet().iterator();
+			while (iter.hasNext()) {
+				Entry<DestructableReference<Object>, IMixer> mixer = iter.next();
+				DestructableReference<Object> ref = mixer.getKey();
+				if (ref.get() != null) {
+					mixer.getValue().think();
+				} else {
+					LCLog.debug("Cleaning up orphaned sound mixer %s", mixer);
+					mixer.getValue().shutdown(true);
+					iter.remove();
+				}
 			}
 		}
 	}

@@ -4,6 +4,8 @@ import java.util.List;
 
 import lc.LCRuntime;
 import lc.LanteaCraft;
+import lc.api.audio.channel.IMixer;
+import lc.api.audio.streaming.ISound;
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
@@ -12,6 +14,8 @@ import lc.api.stargate.IrisState;
 import lc.api.stargate.IrisType;
 import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateType;
+import lc.client.openal.StreamingSoundProperties;
+import lc.common.LCLog;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
@@ -30,6 +34,7 @@ import lc.server.HintProviderServer;
 import lc.server.StargateConnection;
 import lc.server.StargateManager;
 import net.minecraft.block.Block;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -143,7 +148,14 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public void thinkClient() {
 		// TODO Auto-generated method stub
-
+		IMixer mixer = mixer();
+		if (!mixer.hasChannel("test")) {
+			LCLog.debug("Creating channel `test`");
+			ISound test = sound("stargate/ambience/event_horizon_ripple.ogg", new StreamingSoundProperties(false,
+					false, 1.0f, 1.0f, SoundCategory.BLOCKS));
+			mixer.createChannel("test", test);
+		}
+		mixer.playChannel("test");
 	}
 
 	@Override

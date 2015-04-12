@@ -16,6 +16,8 @@ public class LCTickConnector {
 	protected ReentrantLock childLock = new ReentrantLock();
 	protected ArrayList<ITickEventHandler> children = new ArrayList<ITickEventHandler>();
 	protected ArrayList<ITickEventHandler> newChildren = new ArrayList<ITickEventHandler>();
+	
+	protected long counter;
 
 	public LCTickConnector() {
 		FMLCommonHandler.instance().bus().register(this);
@@ -40,12 +42,14 @@ public class LCTickConnector {
 			return;
 		update();
 		doTick(Side.SERVER);
+		counter++;
 	}
 
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent tick) {
 		update();
 		doTick(Side.CLIENT);
+		counter++;
 	}
 
 	private void update() {

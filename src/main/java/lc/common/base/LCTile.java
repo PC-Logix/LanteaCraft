@@ -19,6 +19,7 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCClientUpdate;
 import lc.common.network.packets.LCTileSync;
+import lc.common.util.java.DestructableReferenceQueue;
 import lc.common.util.math.DimensionPos;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -312,6 +313,23 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	}
 
 	@Override
+	public void invalidate() {
+		super.invalidate();
+		LCTile.doCallbacksNow(this, "tileInvalidated");
+		if (clientMixer != null)
+			clientMixer.shutdown(true);
+		DestructableReferenceQueue.queue(this);
+	}
+
+	@Override
+	public void onChunkUnload() {
+		LCTile.doCallbacksNow(this, "tileUnload");
+		if (clientMixer != null)
+			clientMixer.shutdown(true);
+		DestructableReferenceQueue.queue(this);
+	}
+
+	@Override
 	public void blockPlaced() {
 		LCTile.doCallbacksNow(this, "blockPlace");
 	}
@@ -319,6 +337,9 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	@Override
 	public void blockBroken() {
 		LCTile.doCallbacksNow(this, "blockBreak");
+		if (clientMixer != null)
+			clientMixer.shutdown(true);
+		DestructableReferenceQueue.queue(this);
 	}
 
 	@Override
