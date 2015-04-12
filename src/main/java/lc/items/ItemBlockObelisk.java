@@ -8,7 +8,6 @@ public class ItemBlockObelisk extends LCItemBlock {
 	public ItemBlockObelisk(Block block) {
 		super(block);
 		setHasSubtypes(true);
-		// TODO Auto-generated constructor stub
 	}
 
 }

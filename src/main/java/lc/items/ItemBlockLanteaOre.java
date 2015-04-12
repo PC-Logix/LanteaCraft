@@ -22,7 +22,6 @@ public class ItemBlockLanteaOre extends LCItemBlock {
 	public ItemBlockLanteaOre(Block block) {
 		super(block);
 		setHasSubtypes(true);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

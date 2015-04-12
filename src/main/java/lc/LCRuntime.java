@@ -14,6 +14,7 @@ import lc.api.init.Structures;
 import lc.common.GUIHandler;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
+import lc.common.configuration.ConfigurationController;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.common.impl.registry.InterfaceRegistry;
 import lc.common.impl.registry.RecipeRegistry;
@@ -59,6 +60,8 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/** Container of all registrations */
 	private final LCInit container = new LCInit();
+
+	private final ConfigurationController config = new ConfigurationController();
 	/** Network driver */
 	private final LCPacketPipeline network = new LCPacketPipeline();
 	/** Tick driver */
@@ -143,6 +146,15 @@ public class LCRuntime implements ILCAPIProxy {
 	}
 
 	/**
+	 * Get the configuration controller
+	 * 
+	 * @return The configuration controller
+	 */
+	public ConfigurationController config() {
+		return config;
+	}
+
+	/**
 	 * Get the current hint provider.
 	 *
 	 * @return The current hint provider.
@@ -159,6 +171,7 @@ public class LCRuntime implements ILCAPIProxy {
 	 */
 	public void preinit(FMLPreInitializationEvent event) {
 		LCLog.debug("LCRuntime entering phase preinit");
+		config.initialize(event.getSuggestedConfigurationFile().getParentFile());
 		LCCreativeTabManager.registerTab("LanteaCraft", null);
 		container.preinit(this, event);
 		hints.preInit();
@@ -192,6 +205,7 @@ public class LCRuntime implements ILCAPIProxy {
 		LCLog.debug("LCRuntime entering phase postinit");
 		container.postinit(this, event);
 		hints.postInit();
+		config.commit();
 	}
 
 	/**

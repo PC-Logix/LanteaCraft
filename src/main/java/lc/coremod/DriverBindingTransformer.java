@@ -160,7 +160,6 @@ public class DriverBindingTransformer implements IClassTransformer {
 		return master;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
 		if (!name.startsWith("lc."))

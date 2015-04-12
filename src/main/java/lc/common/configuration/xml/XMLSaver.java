@@ -1,4 +1,4 @@
-package lc.common.configuration;
+package lc.common.configuration.xml;
 
 import java.io.FileOutputStream;
 import java.util.HashMap;
@@ -14,6 +14,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import lc.BuildInfo;
 
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
@@ -46,7 +48,7 @@ public class XMLSaver {
 	 * @throws XMLSaverException
 	 *             Any XML writing failure
 	 */
-	public void save(ModuleList list, FileOutputStream output) throws XMLSaverException {
+	public void save(ComponentConfigList list, FileOutputStream output) throws XMLSaverException {
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.newDocument();
@@ -89,10 +91,12 @@ public class XMLSaver {
 			element.setAttribute(param.getKey(), param.getValue().toString());
 	}
 
-	private void saveModuleList(Document document, ModuleList modules) throws XMLSaverException {
+	private void saveModuleList(Document document, ComponentConfigList modules) throws XMLSaverException {
+		Comment title = document.createComment(String.format("Last written by LanteaCraft build %s", BuildInfo.$.build()));
 		Element root = document.createElement("ModConfig");
-		for (ModuleConfig module : modules.children()) {
-			Element moduleElement = document.createElement("Module");
+		root.appendChild(title);
+		for (ComponentConfig module : modules.children()) {
+			Element moduleElement = document.createElement("Component");
 			saveModuleConfig(document, moduleElement, module);
 			root.appendChild(moduleElement);
 			if (module.comment() != null) {
@@ -103,7 +107,7 @@ public class XMLSaver {
 		document.appendChild(root);
 	}
 
-	private void saveModuleConfig(Document document, Element moduleElement, ModuleConfig container)
+	private void saveModuleConfig(Document document, Element moduleElement, ComponentConfig container)
 			throws XMLSaverException {
 		saveParams(moduleElement, container.parameters());
 		for (ConfigNode node : container.children()) {

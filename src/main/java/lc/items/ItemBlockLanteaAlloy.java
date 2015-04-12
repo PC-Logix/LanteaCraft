@@ -22,7 +22,6 @@ public class ItemBlockLanteaAlloy extends LCItemBlock {
 	public ItemBlockLanteaAlloy(Block block) {
 		super(block);
 		setHasSubtypes(true);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

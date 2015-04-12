@@ -1,4 +1,4 @@
-package lc.common.configuration;
+package lc.common.configuration.xml;
 
 import java.util.ArrayList;
 import java.util.List;

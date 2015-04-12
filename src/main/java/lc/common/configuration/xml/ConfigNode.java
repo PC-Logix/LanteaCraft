@@ -1,4 +1,4 @@
-package lc.common.configuration;
+package lc.common.configuration.xml;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;

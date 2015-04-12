@@ -22,7 +22,6 @@ public class BlockObelisk extends LCBlock {
 
 	public BlockObelisk() {
 		super(Material.ground);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

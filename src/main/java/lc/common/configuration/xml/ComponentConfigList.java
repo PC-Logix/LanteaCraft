@@ -1,4 +1,4 @@
-package lc.common.configuration;
+package lc.common.configuration.xml;
 
 import java.util.ArrayList;
 
@@ -8,10 +8,10 @@ import java.util.ArrayList;
  * @author AfterLifeLochie
  *
  */
-public class ModuleList extends ConfigNode {
+public class ComponentConfigList extends ConfigNode {
 
 	/** A blank list */
-	public ModuleList() {
+	public ComponentConfigList() {
 		super();
 	}
 
@@ -21,7 +21,7 @@ public class ModuleList extends ConfigNode {
 	 * @param name
 	 *            The module name
 	 */
-	public ModuleList(String name) {
+	public ComponentConfigList(String name) {
 		super(name);
 	}
 
@@ -33,21 +33,21 @@ public class ModuleList extends ConfigNode {
 	 * @param comment
 	 *            The module comment
 	 */
-	public ModuleList(String name, String comment) {
+	public ComponentConfigList(String name, String comment) {
 		super(name, comment);
 	}
 
 	/**
 	 * The children of the object.
 	 */
-	private ArrayList<ModuleConfig> children = new ArrayList<ModuleConfig>();
+	private ArrayList<ComponentConfig> children = new ArrayList<ComponentConfig>();
 
 	/**
 	 * Get the children of the object.
 	 *
 	 * @return The children of the object.
 	 */
-	public ArrayList<ModuleConfig> children() {
+	public ArrayList<ComponentConfig> children() {
 		return children;
 	}
 
@@ -57,7 +57,7 @@ public class ModuleList extends ConfigNode {
 	 * @param children
 	 *            The children of the object.
 	 */
-	public void setChildren(ArrayList<ModuleConfig> children) {
+	public void setChildren(ArrayList<ComponentConfig> children) {
 		this.children = children;
 	}
 

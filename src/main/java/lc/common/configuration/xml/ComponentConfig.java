@@ -1,4 +1,4 @@
-package lc.common.configuration;
+package lc.common.configuration.xml;
 
 /**
  * Module configuration node
@@ -6,10 +6,10 @@ package lc.common.configuration;
  * @author AfterLifeLochie
  *
  */
-public class ModuleConfig extends ConfigList {
+public class ComponentConfig extends ConfigList {
 
 	/** Default constructor */
-	public ModuleConfig() {
+	public ComponentConfig() {
 		super();
 	}
 
@@ -19,7 +19,7 @@ public class ModuleConfig extends ConfigList {
 	 * @param name
 	 *            The name
 	 */
-	public ModuleConfig(String name) {
+	public ComponentConfig(String name) {
 		super(name);
 	}
 
@@ -31,7 +31,7 @@ public class ModuleConfig extends ConfigList {
 	 * @param comment
 	 *            A comment
 	 */
-	public ModuleConfig(String name, String comment) {
+	public ComponentConfig(String name, String comment) {
 		super(name, comment);
 	}
 
@@ -43,8 +43,17 @@ public class ModuleConfig extends ConfigList {
 	 * @param parent
 	 *            A parent node
 	 */
-	public ModuleConfig(String name, ConfigNode parent) {
+	public ComponentConfig(String name, ConfigNode parent) {
 		super(name, parent);
+	}
+
+	public boolean enabled() {
+		return (Boolean) parameters().get("enabled");
+	}
+
+	public void enabled(boolean z) {
+		parameters().put("enabled", z);
+		modify();
 	}
 
 }

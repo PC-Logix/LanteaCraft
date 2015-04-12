@@ -22,7 +22,6 @@ public class ItemBlockDecorative extends LCItemBlock {
 	public ItemBlockDecorative(Block block) {
 		super(block);
 		setHasSubtypes(true);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

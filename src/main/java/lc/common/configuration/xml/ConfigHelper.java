@@ -1,4 +1,4 @@
-package lc.common.configuration;
+package lc.common.configuration.xml;
 
 import java.util.ArrayList;
 
@@ -20,12 +20,12 @@ public class ConfigHelper {
 	 *            The name to find
 	 * @return The module config, or null if it does not exist
 	 */
-	public static ModuleConfig findModuleConfigByName(ModuleList list, String name) {
-		for (ModuleConfig element : list.children())
-			if (element.name().equalsIgnoreCase("Module") && element.parameters().containsKey("name")
+	public static ComponentConfig findComponentContainer(ComponentConfigList list, String name) {
+		for (ComponentConfig element : list.children())
+			if (element.name().equalsIgnoreCase("Component") && element.parameters().containsKey("name")
 					&& element.parameters().get("name").toString().equalsIgnoreCase(name))
 				return element;
-		ModuleConfig config = new ModuleConfig("Module", list);
+		ComponentConfig config = new ComponentConfig("Component", list);
 		config.parameters().put("name", name);
 		config.parameters().put("enabled", true);
 		list.children().add(config);

@@ -1,4 +1,4 @@
-package lc.common.configuration;
+package lc.common.configuration.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +42,7 @@ public class XMLParser {
 	 * @throws XMLParserException
 	 *             Any XML or read exception.
 	 */
-	public ModuleList read(InputStream chunk) throws XMLParserException {
+	public ComponentConfigList read(InputStream chunk) throws XMLParserException {
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(chunk);
@@ -69,22 +69,22 @@ public class XMLParser {
 	 *         ModuleConfig nodes.
 	 * @throws XMLParserException
 	 */
-	private ModuleList readRoot(Node modRoot) throws XMLParserException {
-		ModuleList root = new ModuleList("ModConfig");
-		ArrayList<ModuleConfig> rootChildren = new ArrayList<ModuleConfig>();
+	private ComponentConfigList readRoot(Node modRoot) throws XMLParserException {
+		ComponentConfigList root = new ComponentConfigList("ModConfig");
+		ArrayList<ComponentConfig> rootChildren = new ArrayList<ComponentConfig>();
 		NodeList childrenRoot = modRoot.getChildNodes();
 		for (int i = 0; i < childrenRoot.getLength(); i++) {
 			Node child = childrenRoot.item(i);
-			if (DOMHelper.isNodeOfType(child, "Module", false))
+			if (DOMHelper.isNodeOfType(child, "Component", false))
 				rootChildren.add(readModuleConfig(root, (Element) child));
 		}
 		root.setChildren(rootChildren);
 		return root;
 	}
 
-	private ModuleConfig readModuleConfig(ConfigNode parent, Element moduleNode) throws XMLParserException {
+	private ComponentConfig readModuleConfig(ConfigNode parent, Element moduleNode) throws XMLParserException {
 		DOMHelper.checkedAllAttributes(moduleNode, new String[] { "name", "enabled" });
-		ModuleConfig moduleRoot = new ModuleConfig("Module", parent);
+		ComponentConfig moduleRoot = new ComponentConfig("Component", parent);
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		ArrayList<ConfigNode> rootChildren = new ArrayList<ConfigNode>();
 		parameters.put("name", moduleNode.getAttribute("name"));

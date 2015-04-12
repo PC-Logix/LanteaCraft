@@ -7,7 +7,7 @@ public class DestructableReference<T> {
 	private WeakReference<T> ref;
 
 	public DestructableReference(T t) {
-		ref = new WeakReference(t);
+		ref = new WeakReference<T>(t);
 	}
 
 	public T get() {
