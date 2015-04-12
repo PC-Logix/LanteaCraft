@@ -4,14 +4,11 @@ import java.awt.Dimension;
 import java.util.HashMap;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import lc.ResourceAccess;
 import lc.api.stargate.IStargateAccess;
-import lc.api.stargate.StargateType;
-import lc.common.LCLog;
 import lc.common.base.ux.IconButton;
 import lc.common.base.ux.LCContainerGUI;
 import lc.common.base.ux.LCContainerTab;

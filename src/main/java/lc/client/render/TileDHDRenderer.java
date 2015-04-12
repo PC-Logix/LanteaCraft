@@ -2,13 +2,8 @@ package lc.client.render;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import lc.ResourceAccess;
 import lc.api.stargate.StargateType;
-import lc.blocks.BlockDHD;
 import lc.client.models.ModelDHD;
-import lc.client.models.loader.WavefrontModel.WavefrontModelException;
-import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;

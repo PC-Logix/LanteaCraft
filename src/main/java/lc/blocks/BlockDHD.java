@@ -19,11 +19,8 @@ import lc.api.defs.Definition;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
-import lc.common.base.LCTile;
-import lc.common.base.multiblock.MultiblockState;
 import lc.items.ItemBlockDHD;
 import lc.tiles.TileDHD;
-import lc.tiles.TileStargateBase;
 
 /**
  * Stargate DHD block implementation

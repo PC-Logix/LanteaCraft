@@ -6,9 +6,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
 import lc.api.stargate.StargateAddress;
 import lc.common.util.math.ChunkPos;
 

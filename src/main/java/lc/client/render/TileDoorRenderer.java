@@ -1,8 +1,6 @@
 package lc.client.render;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
 import lc.ResourceAccess;

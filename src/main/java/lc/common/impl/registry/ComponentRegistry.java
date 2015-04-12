@@ -3,7 +3,6 @@ package lc.common.impl.registry;
 import lc.LCRuntime;
 import lc.api.components.ComponentType;
 import lc.api.components.IComponentRegistry;
-import lc.common.configuration.xml.ComponentConfig;
 
 /**
  * Component registry implementation.

@@ -24,7 +24,6 @@ import lc.common.base.pipeline.LCItemRenderPipeline;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.items.ItemDecorator;
-import lc.items.ItemLanteaDoor;
 import lc.server.HintProviderServer;
 import lc.tiles.TileDHD;
 import lc.tiles.TileLanteaDoor;

@@ -15,7 +15,6 @@ import com.google.gson.JsonParser;
 import lc.BuildInfo;
 import lc.common.LCLog;
 import lc.server.HintProviderServer;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * LanteaCraft beacon stats & data task.

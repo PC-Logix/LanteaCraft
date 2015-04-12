@@ -14,8 +14,6 @@ import net.minecraft.world.World;
 import lc.LCRuntime;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
-import lc.api.rendering.IBlockRenderInfo;
-import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.items.ItemLanteaDoor;
 import lc.tiles.TileLanteaDoor;

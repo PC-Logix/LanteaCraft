@@ -4,15 +4,11 @@ import java.awt.Dimension;
 import java.util.HashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import lc.common.base.ux.LCContainerGUI;
 import lc.common.base.ux.LCContainerTab;
 import lc.container.ContainerDHD;
-import lc.container.ContainerStargate;
 import lc.tiles.TileDHD;
-import lc.tiles.TileStargateBase;
 
 public class GUIDHD extends LCContainerGUI {
 

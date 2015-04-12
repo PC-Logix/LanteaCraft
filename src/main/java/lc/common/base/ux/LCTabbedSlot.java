@@ -1,6 +1,5 @@
 package lc.common.base.ux;
 
-import lc.common.LCLog;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 

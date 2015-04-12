@@ -2,11 +2,8 @@ package lc;
 
 import java.util.Random;
 
-import scala.tools.nsc.doc.model.Def;
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
-import lc.api.defs.IInterfaceDefinition;
-import lc.api.defs.IRecipeDefinition;
 import lc.api.init.Blocks;
 import lc.api.init.Interfaces;
 import lc.api.init.Items;
