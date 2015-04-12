@@ -7,8 +7,28 @@ import java.util.Map.Entry;
 
 public class KeyTrustRegistry {
 
+	/** The local registry key map */
 	private final HashMap<String, PublicKey> keyMap = new HashMap<String, PublicKey>();
 
+	public KeyTrustRegistry() {
+		/* Do nothing */
+	}
+
+	/**
+	 * <p>
+	 * Place a key into the registry. The key and the label must be unique in
+	 * the registry. The label-key association is recorded until the key is
+	 * forgotten.
+	 * </p>
+	 * 
+	 * @param label
+	 *            The label for the key
+	 * @param pk
+	 *            The public key
+	 * @throws KeyStoreException
+	 *             If the key store already contains a key of this label or of
+	 *             this key.
+	 */
 	public final void placeKey(String label, PublicKey pk) throws KeyStoreException {
 		synchronized (keyMap) {
 			if (keyMap.containsKey(label))
@@ -19,12 +39,30 @@ public class KeyTrustRegistry {
 		}
 	}
 
+	/**
+	 * <p>
+	 * Causes the registry to forget about a stored label-key association,
+	 * removing the public key from the trust chain.
+	 * </p>
+	 * 
+	 * @param label
+	 *            The label of the key to forget
+	 */
 	public final void forget(String label) {
 		synchronized (keyMap) {
 			keyMap.remove(label);
 		}
 	}
 
+	/**
+	 * <p>
+	 * Causes the registry to forget about all instances of a public key,
+	 * removing it from any places in the trust chain.
+	 * </p>
+	 * 
+	 * @param pk
+	 *            The public key to forget
+	 */
 	public final void forget(PublicKey pk) {
 		synchronized (keyMap) {
 			String key = label(pk);
@@ -33,6 +71,15 @@ public class KeyTrustRegistry {
 		}
 	}
 
+	/**
+	 * <p>
+	 * Request the label associated with a public key.
+	 * </p>
+	 * 
+	 * @param pk
+	 *            The public key
+	 * @return The label, or null if the key is not known by the registry
+	 */
 	public final String label(PublicKey pk) {
 		synchronized (keyMap) {
 			String key = null;
@@ -43,6 +90,16 @@ public class KeyTrustRegistry {
 		}
 	}
 
+	/**
+	 * <p>
+	 * Checks the chain to see if the public key provided is in the chain. If
+	 * the public key is in the chain, true is returned; else false is returned.
+	 * </p>
+	 * 
+	 * @param pk
+	 *            The public key
+	 * @return If the key is in the trust chain
+	 */
 	public final boolean checkTrust(PublicKey pk) {
 		synchronized (keyMap) {
 			for (Entry<String, PublicKey> pair : keyMap.entrySet())
