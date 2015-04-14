@@ -9,5 +9,9 @@ public interface IStargateAccess {
 	public IrisType getIrisType();
 
 	public IrisState getIrisState();
+	
+	public void transmit(MessagePayload payload);
+	
+	public void receive(MessagePayload payload);
 
 }

@@ -9,6 +9,7 @@ import lc.api.rendering.IBlockSkinnable;
 import lc.api.stargate.IStargateAccess;
 import lc.api.stargate.IrisState;
 import lc.api.stargate.IrisType;
+import lc.api.stargate.MessagePayload;
 import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateType;
 import lc.blocks.BlockStargateBase;
@@ -266,5 +267,17 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	public IrisState getIrisState() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void transmit(MessagePayload payload) {
+		if (currentConnection != null)
+			currentConnection.transmit(this, payload);
+	}
+
+	@Override
+	public void receive(MessagePayload payload) {
+		// TODO Auto-generated method stub
+
 	}
 }

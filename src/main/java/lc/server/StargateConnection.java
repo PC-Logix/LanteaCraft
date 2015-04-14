@@ -1,5 +1,6 @@
 package lc.server;
 
+import lc.api.stargate.MessagePayload;
 import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateState;
 import lc.tiles.TileStargateBase;
@@ -45,5 +46,10 @@ public class StargateConnection {
 		if (state != StargateState.CONNECTED)
 			return;
 		state = StargateState.DISCONNECTING;
+	}
+
+	public void transmit(TileStargateBase tileStargateBase, MessagePayload payload) {
+		// TODO Auto-generated method stub
+		
 	}
 }
