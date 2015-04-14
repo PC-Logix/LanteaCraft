@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class BufferTexture implements IGraphicsBuffer {
 
+	private boolean supported = false;
 	private boolean assigned = false;
 	private boolean entered = false;
 	private boolean bound = false;
@@ -55,8 +56,30 @@ public class BufferTexture implements IGraphicsBuffer {
 				ARBFramebufferObject.GL_DEPTH24_STENCIL8, width, height);
 		EXTFramebufferObject.glFramebufferRenderbufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT,
 				ARBFramebufferObject.GL_DEPTH_STENCIL_ATTACHMENT, EXTFramebufferObject.GL_RENDERBUFFER_EXT, depth);
+		buildStateSupported();
 		EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, 0);
 		assigned = true;
+	}
+
+	@Override
+	public boolean supported() {
+		return supported;
+	}
+
+	private void buildStateSupported() {
+		int state = EXTFramebufferObject.glCheckFramebufferStatusEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT);
+		switch (state) {
+		case EXTFramebufferObject.GL_FRAMEBUFFER_COMPLETE_EXT:
+			break;
+		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+		case EXTFramebufferObject.GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+		default:
+			supported = false;
+		}
 	}
 
 	/**
@@ -81,6 +104,7 @@ public class BufferTexture implements IGraphicsBuffer {
 		EXTFramebufferObject.glBindRenderbufferEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT, depth);
 		EXTFramebufferObject.glRenderbufferStorageEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT,
 				ARBFramebufferObject.GL_DEPTH24_STENCIL8, width, height);
+		buildStateSupported();
 		EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, 0);
 	}
 

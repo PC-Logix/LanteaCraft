@@ -11,6 +11,7 @@ import lc.api.stargate.IrisState;
 import lc.api.stargate.IrisType;
 import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateType;
+import lc.blocks.BlockStargateBase;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
@@ -233,8 +234,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public StargateType getStargateType() {
-		// TODO Auto-generated method stub
-		return StargateType.STANDARD;
+		return StargateType.fromOrdinal(getBlockMetadata());
 	}
 
 	@Override

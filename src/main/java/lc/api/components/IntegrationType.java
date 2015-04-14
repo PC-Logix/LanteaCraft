@@ -15,5 +15,8 @@ public enum IntegrationType {
 	POWER,
 
 	/** Computer drivers */
-	COMPUTERS;
+	COMPUTERS,
+	
+	/** Inter-mod in-game communications providers */
+	COMMUNICATIONS;
 }

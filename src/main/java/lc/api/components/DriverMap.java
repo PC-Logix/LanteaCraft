@@ -6,6 +6,7 @@ package lc.api.components;
 
 import java.util.EnumSet;
 
+import lc.common.LCLog;
 import cpw.mods.fml.common.Loader;
 
 /**
@@ -36,6 +37,11 @@ public enum DriverMap {
 		this.type = type;
 	}
 
+	@Override
+	public String toString() {
+		return "DriverMapping{ mod: " + modName + " (" + modId + "): " + className + ", type " + type + " }";
+	}
+
 	/**
 	 * Get a map of all drivers for a type of integration
 	 *
@@ -46,8 +52,11 @@ public enum DriverMap {
 	public static EnumSet<DriverMap> mapOf(IntegrationType typeof) {
 		EnumSet<DriverMap> map = EnumSet.noneOf(DriverMap.class);
 		for (DriverMap mapping : values())
-			if (mapping.type.equals(typeof) && Loader.isModLoaded(mapping.modId))
-				map.add(mapping);
+			if (mapping.type.equals(typeof))
+				if (Loader.isModLoaded(mapping.modId))
+					map.add(mapping);
+				else
+					LCLog.debug("Not loading driver %s", mapping);
 		return map;
 	}
 

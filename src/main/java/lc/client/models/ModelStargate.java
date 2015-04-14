@@ -23,8 +23,8 @@ public class ModelStargate {
 	private final static double ringSymbolTextureHeight = 12;
 	private final static double ringSymbolSegmentWidth = ringSymbolTextureLength / numRingSegments;
 
-	private final static double ringInnerRadius = 3.0;
-	private final static double ringInnerMovingRadius = ringInnerRadius + 0.1;
+	private final static double ringInnerRadius = 2.75;
+	private final static double ringInnerMovingRadius = ringInnerRadius + 0.15;
 	private final static double ringOuterRadius = 3.5;
 	private final static double ringMidRadius = ringInnerMovingRadius + (ringOuterRadius - ringInnerMovingRadius) / 2;
 
@@ -83,21 +83,29 @@ public class ModelStargate {
 		listLitChevron.init();
 		listRing.init();
 
-		listShell.enter();
-		renderShellImmediate();
-		listShell.exit();
+		if (listShell.supported()) {
+			listShell.enter();
+			renderShellImmediate();
+			listShell.exit();
+		}
 
-		listChevron.enter();
-		renderChevronImmediate(false);
-		listChevron.exit();
+		if (listChevron.supported()) {
+			listChevron.enter();
+			renderChevronImmediate(false);
+			listChevron.exit();
+		}
 
-		listLitChevron.enter();
-		renderChevronImmediate(true);
-		listLitChevron.exit();
+		if (listLitChevron.supported()) {
+			listLitChevron.enter();
+			renderChevronImmediate(true);
+			listLitChevron.exit();
+		}
 
-		listRing.enter();
-		renderRingImmediate();
-		listRing.exit();
+		if (listRing.supported()) {
+			listRing.enter();
+			renderRingImmediate();
+			listRing.exit();
+		}
 	}
 
 	/**
@@ -113,20 +121,29 @@ public class ModelStargate {
 	public void render(TileStargateBaseRenderer renderer, LCTileRenderPipeline tesr, TileStargateBase tile) {
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
 		tesr.bind(renderer.texFrame);
-		listShell.bind();
-		listShell.release();
+		if (listShell.supported()) {
+			listShell.bind();
+			listShell.release();
+		} else
+			renderShellImmediate();
 
 		for (int i = 0; i < numChevrons; i++) {
 			GL11.glPushMatrix();
 			GL11.glRotated(chevronRotations[i], 0.0f, 0.0f, 1.0f);
-			listChevron.bind();
-			listChevron.release();
+			if (listChevron.supported()) {
+				listChevron.bind();
+				listChevron.release();
+			} else
+				renderChevronImmediate(false);
 			GL11.glPopMatrix();
 		}
 
 		tesr.bind(renderer.texGlyphs);
-		listRing.bind();
-		listRing.release();
+		if (listRing.supported()) {
+			listRing.bind();
+			listRing.release();
+		} else
+			renderRingImmediate();
 	}
 
 	private void renderShellImmediate() {
@@ -203,9 +220,11 @@ public class ModelStargate {
 	private void renderChevronImmediate(boolean lit) {
 		double r1 = chevronInnerRadius - 1d / 18d;
 		double r2 = chevronOuterRadius;
-		double z2 = ringDepth - 1d / 32d;
 
+		double z2 = ringDepth;
 		double z1 = z2 + chevronDepth;
+		double z3 = -ringDepth - chevronDepth;
+
 		double w1 = chevronBorderWidth;
 		double w2 = w1 * 1.25;
 
@@ -216,59 +235,60 @@ public class ModelStargate {
 
 		selectTile(chevronTextureIndex);
 
-		// Face 1
+		// Front-face left
 		vertex(x2, y2, z1, 0, 2);
 		vertex(x1, y1, z1, 0, 16);
 		vertex(x1 + w1, y1 - w1, z1, 4, 12);
 		vertex(x2, y2 - w2, z1, 4, 2);
-
-		// Side 1
-		vertex(x2, y2, z1, 0, 0);
-		vertex(x2, y2, z2, 0, 4);
-		vertex(x1, y1, z2, 16, 4);
-		vertex(x1, y1, z1, 16, 0);
-
-		// End 1
-		vertex(x2, y2, z1, 16, 0);
-		vertex(x2, y2 - w2, z1, 12, 0);
-		vertex(x2, y2 - w2, z2, 12, 4);
-		vertex(x2, y2, z2, 16, 4);
-
-		// Face 2
+		// Front-face bottom
 		vertex(x1 + w1, y1 - w1, z1, 4, 12);
 		vertex(x1, y1, z1, 0, 16);
 		vertex(x1, -y1, z1, 16, 16);
 		vertex(x1 + w1, -y1 + w1, z1, 12, 12);
-
-		// Side 2
-		vertex(x1, y1, z1, 0, 0);
-		vertex(x1, y1, z2, 0, 4);
-		vertex(x1, -y1, z2, 16, 4);
-		vertex(x1, -y1, z1, 16, 0);
-
-		// Face 3
+		// Front-face right
 		vertex(x2, -y2 + w2, z1, 12, 0);
 		vertex(x1 + w1, -y1 + w1, z1, 12, 12);
 		vertex(x1, -y1, z1, 16, 16);
 		vertex(x2, -y2, z1, 16, 0);
 
-		// Side 3
+		// Left-side front
+		vertex(x2, y2, z1, 0, 0);
+		vertex(x2, y2, z3, 0, 4);
+		vertex(x1, y1, z3, 16, 4);
+		vertex(x1, y1, z1, 16, 0);
+		// Right-side front
 		vertex(x1, -y1, z1, 0, 0);
-		vertex(x1, -y1, z2, 0, 4);
-		vertex(x2, -y2, z2, 16, 4);
+		vertex(x1, -y1, z3, 0, 4);
+		vertex(x2, -y2, z3, 16, 4);
 		vertex(x2, -y2, z1, 16, 0);
 
-		// End 3
+		// Top-face left
+		vertex(x2, y2, z1, 16, 0);
+		vertex(x2, y2 - w2, z1, 12, 0);
+		vertex(x2, y2 - w2, z3, 12, 4);
+		vertex(x2, y2, z3, 16, 4);
+		// Top-face right
 		vertex(x2, -y2, z1, 0, 0);
-		vertex(x2, -y2, z2, 0, 4);
-		vertex(x2, -y2 + w2, z2, 4, 4);
+		vertex(x2, -y2, z3, 0, 4);
+		vertex(x2, -y2 + w2, z3, 4, 4);
 		vertex(x2, -y2 + w2, z1, 4, 0);
+		// Top-face far fill
+		vertex(x2, y2 - w2, z3, 0, 0);
+		vertex(x2, y2 - w2, 0, 0, 4);
+		vertex(x2, -y2 + w2, 0, 16, 4);
+		vertex(x2, -y2 + w2, z3, 16, 0);
 
-		// Back
-		vertex(x2, -y2, z2, 0, 0);
-		vertex(x1, -y1, z2, 0, 16);
-		vertex(x1, y1, z2, 16, 16);
-		vertex(x2, y2, z2, 16, 0);
+		// Bottom-face
+		vertex(x1, y1, z1, 0, 0);
+		vertex(x1, y1, z3, 0, 4);
+		vertex(x1, -y1, z3, 16, 4);
+		vertex(x1, -y1, z1, 16, 0);
+
+		// Back face
+		vertex(x2, -y2, z3, 0, 0);
+		vertex(x1, -y1, z3, 0, 16);
+		vertex(x1, y1, z3, 16, 16);
+		vertex(x2, y2, z3, 16, 0);
 
 		GL11.glEnd();
 
@@ -279,7 +299,7 @@ public class ModelStargate {
 			GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glBegin(GL11.GL_QUADS);
 
-		// Face 4
+		// Front lit face
 		vertex(x2, y2 - w2, z1, 0, 4);
 		vertex(x1 + w1, y1 - w1, z1, 4, 16);
 		vertex(x1 + w1, 0, z1, 8, 16);
@@ -290,11 +310,11 @@ public class ModelStargate {
 		vertex(x1 + w1, -y1 + w1, z1, 12, 16);
 		vertex(x2, -y2 + w2, z1, 16, 4);
 
-		// End 4
-		vertex(x2, y2 - w2, z2, 0, 0);
+		// Lit top face
+		vertex(x2, y2 - w2, 0, 0, 0);
 		vertex(x2, y2 - w2, z1, 0, 4);
 		vertex(x2, -y2 + w2, z1, 16, 4);
-		vertex(x2, -y2 + w2, z2, 16, 0);
+		vertex(x2, -y2 + w2, 0, 16, 0);
 
 		GL11.glColor3f(1, 1, 1);
 		GL11.glEnd();

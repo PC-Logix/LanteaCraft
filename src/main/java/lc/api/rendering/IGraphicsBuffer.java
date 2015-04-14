@@ -18,6 +18,15 @@ public interface IGraphicsBuffer {
 	public void init();
 
 	/**
+	 * Called to ask the buffer if it is currently supported on the host
+	 * platform. The result value from this method is populated after the call
+	 * to {{@link #init()}.
+	 * 
+	 * @return If the buffer is supported.
+	 */
+	public boolean supported();
+
+	/**
 	 * Called to enter the graphics buffer. Any OpenGL operations after calling
 	 * enter() will be fed to the appropriate buffer.
 	 */

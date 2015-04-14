@@ -1,6 +1,7 @@
 package lc.client.opengl;
 
 import lc.api.rendering.IGraphicsBuffer;
+import lc.common.LCLog;
 
 import org.lwjgl.opengl.GL11;
 
@@ -12,6 +13,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class BufferDisplayList implements IGraphicsBuffer {
 
+	private boolean supported = false;
 	private boolean assigned = false;
 	private boolean entered = false;
 	private boolean bound = false;
@@ -22,7 +24,14 @@ public class BufferDisplayList implements IGraphicsBuffer {
 		if (assigned)
 			throw new RuntimeException("Illegal state: cannot init() while assigned.");
 		idx = GL11.glGenLists(1);
+		if (idx > 0)
+			supported = false;
 		assigned = true;
+	}
+
+	@Override
+	public boolean supported() {
+		return supported;
 	}
 
 	@Override
