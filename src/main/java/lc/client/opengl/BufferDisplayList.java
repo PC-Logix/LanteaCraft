@@ -1,7 +1,6 @@
 package lc.client.opengl;
 
 import lc.api.rendering.IGraphicsBuffer;
-import lc.common.LCLog;
 
 import org.lwjgl.opengl.GL11;
 

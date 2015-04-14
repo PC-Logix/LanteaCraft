@@ -20,7 +20,7 @@ public class StargateAddress {
 	}
 
 	public StargateAddress(Character[] boxedBytes) {
-		this(PrimitiveHelper.unboxChars(boxedBytes));
+		this(PrimitiveHelper.unbox(boxedBytes));
 	}
 
 	public StargateAddress(char[] bytes) {

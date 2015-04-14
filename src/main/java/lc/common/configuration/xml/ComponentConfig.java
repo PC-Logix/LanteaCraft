@@ -47,10 +47,22 @@ public class ComponentConfig extends ConfigList {
 		super(name, parent);
 	}
 
+	/**
+	 * Ask the configuration node if the Component represented by it is enabled
+	 * 
+	 * @return If this Component is enabled
+	 */
 	public boolean enabled() {
 		return (Boolean) parameters().get("enabled");
 	}
 
+	/**
+	 * Set the enabled state of the Component represented by this configuration
+	 * node
+	 * 
+	 * @param z
+	 *            The enabled state
+	 */
 	public void enabled(boolean z) {
 		parameters().put("enabled", z);
 		modify();

@@ -6,6 +6,13 @@ package lc.api.audio.channel;
 
 import lc.api.audio.streaming.ISound;
 
+/**
+ * Sound mixer contract interface. Allows modded blocks, items and tiles to
+ * create and play multiple sounds on virtual channels simultaneously.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public interface IMixer {
 
 	/**

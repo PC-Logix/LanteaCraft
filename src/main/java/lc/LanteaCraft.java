@@ -81,7 +81,7 @@ public class LanteaCraft {
 
 	/**
 	 * Handler for FML onServerStarting event
-	 * 
+	 *
 	 * @param event
 	 *            An event
 	 */
@@ -92,7 +92,7 @@ public class LanteaCraft {
 
 	/**
 	 * Handler for FML onServerStopping event
-	 * 
+	 *
 	 * @param event
 	 *            An event
 	 */

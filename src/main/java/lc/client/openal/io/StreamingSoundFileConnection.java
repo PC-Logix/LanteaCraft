@@ -17,7 +17,7 @@ public class StreamingSoundFileConnection extends URLConnection {
 	public StreamingSoundFileConnection(URL url, StreamingSoundProtocolHandler proto) {
 		super(url);
 		resourceName = new ResourceLocation(url.getPath());
-		this.handler = proto;
+		handler = proto;
 	}
 
 	@Override

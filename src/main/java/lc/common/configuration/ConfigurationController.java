@@ -14,6 +14,12 @@ import lc.common.configuration.xml.XMLParserException;
 import lc.common.configuration.xml.XMLSaver;
 import lc.common.configuration.xml.XMLSaverException;
 
+/**
+ * LanteaCraft configuration management controller.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ConfigurationController {
 
 	private File workdir;
@@ -21,9 +27,18 @@ public class ConfigurationController {
 	private File defaultConfigFile;
 	private ComponentConfigList defaultConfig;
 
+	/** Default constructor */
 	public ConfigurationController() {
 	}
 
+	/**
+	 * Initialize the configuration manager. The configuration manager will
+	 * create the LanteaCraft storage directory at the path specified, then open
+	 * and populate the default configuration file.1
+	 * 
+	 * @param wd
+	 *            The current configuration working directory.
+	 */
 	public void initialize(File wd) {
 		workdir = new File(wd, "LanteaCraft");
 		if (!workdir.exists())
@@ -43,6 +58,10 @@ public class ConfigurationController {
 		}
 	}
 
+	/**
+	 * Commits the configuration to disk if any changes have been made to the
+	 * configuration.
+	 */
 	public void commit() {
 		if (defaultConfig.modified())
 			try {
@@ -55,10 +74,28 @@ public class ConfigurationController {
 			}
 	}
 
+	/**
+	 * Request the configuration controller provide a configuration container
+	 * for a type of component category. If the component doesn't exist in the
+	 * configuration, a new configuration node is created and returned instead.
+	 * 
+	 * @param type
+	 *            The component type
+	 * @return The configuration container for the component type
+	 */
 	public ComponentConfig config(ComponentType type) {
 		return ConfigHelper.findComponentContainer(defaultConfig, type.name());
 	}
 
+	/**
+	 * Get a File reference for a file name on the disk in the configuration
+	 * directory.
+	 * 
+	 * @param name
+	 *            The file path
+	 * @return The fully-formed path to the configuration directory plus the
+	 *         file path specified
+	 */
 	public File getObject(String name) {
 		return new File(workdir, name);
 	}

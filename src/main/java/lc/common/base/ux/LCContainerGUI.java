@@ -492,7 +492,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 	}
 
 	public void setTextColor(int r, int g, int b) {
-		int ucf = (int) ((r << 16) | (g << 8) | b) & 0xFFFFFF;
+		setTextColor((int) ((r << 16) | (g << 8) | b) & 0xFFFFFF);
 	}
 
 	public void setTextColor(int rgb) {

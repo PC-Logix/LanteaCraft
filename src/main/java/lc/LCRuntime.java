@@ -138,7 +138,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Get the tick connector
-	 * 
+	 *
 	 * @return The tick connector
 	 */
 	public LCTickConnector ticks() {
@@ -147,7 +147,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Get the configuration controller
-	 * 
+	 *
 	 * @return The configuration controller
 	 */
 	public ConfigurationController config() {
@@ -210,7 +210,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Called when a server is started
-	 * 
+	 *
 	 * @param event
 	 *            The server.
 	 */
@@ -220,7 +220,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Called when a server is stopped
-	 * 
+	 *
 	 * @param event
 	 *            The server.
 	 */

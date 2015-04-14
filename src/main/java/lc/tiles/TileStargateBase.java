@@ -12,7 +12,6 @@ import lc.api.stargate.IrisType;
 import lc.api.stargate.MessagePayload;
 import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateType;
-import lc.blocks.BlockStargateBase;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
