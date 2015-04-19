@@ -1,6 +1,7 @@
 package lc.common.base;
 
 import lc.common.configuration.IConfigure;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.util.LCCreativeTabManager;
 import lc.common.util.SpecialBucketHandler;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,7 +17,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  * @author AfterLifeLochie
  */
-public abstract class LCItemBucket extends ItemBucket implements IConfigure {
+public class LCItemBucket extends ItemBucket implements IConfigure {
 
 	/**
 	 * Icon name associated with the unlocalized name of this bucket instance.
@@ -60,5 +61,11 @@ public abstract class LCItemBucket extends ItemBucket implements IConfigure {
 	 */
 	public void setTargetTexture(String bucketTextureName) {
 		iconName = bucketTextureName;
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 }
