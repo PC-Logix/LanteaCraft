@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.common.base.LCBlock;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.items.ItemBlockTransportRing;
 import lc.tiles.TileTransportRing;
 
@@ -13,6 +14,12 @@ public class BlockTransportRing extends LCBlock {
 	public BlockTransportRing() {
 		super(Material.ground);
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

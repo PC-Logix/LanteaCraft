@@ -6,6 +6,7 @@ import lc.ResourceAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.common.base.LCBlock;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.items.ItemBlockDecorative;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -78,5 +79,11 @@ public class BlockDecorative extends LCBlock {
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (DecorBlockTypes type : DecorBlockTypes.values())
 			list.add(new ItemStack(item, 1, type.idx));
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+		
 	}
 }

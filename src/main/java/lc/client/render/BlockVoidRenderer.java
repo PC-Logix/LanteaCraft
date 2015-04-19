@@ -3,6 +3,7 @@ package lc.client.render;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
+import lc.common.configuration.xml.ComponentConfig;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
@@ -14,6 +15,12 @@ import net.minecraft.world.IBlockAccess;
  *
  */
 public abstract class BlockVoidRenderer extends LCBlockRenderer {
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public boolean renderInventoryBlock(Block block, RenderBlocks renderer, int metadata) {

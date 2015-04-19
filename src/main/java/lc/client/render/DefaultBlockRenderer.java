@@ -7,6 +7,7 @@ import lc.api.rendering.IRenderInfo;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
 import lc.common.base.LCTile;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.util.game.BlockContainerProxy;
 import lc.common.util.game.WorldProxy;
@@ -26,6 +27,12 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 
 	/** Map of ForgeDirection to rotations on axis 0 */
 	private static int[] rotationMap = new int[] { 0, 0, 0, 2, 1, 3 };
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public Class<? extends LCBlockRenderer> getParent() {

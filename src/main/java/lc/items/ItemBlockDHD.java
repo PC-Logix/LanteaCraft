@@ -3,6 +3,7 @@ package lc.items;
 import lc.ResourceAccess;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItemBlock;
+import lc.common.configuration.xml.ComponentConfig;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -17,6 +18,12 @@ public class ItemBlockDHD extends LCItemBlock {
 	 */
 	public ItemBlockDHD(Block block) {
 		super((LCBlock) block);
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

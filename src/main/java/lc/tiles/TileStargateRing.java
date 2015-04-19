@@ -5,6 +5,7 @@ import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.StructureConfiguration;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCTileSync;
@@ -31,6 +32,12 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 	/** Default constructor */
 	public TileStargateRing() {
 		setSlave(true);
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package lc.items;
 
 import lc.common.base.LCItemBlock;
+import lc.common.configuration.xml.ComponentConfig;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -22,6 +23,12 @@ public class ItemBlockLanteaAlloy extends LCItemBlock {
 	public ItemBlockLanteaAlloy(Block block) {
 		super(block);
 		setHasSubtypes(true);
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

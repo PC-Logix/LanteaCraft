@@ -8,6 +8,7 @@ import net.minecraft.world.IBlockAccess;
 import lc.api.stargate.StargateType;
 import lc.client.models.ModelDHD;
 import lc.common.base.LCBlockRenderer;
+import lc.common.configuration.xml.ComponentConfig;
 
 /**
  * Stargate DHD block renderer
@@ -16,6 +17,12 @@ import lc.common.base.LCBlockRenderer;
  *
  */
 public class BlockDHDRenderer extends LCBlockRenderer {
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public Class<? extends LCBlockRenderer> getParent() {

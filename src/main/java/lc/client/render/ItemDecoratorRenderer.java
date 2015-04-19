@@ -1,6 +1,7 @@
 package lc.client.render;
 
 import lc.common.base.LCItemRenderer;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.game.BlockHelper;
 import net.minecraft.block.Block;
@@ -24,6 +25,12 @@ public class ItemDecoratorRenderer extends LCItemRenderer {
 
 	private static RenderItem renderItem = new RenderItem();
 
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+		
+	}
 	@Override
 	public LCItemRenderer getParent() {
 		return null;

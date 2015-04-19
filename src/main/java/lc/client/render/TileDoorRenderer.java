@@ -1,16 +1,24 @@
 package lc.client.render;
 
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 import lc.ResourceAccess;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.util.math.Orientations;
 import lc.tiles.TileLanteaDoor;
 
 public class TileDoorRenderer extends LCTileRenderer {
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public LCTileRenderer getParent() {

@@ -7,6 +7,7 @@ import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.world.OreType;
 import lc.common.base.LCItem;
+import lc.common.configuration.xml.ComponentConfig;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -28,6 +29,12 @@ public class ItemLanteaAlloyIngot extends LCItem {
 	public ItemLanteaAlloyIngot() {
 		setNoRepair();
 		setHasSubtypes(true);
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

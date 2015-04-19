@@ -7,10 +7,17 @@ import cpw.mods.fml.relauncher.Side;
 import lc.api.stargate.IDHDAccess;
 import lc.api.stargate.StargateType;
 import lc.common.base.LCTile;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 
 public class TileDHD extends LCTile implements IDHDAccess {
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public IInventory getInventory() {

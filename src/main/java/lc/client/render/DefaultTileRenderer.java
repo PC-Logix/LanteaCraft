@@ -10,6 +10,7 @@ import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
+import lc.common.configuration.xml.ComponentConfig;
 import net.minecraft.client.Minecraft;
 
 import org.lwjgl.opengl.GL11;
@@ -28,6 +29,12 @@ public class DefaultTileRenderer extends LCTileRenderer {
 	private final BufferDisplayList listModel = new BufferDisplayList();
 
 	private ArrayList<Class<? extends LCTile>> seenTypes;
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	/** Default constructor */
 	public DefaultTileRenderer() {

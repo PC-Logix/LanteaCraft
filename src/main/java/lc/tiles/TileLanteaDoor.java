@@ -8,6 +8,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import lc.common.base.LCTile;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 
@@ -15,6 +16,12 @@ public class TileLanteaDoor extends LCTile {
 
 	public boolean clientLastState;
 	public int clientAnimation;
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public IInventory getInventory() {

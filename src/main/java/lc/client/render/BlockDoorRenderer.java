@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import lc.common.base.LCBlockRenderer;
+import lc.common.configuration.xml.ComponentConfig;
 
 /**
  * Door block renderer implementation
@@ -13,6 +14,12 @@ import lc.common.base.LCBlockRenderer;
  *
  */
 public class BlockDoorRenderer extends LCBlockRenderer {
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public Class<? extends LCBlockRenderer> getParent() {

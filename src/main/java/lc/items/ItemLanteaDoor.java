@@ -9,6 +9,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import lc.ResourceAccess;
 import lc.common.base.LCItemBlock;
+import lc.common.configuration.xml.ComponentConfig;
 
 public class ItemLanteaDoor extends LCItemBlock {
 
@@ -16,6 +17,12 @@ public class ItemLanteaDoor extends LCItemBlock {
 
 	public ItemLanteaDoor(Block block) {
 		super(block);
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

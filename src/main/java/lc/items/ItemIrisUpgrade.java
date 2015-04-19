@@ -15,6 +15,7 @@ import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.stargate.IrisType;
 import lc.common.base.LCItem;
+import lc.common.configuration.xml.ComponentConfig;
 
 @Definition(name = "irisUpgrade", type = ComponentType.STARGATE, itemClass = ItemIrisUpgrade.class)
 public class ItemIrisUpgrade extends LCItem {
@@ -29,6 +30,12 @@ public class ItemIrisUpgrade extends LCItem {
 		setMaxStackSize(1);
 		setMaxDamage(21);
 		setNoRepair();
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

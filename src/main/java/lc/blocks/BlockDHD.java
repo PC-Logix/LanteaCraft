@@ -19,6 +19,7 @@ import lc.api.defs.Definition;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.items.ItemBlockDHD;
 import lc.tiles.TileDHD;
 
@@ -146,5 +147,11 @@ public class BlockDHD extends LCBlock {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+		
 	}
 }

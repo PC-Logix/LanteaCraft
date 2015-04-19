@@ -7,6 +7,7 @@ import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.world.OreType;
 import lc.common.base.LCBlock;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.items.ItemBlockLanteaAlloy;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -62,5 +63,11 @@ public class BlockLanteaAlloy extends LCBlock {
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < OreType.values().length; i++)
 			list.add(new ItemStack(item, 1, i));
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -6,6 +6,7 @@ import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.base.multiblock.MultiblockState;
 import lc.common.base.pipeline.LCTileRenderPipeline;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.tiles.TileStargateBase;
 import net.minecraft.util.ResourceLocation;
 
@@ -35,6 +36,12 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 				.formatResourceName("textures/tileentity/stargate_glyphs_${TEX_QUALITY}.png"));
 		model = new ModelStargate();
 		model.init();
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

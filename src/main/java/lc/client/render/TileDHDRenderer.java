@@ -7,11 +7,18 @@ import lc.client.models.ModelDHD;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.util.math.Orientations;
 import lc.tiles.TileDHD;
 
 public class TileDHDRenderer extends LCTileRenderer {
 
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+		
+	}
 	@Override
 	public LCTileRenderer getParent() {
 		return null;

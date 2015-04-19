@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import lc.common.base.LCBlockRenderer;
+import lc.common.configuration.xml.ComponentConfig;
 
 /**
  * Obelisk block renderer implementation
@@ -12,6 +13,12 @@ import lc.common.base.LCBlockRenderer;
  *
  */
 public class BlockObeliskRenderer extends LCBlockRenderer {
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public Class<? extends LCBlockRenderer> getParent() {

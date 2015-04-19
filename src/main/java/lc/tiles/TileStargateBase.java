@@ -16,6 +16,7 @@ import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
 import lc.common.base.multiblock.StructureConfiguration;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCTileSync;
@@ -111,6 +112,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 	}.setFilterRule(0, new SlotFilter(new ItemStack[] { LCRuntime.runtime.items().lanteaStargateIris.getStackOf(1) },
 			null, true, true));
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public StructureConfiguration getConfiguration() {

@@ -15,6 +15,7 @@ import lc.LCRuntime;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.common.base.LCBlock;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.items.ItemLanteaDoor;
 import lc.tiles.TileLanteaDoor;
 
@@ -125,6 +126,12 @@ public class BlockLanteaDoor extends LCBlock {
 			if (te != null)
 				te.setRedstoneState(strength);
 		}
+
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
 
 	}
 

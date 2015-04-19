@@ -7,6 +7,7 @@ import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.rendering.IBlockSkinnable;
 import lc.common.base.LCItem;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.game.BlockHelper;
 import net.minecraft.block.Block;
@@ -35,6 +36,12 @@ public class ItemDecorator extends LCItem {
 
 	/** Display icon */
 	public IIcon icon;
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public void registerIcons(IIconRegister ir) {

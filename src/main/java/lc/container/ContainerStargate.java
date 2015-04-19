@@ -5,6 +5,7 @@ import net.minecraft.inventory.ICrafting;
 import lc.common.base.LCContainer;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.inventory.FilteredSlot;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.tiles.TileStargateBase;
 
 public class ContainerStargate extends LCContainer {
@@ -18,6 +19,12 @@ public class ContainerStargate extends LCContainer {
 		filterInventory = (FilteredInventory) te.getInventory();
 		addSlotToContainer(new FilteredSlot(filterInventory, 0, 48, 99, false));
 		addPlayerSlots(player, 48, 123);
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

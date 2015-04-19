@@ -10,6 +10,7 @@ import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
 import lc.common.base.LCTile;
 import lc.common.base.multiblock.MultiblockState;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.items.ItemBlockStargateRing;
 import lc.tiles.TileStargateRing;
 import net.minecraft.block.material.Material;
@@ -130,6 +131,12 @@ public class BlockStargateRing extends LCBlock {
 	@Override
 	public IBlockRenderInfo block() {
 		return BlockStargateRing.renderInfo;
+	}
+
+	@Override
+	public void configure(ComponentConfig c) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
