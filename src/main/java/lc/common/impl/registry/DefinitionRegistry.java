@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import lc.LCRuntime;
+import lc.api.components.ComponentType;
 import lc.api.components.IComponentRegistry;
 import lc.api.components.IDefinitionRegistry;
 import lc.api.defs.IContainerDefinition;
@@ -18,6 +19,8 @@ import lc.common.base.LCItemBucket;
 import lc.common.base.LCItemRenderer;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
+import lc.common.configuration.ConfigurationController;
+import lc.common.configuration.IConfigure;
 import lc.common.util.LCCreativeTabManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.entity.Render;
@@ -119,13 +122,13 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 * @return The Block singleton.
 	 */
 	public <T extends Block> T registerBlock(Class<? extends T> classOf, Class<? extends ItemBlock> itemClassOf,
-			String unlocalizedName) {
-		return registerBlock(classOf, itemClassOf, unlocalizedName, LCCreativeTabManager.getTab("LanteaCraft"));
+			String unlocalizedName, ComponentType type) {
+		return registerBlock(classOf, itemClassOf, unlocalizedName, type, LCCreativeTabManager.getTab("LanteaCraft"));
 	}
 
 	/**
 	 * Register a block with a given class, a given item class, an unlocalized
-	 * name and a display preference in CreativeTabs.
+	 * name, a base type and a display preference in CreativeTabs.
 	 *
 	 * @param classOf
 	 *            The class of the block.
@@ -133,18 +136,22 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 *            The class of the item.
 	 * @param unlocalizedName
 	 *            The unlocalized name.
+	 * @param type
+	 *            The component type of the block
 	 * @param tab
 	 *            The creative tab to place the Block into.
 	 * @return The Block singleton.
 	 */
 	public <T extends Block> T registerBlock(Class<? extends T> classOf, Class<? extends ItemBlock> itemClassOf,
-			String unlocalizedName, CreativeTabs tab) {
+			String unlocalizedName, ComponentType type, CreativeTabs tab) {
 		LCLog.debug("Attempting to register block %s", unlocalizedName);
 		try {
 			Constructor<? extends T> ctor = classOf.getConstructor();
 			T theMysteryBlock = ctor.newInstance();
 			theMysteryBlock.setBlockName(unlocalizedName);
 			theMysteryBlock.setCreativeTab(tab);
+			if (theMysteryBlock instanceof IConfigure)
+				((IConfigure) theMysteryBlock).configure(LCRuntime.runtime.config().config(type));
 			GameRegistry.registerBlock(theMysteryBlock, itemClassOf, unlocalizedName);
 			return theMysteryBlock;
 		} catch (Throwable e) {
@@ -160,10 +167,12 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 *            The class of the item.
 	 * @param unlocalizedName
 	 *            The unlocalized name.
+	 * @param type
+	 *            The component type of the item
 	 * @return The Item singleton.
 	 */
-	public <T extends Item> T registerItem(Class<? extends T> classOf, String unlocalizedName) {
-		return registerItem(classOf, unlocalizedName, LCCreativeTabManager.getTab("LanteaCraft"));
+	public <T extends Item> T registerItem(Class<? extends T> classOf, String unlocalizedName, ComponentType type) {
+		return registerItem(classOf, unlocalizedName, type, LCCreativeTabManager.getTab("LanteaCraft"));
 	}
 
 	/**
@@ -173,16 +182,21 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 *            The class of the item.
 	 * @param unlocalizedName
 	 *            The unlocalized name.
+	 * @param type
+	 *            The component type of the item
 	 * @param tab
 	 *            The creative tab to place the Item into.
 	 * @return The Item singleton.
 	 */
-	public <T extends Item> T registerItem(Class<? extends T> classOf, String unlocalizedName, CreativeTabs tab) {
+	public <T extends Item> T registerItem(Class<? extends T> classOf, String unlocalizedName, ComponentType type,
+			CreativeTabs tab) {
 		LCLog.debug("Attempting to register item " + unlocalizedName);
 		try {
 			Constructor<? extends T> ctor = classOf.getConstructor();
 			T theMysteryItem = ctor.newInstance();
 			theMysteryItem.setUnlocalizedName(unlocalizedName).setCreativeTab(tab);
+			if (theMysteryItem instanceof IConfigure)
+				((IConfigure) theMysteryItem).configure(LCRuntime.runtime.config().config(type));
 			GameRegistry.registerItem(theMysteryItem, unlocalizedName);
 			return theMysteryItem;
 		} catch (Exception e) {

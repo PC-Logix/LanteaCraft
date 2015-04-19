@@ -95,7 +95,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 		if (!LCRuntime.runtime.registries().components().isEnabled(ownerType))
 			return;
 		if (blockType != null && itemBlockType != null) {
-			blockObject = registry.registerBlock(blockType, itemBlockType, defName);
+			blockObject = registry.registerBlock(blockType, itemBlockType, defName, ownerType);
 			blockObject.setProvidesTile(tileType);
 			if (tileType != null) {
 				String tileName = tileType.getSimpleName();
@@ -104,7 +104,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 				registry.registerTileEntity(tileType, tileName);
 			}
 		} else if (itemType != null)
-			itemObject = registry.registerItem(itemType, defName);
+			itemObject = registry.registerItem(itemType, defName, ownerType);
 		LCRuntime.runtime.hints().provideHints(this);
 	}
 
