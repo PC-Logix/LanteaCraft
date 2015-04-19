@@ -1,5 +1,6 @@
 package lc.common.base;
 
+import lc.common.configuration.IConfigure;
 import lc.common.util.LCCreativeTabManager;
 import lc.common.util.SpecialBucketHandler;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -15,7 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  * @author AfterLifeLochie
  */
-public class LCItemBucket extends ItemBucket {
+public abstract class LCItemBucket extends ItemBucket implements IConfigure {
 
 	/**
 	 * Icon name associated with the unlocalized name of this bucket instance.

@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.ILanteaCraftRenderer;
+import lc.common.configuration.IConfigure;
 import lc.common.impl.registry.DefinitionReference;
 import lc.common.util.math.Trans3;
 import lc.common.util.math.Vector3;
@@ -24,7 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  * @author AfterLifeLochie
  *
  */
-public abstract class LCBlockRenderer implements ILanteaCraftRenderer {
+public abstract class LCBlockRenderer implements ILanteaCraftRenderer, IConfigure {
 
 	/**
 	 * Get the parent renderer. Called when a render function cannot be

@@ -14,6 +14,7 @@ import lc.api.audio.streaming.ISoundServer;
 import lc.api.event.IBlockEventHandler;
 import lc.client.openal.StreamingSoundPosition;
 import lc.common.LCLog;
+import lc.common.configuration.IConfigure;
 import lc.common.network.IPacketHandler;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
@@ -36,7 +37,7 @@ import cpw.mods.fml.relauncher.Side;
  *
  * @author AfterLifeLochie
  */
-public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler, IBlockEventHandler {
+public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler, IBlockEventHandler, IConfigure {
 
 	private static HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>> callbacks = new HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>>();
 

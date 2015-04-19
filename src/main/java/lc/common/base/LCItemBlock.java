@@ -1,5 +1,6 @@
 package lc.common.base;
 
+import lc.common.configuration.IConfigure;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -10,7 +11,7 @@ import net.minecraft.item.ItemStack;
  * @author AfterLifeLochie
  *
  */
-public class LCItemBlock extends ItemBlock {
+public abstract class LCItemBlock extends ItemBlock implements IConfigure {
 
 	/** The block type */
 	protected final LCBlock blockType;

@@ -3,6 +3,7 @@ package lc.common.base;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.ILanteaCraftRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
+import lc.common.configuration.IConfigure;
 import lc.common.impl.registry.DefinitionReference;
 
 /**
@@ -11,7 +12,7 @@ import lc.common.impl.registry.DefinitionReference;
  * @author AfterLifeLochie
  *
  */
-public abstract class LCTileRenderer implements ILanteaCraftRenderer {
+public abstract class LCTileRenderer implements ILanteaCraftRenderer, IConfigure {
 
 	/**
 	 * Get the parent renderer. Called when a render function cannot be

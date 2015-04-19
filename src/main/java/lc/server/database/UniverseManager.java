@@ -111,6 +111,14 @@ public class UniverseManager {
 	 *            The save event.
 	 */
 	public void autosaveGalaxy(WorldEvent.Save save) {
+		try {
+			FileOutputStream fos = new FileOutputStream(workFile);
+			LCLog.debug("Auto-saving %s address entries to file.", recordHeap.size());
+			jsonAgent.writeMap(fos, recordHeap);
+			fos.close();
+		} catch (IOException ioex) {
+			LCLog.fatal("Problem saving Stargate address database.", ioex);
+		}
 	}
 
 	/**

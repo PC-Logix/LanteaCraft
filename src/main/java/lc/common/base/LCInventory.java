@@ -1,5 +1,6 @@
 package lc.common.base;
 
+import lc.common.configuration.IConfigure;
 import lc.common.util.game.SlotFilter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -11,7 +12,7 @@ import net.minecraft.item.ItemStack;
  * @author AfterLifeLochie
  *
  */
-public abstract class LCInventory implements ISidedInventory {
+public abstract class LCInventory implements ISidedInventory, IConfigure {
 
 	/** The items in the inventory */
 	protected ItemStack[] items;

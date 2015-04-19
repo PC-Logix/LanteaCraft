@@ -5,6 +5,7 @@ import lc.api.rendering.IBlockRenderInfo;
 import lc.api.rendering.IEntityRenderInfo;
 import lc.api.rendering.IRenderInfo;
 import lc.api.rendering.ITileRenderInfo;
+import lc.common.configuration.IConfigure;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -22,7 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  * @author AfterLifeLochie
  *
  */
-public abstract class LCBlock extends BlockContainer implements IRenderInfo {
+public abstract class LCBlock extends BlockContainer implements IRenderInfo, IConfigure {
 
 	/** Rotation direction map across Y-axis */
 	protected static final ForgeDirection[] directions = new ForgeDirection[] { ForgeDirection.SOUTH,

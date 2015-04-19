@@ -2,6 +2,7 @@ package lc.common.base;
 
 import lc.common.LCLog;
 import lc.common.base.ux.LCTabbedSlot;
+import lc.common.configuration.IConfigure;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -15,7 +16,7 @@ import net.minecraft.item.ItemStack;
  * @author AfterLifeLochie
  *
  */
-public abstract class LCContainer extends Container {
+public abstract class LCContainer extends Container implements IConfigure {
 	/** Container width */
 	public int xSize;
 	/** Container height */

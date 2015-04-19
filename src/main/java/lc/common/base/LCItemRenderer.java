@@ -2,6 +2,7 @@ package lc.common.base;
 
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.ILanteaCraftRenderer;
+import lc.common.configuration.IConfigure;
 import lc.common.impl.registry.DefinitionReference;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -13,7 +14,7 @@ import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
  * @author AfterLifeLochie
  *
  */
-public abstract class LCItemRenderer implements ILanteaCraftRenderer {
+public abstract class LCItemRenderer implements ILanteaCraftRenderer, IConfigure {
 
 	/**
 	 * Get the parent renderer. Called when a render function cannot be
