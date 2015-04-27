@@ -28,5 +28,7 @@ public enum ComponentType {
 	/** Integration */
 	INTEGRATION,
 	/** Galaxy */
-	GALAXY;
+	GALAXY, 
+	/** Client fields */
+	CLIENT;
 }

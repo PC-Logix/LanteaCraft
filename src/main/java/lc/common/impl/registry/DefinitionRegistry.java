@@ -318,6 +318,8 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 			if (type.getKey().equals(clazz))
 				try {
 					ILanteaCraftRenderer renderer = type.getValue().getConstructor().newInstance();
+					if (renderer instanceof IConfigure)
+						((IConfigure) renderer).configure(LCRuntime.runtime.config().config(ComponentType.CLIENT));
 					if (!initializedRenderers.containsKey(typeof))
 						initializedRenderers.put(typeof, new HashMap<Class<?>, ILanteaCraftRenderer>());
 					initializedRenderers.get(typeof).put(clazz, renderer);
