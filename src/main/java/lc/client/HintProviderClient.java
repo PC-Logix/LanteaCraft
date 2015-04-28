@@ -2,6 +2,8 @@ package lc.client;
 
 import lc.LCRuntime;
 import lc.api.audio.ISoundController;
+import lc.api.components.ComponentType;
+import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.blocks.BlockDHD;
@@ -22,6 +24,7 @@ import lc.common.base.LCTile;
 import lc.common.base.pipeline.LCBlockRenderPipeline;
 import lc.common.base.pipeline.LCItemRenderPipeline;
 import lc.common.base.pipeline.LCTileRenderPipeline;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.items.ItemDecorator;
 import lc.server.HintProviderServer;
@@ -34,9 +37,9 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 
 /**
  * Client-side hint provider implementation
- *
+ * 
  * @author AfterLifeLochie
- *
+ * 
  */
 public class HintProviderClient extends HintProviderServer {
 
@@ -44,7 +47,9 @@ public class HintProviderClient extends HintProviderServer {
 	private LCTileRenderPipeline tileRenderingHook;
 	private LCItemRenderPipeline itemRenderingHook;
 
-	private ClientSoundController controller;
+	private ClientSoundController soundController;
+
+	private ComponentConfig renderConfiguration;
 
 	/** Default constructor */
 	public HintProviderClient() {
@@ -55,25 +60,35 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public void preInit() {
 		super.preInit();
-		blockRenderingHook = new LCBlockRenderPipeline(RenderingRegistry.getNextAvailableRenderId());
+		renderConfiguration = LCRuntime.runtime.config().config(
+				ComponentType.CLIENT);
+		blockRenderingHook = new LCBlockRenderPipeline(
+				RenderingRegistry.getNextAvailableRenderId());
 		tileRenderingHook = new LCTileRenderPipeline();
 		itemRenderingHook = new LCItemRenderPipeline();
-		controller = new ClientSoundController();
-		RenderingRegistry.registerBlockHandler(blockRenderingHook.getRenderId(), blockRenderingHook);
+		soundController = new ClientSoundController();
+		RenderingRegistry.registerBlockHandler(
+				blockRenderingHook.getRenderId(), blockRenderingHook);
 	}
 
 	@Override
 	public void init() {
 		super.init();
 
-		DefinitionRegistry registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
-		registry.registerTileRenderer(TileStargateBase.class, TileStargateBaseRenderer.class);
-		registry.registerItemRenderer(ItemDecorator.class, ItemDecoratorRenderer.class);
+		DefinitionRegistry registry = (DefinitionRegistry) LCRuntime.runtime
+				.registries().definitions();
+		registry.registerTileRenderer(TileStargateBase.class,
+				TileStargateBaseRenderer.class);
+		registry.registerItemRenderer(ItemDecorator.class,
+				ItemDecoratorRenderer.class);
 
-		registry.registerBlockRenderer(BlockLanteaDoor.class, BlockDoorRenderer.class);
-		registry.registerBlockRenderer(BlockObelisk.class, BlockObeliskRenderer.class);
+		registry.registerBlockRenderer(BlockLanteaDoor.class,
+				BlockDoorRenderer.class);
+		registry.registerBlockRenderer(BlockObelisk.class,
+				BlockObeliskRenderer.class);
 		registry.registerBlockRenderer(BlockDHD.class, BlockDHDRenderer.class);
-		registry.registerTileRenderer(TileLanteaDoor.class, TileDoorRenderer.class);
+		registry.registerTileRenderer(TileLanteaDoor.class,
+				TileDoorRenderer.class);
 		registry.registerTileRenderer(TileDHD.class, TileDHDRenderer.class);
 	}
 
@@ -92,13 +107,17 @@ public class HintProviderClient extends HintProviderServer {
 		}
 
 		if (definition.getTileType() != null) {
-			Class<? extends LCTile> theTile = (Class<? extends LCTile>) definition.getTileType();
-			ClientRegistry.bindTileEntitySpecialRenderer(theTile, tileRenderingHook);
+			Class<? extends LCTile> theTile = (Class<? extends LCTile>) definition
+					.getTileType();
+			ClientRegistry.bindTileEntitySpecialRenderer(theTile,
+					tileRenderingHook);
 		}
 
-		if (definition.getItem() != null && definition.getItem() instanceof LCItem) {
+		if (definition.getItem() != null
+				&& definition.getItem() instanceof LCItem) {
 			LCItem theItem = (LCItem) definition.getItem();
-			MinecraftForgeClient.registerItemRenderer(theItem, itemRenderingHook);
+			MinecraftForgeClient.registerItemRenderer(theItem,
+					itemRenderingHook);
 		}
 
 	}
@@ -112,7 +131,12 @@ public class HintProviderClient extends HintProviderServer {
 
 	@Override
 	public ISoundController audio() {
-		return controller;
+		return soundController;
+	}
+
+	@Override
+	public IConfigurationProvider config() {
+		return renderConfiguration;
 	}
 
 }

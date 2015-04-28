@@ -1,12 +1,14 @@
 package lc.common.configuration.xml;
 
+import lc.api.components.IConfigurationProvider;
+
 /**
  * Module configuration node
  *
  * @author AfterLifeLochie
  *
  */
-public class ComponentConfig extends ConfigList {
+public class ComponentConfig extends ConfigList implements IConfigurationProvider {
 
 	/** Default constructor */
 	public ComponentConfig() {

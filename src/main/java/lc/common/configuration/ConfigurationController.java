@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import lc.api.components.ComponentType;
+import lc.common.LCLog;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.configuration.xml.ComponentConfigList;
 import lc.common.configuration.xml.ConfigHelper;
@@ -49,8 +50,11 @@ public class ConfigurationController {
 				XMLParser parser = new XMLParser();
 				FileInputStream test = new FileInputStream(defaultConfigFile);
 				defaultConfig = parser.read(test);
-			} else
+				LCLog.debug("Loaded default configuration from disk.");
+			} else {
 				defaultConfig = new ComponentConfigList();
+				LCLog.debug("No configuration on disk. Writing a new one.");
+			}
 		} catch (XMLParserException pex) {
 			throw new RuntimeException("Error configuring LanteaCraft.", pex);
 		} catch (IOException ioex) {
@@ -65,8 +69,10 @@ public class ConfigurationController {
 	public void commit() {
 		if (defaultConfig.modified())
 			try {
+				LCLog.debug("Default configuration modified. Saving it...");
 				XMLSaver saver = new XMLSaver();
 				saver.save(defaultConfig, new FileOutputStream(defaultConfigFile));
+				LCLog.debug("Default configuration committed.");
 			} catch (XMLSaverException sex) {
 				throw new RuntimeException("Error saving LanteaCraft configuration state.", sex);
 			} catch (IOException ioex) {

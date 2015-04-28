@@ -3,8 +3,10 @@ package lc.common;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import lc.api.audio.ISoundController;
+import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
+import lc.common.configuration.xml.ComponentConfig;
 
 /**
  * Hint provider contract interface.
@@ -55,6 +57,12 @@ public interface IHintProvider {
 	 */
 	public void onServerStopping(FMLServerStoppingEvent event);
 
+	/**
+	 * Return the current rendering configuration node
+	 * @return The current rendering configuration node
+	 */
+	public IConfigurationProvider config();
+	
 	/**
 	 * Return the current audio provider in use
 	 * 

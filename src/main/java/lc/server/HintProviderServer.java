@@ -8,6 +8,7 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import lc.api.audio.ISoundController;
+import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
@@ -101,6 +102,11 @@ public class HintProviderServer implements IHintProvider {
 	@Override
 	public ISoundController audio() {
 		return VoidSoundController.controller;
+	}
+
+	@Override
+	public IConfigurationProvider config() {
+		return null;
 	}
 
 }
