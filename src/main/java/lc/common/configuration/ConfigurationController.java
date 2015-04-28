@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import lc.api.components.ComponentType;
 import lc.common.LCLog;
@@ -14,6 +15,7 @@ import lc.common.configuration.xml.XMLParser;
 import lc.common.configuration.xml.XMLParserException;
 import lc.common.configuration.xml.XMLSaver;
 import lc.common.configuration.xml.XMLSaverException;
+import lc.common.util.java.DeferredTaskExecutor;
 
 /**
  * LanteaCraft configuration management controller.
@@ -28,8 +30,16 @@ public class ConfigurationController {
 	private File defaultConfigFile;
 	private ComponentConfigList defaultConfig;
 
+	private Runnable writer = new Runnable() {
+		@Override
+		public void run() {
+			commit();
+		}
+	};
+
 	/** Default constructor */
 	public ConfigurationController() {
+		DeferredTaskExecutor.scheduleWithFixedDelay(writer, 240, 300, TimeUnit.SECONDS);
 	}
 
 	/**
