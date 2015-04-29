@@ -48,8 +48,11 @@ public class StargateConnection {
 		state = StargateState.DISCONNECTING;
 	}
 
-	public void transmit(TileStargateBase tileStargateBase, MessagePayload payload) {
-		// TODO Auto-generated method stub
-		
+	public void transmit(TileStargateBase source, MessagePayload payload) {
+		if (source == tileFrom)
+			tileTo.receive(payload);
+		if (source == tileTo)
+			tileFrom.receive(payload);
+
 	}
 }
