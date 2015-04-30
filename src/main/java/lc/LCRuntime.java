@@ -23,10 +23,15 @@ import lc.common.impl.registry.StructureRegistry;
 import lc.common.network.LCPacketPipeline;
 import lc.common.util.LCCreativeTabManager;
 import lc.common.util.game.LCTickConnector;
+import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
@@ -209,13 +214,43 @@ public class LCRuntime implements ILCAPIProxy {
 	}
 
 	/**
-	 * Called when a server is started
+	 * Called when a server is starting
 	 *
 	 * @param event
 	 *            The server.
 	 */
 	public void serverStarting(FMLServerStartingEvent event) {
-		hints.onServerStarting(event);
+		hints.serverStarting(event);
+	}
+
+	/**
+	 * Called when a server is stopping
+	 *
+	 * @param event
+	 *            The server.
+	 */
+	public void serverStopping(FMLServerStoppingEvent event) {
+		hints.serverStopping(event);
+	}
+
+	/**
+	 * Called when a signature problem is detected
+	 * 
+	 * @param event
+	 *            The event
+	 */
+	public void signatureViolation(FMLFingerprintViolationEvent event) {
+		hints.signatureViolation(event);
+	}
+
+	/**
+	 * Called when an IMC is received
+	 * 
+	 * @param event
+	 *            The event
+	 */
+	public void receiveIMC(IMCEvent event) {
+		hints.receiveIMC(event);
 	}
 
 	/**
@@ -224,8 +259,28 @@ public class LCRuntime implements ILCAPIProxy {
 	 * @param event
 	 *            The server.
 	 */
-	public void serverStopping(FMLServerStoppingEvent event) {
-		hints.onServerStopping(event);
+	public void serverStopped(FMLServerStoppedEvent event) {
+		hints.serverStopped(event);
+	}
+
+	/**
+	 * Called when a server is started
+	 *
+	 * @param event
+	 *            The server.
+	 */
+	public void serverStarted(FMLServerStartedEvent event) {
+		hints.serverStarted(event);
+	}
+
+	/**
+	 * Called before a server is started
+	 *
+	 * @param event
+	 *            The server.
+	 */
+	public void beforeServerStarting(FMLServerAboutToStartEvent event) {
+		hints.beforeServerStarting(event);
 	}
 
 }

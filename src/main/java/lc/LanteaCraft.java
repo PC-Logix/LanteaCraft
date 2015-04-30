@@ -6,10 +6,15 @@ import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.relauncher.FMLRelaunchLog;
 
@@ -32,7 +37,7 @@ public class LanteaCraft {
 	}
 
 	/**
-	 * Handler for FML preInit event
+	 * Handler for FML preinit event
 	 *
 	 * @param event
 	 *            An event
@@ -69,7 +74,7 @@ public class LanteaCraft {
 	}
 
 	/**
-	 * Handler for FML postInit event
+	 * Handler for FML postinit event
 	 *
 	 * @param event
 	 *            An event
@@ -80,7 +85,18 @@ public class LanteaCraft {
 	}
 
 	/**
-	 * Handler for FML onServerStarting event
+	 * Handler for FML beforeServerStarting event
+	 *
+	 * @param event
+	 *            An event
+	 */
+	@Mod.EventHandler
+	public void beforeServerStarting(FMLServerAboutToStartEvent event) {
+		LCRuntime.runtime.beforeServerStarting(event);
+	}
+
+	/**
+	 * Handler for FML serverStarting event
 	 *
 	 * @param event
 	 *            An event
@@ -91,7 +107,18 @@ public class LanteaCraft {
 	}
 
 	/**
-	 * Handler for FML onServerStopping event
+	 * Handler for FML serverStarted event
+	 *
+	 * @param event
+	 *            An event
+	 */
+	@Mod.EventHandler
+	public void serverStarted(FMLServerStartedEvent event) {
+		LCRuntime.runtime.serverStarted(event);
+	}
+
+	/**
+	 * Handler for FML serverStopping event
 	 *
 	 * @param event
 	 *            An event
@@ -101,4 +128,36 @@ public class LanteaCraft {
 		LCRuntime.runtime.serverStopping(event);
 	}
 
+	/**
+	 * Handler for FML serverStopped event
+	 *
+	 * @param event
+	 *            An event
+	 */
+	@Mod.EventHandler
+	public void serverStopped(FMLServerStoppedEvent event) {
+		LCRuntime.runtime.serverStopped(event);
+	}
+
+	/**
+	 * Handler for FML signatureViolation event
+	 *
+	 * @param event
+	 *            An event
+	 */
+	@Mod.EventHandler
+	public void signatureViolation(FMLFingerprintViolationEvent event) {
+		LCRuntime.runtime.signatureViolation(event);
+	}
+
+	/**
+	 * Handler for FML receiveIMC event
+	 *
+	 * @param event
+	 *            An event
+	 */
+	@Mod.EventHandler
+	public void receiveIMC(IMCEvent event) {
+		LCRuntime.runtime.receiveIMC(event);
+	}
 }

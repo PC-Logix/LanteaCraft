@@ -1,12 +1,16 @@
 package lc.common;
 
+import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import lc.api.audio.ISoundController;
 import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
-import lc.common.configuration.xml.ComponentConfig;
 
 /**
  * Hint provider contract interface.
@@ -47,7 +51,7 @@ public interface IHintProvider {
 	 * @param event
 	 *            The start event
 	 */
-	public void onServerStarting(FMLServerStartingEvent event);
+	public void serverStarting(FMLServerStartingEvent event);
 
 	/**
 	 * Called by the system when a server instance is stopping
@@ -55,18 +59,59 @@ public interface IHintProvider {
 	 * @param event
 	 *            The stop event
 	 */
-	public void onServerStopping(FMLServerStoppingEvent event);
+	public void serverStopping(FMLServerStoppingEvent event);
 
 	/**
 	 * Return the current rendering configuration node
+	 * 
 	 * @return The current rendering configuration node
 	 */
 	public IConfigurationProvider config();
-	
+
 	/**
 	 * Return the current audio provider in use
 	 * 
 	 * @return The audio provider in use
 	 */
 	public ISoundController audio();
+
+	/**
+	 * Called by the system when a signature violation is detected
+	 * 
+	 * @param event
+	 *            The violation event
+	 */
+	public void signatureViolation(FMLFingerprintViolationEvent event);
+
+	/**
+	 * Called by the system when an IMC is received for this mod
+	 * 
+	 * @param event
+	 *            The IMC event
+	 */
+	public void receiveIMC(IMCEvent event);
+
+	/**
+	 * Called by the system when a server instance is stopped
+	 * 
+	 * @param event
+	 *            The stop event
+	 */
+	public void serverStopped(FMLServerStoppedEvent event);
+
+	/**
+	 * Called by the system when a server instance is started
+	 * 
+	 * @param event
+	 *            The started event
+	 */
+	public void serverStarted(FMLServerStartedEvent event);
+
+	/**
+	 * Called by the system when a server instance is about to start
+	 * 
+	 * @param event
+	 *            The start event
+	 */
+	public void beforeServerStarting(FMLServerAboutToStartEvent event);
 }

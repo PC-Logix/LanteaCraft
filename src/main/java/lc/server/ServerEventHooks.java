@@ -1,7 +1,10 @@
 package lc.server;
 
 import net.minecraftforge.event.world.WorldEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -48,6 +51,21 @@ public class ServerEventHooks {
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event) {
 		serverHints.universeMgr.autosaveGalaxy(event);
+	}
+
+	public void onServerStopped(FMLServerStoppedEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onServerStarted(FMLServerStartedEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void beforeServerStarted(FMLServerAboutToStartEvent event) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

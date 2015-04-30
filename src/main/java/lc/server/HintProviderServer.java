@@ -3,7 +3,12 @@ package lc.server;
 import java.util.HashMap;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
@@ -86,12 +91,12 @@ public class HintProviderServer implements IHintProvider {
 	}
 
 	@Override
-	public void onServerStarting(FMLServerStartingEvent event) {
+	public void serverStarting(FMLServerStartingEvent event) {
 		serverHookBus.onServerStarting(event);
 	}
 
 	@Override
-	public void onServerStopping(FMLServerStoppingEvent event) {
+	public void serverStopping(FMLServerStoppingEvent event) {
 		serverHookBus.onServerStopping(event);
 	}
 
@@ -107,6 +112,32 @@ public class HintProviderServer implements IHintProvider {
 	@Override
 	public IConfigurationProvider config() {
 		return null;
+	}
+
+	@Override
+	public void signatureViolation(FMLFingerprintViolationEvent event) {
+		// TODO Auto-generated method stub 
+	}
+
+	@Override
+	public void receiveIMC(IMCEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void serverStopped(FMLServerStoppedEvent event) {
+		serverHookBus.onServerStopped(event);
+	}
+
+	@Override
+	public void serverStarted(FMLServerStartedEvent event) {
+		serverHookBus.onServerStarted(event);
+	}
+
+	@Override
+	public void beforeServerStarting(FMLServerAboutToStartEvent event) {
+		serverHookBus.beforeServerStarted(event);
 	}
 
 }
