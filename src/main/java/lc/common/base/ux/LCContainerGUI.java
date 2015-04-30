@@ -1,5 +1,6 @@
 package lc.common.base.ux;
 
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -96,8 +97,13 @@ public abstract class LCContainerGUI extends GuiContainer {
 	 * Rebuild the interface's layout.
 	 */
 	public void rebuildLayout() {
-		xSize = activeTab.getTabDimensions().width;
-		ySize = activeTab.getTabDimensions().height;
+		Dimension size = activeTab.getTabDimensions();
+		if (size == null) {
+			size = new Dimension(800, 600);
+			LCLog.warn("Problem rendering tab %s: no tab size!", activeTab);
+		}
+		xSize = size.width;
+		ySize = size.height;
 		guiLeft = (width - xSize) / 2;
 		guiTop = (height - ySize) / 2;
 	}

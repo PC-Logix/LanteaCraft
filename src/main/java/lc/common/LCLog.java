@@ -65,7 +65,7 @@ public class LCLog {
 	private static void push(Level level, Object[] args) {
 		Logger log = LCLog.log;
 		PrintStream stream = LCLog.printLog;
-		if (isCore()) {
+		if (isCore() || LCLog.log == null) {
 			log = LCLog.cmLog;
 			stream = LCLog.cmPrintLog;
 		}
