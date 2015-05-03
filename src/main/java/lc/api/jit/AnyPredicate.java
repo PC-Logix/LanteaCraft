@@ -1,4 +1,4 @@
-package lc.common.util.data;
+package lc.api.jit;
 
 /**
  * Represents a predicate (boolean-valued function) of any number of untyped or

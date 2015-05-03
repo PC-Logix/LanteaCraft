@@ -9,8 +9,8 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IStructureDefinition;
+import lc.api.jit.AnyPredicate;
 import lc.common.LCLog;
-import lc.common.util.data.AnyPredicate;
 
 /**
  * Structure definition implementation

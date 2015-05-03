@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import lc.BuildInfo;
-import lc.common.util.data.AnyPredicate;
+import lc.api.jit.AnyPredicate;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;

@@ -3,6 +3,7 @@ package lc.common.impl.registry;
 import lc.api.components.IComponentRegistry;
 import lc.api.components.IDefinitionRegistry;
 import lc.api.components.IInterfaceRegistry;
+import lc.api.components.IInteroperabilityRegistry;
 import lc.api.components.IRecipeRegistry;
 import lc.api.components.IRegistryContainer;
 import lc.api.components.IStructureRegistry;
@@ -20,6 +21,7 @@ public class RegistryContainer implements IRegistryContainer {
 	private RecipeRegistry recipes = new RecipeRegistry();
 	private StructureRegistry structures = new StructureRegistry();
 	private InterfaceRegistry interfaces = new InterfaceRegistry();
+	private InteroperabilityRegistry interoperability = new InteroperabilityRegistry();
 
 	@Override
 	public IComponentRegistry components() {
@@ -44,6 +46,11 @@ public class RegistryContainer implements IRegistryContainer {
 	@Override
 	public IInterfaceRegistry interfaces() {
 		return interfaces;
+	}
+
+	@Override
+	public IInteroperabilityRegistry interoperability() {
+		return interoperability;
 	}
 
 }

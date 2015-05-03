@@ -37,4 +37,9 @@ public interface IRegistryContainer {
 	 */
 	public IInterfaceRegistry interfaces();
 
+	/**
+	 * @return The interoperabililty registry
+	 */
+	public IInteroperabilityRegistry interoperability();
+
 }
