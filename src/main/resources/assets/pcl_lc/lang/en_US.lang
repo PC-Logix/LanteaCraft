@@ -105,7 +105,7 @@ item.lanteadebug.name=LanteaCraft Debugger
 tile.integration.computercraft.name=ComputerCraft Adapter
 
 # Death messages
-death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
+death.attack.wormhole_transient=%1$s was torn apart by an unstable vortex.
 
 # Clipboard operations; used as a single string only (no context).
 lc.clipboard.put_success.text=Copied to Clipboard!
