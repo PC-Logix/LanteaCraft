@@ -158,7 +158,7 @@ public class ModuleStargates implements IModule {
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
 						ModuleCore.Items.lanteaOreIngot), 'C', new ItemStack(
 						net.minecraft.init.Blocks.sandstone, 1, 1), 'g',
-				net.minecraft.init.Blocks.glowstone, 'r',
+				net.minecraft.init.Items.glowstone, 'r',
 				net.minecraft.init.Items.redstone, 'p',
 				net.minecraft.init.Items.ender_pearl);
 
@@ -194,7 +194,7 @@ public class ModuleStargates implements IModule {
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
 						ModuleCore.Items.lanteaOreIngot), 'C', 
 						net.minecraft.init.Blocks.cobblestone, 'g',
-				net.minecraft.init.Blocks.glowstone, 'r',
+				net.minecraft.init.Items.glowstone, 'r',
 				net.minecraft.init.Items.redstone, 'p',
 				net.minecraft.init.Items.ender_pearl);
 
@@ -222,7 +222,7 @@ public class ModuleStargates implements IModule {
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
 						ModuleCore.Items.lanteaOreIngot), 'C', 
 						net.minecraft.init.Blocks.mossy_cobblestone, 'g',
-				net.minecraft.init.Blocks.glowstone, 'r',
+				net.minecraft.init.Items.glowstone, 'r',
 				net.minecraft.init.Items.redstone, 'p',
 				net.minecraft.init.Items.ender_pearl);
 
@@ -251,7 +251,7 @@ public class ModuleStargates implements IModule {
 				net.minecraft.init.Items.iron_ingot, 'N', new ItemStack(
 						ModuleCore.Items.lanteaOreIngot), 'C', 
 						net.minecraft.init.Blocks.stone, 'g',
-				net.minecraft.init.Blocks.glowstone, 'r',
+				net.minecraft.init.Items.glowstone, 'r',
 				net.minecraft.init.Items.redstone, 'p',
 				net.minecraft.init.Items.ender_pearl);
 
