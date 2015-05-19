@@ -19,6 +19,7 @@ import lc.api.defs.IRecipeDefinition;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
 import lc.common.base.generation.LCMasterWorldGen;
+import lc.common.crypto.KeyTrustRegistry;
 import lc.common.util.BeaconStreamThread;
 import lc.common.util.StatsProvider;
 import lc.server.database.UniverseManager;
@@ -43,6 +44,9 @@ public class HintProviderServer implements IHintProvider {
 
 	/** The server Stargate manager */
 	final StargateManager stargateMgr;
+	
+	/** The server key-trust chain */
+	final KeyTrustRegistry trustChain;
 
 	/** The master world generator service */
 	LCMasterWorldGen worldGenerator;
@@ -54,6 +58,7 @@ public class HintProviderServer implements IHintProvider {
 		this.beaconMgr = new BeaconStreamThread(this);
 		this.stargateMgr = new StargateManager(this);
 		this.universeMgr = new UniverseManager();
+		this.trustChain = new KeyTrustRegistry();
 	}
 
 	@Override
