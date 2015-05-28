@@ -39,7 +39,8 @@ public class KeyTrustRegistry {
 	 *             If the key store already contains a key of this label or of
 	 *             this key.
 	 */
-	public final void placeKey(String label, PublicKey pk) throws KeyStoreException {
+	public final void placeKey(String label, PublicKey pk)
+			throws KeyStoreException {
 		synchronized (keyMap) {
 			if (keyMap.containsKey(label))
 				throw new KeyStoreException("Entry with label already exists");
@@ -116,6 +117,18 @@ public class KeyTrustRegistry {
 				if (pair.getValue().equals(pk))
 					return true;
 			return false;
+		}
+	}
+
+	/**
+	 * <p>
+	 * Empties the key chain. All keys are immediately released and forgotten
+	 * from the key-chain
+	 * </p>
+	 */
+	public final void purge() {
+		synchronized (keyMap) {
+			keyMap.clear();
 		}
 	}
 

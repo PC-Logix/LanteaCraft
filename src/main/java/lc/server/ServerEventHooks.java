@@ -45,7 +45,8 @@ public class ServerEventHooks {
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
 		serverHints.universeMgr.unloadGalaxy(event);
-		serverHints.stargateMgr.closeConnectionsIn(event.world.provider.dimensionId);
+		serverHints.stargateMgr
+				.closeConnectionsIn(event.world.provider.dimensionId);
 	}
 
 	@SubscribeEvent
@@ -64,8 +65,8 @@ public class ServerEventHooks {
 	}
 
 	public void beforeServerStarted(FMLServerAboutToStartEvent event) {
-		// TODO Auto-generated method stub
-
+		serverHints.trustChain.purge();
+		// TODO: Load the keys from /config/LanteaCraft/trust/ into the chain
 	}
 
 }
