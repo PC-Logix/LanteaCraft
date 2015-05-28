@@ -2,7 +2,6 @@ package lc.client.render;
 
 import java.util.ArrayList;
 
-import lc.ResourceAccess;
 import lc.client.models.ModelError;
 import lc.client.models.loader.WavefrontModel.WavefrontModelException;
 import lc.client.opengl.BufferDisplayList;
@@ -11,6 +10,7 @@ import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.configuration.xml.ComponentConfig;
+import lc.common.resource.ResourceAccess;
 import net.minecraft.client.Minecraft;
 
 import org.lwjgl.opengl.GL11;

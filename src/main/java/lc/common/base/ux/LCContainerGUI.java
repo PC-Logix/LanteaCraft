@@ -15,10 +15,10 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
 
-import lc.ResourceAccess;
 import lc.api.stargate.StargateType;
 import lc.client.opengl.BufferTexture;
 import lc.common.LCLog;
+import lc.common.resource.ResourceAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;

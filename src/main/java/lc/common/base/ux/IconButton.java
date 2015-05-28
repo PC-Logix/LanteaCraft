@@ -1,6 +1,6 @@
 package lc.common.base.ux;
 
-import lc.ResourceAccess;
+import lc.common.resource.ResourceAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 

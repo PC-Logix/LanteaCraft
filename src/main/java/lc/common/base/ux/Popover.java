@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL12;
 
 import com.google.common.collect.Lists;
 
-import lc.ResourceAccess;
+import lc.common.resource.ResourceAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;

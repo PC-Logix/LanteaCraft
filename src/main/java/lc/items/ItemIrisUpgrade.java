@@ -10,12 +10,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import lc.ResourceAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.stargate.IrisType;
 import lc.common.base.LCItem;
 import lc.common.configuration.xml.ComponentConfig;
+import lc.common.resource.ResourceAccess;
 
 @Definition(name = "irisUpgrade", type = ComponentType.STARGATE, itemClass = ItemIrisUpgrade.class)
 public class ItemIrisUpgrade extends LCItem {

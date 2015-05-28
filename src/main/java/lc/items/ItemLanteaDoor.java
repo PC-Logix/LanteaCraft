@@ -7,9 +7,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import lc.ResourceAccess;
 import lc.common.base.LCItemBlock;
 import lc.common.configuration.xml.ComponentConfig;
+import lc.common.resource.ResourceAccess;
 
 public class ItemLanteaDoor extends LCItemBlock {
 

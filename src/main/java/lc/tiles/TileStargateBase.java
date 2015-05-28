@@ -253,6 +253,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		} else {
 			currentConnection = connection;
 		}
+		// TODO: Send the connection state to the client
 	}
 
 	@Override

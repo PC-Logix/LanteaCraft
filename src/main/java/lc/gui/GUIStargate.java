@@ -7,13 +7,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import lc.ResourceAccess;
 import lc.api.stargate.IStargateAccess;
 import lc.common.base.ux.IconButton;
 import lc.common.base.ux.LCContainerGUI;
 import lc.common.base.ux.LCContainerTab;
 import lc.common.base.ux.LCTabbedSlot;
 import lc.common.base.ux.Popover;
+import lc.common.resource.ResourceAccess;
 import lc.container.ContainerStargate;
 import lc.tiles.TileStargateBase;
 

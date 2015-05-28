@@ -4,6 +4,7 @@ import java.security.CodeSource;
 import java.security.cert.Certificate;
 
 import lc.api.IModInfo;
+import lc.common.resource.ResourceAccess;
 import cpw.mods.fml.common.CertificateHelper;
 
 /**

@@ -1,4 +1,4 @@
-package lc;
+package lc.common.resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import lc.BuildInfo;
+import lc.LCRuntime;
 import lc.common.LCLog;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.configuration.xml.ConfigHelper;

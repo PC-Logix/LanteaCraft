@@ -2,7 +2,6 @@ package lc.blocks;
 
 import java.util.List;
 
-import lc.ResourceAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.rendering.IBlockRenderInfo;
@@ -11,6 +10,7 @@ import lc.common.base.LCBlock;
 import lc.common.base.LCTile;
 import lc.common.base.multiblock.MultiblockState;
 import lc.common.configuration.xml.ComponentConfig;
+import lc.common.resource.ResourceAccess;
 import lc.items.ItemBlockStargateRing;
 import lc.tiles.TileStargateRing;
 import net.minecraft.block.material.Material;

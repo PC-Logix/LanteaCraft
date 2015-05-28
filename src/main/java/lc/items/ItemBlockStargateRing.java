@@ -1,9 +1,9 @@
 package lc.items;
 
-import lc.ResourceAccess;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItemBlock;
 import lc.common.configuration.xml.ComponentConfig;
+import lc.common.resource.ResourceAccess;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;

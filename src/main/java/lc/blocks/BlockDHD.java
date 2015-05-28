@@ -13,13 +13,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import lc.LCRuntime;
 import lc.LanteaCraft;
-import lc.ResourceAccess;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
 import lc.api.rendering.IBlockRenderInfo;
 import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
 import lc.common.configuration.xml.ComponentConfig;
+import lc.common.resource.ResourceAccess;
 import lc.items.ItemBlockDHD;
 import lc.tiles.TileDHD;
 
