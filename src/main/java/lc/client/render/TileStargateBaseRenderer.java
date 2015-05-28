@@ -1,5 +1,6 @@
 package lc.client.render;
 
+import lc.api.stargate.StargateType;
 import lc.client.models.ModelStargate;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
@@ -7,6 +8,7 @@ import lc.common.base.multiblock.MultiblockState;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
+import lc.common.resource.ResourceMap;
 import lc.tiles.TileStargateBase;
 import net.minecraft.util.ResourceLocation;
 
@@ -20,20 +22,27 @@ import org.lwjgl.opengl.GL11;
  */
 public class TileStargateBaseRenderer extends LCTileRenderer {
 
-	/** The frame texture resource */
-	public final ResourceLocation texFrame;
-	/** The glyph texture resource */
-	public final ResourceLocation texGlyphs;
+	/** The texture resource map */
+	public final ResourceMap resources = new ResourceMap();
 
 	/** The Stargate model */
 	public final ModelStargate model;
 
 	/** Default constructor */
 	public TileStargateBaseRenderer() {
-		texFrame = ResourceAccess.getNamedResource(ResourceAccess
-				.formatResourceName("textures/tileentity/stargate_${TEX_QUALITY}.png"));
-		texGlyphs = ResourceAccess.getNamedResource(ResourceAccess
-				.formatResourceName("textures/tileentity/stargate_glyphs_${TEX_QUALITY}.png"));
+		for (StargateType type : StargateType.values()) {
+			ResourceLocation fr, gl;
+			String suffix = (type.getSuffix() != null && type.getSuffix().length() > 0) ? "_" + type.getSuffix()
+					+ "_${TEX_QUALITY}.png" : "_${TEX_QUALITY}.png";
+			fr = ResourceAccess.getNamedResource(ResourceAccess.formatResourceName("textures/tileentity/stargate"
+					+ suffix));
+			gl = ResourceAccess.getNamedResource(ResourceAccess
+					.formatResourceName("textures/tileentity/stargate_glyphs" + suffix));
+			ResourceMap map = new ResourceMap();
+			map.add("frame", fr).add("glyphs", gl);
+			resources.add(type.getName(), map);
+		}
+
 		model = new ModelStargate();
 		model.init();
 	}

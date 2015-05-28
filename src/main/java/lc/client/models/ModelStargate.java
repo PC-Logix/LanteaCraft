@@ -4,6 +4,7 @@ import static lc.client.opengl.GLHelper.pushTexVertex;
 import lc.client.opengl.BufferDisplayList;
 import lc.client.render.TileStargateBaseRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
+import lc.common.resource.ResourceMap;
 import lc.common.util.math.Orientations;
 import lc.tiles.TileStargateBase;
 
@@ -120,7 +121,9 @@ public class ModelStargate {
 	 */
 	public void render(TileStargateBaseRenderer renderer, LCTileRenderPipeline tesr, TileStargateBase tile) {
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
-		tesr.bind(renderer.texFrame);
+		ResourceMap resources = renderer.resources;
+		ResourceMap textures = resources.map(tile.getStargateType().getName());
+		tesr.bind(textures.resource("frame"));
 		if (listShell.supported()) {
 			listShell.bind();
 			listShell.release();
@@ -138,7 +141,7 @@ public class ModelStargate {
 			GL11.glPopMatrix();
 		}
 
-		tesr.bind(renderer.texGlyphs);
+		tesr.bind(textures.resource("glyph"));
 		if (listRing.supported()) {
 			listRing.bind();
 			listRing.release();
