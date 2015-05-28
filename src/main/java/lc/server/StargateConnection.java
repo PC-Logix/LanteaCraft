@@ -2,21 +2,30 @@ package lc.server;
 
 import lc.api.stargate.MessagePayload;
 import lc.api.stargate.StargateAddress;
+import lc.api.stargate.StargateConnectionType;
 import lc.api.stargate.StargateState;
 import lc.tiles.TileStargateBase;
 
 public class StargateConnection {
 
+	public final StargateConnectionType type;
 	public final StargateAddress source, dest;
 	public TileStargateBase tileFrom, tileTo;
 
-	public StargateState state;
+	public StargateState state, next;
 	public int stateTimeout;
+	
+	public int diallingState, diallingTimeout;
 
-	public StargateConnection(StargateAddress source, StargateAddress dest) {
+	public StargateConnection(StargateConnectionType type, StargateAddress source, StargateAddress dest) {
+		this.type = type;
 		this.source = source;
 		this.dest = dest;
 		this.state = StargateState.IDLE;
+	}
+	
+	public void think() {
+		
 	}
 
 	public void sendUpdates() {
@@ -46,6 +55,11 @@ public class StargateConnection {
 		if (state != StargateState.CONNECTED)
 			return;
 		state = StargateState.DISCONNECTING;
+	}
+	
+	public void shutdown() {
+		state = StargateState.IDLE;
+		deleteConnection();
 	}
 
 	public void transmit(TileStargateBase source, MessagePayload payload) {

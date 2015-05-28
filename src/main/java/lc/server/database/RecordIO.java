@@ -23,6 +23,9 @@ public class RecordIO {
 		public void write(JsonWriter out, StargateRecord value) throws IOException {
 			out.beginObject();
 			out.name("address").value(value.address.getAddressString());
+			out.name("hasServer").value(value.server != null);
+			if (value.server != null)
+				out.name("server").value(value.server);
 			out.name("hasCoords").value(value.chunk != null);
 			if (value.chunk != null) {
 				out.name("dimension").value(value.dimension);
@@ -37,6 +40,9 @@ public class RecordIO {
 			in.beginObject();
 			StargateRecord result = new StargateRecord();
 			result.address = new StargateAddress(in.nextString().toCharArray());
+			boolean hasServer = in.nextBoolean();
+			if (hasServer)
+				result.server = in.nextString();
 			boolean hasCoords = in.nextBoolean();
 			if (hasCoords) {
 				result.dimension = in.nextInt();

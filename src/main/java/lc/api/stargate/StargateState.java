@@ -13,4 +13,24 @@ public enum StargateState {
 
 	/** The gate is disconnecting */
 	DISCONNECTING;
+
+	public static StargateState nextState(StargateState state) {
+		switch (state) {
+		case CONNECTED:
+			return DISCONNECTING;
+		case DIALLING:
+			return CONNECTED;
+		case DISCONNECTING:
+			return IDLE;
+		case FAILED:
+			return IDLE;
+		case IDLE:
+		default:
+			return IDLE;
+		}
+	}
+
+	public StargateState nextState() {
+		return StargateState.nextState(this);
+	}
 }
