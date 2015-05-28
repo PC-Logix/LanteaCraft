@@ -34,7 +34,7 @@ public class ServerEventHooks {
 
 	public void onServerStopping(FMLServerStoppingEvent event) {
 		serverHints.universeMgr.unloadUniverse(event);
-		serverHints.stargateMgr.closeAllConnections();
+		serverHints.stargateMgr.closeAllConnections(true);
 	}
 
 	@SubscribeEvent
