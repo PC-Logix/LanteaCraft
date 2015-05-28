@@ -11,6 +11,7 @@ import lc.api.stargate.IrisState;
 import lc.api.stargate.IrisType;
 import lc.api.stargate.MessagePayload;
 import lc.api.stargate.StargateAddress;
+import lc.api.stargate.StargateState;
 import lc.api.stargate.StargateType;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
@@ -148,14 +149,26 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void thinkClient() {
-		// TODO Auto-generated method stub
+		if (currentConnection != null) {
+			thinkClientRender();
+			thinkClientSound();
+		}
 	}
+	
+	/** Called to update the sound **/
+	private void thinkClientSound() { }
+	/** Called to update the rendering properties */
+	private void thinkClientRender() { }
 
 	@Override
 	public void thinkServer() {
-		// TODO Auto-generated method stub
-
+		if (currentConnection != null) {
+			thinkServerWormhole();
+		}
 	}
+	
+	/** Called to update the wormhole behaviour */
+	private void thinkServerWormhole() { }
 
 	@Override
 	public boolean shouldRender() {
@@ -235,8 +248,11 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	public void notifyState(StargateConnection connection) {
-		currentConnection = connection;
-
+		if (connection.state == StargateState.IDLE) {
+			currentConnection = null;
+		} else {
+			currentConnection = connection;
+		}
 	}
 
 	@Override
