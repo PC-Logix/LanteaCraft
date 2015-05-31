@@ -22,6 +22,7 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.util.data.ImmutablePair;
+import lc.common.util.data.StateMap;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.game.BlockHelper;
 import lc.common.util.game.SlotFilter;
@@ -82,9 +83,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 	};
 
-	private StargateConnection currentConnection;
-	private Block clientSkinBlock;
+	private StargateConnection currentConnection = null;
+	private Block clientSkinBlock = null;
 	private int clientSkinBlockMetadata;
+	private StateMap clientRenderState = new StateMap();
 
 	private FilteredInventory inventory = new FilteredInventory(1) {
 		@Override
@@ -241,6 +243,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			compound.setString("skin-block", BlockHelper.saveBlock(block, metadata));
 			markNbtDirty();
 		}
+	}
+
+	public StateMap modelState() {
+		return clientRenderState;
 	}
 
 	public boolean hasState() {

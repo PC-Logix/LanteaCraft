@@ -5,6 +5,7 @@ import lc.client.opengl.BufferDisplayList;
 import lc.client.render.TileStargateBaseRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.resource.ResourceMap;
+import lc.common.util.data.StateMap;
 import lc.common.util.math.Orientations;
 import lc.tiles.TileStargateBase;
 
@@ -118,8 +119,11 @@ public class ModelStargate {
 	 *            The tile rendering hook
 	 * @param tile
 	 *            The tile entity
+	 * @param state
+	 *            The model state
 	 */
-	public void render(TileStargateBaseRenderer renderer, LCTileRenderPipeline tesr, TileStargateBase tile) {
+	public void render(TileStargateBaseRenderer renderer, LCTileRenderPipeline tesr, TileStargateBase tile,
+			StateMap state) {
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
 		ResourceMap resources = renderer.resources;
 		ResourceMap textures = resources.map(tile.getStargateType().getName());
@@ -133,20 +137,30 @@ public class ModelStargate {
 		for (int i = 0; i < numChevrons; i++) {
 			GL11.glPushMatrix();
 			GL11.glRotated(chevronRotations[i], 0.0f, 0.0f, 1.0f);
-			if (listChevron.supported()) {
-				listChevron.bind();
-				listChevron.release();
+			boolean lit = state.get("chevron-" + i, false);
+			GL11.glTranslated(state.get("chevron-dist-" + i, 0.0d), 0, 0);
+			if (listChevron.supported() && listLitChevron.supported()) {
+				if (lit) {
+					listLitChevron.bind();
+					listLitChevron.release();
+				} else {
+					listChevron.bind();
+					listChevron.release();
+				}
 			} else
-				renderChevronImmediate(false);
+				renderChevronImmediate(lit);
 			GL11.glPopMatrix();
 		}
 
 		tesr.bind(textures.resource("glyph"));
+		GL11.glPushMatrix();
+		GL11.glRotated(state.get("ring-rotation", 0.0d), 0.0f, 0.0f, 1.0f);
 		if (listRing.supported()) {
 			listRing.bind();
 			listRing.release();
 		} else
 			renderRingImmediate();
+		GL11.glPopMatrix();
 	}
 
 	private void renderShellImmediate() {

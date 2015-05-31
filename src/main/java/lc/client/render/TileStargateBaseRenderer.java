@@ -67,7 +67,7 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 			if (base.getState() == MultiblockState.FORMED) {
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5d, y + 3.5d, z + 0.5d);
-				model.render(this, renderer, (TileStargateBase) tile);
+				model.render(this, renderer, base, base.modelState());
 				GL11.glPopMatrix();
 			}
 		}
