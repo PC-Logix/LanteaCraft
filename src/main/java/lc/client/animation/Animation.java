@@ -1,53 +1,120 @@
 package lc.client.animation;
 
-import java.util.ArrayList;
-
-import lc.common.util.data.ImmutablePair;
+import java.util.HashMap;
 
 public abstract class Animation {
 
-	private int time = 0, duration = 0;
-	private ArrayList<ImmutablePair<Integer, Keyframe>> frames;
-	private ArrayList<Keyframe> runningFrames;
-
-	public Animation() {
-		frames = new ArrayList<ImmutablePair<Integer, Keyframe>>();
-		runningFrames = new ArrayList<Keyframe>();
+	/**
+	 * The tween interpolation mode.
+	 * 
+	 * @author AfterLifeLochie
+	 *
+	 */
+	public static enum InterpolationMode {
+		/** Linear (no easing) */
+		LINEAR,
+		/** Smooth-step (little easing) */
+		SMOOTHSTEP,
+		/** Fast acceleration */
+		SQUARE,
+		/** Fast deceleration */
+		INVSQUARE,
+		/** Faster acceleration */
+		CUBED,
+		/** Faster deceleration */
+		INVCUBED,
+		/** Sinusoidal curve */
+		SIN,
+		/** Inverse sinusoidal curve */
+		INVSIN;
 	}
 
-	public void init() {
-		duration = 0;
-		for (ImmutablePair<Integer, Keyframe> frame : frames) {
-			int end = frame.getA() + frame.getB().duration();
-			if (end > duration)
-				duration = end;
+	private class Property {
+		private Double start, end;
+		private InterpolationMode mode;
+
+		public Property(Double start, Double end, InterpolationMode mode) {
+			this.start = start;
+			this.end = end;
+			this.mode = mode;
+		}
+
+		public Double readProperty(Double fracT) {
+			Double fxFracT = 0.0d;
+			switch (mode) {
+			default:
+			case LINEAR:
+				return (start * fracT) + (end * (1.0d - fracT));
+			case SMOOTHSTEP:
+				fxFracT = ((fracT) * (fracT) * (3.0d - 2.0d * (fracT)));
+				return (start * fxFracT) + (end * (1 - fxFracT));
+			case SQUARE:
+				fxFracT = (fracT) * (fracT);
+				return (start * fxFracT) + (end * (1.0d - fxFracT));
+			case INVSQUARE:
+				fxFracT = 1.0d - (1.0d - fracT) * (1.0d - fracT);
+				return (start * fxFracT) + (end * (1.0d - fxFracT));
+			case CUBED:
+				fxFracT = (fracT) * (fracT) * (fracT);
+				return (start * fxFracT) + (end * (1.0d - fxFracT));
+			case INVCUBED:
+				fxFracT = 1.0d - (1.0d - fracT) * (1.0d - fracT) * (1.0d - fracT);
+				return (start * fxFracT) + (end * (1.0d - fxFracT));
+			case SIN:
+				fxFracT = Math.sin(fracT * Math.PI / 2.0d);
+				return (start * fxFracT) + (end * (1.0d - fxFracT));
+			case INVSIN:
+				fxFracT = 1.0d - Math.sin((1.0d - fracT) * Math.PI / 2.0d);
+				return (start * fxFracT) + (end * (1.0d - fxFracT));
+			}
 		}
 	}
 
-	public void think() {
-		if (time > duration)
-			return;
+	private final Double duration;
+	private final HashMap<String, Property> properties;
 
-		for (Keyframe frame : runningFrames)
-			stepFrame(frame);
-
-		for (ImmutablePair<Integer, Keyframe> frame : frames)
-			if (frame.getA() == time) {
-				initFrame(frame.getB());
-				runningFrames.add(frame.getB());
-			}
-
-		time++;
+	/**
+	 * Create an animation of a specified length.
+	 * 
+	 * @param duration
+	 *            The total duration of the animation
+	 */
+	public Animation(Double duration) {
+		this.duration = duration;
+		this.properties = new HashMap<String, Property>();
 	}
 
-	private void initFrame(Keyframe b) {
-		// TODO Auto-generated method stub
-
+	/**
+	 * Add a property to the animation.
+	 * 
+	 * @param name
+	 *            The name of the property
+	 * @param start
+	 *            The start value of the property
+	 * @param end
+	 *            The end value of the property
+	 * @param mode
+	 *            The interpolation mode of the property
+	 */
+	public void addProperty(String name, Double start, Double end, InterpolationMode mode) {
+		this.properties.put(name, new Property(start, end, mode));
 	}
 
-	private void stepFrame(Keyframe frame) {
-		// TODO Auto-generated method stub
-
+	/**
+	 * Read a property at a specified frame time.
+	 * 
+	 * @param name
+	 *            The name of the property
+	 * @param time
+	 *            The time to read at
+	 * @return The value of the property at the time
+	 */
+	public Double readProperty(String name, Double time) {
+		Property property = properties.get(name);
+		if (property != null)
+			return property.readProperty(time / duration);
+		else
+			throw new IllegalArgumentException("No such property found.");
 	}
 
 }
