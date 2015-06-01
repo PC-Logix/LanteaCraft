@@ -13,6 +13,7 @@ import lc.api.stargate.MessagePayload;
 import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateState;
 import lc.api.stargate.StargateType;
+import lc.client.animation.Animation;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
@@ -89,6 +90,9 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	private Block clientSkinBlock = null;
 	private int clientSkinBlockMetadata;
+	
+	private Animation clientAnimation = null;
+	private double clientAnimationCounter = 0.0d;
 	private StateMap clientRenderState = new StateMap();
 
 	/** Client Stargate state - used only for rendering */
@@ -186,6 +190,14 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	/** Called to update the wormhole behaviour */
 	private void thinkServerWormhole() {
+	}
+
+	public Animation getAnimation() {
+		return clientAnimation;
+	}
+	
+	public double getAnimationProgress() {
+		return clientAnimationCounter;
 	}
 
 	@Override

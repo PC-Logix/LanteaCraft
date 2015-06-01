@@ -37,7 +37,6 @@ public class ModelStargate {
 	private final static double chevronWidth = 0.5;
 	private final static double chevronDepth = 0.0625d;
 	private final static double chevronBorderWidth = chevronWidth / 6;
-	private final static double chevronMotionDistance = 1 / 16.0d;
 	private final static double chevronAngle = 360.0 / numChevrons;
 	private final static double chevronAngleOffset = -90.0 + chevronWidth;
 

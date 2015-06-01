@@ -1,6 +1,9 @@
 package lc.client.animation;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+
+import lc.common.util.data.StateMap;
 
 public abstract class Animation {
 
@@ -115,6 +118,30 @@ public abstract class Animation {
 			return property.readProperty(time / duration);
 		else
 			throw new IllegalArgumentException("No such property found.");
+	}
+
+	/**
+	 * Sample the properties from the current animation into the StateMap
+	 * provided. The values in the state-map which are named identically to the
+	 * animation are overwritten.
+	 * 
+	 * @param map
+	 *            The state map
+	 * @param time
+	 *            The time to sample
+	 */
+	public void sampleProperties(StateMap map, Double time) {
+		for (Entry<String, Property> rec : properties.entrySet())
+			map.set(rec.getKey(), rec.getValue().readProperty(time / duration));
+	}
+
+	/**
+	 * Check if the animation is finished beyond a certain time.
+	 * 
+	 * @return If an animation has finished beyond a certain time value
+	 */
+	public boolean finished(Double time) {
+		return (time > duration);
 	}
 
 }
