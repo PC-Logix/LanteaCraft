@@ -156,11 +156,14 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			thinkClientSound();
 		}
 	}
-	
+
 	/** Called to update the sound **/
-	private void thinkClientSound() { }
+	private void thinkClientSound() {
+	}
+
 	/** Called to update the rendering properties */
-	private void thinkClientRender() { }
+	private void thinkClientRender() {
+	}
 
 	@Override
 	public void thinkServer() {
@@ -168,9 +171,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			thinkServerWormhole();
 		}
 	}
-	
+
 	/** Called to update the wormhole behaviour */
-	private void thinkServerWormhole() { }
+	private void thinkServerWormhole() {
+	}
 
 	@Override
 	public boolean shouldRender() {
@@ -249,11 +253,15 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		return clientRenderState;
 	}
 
-	public boolean hasState() {
+	public boolean hasConnectionState() {
 		return currentConnection != null;
 	}
 
-	public void notifyState(StargateConnection connection) {
+	public StargateConnection getConnectionState() {
+		return currentConnection;
+	}
+
+	public void notifyConnectionState(StargateConnection connection) {
 		if (connection.state == StargateState.IDLE) {
 			currentConnection = null;
 		} else {
