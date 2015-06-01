@@ -90,11 +90,13 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	private Block clientSkinBlock = null;
 	private int clientSkinBlockMetadata;
-	
+
 	private Animation clientAnimation = null;
 	private double clientAnimationCounter = 0.0d;
 	private StateMap clientRenderState = new StateMap();
 
+	/** Client flag - used to notify new data */
+	private boolean clientSeenState = true;
 	/** Client Stargate state - used only for rendering */
 	private StargateState clientStargateState;
 	/** Client state timeout - used only for rendering */
@@ -167,7 +169,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void thinkClient() {
-		if (currentConnection != null) {
+		if (!clientSeenState) {
+			clientSeenState = true;
 			thinkClientRender();
 			thinkClientSound();
 		}
@@ -179,6 +182,15 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	/** Called to update the rendering properties */
 	private void thinkClientRender() {
+
+	}
+
+	private void thinkChangeAnimation(Animation next) {
+		if (clientAnimation != null) {
+			clientAnimation.sampleProperties(clientRenderState);
+		}
+		clientAnimation = next;
+		clientAnimationCounter = 0;
 	}
 
 	@Override
@@ -195,7 +207,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	public Animation getAnimation() {
 		return clientAnimation;
 	}
-	
+
 	public double getAnimationProgress() {
 		return clientAnimationCounter;
 	}
@@ -247,6 +259,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			clientStargateStateTime = state.stateTimeout;
 			clientDiallingProgress = state.diallingProgress;
 			clientDiallingTimeout = state.diallingTimeout;
+			clientSeenState = false;
 		}
 	}
 

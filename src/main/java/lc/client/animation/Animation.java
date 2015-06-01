@@ -136,6 +136,19 @@ public abstract class Animation {
 	}
 
 	/**
+	 * Sample the properties from the current animation into the StateMap
+	 * provided. The values in the state-map which are named identically to the
+	 * animation are overwritten.
+	 * 
+	 * @param map
+	 *            The state map
+	 */
+	public void sampleProperties(StateMap map) {
+		for (Entry<String, Property> rec : properties.entrySet())
+			map.set(rec.getKey(), 1.0d);
+	}
+
+	/**
 	 * Check if the animation is finished beyond a certain time.
 	 * 
 	 * @return If an animation has finished beyond a certain time value

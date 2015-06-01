@@ -21,12 +21,12 @@ public class StargateConnection {
 	/** The Stargate state */
 	public StargateState state;
 	/** The timeout until this state ends */
-	public int stateTimeout;
+	public int stateTimeout = 0;
 
 	/** The dial-progress */
-	public int diallingProgress;
+	public int diallingProgress = 0;
 	/** The dial-state timeout */
-	public int diallingTimeout;
+	public int diallingTimeout = 0;
 
 	/** The connection live state */
 	public boolean dead = false;
@@ -130,6 +130,7 @@ public class StargateConnection {
 	public void openConnection() {
 		if (state != StargateState.IDLE)
 			return;
+		diallingTimeout = 40;
 		changeState(StargateState.DIALLING, 0);
 	}
 
