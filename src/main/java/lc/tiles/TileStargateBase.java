@@ -15,6 +15,9 @@ import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateState;
 import lc.api.stargate.StargateType;
 import lc.client.animation.Animation;
+import lc.client.render.animations.ChevronMoveAnimation;
+import lc.client.render.animations.ChevronReleaseAnimation;
+import lc.client.render.animations.RingSpinAnimation;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
@@ -24,12 +27,14 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCStargatePacket;
 import lc.common.network.packets.LCTileSync;
+import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.data.StateMap;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.game.BlockHelper;
 import lc.common.util.game.SlotFilter;
 import lc.common.util.math.DimensionPos;
+import lc.common.util.math.MathUtils;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.server.HintProviderServer;
@@ -105,6 +110,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private int clientStargateStateTime;
 	/** Client dialling progress - used only for rendering */
 	private int clientDiallingProgress;
+	/** Client dialling symbol ID - used only for rendering */
+	private int clientDiallingSymbol;
 	/** Client dialling timeout - used only for rendering */
 	private int clientDiallingTimeout;
 
@@ -191,6 +198,40 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			if (animationQueue.peek() != null)
 				thinkChangeAnimation(animationQueue.pop());
 		}
+
+		if (updated) {
+			/* We probably need to push new frames now */
+			switch (clientStargateState) {
+			case CONNECTED:
+				break;
+			case DIALLING:
+				// TODO: This is ripped from the old source. Check that it
+				// actually produces the right angle under the new rendering
+				// scheme. It probably doesn't, but hey, that's half the fun? /s
+				int symbolIndex = StargateCharsetHelper.singleton().index((char) clientDiallingSymbol);
+				int whichChevron = clientDiallingProgress;
+				double chevronAngle = (360.0d / 9.0d) * whichChevron;
+				double symbolRotation = symbolIndex * (360.0 / 38.0d);
+				double dest = symbolRotation;
+				double aangle = MathUtils.normaliseAngle(dest);
+				animationQueue.push(new RingSpinAnimation(clientDiallingTimeout - 5.0d, 0.0d, aangle, true));
+				animationQueue.push(new ChevronMoveAnimation(clientDiallingProgress, true));
+				break;
+			case DISCONNECTING:
+				animationQueue.push(new ChevronReleaseAnimation(9, true));
+				animationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
+				break;
+			case FAILED:
+				animationQueue.push(new ChevronReleaseAnimation(9, true));
+				animationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
+				break;
+			case IDLE:
+				break;
+			default:
+				break;
+
+			}
+		}
 	}
 
 	private void thinkChangeAnimation(Animation next) {
@@ -198,6 +239,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			clientAnimation.sampleProperties(clientRenderState);
 		clientAnimation = next;
 		clientAnimationCounter = 0;
+		if (clientAnimation.requiresResampling())
+			clientAnimation.resampleProperties(clientRenderState);
 	}
 
 	@Override
@@ -265,6 +308,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			clientStargateState = state.state;
 			clientStargateStateTime = state.stateTimeout;
 			clientDiallingProgress = state.diallingProgress;
+			clientDiallingSymbol = state.diallingSymbol;
 			clientDiallingTimeout = state.diallingTimeout;
 			clientSeenState = false;
 		}
@@ -319,7 +363,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			currentConnection = connection;
 		}
 		LCStargatePacket state = new LCStargatePacket(new DimensionPos(this), currentConnection.state,
-				currentConnection.stateTimeout, currentConnection.diallingProgress, currentConnection.diallingTimeout);
+				currentConnection.stateTimeout, currentConnection.diallingProgress, currentConnection.diallingSymbol,
+				currentConnection.diallingTimeout);
 		sendPacketToClients(state);
 	}
 

@@ -18,6 +18,8 @@ public class LCStargatePacket extends LCTargetPacket {
 
 	/** The dial-progress */
 	public int diallingProgress;
+	/** The dial-symbol */
+	public int diallingSymbol;
 	/** The dial-state timeout */
 	public int diallingTimeout;
 
@@ -32,11 +34,12 @@ public class LCStargatePacket extends LCTargetPacket {
 	 *            The target element
 	 */
 	public LCStargatePacket(DimensionPos target, StargateState state, int stateTimeout, int diallingProgress,
-			int diallingTimeout) {
+			int diallingSymbol, int diallingTimeout) {
 		this.target = target;
 		this.state = state;
 		this.stateTimeout = stateTimeout;
 		this.diallingProgress = diallingProgress;
+		this.diallingSymbol = diallingSymbol;
 		this.diallingTimeout = diallingTimeout;
 	}
 
@@ -46,6 +49,7 @@ public class LCStargatePacket extends LCTargetPacket {
 		buffer.writeInt(state.ordinal());
 		buffer.writeInt(stateTimeout);
 		buffer.writeInt(diallingProgress);
+		buffer.writeInt(diallingSymbol);
 		buffer.writeInt(diallingTimeout);
 	}
 
@@ -55,6 +59,7 @@ public class LCStargatePacket extends LCTargetPacket {
 		this.state = StargateState.values()[buffer.readInt()];
 		this.stateTimeout = buffer.readInt();
 		this.diallingProgress = buffer.readInt();
+		this.diallingSymbol = buffer.readInt();
 		this.diallingTimeout = buffer.readInt();
 	}
 }

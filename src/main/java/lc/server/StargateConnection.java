@@ -25,6 +25,8 @@ public class StargateConnection {
 
 	/** The dial-progress */
 	public int diallingProgress = 0;
+	/** The currently dialling symbol */
+	public int diallingSymbol = 0;
 	/** The dial-state timeout */
 	public int diallingTimeout = 0;
 
@@ -71,6 +73,7 @@ public class StargateConnection {
 		diallingTimeout--;
 		if (diallingTimeout <= 0) {
 			diallingProgress++;
+			diallingSymbol = dest.getAddress()[diallingProgress];
 			if (diallingProgress >= dest.getAddress().length) {
 				thinkPerformConnection();
 			} else {
@@ -131,6 +134,7 @@ public class StargateConnection {
 		if (state != StargateState.IDLE)
 			return;
 		diallingTimeout = 40;
+		diallingSymbol = dest.getAddress()[0];
 		changeState(StargateState.DIALLING, 0);
 	}
 
