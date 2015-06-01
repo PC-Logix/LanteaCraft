@@ -33,8 +33,8 @@ public abstract class Animation {
 	}
 
 	private class Property {
-		private Double start, end;
-		private InterpolationMode mode;
+		protected Double start, end;
+		protected InterpolationMode mode;
 
 		public Property(Double start, Double end, InterpolationMode mode) {
 			this.start = start;
@@ -75,16 +75,20 @@ public abstract class Animation {
 
 	private final Double duration;
 	private final HashMap<String, Property> properties;
+	private final boolean requiresResampling;
 
 	/**
 	 * Create an animation of a specified length.
 	 * 
 	 * @param duration
 	 *            The total duration of the animation
+	 * @param resample
+	 *            If re-sampling is required at the start of the animation
 	 */
-	public Animation(Double duration) {
+	public Animation(Double duration, boolean resample) {
 		this.duration = duration;
 		this.properties = new HashMap<String, Property>();
+		this.requiresResampling = resample;
 	}
 
 	/**
@@ -146,6 +150,31 @@ public abstract class Animation {
 	public void sampleProperties(StateMap map) {
 		for (Entry<String, Property> rec : properties.entrySet())
 			map.set(rec.getKey(), 1.0d);
+	}
+
+	/**
+	 * Sample the properties from the StateMap into the current animation. The
+	 * start frame in the animation properties which are named identically to
+	 * the animation are overwritten.
+	 * 
+	 * @param map
+	 *            The state map
+	 */
+	public void resampleProperties(StateMap map) {
+		for (Entry<String, Property> rec : properties.entrySet()) {
+			Object zz = map.get(rec.getKey());
+			if (zz != null && zz instanceof Double)
+				rec.getValue().start = (Double) zz;
+		}
+	}
+
+	/**
+	 * Check if this Animation requires resampling before use.
+	 * 
+	 * @return If this Animation requests it be resampled before use
+	 */
+	public boolean requiresResampling() {
+		return requiresResampling;
 	}
 
 	/**
