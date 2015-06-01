@@ -20,12 +20,14 @@ import lc.common.base.multiblock.StructureConfiguration;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
+import lc.common.network.packets.LCStargatePacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.data.StateMap;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.game.BlockHelper;
 import lc.common.util.game.SlotFilter;
+import lc.common.util.math.DimensionPos;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.server.HintProviderServer;
@@ -84,9 +86,19 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	};
 
 	private StargateConnection currentConnection = null;
+
 	private Block clientSkinBlock = null;
 	private int clientSkinBlockMetadata;
 	private StateMap clientRenderState = new StateMap();
+
+	/** Client Stargate state - used only for rendering */
+	private StargateState clientStargateState;
+	/** Client state timeout - used only for rendering */
+	private int clientStargateStateTime;
+	/** Client dialling progress - used only for rendering */
+	private int clientDiallingProgress;
+	/** Client dialling timeout - used only for rendering */
+	private int clientDiallingTimeout;
 
 	private FilteredInventory inventory = new FilteredInventory(1) {
 		@Override
@@ -217,6 +229,13 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					clientSkinBlockMetadata = 0;
 				}
 			}
+		if (packet instanceof LCStargatePacket) {
+			LCStargatePacket state = (LCStargatePacket) packet;
+			clientStargateState = state.state;
+			clientStargateStateTime = state.stateTimeout;
+			clientDiallingProgress = state.diallingProgress;
+			clientDiallingTimeout = state.diallingTimeout;
+		}
 	}
 
 	@Override
@@ -267,7 +286,9 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		} else {
 			currentConnection = connection;
 		}
-		// TODO: Send the connection state to the client
+		LCStargatePacket state = new LCStargatePacket(new DimensionPos(this), currentConnection.state,
+				currentConnection.stateTimeout, currentConnection.diallingProgress, currentConnection.diallingTimeout);
+		sendPacketToClients(state);
 	}
 
 	@Override

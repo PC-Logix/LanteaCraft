@@ -369,10 +369,14 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
 			sendPackets(packets);
 			for (LCPacket packet : packets)
-				LCRuntime.runtime.network().sendScoped(packet, 128.0d);
+				sendPacketToClients(packet);
 		} catch (LCNetworkException e) {
 			LCLog.warn("Error sending network update.", e);
 		}
+	}
+
+	protected void sendPacketToClients(LCPacket packet) {
+		LCRuntime.runtime.network().sendScoped(packet, 128.0d);
 	}
 
 	private void sendUpdatesToClient(EntityPlayerMP player) {
@@ -380,10 +384,14 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
 			sendPackets(packets);
 			for (LCPacket packet : packets)
-				LCRuntime.runtime.network().sendTo(packet, player);
+				sendPacketToClient(packet, player);
 		} catch (LCNetworkException e) {
 			LCLog.warn("Error sending network update.", e);
 		}
+	}
+	
+	protected void sendPacketToClient(LCPacket packet, EntityPlayerMP player) {
+		LCRuntime.runtime.network().sendTo(packet, player);
 	}
 
 	@Override
