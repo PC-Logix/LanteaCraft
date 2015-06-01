@@ -36,25 +36,53 @@ public class StargateManager implements ITickEventHandler {
 	}
 
 	public void closeConnection(TileStargateBase tile, char[] address) {
+		synchronized (connections) {
 
+		}
 	}
 
 	public void closeConnectionsIn(int dimensionId) {
-
+		ArrayList<StargateConnection> dc = null;
+		synchronized (connections) {
+			dc = connections.remove(dimensionId);
+		}
+		if (dc != null) {
+			Iterator<StargateConnection> iter = dc.iterator();
+			while (iter.hasNext())
+				iter.next().deleteConnection();
+		}
 	}
 
 	public void closeAllConnections(boolean now) {
-		
-		
+		synchronized (connections) {
+			Iterator<Integer> dimensions = connections.keySet().iterator();
+			while (dimensions.hasNext()) {
+				int dimension = dimensions.next();
+				ArrayList<StargateConnection> dc = connections.get(dimension);
+				Iterator<StargateConnection> iter = dc.iterator();
+				while (iter.hasNext())
+					iter.next().deleteConnection();
+				dimensions.remove();
+			}
+		}
 	}
 
 	@Override
 	public void think(Side what) {
 		if (what == Side.SERVER) {
-			Iterator<Integer> dimensions = connections.keySet().iterator();
-			while (dimensions.hasNext()) {
-				int dimension = dimensions.next();
-
+			synchronized (connections) {
+				Iterator<Integer> dimensions = connections.keySet().iterator();
+				while (dimensions.hasNext()) {
+					int dimension = dimensions.next();
+					ArrayList<StargateConnection> dc = connections.get(dimension);
+					Iterator<StargateConnection> iter = dc.iterator();
+					while (iter.hasNext()) {
+						StargateConnection conn = iter.next();
+						conn.think();
+						if (conn.dead)
+							iter.remove();
+					}
+				}
 			}
 		}
 	}
