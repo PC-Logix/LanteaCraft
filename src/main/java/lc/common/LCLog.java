@@ -229,6 +229,7 @@ public class LCLog {
 			}
 		} catch (Exception e) {
 			fatal(params);
+			throw new Error("A proxied assertion error in LanteaCraft occurred.");
 		}
 	}
 
