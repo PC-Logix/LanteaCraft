@@ -112,4 +112,12 @@ public abstract class LCContainerTab {
 	 *            The key number
 	 */
 	protected abstract void keyTyped(LCContainerGUI container, char c, int key);
+
+	/**
+	 * Called to tick the tab
+	 * 
+	 * @param container
+	 *            The container
+	 */
+	protected abstract void update(LCContainerGUI container);
 }

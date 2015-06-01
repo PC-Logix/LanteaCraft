@@ -100,6 +100,11 @@ public class GUIStargate extends LCContainerGUI {
 		protected void keyTyped(LCContainerGUI container, char c, int key) {
 			// TODO Auto-generated method stub
 		}
+
+		@Override
+		protected void update(LCContainerGUI container) {
+
+		}
 	}
 
 	/** Stargate options tab implementation */
@@ -175,6 +180,11 @@ public class GUIStargate extends LCContainerGUI {
 		@Override
 		protected void keyTyped(LCContainerGUI container, char c, int key) {
 			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		protected void update(LCContainerGUI container) {
 
 		}
 

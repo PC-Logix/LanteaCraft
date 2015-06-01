@@ -143,6 +143,8 @@ public abstract class LCContainerGUI extends GuiContainer {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
+		if (activeTab != null)
+			activeTab.update(this);
 		Iterator<Popover> i = popovers.iterator();
 		while (i.hasNext()) {
 			Popover what = i.next();
