@@ -105,6 +105,10 @@ public class HintProviderServer implements IHintProvider {
 		serverHookBus.onServerStopping(event);
 	}
 
+	/**
+	 * Gets the active Stargate manager
+	 * @return The active Stargate manager
+	 */
 	public StargateManager stargates() {
 		return stargateMgr;
 	}

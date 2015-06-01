@@ -5,7 +5,8 @@
 package lc.api.defs;
 
 /**
- * Global game definition container.
+ * Global game definition interface; all definitions in the game are
+ * quantifiable to exactly one game definition type.
  *
  * @author AfterLifeLochie
  *

@@ -19,11 +19,18 @@ import lc.common.configuration.xml.ComponentConfig;
 import lc.items.ItemLanteaDoor;
 import lc.tiles.TileLanteaDoor;
 
+/**
+ * LanteaCraft door block implementation
+ * @author AfterLifeLochie
+ *
+ */
 @Definition(name = "lanteaDoor", type = ComponentType.DECOR, blockClass = BlockLanteaDoor.class, itemBlockClass = ItemLanteaDoor.class, tileClass = TileLanteaDoor.class)
 public class BlockLanteaDoor extends LCBlock {
 
+	/** The block icon */
 	private IIcon doorIcon;
 
+	/** Default constructor */
 	public BlockLanteaDoor() {
 		super(Material.ground);
 		setOpaque(false);

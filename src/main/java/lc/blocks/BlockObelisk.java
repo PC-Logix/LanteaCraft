@@ -16,11 +16,17 @@ import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
 import lc.items.ItemBlockObelisk;
 
+/**
+ * Obelisk block implementation
+ * @author AfterLifeLochie
+ *
+ */
 @Definition(name = "blockObelisk", type = ComponentType.DECOR, blockClass = BlockObelisk.class, itemBlockClass = ItemBlockObelisk.class)
 public class BlockObelisk extends LCBlock {
 
 	private IIcon missing;
 
+	/** Default constructor */
 	public BlockObelisk() {
 		super(Material.ground);
 	}

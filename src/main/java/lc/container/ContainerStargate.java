@@ -8,11 +8,25 @@ import lc.common.base.inventory.FilteredSlot;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.tiles.TileStargateBase;
 
+/**
+ * Stargate container implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ContainerStargate extends LCContainer {
 
 	private TileStargateBase te;
 	private FilteredInventory filterInventory;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param tile
+	 *            The base tile
+	 * @param player
+	 *            The local player
+	 */
 	public ContainerStargate(TileStargateBase tile, EntityPlayer player) {
 		super(256, 208);
 		this.te = tile;

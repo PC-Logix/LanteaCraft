@@ -8,9 +8,15 @@ import lc.common.configuration.xml.ComponentConfig;
 import lc.items.ItemBlockTransportRing;
 import lc.tiles.TileTransportRing;
 
+/**
+ * Transporter ring block implementation
+ * @author AfterLifeLochie
+ *
+ */
 @Definition(name = "blockTransportRing", type = ComponentType.STARGATE, blockClass = BlockTransportRing.class, itemBlockClass = ItemBlockTransportRing.class, tileClass = TileTransportRing.class)
 public class BlockTransportRing extends LCBlock {
 
+	/** Default constructor */
 	public BlockTransportRing() {
 		super(Material.ground);
 		// TODO Auto-generated constructor stub

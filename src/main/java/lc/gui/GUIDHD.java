@@ -10,6 +10,12 @@ import lc.common.base.ux.LCContainerTab;
 import lc.container.ContainerDHD;
 import lc.tiles.TileDHD;
 
+/**
+ * DHD GUI implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class GUIDHD extends LCContainerGUI {
 
 	private static class DHDDefaultTab extends LCContainerTab {
@@ -80,6 +86,11 @@ public class GUIDHD extends LCContainerGUI {
 		tabs.put(0, new DHDDefaultTab());
 	}
 
+	/**
+	 * Default constructor 
+	 * @param tile The base tile
+	 * @param player The local player
+	 */
 	public GUIDHD(TileDHD tile, EntityPlayer player) {
 		super(tile, new ContainerDHD(tile, player));
 		switchTab(0);
