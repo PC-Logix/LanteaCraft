@@ -1,5 +1,6 @@
 package lc.tiles;
 
+import java.util.ArrayDeque;
 import java.util.List;
 
 import lc.LCRuntime;
@@ -92,6 +93,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private int clientSkinBlockMetadata;
 
 	private Animation clientAnimation = null;
+	private ArrayDeque<Animation> animationQueue = null;
 	private double clientAnimationCounter = 0.0d;
 	private StateMap clientRenderState = new StateMap();
 
@@ -169,26 +171,31 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void thinkClient() {
-		if (!clientSeenState) {
-			clientSeenState = true;
-			thinkClientRender();
-			thinkClientSound();
-		}
+		thinkClientRender(!clientSeenState);
+		thinkClientSound(!clientSeenState);
+		clientSeenState = true;
 	}
 
 	/** Called to update the sound **/
-	private void thinkClientSound() {
+	private void thinkClientSound(boolean updated) {
+
 	}
 
 	/** Called to update the rendering properties */
-	private void thinkClientRender() {
-
+	private void thinkClientRender(boolean updated) {
+		if (clientAnimation != null) {
+			clientAnimationCounter++;
+			if (clientAnimation.finished(clientAnimationCounter))
+				thinkChangeAnimation(animationQueue.pop());
+		} else {
+			if (animationQueue.peek() != null)
+				thinkChangeAnimation(animationQueue.pop());
+		}
 	}
 
 	private void thinkChangeAnimation(Animation next) {
-		if (clientAnimation != null) {
+		if (clientAnimation != null)
 			clientAnimation.sampleProperties(clientRenderState);
-		}
 		clientAnimation = next;
 		clientAnimationCounter = 0;
 	}
