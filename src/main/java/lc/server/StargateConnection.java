@@ -1,6 +1,10 @@
 package lc.server;
 
+import java.util.ArrayList;
+
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import lc.LCRuntime;
@@ -9,7 +13,12 @@ import lc.api.stargate.MessagePayload;
 import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateConnectionType;
 import lc.api.stargate.StargateState;
+import lc.common.LCLog;
+import lc.common.base.multiblock.MultiblockState;
 import lc.common.configuration.xml.ConfigHelper;
+import lc.common.util.ScanningHelper;
+import lc.common.util.math.ChunkPos;
+import lc.common.util.math.Vector3;
 import lc.server.database.StargateRecord;
 import lc.server.world.LCLoadedChunkManager.LCChunkTicket;
 import lc.tiles.TileStargateBase;
@@ -48,7 +57,8 @@ public class StargateConnection {
 		this.state = StargateState.IDLE;
 		this.ticketFrom = ((HintProviderServer) LCRuntime.runtime.hints()).chunkLoaders().requestTicket(
 				tileFrom.getWorldObj());
-		// TODO: Load the source gate chunks
+		ChunkPos origin = new ChunkPos(tileFrom);
+		ticketFrom.loadChunkRange(origin, -1, -1, 1, 1);
 		this.maxConnectionAge = (Integer) ConfigHelper.getOrSetParam(
 				LCRuntime.runtime.config().config(ComponentType.STARGATE), "Time", "Stargate", "maxConnectionAge",
 				"Maximum connection age in ticks", 6000);
@@ -99,16 +109,39 @@ public class StargateConnection {
 		if (tileTo != null)
 			return;
 		try {
-			// TODO: We're supposed to load the chunks in question here
 			WorldServer world = MinecraftServer.getServer().worldServerForDimension(dest.dimension);
 			if (world == null)
 				return;
+			if (ticketTo == null) {
+				ticketTo = ((HintProviderServer) LCRuntime.runtime.hints()).chunkLoaders().requestTicket(world);
+				ticketTo.loadChunkRange(dest.chunk, -1, -1, 1, 1);
+			}
 			Chunk chunk = world.getChunkFromChunkCoords(dest.chunk.cx, dest.chunk.cz);
 			if (chunk == null)
 				return;
+			ArrayList<Vector3> found = ScanningHelper.findAllTileEntitesOf(world, TileStargateBase.class,
+					16 * dest.chunk.cx, 0, 16 * dest.chunk.cz,
+					AxisAlignedBB.getBoundingBox(0, 0, 0, 15, world.getHeight(), 15));
+			Vector3 origin = new Vector3(16 * dest.chunk.cx, 0, 16 * dest.chunk.cz);
+			for (Vector3 vec : found) {
+				Vector3 real = vec.add(origin);
+				TileEntity tile = world.getTileEntity(real.floorX(), real.floorY(), real.floorZ());
+				if (tile != null) {
+					if (tile instanceof TileStargateBase) {
+						TileStargateBase stargate = (TileStargateBase) tile;
+						if (stargate.getState() != MultiblockState.FORMED)
+							continue;
+						if (stargate.hasConnectionState())
+							continue;
+						tileTo = stargate;
+						sendUpdates();
+					}
+				}
+			}
 
 		} catch (Exception e) {
 			// TODO: We need to actually sample some errors here
+			LCLog.warn("Problem scanning for Stargate.", e);
 		}
 	}
 

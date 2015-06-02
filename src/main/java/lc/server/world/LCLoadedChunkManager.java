@@ -28,6 +28,12 @@ public class LCLoadedChunkManager {
 			loaded.add(chunk);
 		}
 
+		public void loadChunkRange(ChunkPos origin, int ix, int iz, int mx, int mz) {
+			for (int x = ix; x <= mx; x++)
+				for (int z = iz; z <= mz; z++)
+					loadChunk(new ChunkPos(origin.cx + x, origin.cz + z));
+		}
+
 		public void unload() {
 			for (ChunkPos chunk : loaded)
 				ForgeChunkManager.unforceChunk(ticket, new ChunkCoordIntPair(chunk.cx, chunk.cz));
