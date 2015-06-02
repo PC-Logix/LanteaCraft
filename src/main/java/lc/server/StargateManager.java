@@ -9,6 +9,7 @@ import lc.LCRuntime;
 import lc.api.event.ITickEventHandler;
 import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateConnectionType;
+import lc.common.LCLog;
 import lc.common.util.math.ChunkPos;
 import lc.server.database.StargateRecord;
 import lc.tiles.TileStargateBase;
@@ -30,6 +31,10 @@ public class StargateManager implements ITickEventHandler {
 
 	public StargateConnection openConnection(TileStargateBase tile, StargateAddress address) {
 		StargateRecord what = server.universeMgr.findRecord(address);
+		if (what == null) {
+			LCLog.debug("No such address found: " + address);
+			return null;
+		}
 		StargateConnectionType type = (what.server != null) ? StargateConnectionType.SERVERTOSERVER
 				: StargateConnectionType.LOCAL;
 		StargateConnection connection = new StargateConnection(type, tile, what);

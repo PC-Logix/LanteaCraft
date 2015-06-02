@@ -59,9 +59,9 @@ public class StargateConnection {
 				tileFrom.getWorldObj());
 		ChunkPos origin = new ChunkPos(tileFrom);
 		ticketFrom.loadChunkRange(origin, -1, -1, 1, 1);
-		this.maxConnectionAge = (Integer) ConfigHelper.getOrSetParam(
+		this.maxConnectionAge = Integer.parseInt((String) ConfigHelper.getOrSetParam(
 				LCRuntime.runtime.config().config(ComponentType.STARGATE), "Time", "Stargate", "maxConnectionAge",
-				"Maximum connection age in ticks", 6000);
+				"Maximum connection age in ticks", 6000));
 	}
 
 	public void think() {
@@ -110,35 +110,31 @@ public class StargateConnection {
 			return;
 		try {
 			WorldServer world = MinecraftServer.getServer().worldServerForDimension(dest.dimension);
-			if (world == null)
+			if (world == null) {
+				LCLog.debug("Can't find world %s", dest.dimension);
 				return;
+			}
 			if (ticketTo == null) {
 				ticketTo = ((HintProviderServer) LCRuntime.runtime.hints()).chunkLoaders().requestTicket(world);
 				ticketTo.loadChunkRange(dest.chunk, -1, -1, 1, 1);
 			}
 			Chunk chunk = world.getChunkFromChunkCoords(dest.chunk.cx, dest.chunk.cz);
-			if (chunk == null)
+			if (chunk == null) {
+				LCLog.debug("Can't find chunk [%s, %s]", dest.chunk.cx, dest.chunk.cz);
 				return;
-			ArrayList<Vector3> found = ScanningHelper.findAllTileEntitesOf(world, TileStargateBase.class,
-					16 * dest.chunk.cx, 0, 16 * dest.chunk.cz,
-					AxisAlignedBB.getBoundingBox(0, 0, 0, 15, world.getHeight(), 15));
-			Vector3 origin = new Vector3(16 * dest.chunk.cx, 0, 16 * dest.chunk.cz);
-			for (Vector3 vec : found) {
-				Vector3 real = vec.add(origin);
-				TileEntity tile = world.getTileEntity(real.floorX(), real.floorY(), real.floorZ());
-				if (tile != null) {
-					if (tile instanceof TileStargateBase) {
-						TileStargateBase stargate = (TileStargateBase) tile;
-						if (stargate.getState() != MultiblockState.FORMED)
-							continue;
-						if (stargate.hasConnectionState())
-							continue;
-						tileTo = stargate;
-						sendUpdates();
-					}
-				}
 			}
 
+			for (Object o : chunk.chunkTileEntityMap.values())
+				if (o instanceof TileStargateBase) {
+					TileStargateBase tile = (TileStargateBase) o;
+					if (tile.getState() == MultiblockState.FORMED && !tile.hasConnectionState()) {
+						LCLog.debug("Found Stargate in chunk [%s, %s]", dest.chunk.cx, dest.chunk.cz);
+						tileTo = tile;
+						return;
+					}
+				}
+
+			LCLog.debug("Failed to find Stargate in chunk [%s, %s]", dest.chunk.cx, dest.chunk.cz);
 		} catch (Exception e) {
 			// TODO: We need to actually sample some errors here
 			LCLog.warn("Problem scanning for Stargate.", e);
@@ -165,6 +161,7 @@ public class StargateConnection {
 				throw new IllegalStateException("Stargate is busy with non-self connection.");
 			changeState(StargateState.CONNECTED, maxConnectionAge);
 		} catch (Exception e) {
+			LCLog.debug("Can't connect to Stargate.", e);
 			changeState(StargateState.FAILED, 60);
 		}
 	}
