@@ -57,7 +57,7 @@ public class UniverseManager {
 			try {
 				FileInputStream fis = new FileInputStream(workFile);
 				recordHeap.clear();
-				jsonAgent.readMap(fis, recordHeap);
+				recordHeap = jsonAgent.readMap(fis);
 				LCLog.debug("Read %s existing address entries.", recordHeap.size());
 				fis.close();
 			} catch (IOException ioex) {
@@ -75,12 +75,17 @@ public class UniverseManager {
 	 *            The server event.
 	 */
 	public void unloadUniverse(FMLServerStoppingEvent event) {
+		if (workFile == null) {
+			LCLog.debug("Can't unload: no open work file!");
+			return;
+		}
 		try {
 			FileOutputStream fos = new FileOutputStream(workFile);
 			LCLog.debug("Writing %s address entries to file.", recordHeap.size());
 			jsonAgent.writeMap(fos, recordHeap);
 			recordHeap.clear();
 			fos.close();
+			workFile = null;
 		} catch (IOException ioex) {
 			LCLog.fatal("Problem saving Stargate address database.", ioex);
 		}
@@ -111,6 +116,10 @@ public class UniverseManager {
 	 *            The save event.
 	 */
 	public void autosaveGalaxy(WorldEvent.Save save) {
+		if (workFile == null) {
+			LCLog.debug("Can't autosave: no open work file!");
+			return;
+		}
 		try {
 			FileOutputStream fos = new FileOutputStream(workFile);
 			LCLog.debug("Auto-saving %s address entries to file.", recordHeap.size());
