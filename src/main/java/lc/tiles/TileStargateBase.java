@@ -43,6 +43,7 @@ import lc.common.util.math.Matrix3;
 import lc.common.util.math.Orientations;
 import lc.common.util.math.Trans3;
 import lc.common.util.math.Vector3;
+import lc.items.ItemIrisUpgrade;
 import lc.server.HintProviderServer;
 import lc.server.StargateConnection;
 import lc.server.StargateManager;
@@ -175,7 +176,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			return "Stargate";
 		}
 	}.setFilterRule(0, new SlotFilter(new ItemStack[] { LCRuntime.runtime.items().lanteaStargateIris.getStackOf(1) },
-			null, true, true));
+			null, true, false));
 
 	@Override
 	public void configure(ComponentConfig c) {
@@ -334,6 +335,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		if (currentConnection != null) {
 			thinkServerWormhole();
 		}
+		thinkServerIris();
 	}
 
 	/** Called to update the wormhole behaviour */
@@ -378,6 +380,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	private void thinkDispatchEntity(Entity entity, Trans3 src, Trans3 dst, TileStargateBase destination) {
 		TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
+	}
+	
+	private void thinkServerIris() {
+		// TODO: Control the iris, send state to client
 	}
 
 	public Animation getAnimation() {
@@ -541,14 +547,18 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public IrisType getIrisType() {
-		// TODO Auto-generated method stub
-		return null;
+		ItemStack stack = getInventory().getStackInSlot(0);
+		if (stack == null || !(stack.getItem() instanceof ItemIrisUpgrade))
+			return null;
+		ItemIrisUpgrade item = (ItemIrisUpgrade) stack.getItem();
+		return item.getType(stack);
 	}
 
 	@Override
 	public IrisState getIrisState() {
-		// TODO Auto-generated method stub
-		return null;
+		if (getIrisType() == null)
+			return IrisState.None;
+		return IrisState.Closed;
 	}
 
 	@Override

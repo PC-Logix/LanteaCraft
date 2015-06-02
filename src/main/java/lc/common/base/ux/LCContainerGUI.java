@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -221,6 +222,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	@Override
 	protected void keyTyped(char c, int key) {
+		super.keyTyped(c, key);
 		if (activeTab != null)
 			activeTab.keyTyped(this, c, key);
 		if (key == Keyboard.KEY_ESCAPE)
@@ -229,6 +231,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	@Override
 	protected void mouseClicked(int x, int y, int mouseButton) {
+		super.mouseClicked(x, y, mouseButton);
 		if (mouseButton == 0)
 			mouseDown = true;
 		if (activeTab != null)
@@ -244,6 +247,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	@Override
 	protected void mouseMovedOrUp(int x, int y, int mouseButton) {
+		super.mouseMovedOrUp(x, y, mouseButton);
 		if (activeTab != null)
 			activeTab.mouseMovedOrUp(this, x, y, mouseButton);
 		if (mouseButton == 0 || mouseButton == 1)

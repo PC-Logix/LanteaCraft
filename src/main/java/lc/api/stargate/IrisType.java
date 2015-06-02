@@ -1,7 +1,7 @@
 package lc.api.stargate;
 
 public enum IrisType {
-	MECHANICAL("iris.mechanical", false), ENERGY("iris.energy", true);
+	MECHANICAL("mechanical", false), ENERGY("energy", true);
 
 	private final String name;
 	private final boolean invulnerable;
