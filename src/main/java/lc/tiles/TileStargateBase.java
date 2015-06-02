@@ -3,6 +3,7 @@ package lc.tiles;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import lc.LCRuntime;
 import lc.api.components.IntegrationType;
@@ -130,6 +131,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private ArrayDeque<Animation> clientAnimationQueue = new ArrayDeque<Animation>();
 	private double clientAnimationCounter = 0.0d;
 	private StateMap clientRenderState = new StateMap();
+	private double[][][] clientGfxGrid = null;
+	private Random clientRandomProvider = new Random();
 
 	/** Client flag - used to notify new data */
 	private boolean clientSeenState = true, clientSeenStargateData = false;
@@ -241,6 +244,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		if (updated) {
 			switch (clientStargateState) {
 			case CONNECTED:
+				clientRenderState.set("event-horizon", true);
 				for (int i = 0; i < 9; i++) {
 					clientRenderState.set("chevron-dist-" + i, 1.0d / 8.0d);
 					clientRenderState.set("chevron-light-" + i, 0.5d);
@@ -266,17 +270,50 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				}
 				break;
 			case DISCONNECTING:
+				clientRenderState.set("event-horizon", false);
 				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
 				clientAnimationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
 				break;
 			case FAILED:
+				clientRenderState.set("event-horizon", false);
 				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
 				clientAnimationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
 				break;
 			case IDLE:
+				clientRenderState.set("event-horizon", false);
 				break;
 			default:
 				break;
+			}
+		}
+
+		if (clientStargateState == StargateState.CONNECTED) {
+			double grid[][][] = getGfxGrid();
+			final int m = 10, n = 38;
+			double u[][] = grid[0], v[][] = grid[1];
+			double dt = 1.0, asq = 0.03, d = 0.95;
+			int r = clientRandomProvider.nextInt(m - 1) + 1, t = clientRandomProvider.nextInt(n) + 1;
+			v[t][r] += 0.05 * clientRandomProvider.nextGaussian();
+			for (int i = 1; i < m; i++)
+				for (int j = 1; j <= n; j++) {
+					double du_dr = 0.5 * (u[j][i + 1] - u[j][i - 1]);
+					double d2u_drsq = u[j][i + 1] - 2 * u[j][i] + u[j][i - 1];
+					double d2u_dthsq = u[j + 1][i] - 2 * u[j][i] + u[j - 1][i];
+					v[j][i] = d * v[j][i] + asq * dt * (d2u_drsq + du_dr / i + d2u_dthsq / (i * i));
+				}
+			for (int i = 1; i < m; i++)
+				for (int j = 1; j <= n; j++)
+					u[j][i] += v[j][i] * dt;
+			double u0 = 0, v0 = 0;
+			for (int j = 1; j <= n; j++) {
+				u0 += u[j][1];
+				v0 += v[j][1];
+			}
+			u0 /= n;
+			v0 /= n;
+			for (int j = 1; j <= n; j++) {
+				u[j][0] = u0;
+				v[j][0] = v0;
 			}
 		}
 	}
@@ -342,7 +379,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			}
 		}
 	}
-	
+
 	private void thinkDispatchEntity(Entity entity, Trans3 src, Trans3 dst, TileStargateBase destination) {
 		TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
 	}
@@ -353,6 +390,18 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	public double getAnimationProgress() {
 		return clientAnimationCounter;
+	}
+
+	public double[][][] getGfxGrid() {
+		if (clientGfxGrid == null) {
+			int m = 10, n = 38;
+			clientGfxGrid = new double[2][n + 2][m + 1];
+			for (int i = 0; i < 2; i++) {
+				clientGfxGrid[i][0] = clientGfxGrid[i][n];
+				clientGfxGrid[i][n + 1] = clientGfxGrid[i][1];
+			}
+		}
+		return clientGfxGrid;
 	}
 
 	@Override

@@ -27,6 +27,13 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 	/** The texture resource map */
 	public final ResourceMap resources = new ResourceMap();
 
+	public final ResourceLocation fxHorizon = ResourceAccess.getNamedResource(ResourceAccess
+			.formatResourceName("textures/fx/eventhorizon_${TEX_QUALITY}.png"));
+
+	public final static int ehGridRadialSize = 10;
+	public final static int ehGridPolarSize = ModelStargate.numRingSegments;
+	public final static double ehBandWidth = ModelStargate.ringInnerRadius / ehGridRadialSize;
+
 	/** The Stargate model */
 	public final ModelStargate model;
 
@@ -77,9 +84,47 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 						animation.sampleProperties(state, frame);
 				}
 				model.render(this, renderer, base, state);
+				if (state.get("event-horizon", false))
+					renderGfxHorizonImmediate(base, renderer, x, y, z);
 				GL11.glPopMatrix();
 			}
 		}
 		return true;
+	}
+
+	private void renderGfxHorizonImmediate(TileStargateBase tile, LCTileRenderPipeline pipeline, double x, double y,
+			double z) {
+		pipeline.bind(fxHorizon);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		GL11.glNormal3d(0, 0, 1);
+		double grid[][] = tile.getGfxGrid()[0];
+		for (int i = 1; i < ehGridRadialSize; i++) {
+			GL11.glBegin(GL11.GL_QUAD_STRIP);
+			for (int j = 0; j <= ehGridPolarSize; j++) {
+				eventHVertex(grid, i, j);
+				eventHVertex(grid, i + 1, j);
+			}
+			GL11.glEnd();
+		}
+
+		GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+		GL11.glTexCoord2d(0.5, 0.5);
+		GL11.glVertex3d(0, 0, grid[1][0]);
+		for (int j = 0; j <= ehGridPolarSize; j++)
+			eventHVertex(grid, 1, j);
+		GL11.glEnd();
+		GL11.glEnable(GL11.GL_CULL_FACE);
+
+	}
+
+	private void eventHVertex(double[][] grid, int i, int j) {
+		double r = i * 2.75d / 10.0d;
+		double x = r * ModelStargate.cos[j];
+		double y = r * ModelStargate.sin[j];
+
+		double u = (x + 3) / 6;
+		double v = (y + 3) / 6;
+		GL11.glTexCoord2d(u, v);
+		GL11.glVertex3d(x, y, grid[j + 1][i]);
 	}
 }
