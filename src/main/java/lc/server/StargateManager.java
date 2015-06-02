@@ -28,11 +28,17 @@ public class StargateManager implements ITickEventHandler {
 		return server.universeMgr.findAddress(tile.getWorldObj().provider.dimensionId, new ChunkPos(tile));
 	}
 
-	public void openConnection(TileStargateBase tile, StargateAddress address) {
+	public StargateConnection openConnection(TileStargateBase tile, StargateAddress address) {
 		StargateRecord what = server.universeMgr.findRecord(address);
 		StargateConnectionType type = (what.server != null) ? StargateConnectionType.SERVERTOSERVER
 				: StargateConnectionType.LOCAL;
 		StargateConnection connection = new StargateConnection(type, tile.getStargateAddress(), what.address);
+		synchronized (connections) {
+			if (!connections.containsKey(tile.getWorldObj().provider.dimensionId))
+				connections.put(tile.getWorldObj().provider.dimensionId, new ArrayList<StargateConnection>());
+			connections.get(tile.getWorldObj().provider.dimensionId).add(connection);
+		}
+		return connection;
 	}
 
 	public void closeConnection(TileStargateBase tile, char[] address) {
