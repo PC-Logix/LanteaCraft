@@ -102,9 +102,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private ArrayDeque<Animation> clientAnimationQueue = new ArrayDeque<Animation>();
 	private double clientAnimationCounter = 0.0d;
 	private StateMap clientRenderState = new StateMap();
+	private final static int[] clientChevronQueue = { 8, 7, 6, 3, 2, 1, 5, 4, 0 };
 
 	/** Client flag - used to notify new data */
-	private boolean clientSeenState = true;
+	private boolean clientSeenState = true, clientSeenStargateData = false;
 	/** Client Stargate state - used only for rendering */
 	private StargateState clientStargateState;
 	/** Client state timeout - used only for rendering */
@@ -181,6 +182,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void thinkClient() {
+		if (!clientSeenStargateData) {
+			LCRuntime.runtime.network().sendToServer(
+					new LCStargatePacket(new DimensionPos(this), StargateState.IDLE, 0, 0, 0, 0, false));
+		}
 		thinkClientRender(!clientSeenState);
 		thinkClientSound(!clientSeenState);
 		clientSeenState = true;
@@ -209,6 +214,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		if (updated) {
 			switch (clientStargateState) {
 			case CONNECTED:
+				for (int i = 0; i < 9; i++) {
+					clientRenderState.set("chevron-dist-" + i, 1.0d / 8.0d);
+					clientRenderState.set("chevron-light-" + i, 0.5d);
+				}
 				break;
 			case DIALLING:
 				if (clientDiallingIsSource) {
@@ -216,7 +225,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					double symbolRotation = symbolIndex * (360.0 / 38.0d);
 					double aangle = MathUtils.normaliseAngle(symbolRotation);
 					clientAnimationQueue.push(new RingSpinAnimation(clientDiallingTimeout - 10.0d, 0.0d, aangle, true));
-					clientAnimationQueue.push(new ChevronMoveAnimation(10.0d, clientDiallingProgress, true));
+					clientAnimationQueue.push(new ChevronMoveAnimation(10.0d,
+							clientChevronQueue[clientDiallingProgress], true));
+					for (int i = 0; i < clientDiallingProgress; i++) {
+						clientRenderState.set("chevron-dist-" + clientChevronQueue[i], 1.0d / 8.0d);
+						clientRenderState.set("chevron-light-" + clientChevronQueue[i], 0.5d);
+					}
 				} else {
 					if (clientDiallingProgress == 8) {
 						for (int i = 0; i < 9; i++)
@@ -312,14 +326,19 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				}
 			}
 		if (packet instanceof LCStargatePacket) {
-			LCStargatePacket state = (LCStargatePacket) packet;
-			clientStargateState = state.state;
-			clientStargateStateTime = state.stateTimeout;
-			clientDiallingProgress = state.diallingProgress;
-			clientDiallingSymbol = state.diallingSymbol;
-			clientDiallingTimeout = state.diallingTimeout;
-			clientDiallingIsSource = state.isSource;
-			clientSeenState = false;
+			if (getWorldObj().isRemote) {
+				LCStargatePacket state = (LCStargatePacket) packet;
+				clientSeenStargateData = true;
+				clientStargateState = state.state;
+				clientStargateStateTime = state.stateTimeout;
+				clientDiallingProgress = state.diallingProgress;
+				clientDiallingSymbol = state.diallingSymbol;
+				clientDiallingTimeout = state.diallingTimeout;
+				clientDiallingIsSource = state.isSource;
+				clientSeenState = false;
+			} else {
+				notifyConnectionState(currentConnection);
+			}
 		}
 	}
 

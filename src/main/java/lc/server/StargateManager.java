@@ -54,6 +54,7 @@ public class StargateManager implements ITickEventHandler {
 	}
 
 	public void closeConnectionsIn(int dimensionId) {
+		LCLog.info("Closing connections in dimension %s.", dimensionId);
 		ArrayList<StargateConnection> dc = null;
 		synchronized (connections) {
 			dc = connections.remove(dimensionId);
@@ -82,6 +83,7 @@ public class StargateManager implements ITickEventHandler {
 	@Override
 	public void think(Side what) {
 		if (what == Side.SERVER) {
+			int count = 0;
 			synchronized (connections) {
 				Iterator<Integer> dimensions = connections.keySet().iterator();
 				while (dimensions.hasNext()) {
@@ -91,8 +93,11 @@ public class StargateManager implements ITickEventHandler {
 					while (iter.hasNext()) {
 						StargateConnection conn = iter.next();
 						conn.think();
-						if (conn.dead)
+						if (conn.dead) {
+							LCLog.debug("Removing dead connection %s.", conn);
 							iter.remove();
+						} else
+							count++;
 					}
 				}
 			}

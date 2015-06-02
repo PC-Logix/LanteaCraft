@@ -24,6 +24,7 @@ public class LCLoadedChunkManager {
 		}
 
 		public void loadChunk(ChunkPos chunk) {
+			LCLog.debug("Forcing chunk: [%s, %s]", chunk.cx, chunk.cz);
 			ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(chunk.cx, chunk.cz));
 			loaded.add(chunk);
 		}
@@ -35,6 +36,7 @@ public class LCLoadedChunkManager {
 		}
 
 		public void unload() {
+			LCLog.debug("Releasing all forced chunks");
 			for (ChunkPos chunk : loaded)
 				ForgeChunkManager.unforceChunk(ticket, new ChunkCoordIntPair(chunk.cx, chunk.cz));
 			loaded.clear();

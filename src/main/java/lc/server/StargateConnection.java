@@ -1,10 +1,6 @@
 package lc.server;
 
-import java.util.ArrayList;
-
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import lc.LCRuntime;
@@ -16,9 +12,7 @@ import lc.api.stargate.StargateState;
 import lc.common.LCLog;
 import lc.common.base.multiblock.MultiblockState;
 import lc.common.configuration.xml.ConfigHelper;
-import lc.common.util.ScanningHelper;
 import lc.common.util.math.ChunkPos;
-import lc.common.util.math.Vector3;
 import lc.server.database.StargateRecord;
 import lc.server.world.LCLoadedChunkManager.LCChunkTicket;
 import lc.tiles.TileStargateBase;
@@ -59,9 +53,9 @@ public class StargateConnection {
 				tileFrom.getWorldObj());
 		ChunkPos origin = new ChunkPos(tileFrom);
 		ticketFrom.loadChunkRange(origin, -1, -1, 1, 1);
-		this.maxConnectionAge = Integer.parseInt((String) ConfigHelper.getOrSetParam(
+		this.maxConnectionAge = Integer.parseInt(ConfigHelper.getOrSetParam(
 				LCRuntime.runtime.config().config(ComponentType.STARGATE), "Time", "Stargate", "maxConnectionAge",
-				"Maximum connection age in ticks", 6000));
+				"Maximum connection age in ticks", 6000).toString());
 	}
 
 	public void think() {
@@ -186,6 +180,16 @@ public class StargateConnection {
 			tileTo.notifyConnectionState(null);
 		tileFrom = null;
 		tileTo = null;
+		if (ticketTo != null) {
+			ticketTo.unload();
+			((HintProviderServer) LCRuntime.runtime.hints()).chunkLoaders().closeTicket(ticketTo);
+			ticketTo = null;
+		}
+		if (ticketFrom != null) {
+			ticketFrom.unload();
+			((HintProviderServer) LCRuntime.runtime.hints()).chunkLoaders().closeTicket(ticketFrom);
+			ticketFrom = null;
+		}
 		dead = true;
 	}
 
