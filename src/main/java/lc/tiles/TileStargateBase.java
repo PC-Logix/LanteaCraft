@@ -305,10 +305,11 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			for (TrackedEntity trk : trackedEntities)
 				thinkEntityInWormhole(trk.entity, trk.lastPos);
 			trackedEntities.clear();
-			Vector3 p0 = new Vector3(-2.5, 0.5, -3.5);
-			Vector3 p1 = new Vector3(2.5, 5.5, 3.5);
-			Trans3 t = new Trans3(xCoord, yCoord, zCoord).side(0).turn(rotationMap[getRotation().ordinal()]);
-			AxisAlignedBB box = t.box(p0, p1);
+			Matrix3 rotation = Orientations.from(getRotation()).rotation();
+			Vector3 origin = new Vector3(this);
+			Vector3 p0 = rotation.mul(new Vector3(-2.5, 0.5, -1.0));
+			Vector3 p1 = rotation.mul(new Vector3(2.5, 5.5, 0.0));
+			AxisAlignedBB box = Vector3.makeAABB(p0.add(origin), p1.add(origin));
 			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
 			for (Entity entity : ents)
 				if (!entity.isDead && entity.ridingEntity == null)
@@ -318,7 +319,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	private void thinkEntityInWormhole(Entity entity, Vector3 prevPos) {
 		if (!entity.isDead) {
-			Trans3 t = new Trans3(xCoord, yCoord, zCoord).side(0).turn(rotationMap[getRotation().ordinal()]);
+			Trans3 t = new Trans3(xCoord, yCoord, zCoord).rotate(Orientations.from(getRotation()).rotation());
 			double vx = entity.posX - prevPos.x;
 			double vy = entity.posY - prevPos.y;
 			double vz = entity.posZ - prevPos.z;
@@ -326,6 +327,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			Vector3 p0 = t.ip(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z - entity.posZ);
 			double z0 = 0.0;
 			if (p0.z >= z0 && p1.z < z0) {
+				LCLog.debug("Teleporting!");
 				entity.motionX = vx;
 				entity.motionY = vy;
 				entity.motionZ = vz;

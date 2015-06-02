@@ -168,7 +168,8 @@ public class Vector3 {
 	 * @return An AABB
 	 */
 	public static AxisAlignedBB makeAABB(Vector3 min, Vector3 max) {
-		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		return AxisAlignedBB.getBoundingBox(Math.min(min.x, max.x), Math.min(min.y, max.y), Math.min(min.z, max.z), 
+				Math.max(max.x, min.x), Math.max(max.y, min.y), Math.max(max.z, min.z));
 	}
 
 	/**
