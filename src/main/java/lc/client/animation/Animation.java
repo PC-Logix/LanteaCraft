@@ -3,6 +3,7 @@ package lc.client.animation;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import lc.common.LCLog;
 import lc.common.util.data.StateMap;
 
 public abstract class Animation {
@@ -33,12 +34,12 @@ public abstract class Animation {
 	}
 
 	private class Property {
-		protected Double start, end;
+		protected Double a, b;
 		protected InterpolationMode mode;
 
 		public Property(Double start, Double end, InterpolationMode mode) {
-			this.start = start;
-			this.end = end;
+			this.a = end;
+			this.b = start;
 			this.mode = mode;
 		}
 
@@ -47,28 +48,28 @@ public abstract class Animation {
 			switch (mode) {
 			default:
 			case LINEAR:
-				return (start * fracT) + (end * (1.0d - fracT));
+				return (a * fracT) + (b * (1.0d - fracT));
 			case SMOOTHSTEP:
 				fxFracT = ((fracT) * (fracT) * (3.0d - 2.0d * (fracT)));
-				return (start * fxFracT) + (end * (1 - fxFracT));
+				return (a * fxFracT) + (b * (1 - fxFracT));
 			case SQUARE:
 				fxFracT = (fracT) * (fracT);
-				return (start * fxFracT) + (end * (1.0d - fxFracT));
+				return (a * fxFracT) + (b * (1.0d - fxFracT));
 			case INVSQUARE:
 				fxFracT = 1.0d - (1.0d - fracT) * (1.0d - fracT);
-				return (start * fxFracT) + (end * (1.0d - fxFracT));
+				return (a * fxFracT) + (b * (1.0d - fxFracT));
 			case CUBED:
 				fxFracT = (fracT) * (fracT) * (fracT);
-				return (start * fxFracT) + (end * (1.0d - fxFracT));
+				return (a * fxFracT) + (b * (1.0d - fxFracT));
 			case INVCUBED:
 				fxFracT = 1.0d - (1.0d - fracT) * (1.0d - fracT) * (1.0d - fracT);
-				return (start * fxFracT) + (end * (1.0d - fxFracT));
+				return (a * fxFracT) + (b * (1.0d - fxFracT));
 			case SIN:
 				fxFracT = Math.sin(fracT * Math.PI / 2.0d);
-				return (start * fxFracT) + (end * (1.0d - fxFracT));
+				return (a * fxFracT) + (b * (1.0d - fxFracT));
 			case INVSIN:
 				fxFracT = 1.0d - Math.sin((1.0d - fracT) * Math.PI / 2.0d);
-				return (start * fxFracT) + (end * (1.0d - fxFracT));
+				return (a * fxFracT) + (b * (1.0d - fxFracT));
 			}
 		}
 	}
@@ -118,9 +119,9 @@ public abstract class Animation {
 	 */
 	public Double readProperty(String name, Double time) {
 		Property property = properties.get(name);
-		if (property != null)
+		if (property != null) {
 			return property.readProperty(time / duration);
-		else
+		} else
 			throw new IllegalArgumentException("No such property found.");
 	}
 
@@ -149,7 +150,7 @@ public abstract class Animation {
 	 */
 	public void sampleProperties(StateMap map) {
 		for (Entry<String, Property> rec : properties.entrySet())
-			map.set(rec.getKey(), 1.0d);
+			map.set(rec.getKey(), rec.getValue().readProperty(1.0d));
 	}
 
 	/**
@@ -164,7 +165,7 @@ public abstract class Animation {
 		for (Entry<String, Property> rec : properties.entrySet()) {
 			Object zz = map.get(rec.getKey());
 			if (zz != null && zz instanceof Double)
-				rec.getValue().start = (Double) zz;
+				rec.getValue().b = (Double) zz;
 		}
 	}
 

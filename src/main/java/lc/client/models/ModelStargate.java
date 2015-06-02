@@ -3,6 +3,7 @@ package lc.client.models;
 import static lc.client.opengl.GLHelper.pushTexVertex;
 import lc.client.opengl.BufferDisplayList;
 import lc.client.render.TileStargateBaseRenderer;
+import lc.common.LCLog;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.resource.ResourceMap;
 import lc.common.util.data.StateMap;
@@ -64,10 +65,6 @@ public class ModelStargate {
 
 	/** Display buffer for outer shell */
 	private final BufferDisplayList listShell = new BufferDisplayList();
-	/** Display buffer for chevron */
-	private final BufferDisplayList listChevron = new BufferDisplayList();
-	/** Display buffer for lit chevron */
-	private final BufferDisplayList listLitChevron = new BufferDisplayList();
 	/** Display buffer for inner ring */
 	private final BufferDisplayList listRing = new BufferDisplayList();
 
@@ -80,26 +77,12 @@ public class ModelStargate {
 	/** Initialize the model. */
 	public void init() {
 		listShell.init();
-		listChevron.init();
-		listLitChevron.init();
 		listRing.init();
 
 		if (listShell.supported()) {
 			listShell.enter();
 			renderShellImmediate();
 			listShell.exit();
-		}
-
-		if (listChevron.supported()) {
-			listChevron.enter();
-			renderChevronImmediate(false);
-			listChevron.exit();
-		}
-
-		if (listLitChevron.supported()) {
-			listLitChevron.enter();
-			renderChevronImmediate(true);
-			listLitChevron.exit();
 		}
 
 		if (listRing.supported()) {
@@ -136,22 +119,12 @@ public class ModelStargate {
 		for (int i = 0; i < numChevrons; i++) {
 			GL11.glPushMatrix();
 			GL11.glRotated(chevronRotations[i], 0.0f, 0.0f, 1.0f);
-			boolean lit = state.get("chevron-" + i, false);
-			GL11.glTranslated(state.get("chevron-dist-" + i, 0.0d), 0, 0);
-			if (listChevron.supported() && listLitChevron.supported()) {
-				if (lit) {
-					listLitChevron.bind();
-					listLitChevron.release();
-				} else {
-					listChevron.bind();
-					listChevron.release();
-				}
-			} else
-				renderChevronImmediate(lit);
+			GL11.glTranslated(-state.get("chevron-dist-" + i, 0.0d), 0, 0);
+			renderChevronImmediate(state.get("chevron-light-" + i, 0.0d));
 			GL11.glPopMatrix();
 		}
 
-		tesr.bind(textures.resource("glyph"));
+		tesr.bind(textures.resource("glyphs"));
 		GL11.glPushMatrix();
 		GL11.glRotated(state.get("ring-rotation", 0.0d), 0.0f, 0.0f, 1.0f);
 		if (listRing.supported()) {
@@ -233,7 +206,7 @@ public class ModelStargate {
 		GL11.glEnd();
 	}
 
-	private void renderChevronImmediate(boolean lit) {
+	private void renderChevronImmediate(double light) {
 		double r1 = chevronInnerRadius - 1d / 18d;
 		double r2 = chevronOuterRadius;
 
@@ -307,12 +280,11 @@ public class ModelStargate {
 		vertex(x2, y2, z3, 16, 0);
 
 		GL11.glEnd();
-
 		selectTile(chevronLitTextureIndex);
-		if (!lit)
-			GL11.glColor3d(0.5, 0.5, 0.5);
-		else
+		if (light > 0.0d)
 			GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glColor3d(0.5d + light, 0.5d + light, 0.5d + light);
+
 		GL11.glBegin(GL11.GL_QUADS);
 
 		// Front lit face

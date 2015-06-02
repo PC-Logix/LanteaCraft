@@ -34,19 +34,19 @@ import lc.server.openal.VoidSoundController;
 public class HintProviderServer implements IHintProvider {
 
 	/** The server hook bus */
-	final ServerEventHooks serverHookBus;
+	ServerEventHooks serverHookBus;
 
 	/** The metadata beacon controller */
-	final BeaconStreamThread beaconMgr;
+	BeaconStreamThread beaconMgr;
 
 	/** The server universe manager global instance */
-	final UniverseManager universeMgr;
+	UniverseManager universeMgr;
 
 	/** The server Stargate manager */
-	final StargateManager stargateMgr;
+	StargateManager stargateMgr;
 	
 	/** The server key-trust chain */
-	final KeyTrustRegistry trustChain;
+	KeyTrustRegistry trustChain;
 
 	/** The master world generator service */
 	LCMasterWorldGen worldGenerator;
@@ -54,16 +54,16 @@ public class HintProviderServer implements IHintProvider {
 	/** Default constructor */
 	public HintProviderServer() {
 		LCLog.debug("HintProviderServer providing server-side hints");
-		this.serverHookBus = new ServerEventHooks(this);
-		this.beaconMgr = new BeaconStreamThread(this);
-		this.stargateMgr = new StargateManager(this);
-		this.universeMgr = new UniverseManager();
-		this.trustChain = new KeyTrustRegistry();
 	}
 
 	@Override
 	public void preInit() {
 		LCLog.debug("Providing base initialization helpers.");
+		serverHookBus = new ServerEventHooks(this);
+		beaconMgr = new BeaconStreamThread(this);
+		stargateMgr = new StargateManager(this);
+		universeMgr = new UniverseManager();
+		trustChain = new KeyTrustRegistry();
 		FMLCommonHandler.instance().bus().register(serverHookBus);
 		MinecraftForge.EVENT_BUS.register(serverHookBus);
 	}

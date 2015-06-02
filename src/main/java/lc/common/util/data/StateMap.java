@@ -8,6 +8,8 @@ public class StateMap {
 
 	public <T> T get(String index, T def) {
 		Object zz = state.get(index);
+		if (zz == null)
+			return def;
 		if (def.getClass().isAssignableFrom(zz.getClass()) || zz.getClass().isAssignableFrom(def.getClass()))
 			return (T) zz;
 		return def;

@@ -18,6 +18,7 @@ import lc.client.animation.Animation;
 import lc.client.render.animations.ChevronMoveAnimation;
 import lc.client.render.animations.ChevronReleaseAnimation;
 import lc.client.render.animations.RingSpinAnimation;
+import lc.common.LCLog;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
@@ -98,7 +99,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private int clientSkinBlockMetadata;
 
 	private Animation clientAnimation = null;
-	private ArrayDeque<Animation> animationQueue = null;
+	private ArrayDeque<Animation> clientAnimationQueue = new ArrayDeque<Animation>();
 	private double clientAnimationCounter = 0.0d;
 	private StateMap clientRenderState = new StateMap();
 
@@ -191,12 +192,35 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	/** Called to update the rendering properties */
 	private void thinkClientRender(boolean updated) {
 		if (clientAnimation != null) {
-			clientAnimationCounter++;
-			if (clientAnimation.finished(clientAnimationCounter))
-				thinkChangeAnimation(animationQueue.pop());
+			clientAnimationCounter += 1.0d;
+			if (clientAnimation.finished(clientAnimationCounter)) {
+				if (clientAnimationQueue.peek() != null)
+					thinkChangeAnimation(clientAnimationQueue.pop());
+				else
+					thinkChangeAnimation(null);
+			}
 		} else {
-			if (animationQueue.peek() != null)
-				thinkChangeAnimation(animationQueue.pop());
+			if (clientAnimationQueue.peek() != null)
+				thinkChangeAnimation(clientAnimationQueue.pop());
+		}
+
+		if (clientAnimationQueue.peek() == null) {
+			clientAnimationCounter++;
+			if (clientAnimationCounter > 80.0d) {
+				clientAnimationCounter = 0.0d;
+				for (int i = 0; i < 9; i++) {
+					double angle = 360.0d / 38.0d;
+					clientAnimationQueue.push(new RingSpinAnimation(30.0d, 0.0d, MathUtils.normaliseAngle(angle * (i * 4)), true));
+					clientAnimationQueue.push(new ChevronMoveAnimation(i, 0.5d, true));
+				}
+				clientAnimationQueue.push(new RingSpinAnimation(120.0d, 0.0d, 0.0d, true));
+				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
+				
+				for (int i = 0; i < 9; i++) {
+					clientAnimationQueue.push(new ChevronMoveAnimation(i, 0.5d, true));
+				}
+				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
+			}
 		}
 
 		if (updated) {
@@ -214,16 +238,16 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				double symbolRotation = symbolIndex * (360.0 / 38.0d);
 				double dest = symbolRotation;
 				double aangle = MathUtils.normaliseAngle(dest);
-				animationQueue.push(new RingSpinAnimation(clientDiallingTimeout - 5.0d, 0.0d, aangle, true));
-				animationQueue.push(new ChevronMoveAnimation(clientDiallingProgress, true));
+				clientAnimationQueue.push(new RingSpinAnimation(clientDiallingTimeout - 5.0d, 0.0d, aangle, true));
+				clientAnimationQueue.push(new ChevronMoveAnimation(clientDiallingProgress, 0.5d, true));
 				break;
 			case DISCONNECTING:
-				animationQueue.push(new ChevronReleaseAnimation(9, true));
-				animationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
+				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
+				clientAnimationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
 				break;
 			case FAILED:
-				animationQueue.push(new ChevronReleaseAnimation(9, true));
-				animationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
+				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
+				clientAnimationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
 				break;
 			case IDLE:
 				break;
@@ -235,12 +259,14 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	private void thinkChangeAnimation(Animation next) {
+		LCLog.debug("thinkChangeAnimation: " + ((clientAnimation != null) ? clientAnimation.toString() : "[none]")
+				+ " => " + ((next != null) ? next.toString() : "[none]"));
 		if (clientAnimation != null)
 			clientAnimation.sampleProperties(clientRenderState);
 		clientAnimation = next;
-		clientAnimationCounter = 0;
-		if (clientAnimation.requiresResampling())
+		if (clientAnimation != null && clientAnimation.requiresResampling())
 			clientAnimation.resampleProperties(clientRenderState);
+		clientAnimationCounter = 0.0d;
 	}
 
 	@Override
