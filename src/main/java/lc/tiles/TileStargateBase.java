@@ -115,6 +115,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private int clientDiallingSymbol;
 	/** Client dialling timeout - used only for rendering */
 	private int clientDiallingTimeout;
+	/** Client dialling source - used only for rendering */
+	private boolean clientDiallingIsSource;
 
 	private FilteredInventory inventory = new FilteredInventory(1) {
 		@Override
@@ -205,22 +207,22 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 
 		if (updated) {
-			/* We probably need to push new frames now */
 			switch (clientStargateState) {
 			case CONNECTED:
 				break;
 			case DIALLING:
-				// TODO: This is ripped from the old source. Check that it
-				// actually produces the right angle under the new rendering
-				// scheme. It probably doesn't, but hey, that's half the fun? /s
-				int symbolIndex = StargateCharsetHelper.singleton().index((char) clientDiallingSymbol);
-				int whichChevron = clientDiallingProgress;
-				double chevronAngle = (360.0d / 9.0d) * whichChevron;
-				double symbolRotation = symbolIndex * (360.0 / 38.0d);
-				double dest = symbolRotation;
-				double aangle = MathUtils.normaliseAngle(dest);
-				clientAnimationQueue.push(new RingSpinAnimation(clientDiallingTimeout - 5.0d, 0.0d, aangle, true));
-				clientAnimationQueue.push(new ChevronMoveAnimation(clientDiallingProgress, true));
+				if (clientDiallingIsSource) {
+					int symbolIndex = StargateCharsetHelper.singleton().index((char) clientDiallingSymbol);
+					double symbolRotation = symbolIndex * (360.0 / 38.0d);
+					double aangle = MathUtils.normaliseAngle(symbolRotation);
+					clientAnimationQueue.push(new RingSpinAnimation(clientDiallingTimeout - 10.0d, 0.0d, aangle, true));
+					clientAnimationQueue.push(new ChevronMoveAnimation(10.0d, clientDiallingProgress, true));
+				} else {
+					if (clientDiallingProgress == 8) {
+						for (int i = 0; i < 9; i++)
+							clientAnimationQueue.push(new ChevronMoveAnimation(5.0d, i, true));
+					}
+				}
 				break;
 			case DISCONNECTING:
 				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
@@ -234,7 +236,6 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				break;
 			default:
 				break;
-
 			}
 		}
 	}
@@ -317,6 +318,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			clientDiallingProgress = state.diallingProgress;
 			clientDiallingSymbol = state.diallingSymbol;
 			clientDiallingTimeout = state.diallingTimeout;
+			clientDiallingIsSource = state.isSource;
 			clientSeenState = false;
 		}
 	}
@@ -364,14 +366,17 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	public void notifyConnectionState(StargateConnection connection) {
-		if (connection.state == StargateState.IDLE) {
+		LCStargatePacket state;
+		if (connection == null || connection.dead || connection.state == null || connection.state == StargateState.IDLE) {
 			currentConnection = null;
+			state = new LCStargatePacket(new DimensionPos(this), StargateState.IDLE, 0, 0, 0, 0, false);
 		} else {
 			currentConnection = connection;
+			state = new LCStargatePacket(new DimensionPos(this), currentConnection.state,
+					currentConnection.stateTimeout, currentConnection.diallingProgress,
+					currentConnection.diallingSymbol, currentConnection.diallingTimeout,
+					currentConnection.tileFrom == this);
 		}
-		LCStargatePacket state = new LCStargatePacket(new DimensionPos(this), currentConnection.state,
-				currentConnection.stateTimeout, currentConnection.diallingProgress, currentConnection.diallingSymbol,
-				currentConnection.diallingTimeout);
 		sendPacketToClients(state);
 	}
 

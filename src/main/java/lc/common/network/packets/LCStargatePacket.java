@@ -23,6 +23,9 @@ public class LCStargatePacket extends LCTargetPacket {
 	/** The dial-state timeout */
 	public int diallingTimeout;
 
+	/** If this Stargate is the source */
+	public boolean isSource;
+
 	/** Create a blank Stargate packet */
 	public LCStargatePacket() {
 	}
@@ -34,13 +37,14 @@ public class LCStargatePacket extends LCTargetPacket {
 	 *            The target element
 	 */
 	public LCStargatePacket(DimensionPos target, StargateState state, int stateTimeout, int diallingProgress,
-			int diallingSymbol, int diallingTimeout) {
+			int diallingSymbol, int diallingTimeout, boolean isSource) {
 		this.target = target;
 		this.state = state;
 		this.stateTimeout = stateTimeout;
 		this.diallingProgress = diallingProgress;
 		this.diallingSymbol = diallingSymbol;
 		this.diallingTimeout = diallingTimeout;
+		this.isSource = isSource;
 	}
 
 	@Override
@@ -51,6 +55,7 @@ public class LCStargatePacket extends LCTargetPacket {
 		buffer.writeInt(diallingProgress);
 		buffer.writeInt(diallingSymbol);
 		buffer.writeInt(diallingTimeout);
+		buffer.writeBoolean(isSource);
 	}
 
 	@Override
@@ -61,5 +66,6 @@ public class LCStargatePacket extends LCTargetPacket {
 		this.diallingProgress = buffer.readInt();
 		this.diallingSymbol = buffer.readInt();
 		this.diallingTimeout = buffer.readInt();
+		this.isSource = buffer.readBoolean();
 	}
 }

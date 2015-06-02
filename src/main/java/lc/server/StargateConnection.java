@@ -94,10 +94,10 @@ public class StargateConnection {
 		diallingTimeout--;
 		if (diallingTimeout <= 0) {
 			diallingProgress++;
-			diallingSymbol = dest.address.getAddress()[diallingProgress];
 			if (diallingProgress >= dest.address.getAddress().length) {
 				thinkPerformConnection();
 			} else {
+				diallingSymbol = dest.address.getAddress()[diallingProgress];
 				diallingTimeout += 40;
 				sendUpdates();
 				thinkFindTile();

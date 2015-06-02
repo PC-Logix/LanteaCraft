@@ -55,25 +55,19 @@ public class TileDHD extends LCTile implements IDHDAccess {
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
 		if (packet instanceof LCDHDPacket) {
 			LCDHDPacket request = (LCDHDPacket) packet;
-			if (request.compound.getString("task").equals("openConnection")) {
-				if (!ownsConnection()) {
-					AxisAlignedBB box = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5);
-					TileEntity tile = ScanningHelper.findNearestTileEntityOf(getWorldObj(), TileStargateBase.class,
-							xCoord, yCoord, zCoord, box);
-					if (tile == null || !(tile instanceof TileStargateBase))
-						return;
-					TileStargateBase sg = (TileStargateBase) tile;
-					HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
-					String typedAddress = request.compound.getString("typedAddress");
-					StargateAddress address = new StargateAddress(typedAddress.toCharArray());
-					ownedConnection = server.stargates().openConnection(sg, address);
-				}
-			} else if (request.compound.getString("task").equals("hangUp")) {
-				if (ownsConnection())
-					ownedConnection.closeConnection();
-			} else {
-				LCLog.warn("Bad LCDHDPacket from client, unknown task requested.");
-			}
+			if (!ownsConnection() && request.compound.getString("typedAddress").length() != 0) {
+				AxisAlignedBB box = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5);
+				TileEntity tile = ScanningHelper.findNearestTileEntityOf(getWorldObj(), TileStargateBase.class,
+						xCoord, yCoord, zCoord, box);
+				if (tile == null || !(tile instanceof TileStargateBase))
+					return;
+				TileStargateBase sg = (TileStargateBase) tile;
+				HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
+				String typedAddress = request.compound.getString("typedAddress");
+				StargateAddress address = new StargateAddress(typedAddress.toCharArray());
+				ownedConnection = server.stargates().openConnection(sg, address);
+			} else
+				ownedConnection.closeConnection();
 		}
 	}
 
@@ -115,7 +109,6 @@ public class TileDHD extends LCTile implements IDHDAccess {
 
 	public void clientDoOpenConnection(String typedAddress) {
 		NBTTagCompound request = new NBTTagCompound();
-		request.setString("task", "openConnection");
 		request.setString("typedAddress", typedAddress);
 		LCDHDPacket packet = new LCDHDPacket(new DimensionPos(this), request);
 		LCRuntime.runtime.network().sendToServer(packet);
@@ -123,7 +116,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 
 	public void clientDoHangUp() {
 		NBTTagCompound request = new NBTTagCompound();
-		request.setString("task", "hangUp");
+		request.setString("typedAddress", "");
 		LCDHDPacket packet = new LCDHDPacket(new DimensionPos(this), request);
 		LCRuntime.runtime.network().sendToServer(packet);
 	}
