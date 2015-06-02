@@ -115,7 +115,7 @@ public class GUIDHD extends LCContainerGUI {
 			if (mouseButton == 0) {
 				int i = findDHDButton(x, y);
 				if (i >= 0) {
-					dhdButtonPressed(i);
+					dhdButtonPressed((TileDHD) container.getTile(), i);
 					return;
 				}
 			}
@@ -135,7 +135,7 @@ public class GUIDHD extends LCContainerGUI {
 			} else if (key == Keyboard.KEY_BACK || key == Keyboard.KEY_DELETE)
 				backspace();
 			else if (key == Keyboard.KEY_RETURN || key == Keyboard.KEY_NUMPADENTER)
-				orangeButtonPressed(true);
+				orangeButtonPressed((TileDHD) container.getTile());
 			else {
 				String C = String.valueOf(c).toUpperCase();
 				if (StargateCharsetHelper.singleton().isLegal(C))
@@ -175,9 +175,9 @@ public class GUIDHD extends LCContainerGUI {
 			return i;
 		}
 
-		private void dhdButtonPressed(int i) {
+		private void dhdButtonPressed(TileDHD tile, int i) {
 			if (i == 0)
-				orangeButtonPressed(false);
+				orangeButtonPressed(tile);
 			else if (i > 38)
 				backspace();
 			else
@@ -185,8 +185,12 @@ public class GUIDHD extends LCContainerGUI {
 
 		}
 
-		void orangeButtonPressed(boolean connectOnly) {
-			// TODO: Tell tile to do dialling
+		private void orangeButtonPressed(TileDHD tile) {
+			if (tile.ownsConnection())
+				tile.clientDoHangUp();
+			else
+				tile.clientDoOpenConnection(enteredAddress);
+
 		}
 
 		private void backspace() {

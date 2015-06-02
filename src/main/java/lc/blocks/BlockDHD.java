@@ -137,6 +137,10 @@ public class BlockDHD extends LCBlock {
 	public int getBaseType(int metadata) {
 		return (int) Math.floor(metadata / blockMask);
 	}
+	
+	public StargateType getDHDType(int metadata) {
+		return StargateType.fromOrdinal(getBaseType(metadata));
+	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float cx,
