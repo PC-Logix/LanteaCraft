@@ -32,7 +32,7 @@ public class StargateManager implements ITickEventHandler {
 		StargateRecord what = server.universeMgr.findRecord(address);
 		StargateConnectionType type = (what.server != null) ? StargateConnectionType.SERVERTOSERVER
 				: StargateConnectionType.LOCAL;
-		StargateConnection connection = new StargateConnection(type, tile.getStargateAddress(), what.address);
+		StargateConnection connection = new StargateConnection(type, tile, what);
 		synchronized (connections) {
 			if (!connections.containsKey(tile.getWorldObj().provider.dimensionId))
 				connections.put(tile.getWorldObj().provider.dimensionId, new ArrayList<StargateConnection>());

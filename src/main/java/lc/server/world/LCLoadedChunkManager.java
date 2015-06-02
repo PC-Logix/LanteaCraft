@@ -31,6 +31,7 @@ public class LCLoadedChunkManager {
 		public void unload() {
 			for (ChunkPos chunk : loaded)
 				ForgeChunkManager.unforceChunk(ticket, new ChunkCoordIntPair(chunk.cx, chunk.cz));
+			loaded.clear();
 		}
 	}
 

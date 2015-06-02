@@ -1,5 +1,8 @@
 package lc.server;
 
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import lc.LCRuntime;
 import lc.api.components.ComponentType;
 import lc.api.stargate.MessagePayload;
@@ -7,16 +10,20 @@ import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateConnectionType;
 import lc.api.stargate.StargateState;
 import lc.common.configuration.xml.ConfigHelper;
+import lc.server.database.StargateRecord;
+import lc.server.world.LCLoadedChunkManager.LCChunkTicket;
 import lc.tiles.TileStargateBase;
 
 public class StargateConnection {
 
 	public final StargateConnectionType type;
-	public final StargateAddress source, dest;
+	public final StargateAddress source;
+	public final StargateRecord dest;
 
 	private int maxConnectionAge;
 
 	public TileStargateBase tileFrom, tileTo;
+	public LCChunkTicket ticketFrom, ticketTo;
 
 	/** The Stargate state */
 	public StargateState state;
@@ -33,11 +40,15 @@ public class StargateConnection {
 	/** The connection live state */
 	public boolean dead = false;
 
-	public StargateConnection(StargateConnectionType type, StargateAddress source, StargateAddress dest) {
+	public StargateConnection(StargateConnectionType type, TileStargateBase tileFrom, StargateRecord what) {
 		this.type = type;
-		this.source = source;
-		this.dest = dest;
+		this.tileFrom = tileFrom;
+		this.source = tileFrom.getStargateAddress();
+		this.dest = what;
 		this.state = StargateState.IDLE;
+		this.ticketFrom = ((HintProviderServer) LCRuntime.runtime.hints()).chunkLoaders().requestTicket(
+				tileFrom.getWorldObj());
+		// TODO: Load the source gate chunks
 		this.maxConnectionAge = (Integer) ConfigHelper.getOrSetParam(
 				LCRuntime.runtime.config().config(ComponentType.STARGATE), "Time", "Stargate", "maxConnectionAge",
 				"Maximum connection age in ticks", 6000);
@@ -73,13 +84,31 @@ public class StargateConnection {
 		diallingTimeout--;
 		if (diallingTimeout <= 0) {
 			diallingProgress++;
-			diallingSymbol = dest.getAddress()[diallingProgress];
-			if (diallingProgress >= dest.getAddress().length) {
+			diallingSymbol = dest.address.getAddress()[diallingProgress];
+			if (diallingProgress >= dest.address.getAddress().length) {
 				thinkPerformConnection();
 			} else {
 				diallingTimeout += 40;
 				sendUpdates();
+				thinkFindTile();
 			}
+		}
+	}
+
+	private void thinkFindTile() {
+		if (tileTo != null)
+			return;
+		try {
+			// TODO: We're supposed to load the chunks in question here
+			WorldServer world = MinecraftServer.getServer().worldServerForDimension(dest.dimension);
+			if (world == null)
+				return;
+			Chunk chunk = world.getChunkFromChunkCoords(dest.chunk.cx, dest.chunk.cz);
+			if (chunk == null)
+				return;
+
+		} catch (Exception e) {
+			// TODO: We need to actually sample some errors here
 		}
 	}
 
@@ -134,7 +163,7 @@ public class StargateConnection {
 		if (state != StargateState.IDLE)
 			return;
 		diallingTimeout = 40;
-		diallingSymbol = dest.getAddress()[0];
+		diallingSymbol = dest.address.getAddress()[0];
 		changeState(StargateState.DIALLING, 0);
 	}
 
