@@ -204,25 +204,6 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				thinkChangeAnimation(clientAnimationQueue.pop());
 		}
 
-		if (clientAnimationQueue.peek() == null) {
-			clientAnimationCounter++;
-			if (clientAnimationCounter > 80.0d) {
-				clientAnimationCounter = 0.0d;
-				for (int i = 0; i < 9; i++) {
-					double angle = 360.0d / 38.0d;
-					clientAnimationQueue.push(new RingSpinAnimation(30.0d, 0.0d, MathUtils.normaliseAngle(angle * (i * 4)), true));
-					clientAnimationQueue.push(new ChevronMoveAnimation(i, true));
-				}
-				clientAnimationQueue.push(new RingSpinAnimation(120.0d, 0.0d, 0.0d, true));
-				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
-
-				for (int i = 0; i < 9; i++) {
-					clientAnimationQueue.push(new ChevronMoveAnimation(i, true));
-				}
-				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
-			}
-		}
-
 		if (updated) {
 			/* We probably need to push new frames now */
 			switch (clientStargateState) {
