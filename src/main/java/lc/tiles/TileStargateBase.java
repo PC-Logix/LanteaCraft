@@ -301,7 +301,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	/** Called to update the wormhole behaviour */
 	private void thinkServerWormhole() {
-		if (currentConnection.state == StargateState.CONNECTED) {
+		if (currentConnection.tileFrom == this && currentConnection.state == StargateState.CONNECTED) {
 			for (TrackedEntity trk : trackedEntities)
 				thinkEntityInWormhole(trk.entity, trk.lastPos);
 			trackedEntities.clear();
