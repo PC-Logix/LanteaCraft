@@ -38,6 +38,7 @@ public class StargateManager implements ITickEventHandler {
 				connections.put(tile.getWorldObj().provider.dimensionId, new ArrayList<StargateConnection>());
 			connections.get(tile.getWorldObj().provider.dimensionId).add(connection);
 		}
+		connection.openConnection();
 		return connection;
 	}
 

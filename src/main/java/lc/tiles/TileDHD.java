@@ -47,8 +47,8 @@ public class TileDHD extends LCTile implements IDHDAccess {
 
 	@Override
 	public void thinkServer() {
-		// TODO Auto-generated method stub
-
+		if (ownedConnection != null && ownedConnection.dead)
+			ownedConnection = null;
 	}
 
 	@Override
@@ -66,8 +66,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 					HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
 					String typedAddress = request.compound.getString("typedAddress");
 					StargateAddress address = new StargateAddress(typedAddress.toCharArray());
-					StargateConnection conn = server.stargates().openConnection(sg, address);
-
+					ownedConnection = server.stargates().openConnection(sg, address);
 				}
 			} else if (request.compound.getString("task").equals("hangUp")) {
 				if (ownsConnection())
