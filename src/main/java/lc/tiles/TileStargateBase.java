@@ -1,6 +1,7 @@
 package lc.tiles;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
 import lc.LCRuntime;
@@ -35,19 +36,25 @@ import lc.common.util.game.BlockFilter;
 import lc.common.util.game.BlockHelper;
 import lc.common.util.game.SlotFilter;
 import lc.common.util.math.DimensionPos;
+import lc.common.util.math.Facing3;
 import lc.common.util.math.MathUtils;
+import lc.common.util.math.Matrix3;
 import lc.common.util.math.Orientations;
+import lc.common.util.math.Trans3;
 import lc.common.util.math.Vector3;
 import lc.server.HintProviderServer;
 import lc.server.StargateConnection;
 import lc.server.StargateManager;
+import lc.server.world.TeleportationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.RotationHelper;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -93,16 +100,36 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 	};
 
+	/**
+	 * Used to track an entity position and velocity
+	 * 
+	 * @author AfterLifeLochie
+	 */
+	private class TrackedEntity {
+		public Entity entity;
+		public Vector3 lastPos;
+		public Vector3 lastVel;
+
+		public TrackedEntity(Entity entity) {
+			this.entity = entity;
+			lastPos = new Vector3(entity);
+			lastVel = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
+		}
+	}
+
 	private StargateConnection currentConnection = null;
+	private ArrayList<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
+	/** TODO: Externalize this */
+	private static int[] rotationMap = new int[] { 0, 0, 0, 2, 1, 3 };
 
 	private Block clientSkinBlock = null;
 	private int clientSkinBlockMetadata;
 
+	private final static int[] clientChevronQueue = { 8, 7, 6, 3, 2, 1, 5, 4, 0 };
 	private Animation clientAnimation = null;
 	private ArrayDeque<Animation> clientAnimationQueue = new ArrayDeque<Animation>();
 	private double clientAnimationCounter = 0.0d;
 	private StateMap clientRenderState = new StateMap();
-	private final static int[] clientChevronQueue = { 8, 7, 6, 3, 2, 1, 5, 4, 0 };
 
 	/** Client flag - used to notify new data */
 	private boolean clientSeenState = true, clientSeenStargateData = false;
@@ -274,6 +301,48 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	/** Called to update the wormhole behaviour */
 	private void thinkServerWormhole() {
+		if (currentConnection.state == StargateState.CONNECTED) {
+			for (TrackedEntity trk : trackedEntities)
+				thinkEntityInWormhole(trk.entity, trk.lastPos);
+			trackedEntities.clear();
+			Vector3 p0 = new Vector3(-2.5, 0.5, -3.5);
+			Vector3 p1 = new Vector3(2.5, 5.5, 3.5);
+			Trans3 t = new Trans3(xCoord, yCoord, zCoord).side(0).turn(rotationMap[getRotation().ordinal()]);
+			AxisAlignedBB box = t.box(p0, p1);
+			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
+			for (Entity entity : ents)
+				if (!entity.isDead && entity.ridingEntity == null)
+					trackedEntities.add(new TrackedEntity(entity));
+		}
+	}
+
+	private void thinkEntityInWormhole(Entity entity, Vector3 prevPos) {
+		if (!entity.isDead) {
+			Trans3 t = new Trans3(xCoord, yCoord, zCoord).side(0).turn(rotationMap[getRotation().ordinal()]);
+			double vx = entity.posX - prevPos.x;
+			double vy = entity.posY - prevPos.y;
+			double vz = entity.posZ - prevPos.z;
+			Vector3 p1 = t.ip(entity.posX, entity.posY, entity.posZ);
+			Vector3 p0 = t.ip(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z - entity.posZ);
+			double z0 = 0.0;
+			if (p0.z >= z0 && p1.z < z0) {
+				entity.motionX = vx;
+				entity.motionY = vy;
+				entity.motionZ = vz;
+				TileStargateBase dte = currentConnection.tileTo;
+				if (dte != null) {
+					Trans3 dt = new Trans3(dte.xCoord, dte.yCoord, dte.zCoord).side(0).turn(
+							rotationMap[dte.getRotation().ordinal()]);
+					while (entity.ridingEntity != null)
+						entity = entity.ridingEntity;
+					thinkDispatchEntity(entity, t, dt, dte);
+				}
+			}
+		}
+	}
+	
+	private void thinkDispatchEntity(Entity entity, Trans3 src, Trans3 dst, TileStargateBase destination) {
+		TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
 	}
 
 	public Animation getAnimation() {
