@@ -33,9 +33,9 @@ public abstract class Animation {
 		INVSIN;
 	}
 
-	private class Property {
-		protected Double a, b;
-		protected InterpolationMode mode;
+	protected class Property {
+		public Double a, b;
+		public InterpolationMode mode;
 
 		public Property(Double start, Double end, InterpolationMode mode) {
 			this.a = end;
@@ -74,9 +74,9 @@ public abstract class Animation {
 		}
 	}
 
-	private final Double duration;
-	private final HashMap<String, Property> properties;
-	private final boolean requiresResampling;
+	protected final Double duration;
+	protected final HashMap<String, Property> properties;
+	protected final boolean requiresResampling;
 
 	/**
 	 * Create an animation of a specified length.

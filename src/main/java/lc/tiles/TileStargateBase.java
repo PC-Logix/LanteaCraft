@@ -211,13 +211,13 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				for (int i = 0; i < 9; i++) {
 					double angle = 360.0d / 38.0d;
 					clientAnimationQueue.push(new RingSpinAnimation(30.0d, 0.0d, MathUtils.normaliseAngle(angle * (i * 4)), true));
-					clientAnimationQueue.push(new ChevronMoveAnimation(i, 0.5d, true));
+					clientAnimationQueue.push(new ChevronMoveAnimation(i, true));
 				}
 				clientAnimationQueue.push(new RingSpinAnimation(120.0d, 0.0d, 0.0d, true));
 				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
-				
+
 				for (int i = 0; i < 9; i++) {
-					clientAnimationQueue.push(new ChevronMoveAnimation(i, 0.5d, true));
+					clientAnimationQueue.push(new ChevronMoveAnimation(i, true));
 				}
 				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
 			}
@@ -239,7 +239,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				double dest = symbolRotation;
 				double aangle = MathUtils.normaliseAngle(dest);
 				clientAnimationQueue.push(new RingSpinAnimation(clientDiallingTimeout - 5.0d, 0.0d, aangle, true));
-				clientAnimationQueue.push(new ChevronMoveAnimation(clientDiallingProgress, 0.5d, true));
+				clientAnimationQueue.push(new ChevronMoveAnimation(clientDiallingProgress, true));
 				break;
 			case DISCONNECTING:
 				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
