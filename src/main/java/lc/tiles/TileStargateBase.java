@@ -344,10 +344,11 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			trackedEntities.clear();
 			Matrix3 rotation = Orientations.from(getRotation()).rotation();
 			Vector3 origin = new Vector3(this);
-			Vector3 p0 = rotation.mul(new Vector3(-2.5, 0.5, -1.0));
-			Vector3 p1 = rotation.mul(new Vector3(2.5, 5.5, 0.0));
+			Vector3 p0 = rotation.mul(new Vector3(-2.5, 0.5, 0.0));
+			Vector3 p1 = rotation.mul(new Vector3(2.5, 5.5, 1.0));
 			AxisAlignedBB box = Vector3.makeAABB(p0.add(origin), p1.add(origin));
 			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
+			// LCLog.debug("Entity box: %s, count %s", box, ents.size());
 			for (Entity entity : ents)
 				if (!entity.isDead && entity.ridingEntity == null)
 					trackedEntities.add(new TrackedEntity(entity));
@@ -356,24 +357,19 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	private void thinkEntityInWormhole(Entity entity, Vector3 prevPos) {
 		if (!entity.isDead) {
-			Trans3 t = new Trans3(xCoord, yCoord, zCoord).rotate(Orientations.from(getRotation()).rotation());
-			double vx = entity.posX - prevPos.x;
-			double vy = entity.posY - prevPos.y;
-			double vz = entity.posZ - prevPos.z;
-			Vector3 p1 = t.ip(entity.posX, entity.posY, entity.posZ);
-			Vector3 p0 = t.ip(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z - entity.posZ);
+			Matrix3 rotation = Orientations.from(getRotation()).rotation();
+			Vector3 or = new Vector3(this);
+			Vector3 p1 = rotation.mul(new Vector3(entity.posX, entity.posY, entity.posZ).sub(or));
+			Vector3 p0 = rotation.mul(new Vector3(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z - entity.posZ).sub(or));
 			double z0 = 0.0;
 			if (p0.z >= z0 && p1.z < z0) {
-				LCLog.debug("Teleporting!");
-				entity.motionX = vx;
-				entity.motionY = vy;
-				entity.motionZ = vz;
 				TileStargateBase dte = currentConnection.tileTo;
 				if (dte != null) {
 					Trans3 dt = new Trans3(dte.xCoord, dte.yCoord, dte.zCoord).side(0).turn(
 							rotationMap[dte.getRotation().ordinal()]);
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
+					Trans3 t = new Trans3(xCoord, yCoord, zCoord).rotate(Orientations.from(getRotation()).rotation());
 					thinkDispatchEntity(entity, t, dt, dte);
 				}
 			}
