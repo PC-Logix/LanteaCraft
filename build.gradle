@@ -47,7 +47,7 @@ jar.doFirst {
 jar.version = "${minecraft.version}"
 jar.classifier = "${ext.buildNumber}"
 jar.manifest = manifest { attributes(
-	"FMLCorePlugin": "pcl.lc.coremod.LCCoreMod",
+	"FMLCorePlugin": "lc.coremod.LCCoreMod",
 	"FMLCorePluginContainsFMLMod": "icanhazfmlmodpweeze"
 ) }
 
