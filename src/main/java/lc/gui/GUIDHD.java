@@ -36,7 +36,7 @@ public class GUIDHD extends LCContainerGUI {
 		final double dhdRadius3 = dhdWidth * 0.45;
 		private int dhdTop, dhdCentreX, dhdCentreY, ticks = 0;
 		private ResourceLocation dhdLayer, dhdButtonLayer;
-		private String enteredAddress;
+		private String enteredAddress = "";
 
 		public DHDDefaultTab() {
 			super();
