@@ -40,15 +40,15 @@ public class GUIDHD extends LCContainerGUI {
 
 		public DHDDefaultTab() {
 			super();
-			dhdLayer = ResourceAccess.getNamedResource("textures/gui/dhd_gui.png");
-			dhdButtonLayer = ResourceAccess.getNamedResource("textures/gui/dhd_centre.png");
+			dhdLayer = ResourceAccess.getNamedResource("textures/gui/dhd/dhd_gui.png");
+			dhdButtonLayer = ResourceAccess.getNamedResource("textures/gui/dhd/dhd_centre.png");
 		}
 
 		@Override
 		protected void onTabOpened(LCContainerGUI container) {
-			dhdTop = container.height - dhdHeight;
-			dhdCentreX = container.width / 2;
-			dhdCentreY = dhdTop + dhdHeight / 2;
+			dhdCentreX = dhdWidth / 2;
+			dhdCentreY = dhdHeight / 2;
+			dhdTop = 48;
 		}
 
 		@Override
@@ -70,14 +70,13 @@ public class GUIDHD extends LCContainerGUI {
 
 		@Override
 		protected Dimension getTabDimensions() {
-			// TODO Auto-generated method stub
-			return null;
+			return new Dimension(dhdWidth, dhdHeight + dhdTop);
 		}
 
 		@Override
 		protected void drawBackgroundLayer(LCContainerGUI container, float partialTickCount, int mouseX, int mouseY) {
-			container.drawTexturedRect((container.width - dhdWidth) / 2, container.height - dhdHeight, dhdWidth,
-					dhdHeight);
+			container.bindTexture(dhdLayer);
+			container.drawTexturedRect(0, dhdTop, dhdWidth, dhdHeight);
 
 			container.bindTexture(dhdButtonLayer, 128, 64);
 			GL11.glEnable(GL11.GL_BLEND);
@@ -87,17 +86,17 @@ public class GUIDHD extends LCContainerGUI {
 			else
 				container.setColor(0.5, 0.25, 0.0);
 			double rx = dhdWidth * 48 / 512.0;
-			double ry = dhdHeight * 48 / (96.0 + 256.0);
+			double ry = dhdHeight * 48 / (90.0 + 256.0);
 			Tessellator.instance.disableColor();
-			container.drawTexturedRect(dhdCentreX - rx, dhdCentreY - ry + 8.0d, 2 * rx, 1.5 * ry, 64, 0, 64, 48);
+			container.drawTexturedRect(dhdCentreX - rx, dhdTop + dhdCentreY - ry + 8, 2 * rx, 1.5 * ry, 64, 0, 64, 48);
 			container.resetColor();
 			if (dhd.ownsConnection()) {
 				GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 				double d = 5;
-				container.drawTexturedRect(dhdCentreX - rx - d, dhdCentreY - ry - d + 8.0d, 2 * (rx + d), ry + d, 0, 0,
-						64, 32);
-				container.drawTexturedRect(dhdCentreX - rx - d, dhdCentreY + 8.0d, 2 * (rx + d), 0.5 * ry + d, 0, 32,
-						64, 32);
+				container.drawTexturedRect(dhdCentreX - rx - d, dhdTop + dhdCentreY - ry - d + 8.0d, 2 * (rx + d), ry
+						+ d, 0, 0, 64, 32);
+				container.drawTexturedRect(dhdCentreX - rx - d, dhdTop + dhdCentreY + 8.0d, 2 * (rx + d), 0.5 * ry + d,
+						0, 32, 64, 32);
 				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			}
 		}
@@ -105,15 +104,14 @@ public class GUIDHD extends LCContainerGUI {
 		@Override
 		protected void drawForegroundLayer(LCContainerGUI container, int mouseX, int mouseY) {
 			TileDHD dhd = (TileDHD) container.getTile();
-			container.drawFramedSymbols(container.width / 2, dhdTop - 60, dhd.getDHDType(), enteredAddress);
-			container.drawAddressString(container.width / 2, dhdTop - 12, enteredAddress, 9, " ", (ticks > 10) ? "_"
-					: " ");
+			container.drawFramedSymbols(dhdCentreX, 0, dhd.getDHDType(), enteredAddress);
+			container.drawAddressString(dhdCentreX, 48, enteredAddress, 9, " ", (ticks > 10) ? "_" : " ");
 		}
 
 		@Override
 		protected void mouseClicked(LCContainerGUI container, int x, int y, int mouseButton) {
 			if (mouseButton == 0) {
-				int i = findDHDButton(x, y);
+				int i = findDHDButton(x - container.offsetLeft(), y - container.offsetTop());
 				if (i >= 0) {
 					dhdButtonPressed((TileDHD) container.getTile(), i);
 					return;
@@ -160,9 +158,11 @@ public class GUIDHD extends LCContainerGUI {
 		}
 
 		private int findDHDButton(int mx, int my) {
+			
 			double x = -(mx - dhdCentreX);
-			double y = -(my - dhdCentreY) * dhdWidth / dhdHeight;
+			double y = -(my - dhdCentreY - dhdTop) * dhdWidth / dhdHeight;
 			double r = Math.hypot(x, y);
+			LCLog.debug("dhdClick: " + x + ", " + y);
 			if (r > dhdRadius3)
 				return -1;
 			if (r <= dhdRadius1)
