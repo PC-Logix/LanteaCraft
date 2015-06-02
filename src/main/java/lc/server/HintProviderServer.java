@@ -11,7 +11,9 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import lc.LanteaCraft;
 import lc.api.audio.ISoundController;
 import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
@@ -24,6 +26,8 @@ import lc.common.util.BeaconStreamThread;
 import lc.common.util.StatsProvider;
 import lc.server.database.UniverseManager;
 import lc.server.openal.VoidSoundController;
+import lc.server.world.LCChunkLoadCallback;
+import lc.server.world.LCLoadedChunkManager;
 
 /**
  * Server-side hint provider implementation
@@ -36,6 +40,12 @@ public class HintProviderServer implements IHintProvider {
 	/** The server hook bus */
 	ServerEventHooks serverHookBus;
 
+	/** The server chunk-loading callback */
+	LCChunkLoadCallback chunkLoadCallback;
+
+	/** The server chunk-loader manager */
+	LCLoadedChunkManager chunkLoadManager;
+
 	/** The metadata beacon controller */
 	BeaconStreamThread beaconMgr;
 
@@ -44,7 +54,7 @@ public class HintProviderServer implements IHintProvider {
 
 	/** The server Stargate manager */
 	StargateManager stargateMgr;
-	
+
 	/** The server key-trust chain */
 	KeyTrustRegistry trustChain;
 
@@ -64,8 +74,11 @@ public class HintProviderServer implements IHintProvider {
 		stargateMgr = new StargateManager(this);
 		universeMgr = new UniverseManager();
 		trustChain = new KeyTrustRegistry();
+		chunkLoadCallback = new LCChunkLoadCallback();
+		chunkLoadManager = new LCLoadedChunkManager();
 		FMLCommonHandler.instance().bus().register(serverHookBus);
 		MinecraftForge.EVENT_BUS.register(serverHookBus);
+		ForgeChunkManager.setForcedChunkLoadingCallback(LanteaCraft.instance, chunkLoadCallback);
 	}
 
 	@Override
@@ -107,10 +120,20 @@ public class HintProviderServer implements IHintProvider {
 
 	/**
 	 * Gets the active Stargate manager
+	 * 
 	 * @return The active Stargate manager
 	 */
 	public StargateManager stargates() {
 		return stargateMgr;
+	}
+
+	/**
+	 * Gets the active Chunk-loader manager
+	 *
+	 * @return The active Chunk-loader manager
+	 */
+	public LCLoadedChunkManager chunkLoaders() {
+		return chunkLoadManager;
 	}
 
 	@Override
@@ -125,13 +148,13 @@ public class HintProviderServer implements IHintProvider {
 
 	@Override
 	public void signatureViolation(FMLFingerprintViolationEvent event) {
-		// TODO Auto-generated method stub 
+		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void receiveIMC(IMCEvent event) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
