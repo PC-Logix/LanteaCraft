@@ -22,7 +22,7 @@ tile.stargateRing.6.name=Nox Stargate Ring
 tile.stargateRing.7.name=Nox Stargate Chevron
 
 # Iris items & tags
-item.iris.name=Stargate Iris
+item.irisUpgrade.name=Stargate Iris
 item.gdo.name=GDO
 
 # Power-related items
