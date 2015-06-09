@@ -34,7 +34,6 @@ minecraft {
 }
 
 sourceSets.main.java.srcDir("./src/externs/java")
-sourceSets.main.java.srcDir("./src/astrodat-lib/src")
 
 jar.doFirst {
 	for (String s : new File("./src/externs/java").list()) {
