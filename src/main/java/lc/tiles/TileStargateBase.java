@@ -258,7 +258,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					double aangle = MathUtils.normaliseAngle(symbolRotation);
 					clientAnimationQueue.push(new RingSpinAnimation(clientDiallingTimeout - 10.0d, 0.0d, aangle, true));
 					clientAnimationQueue.push(new ChevronMoveAnimation(10.0d,
-							clientChevronQueue[clientDiallingProgress], true));
+							clientChevronQueue[clientDiallingProgress], 1.0d / 8.0d, 0.5d, true));
 					for (int i = 0; i < clientDiallingProgress; i++) {
 						clientRenderState.set("chevron-dist-" + clientChevronQueue[i], 1.0d / 8.0d);
 						clientRenderState.set("chevron-light-" + clientChevronQueue[i], 0.5d);
@@ -266,7 +266,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				} else {
 					if (clientDiallingProgress == 8) {
 						for (int i = 0; i < 9; i++)
-							clientAnimationQueue.push(new ChevronMoveAnimation(5.0d, i, true));
+							clientAnimationQueue.push(new ChevronMoveAnimation(5.0d, i, 1.0d / 8.0d, 0.5d, true));
 					}
 				}
 				break;
@@ -367,8 +367,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			if (p0.z >= z0 && p1.z < z0) {
 				TileStargateBase dte = currentConnection.tileTo;
 				if (dte != null) {
-					Trans3 dt = new Trans3(dte.xCoord, dte.yCoord, dte.zCoord).side(0).turn(
-							rotationMap[dte.getRotation().ordinal()]);
+					Trans3 dt = new Trans3(dte.xCoord, dte.yCoord, dte.zCoord).rotate(Orientations.from(dte.getRotation()).rotation());
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
 					Trans3 t = new Trans3(xCoord, yCoord, zCoord).rotate(Orientations.from(getRotation()).rotation());
