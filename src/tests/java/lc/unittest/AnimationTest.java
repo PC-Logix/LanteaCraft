@@ -1,4 +1,4 @@
-package lc;
+package lc.unittest;
 
 import static org.junit.Assert.*;
 import lc.client.animation.Animation;
