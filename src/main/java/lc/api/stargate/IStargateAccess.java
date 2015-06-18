@@ -41,7 +41,7 @@ public interface IStargateAccess {
 	public void selectGlyph(char glyph);
 	public void activateChevron();
 	public void deactivateChevron();
-	public int getActivatedChevron();
+	public int getActivatedChevrons();
 	public void engageStargate();
 	public void disengateStargate();
 

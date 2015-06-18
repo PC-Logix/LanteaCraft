@@ -589,37 +589,32 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void selectGlyph(char glyph) {
-		// TODO Auto-generated method stub
-
+		commandQueue.add(new StargateCommand(StargateCommandType.SPIN, glyph));
 	}
 
 	@Override
 	public void activateChevron() {
-		// TODO Auto-generated method stub
-
+		commandQueue.add(new StargateCommand(StargateCommandType.ENGAGE));
 	}
 
 	@Override
 	public void deactivateChevron() {
-		// TODO Auto-generated method stub
-
+		commandQueue.add(new StargateCommand(StargateCommandType.DISENGAGE));
 	}
 
 	@Override
-	public int getActivatedChevron() {
+	public int getActivatedChevrons() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void engageStargate() {
-		// TODO Auto-generated method stub
-
+		commandQueue.add(new StargateCommand(StargateCommandType.CONNECT));
 	}
 
 	@Override
 	public void disengateStargate() {
-		// TODO Auto-generated method stub
-
+		commandQueue.add(new StargateCommand(StargateCommandType.DISCONNECT));
 	}
 }
