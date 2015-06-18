@@ -116,17 +116,22 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			lastVel = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
 		}
 	}
-	
-	
-	private enum StargateCommandType { SPIN, ENGAGE, DISENGAGE, CONNECT, DISCONNECT; }
+
+	private enum StargateCommandType {
+		SPIN, ENGAGE, DISENGAGE, CONNECT, DISCONNECT;
+	}
+
 	private class StargateCommand {
 		public final StargateCommandType type;
 		public final Object[] args;
-		public StargateCommand(StargateCommandType type, Object... args) { this.type = type; this.args = args; }
-	}
-	
 
-	private ArrayDeque<Object> commandQueue = new ArrayDeque<Object>();
+		public StargateCommand(StargateCommandType type, Object... args) {
+			this.type = type;
+			this.args = args;
+		}
+	}
+
+	private ArrayDeque<StargateCommand> commandQueue = new ArrayDeque<StargateCommand>();
 	private StargateConnection currentConnection = null;
 	private ArrayList<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
 	/** TODO: Externalize this */
@@ -585,19 +590,19 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public void selectGlyph(char glyph) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void activateChevron() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deactivateChevron() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -609,12 +614,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public void engageStargate() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void disengateStargate() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
