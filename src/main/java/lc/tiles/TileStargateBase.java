@@ -37,7 +37,6 @@ import lc.common.util.game.BlockFilter;
 import lc.common.util.game.BlockHelper;
 import lc.common.util.game.SlotFilter;
 import lc.common.util.math.DimensionPos;
-import lc.common.util.math.Facing3;
 import lc.common.util.math.MathUtils;
 import lc.common.util.math.Matrix3;
 import lc.common.util.math.Orientations;
@@ -56,7 +55,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.RotationHelper;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -118,7 +116,17 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			lastVel = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
 		}
 	}
+	
+	
+	private enum StargateCommandType { SPIN, ENGAGE, DISENGAGE, CONNECT, DISCONNECT; }
+	private class StargateCommand {
+		public final StargateCommandType type;
+		public final Object[] args;
+		public StargateCommand(StargateCommandType type, Object... args) { this.type = type; this.args = args; }
+	}
+	
 
+	private ArrayDeque<Object> commandQueue = new ArrayDeque<Object>();
 	private StargateConnection currentConnection = null;
 	private ArrayList<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
 	/** TODO: Externalize this */
@@ -362,12 +370,14 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			Matrix3 rotation = Orientations.from(getRotation()).rotation();
 			Vector3 or = new Vector3(this);
 			Vector3 p1 = rotation.mul(new Vector3(entity.posX, entity.posY, entity.posZ).sub(or));
-			Vector3 p0 = rotation.mul(new Vector3(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2 * prevPos.z - entity.posZ).sub(or));
+			Vector3 p0 = rotation.mul(new Vector3(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2
+					* prevPos.z - entity.posZ).sub(or));
 			double z0 = 0.0;
 			if (p0.z >= z0 && p1.z < z0) {
 				TileStargateBase dte = currentConnection.tileTo;
 				if (dte != null) {
-					Trans3 dt = new Trans3(dte.xCoord, dte.yCoord, dte.zCoord).rotate(Orientations.from(dte.getRotation()).rotation());
+					Trans3 dt = new Trans3(dte.xCoord, dte.yCoord, dte.zCoord).rotate(Orientations.from(
+							dte.getRotation()).rotation());
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
 					Trans3 t = new Trans3(xCoord, yCoord, zCoord).rotate(Orientations.from(getRotation()).rotation());
@@ -380,7 +390,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private void thinkDispatchEntity(Entity entity, Trans3 src, Trans3 dst, TileStargateBase destination) {
 		TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
 	}
-	
+
 	private void thinkServerIris() {
 		// TODO: Control the iris, send state to client
 	}
@@ -570,5 +580,41 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	public void receive(MessagePayload payload) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void selectGlyph(char glyph) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void activateChevron() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deactivateChevron() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getActivatedChevron() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void engageStargate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disengateStargate() {
+		// TODO Auto-generated method stub
+		
 	}
 }
