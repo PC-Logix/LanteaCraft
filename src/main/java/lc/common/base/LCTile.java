@@ -7,6 +7,7 @@ import java.util.List;
 
 import lc.LCRuntime;
 import lc.api.audio.ISoundController;
+import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.audio.channel.IMixer;
 import lc.api.audio.streaming.ISound;
 import lc.api.audio.streaming.ISoundProperties;
@@ -40,6 +41,7 @@ import cpw.mods.fml.relauncher.Side;
 public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler, IBlockEventHandler, IConfigure {
 
 	private static HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>> callbacks = new HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>>();
+	private static HashMap<Class<? extends LCTile>, ArrayList<ChannelDescriptor>> channels = new HashMap<Class<? extends LCTile>, ArrayList<ChannelDescriptor>>();
 
 	/**
 	 * Register an event callback on a class. Must provide the method name, the
@@ -63,6 +65,26 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		if (!me_calls.get(event).contains(method))
 			me_calls.get(event).add(method);
 		LCLog.debug("Driver adding callback on class %s event %s: %s", me.getName(), event, method);
+	}
+
+	/**
+	 * Register a channel descriptor on a class. Must provide the self class and
+	 * the descriptor to register.
+	 * 
+	 * @param me
+	 *            The self class.
+	 * @param descriptor
+	 *            The descriptor to register.
+	 */
+	@SuppressWarnings("unchecked")
+	public static void registerChannel(Class<?> me, ChannelDescriptor descriptor) {
+		Class<? extends LCTile> tile = (Class<? extends LCTile>) me;
+		if (!channels.containsKey(tile))
+			channels.put(tile, new ArrayList<ChannelDescriptor>());
+		ArrayList<ChannelDescriptor> descriptors = channels.get(tile);
+		if (!descriptors.contains(descriptor))
+			descriptors.add(descriptor);
+		LCLog.debug("Adding sound descriptor %s on class %s", descriptor, me.getName());
 	}
 
 	/**
@@ -123,6 +145,19 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 					}
 					break;
 				}
+	}
+
+	/**
+	 * Get all the known descriptors for a provided self class.
+	 * 
+	 * @param me
+	 *            The self class
+	 * @return The list of all known descriptors
+	 */
+	public static ChannelDescriptor[] getDescriptors(Class<? extends LCTile> me) {
+		if (!channels.containsKey(me))
+			return null;
+		return channels.get(me).toArray(new ChannelDescriptor[0]);
 	}
 
 	/**
@@ -579,6 +614,9 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		if (sys == null || !sys.ready())
 			return null;
 		clientMixer = sys.findMixer(this);
+		ChannelDescriptor[] descriptors = getDescriptors(getClass());
+		for (ChannelDescriptor descriptor : descriptors)
+			clientMixer.createChannelDescriptor(descriptor.name, descriptor);
 		return clientMixer;
 	}
 

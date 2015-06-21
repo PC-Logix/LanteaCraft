@@ -24,14 +24,10 @@ public interface IMixer {
 	 * 
 	 * @param name
 	 *            The name of the channel
-	 * @param file
-	 *            The file name to play
-	 * @param position
-	 *            The position of the sound
-	 * @param properties
-	 *            The properties of the channel
+	 * @param descriptor
+	 *            The channel's descriptor information
 	 */
-	void createChannelDescriptor(String name, String file, ISoundPosition position, ISoundProperties properties);
+	void createChannelDescriptor(String name, ChannelDescriptor descriptor);
 
 	/**
 	 * Create a channel on the sound mixer. The channel consists of a name and a

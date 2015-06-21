@@ -164,7 +164,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 		if (!mixer().hasChannel("click")) {
 			ISoundController audio = LCRuntime.runtime.hints().audio();
 			ISound click = audio.getSoundService().assign(this, "stargate/milkyway/milkyway_dhd_button.ogg",
-					new StreamingSoundPosition(new DimensionPos(this)),
+					audio.getPosition(this),
 					new StreamingSoundProperties(false, true, 1.0f, 1.0f, SoundCategory.MASTER));
 			mixer().createChannel("click", click);
 		}

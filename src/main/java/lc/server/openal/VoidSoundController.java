@@ -2,6 +2,7 @@ package lc.server.openal;
 
 import lc.api.audio.ISoundController;
 import lc.api.audio.channel.IMixer;
+import lc.api.audio.streaming.ISoundPosition;
 import lc.api.audio.streaming.ISoundServer;
 
 public class VoidSoundController implements ISoundController {
@@ -17,6 +18,12 @@ public class VoidSoundController implements ISoundController {
 	@Override
 	public boolean ready() {
 		return false;
+	}
+
+	@Override
+	public ISoundPosition getPosition(Object object) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
