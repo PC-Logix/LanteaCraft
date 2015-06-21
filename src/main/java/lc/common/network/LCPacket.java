@@ -13,7 +13,8 @@ import java.io.IOException;
  */
 public abstract class LCPacket {
 
-	protected enum PrimType {
+	/** Primitive type map */
+	private enum PrimType {
 		NULL, BOOLEAN, SHORT, CHARACTER, INTEGER, FLOAT, DOUBLE;
 	}
 
@@ -29,6 +30,17 @@ public abstract class LCPacket {
 	 */
 	public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException;
 
+	/**
+	 * Encode a boxed primitive into the underlying stream
+	 * 
+	 * @param buffer
+	 *            The buffer stream
+	 * @param prim
+	 *            The boxed primitive object
+	 * @throws IOException
+	 *             Any exception which occurs when writing, or if the boxed type
+	 *             is unknown
+	 */
 	protected void encodePrimitiveInto(ByteBuf buffer, Object prim) throws IOException {
 		if (prim == null) {
 			buffer.writeByte(PrimType.NULL.ordinal());
@@ -54,6 +66,17 @@ public abstract class LCPacket {
 			throw new IOException("Unknown primitive type " + prim.getClass().getName());
 	}
 
+	/**
+	 * Encode an array of boxed primitives into the underlying stream
+	 * 
+	 * @param buffer
+	 *            The buffer stream
+	 * @param arr
+	 *            The array of boxed primitive objects
+	 * @throws IOException
+	 *             Any exception which occurs when writing, or if the boxed type
+	 *             is unknown
+	 */
 	protected void encodePrimitiveArrayInto(ByteBuf buffer, Object[] arr) throws IOException {
 		buffer.writeInt(arr.length);
 		for (int i = 0; i < arr.length; i++)
@@ -72,6 +95,16 @@ public abstract class LCPacket {
 	 */
 	public abstract void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException;
 
+	/**
+	 * Decode a boxed primitive from the underlying stream
+	 * 
+	 * @param buffer
+	 *            The underlying stream
+	 * @return The boxed type
+	 * @throws IOException
+	 *             Any exception which occurs when reading, or if the specified
+	 *             boxed type on the stream is unsupported
+	 */
 	protected Object decodePrimitiveFrom(ByteBuf buffer) throws IOException {
 		byte typeof = buffer.readByte();
 		switch (PrimType.values()[typeof]) {
@@ -93,6 +126,16 @@ public abstract class LCPacket {
 		throw new IOException("Unknown primitive type " + typeof);
 	}
 
+	/**
+	 * Decodes an array of boxed primitives from the underlying stream
+	 * 
+	 * @param buffer
+	 *            The underlying stream
+	 * @return The array of boxed primitives
+	 * @throws IOException
+	 *             Any exception which occurs when reading, or if the specified
+	 *             boxed type on the stream is unsupported
+	 */
 	protected Object[] decodePrimitiveArrayFrom(ByteBuf buffer) throws IOException {
 		int sz = buffer.readInt();
 		Object[] prims = new Object[sz];

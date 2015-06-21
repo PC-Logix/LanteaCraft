@@ -137,7 +137,14 @@ public class BlockDHD extends LCBlock {
 	public int getBaseType(int metadata) {
 		return (int) Math.floor(metadata / blockMask);
 	}
-	
+
+	/**
+	 * Get the type of the DHD for the metadata specified
+	 * 
+	 * @param metadata
+	 *            The metadata value
+	 * @return The type of the DHD
+	 */
 	public StargateType getDHDType(int metadata) {
 		return StargateType.fromOrdinal(getBaseType(metadata));
 	}
@@ -156,6 +163,6 @@ public class BlockDHD extends LCBlock {
 	@Override
 	public void configure(ComponentConfig c) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

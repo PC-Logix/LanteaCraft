@@ -6,6 +6,12 @@ package lc.api.audio.streaming;
 
 import net.minecraft.client.audio.SoundCategory;
 
+/**
+ * Interface for sound servers at runtime.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public interface ISoundServer {
 
 	/**

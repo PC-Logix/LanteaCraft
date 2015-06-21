@@ -2,6 +2,12 @@ package lc.api.components;
 
 import lc.api.defs.IInterfaceDefinition;
 
+/**
+ * Interface registry interface. Stores all declared interfaces at runtime.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public interface IInterfaceRegistry {
 	/**
 	 * Add a new game definition

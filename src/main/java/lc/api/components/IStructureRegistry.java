@@ -2,6 +2,12 @@ package lc.api.components;
 
 import lc.api.defs.IStructureDefinition;
 
+/**
+ * Structure registry interface. Stores all declared structures at runtime.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public interface IStructureRegistry {
 
 	/**

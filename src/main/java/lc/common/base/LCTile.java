@@ -410,6 +410,12 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		}
 	}
 
+	/**
+	 * Send a packet to all clients on the server
+	 * 
+	 * @param packet
+	 *            The packet to send
+	 */
 	protected void sendPacketToClients(LCPacket packet) {
 		LCRuntime.runtime.network().sendScoped(packet, 128.0d);
 	}
@@ -425,6 +431,14 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		}
 	}
 
+	/**
+	 * Send a packet to a specific client
+	 * 
+	 * @param packet
+	 *            The packet to send
+	 * @param player
+	 *            The player to send to
+	 */
 	protected void sendPacketToClient(LCPacket packet, EntityPlayerMP player) {
 		LCRuntime.runtime.network().sendTo(packet, player);
 	}

@@ -4,6 +4,12 @@
  */
 package lc.api.audio.streaming;
 
+/**
+ * Interface for sound position descriptors at runtime.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public interface ISoundPosition {
 
 	/**

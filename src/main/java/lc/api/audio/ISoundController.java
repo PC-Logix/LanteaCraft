@@ -8,6 +8,12 @@ import lc.api.audio.channel.IMixer;
 import lc.api.audio.streaming.ISoundPosition;
 import lc.api.audio.streaming.ISoundServer;
 
+/**
+ * Interface for sound controller systems at runtime.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public interface ISoundController {
 
 	/**

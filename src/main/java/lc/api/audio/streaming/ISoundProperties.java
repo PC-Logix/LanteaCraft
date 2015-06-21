@@ -6,6 +6,12 @@ package lc.api.audio.streaming;
 
 import net.minecraft.client.audio.SoundCategory;
 
+/**
+ * Interface for sound property containers at runtime.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public interface ISoundProperties {
 	/**
 	 * @return If the sound is to loop

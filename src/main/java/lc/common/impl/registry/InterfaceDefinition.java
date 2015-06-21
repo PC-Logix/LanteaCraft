@@ -3,6 +3,12 @@ package lc.common.impl.registry;
 import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IInterfaceDefinition;
 
+/**
+ * Implementation of definitions for interface
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class InterfaceDefinition implements IInterfaceDefinition {
 
 	private String name;
@@ -11,6 +17,16 @@ public class InterfaceDefinition implements IInterfaceDefinition {
 
 	private int regId = -1;
 
+	/**
+	 * Create an interface definition
+	 * 
+	 * @param name
+	 *            The name of the definition
+	 * @param containerClass
+	 *            The name of the container class
+	 * @param guiClass
+	 *            The name of the GUI class
+	 */
 	public InterfaceDefinition(String name, String containerClass, String guiClass) {
 		this.name = name;
 		this.containerClass = containerClass;

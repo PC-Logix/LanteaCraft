@@ -6,7 +6,14 @@ import lc.client.animation.Animation.InterpolationMode;
 
 import org.junit.Test;
 
+/**
+ * Animation test class
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class AnimationTest {
+	/** The test */
 	@Test
 	public void test() {
 		Animation animation = new Animation((Double) 20.0d, false, null, null) {

@@ -7,6 +7,14 @@ import lc.common.LCLog;
 import lc.common.util.data.StateMap;
 import lc.common.util.game.RunnableTileCallback;
 
+/**
+ * Animation controller class. Allows the rendering engine to declare animations
+ * which modify multiple double-based properties over a given time between a set
+ * of given values, under a particular interpolation mode.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public abstract class Animation {
 
 	/**
@@ -34,16 +42,38 @@ public abstract class Animation {
 		INVSIN;
 	}
 
+	/** An animation property */
 	protected class Property {
-		public Double a, b;
+		/** The A value */
+		public Double a;
+		/** The B value */
+		public Double b;
+		/** The interpolation mode */
 		public InterpolationMode mode;
 
+		/**
+		 * Create a new animable property
+		 * 
+		 * @param start
+		 *            The A start value
+		 * @param end
+		 *            The B end value
+		 * @param mode
+		 *            The interpolation mode
+		 */
 		public Property(Double start, Double end, InterpolationMode mode) {
 			this.a = end;
 			this.b = start;
 			this.mode = mode;
 		}
 
+		/**
+		 * Read the property at a given fractional time
+		 * 
+		 * @param fracT
+		 *            The fractional time between 0.0 and 1.0
+		 * @return The value of the property at the given fractional time
+		 */
 		public Double readProperty(Double fracT) {
 			Double fxFracT = 0.0d;
 			switch (mode) {
@@ -75,11 +105,16 @@ public abstract class Animation {
 		}
 	}
 
+	/** The duration of the animation */
 	protected final Double duration;
+	/** The named property-map of the animation */
 	protected final HashMap<String, Property> properties;
+	/** If the animations require u-value property resampling */
 	protected final boolean requiresResampling;
 
+	/** The callback to perform before animating */
 	public final RunnableTileCallback doBefore;
+	/** The callback to perform after animation */
 	public final RunnableTileCallback doAfter;
 
 	/**
@@ -89,6 +124,10 @@ public abstract class Animation {
 	 *            The total duration of the animation
 	 * @param resample
 	 *            If re-sampling is required at the start of the animation
+	 * @param doBefore
+	 *            The do-before-animation callback, may be null
+	 * @param doAfter
+	 *            The do-after-animation callback, may be null
 	 */
 	public Animation(Double duration, boolean resample, RunnableTileCallback doBefore, RunnableTileCallback doAfter) {
 		this.duration = duration;
@@ -187,6 +226,8 @@ public abstract class Animation {
 	/**
 	 * Check if the animation is finished beyond a certain time.
 	 * 
+	 * @param time
+	 *            The full time value to check
 	 * @return If an animation has finished beyond a certain time value
 	 */
 	public boolean finished(Double time) {
