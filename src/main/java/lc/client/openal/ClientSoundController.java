@@ -4,14 +4,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.audio.ISoundController;
 import lc.api.audio.channel.IMixer;
+import lc.api.audio.streaming.ISoundPosition;
 import lc.api.audio.streaming.ISoundServer;
 import lc.api.event.ITickEventHandler;
 import lc.common.LCLog;
 import lc.common.util.java.DestructableReference;
+import lc.common.util.math.DimensionPos;
 
 /**
  * Client sound controller implementation.
@@ -39,6 +43,18 @@ public class ClientSoundController implements ISoundController, ITickEventHandle
 	}
 
 	@Override
+	public ISoundPosition getPosition(Object object) {
+		DimensionPos pos = null;
+		if (object instanceof NBTTagCompound) {
+			pos = new DimensionPos((NBTTagCompound) object);
+		} else if (object instanceof TileEntity) {
+			pos = new DimensionPos((TileEntity) object);
+		} else
+			return null;
+		return new StreamingSoundPosition(pos);
+	}
+
+	@Override
 	public ISoundServer getSoundService() {
 		return server;
 	}
@@ -51,7 +67,7 @@ public class ClientSoundController implements ISoundController, ITickEventHandle
 			if (mz.getKey().get().equals(key))
 				return mz.getValue();
 		}
-		StreamingSoundMixer mixer = new StreamingSoundMixer();
+		StreamingSoundMixer mixer = new StreamingSoundMixer(server, key);
 		liveMixers.put(new DestructableReference<Object>(key), mixer);
 		return mixer;
 	}

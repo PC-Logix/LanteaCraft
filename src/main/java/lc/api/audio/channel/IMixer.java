@@ -5,6 +5,8 @@
 package lc.api.audio.channel;
 
 import lc.api.audio.streaming.ISound;
+import lc.api.audio.streaming.ISoundPosition;
+import lc.api.audio.streaming.ISoundProperties;
 
 /**
  * Sound mixer contract interface. Allows modded blocks, items and tiles to
@@ -14,6 +16,22 @@ import lc.api.audio.streaming.ISound;
  *
  */
 public interface IMixer {
+
+	/**
+	 * Create a channel descriptor on the mixer. The descriptor describes a
+	 * channel and it's properties so that the mixer can retain the channel
+	 * immutably.
+	 * 
+	 * @param name
+	 *            The name of the channel
+	 * @param file
+	 *            The file name to play
+	 * @param position
+	 *            The position of the sound
+	 * @param properties
+	 *            The properties of the channel
+	 */
+	void createChannelDescriptor(String name, String file, ISoundPosition position, ISoundProperties properties);
 
 	/**
 	 * Create a channel on the sound mixer. The channel consists of a name and a

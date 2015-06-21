@@ -389,7 +389,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 			LCLog.warn("Error sending network update.", e);
 		}
 	}
-	
+
 	protected void sendPacketToClient(LCPacket packet, EntityPlayerMP player) {
 		LCRuntime.runtime.network().sendTo(packet, player);
 	}
@@ -600,7 +600,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		ISoundServer server = sys.getSoundService();
 		if (server == null || !server.ready())
 			return null;
-		return server.assign(this, filename, new StreamingSoundPosition(new DimensionPos(this)), properties);
+		return server.assign(this, filename, sys.getPosition(this), properties);
 	}
 
 }
