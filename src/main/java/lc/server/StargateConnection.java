@@ -33,13 +33,6 @@ public class StargateConnection {
 	/** The timeout until this state ends */
 	public int stateTimeout = 0;
 
-	/** The dial-progress */
-	public int diallingProgress = 0;
-	/** The currently dialling symbol */
-	public int diallingSymbol = 0;
-	/** The dial-state timeout */
-	public int diallingTimeout = 0;
-
 	/** The connection live state */
 	public boolean dead = false;
 
@@ -66,7 +59,7 @@ public class StargateConnection {
 			thinkConnection();
 			break;
 		case DIALLING:
-			thinkSpinUp();
+			thinkPerformConnection();
 			break;
 		case DISCONNECTING:
 		case FAILED:
@@ -82,21 +75,6 @@ public class StargateConnection {
 		stateTimeout--;
 		if (stateTimeout <= 0)
 			changeState(StargateState.DISCONNECTING, 60);
-	}
-
-	private void thinkSpinUp() {
-		diallingTimeout--;
-		if (diallingTimeout <= 0) {
-			diallingProgress++;
-			if (diallingProgress >= dest.address.getAddress().length) {
-				thinkPerformConnection();
-			} else {
-				diallingSymbol = dest.address.getAddress()[diallingProgress];
-				diallingTimeout += 40;
-				sendUpdates();
-				thinkFindTile();
-			}
-		}
 	}
 
 	private void thinkFindTile() {
@@ -146,18 +124,19 @@ public class StargateConnection {
 	}
 
 	private void thinkPerformConnection() {
+		stateTimeout--;
+		thinkFindTile();
 		try {
-			if (tileFrom == null || tileTo == null)
-				throw new IllegalStateException("Can't connect to no Stargate.");
-			if (!tileFrom.hasConnectionState() || !tileTo.hasConnectionState())
-				throw new IllegalStateException("Can't connect to unnotified Stargate.");
-			if (tileFrom.getConnectionState() != this || tileTo.getConnectionState() != this)
-				throw new IllegalStateException("Stargate is busy with non-self connection.");
-			changeState(StargateState.CONNECTED, maxConnectionAge);
+			if (tileFrom != null && tileTo != null) {
+				if (tileFrom.getConnectionState() != this || tileTo.getConnectionState() != this)
+					throw new IllegalStateException("Stargate is busy with non-self connection.");
+				changeState(StargateState.CONNECTED, maxConnectionAge);
+			}
 		} catch (Exception e) {
 			LCLog.debug("Can't connect to Stargate.", e);
-			changeState(StargateState.FAILED, 60);
 		}
+		if (stateTimeout <= 0)
+			changeState(StargateState.FAILED, 60);
 	}
 
 	private void changeState(StargateState state, int stateTimeout) {
@@ -196,8 +175,6 @@ public class StargateConnection {
 	public void openConnection() {
 		if (state != StargateState.IDLE)
 			return;
-		diallingTimeout = 40;
-		diallingSymbol = dest.address.getAddress()[0];
 		changeState(StargateState.DIALLING, 0);
 	}
 

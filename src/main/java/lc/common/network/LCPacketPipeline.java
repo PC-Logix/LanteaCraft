@@ -14,7 +14,7 @@ import lc.common.LCLog;
 import lc.common.network.packets.LCClientUpdate;
 import lc.common.network.packets.LCDHDPacket;
 import lc.common.network.packets.LCMultiblockPacket;
-import lc.common.network.packets.LCStargatePacket;
+import lc.common.network.packets.LCStargateConnectionPacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.network.packets.abs.LCTargetPacket;
 import lc.common.util.math.DimensionPos;
@@ -69,7 +69,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		registerPacket(LCTileSync.class);
 		registerPacket(LCMultiblockPacket.class);
 		registerPacket(LCClientUpdate.class);
-		registerPacket(LCStargatePacket.class);
+		registerPacket(LCStargateConnectionPacket.class);
 		registerPacket(LCDHDPacket.class);
 	}
 
