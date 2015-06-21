@@ -36,7 +36,7 @@ public class StargateGlyphRenderer {
 	 * @param zLevel
 	 *            The z-depth
 	 */
-	public static void drawAddress(Minecraft mc, StargateType type, String address, int x, int y, int length,
+	public static void drawAddress(Minecraft mc, StargateType type, char[] address, int x, int y, int length,
 			int scale, float zLevel) {
 		if (type.getSuffix().length() != 0)
 			bindSGTexture(mc, "symbols_" + type.getSuffix() + ".png", 512 / scale, 320 / scale);
@@ -45,18 +45,18 @@ public class StargateGlyphRenderer {
 		int paddingTop = 0, paddingLeft = 0;
 		int borderSize = 12 / scale;
 		int cellSize = 64 / scale;
-		if (address.length() > 7) {
-			cellSize = (int) Math.floor(448 / address.length()) / scale;
-			if (448 / scale > address.length() * cellSize) {
-				double freeLeftRight = 448 / scale - address.length() * cellSize;
+		if (address.length > 7) {
+			cellSize = (int) Math.floor(448 / address.length) / scale;
+			if (448 / scale > address.length * cellSize) {
+				double freeLeftRight = 448 / scale - address.length * cellSize;
 				double freeTopBottom = 64 / scale - cellSize;
-				paddingLeft += (int) Math.floor(freeLeftRight / address.length());
+				paddingLeft += (int) Math.floor(freeLeftRight / address.length);
 				paddingTop += (int) Math.floor(freeTopBottom / 2);
 			}
 		}
 
-		for (int i = 0; i < address.length(); i++) {
-			int s = StargateCharsetHelper.singleton().index(address.charAt(i));
+		for (int i = 0; i < address.length; i++) {
+			int s = StargateCharsetHelper.singleton().index(address[i]);
 			double u = uscale * ((s % length) * 32), v = vscale * ((s / length) * 32);
 			double u2 = uscale * 32, v2 = vscale * 32;
 			drawTexturedRectUV(x + borderSize + i * cellSize + paddingLeft, y + borderSize + paddingTop, cellSize,

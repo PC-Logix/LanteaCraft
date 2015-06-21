@@ -37,12 +37,19 @@ public interface IStargateAccess {
 	public void transmit(MessagePayload payload);
 
 	public void receive(MessagePayload payload);
-	
+
 	public void selectGlyph(char glyph);
+
 	public void activateChevron();
+
 	public void deactivateChevron();
+
 	public int getActivatedChevrons();
+
+	public Character[] getActivatedGlpyhs();
+
 	public void engageStargate();
+
 	public void disengateStargate();
 
 }

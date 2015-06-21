@@ -9,6 +9,13 @@ public class PrimitiveHelper {
 		return result;
 	}
 
+	public static String flatten(char[] expanded) {
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < expanded.length; i++)
+			result.append(expanded[i]);
+		return result.toString();
+	}
+
 	public static int[] unbox(Integer[] boxed) {
 		int[] result = new int[boxed.length];
 		for (int i = 0; i < result.length; i++)

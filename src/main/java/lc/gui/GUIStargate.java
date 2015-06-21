@@ -67,7 +67,7 @@ public class GUIStargate extends LCContainerGUI {
 			IStargateAccess stargate = (IStargateAccess) container.getTile();
 			String address = stargate.getStargateAddress().getAddressString();
 			container.drawAddressString(128, 56, address, 9, "-", "-");
-			container.drawFramedSymbols(128, 8, stargate.getStargateType(), address);
+			container.drawFramedSymbols(128, 8, stargate.getStargateType(), address.toCharArray());
 			IconButton.drawButton(Minecraft.getMinecraft(), "copy", 240, 54, mouseX - container.offsetLeft(), mouseY
 					- container.offsetTop(), container.isMouseDown(), 0.75, 1.0f);
 			if (IconButton.buttonHovered(240, 54, mouseX - container.offsetLeft(), mouseY - container.offsetTop(), 1.0))

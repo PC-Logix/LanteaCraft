@@ -17,6 +17,7 @@ import lc.common.base.ux.LCContainerGUI;
 import lc.common.base.ux.LCContainerTab;
 import lc.common.resource.ResourceAccess;
 import lc.common.stargate.StargateCharsetHelper;
+import lc.common.util.data.PrimitiveHelper;
 import lc.container.ContainerDHD;
 import lc.tiles.TileDHD;
 
@@ -36,7 +37,6 @@ public class GUIDHD extends LCContainerGUI {
 		final double dhdRadius3 = dhdWidth * 0.45;
 		private int dhdTop, dhdCentreX, dhdCentreY, ticks = 0;
 		private ResourceLocation dhdLayer, dhdButtonLayer;
-		private String enteredAddress = "";
 
 		public DHDDefaultTab() {
 			super();
@@ -81,7 +81,7 @@ public class GUIDHD extends LCContainerGUI {
 			container.bindTexture(dhdButtonLayer, 128, 64);
 			GL11.glEnable(GL11.GL_BLEND);
 			TileDHD dhd = (TileDHD) container.getTile();
-			if (dhd.ownsConnection())
+			if (dhd.clientAskConnectionOpen())
 				container.setColor(1.0, 0.5, 0.0);
 			else
 				container.setColor(0.5, 0.25, 0.0);
@@ -90,7 +90,7 @@ public class GUIDHD extends LCContainerGUI {
 			Tessellator.instance.disableColor();
 			container.drawTexturedRect(dhdCentreX - rx, dhdTop + dhdCentreY - ry + 8, 2 * rx, 1.5 * ry, 64, 0, 64, 48);
 			container.resetColor();
-			if (dhd.ownsConnection()) {
+			if (dhd.clientAskConnectionOpen()) {
 				GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 				double d = 5;
 				container.drawTexturedRect(dhdCentreX - rx - d, dhdTop + dhdCentreY - ry - d + 8.0d, 2 * (rx + d), ry
@@ -104,8 +104,10 @@ public class GUIDHD extends LCContainerGUI {
 		@Override
 		protected void drawForegroundLayer(LCContainerGUI container, int mouseX, int mouseY) {
 			TileDHD dhd = (TileDHD) container.getTile();
-			container.drawFramedSymbols(dhdCentreX, 0, dhd.getDHDType(), enteredAddress);
-			container.drawAddressString(dhdCentreX, 48, enteredAddress, 9, " ", (ticks > 10) ? "_" : " ");
+			char[] glyphs = PrimitiveHelper.unbox(dhd.clientAskEngagedGlpyhs());
+			container.drawFramedSymbols(dhdCentreX, 0, dhd.getDHDType(), glyphs);
+			container.drawAddressString(dhdCentreX, 48, PrimitiveHelper.flatten(glyphs), 9, " ", (ticks > 10) ? "_"
+					: " ");
 		}
 
 		@Override
@@ -131,13 +133,13 @@ public class GUIDHD extends LCContainerGUI {
 				container.mc.displayGuiScreen((GuiScreen) null);
 				container.mc.setIngameFocus();
 			} else if (key == Keyboard.KEY_BACK || key == Keyboard.KEY_DELETE)
-				backspace();
+				backspace((TileDHD) container.getTile());
 			else if (key == Keyboard.KEY_RETURN || key == Keyboard.KEY_NUMPADENTER)
 				orangeButtonPressed((TileDHD) container.getTile());
 			else {
 				String C = String.valueOf(c).toUpperCase();
 				if (StargateCharsetHelper.singleton().isLegal(C))
-					write(C.charAt(0));
+					write((TileDHD) container.getTile(), C.charAt(0));
 			}
 
 			if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))
@@ -146,7 +148,7 @@ public class GUIDHD extends LCContainerGUI {
 						String data = container.getTextFromClipboard();
 						for (char c1 : data.toCharArray())
 							if (StargateCharsetHelper.singleton().isLegal(c1))
-								write(c1);
+								write((TileDHD) container.getTile(), c1);
 					} catch (Exception e) {
 						LCLog.warn("Can't read from clipboard.", e);
 					}
@@ -158,7 +160,7 @@ public class GUIDHD extends LCContainerGUI {
 		}
 
 		private int findDHDButton(int mx, int my) {
-			
+
 			double x = -(mx - dhdCentreX);
 			double y = -(my - dhdCentreY - dhdTop) * dhdWidth / dhdHeight;
 			double r = Math.hypot(x, y);
@@ -179,28 +181,23 @@ public class GUIDHD extends LCContainerGUI {
 			if (i == 0)
 				orangeButtonPressed(tile);
 			else if (i > 38)
-				backspace();
+				backspace(tile);
 			else
-				write(StargateCharsetHelper.singleton().index(i - 1));
+				write(tile, StargateCharsetHelper.singleton().index(i - 1));
 
 		}
 
 		private void orangeButtonPressed(TileDHD tile) {
-			if (tile.ownsConnection())
-				tile.clientDoHangUp();
-			else
-				tile.clientDoOpenConnection(enteredAddress);
+			tile.clientDoPressedButton(2, (char) 0);
 
 		}
 
-		private void backspace() {
-			if (enteredAddress.length() > 0)
-				enteredAddress = enteredAddress.substring(0, enteredAddress.length() - 1);
+		private void backspace(TileDHD tile) {
+			tile.clientDoPressedButton(1, (char) 0);
 		}
 
-		private void write(char c) {
-			if (enteredAddress.length() < 9)
-				enteredAddress = enteredAddress + c;
+		private void write(TileDHD tile, char c) {
+			tile.clientDoPressedButton(0, c);
 		}
 	}
 

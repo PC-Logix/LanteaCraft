@@ -36,7 +36,7 @@ public class TileDHDRenderer extends LCTileRenderer {
 		GL11.glRotatef(Orientations.from(tile.getRotation()).angle(), 0, 1, 0);
 		GL11.glTranslatef(-0.5f, 0.0f, -0.5f);
 		TileDHD dhd = (TileDHD) tile;
-		ModelDHD.$.prepareAndRender(StargateType.fromOrdinal(tile.getBlockMetadata()), dhd.ownsConnection());
+		ModelDHD.$.prepareAndRender(StargateType.fromOrdinal(tile.getBlockMetadata()), dhd.clientAskConnectionOpen());
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 		return true;

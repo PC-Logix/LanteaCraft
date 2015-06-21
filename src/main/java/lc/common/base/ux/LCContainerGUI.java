@@ -284,7 +284,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 	 * @param address
 	 *            The address string
 	 */
-	public void drawFramedSymbols(int x, int y, StargateType type, String address) {
+	public void drawFramedSymbols(int x, int y, StargateType type, char[] address) {
 		int scale = 2;
 		ResourceLocation tex = null;
 		if (type.getSuffix().length() != 0)

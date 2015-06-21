@@ -1,5 +1,7 @@
 package lc.tiles;
 
+import java.lang.ref.WeakReference;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,7 +27,8 @@ import lc.server.StargateManager;
 
 public class TileDHD extends LCTile implements IDHDAccess {
 
-	private StargateConnection ownedConnection;
+	private WeakReference<TileStargateBase> stargate;
+	private int scanTimeout = 0;
 
 	@Override
 	public void configure(ComponentConfig c) {
@@ -41,33 +44,65 @@ public class TileDHD extends LCTile implements IDHDAccess {
 
 	@Override
 	public void thinkClient() {
-		// TODO Auto-generated method stub
-
+		thinkAnySide();
 	}
 
 	@Override
 	public void thinkServer() {
-		if (ownedConnection != null && ownedConnection.dead)
-			ownedConnection = null;
+		thinkAnySide();
+	}
+
+	private void thinkAnySide() {
+		if (stargate == null || stargate.get() == null) {
+			scanTimeout--;
+			if (scanTimeout <= 0) {
+				AxisAlignedBB box = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5);
+				TileEntity tile = ScanningHelper.findNearestTileEntityOf(getWorldObj(), TileStargateBase.class, xCoord,
+						yCoord, zCoord, box);
+				if (tile != null && tile instanceof TileStargateBase)
+					stargate = new WeakReference<TileStargateBase>((TileStargateBase) tile);
+			} else
+				scanTimeout += 20;
+		}
 	}
 
 	@Override
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
 		if (packet instanceof LCDHDPacket) {
 			LCDHDPacket request = (LCDHDPacket) packet;
-			if (!ownsConnection() && request.compound.getString("typedAddress").length() != 0) {
-				AxisAlignedBB box = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5);
-				TileEntity tile = ScanningHelper.findNearestTileEntityOf(getWorldObj(), TileStargateBase.class,
-						xCoord, yCoord, zCoord, box);
-				if (tile == null || !(tile instanceof TileStargateBase))
-					return;
-				TileStargateBase sg = (TileStargateBase) tile;
-				HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
-				String typedAddress = request.compound.getString("typedAddress");
-				StargateAddress address = new StargateAddress(typedAddress.toCharArray());
-				ownedConnection = server.stargates().openConnection(sg, address);
-			} else
-				ownedConnection.closeConnection();
+			if (stargate != null && stargate.get() != null) {
+				TileStargateBase tile = stargate.get();
+				int whichButton = request.compound.getInteger("typedButton");
+				char whatValue = (char) request.compound.getInteger("typedValue");
+				if (whichButton == 0) {
+					tile.selectGlyph(whatValue);
+					tile.activateChevron();
+				} else if (whichButton == 1) {
+					tile.deactivateChevron();
+				} else if (whichButton == 2) {
+					if (!tile.hasConnectionState())
+						tile.engageStargate();
+					else
+						tile.disengateStargate();
+				}
+
+			}
+			/**
+			 * if (!ownsConnection() &&
+			 * request.compound.getString("typedAddress").length() != 0) {
+			 * AxisAlignedBB box = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5,
+			 * 5, 5); TileEntity tile =
+			 * ScanningHelper.findNearestTileEntityOf(getWorldObj(),
+			 * TileStargateBase.class, xCoord, yCoord, zCoord, box); if (tile ==
+			 * null || !(tile instanceof TileStargateBase)) return;
+			 * TileStargateBase sg = (TileStargateBase) tile; HintProviderServer
+			 * server = (HintProviderServer) LCRuntime.runtime.hints(); String
+			 * typedAddress = request.compound.getString("typedAddress");
+			 * StargateAddress address = new
+			 * StargateAddress(typedAddress.toCharArray()); ownedConnection =
+			 * server.stargates().openConnection(sg, address); } else
+			 * ownedConnection.closeConnection();
+			 */
 		}
 	}
 
@@ -90,7 +125,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 
 	@Override
 	public String[] debug(Side side) {
-		return new String[] { "ownsConnection: " + ((ownsConnection()) ? "yes" : "no") };
+		return new String[0];
 	}
 
 	@Override
@@ -98,27 +133,32 @@ public class TileDHD extends LCTile implements IDHDAccess {
 		return ((BlockDHD) getBlockType()).getDHDType(getBlockMetadata());
 	}
 
-	@Override
-	public boolean ownsConnection() {
-		if (ownedConnection == null)
-			return false;
-		if (ownedConnection.dead)
-			return false;
-		return true;
+	public Character[] clientAskEngagedGlpyhs() {
+		if (stargate != null && stargate.get() != null) {
+			TileStargateBase what = stargate.get();
+			return what.getActivatedGlpyhs();
+		} else
+			return new Character[0];
 	}
 
-	public void clientDoOpenConnection(String typedAddress) {
-		NBTTagCompound request = new NBTTagCompound();
-		request.setString("typedAddress", typedAddress);
-		LCDHDPacket packet = new LCDHDPacket(new DimensionPos(this), request);
-		LCRuntime.runtime.network().sendToServer(packet);
+	public boolean clientAskConnectionOpen() {
+		if (stargate != null && stargate.get() != null) {
+			TileStargateBase what = stargate.get();
+			return what.hasConnectionState();
+		} else
+			return false;
 	}
 
-	public void clientDoHangUp() {
+	public void clientDoPressedButton(int whichButton, char whatValue) {
 		NBTTagCompound request = new NBTTagCompound();
-		request.setString("typedAddress", "");
+		request.setInteger("typedButton", whichButton);
+		request.setInteger("typedValue", (int) whatValue);
 		LCDHDPacket packet = new LCDHDPacket(new DimensionPos(this), request);
 		LCRuntime.runtime.network().sendToServer(packet);
+		
+		if (!mixer().hasChannel("click")) {
+			
+		}
 	}
 
 }

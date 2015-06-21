@@ -139,6 +139,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private StargateCommand command;
 	private double commandTimer = 0.0d;
 
+	private char currentGlyph;
 	private Stack<Character> engagedGlyphs = new Stack<Character>();
 	private StargateConnection currentConnection = null;
 	private ArrayList<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
@@ -147,13 +148,16 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private int clientSkinBlockMetadata;
 
 	private final static int[] clientChevronQueue = { 8, 7, 6, 3, 2, 1, 5, 4, 0 };
-	private Animation clientAnimation = null;
 	private ArrayDeque<Animation> clientAnimationQueue = new ArrayDeque<Animation>();
+	private Animation clientAnimation = null;
 	private double clientAnimationCounter = 0.0d;
+
 	private StateMap clientRenderState = new StateMap();
 	private double[][][] clientGfxGrid = null;
 	private Random clientRandomProvider = new Random();
 
+	private char clientCurrentGlyph;
+	private Stack<Character> clientEngagedGlyphs = new Stack<Character>();
 	/** Client flag - used to notify new data */
 	private boolean clientSeenState = true, clientSeenStargateData = false;
 	/** Client Stargate state - used only for rendering */
@@ -162,8 +166,6 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private int clientStargateStateTime;
 	/** Client dialling progress - used only for rendering */
 	private int clientEngagedChevrons;
-	/** Client dialling symbol ID - used only for rendering */
-	private int clientDiallingSymbol;
 	/** Client dialling timeout - used only for rendering */
 	private int clientDiallingTimeout;
 	/** Client dialling source - used only for rendering */
@@ -246,43 +248,69 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	}
 
+	private void thinkClientCommand(StargateCommand command) {
+		switch (command.type) {
+		case CONNECT:
+			clientRenderState.set("event-horizon", true);
+			for (int i = 0; i < 9; i++) {
+				clientRenderState.set("chevron-dist-" + i, 1.0d / 8.0d);
+				clientRenderState.set("chevron-light-" + i, 0.5d);
+			}
+			break;
+		case DISCONNECT:
+			clientRenderState.set("event-horizon", false);
+			clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
+			clientAnimationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
+			clientEngagedGlyphs.clear();
+			break;
+		case DISENGAGE:
+			clientAnimationQueue.push(new ChevronMoveAnimation(10.0d,
+					clientChevronQueue[clientEngagedGlyphs.size() - 1], 0.0d, 0.0d, true));
+			clientEngagedGlyphs.remove(clientEngagedGlyphs.size() - 1);
+			break;
+		case ENGAGE:
+			clientEngagedGlyphs.add(clientCurrentGlyph);
+			clientAnimationQueue.push(new ChevronMoveAnimation(10.0d,
+					clientChevronQueue[clientEngagedGlyphs.size() - 1], 1.0d / 8.0d, 0.5d, true));
+			break;
+		case SPIN:
+			clientCurrentGlyph = (Character) command.args[0];
+			int symbolIndex = StargateCharsetHelper.singleton().index((char) clientCurrentGlyph);
+			double symbolRotation = symbolIndex * (360.0 / 38.0d);
+			double aangle = MathUtils.normaliseAngle(symbolRotation);
+			clientAnimationQueue.push(new RingSpinAnimation(40.0d - 10.0d, 0.0d, aangle, true));
+			for (int i = 0; i < clientEngagedGlyphs.size() - 1; i++) {
+				clientRenderState.set("chevron-dist-" + clientChevronQueue[i], 1.0d / 8.0d);
+				clientRenderState.set("chevron-light-" + clientChevronQueue[i], 0.5d);
+			}
+			break;
+		default:
+			break;
+
+		}
+	}
+
 	/** Called to update the rendering properties */
 	private void thinkClientRender(boolean updated) {
 		if (clientAnimation != null) {
 			clientAnimationCounter += 1.0d;
 			if (clientAnimation.finished(clientAnimationCounter)) {
 				if (clientAnimationQueue.peek() != null)
-					thinkChangeAnimation(clientAnimationQueue.pop());
+					thinkClientChangeAnimation(clientAnimationQueue.pop());
 				else
-					thinkChangeAnimation(null);
+					thinkClientChangeAnimation(null);
 			}
 		} else {
 			if (clientAnimationQueue.peek() != null)
-				thinkChangeAnimation(clientAnimationQueue.pop());
+				thinkClientChangeAnimation(clientAnimationQueue.pop());
 		}
 
 		if (updated) {
 			switch (clientStargateState) {
 			case CONNECTED:
-				clientRenderState.set("event-horizon", true);
-				for (int i = 0; i < 9; i++) {
-					clientRenderState.set("chevron-dist-" + i, 1.0d / 8.0d);
-					clientRenderState.set("chevron-light-" + i, 0.5d);
-				}
 				break;
 			case DIALLING:
-				if (clientDiallingIsSource) {
-					int symbolIndex = StargateCharsetHelper.singleton().index((char) clientDiallingSymbol);
-					double symbolRotation = symbolIndex * (360.0 / 38.0d);
-					double aangle = MathUtils.normaliseAngle(symbolRotation);
-					clientAnimationQueue.push(new RingSpinAnimation(clientDiallingTimeout - 10.0d, 0.0d, aangle, true));
-					clientAnimationQueue.push(new ChevronMoveAnimation(10.0d,
-							clientChevronQueue[clientEngagedChevrons], 1.0d / 8.0d, 0.5d, true));
-					for (int i = 0; i < clientEngagedChevrons; i++) {
-						clientRenderState.set("chevron-dist-" + clientChevronQueue[i], 1.0d / 8.0d);
-						clientRenderState.set("chevron-light-" + clientChevronQueue[i], 0.5d);
-					}
-				} else {
+				if (!clientDiallingIsSource) {
 					if (clientEngagedChevrons == 8) {
 						for (int i = 0; i < 9; i++)
 							clientAnimationQueue.push(new ChevronMoveAnimation(5.0d, i, 1.0d / 8.0d, 0.5d, true));
@@ -290,14 +318,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				}
 				break;
 			case DISCONNECTING:
-				clientRenderState.set("event-horizon", false);
-				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
-				clientAnimationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
 				break;
 			case FAILED:
-				clientRenderState.set("event-horizon", false);
-				clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
-				clientAnimationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
 				break;
 			case IDLE:
 				clientRenderState.set("event-horizon", false);
@@ -338,7 +360,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 	}
 
-	private void thinkChangeAnimation(Animation next) {
+	private void thinkClientChangeAnimation(Animation next) {
 		LCLog.debug("thinkChangeAnimation: " + ((clientAnimation != null) ? clientAnimation.toString() : "[none]")
 				+ " => " + ((next != null) ? next.toString() : "[none]"));
 		if (clientAnimation != null)
@@ -361,7 +383,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private void thinkServerWormhole() {
 		if (currentConnection.tileFrom == this && currentConnection.state == StargateState.CONNECTED) {
 			for (TrackedEntity trk : trackedEntities)
-				thinkEntityInWormhole(trk.entity, trk.lastPos);
+				thinkServerEntityInWormhole(trk.entity, trk.lastPos);
 			trackedEntities.clear();
 			Matrix3 rotation = Orientations.from(getRotation()).rotation();
 			Vector3 origin = new Vector3(this);
@@ -376,7 +398,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 	}
 
-	private void thinkEntityInWormhole(Entity entity, Vector3 prevPos) {
+	private void thinkServerEntityInWormhole(Entity entity, Vector3 prevPos) {
 		if (!entity.isDead) {
 			Matrix3 rotation = Orientations.from(getRotation()).rotation();
 			Vector3 or = new Vector3(this);
@@ -392,13 +414,13 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
 					Trans3 t = new Trans3(xCoord, yCoord, zCoord).rotate(Orientations.from(getRotation()).rotation());
-					thinkDispatchEntity(entity, t, dt, dte);
+					thinkServerDispatchEntity(entity, t, dt, dte);
 				}
 			}
 		}
 	}
 
-	private void thinkDispatchEntity(Entity entity, Trans3 src, Trans3 dst, TileStargateBase destination) {
+	private void thinkServerDispatchEntity(Entity entity, Trans3 src, Trans3 dst, TileStargateBase destination) {
 		TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
 	}
 
@@ -407,40 +429,51 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			commandTimer += 1.0d;
 			if (commandTimer >= command.duration) {
 				if (commandQueue.peek() != null)
-					thinkChangeCommand(commandQueue.pop());
+					thinkServerChangeCommand(commandQueue.pop());
 				else
-					thinkChangeCommand(null);
+					thinkServerChangeCommand(null);
 			}
 		} else {
 			if (commandQueue.peek() != null)
-				thinkChangeCommand(commandQueue.pop());
+				thinkServerChangeCommand(commandQueue.pop());
 		}
 	}
 
-	private void thinkChangeCommand(StargateCommand next) {
+	private void thinkServerChangeCommand(StargateCommand next) {
 		LCLog.debug("thinkChangeCommand: " + ((command != null) ? command.toString() : "[none]") + " => "
 				+ ((next != null) ? next.toString() : "[none]"));
 		command = next;
-		switch (command.type) {
-		case CONNECT:
-			break;
-		case DISCONNECT:
-			break;
-		case DISENGAGE:
-			break;
-		case ENGAGE:
-			break;
-		case SPIN:
-			
-			break;
-		}
+		if (command != null)
+			switch (command.type) {
+			case CONNECT:
+				// TODO: Server -> establish connection here
+				break;
+			case DISCONNECT:
+				// TODO: Server -> disconnect connection here
+				break;
+			case DISENGAGE:
+				if (engagedGlyphs.size() > 0)
+					engagedGlyphs.remove(engagedGlyphs.size() - 1);
+				break;
+			case ENGAGE:
+				if (engagedGlyphs.size() < 9)
+					engagedGlyphs.add(currentGlyph);
+				break;
+			case SPIN:
+				char glyph = (Character) command.args[0];
+				currentGlyph = glyph;
+				break;
+			}
+		thinkServerDispatchState(command);
 		commandTimer = 0.0d;
 	}
 
-	private void thinkDispatchState(StargateCommand command) {
-		LCStargateStatePacket packet = new LCStargateStatePacket(new DimensionPos(this), command.type.ordinal(),
-				command.duration, command.args);
-		sendPacketToClients(packet);
+	private void thinkServerDispatchState(StargateCommand command) {
+		if (command != null) {
+			LCStargateStatePacket packet = new LCStargateStatePacket(new DimensionPos(this), command.type.ordinal(),
+					command.duration, command.args);
+			sendPacketToClients(packet);
+		}
 	}
 
 	private void thinkServerIris() {
@@ -520,6 +553,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				notifyConnectionState(currentConnection);
 			}
 		}
+		if (packet instanceof LCStargateStatePacket) {
+			LCStargateStatePacket state = (LCStargateStatePacket) packet;
+			StargateCommand cmd = new StargateCommand(StargateCommandType.values()[state.type], state.duration,
+					state.args);
+			thinkClientCommand(cmd);
+		}
 	}
 
 	@Override
@@ -557,7 +596,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	public boolean hasConnectionState() {
-		return currentConnection != null;
+		if (!getWorldObj().isRemote)
+			return currentConnection != null;
+		else
+			return (clientStargateState != null && clientStargateState != StargateState.IDLE);
 	}
 
 	public StargateConnection getConnectionState() {
@@ -651,6 +693,15 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	public int getActivatedChevrons() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public Character[] getActivatedGlpyhs() {
+		if (getWorldObj().isRemote) {
+			return clientEngagedGlyphs.toArray(new Character[0]);
+		} else {
+			return engagedGlyphs.toArray(new Character[0]);
+		}
 	}
 
 	@Override

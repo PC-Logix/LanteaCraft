@@ -14,7 +14,7 @@ import java.io.IOException;
 public abstract class LCPacket {
 
 	protected enum PrimType {
-		NULL, BOOLEAN, SHORT, INTEGER, FLOAT, DOUBLE;
+		NULL, BOOLEAN, SHORT, CHARACTER, INTEGER, FLOAT, DOUBLE;
 	}
 
 	/**
@@ -38,6 +38,9 @@ public abstract class LCPacket {
 		} else if (prim instanceof Short) {
 			buffer.writeByte(PrimType.SHORT.ordinal());
 			buffer.writeShort((Short) prim);
+		} else if (prim instanceof Character) {
+			buffer.writeByte(PrimType.CHARACTER.ordinal());
+			buffer.writeChar((Character) prim);
 		} else if (prim instanceof Integer) {
 			buffer.writeByte(PrimType.INTEGER.ordinal());
 			buffer.writeInt((Integer) prim);
@@ -78,6 +81,8 @@ public abstract class LCPacket {
 			return buffer.readDouble();
 		case FLOAT:
 			return buffer.readFloat();
+		case CHARACTER:
+			return buffer.readChar();
 		case INTEGER:
 			return buffer.readInt();
 		case NULL:
