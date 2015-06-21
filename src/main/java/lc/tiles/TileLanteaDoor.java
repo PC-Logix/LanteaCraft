@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
+import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
@@ -143,6 +144,9 @@ public class TileLanteaDoor extends LCTile {
 				}
 			}
 			break;
+		default:
+			LCLog.fatal("Invalid door state rotation!");
+			break;
 		}
 	}
 
@@ -178,6 +182,8 @@ public class TileLanteaDoor extends LCTile {
 			return ForgeDirection.EAST;
 		case WEST:
 			return ForgeDirection.SOUTH;
+		default:
+			LCLog.fatal("Invalid door state rotation!");
 		}
 		return ForgeDirection.WEST;
 	}
@@ -198,6 +204,8 @@ public class TileLanteaDoor extends LCTile {
 			case WEST:
 				box = AxisAlignedBB.getBoundingBox(d0, 0, 0, d1, 1, 1);
 				break;
+			default:
+				LCLog.fatal("Invalid door state rotation!");
 			}
 		} else {
 			switch (getRotation()) {
@@ -213,6 +221,8 @@ public class TileLanteaDoor extends LCTile {
 			case WEST:
 				box = AxisAlignedBB.getBoundingBox(0.11d - d0, 0, 0.85d - 0.135d, d1 + 0.11d, 1, 1.0d - 0.11d);
 				break;
+			default:
+				LCLog.fatal("Invalid door state rotation!");
 			}
 		}
 		return box;

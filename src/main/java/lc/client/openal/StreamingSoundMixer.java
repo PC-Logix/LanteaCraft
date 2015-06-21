@@ -6,9 +6,6 @@ import lc.api.audio.ISoundController;
 import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.audio.channel.IMixer;
 import lc.api.audio.streaming.ISound;
-import lc.api.audio.streaming.ISoundPosition;
-import lc.api.audio.streaming.ISoundProperties;
-import lc.api.audio.streaming.ISoundServer;
 import lc.common.util.java.DestructableReference;
 
 public class StreamingSoundMixer implements IMixer {

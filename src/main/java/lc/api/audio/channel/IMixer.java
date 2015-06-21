@@ -5,8 +5,6 @@
 package lc.api.audio.channel;
 
 import lc.api.audio.streaming.ISound;
-import lc.api.audio.streaming.ISoundPosition;
-import lc.api.audio.streaming.ISoundProperties;
 
 /**
  * Sound mixer contract interface. Allows modded blocks, items and tiles to

@@ -1,7 +1,6 @@
 package lc.client.render.animations;
 
 import lc.client.animation.Animation;
-import lc.client.animation.Animation.InterpolationMode;
 
 /**
  * Chevron release animation implementation.

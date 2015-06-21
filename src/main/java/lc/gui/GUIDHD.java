@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import lc.api.stargate.StargateType;
 import lc.common.LCLog;
 import lc.common.base.ux.LCContainerGUI;
 import lc.common.base.ux.LCContainerTab;

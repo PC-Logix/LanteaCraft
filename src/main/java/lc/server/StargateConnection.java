@@ -17,16 +17,31 @@ import lc.server.database.StargateRecord;
 import lc.server.world.LCLoadedChunkManager.LCChunkTicket;
 import lc.tiles.TileStargateBase;
 
+/**
+ * Stargate connection emulation class
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class StargateConnection {
 
+	/** Connection type */
 	public final StargateConnectionType type;
+	/** Source Stargate address */
 	public final StargateAddress source;
+	/** Destination Stargate address */
 	public final StargateRecord dest;
 
 	private int maxConnectionAge;
 
-	public TileStargateBase tileFrom, tileTo;
-	public LCChunkTicket ticketFrom, ticketTo;
+	/** Source tile Stargate */
+	public TileStargateBase tileFrom;
+	/** Destination tile Stargate */
+	public TileStargateBase tileTo;
+	/** Source tile chunk loader */
+	public LCChunkTicket ticketFrom;
+	/** Destination tile chunk loader */
+	public LCChunkTicket ticketTo;
 
 	/** The Stargate state */
 	public StargateState state;
@@ -36,6 +51,16 @@ public class StargateConnection {
 	/** The connection live state */
 	public boolean dead = false;
 
+	/**
+	 * Create a Stargate connection
+	 * 
+	 * @param type
+	 *            The connection type
+	 * @param tileFrom
+	 *            The source tile
+	 * @param what
+	 *            The stargate record being connected to
+	 */
 	public StargateConnection(StargateConnectionType type, TileStargateBase tileFrom, StargateRecord what) {
 		this.type = type;
 		this.tileFrom = tileFrom;
@@ -51,6 +76,7 @@ public class StargateConnection {
 				"Maximum connection age in ticks", 6000).toString());
 	}
 
+	/** Update the connection */
 	public void think() {
 		if (dead)
 			return;
@@ -145,6 +171,7 @@ public class StargateConnection {
 		sendUpdates();
 	}
 
+	/** Update the connection */
 	public void sendUpdates() {
 		if (tileFrom != null)
 			tileFrom.notifyConnectionState(this);
@@ -152,6 +179,7 @@ public class StargateConnection {
 			tileTo.notifyConnectionState(this);
 	}
 
+	/** Dispose the connection */
 	public void deleteConnection() {
 		if (tileFrom != null)
 			tileFrom.notifyConnectionState(null);
@@ -172,23 +200,34 @@ public class StargateConnection {
 		dead = true;
 	}
 
+	/** Open the connection */
 	public void openConnection() {
 		if (state != StargateState.IDLE)
 			return;
 		changeState(StargateState.DIALLING, 0);
 	}
 
+	/** Close the connection */
 	public void closeConnection() {
 		if (state != StargateState.CONNECTED)
 			return;
 		changeState(StargateState.DISCONNECTING, 60);
 	}
 
+	/** Shut down the connection */
 	public void shutdown() {
 		state = StargateState.IDLE;
 		deleteConnection();
 	}
 
+	/**
+	 * Transmit data across the Stargate
+	 * 
+	 * @param source
+	 *            The source tile
+	 * @param payload
+	 *            The data payload
+	 */
 	public void transmit(TileStargateBase source, MessagePayload payload) {
 		if (source == tileFrom)
 			tileTo.receive(payload);

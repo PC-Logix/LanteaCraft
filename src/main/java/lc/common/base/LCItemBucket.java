@@ -20,11 +20,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class LCItemBucket extends ItemBucket implements IConfigure {
 
 	/**
-	 * Icon name associated with the unlocalized name of this bucket instance.
-	 */
-	private String iconName;
-
-	/**
 	 * Creates an instance of an LCItemBucket and initializes it with default
 	 * properties and with the {@link SpecialBucketHandler} registry.
 	 *
@@ -40,7 +35,6 @@ public class LCItemBucket extends ItemBucket implements IConfigure {
 
 	@Override
 	public Item setUnlocalizedName(String par1Str) {
-		iconName = par1Str;
 		return super.setUnlocalizedName(par1Str);
 	}
 
@@ -60,7 +54,6 @@ public class LCItemBucket extends ItemBucket implements IConfigure {
 	 *            The texture name for the bucket.
 	 */
 	public void setTargetTexture(String bucketTextureName) {
-		iconName = bucketTextureName;
 	}
 
 	@Override

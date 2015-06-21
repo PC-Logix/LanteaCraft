@@ -1,7 +1,16 @@
 package lc.api.stargate;
 
+/**
+ * Iris type list.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public enum IrisType {
-	MECHANICAL("mechanical", false), ENERGY("energy", true);
+	/** Mechanical */
+	MECHANICAL("mechanical", false),
+	/** Energy */
+	ENERGY("energy", true);
 
 	private final String name;
 	private final boolean invulnerable;
@@ -29,6 +38,13 @@ public enum IrisType {
 		return invulnerable;
 	}
 
+	/**
+	 * Gets the Iris type from an ordinal
+	 * 
+	 * @param ordinal
+	 *            The ordinal
+	 * @return The type
+	 */
 	public static IrisType fromOrdinal(int ordinal) {
 		return IrisType.values()[ordinal];
 	}

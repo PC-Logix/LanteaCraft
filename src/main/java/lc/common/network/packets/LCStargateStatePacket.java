@@ -5,7 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 
-import lc.api.stargate.StargateState;
 import lc.common.network.packets.abs.LCTargetPacket;
 import lc.common.util.math.DimensionPos;
 

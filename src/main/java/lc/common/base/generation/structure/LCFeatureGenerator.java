@@ -22,14 +22,9 @@ import net.minecraft.world.gen.structure.StructureStart;
 public final class LCFeatureGenerator extends MapGenStructure {
 	private final StructureRegistry registry;
 
-	private int maxDistanceBetweenScatteredFeatures;
-	private int minDistanceBetweenScatteredFeatures;
-
 	/** Default constructor */
 	public LCFeatureGenerator() {
 		registry = (StructureRegistry) LCRuntime.runtime.registries().structures();
-		maxDistanceBetweenScatteredFeatures = 32;
-		minDistanceBetweenScatteredFeatures = 8;
 	}
 
 	/**

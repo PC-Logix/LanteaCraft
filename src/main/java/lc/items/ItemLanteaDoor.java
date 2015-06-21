@@ -11,6 +11,12 @@ import lc.common.base.LCItemBlock;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
 
+/**
+ * Lantean door item block implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ItemLanteaDoor extends LCItemBlock {
 
 	private IIcon doorIcon;

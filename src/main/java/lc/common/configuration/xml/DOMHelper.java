@@ -1,8 +1,6 @@
 package lc.common.configuration.xml;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.w3c.dom.Comment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -192,17 +190,6 @@ public class DOMHelper {
 			s.append(j).append(", ");
 		String s1 = s.toString();
 		return s1.substring(0, s1.length() - 2);
-	}
-
-	/**
-	 * Converts the list of labels to a string.
-	 *
-	 * @param labels
-	 *            The list of labels.
-	 * @return The string version of the list.
-	 */
-	private static String listToString(List<String> labels) {
-		return listToString(labels.toArray(new String[0]));
 	}
 
 	/**

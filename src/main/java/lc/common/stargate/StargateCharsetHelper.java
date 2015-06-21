@@ -109,7 +109,7 @@ public class StargateCharsetHelper {
 		return radix[i];
 	}
 
-	private String longToAddress(long value, int width) {
+	public String longToAddress(long value, int width) {
 		final char[] buf = new char[width];
 		while (width > 0) {
 			buf[--width] = index((int) (value % radix.length));

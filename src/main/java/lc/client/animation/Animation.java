@@ -3,7 +3,6 @@ package lc.client.animation;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import lc.common.LCLog;
 import lc.common.util.data.StateMap;
 import lc.common.util.game.RunnableTileCallback;
 

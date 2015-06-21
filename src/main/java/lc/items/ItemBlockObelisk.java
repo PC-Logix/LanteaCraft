@@ -4,6 +4,12 @@ import net.minecraft.block.Block;
 import lc.common.base.LCItemBlock;
 import lc.common.configuration.xml.ComponentConfig;
 
+/**
+ * Obelisk item block implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ItemBlockObelisk extends LCItemBlock {
 
 	public ItemBlockObelisk(Block block) {

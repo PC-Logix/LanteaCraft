@@ -8,6 +8,12 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+/**
+ * DHD item block implementation.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ItemBlockDHD extends LCItemBlock {
 
 	/**

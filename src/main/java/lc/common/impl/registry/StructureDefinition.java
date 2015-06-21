@@ -39,8 +39,10 @@ public abstract class StructureDefinition implements IStructureDefinition {
 	}
 
 	/**
-	 * Add a new component to the defintion
+	 * Add a new component to the definition
 	 * 
+	 * @param name
+	 *            The name of the structure
 	 * @param component
 	 *            The component type
 	 * @return The self definition

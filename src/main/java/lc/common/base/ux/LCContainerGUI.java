@@ -26,7 +26,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -205,6 +204,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void drawTooltip(String what, int x, int y) {
 		List l0 = Lists.newArrayList(what);
 		drawHoveringText(l0, x, y, fontRendererObj);

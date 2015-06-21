@@ -19,7 +19,6 @@ import lc.common.base.LCItemBucket;
 import lc.common.base.LCItemRenderer;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
-import lc.common.configuration.ConfigurationController;
 import lc.common.configuration.IConfigure;
 import lc.common.util.LCCreativeTabManager;
 import net.minecraft.block.Block;
@@ -119,6 +118,8 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 *            The class of the item.
 	 * @param unlocalizedName
 	 *            The unlocalized name.
+	 * @param type
+	 *            The type of the component
 	 * @return The Block singleton.
 	 */
 	public <T extends Block> T registerBlock(Class<? extends T> classOf, Class<? extends ItemBlock> itemClassOf,

@@ -10,16 +10,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
-import lc.api.audio.ISoundController;
 import lc.api.audio.channel.ChannelDescriptor;
-import lc.api.audio.streaming.ISound;
 import lc.api.stargate.IDHDAccess;
-import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateType;
 import lc.blocks.BlockDHD;
-import lc.client.openal.StreamingSoundPosition;
 import lc.client.openal.StreamingSoundProperties;
-import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
@@ -27,9 +22,6 @@ import lc.common.network.LCPacket;
 import lc.common.network.packets.LCDHDPacket;
 import lc.common.util.ScanningHelper;
 import lc.common.util.math.DimensionPos;
-import lc.server.HintProviderServer;
-import lc.server.StargateConnection;
-import lc.server.StargateManager;
 
 public class TileDHD extends LCTile implements IDHDAccess {
 

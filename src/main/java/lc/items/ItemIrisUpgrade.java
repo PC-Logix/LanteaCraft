@@ -17,6 +17,12 @@ import lc.common.base.LCItem;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
 
+/**
+ * Iris upgrade item implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 @Definition(name = "irisUpgrade", type = ComponentType.STARGATE, itemClass = ItemIrisUpgrade.class)
 public class ItemIrisUpgrade extends LCItem {
 
@@ -121,7 +127,8 @@ public class ItemIrisUpgrade extends LCItem {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wat) {
 		double damage = ((100 * getIrisDamage(stack)) / getMaximumDamage(getType(stack)));
-		list.add(I18n.format("lc.interface.iris.type.text", I18n.format(String.format("lc.interface.iris.type.%s.name", getType(stack).getName()))));
+		list.add(I18n.format("lc.interface.iris.type.text",
+				I18n.format(String.format("lc.interface.iris.type.%s.name", getType(stack).getName()))));
 		list.add(I18n.format("lc.interface.iris.damage.text", String.format("%.2f%%", damage)));
 	}
 

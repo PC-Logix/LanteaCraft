@@ -4,6 +4,12 @@ import net.minecraft.block.Block;
 import lc.common.base.LCItemBlock;
 import lc.common.configuration.xml.ComponentConfig;
 
+/**
+ * Transport ring item block implementation
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ItemBlockTransportRing extends LCItemBlock {
 
 	public ItemBlockTransportRing(Block block) {

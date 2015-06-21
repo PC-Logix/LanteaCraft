@@ -13,7 +13,6 @@ import lc.api.audio.streaming.ISound;
 import lc.api.audio.streaming.ISoundProperties;
 import lc.api.audio.streaming.ISoundServer;
 import lc.api.event.IBlockEventHandler;
-import lc.client.openal.StreamingSoundPosition;
 import lc.common.LCLog;
 import lc.common.configuration.IConfigure;
 import lc.common.network.IPacketHandler;
@@ -399,7 +398,10 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		clientDataDirty = true;
 	}
 
-	private void sendUpdatesToClients() {
+	/**
+	 * Send updated data to all clients on the server.
+	 */
+	protected void sendUpdatesToClients() {
 		try {
 			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
 			sendPackets(packets);

@@ -14,21 +14,49 @@ import lc.common.util.math.ChunkPos;
 import lc.server.database.StargateRecord;
 import lc.tiles.TileStargateBase;
 
+/**
+ * Stargate state manager
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class StargateManager implements ITickEventHandler {
 
 	private final HintProviderServer server;
 	private final HashMap<Integer, ArrayList<StargateConnection>> connections;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param server
+	 *            The hint server
+	 */
 	public StargateManager(HintProviderServer server) {
 		this.server = server;
 		this.connections = new HashMap<Integer, ArrayList<StargateConnection>>();
 		LCRuntime.runtime.ticks().register(this);
 	}
 
+	/**
+	 * Get a Stargate address for a tile
+	 * 
+	 * @param tile
+	 *            The tile
+	 * @return The address
+	 */
 	public StargateAddress getStargateAddress(TileStargateBase tile) {
 		return server.universeMgr.findAddress(tile.getWorldObj().provider.dimensionId, new ChunkPos(tile));
 	}
 
+	/**
+	 * Open a connection from a Stargate
+	 * 
+	 * @param tile
+	 *            The source tile
+	 * @param address
+	 *            The destination address
+	 * @return The connection
+	 */
 	public StargateConnection openConnection(TileStargateBase tile, StargateAddress address) {
 		StargateRecord what = server.universeMgr.findRecord(address);
 		if (what == null) {
@@ -47,12 +75,26 @@ public class StargateManager implements ITickEventHandler {
 		return connection;
 	}
 
+	/**
+	 * Close a connection
+	 * 
+	 * @param tile
+	 *            The source tile
+	 * @param address
+	 *            The address
+	 */
 	public void closeConnection(TileStargateBase tile, char[] address) {
 		synchronized (connections) {
-
+			// TODO: WHY?
 		}
 	}
 
+	/**
+	 * Close all connections in a dimension
+	 * 
+	 * @param dimensionId
+	 *            The dimension
+	 */
 	public void closeConnectionsIn(int dimensionId) {
 		LCLog.info("Closing connections in dimension %s.", dimensionId);
 		ArrayList<StargateConnection> dc = null;
@@ -66,6 +108,12 @@ public class StargateManager implements ITickEventHandler {
 		}
 	}
 
+	/**
+	 * Close all connections active in the game
+	 * 
+	 * @param now
+	 *            Force the close - don't wait for idle to arrive
+	 */
 	public void closeAllConnections(boolean now) {
 		synchronized (connections) {
 			Iterator<Integer> dimensions = connections.keySet().iterator();
@@ -83,7 +131,6 @@ public class StargateManager implements ITickEventHandler {
 	@Override
 	public void think(Side what) {
 		if (what == Side.SERVER) {
-			int count = 0;
 			synchronized (connections) {
 				Iterator<Integer> dimensions = connections.keySet().iterator();
 				while (dimensions.hasNext()) {
@@ -96,8 +143,7 @@ public class StargateManager implements ITickEventHandler {
 						if (conn.dead) {
 							LCLog.debug("Removing dead connection %s.", conn);
 							iter.remove();
-						} else
-							count++;
+						}
 					}
 				}
 			}

@@ -28,6 +28,12 @@ public class LCStargateConnectionPacket extends LCTargetPacket {
 	 *
 	 * @param target
 	 *            The target element
+	 * @param state
+	 *            The new stargate state
+	 * @param stateTimeout
+	 *            The state timeout
+	 * @param isSource
+	 *            If this connection is the source
 	 */
 	public LCStargateConnectionPacket(DimensionPos target, StargateState state, int stateTimeout, boolean isSource) {
 		this.target = target;

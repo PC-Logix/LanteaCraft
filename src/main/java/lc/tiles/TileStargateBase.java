@@ -119,12 +119,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private class TrackedEntity {
 		public Entity entity;
 		public Vector3 lastPos;
-		public Vector3 lastVel;
 
 		public TrackedEntity(Entity entity) {
 			this.entity = entity;
 			lastPos = new Vector3(entity);
-			lastVel = new Vector3(entity.motionX, entity.motionY, entity.motionZ);
 		}
 	}
 
@@ -171,12 +169,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private boolean clientSeenState = true, clientSeenStargateData = false;
 	/** Client Stargate state - used only for rendering */
 	private StargateState clientStargateState;
-	/** Client state timeout - used only for rendering */
-	private int clientStargateStateTime;
 	/** Client dialling progress - used only for rendering */
 	private int clientEngagedChevrons;
-	/** Client dialling timeout - used only for rendering */
-	private int clientDiallingTimeout;
 	/** Client dialling source - used only for rendering */
 	private boolean clientDiallingIsSource;
 
@@ -396,6 +390,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	/** Called to update the wormhole behaviour */
+	@SuppressWarnings("unchecked")
 	private void thinkServerWormhole() {
 		if (currentConnection.tileFrom == this && currentConnection.state == StargateState.CONNECTED) {
 			for (TrackedEntity trk : trackedEntities)
@@ -571,7 +566,6 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				LCStargateConnectionPacket state = (LCStargateConnectionPacket) packet;
 				clientSeenStargateData = true;
 				clientStargateState = state.state;
-				clientStargateStateTime = state.stateTimeout;
 				clientDiallingIsSource = state.isSource;
 				clientSeenState = false;
 			} else {

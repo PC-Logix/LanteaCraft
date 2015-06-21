@@ -9,23 +9,52 @@ import org.lwjgl.opengl.GL12;
 
 import com.google.common.collect.Lists;
 
-import lc.common.resource.ResourceAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 
+/**
+ * Popover GUI element
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class Popover {
 
 	private String message;
 	private int age;
 	private int expiry;
 
+	/**
+	 * Create a popover
+	 * 
+	 * @param message
+	 *            The message text
+	 * @param expiry
+	 *            The expiry time
+	 */
 	public Popover(String message, int expiry) {
 		this.message = message;
 		this.expiry = expiry;
 	}
 
+	/**
+	 * Render the popover
+	 * 
+	 * @param mc
+	 *            The game
+	 * @param gui
+	 *            The GUI
+	 * @param x
+	 *            The x-coordinate of the popover
+	 * @param y
+	 *            The y-coordinate of the popover
+	 * @param width
+	 *            The width
+	 * @param zLevel
+	 *            The z-depth
+	 * @return The height of the popover
+	 */
 	public int render(Minecraft mc, LCContainerGUI gui, int x, int y, int width, float zLevel) {
 		float remain = 1.0f;
 		if (age > 0.5f * expiry)
@@ -33,14 +62,41 @@ public class Popover {
 		return Popover.drawPopover(mc, gui, message, x, y, remain, width, zLevel);
 	}
 
+	/** Advance the popover */
 	public void tick() {
 		age++;
 	}
 
+	/**
+	 * Check if the popover has expired
+	 * 
+	 * @return If the popover is dead
+	 */
 	public boolean dead() {
 		return age > expiry;
 	}
 
+	/**
+	 * Draws a popover
+	 * 
+	 * @param mc
+	 *            The game
+	 * @param gui
+	 *            The GUI
+	 * @param text
+	 *            The text
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param remain
+	 *            The remaining time
+	 * @param width
+	 *            The width of the box
+	 * @param zLevel
+	 *            The z-depth
+	 * @return The height used
+	 */
 	public static int drawPopover(Minecraft mc, LCContainerGUI gui, String text, int x, int y, float remain, int width,
 			float zLevel) {
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -98,21 +154,4 @@ public class Popover {
 		return height + 8;
 	}
 
-	private static void bindAndClamp(Minecraft mc, String name) {
-		mc.getTextureManager().bindTexture(
-				ResourceAccess.getNamedResource(ResourceAccess.formatResourceName("textures/gui/%s_${TEX_QUALITY}.png",
-						name)));
-	}
-
-	private static void drawTexturedRectUV(double x, double y, double w, double h, double u, double v, double us,
-			double vs, float zLevel) {
-		Tessellator tess = Tessellator.instance;
-		tess.startDrawingQuads();
-		tess.setColorOpaque_F(1.0f, 1.0f, 1.0f);
-		tess.addVertexWithUV(x, y + h, zLevel, u, v + vs);
-		tess.addVertexWithUV(x + w, y + h, zLevel, u + us, v + vs);
-		tess.addVertexWithUV(x + w, y, zLevel, u + us, v);
-		tess.addVertexWithUV(x, y, zLevel, u, v);
-		tess.draw();
-	}
 }

@@ -9,10 +9,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Streaming sound on-disk file connection between IResource and the OpenAL
+ * driver.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class StreamingSoundFileConnection extends URLConnection {
 
 	private final ResourceLocation resourceName;
-	private final StreamingSoundProtocolHandler handler;
+	/** The stream protocol handler */
+	protected final StreamingSoundProtocolHandler handler;
 
 	public StreamingSoundFileConnection(URL url, StreamingSoundProtocolHandler proto) {
 		super(url);

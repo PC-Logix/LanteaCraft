@@ -4,7 +4,6 @@ import lc.client.animation.Animation;
 import lc.common.base.LCTile;
 import lc.common.util.data.StateMap;
 import lc.common.util.game.RunnableTileCallback;
-import lc.common.util.math.MathUtils;
 
 public class RingSpinAnimation extends Animation {
 
