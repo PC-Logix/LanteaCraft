@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import lc.common.LCLog;
 import lc.common.util.data.StateMap;
+import lc.common.util.game.RunnableTileCallback;
 
 public abstract class Animation {
 
@@ -78,6 +79,9 @@ public abstract class Animation {
 	protected final HashMap<String, Property> properties;
 	protected final boolean requiresResampling;
 
+	public final RunnableTileCallback doBefore;
+	public final RunnableTileCallback doAfter;
+
 	/**
 	 * Create an animation of a specified length.
 	 * 
@@ -86,10 +90,12 @@ public abstract class Animation {
 	 * @param resample
 	 *            If re-sampling is required at the start of the animation
 	 */
-	public Animation(Double duration, boolean resample) {
+	public Animation(Double duration, boolean resample, RunnableTileCallback doBefore, RunnableTileCallback doAfter) {
 		this.duration = duration;
 		this.properties = new HashMap<String, Property>();
 		this.requiresResampling = resample;
+		this.doBefore = doBefore;
+		this.doAfter = doAfter;
 	}
 
 	/**

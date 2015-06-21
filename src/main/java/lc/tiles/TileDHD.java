@@ -11,6 +11,7 @@ import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.audio.ISoundController;
+import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.audio.streaming.ISound;
 import lc.api.stargate.IDHDAccess;
 import lc.api.stargate.StargateAddress;
@@ -31,6 +32,11 @@ import lc.server.StargateConnection;
 import lc.server.StargateManager;
 
 public class TileDHD extends LCTile implements IDHDAccess {
+
+	static {
+		registerChannel(TileDHD.class, new ChannelDescriptor("click", "stargate/milkyway/milkyway_dhd_button.ogg",
+				new StreamingSoundProperties(SoundCategory.MASTER)));
+	}
 
 	private WeakReference<TileStargateBase> stargate;
 	private int scanTimeout = 0;
@@ -160,15 +166,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 		request.setInteger("typedValue", (int) whatValue);
 		LCDHDPacket packet = new LCDHDPacket(new DimensionPos(this), request);
 		LCRuntime.runtime.network().sendToServer(packet);
-
-		if (!mixer().hasChannel("click")) {
-			ISoundController audio = LCRuntime.runtime.hints().audio();
-			ISound click = audio.getSoundService().assign(this, "stargate/milkyway/milkyway_dhd_button.ogg",
-					audio.getPosition(this),
-					new StreamingSoundProperties(false, true, 1.0f, 1.0f, SoundCategory.MASTER));
-			mixer().createChannel("click", click);
-		}
-		mixer().playChannel("click");
+		mixer().replayChannel("click");
 	}
 
 }

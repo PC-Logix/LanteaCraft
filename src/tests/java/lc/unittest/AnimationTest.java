@@ -9,7 +9,7 @@ import org.junit.Test;
 public class AnimationTest {
 	@Test
 	public void test() {
-		Animation animation = new Animation((Double) 20.0d, false) {
+		Animation animation = new Animation((Double) 20.0d, false, null, null) {
 			/** {default inst.} */
 		};
 		animation.addProperty("test", 0.0d, 10.0d, InterpolationMode.LINEAR);

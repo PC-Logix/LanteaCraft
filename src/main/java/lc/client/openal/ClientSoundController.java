@@ -67,7 +67,7 @@ public class ClientSoundController implements ISoundController, ITickEventHandle
 			if (mz.getKey().get().equals(key))
 				return mz.getValue();
 		}
-		StreamingSoundMixer mixer = new StreamingSoundMixer(server, key);
+		StreamingSoundMixer mixer = new StreamingSoundMixer(this, key);
 		liveMixers.put(new DestructableReference<Object>(key), mixer);
 		return mixer;
 	}

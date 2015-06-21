@@ -2,6 +2,7 @@ package lc.client.openal;
 
 import java.util.HashMap;
 
+import lc.api.audio.ISoundController;
 import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.audio.channel.IMixer;
 import lc.api.audio.streaming.ISound;
@@ -12,14 +13,14 @@ import lc.common.util.java.DestructableReference;
 
 public class StreamingSoundMixer implements IMixer {
 
-	private final ISoundServer server;
+	private final ISoundController controller;
 	private final DestructableReference<Object> owner;
 	private final HashMap<String, ISound> channels;
 	private final HashMap<String, ChannelDescriptor> descriptors;
 	private boolean dead;
 
-	public StreamingSoundMixer(ISoundServer server, Object owner) {
-		this.server = server;
+	public StreamingSoundMixer(ISoundController controller, Object owner) {
+		this.controller = controller;
 		this.owner = new DestructableReference<Object>(owner);
 		this.channels = new HashMap<String, ISound>();
 		this.descriptors = new HashMap<String, ChannelDescriptor>();
@@ -108,7 +109,8 @@ public class StreamingSoundMixer implements IMixer {
 		if (oz != null) {
 			for (ChannelDescriptor descriptor : descriptors.values())
 				if (!hasChannel(descriptor.name)) {
-					ISound what = server.assign(oz, descriptor.file, descriptor.position, descriptor.properties);
+					ISound what = controller.getSoundService().assign(oz, descriptor.file, controller.getPosition(oz),
+							descriptor.properties);
 					if (what != null)
 						createChannel(descriptor.name, what);
 				}

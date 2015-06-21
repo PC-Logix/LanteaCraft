@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import lc.LCRuntime;
+import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
@@ -18,6 +19,7 @@ import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateState;
 import lc.api.stargate.StargateType;
 import lc.client.animation.Animation;
+import lc.client.openal.StreamingSoundProperties;
 import lc.client.render.animations.ChevronMoveAnimation;
 import lc.client.render.animations.ChevronReleaseAnimation;
 import lc.client.render.animations.RingSpinAnimation;
@@ -67,6 +69,13 @@ import cpw.mods.fml.relauncher.Side;
  */
 @DriverCandidate(types = { IntegrationType.POWER, IntegrationType.COMPUTERS })
 public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnable, IStargateAccess {
+
+	static {
+		registerChannel(TileStargateBase.class, new ChannelDescriptor("spin", "stargate/milkyway/milkyway_roll.ogg",
+				new StreamingSoundProperties()));
+		registerChannel(TileStargateBase.class, new ChannelDescriptor("lock",
+				"stargate/milkyway/milkyway_chevron_lock.ogg", new StreamingSoundProperties()));
+	}
 
 	public final static StructureConfiguration structure = new StructureConfiguration() {
 
@@ -264,9 +273,11 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			clientEngagedGlyphs.clear();
 			break;
 		case DISENGAGE:
-			clientAnimationQueue.push(new ChevronMoveAnimation(10.0d,
-					clientChevronQueue[clientEngagedGlyphs.size() - 1], 0.0d, 0.0d, true));
-			clientEngagedGlyphs.remove(clientEngagedGlyphs.size() - 1);
+			if (clientEngagedGlyphs.size() > 0) {
+				clientAnimationQueue.push(new ChevronMoveAnimation(10.0d,
+						clientChevronQueue[clientEngagedGlyphs.size() - 1], 0.0d, 0.0d, true));
+				clientEngagedGlyphs.remove(clientEngagedGlyphs.size() - 1);
+			}
 			break;
 		case ENGAGE:
 			clientEngagedGlyphs.add(clientCurrentGlyph);
@@ -363,11 +374,16 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private void thinkClientChangeAnimation(Animation next) {
 		LCLog.debug("thinkChangeAnimation: " + ((clientAnimation != null) ? clientAnimation.toString() : "[none]")
 				+ " => " + ((next != null) ? next.toString() : "[none]"));
-		if (clientAnimation != null)
+		if (clientAnimation != null) {
 			clientAnimation.sampleProperties(clientRenderState);
+			if (clientAnimation.doAfter != null)
+				clientAnimation.doAfter.run(this);
+		}
 		clientAnimation = next;
 		if (clientAnimation != null && clientAnimation.requiresResampling())
 			clientAnimation.resampleProperties(clientRenderState);
+		if (clientAnimation != null && clientAnimation.doBefore != null)
+			clientAnimation.doBefore.run(this);
 		clientAnimationCounter = 0.0d;
 	}
 
@@ -443,28 +459,37 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		LCLog.debug("thinkChangeCommand: " + ((command != null) ? command.toString() : "[none]") + " => "
 				+ ((next != null) ? next.toString() : "[none]"));
 		command = next;
+		boolean sendToClient = false;
 		if (command != null)
 			switch (command.type) {
 			case CONNECT:
 				// TODO: Server -> establish connection here
+				sendToClient = true;
 				break;
 			case DISCONNECT:
 				// TODO: Server -> disconnect connection here
+				sendToClient = true;
 				break;
 			case DISENGAGE:
-				if (engagedGlyphs.size() > 0)
+				if (engagedGlyphs.size() > 0) {
 					engagedGlyphs.remove(engagedGlyphs.size() - 1);
+					sendToClient = true;
+				}
 				break;
 			case ENGAGE:
-				if (engagedGlyphs.size() < 9)
+				if (engagedGlyphs.size() < 9) {
 					engagedGlyphs.add(currentGlyph);
+					sendToClient = true;
+				}
 				break;
 			case SPIN:
 				char glyph = (Character) command.args[0];
 				currentGlyph = glyph;
+				sendToClient = true;
 				break;
 			}
-		thinkServerDispatchState(command);
+		if (sendToClient)
+			thinkServerDispatchState(command);
 		commandTimer = 0.0d;
 	}
 

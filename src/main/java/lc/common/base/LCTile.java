@@ -607,7 +607,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 * @return The sound mixer for this tile-entity, or null if no mixer is
 	 *         available.
 	 */
-	protected IMixer mixer() {
+	public IMixer mixer() {
 		if (clientMixer != null)
 			return clientMixer;
 		ISoundController sys = LCRuntime.runtime.hints().audio();
