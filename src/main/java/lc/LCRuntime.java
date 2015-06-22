@@ -235,7 +235,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Called when a signature problem is detected
-	 * 
+	 *
 	 * @param event
 	 *            The event
 	 */
@@ -245,7 +245,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	/**
 	 * Called when an IMC is received
-	 * 
+	 *
 	 * @param event
 	 *            The event
 	 */

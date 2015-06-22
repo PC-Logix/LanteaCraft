@@ -205,7 +205,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public void configure(ComponentConfig c) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -254,14 +254,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private void thinkClientCommand(StargateCommand command) {
 		switch (command.type) {
 		case CONNECT:
-			clientRenderState.set("event-horizon", true);
 			for (int i = 0; i < 9; i++) {
 				clientRenderState.set("chevron-dist-" + i, 1.0d / 8.0d);
 				clientRenderState.set("chevron-light-" + i, 0.5d);
 			}
 			break;
 		case DISCONNECT:
-			clientRenderState.set("event-horizon", false);
 			clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
 			clientAnimationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
 			clientEngagedGlyphs.clear();
@@ -313,6 +311,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		if (updated) {
 			switch (clientStargateState) {
 			case CONNECTED:
+				clientRenderState.set("event-horizon", true);
 				break;
 			case DIALLING:
 				if (!clientDiallingIsSource) {
@@ -323,6 +322,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				}
 				break;
 			case DISCONNECTING:
+				clientRenderState.set("event-horizon", false);
 				break;
 			case FAILED:
 				break;

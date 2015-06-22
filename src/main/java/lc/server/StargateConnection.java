@@ -1,5 +1,7 @@
 package lc.server;
 
+import com.typesafe.config.ConfigList;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -11,6 +13,7 @@ import lc.api.stargate.StargateConnectionType;
 import lc.api.stargate.StargateState;
 import lc.common.LCLog;
 import lc.common.base.multiblock.MultiblockState;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.configuration.xml.ConfigHelper;
 import lc.common.util.math.ChunkPos;
 import lc.server.database.StargateRecord;
@@ -71,8 +74,9 @@ public class StargateConnection {
 				tileFrom.getWorldObj());
 		ChunkPos origin = new ChunkPos(tileFrom);
 		ticketFrom.loadChunkRange(origin, -1, -1, 1, 1);
-		this.maxConnectionAge = Integer.parseInt(ConfigHelper.getOrSetParam(
-				LCRuntime.runtime.config().config(ComponentType.STARGATE), "Time", "Stargate", "maxConnectionAge",
+
+		ComponentConfig list = LCRuntime.runtime.config().config(ComponentType.STARGATE);
+		this.maxConnectionAge = Integer.parseInt(list.getOrSetParam("Time", "Stargate", "maxConnectionAge",
 				"Maximum connection age in ticks", 6000).toString());
 	}
 
