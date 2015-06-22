@@ -10,6 +10,7 @@ import lc.blocks.BlockDHD;
 import lc.blocks.BlockLanteaDoor;
 import lc.blocks.BlockObelisk;
 import lc.client.openal.ClientSoundController;
+import lc.client.opengl.ParticleMachine;
 import lc.client.render.BlockDHDRenderer;
 import lc.client.render.BlockDoorRenderer;
 import lc.client.render.BlockObeliskRenderer;
@@ -48,6 +49,7 @@ public class HintProviderClient extends HintProviderServer {
 	private LCItemRenderPipeline itemRenderingHook;
 
 	private ClientSoundController soundController;
+	private ParticleMachine particleMachine;
 
 	private ComponentConfig renderConfiguration;
 
@@ -60,35 +62,27 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public void preInit() {
 		super.preInit();
-		renderConfiguration = LCRuntime.runtime.config().config(
-				ComponentType.CLIENT);
-		blockRenderingHook = new LCBlockRenderPipeline(
-				RenderingRegistry.getNextAvailableRenderId());
+		renderConfiguration = LCRuntime.runtime.config().config(ComponentType.CLIENT);
+		blockRenderingHook = new LCBlockRenderPipeline(RenderingRegistry.getNextAvailableRenderId());
 		tileRenderingHook = new LCTileRenderPipeline();
 		itemRenderingHook = new LCItemRenderPipeline();
 		soundController = new ClientSoundController();
-		RenderingRegistry.registerBlockHandler(
-				blockRenderingHook.getRenderId(), blockRenderingHook);
+		particleMachine = new ParticleMachine();
+		RenderingRegistry.registerBlockHandler(blockRenderingHook.getRenderId(), blockRenderingHook);
 	}
 
 	@Override
 	public void init() {
 		super.init();
 
-		DefinitionRegistry registry = (DefinitionRegistry) LCRuntime.runtime
-				.registries().definitions();
-		registry.registerTileRenderer(TileStargateBase.class,
-				TileStargateBaseRenderer.class);
-		registry.registerItemRenderer(ItemDecorator.class,
-				ItemDecoratorRenderer.class);
+		DefinitionRegistry registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
+		registry.registerTileRenderer(TileStargateBase.class, TileStargateBaseRenderer.class);
+		registry.registerItemRenderer(ItemDecorator.class, ItemDecoratorRenderer.class);
 
-		registry.registerBlockRenderer(BlockLanteaDoor.class,
-				BlockDoorRenderer.class);
-		registry.registerBlockRenderer(BlockObelisk.class,
-				BlockObeliskRenderer.class);
+		registry.registerBlockRenderer(BlockLanteaDoor.class, BlockDoorRenderer.class);
+		registry.registerBlockRenderer(BlockObelisk.class, BlockObeliskRenderer.class);
 		registry.registerBlockRenderer(BlockDHD.class, BlockDHDRenderer.class);
-		registry.registerTileRenderer(TileLanteaDoor.class,
-				TileDoorRenderer.class);
+		registry.registerTileRenderer(TileLanteaDoor.class, TileDoorRenderer.class);
 		registry.registerTileRenderer(TileDHD.class, TileDHDRenderer.class);
 	}
 
@@ -107,17 +101,13 @@ public class HintProviderClient extends HintProviderServer {
 		}
 
 		if (definition.getTileType() != null) {
-			Class<? extends LCTile> theTile = (Class<? extends LCTile>) definition
-					.getTileType();
-			ClientRegistry.bindTileEntitySpecialRenderer(theTile,
-					tileRenderingHook);
+			Class<? extends LCTile> theTile = (Class<? extends LCTile>) definition.getTileType();
+			ClientRegistry.bindTileEntitySpecialRenderer(theTile, tileRenderingHook);
 		}
 
-		if (definition.getItem() != null
-				&& definition.getItem() instanceof LCItem) {
+		if (definition.getItem() != null && definition.getItem() instanceof LCItem) {
 			LCItem theItem = (LCItem) definition.getItem();
-			MinecraftForgeClient.registerItemRenderer(theItem,
-					itemRenderingHook);
+			MinecraftForgeClient.registerItemRenderer(theItem, itemRenderingHook);
 		}
 
 	}

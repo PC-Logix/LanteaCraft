@@ -74,6 +74,8 @@ public class LCTickConnector {
 	 */
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent tick) {
+		if (tick.phase != Phase.START)
+			return;
 		update();
 		doTick(Side.CLIENT);
 	}
