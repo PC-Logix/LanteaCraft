@@ -36,6 +36,7 @@ public class StargateConnection {
 	public final StargateRecord dest;
 
 	private int maxConnectionAge;
+	private int maxTimeout;
 
 	/** Source tile Stargate */
 	public TileStargateBase tileFrom;
@@ -64,7 +65,8 @@ public class StargateConnection {
 	 * @param what
 	 *            The stargate record being connected to
 	 */
-	public StargateConnection(StargateConnectionType type, TileStargateBase tileFrom, StargateRecord what) {
+	public StargateConnection(StargateConnectionType type, TileStargateBase tileFrom, StargateRecord what, int timeout,
+			int maxAge) {
 		this.type = type;
 		this.tileFrom = tileFrom;
 		this.source = tileFrom.getStargateAddress();
@@ -72,12 +74,10 @@ public class StargateConnection {
 		this.state = StargateState.IDLE;
 		this.ticketFrom = ((HintProviderServer) LCRuntime.runtime.hints()).chunkLoaders().requestTicket(
 				tileFrom.getWorldObj());
+		this.maxConnectionAge = maxAge;
+		this.maxTimeout = timeout;
 		ChunkPos origin = new ChunkPos(tileFrom);
 		ticketFrom.loadChunkRange(origin, -1, -1, 1, 1);
-
-		ComponentConfig list = LCRuntime.runtime.config().config(ComponentType.STARGATE);
-		this.maxConnectionAge = Integer.parseInt(list.getOrSetParam("Time", "Stargate", "maxConnectionAge",
-				"Maximum connection age in ticks", 6000).toString());
 	}
 
 	/** Update the connection */
@@ -85,11 +85,11 @@ public class StargateConnection {
 		if (dead)
 			return;
 		switch (state) {
-		case CONNECTED:
-			thinkConnection();
-			break;
 		case DIALLING:
 			thinkPerformConnection();
+			break;
+		case CONNECTED:
+			thinkConnection();
 			break;
 		case DISCONNECTING:
 		case FAILED:
@@ -158,8 +158,10 @@ public class StargateConnection {
 		thinkFindTile();
 		try {
 			if (tileFrom != null && tileTo != null) {
-				if (tileFrom.getConnectionState() != this || tileTo.getConnectionState() != this)
-					throw new IllegalStateException("Stargate is busy with non-self connection.");
+				if (tileFrom.getConnectionState() != null && tileFrom.getConnectionState() != this)
+					throw new IllegalStateException("Source Stargate is busy with non-self connection.");
+				if (tileTo.getConnectionState() != null && tileTo.getConnectionState() != this)
+					throw new IllegalStateException("Destination Stargate is busy with non-self connection.");
 				changeState(StargateState.CONNECTED, maxConnectionAge);
 			}
 		} catch (Exception e) {
@@ -172,6 +174,7 @@ public class StargateConnection {
 	private void changeState(StargateState state, int stateTimeout) {
 		this.state = state;
 		this.stateTimeout = stateTimeout;
+		LCLog.debug("Going to state %s (timeout %s)", state, stateTimeout);
 		sendUpdates();
 	}
 
@@ -201,6 +204,7 @@ public class StargateConnection {
 			((HintProviderServer) LCRuntime.runtime.hints()).chunkLoaders().closeTicket(ticketFrom);
 			ticketFrom = null;
 		}
+		LCLog.debug("Connection closed!");
 		dead = true;
 	}
 
@@ -208,7 +212,7 @@ public class StargateConnection {
 	public void openConnection() {
 		if (state != StargateState.IDLE)
 			return;
-		changeState(StargateState.DIALLING, 0);
+		changeState(StargateState.DIALLING, maxTimeout);
 	}
 
 	/** Close the connection */

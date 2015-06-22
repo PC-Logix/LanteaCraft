@@ -36,6 +36,7 @@ import lc.common.network.packets.LCStargateStatePacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.ImmutablePair;
+import lc.common.util.data.PrimitiveHelper;
 import lc.common.util.data.StateMap;
 import lc.common.util.game.BlockFilter;
 import lc.common.util.game.BlockHelper;
@@ -142,6 +143,11 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 	}
 
+	private static final double stargateSpinTime = 20.0d;
+	private static final double stargateChevronMoveTime = 5.0d;
+	private static final double stargateConnectTimeout = 200.0d;
+	private static final double stargateEstablishedTimeout = 2400.0d;
+
 	private ArrayDeque<StargateCommand> commandQueue = new ArrayDeque<StargateCommand>();
 	private StargateCommand command;
 	private double commandTimer = 0.0d;
@@ -205,7 +211,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public void configure(ComponentConfig c) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -261,19 +267,19 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			break;
 		case DISCONNECT:
 			clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
-			clientAnimationQueue.push(new RingSpinAnimation(20.0d, 0.0d, 0.0d, true));
+			clientAnimationQueue.push(new RingSpinAnimation(stargateSpinTime, 0.0d, 0.0d, true));
 			clientEngagedGlyphs.clear();
 			break;
 		case DISENGAGE:
 			if (clientEngagedGlyphs.size() > 0) {
-				clientAnimationQueue.push(new ChevronMoveAnimation(10.0d,
+				clientAnimationQueue.push(new ChevronMoveAnimation(stargateChevronMoveTime,
 						clientChevronQueue[clientEngagedGlyphs.size() - 1], 0.0d, 0.0d, true));
 				clientEngagedGlyphs.remove(clientEngagedGlyphs.size() - 1);
 			}
 			break;
 		case ENGAGE:
 			clientEngagedGlyphs.add(clientCurrentGlyph);
-			clientAnimationQueue.push(new ChevronMoveAnimation(10.0d,
+			clientAnimationQueue.push(new ChevronMoveAnimation(stargateChevronMoveTime,
 					clientChevronQueue[clientEngagedGlyphs.size() - 1], 1.0d / 8.0d, 0.5d, true));
 			break;
 		case SPIN:
@@ -281,7 +287,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			int symbolIndex = StargateCharsetHelper.singleton().index((char) clientCurrentGlyph);
 			double symbolRotation = symbolIndex * (360.0 / 38.0d);
 			double aangle = MathUtils.normaliseAngle(symbolRotation);
-			clientAnimationQueue.push(new RingSpinAnimation(40.0d - 10.0d, 0.0d, aangle, true));
+			clientAnimationQueue.push(new RingSpinAnimation(stargateSpinTime, 0.0d, aangle, true));
 			for (int i = 0; i < clientEngagedGlyphs.size() - 1; i++) {
 				clientRenderState.set("chevron-dist-" + clientChevronQueue[i], 1.0d / 8.0d);
 				clientRenderState.set("chevron-light-" + clientChevronQueue[i], 0.5d);
@@ -458,29 +464,41 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		if (command != null)
 			switch (command.type) {
 			case CONNECT:
-				// TODO: Server -> establish connection here
+				if (currentConnection == null) {
+					HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
+					Character[] addr = engagedGlyphs.toArray(new Character[0]);
+					StargateAddress address = new StargateAddress(PrimitiveHelper.unbox(addr));
+					currentConnection = server.stargates().openConnection(this, address, (int) stargateConnectTimeout,
+							(int) stargateEstablishedTimeout);
+				}
 				sendToClient = true;
 				break;
 			case DISCONNECT:
-				// TODO: Server -> disconnect connection here
-				sendToClient = true;
+				if (currentConnection != null && currentConnection.state == StargateState.CONNECTED) {
+					currentConnection.closeConnection();
+					engagedGlyphs.clear();
+					sendToClient = true;
+				}
 				break;
 			case DISENGAGE:
-				if (engagedGlyphs.size() > 0) {
-					engagedGlyphs.remove(engagedGlyphs.size() - 1);
-					sendToClient = true;
-				}
+				if (currentConnection == null)
+					if (engagedGlyphs.size() > 0) {
+						engagedGlyphs.remove(engagedGlyphs.size() - 1);
+						sendToClient = true;
+					}
 				break;
 			case ENGAGE:
-				if (engagedGlyphs.size() < 9) {
-					engagedGlyphs.add(currentGlyph);
-					sendToClient = true;
-				}
+				if (currentConnection == null)
+					if (engagedGlyphs.size() < 9) {
+						engagedGlyphs.add(currentGlyph);
+						sendToClient = true;
+					}
 				break;
 			case SPIN:
-				char glyph = (Character) command.args[0];
-				currentGlyph = glyph;
-				sendToClient = true;
+				if (currentConnection == null) {
+					currentGlyph = (Character) command.args[0];
+					sendToClient = true;
+				}
 				break;
 			}
 		if (sendToClient)
@@ -692,26 +710,26 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void selectGlyph(char glyph) {
-		// TODO: Remove magic numbers
-		commandQueue.add(new StargateCommand(StargateCommandType.SPIN, 40.0d - 10.0d, glyph));
+		commandQueue.add(new StargateCommand(StargateCommandType.SPIN, stargateSpinTime, glyph));
 	}
 
 	@Override
 	public void activateChevron() {
-		// TODO: Remove magic numbers
-		commandQueue.add(new StargateCommand(StargateCommandType.ENGAGE, 10.0d));
+		commandQueue.add(new StargateCommand(StargateCommandType.ENGAGE, stargateChevronMoveTime));
 	}
 
 	@Override
 	public void deactivateChevron() {
-		// TODO: Remove magic numbers
-		commandQueue.add(new StargateCommand(StargateCommandType.DISENGAGE, 10.0d));
+		commandQueue.add(new StargateCommand(StargateCommandType.DISENGAGE, stargateChevronMoveTime));
 	}
 
 	@Override
 	public int getActivatedChevrons() {
-		// TODO Auto-generated method stub
-		return 0;
+		if (getWorldObj().isRemote) {
+			return clientEngagedGlyphs.size();
+		} else {
+			return engagedGlyphs.size();
+		}
 	}
 
 	@Override
@@ -725,13 +743,11 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void engageStargate() {
-		// TODO: Remove magic numbers
-		commandQueue.add(new StargateCommand(StargateCommandType.CONNECT, 400));
+		commandQueue.add(new StargateCommand(StargateCommandType.CONNECT, stargateConnectTimeout));
 	}
 
 	@Override
 	public void disengateStargate() {
-		// TODO: Remove magic numbers
-		commandQueue.add(new StargateCommand(StargateCommandType.DISCONNECT, 60));
+		commandQueue.add(new StargateCommand(StargateCommandType.DISCONNECT, stargateSpinTime));
 	}
 }

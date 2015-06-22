@@ -55,9 +55,14 @@ public class StargateManager implements ITickEventHandler {
 	 *            The source tile
 	 * @param address
 	 *            The destination address
+	 * @param connectTimeout
+	 *            The time to wait before giving up on connecting
+	 * @param establishedTimeout
+	 *            The time to wait before force-closing the Stargate
 	 * @return The connection
 	 */
-	public StargateConnection openConnection(TileStargateBase tile, StargateAddress address) {
+	public StargateConnection openConnection(TileStargateBase tile, StargateAddress address, int connectTimeout,
+			int establishedTimeout) {
 		StargateRecord what = server.universeMgr.findRecord(address);
 		if (what == null) {
 			LCLog.debug("No such address found: " + address);
@@ -65,7 +70,7 @@ public class StargateManager implements ITickEventHandler {
 		}
 		StargateConnectionType type = (what.server != null) ? StargateConnectionType.SERVERTOSERVER
 				: StargateConnectionType.LOCAL;
-		StargateConnection connection = new StargateConnection(type, tile, what);
+		StargateConnection connection = new StargateConnection(type, tile, what, connectTimeout, establishedTimeout);
 		synchronized (connections) {
 			if (!connections.containsKey(tile.getWorldObj().provider.dimensionId))
 				connections.put(tile.getWorldObj().provider.dimensionId, new ArrayList<StargateConnection>());

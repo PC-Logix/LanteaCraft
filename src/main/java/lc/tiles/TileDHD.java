@@ -90,22 +90,6 @@ public class TileDHD extends LCTile implements IDHDAccess {
 				}
 
 			}
-			/**
-			 * if (!ownsConnection() &&
-			 * request.compound.getString("typedAddress").length() != 0) {
-			 * AxisAlignedBB box = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5,
-			 * 5, 5); TileEntity tile =
-			 * ScanningHelper.findNearestTileEntityOf(getWorldObj(),
-			 * TileStargateBase.class, xCoord, yCoord, zCoord, box); if (tile ==
-			 * null || !(tile instanceof TileStargateBase)) return;
-			 * TileStargateBase sg = (TileStargateBase) tile; HintProviderServer
-			 * server = (HintProviderServer) LCRuntime.runtime.hints(); String
-			 * typedAddress = request.compound.getString("typedAddress");
-			 * StargateAddress address = new
-			 * StargateAddress(typedAddress.toCharArray()); ownedConnection =
-			 * server.stargates().openConnection(sg, address); } else
-			 * ownedConnection.closeConnection();
-			 */
 		}
 	}
 
