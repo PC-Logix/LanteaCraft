@@ -464,14 +464,15 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		if (command != null)
 			switch (command.type) {
 			case CONNECT:
-				if (currentConnection == null) {
-					HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
-					Character[] addr = engagedGlyphs.toArray(new Character[0]);
-					StargateAddress address = new StargateAddress(PrimitiveHelper.unbox(addr));
-					currentConnection = server.stargates().openConnection(this, address, (int) stargateConnectTimeout,
-							(int) stargateEstablishedTimeout);
-				}
-				sendToClient = true;
+				if (currentConnection == null)
+					if (engagedGlyphs.size() == 9) {
+						HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
+						Character[] addr = engagedGlyphs.toArray(new Character[0]);
+						StargateAddress address = new StargateAddress(PrimitiveHelper.unbox(addr));
+						currentConnection = server.stargates().openConnection(this, address,
+								(int) stargateConnectTimeout, (int) stargateEstablishedTimeout);
+						sendToClient = true;
+					}
 				break;
 			case DISCONNECT:
 				if (currentConnection != null && currentConnection.state == StargateState.CONNECTED) {
