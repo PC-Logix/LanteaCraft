@@ -1,5 +1,6 @@
 package lc.common.base.multiblock;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -98,6 +99,43 @@ public abstract class StructureConfiguration {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Generate a map of all types specified in the structure configuration.
+	 * 
+	 * @param x
+	 *            The x-coordinate to rotate around
+	 * @param y
+	 *            The y-coordinate to rotate around
+	 * @param z
+	 *            The z-coordinate to rotate around
+	 * @param typeof
+	 *            The type of filter path
+	 * @param orientation
+	 *            The rotation
+	 * @return A list of all Vector3 paths which reuslt in a typeof specified.
+	 */
+	public Vector3[] mapType(int x, int y, int z, int typeof, Orientations orientation) {
+		ArrayList<Vector3> vectors = new ArrayList<Vector3>();
+		Matrix3 rotation = orientation.rotation();
+		Vector3 origin = new Vector3(x, y, z).sub(rotation.mul(getStructureCenter()));
+		VectorAABB box = VectorAABB.boxOf(origin, getStructureDimensions());
+		List<Vector3> elems = box.contents();
+		Iterator<Vector3> each = elems.iterator();
+		while (each.hasNext()) {
+			Vector3 mapping = each.next();
+			Vector3 tile = origin.add(rotation.mul(mapping.add(0.5f, 0.5f, 0.5f)));
+			try {
+				int cell = getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
+				if (cell == typeof)
+					vectors.add(tile);
+			} catch (IndexOutOfBoundsException bounds) {
+				LCLog.fatal("Access out of bounds: " + bounds.getMessage() + ": "
+						+ String.format("%s %s %s", mapping.floorX(), mapping.floorY(), mapping.floorZ()));
+			}
+		}
+		return vectors.toArray(new Vector3[0]);
 	}
 
 	/**

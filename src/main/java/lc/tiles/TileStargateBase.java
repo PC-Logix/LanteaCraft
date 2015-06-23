@@ -23,6 +23,7 @@ import lc.client.openal.StreamingSoundProperties;
 import lc.client.render.animations.ChevronMoveAnimation;
 import lc.client.render.animations.ChevronReleaseAnimation;
 import lc.client.render.animations.RingSpinAnimation;
+import lc.client.render.gfx.GFXDust;
 import lc.common.LCLog;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
@@ -517,6 +518,11 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	private void thinkServerIris() {
 		// TODO: Control the iris, send state to client
+	}
+
+	public Vector3[] getChevronBlocks() {
+		Orientations rotation = Orientations.from(getRotation());
+		return structure.mapType(xCoord, yCoord, zCoord, 2, rotation);
 	}
 
 	public Animation getAnimation() {
