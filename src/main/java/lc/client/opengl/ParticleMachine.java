@@ -20,10 +20,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 
+/**
+ * Client-side particle on-demand rendering system
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 
 	private HashMap<Integer, HashMap<Integer, ArrayList<EntityFX>>> particles;
 
+	/** Default constructor */
 	public ParticleMachine() {
 		LCRuntime.runtime.ticks().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
@@ -49,10 +56,10 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 	private void thinkParticles() {
 		World theWorld = Minecraft.getMinecraft().theWorld;
 		int dimension = theWorld.provider.dimensionId;
-		for (int i = 0; i < 4; i++) {
-			HashMap<Integer, ArrayList<EntityFX>> layer = particles.get(i);
-			if (layer.containsKey(dimension)) {
-				ArrayList<EntityFX> entities = layer.get(dimension);
+		for (int layer = 0; layer < 4; layer++) {
+			HashMap<Integer, ArrayList<EntityFX>> objects = particles.get(layer);
+			if (objects.containsKey(dimension)) {
+				ArrayList<EntityFX> entities = objects.get(dimension);
 				Iterator<EntityFX> iter = entities.iterator();
 				while (iter.hasNext()) {
 					EntityFX entity = iter.next();
@@ -76,30 +83,45 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 		GL11.glPushMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDepthMask(false);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0044F);
 		Tessellator tessellator = Tessellator.instance;
-		for (int i = 0; i < 4; i++) {
-			HashMap<Integer, ArrayList<EntityFX>> layer = particles.get(i);
-			if (layer.containsKey(dimension)) {
-				ArrayList<EntityFX> list = layer.get(dimension);
+		for (int layer = 0; layer < 4; layer++) {
+			HashMap<Integer, ArrayList<EntityFX>> objects = particles.get(layer);
+			if (objects.containsKey(dimension)) {
+				GL11.glPushMatrix();
+				ArrayList<EntityFX> list = objects.get(dimension);
 				if (list.size() == 0)
 					continue;
+				switch (layer) {
+				case 0:
+				case 2:
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+					break;
+				case 1:
+				case 3:
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					break;
+				}
 				Iterator<EntityFX> entities = list.iterator();
 				while (entities.hasNext()) {
 					EntityFX entity = entities.next();
-					GL11.glPushMatrix();
-					float rotationX = ActiveRenderInfo.rotationX, rotationZ = ActiveRenderInfo.rotationZ;
-					float rotationYZ = ActiveRenderInfo.rotationYZ, rotationXY = ActiveRenderInfo.rotationXY, rotationXZ = ActiveRenderInfo.rotationXZ;
+					float rotX = ActiveRenderInfo.rotationX, rotZ = ActiveRenderInfo.rotationZ;
+					float rotYZ = ActiveRenderInfo.rotationYZ, rotXY = ActiveRenderInfo.rotationXY, rotXZ = ActiveRenderInfo.rotationXZ;
 					EntityFX.interpPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * frame;
 					EntityFX.interpPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * frame;
 					EntityFX.interpPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * frame;
 					tessellator.startDrawingQuads();
 					tessellator.setBrightness(entity.getBrightnessForRender(frame));
-					entity.renderParticle(tessellator, frame, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
+					entity.renderParticle(tessellator, frame, rotX, rotXZ, rotZ, rotYZ, rotXY);
 					tessellator.draw();
-					GL11.glPopMatrix();
 				}
+				GL11.glPopMatrix();
 			}
 		}
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glDepthMask(true);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 		GL11.glPopMatrix();
 	}
 }
