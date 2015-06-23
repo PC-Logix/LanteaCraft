@@ -41,7 +41,6 @@ public class TileDHD extends LCTile implements IDHDAccess {
 
 	@Override
 	public IInventory getInventory() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
