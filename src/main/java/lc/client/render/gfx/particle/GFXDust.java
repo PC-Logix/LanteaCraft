@@ -1,4 +1,4 @@
-package lc.client.render.gfx;
+package lc.client.render.gfx.particle;
 
 import lc.client.opengl.LCEntityFX;
 import lc.common.resource.ResourceAccess;

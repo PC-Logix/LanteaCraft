@@ -23,7 +23,7 @@ import lc.client.openal.StreamingSoundProperties;
 import lc.client.render.animations.ChevronMoveAnimation;
 import lc.client.render.animations.ChevronReleaseAnimation;
 import lc.client.render.animations.RingSpinAnimation;
-import lc.client.render.gfx.GFXDust;
+import lc.client.render.gfx.particle.GFXDust;
 import lc.common.LCLog;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;

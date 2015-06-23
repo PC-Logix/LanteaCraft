@@ -3,7 +3,7 @@ package lc.client.render.animations;
 import net.minecraft.world.World;
 import lc.LCRuntime;
 import lc.client.animation.Animation;
-import lc.client.render.gfx.GFXDust;
+import lc.client.render.gfx.particle.GFXDust;
 import lc.common.base.LCTile;
 import lc.common.util.data.StateMap;
 import lc.common.util.game.RunnableTileCallback;
