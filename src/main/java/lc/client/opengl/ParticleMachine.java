@@ -17,6 +17,7 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -56,6 +57,8 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 
 	private void thinkParticles() {
 		World theWorld = Minecraft.getMinecraft().theWorld;
+		if (theWorld == null)
+			return;
 		int dimension = theWorld.provider.dimensionId;
 		for (int layer = 0; layer < 4; layer++) {
 			HashMap<Integer, ArrayList<LCEntityFX>> objects = particles.get(layer);
@@ -80,6 +83,9 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 	public void renderParticles(RenderWorldLastEvent event) {
 		float frame = event.partialTicks;
 		World theWorld = Minecraft.getMinecraft().theWorld;
+		if (theWorld == null)
+			return;
+		Entity player = Minecraft.getMinecraft().thePlayer;
 		int dimension = theWorld.provider.dimensionId;
 		GL11.glPushMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -92,10 +98,10 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 		for (int layer = 0; layer < 4; layer++) {
 			HashMap<Integer, ArrayList<LCEntityFX>> objects = particles.get(layer);
 			if (objects.containsKey(dimension)) {
-				GL11.glPushMatrix();
 				ArrayList<LCEntityFX> list = objects.get(dimension);
 				if (list.size() == 0)
 					continue;
+				GL11.glPushMatrix();
 				switch (layer) {
 				case 0:
 				case 2:
@@ -109,15 +115,20 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 				Iterator<LCEntityFX> entities = list.iterator();
 				while (entities.hasNext()) {
 					LCEntityFX entity = entities.next();
-					float rotX = ActiveRenderInfo.rotationX, rotZ = ActiveRenderInfo.rotationZ;
-					float rotYZ = ActiveRenderInfo.rotationYZ, rotXY = ActiveRenderInfo.rotationXY, rotXZ = ActiveRenderInfo.rotationXZ;
-					LCEntityFX.interpPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * frame;
-					LCEntityFX.interpPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * frame;
-					LCEntityFX.interpPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * frame;
+					
+					float f1 = ActiveRenderInfo.rotationX;
+			        float f2 = ActiveRenderInfo.rotationZ;
+			        float f3 = ActiveRenderInfo.rotationYZ;
+			        float f4 = ActiveRenderInfo.rotationXY;
+			        float f5 = ActiveRenderInfo.rotationXZ;
+			        
+			        EntityFX.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * frame;
+					EntityFX.interpPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * frame;
+					EntityFX.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * frame;
 					tessellator.startDrawingQuads();
 					tessellator.setBrightness(entity.getBrightnessForRender(frame));
 					renderer.bindTexture(entity.getTextureForRender());
-					entity.renderParticle(tessellator, frame, rotX, rotXZ, rotZ, rotYZ, rotXY);
+					entity.renderParticle(tessellator, frame, f1, f5, f2, f3, f4);
 					tessellator.draw();
 				}
 				GL11.glPopMatrix();

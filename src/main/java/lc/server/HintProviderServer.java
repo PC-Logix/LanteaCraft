@@ -18,6 +18,7 @@ import lc.api.audio.ISoundController;
 import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
+import lc.api.rendering.IParticleMachine;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
 import lc.common.base.generation.LCMasterWorldGen;
@@ -170,6 +171,11 @@ public class HintProviderServer implements IHintProvider {
 	@Override
 	public void beforeServerStarting(FMLServerAboutToStartEvent event) {
 		serverHookBus.beforeServerStarted(event);
+	}
+
+	@Override
+	public IParticleMachine particles() {
+		throw new RuntimeException("Particles not permitted on server.");
 	}
 
 }

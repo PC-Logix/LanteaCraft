@@ -11,6 +11,7 @@ import lc.api.audio.ISoundController;
 import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
+import lc.api.rendering.IParticleMachine;
 
 /**
  * Hint provider contract interface.
@@ -74,6 +75,8 @@ public interface IHintProvider {
 	 * @return The audio provider in use
 	 */
 	public ISoundController audio();
+
+	public IParticleMachine particles();
 
 	/**
 	 * Called by the system when a signature violation is detected

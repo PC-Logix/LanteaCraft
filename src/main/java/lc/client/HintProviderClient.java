@@ -6,6 +6,7 @@ import lc.api.components.ComponentType;
 import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
+import lc.api.rendering.IParticleMachine;
 import lc.blocks.BlockDHD;
 import lc.blocks.BlockLanteaDoor;
 import lc.blocks.BlockObelisk;
@@ -127,6 +128,11 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public IConfigurationProvider config() {
 		return renderConfiguration;
+	}
+
+	@Override
+	public IParticleMachine particles() {
+		return particleMachine;
 	}
 
 }
