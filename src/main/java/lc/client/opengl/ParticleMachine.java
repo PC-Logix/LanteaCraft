@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,23 +29,23 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 
-	private HashMap<Integer, HashMap<Integer, ArrayList<EntityFX>>> particles;
+	private HashMap<Integer, HashMap<Integer, ArrayList<LCEntityFX>>> particles;
 
 	/** Default constructor */
 	public ParticleMachine() {
 		LCRuntime.runtime.ticks().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
-		particles = new HashMap<Integer, HashMap<Integer, ArrayList<EntityFX>>>();
+		particles = new HashMap<Integer, HashMap<Integer, ArrayList<LCEntityFX>>>();
 		for (int i = 0; i < 4; i++)
-			particles.put(i, new HashMap<Integer, ArrayList<EntityFX>>());
+			particles.put(i, new HashMap<Integer, ArrayList<LCEntityFX>>());
 	}
 
 	@Override
 	public void placeParticle(World theWorld, EntityFX entity) {
 		int dimension = theWorld.provider.dimensionId;
 		if (!particles.get(entity.getFXLayer()).containsKey(dimension))
-			particles.get(entity.getFXLayer()).put(dimension, new ArrayList<EntityFX>());
-		particles.get(entity.getFXLayer()).get(dimension).add(entity);
+			particles.get(entity.getFXLayer()).put(dimension, new ArrayList<LCEntityFX>());
+		particles.get(entity.getFXLayer()).get(dimension).add((LCEntityFX) entity);
 	}
 
 	@Override
@@ -57,10 +58,10 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 		World theWorld = Minecraft.getMinecraft().theWorld;
 		int dimension = theWorld.provider.dimensionId;
 		for (int layer = 0; layer < 4; layer++) {
-			HashMap<Integer, ArrayList<EntityFX>> objects = particles.get(layer);
+			HashMap<Integer, ArrayList<LCEntityFX>> objects = particles.get(layer);
 			if (objects.containsKey(dimension)) {
-				ArrayList<EntityFX> entities = objects.get(dimension);
-				Iterator<EntityFX> iter = entities.iterator();
+				ArrayList<LCEntityFX> entities = objects.get(dimension);
+				Iterator<LCEntityFX> iter = entities.iterator();
 				while (iter.hasNext()) {
 					EntityFX entity = iter.next();
 					if (entity != null) {
@@ -86,11 +87,13 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0044F);
 		Tessellator tessellator = Tessellator.instance;
+		TextureManager renderer = Minecraft.getMinecraft().renderEngine;
+
 		for (int layer = 0; layer < 4; layer++) {
-			HashMap<Integer, ArrayList<EntityFX>> objects = particles.get(layer);
+			HashMap<Integer, ArrayList<LCEntityFX>> objects = particles.get(layer);
 			if (objects.containsKey(dimension)) {
 				GL11.glPushMatrix();
-				ArrayList<EntityFX> list = objects.get(dimension);
+				ArrayList<LCEntityFX> list = objects.get(dimension);
 				if (list.size() == 0)
 					continue;
 				switch (layer) {
@@ -103,16 +106,17 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					break;
 				}
-				Iterator<EntityFX> entities = list.iterator();
+				Iterator<LCEntityFX> entities = list.iterator();
 				while (entities.hasNext()) {
-					EntityFX entity = entities.next();
+					LCEntityFX entity = entities.next();
 					float rotX = ActiveRenderInfo.rotationX, rotZ = ActiveRenderInfo.rotationZ;
 					float rotYZ = ActiveRenderInfo.rotationYZ, rotXY = ActiveRenderInfo.rotationXY, rotXZ = ActiveRenderInfo.rotationXZ;
-					EntityFX.interpPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * frame;
-					EntityFX.interpPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * frame;
-					EntityFX.interpPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * frame;
+					LCEntityFX.interpPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * frame;
+					LCEntityFX.interpPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * frame;
+					LCEntityFX.interpPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * frame;
 					tessellator.startDrawingQuads();
 					tessellator.setBrightness(entity.getBrightnessForRender(frame));
+					renderer.bindTexture(entity.getTextureForRender());
 					entity.renderParticle(tessellator, frame, rotX, rotXZ, rotZ, rotYZ, rotXY);
 					tessellator.draw();
 				}
