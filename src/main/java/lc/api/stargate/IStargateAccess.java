@@ -1,5 +1,7 @@
 package lc.api.stargate;
 
+import lc.api.jit.Tag;
+
 /**
  * Contract interface for Stargate access.
  * 
@@ -72,16 +74,19 @@ public interface IStargateAccess {
 	 * @param glyph
 	 *            The glyph to select
 	 */
+	@Tag(name = "ComputerCallable")
 	public void selectGlyph(char glyph);
 
 	/**
 	 * Activates a chevron at the currently selected glyph
 	 */
+	@Tag(name = "ComputerCallable")
 	public void activateChevron();
 
 	/**
 	 * Deactivates the last activated chevron
 	 */
+	@Tag(name = "ComputerCallable")
 	public void deactivateChevron();
 
 	/**
@@ -89,6 +94,7 @@ public interface IStargateAccess {
 	 * 
 	 * @return The number of active chevrons
 	 */
+	@Tag(name = "ComputerCallable")
 	public int getActivatedChevrons();
 
 	/**
@@ -96,16 +102,19 @@ public interface IStargateAccess {
 	 * 
 	 * @return The active glyphs on the Stargate
 	 */
+	@Tag(name = "ComputerCallable")
 	public Character[] getActivatedGlpyhs();
 
 	/**
 	 * Engage the Stargate to establish a connection
 	 */
+	@Tag(name = "ComputerCallable")
 	public void engageStargate();
 
 	/**
 	 * Disengage the Stargate to close a connection
 	 */
+	@Tag(name = "ComputerCallable")
 	public void disengateStargate();
 
 }
