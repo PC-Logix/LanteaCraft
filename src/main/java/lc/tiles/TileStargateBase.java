@@ -801,7 +801,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	@Tag(name = "ComputerCallable")
-	public void disengateStargate() {
+	public void disengageStargate() {
 		commandQueue.add(new StargateCommand(StargateCommandType.DISCONNECT, stargateSpinTime));
 	}
 
