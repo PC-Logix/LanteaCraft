@@ -36,6 +36,7 @@ import lc.common.network.LCPacket;
 import lc.common.network.packets.LCStargateConnectionPacket;
 import lc.common.network.packets.LCStargateStatePacket;
 import lc.common.network.packets.LCTileSync;
+import lc.common.stargate.MessageStringPayload;
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.data.PrimitiveHelper;
@@ -733,8 +734,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void receive(MessagePayload payload) {
-		// TODO Auto-generated method stub
+		doCallbacksNow(this, "stargateMessage", this, payload);
+	}
 
+	@Tag(name = "ComputerCallable")
+	public void sendMessage(String data) {
+		transmit(new MessageStringPayload(data));
 	}
 
 	@Override
