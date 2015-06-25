@@ -1,7 +1,5 @@
 package lc.api.stargate;
 
-import lc.api.jit.Tag;
-
 /**
  * Contract interface for Stargate access.
  * 
@@ -37,20 +35,6 @@ public interface IStargateAccess {
 	 * @return The Stargate address
 	 */
 	public StargateAddress getStargateAddress();
-
-	/**
-	 * Get the type of the iris on the Stargate
-	 * 
-	 * @return The type of the iris on the Stargate
-	 */
-	public IrisType getIrisType();
-
-	/**
-	 * Get the state of the iris
-	 * 
-	 * @return The state of the iris
-	 */
-	public IrisState getIrisState();
 
 	/**
 	 * Transmit a message through the Stargate
@@ -109,5 +93,36 @@ public interface IStargateAccess {
 	 * Disengage the Stargate to close a connection
 	 */
 	public void disengateStargate();
+
+	/**
+	 * Get the type of the iris on the Stargate
+	 * 
+	 * @return The type of the iris on the Stargate
+	 */
+	public IrisType getIrisType();
+
+	/**
+	 * Get the state of the iris
+	 * 
+	 * @return The state of the iris
+	 */
+	public IrisState getIrisState();
+
+	/**
+	 * Open the iris
+	 */
+	public void openIris();
+
+	/**
+	 * Close the iris
+	 */
+	public void closeIris();
+
+	/**
+	 * Get the health of the iris as a fractional between 1.0d and 0.0d
+	 * 
+	 * @return The health of the iris as a fractional between 1.0d and 0.0d
+	 */
+	public double getIrisHealth();
 
 }
