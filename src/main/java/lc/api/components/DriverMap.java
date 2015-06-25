@@ -16,10 +16,9 @@ import cpw.mods.fml.common.Loader;
  *
  */
 public enum DriverMap {
-	/** IC2 power drivers */
-	IC2("IndustrialCraft 2", "IC2", "lc.common.impl.drivers.DriverIC2Power", IntegrationType.POWER),
-	/** Buildcraft power drivers */
-	BUILDCRAFT("BuildCraft", "BuildCraft|Core", "lc.common.impl.drivers.DriverBCPower", IntegrationType.POWER);
+	/** CC computer driver */
+	COMPUTERCRAFT("ComputerCraft", "ComputerCraft", "lc.common.impl.drivers.ComputerCraftPeripheralDriver",
+			IntegrationType.COMPUTERS);
 
 	/** The target mod name */
 	public final String modName;
