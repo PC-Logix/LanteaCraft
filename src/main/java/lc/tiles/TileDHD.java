@@ -85,7 +85,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 					if (!tile.hasConnectionState())
 						tile.engageStargate();
 					else
-						tile.disengateStargate();
+						tile.disengageStargate();
 				}
 
 			}
