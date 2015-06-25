@@ -78,7 +78,7 @@ public abstract class StructureConfiguration {
 	 */
 	public boolean test(World world, int x, int y, int z, Orientations orientation) {
 		BlockFilter[] mappings = getBlockMappings();
-		Matrix3 rotation = orientation.rotation();
+		Matrix3 rotation = (orientation != null) ? orientation.rotation() : Matrix3.ident;
 		Vector3 origin = new Vector3(x, y, z).sub(rotation.mul(getStructureCenter()));
 		VectorAABB box = VectorAABB.boxOf(origin, getStructureDimensions());
 		List<Vector3> elems = box.contents();
@@ -118,7 +118,7 @@ public abstract class StructureConfiguration {
 	 */
 	public Vector3[] mapType(int x, int y, int z, int typeof, Orientations orientation) {
 		ArrayList<Vector3> vectors = new ArrayList<Vector3>();
-		Matrix3 rotation = orientation.rotation();
+		Matrix3 rotation = (orientation != null) ? orientation.rotation() : Matrix3.ident;
 		Vector3 origin = new Vector3(x, y, z).sub(rotation.mul(getStructureCenter()));
 		VectorAABB box = VectorAABB.boxOf(origin, getStructureDimensions());
 		List<Vector3> elems = box.contents();
@@ -156,7 +156,7 @@ public abstract class StructureConfiguration {
 	 */
 	public void apply(World world, int x, int y, int z, Orientations orientation, LCMultiblockTile owner) {
 		Vector3 ownerVec = (owner != null) ? new Vector3(owner) : null;
-		Matrix3 rotation = orientation.rotation();
+		Matrix3 rotation = (orientation != null) ? orientation.rotation() : Matrix3.ident;
 		Vector3 origin = new Vector3(x, y, z).sub(rotation.mul(getStructureCenter()));
 		VectorAABB box = VectorAABB.boxOf(origin, getStructureDimensions());
 		List<Vector3> elems = box.contents();
