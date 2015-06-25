@@ -142,6 +142,19 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			this.duration = duration;
 			this.args = args;
 		}
+
+		@Override
+		public String toString() {
+			StringBuilder zz = new StringBuilder();
+			zz.append("StargateCommand{").append(type).append(":").append(duration);
+			if (args != null) {
+				zz.append(", [");
+				for (int i = 0; i < args.length; i++)
+					zz.append((args[i] != null) ? args[i].toString() : "<null>").append(",");
+				zz.append("]");
+			}
+			return zz.append("}").toString();
+		}
 	}
 
 	private static final double stargateSpinTime = 20.0d;
@@ -373,8 +386,9 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	private void thinkClientChangeAnimation(Animation next) {
-		LCLog.debug("thinkChangeAnimation: " + ((clientAnimation != null) ? clientAnimation.toString() : "[none]")
-				+ " => " + ((next != null) ? next.toString() : "[none]"));
+		LCLog.debug("thinkChangeAnimation: %s => %s",
+				(clientAnimation != null) ? clientAnimation.toString() : "[none]", (next != null) ? next.toString()
+						: "[none]");
 		if (clientAnimation != null) {
 			clientAnimation.sampleProperties(clientRenderState);
 			if (clientAnimation.doAfter != null)
@@ -458,10 +472,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	private void thinkServerChangeCommand(StargateCommand next) {
-		LCLog.debug("thinkChangeCommand: " + ((command != null) ? command.toString() : "[none]") + " => "
-				+ ((next != null) ? next.toString() : "[none]"));
+		LCLog.debug("thinkChangeCommand: %s => %s", (command != null) ? command.toString() : "[none]",
+				(next != null) ? next.toString() : "[none]");
 		command = next;
-		boolean sendToClient = false;
+		boolean doCommand = false;
 		if (command != null)
 			switch (command.type) {
 			case CONNECT:
@@ -472,43 +486,50 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 						StargateAddress address = new StargateAddress(PrimitiveHelper.unbox(addr));
 						currentConnection = server.stargates().openConnection(this, address,
 								(int) stargateConnectTimeout, (int) stargateEstablishedTimeout);
-						sendToClient = true;
+						doCommand = true;
 					}
 				break;
 			case DISCONNECT:
 				if (currentConnection != null && currentConnection.state == StargateState.CONNECTED) {
 					currentConnection.closeConnection();
 					engagedGlyphs.clear();
-					sendToClient = true;
+					doCommand = true;
 				}
 				break;
 			case DISENGAGE:
 				if (currentConnection == null)
 					if (engagedGlyphs.size() > 0) {
 						engagedGlyphs.remove(engagedGlyphs.size() - 1);
-						sendToClient = true;
+						doCommand = true;
 					}
 				break;
 			case ENGAGE:
 				if (currentConnection == null)
 					if (engagedGlyphs.size() < 9) {
 						engagedGlyphs.add(currentGlyph);
-						sendToClient = true;
+						doCommand = true;
 					}
 				break;
 			case SPIN:
 				if (currentConnection == null) {
-					currentGlyph = (Character) command.args[0];
-					sendToClient = true;
+					if (engagedGlyphs.size() < 9) {
+						currentGlyph = (Character) command.args[0];
+						doCommand = true;
+					}
 				}
 				break;
 			}
-		if (sendToClient)
+		if (doCommand) {
 			thinkServerDispatchState(command);
-		commandTimer = 0.0d;
+			commandTimer = 0.0d;
+		} else if (command != null) {
+			LCLog.debug("Skipping command %s, invalid state.", command);
+			commandTimer += command.duration;
+		}
 	}
 
 	private void thinkServerDispatchState(StargateCommand command) {
+		LCLog.debug("thinkServerDispatchState: %s", (command != null) ? command.toString() : "[none]");
 		if (command != null) {
 			LCStargateStatePacket packet = new LCStargateStatePacket(new DimensionPos(this), command.type.ordinal(),
 					command.duration, command.args);
