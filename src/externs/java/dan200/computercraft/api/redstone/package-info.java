@@ -4,18 +4,7 @@
  * For help using the API, and posting your mods, visit the forums at computercraft.info.
  */
 
-package dan200.computercraft.api.turtle;
+@API( owner="ComputerCraft", provides="ComputerCraft|API|Redstone", apiVersion="1.73" )
+package dan200.computercraft.api.redstone;
 
-public enum TurtleAnimation
-{
-    None,
-    MoveForward,
-    MoveBack,
-    MoveUp,
-    MoveDown,
-    TurnLeft,
-    TurnRight,
-    SwingLeftTool,
-    SwingRightTool,
-    Wait,
-}
+import cpw.mods.fml.common.API;
