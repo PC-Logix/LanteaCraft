@@ -21,7 +21,10 @@ public enum DriverMap {
 			"lc.common.impl.drivers.ComputerCraftDriverManager", IntegrationType.COMPUTERS),
 
 	/** Waila support driver */
-	WAILA("Waila", "Waila", null, "lc.common.impl.drivers.WailaDriverManager", IntegrationType.UTILITY);
+	/*
+	 * WAILA("Waila", "Waila", null,
+	 * "lc.common.impl.drivers.WailaDriverManager", IntegrationType.UTILITY)
+	 */;
 
 	/** The target mod name */
 	public final String modName;
