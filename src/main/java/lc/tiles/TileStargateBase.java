@@ -9,6 +9,7 @@ import java.util.Stack;
 import lc.LCRuntime;
 import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.components.IntegrationType;
+import lc.api.jit.Tag;
 import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
 import lc.api.stargate.IStargateAccess;
@@ -737,21 +738,25 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public void selectGlyph(char glyph) {
 		commandQueue.add(new StargateCommand(StargateCommandType.SPIN, stargateSpinTime, glyph));
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public void activateChevron() {
 		commandQueue.add(new StargateCommand(StargateCommandType.ENGAGE, stargateChevronMoveTime));
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public void deactivateChevron() {
 		commandQueue.add(new StargateCommand(StargateCommandType.DISENGAGE, stargateChevronMoveTime));
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public int getActivatedChevrons() {
 		if (getWorldObj().isRemote) {
 			return clientEngagedGlyphs.size();
@@ -761,6 +766,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public Character[] getActivatedGlpyhs() {
 		if (getWorldObj().isRemote) {
 			return clientEngagedGlyphs.toArray(new Character[0]);
@@ -770,11 +776,13 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public void engageStargate() {
 		commandQueue.add(new StargateCommand(StargateCommandType.CONNECT, stargateConnectTimeout));
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public void disengateStargate() {
 		commandQueue.add(new StargateCommand(StargateCommandType.DISCONNECT, stargateSpinTime));
 	}

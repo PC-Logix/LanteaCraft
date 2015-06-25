@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverProvider;
+import lc.api.jit.ASMTag;
 import lc.api.jit.Tag;
 import lc.api.jit.TagMap;
 import lc.common.LCLog;
@@ -25,7 +26,7 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 
 	@Override
 	public String getType() {
-		return getClass().getName().replace("Tile", "").replace("tile", "");
+		return getClass().getSimpleName().replace("Tile", "").replace("tile", "");
 	}
 
 	@Override
@@ -35,26 +36,11 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 			Class<?> zz = getClass();
 			Method[] methods = zz.getMethods();
 			for (Method m : methods) {
-				Annotation[] annotations = m.getAnnotations();
-				if (annotations == null || annotations.length == 0)
-					continue;
-				Tag foundTag = null;
-				for (int i = 0; i < annotations.length; i++) {
-					Annotation annotation = annotations[i];
-					if (annotation instanceof Tag && ((Tag) annotation).name().equals("ComputerCallable"))
-						foundTag = (Tag) annotation;
-					else if (annotation instanceof TagMap) {
-						TagMap map = (TagMap) annotation;
-						Tag[] tree = map.value();
-						for (int k = 0; k < tree.length; k++) {
-							Tag branch = tree[k];
-							if (branch.name().equals("ComputerCallable"))
-								foundTag = branch;
-						}
-					}
-				}
+				LCLog.debug("ComputerCraft driver: assessing method %s (class %s).", m.getName(), zz.getSimpleName());
+				Tag foundTag = ASMTag.findTag(getClass(), m, "ComputerCallable");
 				if (foundTag == null)
 					continue;
+				LCLog.debug("ComputerCraft driver: adding method %s", m.getName());
 				alist.add(m.getName());
 			}
 			computercraft_methodcache = alist.toArray(new String[0]);
@@ -73,7 +59,13 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 		if (foundMethod == null)
 			throw new LuaException("No such method.");
 		try {
-			Object aresult = foundMethod.invoke(this, arguments);
+			Class<?>[] types = foundMethod.getParameterTypes();
+			if (arguments.length != types.length)
+				throw new Exception("Incorrect number of parameters.");
+			Object[] aargs = new Object[arguments.length];
+			for (int i = 0; i < aargs.length; i++)
+				aargs[i] = ComputerCraftDriverManager.performCastToType(arguments[i], types[i]);
+			Object aresult = foundMethod.invoke(this, aargs);
 			return new Object[] { aresult };
 		} catch (Exception exception) {
 			LCLog.warn("Problem calling method from ComputerCraft driver!", exception);

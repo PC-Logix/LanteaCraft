@@ -207,6 +207,12 @@ public class DriverBindingTransformer implements IClassTransformer {
 					LCLog.warn("Can't find class %s for driver %s, skipping...", mapping.className, mapping);
 					continue;
 				}
+				try {
+					mapping.trySpinUpDriver();
+				} catch (Exception failure) {
+					LCLog.fatal("Failed to spin up driver manager class %s for driver %s. Problems may occur.",
+							mapping.managerClassName, mapping);
+				}
 				ClassNode driverClass = new ClassNode();
 				ClassReader reader = new ClassReader(driverSrc);
 				reader.accept(driverClass, 0);
@@ -229,13 +235,15 @@ public class DriverBindingTransformer implements IClassTransformer {
 									events.put(method.name, callMethod);
 							}
 						} else
-							LCLog.warn("Skipping method %s, already present!", signature(method));
+							LCLog.warn("Skipping method %s#%s, already exists in class %s.", driverClass.name,
+									signature(method), classNode.name);
 				if (driverClass.fields != null)
 					for (FieldNode field : driverClass.fields)
 						if (!hasDuplicateField(field, classNode))
 							classNode.fields.add(remapField(driverClass.name, classNode.name, field));
 						else
-							LCLog.warn("Skipping field %s, already present!", signature(field));
+							LCLog.warn("Skipping field %s#%s, already exists in class %s.", driverClass.name,
+									signature(field), classNode.name);
 				count++;
 			}
 		}
