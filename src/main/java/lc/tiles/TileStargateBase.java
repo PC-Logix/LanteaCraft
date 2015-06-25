@@ -131,7 +131,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	private enum StargateCommandType {
-		SPIN, ENGAGE, DISENGAGE, CONNECT, DISCONNECT;
+		SPIN, ENGAGE, DISENGAGE, CONNECT, DISCONNECT, OPENIRIS, CLOSEIRIS;
 	}
 
 	private class StargateCommand {
@@ -172,6 +172,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private Stack<Character> engagedGlyphs = new Stack<Character>();
 	private StargateConnection currentConnection = null;
 	private ArrayList<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
+
+	private IrisState irisState;
 
 	private Block clientSkinBlock = null;
 	private int clientSkinBlockMetadata;
@@ -309,9 +311,14 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				clientRenderState.set("chevron-light-" + clientChevronQueue[i], 0.5d);
 			}
 			break;
+		case CLOSEIRIS:
+			// TODO: Client-side iris render
+			break;
+		case OPENIRIS:
+			// TODO: Client-side iris render
+			break;
 		default:
 			break;
-
 		}
 	}
 
@@ -519,6 +526,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 						doCommand = true;
 					}
 				}
+				break;
+			case CLOSEIRIS:
+				// TODO: Server-side close iris task
+				break;
+			case OPENIRIS:
+				// TODO: Server-side open iris task
 				break;
 			}
 		if (doCommand) {
@@ -790,5 +803,23 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Tag(name = "ComputerCallable")
 	public void disengateStargate() {
 		commandQueue.add(new StargateCommand(StargateCommandType.DISCONNECT, stargateSpinTime));
+	}
+
+	@Override
+	public void openIris() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void closeIris() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public double getIrisHealth() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
