@@ -93,14 +93,16 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 *            The self object
 	 * @param type
 	 *            The type of event
+	 * @param params
+	 *            The parameters to callback, if any
 	 */
-	public static void doCallbacksNow(Object me, String type) {
+	public static void doCallbacksNow(Object me, String type, Object... params) {
 		@SuppressWarnings("unchecked")
 		Class<? extends LCTile> meClazz = (Class<? extends LCTile>) me.getClass();
 		ArrayList<String> cbs = getCallbacks(meClazz, type);
 		if (cbs == null)
 			return;
-		doCallbacks(meClazz, me, cbs);
+		doCallbacks(meClazz, me, cbs, params);
 	}
 
 	/**
@@ -131,14 +133,20 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 *            The self object
 	 * @param methods
 	 *            The methods to invoke
+	 * @param aparams
+	 *            The parameters to callback with
 	 */
-	public static void doCallbacks(Class<? extends LCTile> me, Object meObject, ArrayList<String> methods) {
+	public static void doCallbacks(Class<? extends LCTile> me, Object meObject, ArrayList<String> methods,
+			Object[] aparams) {
 		Method[] meMethods = me.getMethods();
 		for (String methodName : methods)
 			for (Method invoke : meMethods)
 				if (invoke.getName().equalsIgnoreCase(methodName)) {
 					try {
-						invoke.invoke(meObject, new Object[] { (LCTile) meObject });
+						if (aparams == null)
+							invoke.invoke(meObject, new Object[] { (LCTile) meObject });
+						else
+							invoke.invoke(meObject, aparams);
 					} catch (Throwable t) {
 						LCLog.warn("Error when processing callback %s!", methodName, t);
 					}
