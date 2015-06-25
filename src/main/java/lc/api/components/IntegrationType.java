@@ -18,5 +18,8 @@ public enum IntegrationType {
 	COMPUTERS,
 	
 	/** Inter-mod in-game communications providers */
-	COMMUNICATIONS;
+	COMMUNICATIONS,
+	
+	/** Utilities */
+	UTILITY;
 }

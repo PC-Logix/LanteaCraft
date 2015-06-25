@@ -18,7 +18,10 @@ import cpw.mods.fml.common.Loader;
 public enum DriverMap {
 	/** CC computer driver */
 	COMPUTERCRAFT("ComputerCraft", "ComputerCraft", "lc.common.impl.drivers.ComputerCraftPeripheralDriver",
-			"lc.common.impl.drivers.ComputerCraftDriverManager", IntegrationType.COMPUTERS);
+			"lc.common.impl.drivers.ComputerCraftDriverManager", IntegrationType.COMPUTERS),
+
+	/** Waila support driver */
+	WAILA("Waila", "Waila", null, "lc.common.impl.drivers.WailaDriverManager", IntegrationType.UTILITY);
 
 	/** The target mod name */
 	public final String modName;
@@ -66,6 +69,22 @@ public enum DriverMap {
 			return;
 		Class<?> clazz = Class.forName(managerClassName);
 		managerObject = clazz.newInstance();
+	}
+
+	/**
+	 * Try and spin up all required drivers in the system. If a Driver has not
+	 * been imported, a Driver manager may not be loaded; this ensures that all
+	 * managers which are applicable are booted for usage later on.
+	 */
+	public static void trySpinUpAll() {
+		for (DriverMap mapping : values())
+			if (Loader.isModLoaded(mapping.modId))
+				try {
+					mapping.trySpinUpDriver();
+				} catch (Exception e) {
+					LCLog.warn("Failed to fallback spin-up needed driver %s (class %s).", mapping.modName,
+							mapping.managerClassName);
+				}
 	}
 
 	/**

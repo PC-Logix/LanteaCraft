@@ -15,6 +15,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import lc.LanteaCraft;
 import lc.api.audio.ISoundController;
+import lc.api.components.DriverMap;
 import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
@@ -88,6 +89,7 @@ public class HintProviderServer implements IHintProvider {
 		worldGenerator = new LCMasterWorldGen();
 		GameRegistry.registerWorldGenerator(worldGenerator, 0);
 		MinecraftForge.TERRAIN_GEN_BUS.register(worldGenerator);
+		DriverMap.trySpinUpAll();
 	}
 
 	@Override
