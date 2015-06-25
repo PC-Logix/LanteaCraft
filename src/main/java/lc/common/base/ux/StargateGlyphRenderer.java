@@ -1,6 +1,7 @@
 package lc.common.base.ux;
 
 import lc.api.stargate.StargateType;
+import lc.common.LCLog;
 import lc.common.resource.ResourceAccess;
 import lc.common.stargate.StargateCharsetHelper;
 import net.minecraft.client.Minecraft;
@@ -56,11 +57,15 @@ public class StargateGlyphRenderer {
 		}
 
 		for (int i = 0; i < address.length; i++) {
-			int s = StargateCharsetHelper.singleton().index(address[i]);
-			double u = uscale * ((s % length) * 32), v = vscale * ((s / length) * 32);
-			double u2 = uscale * 32, v2 = vscale * 32;
-			drawTexturedRectUV(x + borderSize + i * cellSize + paddingLeft, y + borderSize + paddingTop, cellSize,
-					cellSize, u, v, u2, v2, zLevel);
+			try {
+				int s = StargateCharsetHelper.singleton().index(address[i]);
+				double u = uscale * ((s % length) * 32), v = vscale * ((s / length) * 32);
+				double u2 = uscale * 32, v2 = vscale * 32;
+				drawTexturedRectUV(x + borderSize + i * cellSize + paddingLeft, y + borderSize + paddingTop, cellSize,
+						cellSize, u, v, u2, v2, zLevel);
+			} catch (NumberFormatException format) {
+				LCLog.fatal("Problem rendering screen.", format);
+			}
 		}
 	}
 
