@@ -221,12 +221,19 @@ public class StreamingSoundServer implements ISoundServer {
 			for (Entry<SoundOwner, ArrayList<ISound>> entry : sounds.entrySet())
 				if (entry.getKey().isEnqueued())
 					purge.add(entry.getKey());
-				else
+				else {
+					ArrayList<StreamingSound> renew = new ArrayList<StreamingSound>();
 					for (ISound sound : entry.getValue()) {
 						sound.think(this, client);
 						if (sound.realvol() > 0.0F)
 							playing.add(sound);
+						if (sound instanceof StreamingSound) {
+							StreamingSound base = (StreamingSound) sound;
+							if (base.errored())
+								base.setup(nextSoundTag("StreamingSound"));
+						}
 					}
+				}
 			for (int k = 0; !playing.isEmpty(); k++) {
 				ISound source = playing.poll();
 				if (maxSources > k)

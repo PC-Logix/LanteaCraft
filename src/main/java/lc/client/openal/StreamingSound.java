@@ -27,13 +27,18 @@ public class StreamingSound implements ISound, Comparable<StreamingSound> {
 	private boolean valid, culled, paused;
 	private float realVolume;
 
+	private volatile boolean errored = false;
+
 	public StreamingSound(ISoundServer server, SoundSystem system, ISoundPosition pos, String f,
 			ISoundProperties props, String tag) {
 		this.system = system;
 		this.position = pos;
 		this.properties = props;
-		this.tag = tag;
 		this.filename = f;
+		setup(tag);
+	}
+
+	public void setup(String tag) {
 		try {
 			String f0 = ResourceAccess.formatResourceName("${ASSET_KEY}:sound/%s", filename);
 			ResourceLocation resourcelocation = new ResourceLocation(f0);
@@ -42,8 +47,9 @@ public class StreamingSound implements ISound, Comparable<StreamingSound> {
 			URL path = new URL(null, s1, new StreamingSoundProtocolHandler());
 			Vector3 p = (Vector3) position.getPositionObject();
 			system.newSource(properties.override(), tag, path, filename, properties.loop(), (float) p.x, (float) p.y,
-					(float) p.z, 0, server.falloff() * Math.max(properties.volume(), 1.0F));
+					(float) p.z, 0, Math.max(properties.volume(), 1.0F));
 			valid = true;
+			this.tag = tag;
 		} catch (IOException ioex) {
 			LCLog.warn("Can't create StreamingSound.", ioex);
 		}
@@ -51,57 +57,81 @@ public class StreamingSound implements ISound, Comparable<StreamingSound> {
 
 	@Override
 	public void play() {
-		if (!valid || playing())
-			return;
-		if (culled)
-			activate();
-		paused = false;
-		system.play(tag);
+		try {
+			if (!valid || playing())
+				return;
+			if (culled)
+				activate();
+			paused = false;
+			system.play(tag);
+		} catch (Exception e) {
+			errored = true;
+		}
 	}
 
 	@Override
 	public void pause() {
-		if (!valid || !playing() || culled)
-			return;
-		paused = true;
-		system.pause(tag);
+		try {
+			if (!valid || !playing() || culled)
+				return;
+			paused = true;
+			system.pause(tag);
+		} catch (Exception e) {
+			errored = true;
+		}
 	}
 
 	@Override
 	public void stop() {
-		if (!valid || !playing() || culled)
-			return;
-		system.stop(tag);
-		system.rewind(tag);
+		try {
+			if (!valid || !playing() || culled)
+				return;
+			system.stop(tag);
+			system.rewind(tag);
+		} catch (Exception e) {
+			errored = true;
+		}
 	}
 
 	@Override
 	public void remove() {
-		if (!valid)
-			return;
-		system.stop(tag);
-		system.removeSource(tag);
-		valid = false;
-		tag = null;
+		try {
+			if (!valid)
+				return;
+			system.stop(tag);
+			system.removeSource(tag);
+			valid = false;
+			tag = null;
+		} catch (Exception e) {
+			errored = true;
+		}
 	}
 
 	@Override
 	public void cull() {
-		if (!valid || culled)
-			return;
-		system.cull(tag);
-		culled = true;
+		try {
+			if (!valid || culled)
+				return;
+			system.cull(tag);
+			culled = true;
+		} catch (Exception e) {
+			errored = true;
+		}
 	}
 
 	@Override
 	public void activate() {
-		if (!valid || !culled)
-			return;
-		system.activate(tag);
-		culled = false;
-		if (playing()) {
-			stop();
-			play();
+		try {
+			if (!valid || !culled)
+				return;
+			system.activate(tag);
+			culled = false;
+			if (playing()) {
+				stop();
+				play();
+			}
+		} catch (Exception e) {
+			errored = true;
 		}
 	}
 
@@ -176,6 +206,10 @@ public class StreamingSound implements ISound, Comparable<StreamingSound> {
 		if (culled)
 			return (int) ((realVolume * 0.9F - x.realVolume) * 128.0F);
 		return (int) ((realVolume - x.realVolume) * 128.0F);
+	}
+
+	public boolean errored() {
+		return errored;
 	}
 
 }
