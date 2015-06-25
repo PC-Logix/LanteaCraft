@@ -92,7 +92,7 @@ public interface IStargateAccess {
 	/**
 	 * Disengage the Stargate to close a connection
 	 */
-	public void disengateStargate();
+	public void disengageStargate();
 
 	/**
 	 * Get the type of the iris on the Stargate
