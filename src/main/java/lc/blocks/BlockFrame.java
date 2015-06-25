@@ -7,9 +7,7 @@ import lc.common.base.LCBlock;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
 import lc.items.ItemBlockFrame;
-import lc.items.ItemBlockStargateRing;
 import lc.tiles.TileFrame;
-import lc.tiles.TileStargateRing;
 
 @Definition(name = "frame", type = ComponentType.CORE, blockClass = BlockFrame.class, itemBlockClass = ItemBlockFrame.class, tileClass = TileFrame.class)
 public class BlockFrame extends LCBlock {

@@ -27,6 +27,8 @@ public class Blocks {
 	public IContainerDefinition stargateDHDBlock;
 	/** Transporter ring block */
 	public IContainerDefinition transporterBlock;
+	/** Frame machine block */
+	public IContainerDefinition frameBlock;
 
 	/** Decorative global block */
 	public IContainerDefinition lanteaDecorBlock;
