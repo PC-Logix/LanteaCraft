@@ -39,7 +39,7 @@ public class ComputerCraftDriverManager {
 		LCLog.debug("ComputerCraft driver: perform cast: %s to %s", xx.getClass().getName(), yy.getName());
 		if (yy == Character.class || yy == char.class) {
 			if (!(xx instanceof String))
-				throw new Exception("Cannot cast " + yy.getSimpleName() + " to Character");
+				throw new Exception("Cannot cast " + xx.getClass().getSimpleName() + " to Character");
 			String xxx = (String) xx;
 			if (xxx.length() != 1)
 				throw new Exception("Illegal Character length.");
