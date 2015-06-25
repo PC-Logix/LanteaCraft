@@ -220,6 +220,15 @@ public class DriverBindingTransformer implements IClassTransformer {
 					for (String iface : driverClass.interfaces) {
 						if (classNode.interfaces == null)
 							classNode.interfaces = new ArrayList<String>();
+						/**
+						 * FIXME: BEFORE adding interfaces, we need to confirm
+						 * that we actually have the required methods and that
+						 * their signatures match. It is entirely possible that
+						 * a Driver could contain (A, B, C) and the currently
+						 * defined API version by the owner mod is (A, ZZZ, C);
+						 * given ZZZ is a modified signature. This would result
+						 * in a compiling failure, which is greatly undesirable.
+						 */
 						if (!classNode.interfaces.contains(iface))
 							classNode.interfaces.add(iface);
 					}
