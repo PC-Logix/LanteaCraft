@@ -17,6 +17,7 @@ import lc.common.network.packets.LCMultiblockPacket;
 import lc.common.network.packets.LCStargateConnectionPacket;
 import lc.common.network.packets.LCStargateStatePacket;
 import lc.common.network.packets.LCTileSync;
+import lc.common.network.packets.LCTransportRingsStatePacket;
 import lc.common.network.packets.abs.LCTargetPacket;
 import lc.common.util.math.DimensionPos;
 import net.minecraft.client.Minecraft;
@@ -73,6 +74,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		registerPacket(LCStargateConnectionPacket.class);
 		registerPacket(LCStargateStatePacket.class);
 		registerPacket(LCDHDPacket.class);
+		registerPacket(LCTransportRingsStatePacket.class);
 	}
 
 	@Override
