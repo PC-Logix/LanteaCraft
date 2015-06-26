@@ -72,7 +72,7 @@ public class DecoratorSetterRecipe implements IRecipe {
 					flag0 = true;
 			else {
 				Block block = Block.getBlockFromItem(stack.getItem());
-				if (block != null && block.isBlockNormalCube())
+				if (block != null)
 					p++;
 			}
 		return flag0 && (p == 0 || p == 1) && !flag2;
