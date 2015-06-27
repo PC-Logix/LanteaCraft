@@ -2,7 +2,7 @@ package lc.common.base.pipeline;
 
 import lc.LCRuntime;
 import lc.api.defs.ILanteaCraftRenderer;
-import lc.client.render.DefaultBlockRenderer;
+import lc.client.render.fabs.DefaultBlockRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlockRenderer;
 import lc.common.impl.registry.DefinitionRegistry;

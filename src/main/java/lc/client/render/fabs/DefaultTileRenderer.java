@@ -1,4 +1,4 @@
-package lc.client.render;
+package lc.client.render.fabs;
 
 import java.util.ArrayList;
 

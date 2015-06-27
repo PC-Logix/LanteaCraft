@@ -1,4 +1,4 @@
-package lc.client.render;
+package lc.client.render.fabs.items;
 
 import lc.common.base.LCItemRenderer;
 import lc.common.configuration.xml.ComponentConfig;

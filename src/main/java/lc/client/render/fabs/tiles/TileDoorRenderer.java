@@ -1,4 +1,4 @@
-package lc.client.render;
+package lc.client.render.fabs.tiles;
 
 import net.minecraft.util.ResourceLocation;
 

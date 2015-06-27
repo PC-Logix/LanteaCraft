@@ -1,4 +1,4 @@
-package lc.client.render;
+package lc.client.render.fabs.blocks;
 
 import lc.api.rendering.IBlockRenderInfo;
 import lc.common.base.LCBlock;

@@ -1,4 +1,4 @@
-package lc.client.render;
+package lc.client.render.fabs.tiles;
 
 import org.lwjgl.opengl.GL11;
 

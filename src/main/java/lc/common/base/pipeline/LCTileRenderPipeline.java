@@ -2,7 +2,7 @@ package lc.common.base.pipeline;
 
 import lc.LCRuntime;
 import lc.api.defs.ILanteaCraftRenderer;
-import lc.client.render.DefaultTileRenderer;
+import lc.client.render.fabs.DefaultTileRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;

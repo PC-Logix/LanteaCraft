@@ -12,13 +12,13 @@ import lc.blocks.BlockLanteaDoor;
 import lc.blocks.BlockObelisk;
 import lc.client.openal.ClientSoundController;
 import lc.client.opengl.ParticleMachine;
-import lc.client.render.BlockDHDRenderer;
-import lc.client.render.BlockDoorRenderer;
-import lc.client.render.BlockObeliskRenderer;
-import lc.client.render.ItemDecoratorRenderer;
-import lc.client.render.TileDHDRenderer;
-import lc.client.render.TileDoorRenderer;
-import lc.client.render.TileStargateBaseRenderer;
+import lc.client.render.fabs.blocks.BlockDHDRenderer;
+import lc.client.render.fabs.blocks.BlockDoorRenderer;
+import lc.client.render.fabs.blocks.BlockObeliskRenderer;
+import lc.client.render.fabs.items.ItemDecoratorRenderer;
+import lc.client.render.fabs.tiles.TileDHDRenderer;
+import lc.client.render.fabs.tiles.TileDoorRenderer;
+import lc.client.render.fabs.tiles.TileStargateBaseRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
@@ -28,6 +28,7 @@ import lc.common.base.pipeline.LCItemRenderPipeline;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.impl.registry.DefinitionRegistry;
+import lc.common.network.LCClientNetworkForwarder;
 import lc.items.ItemDecorator;
 import lc.server.HintProviderServer;
 import lc.tiles.TileDHD;
@@ -53,6 +54,9 @@ public class HintProviderClient extends HintProviderServer {
 	private ParticleMachine particleMachine;
 
 	private ComponentConfig renderConfiguration;
+
+	/** The connection forwarder */
+	final LCClientNetworkForwarder forwarder = new LCClientNetworkForwarder();
 
 	/** Default constructor */
 	public HintProviderClient() {

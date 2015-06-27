@@ -1,19 +1,19 @@
-package lc.client.render;
+package lc.client.render.fabs.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
+import lc.client.render.fabs.DefaultBlockRenderer;
 import lc.common.base.LCBlockRenderer;
 import lc.common.configuration.xml.ComponentConfig;
 
 /**
- * Door block renderer implementation
+ * Obelisk block renderer implementation
  * 
  * @author AfterLifeLochie
  *
  */
-public class BlockDoorRenderer extends LCBlockRenderer {
+public class BlockObeliskRenderer extends LCBlockRenderer {
 
 	@Override
 	public void configure(ComponentConfig c) {
@@ -23,18 +23,19 @@ public class BlockDoorRenderer extends LCBlockRenderer {
 
 	@Override
 	public Class<? extends LCBlockRenderer> getParent() {
-		return null;
+		return DefaultBlockRenderer.class;
 	}
 
 	@Override
 	public boolean renderInventoryBlock(Block block, RenderBlocks renderer, int metadata) {
-		renderDefaultItem(new ItemStack(block, 1, metadata));
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
 	public boolean renderWorldBlock(Block block, RenderBlocks renderer, IBlockAccess world, int x, int y, int z) {
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

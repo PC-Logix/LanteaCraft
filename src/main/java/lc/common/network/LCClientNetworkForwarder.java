@@ -12,12 +12,16 @@ public class LCClientNetworkForwarder {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void forward(LCServerToServerEnvelope packet) {
+	public void handle(LCServerToServerEnvelope packet) {
 		if (!queue.contains(packet))
 			queue.add(packet);
 	}
 
-	public LCServerToServerEnvelope[] expand() {
+	public LCServerToServerEnvelope[] forward() {
 		return queue.toArray(new LCServerToServerEnvelope[0]);
+	}
+
+	public void unwind() {
+		queue.clear();
 	}
 }

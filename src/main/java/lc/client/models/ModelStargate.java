@@ -2,7 +2,7 @@ package lc.client.models;
 
 import static lc.client.opengl.GLHelper.pushTexVertex;
 import lc.client.opengl.BufferDisplayList;
-import lc.client.render.TileStargateBaseRenderer;
+import lc.client.render.fabs.tiles.TileStargateBaseRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.resource.ResourceMap;
 import lc.common.util.data.StateMap;
