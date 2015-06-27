@@ -55,7 +55,7 @@ public class RecipeRegistry implements IRecipeRegistry {
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
 		for (Entry<String, IRecipeDefinition> entry : definitionPool.entrySet()) {
 			entry.getValue().evaluateRecipe();
-			LCLog.info("Setting up recipe %s (type: %s)", entry.getValue().getName(), entry.getValue().getType());
+			LCLog.debug("Setting up recipe %s (type: %s)", entry.getValue().getName(), entry.getValue().getType());
 			IRecipeDefinition definition = entry.getValue();
 			RecipeType type = definition.getType();
 			if (type == RecipeType.SHAPELESS) {
