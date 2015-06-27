@@ -43,8 +43,16 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @ChannelHandler.Sharable
 public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPacket> {
-	private EnumMap<Side, FMLEmbeddedChannel> channels;
-	private LinkedList<Class<? extends LCPacket>> packets = new LinkedList<Class<? extends LCPacket>>();
+	protected EnumMap<Side, FMLEmbeddedChannel> channels;
+	protected LinkedList<Class<? extends LCPacket>> packets = new LinkedList<Class<? extends LCPacket>>();
+
+	public byte discriminator(Class<? extends LCPacket> packetClazz) {
+		return (byte) packets.indexOf(packetClazz);
+	}
+
+	public Class<? extends LCPacket> packetClass(int discriminator) {
+		return packets.get(discriminator);
+	}
 
 	/**
 	 * Register a packet
