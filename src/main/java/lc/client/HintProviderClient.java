@@ -19,6 +19,7 @@ import lc.client.render.fabs.items.ItemDecoratorRenderer;
 import lc.client.render.fabs.tiles.TileDHDRenderer;
 import lc.client.render.fabs.tiles.TileDoorRenderer;
 import lc.client.render.fabs.tiles.TileStargateBaseRenderer;
+import lc.client.render.fabs.tiles.TileTransportRingRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
@@ -34,6 +35,7 @@ import lc.server.HintProviderServer;
 import lc.tiles.TileDHD;
 import lc.tiles.TileLanteaDoor;
 import lc.tiles.TileStargateBase;
+import lc.tiles.TileTransportRing;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -82,6 +84,7 @@ public class HintProviderClient extends HintProviderServer {
 
 		DefinitionRegistry registry = (DefinitionRegistry) LCRuntime.runtime.registries().definitions();
 		registry.registerTileRenderer(TileStargateBase.class, TileStargateBaseRenderer.class);
+		registry.registerTileRenderer(TileTransportRing.class, TileTransportRingRenderer.class);
 		registry.registerItemRenderer(ItemDecorator.class, ItemDecoratorRenderer.class);
 
 		registry.registerBlockRenderer(BlockLanteaDoor.class, BlockDoorRenderer.class);
