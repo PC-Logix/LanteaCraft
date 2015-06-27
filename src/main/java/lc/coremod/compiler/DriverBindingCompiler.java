@@ -1,4 +1,4 @@
-package lc.coremod;
+package lc.coremod.compiler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import lc.api.components.DriverMap;
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers;
 import lc.common.LCLog;
+import lc.coremod.ASMAssist;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.ClassReader;
@@ -30,7 +31,7 @@ import org.objectweb.asm.tree.MethodNode;
  *
  * @author AfterLifeLochie
  */
-public class DriverBindingTransformer implements IClassTransformer {
+public class DriverBindingCompiler implements ICompilerFeature {
 
 	/** Cache of all byte[] implementations for drivers */
 	private HashMap<String, byte[]> driverImplCache = new HashMap<String, byte[]>();
@@ -161,7 +162,7 @@ public class DriverBindingTransformer implements IClassTransformer {
 	}
 
 	@Override
-	public byte[] transform(String name, String transformedName, byte[] basicClass) {
+	public byte[] compile(String name, String transformedName, byte[] basicClass) {
 		if (!name.startsWith("lc."))
 			return basicClass;
 

@@ -7,6 +7,7 @@ import java.util.List;
 
 import lc.BuildInfo;
 import lc.common.LCLog;
+import lc.coremod.compiler.ICompilerFeature;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 /**
@@ -18,20 +19,20 @@ import net.minecraft.launchwrapper.IClassTransformer;
 public class LCCoreTransformer implements IClassTransformer {
 
 	/**
-	 * List of all registered transformers
+	 * List of all registered compiler classes.
 	 */
-	private static final List<String> defs = new ArrayList<String>();
+	private static final List<String> compilerDefs = new ArrayList<String>();
 
 	static {
-		defs.add("lc.coremod.ClassOptionalTransformer");
-		defs.add("lc.coremod.HintInjectionTransformer");
-		defs.add("lc.coremod.DriverBindingTransformer");
+		compilerDefs.add("lc.coremod.compiler.ClassOptionalCompiler");
+		compilerDefs.add("lc.coremod.compiler.HintInjectionCompiler");
+		compilerDefs.add("lc.coremod.compiler.DriverBindingCompiler");
 	}
 
 	/**
-	 * Declaration of all registered transformers
+	 * Declaration of all registered compilers
 	 */
-	private final List<IClassTransformer> transformers = new ArrayList<IClassTransformer>();
+	private final List<ICompilerFeature> compilers = new ArrayList<ICompilerFeature>();
 
 	/**
 	 * Static to establish if the ASM hooking was completed at runtime
@@ -46,12 +47,12 @@ public class LCCoreTransformer implements IClassTransformer {
 	public LCCoreTransformer() {
 		LCCoreTransformer.ASM_SUCCESS = true;
 
-		for (String transformer : defs)
+		for (String compiler : compilerDefs)
 			try {
-				transformers.add((IClassTransformer) Class.forName(transformer).newInstance());
-				LCLog.debug("Instantiated transformer %s.", transformer);
+				compilers.add((ICompilerFeature) Class.forName(compiler).newInstance());
+				LCLog.debug("Instantiated compiler %s.", compiler);
 			} catch (Throwable e) {
-				LCLog.fatal("Could not instantiate transformer %s.", transformer, e);
+				LCLog.fatal("Could not instantiate compiler %s.", compiler, e);
 			}
 		if (BuildInfo.DEBUG)
 			try {
@@ -90,12 +91,12 @@ public class LCCoreTransformer implements IClassTransformer {
 		 * successful, put result into transformed and update result with the
 		 * last transformation.
 		 */
-		for (IClassTransformer transformer : transformers)
+		for (ICompilerFeature compiler : compilers)
 			try {
-				result = transformer.transform(name, transformedName, transformed);
+				result = compiler.compile(name, transformedName, transformed);
 				if (result == null)
-					LCLog.fatal("Transformer %s has corrupted class %s, ignoring the transformer's result.",
-							transformer, name);
+					LCLog.fatal("ICompilerFeature %s has corrupted class %s, ignoring the compiler result.", compiler,
+							name);
 				else {
 					transformed = result;
 					result = new byte[transformed.length];
@@ -103,8 +104,8 @@ public class LCCoreTransformer implements IClassTransformer {
 				}
 			} catch (Throwable e) {
 				LCLog.fatal(
-						"Transformer %s failed to transform class %s (exception raised), ignoring transformer result. ",
-						transformer, name, e);
+						"ICompilerFeature %s failed to recompile class %s (exception raised), ignoring compiler result.",
+						compiler, name, e);
 			}
 
 		if (BuildInfo.DEBUG && name.startsWith("lc."))

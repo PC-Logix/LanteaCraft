@@ -106,7 +106,11 @@ public class LCLog {
 	}
 
 	private static void writeAll(Logger l, PrintStream s, Level l0, String s0, Throwable z) {
-		writeLog(l, l0, s0, z);
+		if (l0 == Level.DEBUG || l0 == Level.TRACE) {
+			if (BuildInfo.DEBUG)
+				writeLog(l, l0, s0, z);
+		} else
+			writeLog(l, l0, s0, z);
 		writeStream(s, l0, s0, z);
 	}
 
@@ -169,8 +173,7 @@ public class LCLog {
 	 *            The log entry arguments
 	 */
 	public static void debug(Object... args) {
-		if (BuildInfo.DEBUG)
-			push(BuildInfo.DEBUG_MASQ ? Level.INFO : Level.DEBUG, args);
+		push(BuildInfo.DEBUG_MASQ ? Level.INFO : Level.DEBUG, args);
 	}
 
 	/**
@@ -180,8 +183,7 @@ public class LCLog {
 	 *            The log entry arguments
 	 */
 	public static void trace(Object... args) {
-		if (BuildInfo.DEBUG)
-			push(BuildInfo.DEBUG_MASQ ? Level.INFO : Level.TRACE, args);
+		push(BuildInfo.DEBUG_MASQ ? Level.INFO : Level.TRACE, args);
 	}
 
 	/**

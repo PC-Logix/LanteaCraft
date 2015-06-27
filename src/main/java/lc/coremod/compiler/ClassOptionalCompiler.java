@@ -1,9 +1,10 @@
-package lc.coremod;
+package lc.coremod.compiler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import lc.common.LCLog;
-import net.minecraft.launchwrapper.IClassTransformer;
+import lc.coremod.RuntimeAnnotation;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -19,13 +20,10 @@ import cpw.mods.fml.common.Loader;
  *
  * @author AfterLifeLochie
  */
-public class ClassOptionalTransformer implements IClassTransformer {
+public class ClassOptionalCompiler implements ICompilerFeature {
 
-	/**
-	 * Transforms a provided class.
-	 */
 	@Override
-	public byte[] transform(String name, String transformedName, byte[] basicClass) {
+	public byte[] compile(String name, String transformedName, byte[] basicClass) {
 		ClassNode classNode = new ClassNode();
 		ClassReader classReader = new ClassReader(basicClass);
 		classReader.accept(classNode, 0);

@@ -1,4 +1,4 @@
-package lc.coremod;
+package lc.coremod.compiler;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import lc.api.defs.HintProvider;
 import lc.common.LCLog;
-import net.minecraft.launchwrapper.IClassTransformer;
+import lc.coremod.ASMAssist;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -32,10 +32,10 @@ import cpw.mods.fml.relauncher.Side;
  *
  * @author AfterLifeLochie
  */
-public class HintInjectionTransformer implements IClassTransformer {
+public class HintInjectionCompiler implements ICompilerFeature {
 
 	@Override
-	public byte[] transform(String name, String transformedName, byte[] basicClass) {
+	public byte[] compile(String name, String transformedName, byte[] basicClass) {
 		if (!name.startsWith("lc."))
 			return basicClass;
 
