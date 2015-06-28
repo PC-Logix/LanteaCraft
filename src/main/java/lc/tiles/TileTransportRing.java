@@ -14,6 +14,7 @@ import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.jit.Tag;
+import lc.api.rendering.IBlockSkinnable;
 import lc.api.rendering.ITileRenderInfo;
 import lc.api.stargate.ITransportRingAccess;
 import lc.client.animation.Animation;
@@ -37,7 +38,8 @@ import lc.common.util.math.Trans3;
 import lc.common.util.math.Vector3;
 import lc.server.world.TeleportationHelper;
 
-public class TileTransportRing extends LCMultiblockTile implements ITransportRingAccess, ITileRenderInfo {
+public class TileTransportRing extends LCMultiblockTile implements ITransportRingAccess, ITileRenderInfo,
+		IBlockSkinnable {
 
 	public final static StructureConfiguration structure = new StructureConfiguration() {
 
@@ -82,7 +84,7 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 	}
 
 	private enum TransportRingCommandType {
-		TRANSPORT;
+		ENGAGE, TRANSPORT, DISENGAGE;
 	}
 
 	private class TransportRingCommand {
@@ -332,6 +334,31 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 	}
 
 	@Override
+	public Block getSkinBlock() {
+		return clientSkinBlock;
+	}
+
+	@Override
+	public int getSkinBlockMetadata() {
+		return clientSkinBlockMetadata;
+	}
+
+	@Override
+	public void setSkinBlock(Block block, int metadata) {
+		if (block == null) {
+			if (compound != null && compound.hasKey("skin-block")) {
+				compound.removeTag("skin-block");
+				markNbtDirty();
+			}
+		} else {
+			if (compound == null)
+				compound = new NBTTagCompound();
+			compound.setString("skin-block", BlockHelper.saveBlock(block, metadata));
+			markNbtDirty();
+		}
+	}
+
+	@Override
 	public ITileRenderInfo renderInfoTile() {
 		return (ITileRenderInfo) this;
 	}
@@ -354,7 +381,9 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void activate() {
-		commandQueue.add(new TransportRingCommand(TransportRingCommandType.TRANSPORT, 120));
+		commandQueue.add(new TransportRingCommand(TransportRingCommandType.ENGAGE, 50.0d));
+		commandQueue.add(new TransportRingCommand(TransportRingCommandType.TRANSPORT, 20.0d));
+		commandQueue.add(new TransportRingCommand(TransportRingCommandType.DISENGAGE, 50.0d));
 	}
 
 }
