@@ -164,6 +164,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private static final double stargateChevronMoveTime = 5.0d;
 	private static final double stargateConnectTimeout = 200.0d;
 	private static final double stargateEstablishedTimeout = 2400.0d;
+	private static final double stargateIrisSpeed = 40.0d;
 
 	private ArrayDeque<StargateCommand> commandQueue = new ArrayDeque<StargateCommand>();
 	private StargateCommand command;
@@ -501,9 +502,11 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				break;
 			case DISCONNECT:
 				if (currentConnection != null && currentConnection.state == StargateState.CONNECTED) {
-					currentConnection.closeConnection();
-					engagedGlyphs.clear();
-					doCommand = true;
+					boolean state = currentConnection.closeConnection(this);
+					if (state) {
+						engagedGlyphs.clear();
+						doCommand = true;
+					}
 				}
 				break;
 			case DISENGAGE:
@@ -816,14 +819,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public void openIris() {
-		// TODO Auto-generated method stub
-
+		commandQueue.add(new StargateCommand(StargateCommandType.OPENIRIS, stargateIrisSpeed));
 	}
 
 	@Override
 	public void closeIris() {
-		// TODO Auto-generated method stub
-
+		commandQueue.add(new StargateCommand(StargateCommandType.CLOSEIRIS, stargateIrisSpeed));
 	}
 
 	@Override

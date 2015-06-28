@@ -215,11 +215,20 @@ public class StargateConnection {
 		changeState(StargateState.DIALLING, maxTimeout);
 	}
 
-	/** Close the connection */
-	public void closeConnection() {
+	/**
+	 * Close the connection
+	 * 
+	 * @param source
+	 *            The source of the request
+	 */
+	public boolean closeConnection(TileStargateBase source) {
 		if (state != StargateState.CONNECTED)
-			return;
-		changeState(StargateState.DISCONNECTING, 60);
+			return false;
+		if (source == tileFrom) {
+			changeState(StargateState.DISCONNECTING, 60);
+			return true;
+		}
+		return false;
 	}
 
 	/** Shut down the connection */
