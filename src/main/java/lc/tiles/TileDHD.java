@@ -11,6 +11,7 @@ import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.audio.channel.ChannelDescriptor;
+import lc.api.rendering.ITileRenderInfo;
 import lc.api.stargate.IDHDAccess;
 import lc.api.stargate.StargateType;
 import lc.blocks.BlockDHD;
@@ -21,6 +22,7 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCDHDPacket;
 import lc.common.util.ScanningHelper;
+import lc.common.util.data.StateMap;
 import lc.common.util.math.DimensionPos;
 
 public class TileDHD extends LCTile implements IDHDAccess {
@@ -112,6 +114,11 @@ public class TileDHD extends LCTile implements IDHDAccess {
 	@Override
 	public String[] debug(Side side) {
 		return new String[0];
+	}
+
+	@Override
+	public ITileRenderInfo renderInfoTile() {
+		return null;
 	}
 
 	@Override

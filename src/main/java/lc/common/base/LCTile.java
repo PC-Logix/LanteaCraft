@@ -13,6 +13,9 @@ import lc.api.audio.streaming.ISound;
 import lc.api.audio.streaming.ISoundProperties;
 import lc.api.audio.streaming.ISoundServer;
 import lc.api.event.IBlockEventHandler;
+import lc.api.rendering.IBlockRenderInfo;
+import lc.api.rendering.IEntityRenderInfo;
+import lc.api.rendering.IRenderInfo;
 import lc.common.LCLog;
 import lc.common.configuration.IConfigure;
 import lc.common.network.IPacketHandler;
@@ -37,7 +40,8 @@ import cpw.mods.fml.relauncher.Side;
  *
  * @author AfterLifeLochie
  */
-public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler, IBlockEventHandler, IConfigure {
+public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler, IBlockEventHandler, IRenderInfo,
+		IConfigure {
 
 	private static HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>> callbacks = new HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>>();
 	private static HashMap<Class<? extends LCTile>, ArrayList<ChannelDescriptor>> channels = new HashMap<Class<? extends LCTile>, ArrayList<ChannelDescriptor>>();
@@ -621,6 +625,14 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	public Packet getDescriptionPacket() {
 		if (worldObj.isRemote)
 			LCRuntime.runtime.network().sendToServer(new LCClientUpdate(new DimensionPos(this)));
+		return null;
+	}
+
+	public IEntityRenderInfo renderInfoEntity() {
+		return null;
+	}
+
+	public IBlockRenderInfo renderInfoBlock() {
 		return null;
 	}
 

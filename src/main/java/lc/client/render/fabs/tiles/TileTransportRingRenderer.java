@@ -2,11 +2,16 @@ package lc.client.render.fabs.tiles;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import lc.client.animation.Animation;
 import lc.client.models.ModelTransportRing;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.configuration.xml.ComponentConfig;
+import lc.common.resource.ResourceAccess;
+import lc.common.util.data.StateMap;
+import lc.tiles.TileTransportRing;
 
 public class TileTransportRingRenderer extends LCTileRenderer {
 
@@ -33,8 +38,26 @@ public class TileTransportRingRenderer extends LCTileRenderer {
 			return false;
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glTranslated(x, y, z);
-		ModelTransportRing.$.prepareAndRender();
+		GL11.glTranslated(x, y + 1.0f, z);
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(ResourceAccess.getNamedResource(ResourceAccess
+				.formatResourceName("textures/models/transport_rings_${TEX_QUALITY}.png")));
+
+		TileTransportRing ring = (TileTransportRing) tile;
+
+		StateMap state = ring.renderInfoTile().tileRenderState();
+		Animation animation = (Animation) ring.renderInfoTile().tileAnimation();
+		if (animation != null) {
+			Double frame = ring.renderInfoTile().tileAnimationProgress() + (double) partialTickTime;
+			if (!animation.finished(frame))
+				animation.sampleProperties(state, frame);
+		}
+
+		for (int i = 0; i < 5; i++) {
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0.0f, 0.5f * i, 0.0f);
+			ModelTransportRing.$.prepareAndRender();
+			GL11.glPopMatrix();
+		}
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 		return true;

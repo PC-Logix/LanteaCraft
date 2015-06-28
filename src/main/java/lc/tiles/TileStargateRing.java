@@ -3,6 +3,7 @@ package lc.tiles;
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
+import lc.api.rendering.ITileRenderInfo;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.StructureConfiguration;
 import lc.common.configuration.xml.ComponentConfig;
@@ -10,6 +11,7 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.util.data.ImmutablePair;
+import lc.common.util.data.StateMap;
 import lc.common.util.game.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -100,6 +102,11 @@ public class TileStargateRing extends LCMultiblockTile implements IBlockSkinnabl
 				String.format("Multiblock: %s", getState()),
 				String.format("Ghost block: %s", (clientSkinBlock != null) ? clientSkinBlock.getUnlocalizedName()
 						: "null"), String.format("Ghost metadata: %s", clientSkinBlockMetadata) };
+	}
+
+	@Override
+	public ITileRenderInfo renderInfoTile() {
+		return null;
 	}
 
 	@Override

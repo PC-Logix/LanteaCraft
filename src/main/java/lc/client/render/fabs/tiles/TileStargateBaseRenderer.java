@@ -76,10 +76,10 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 			if (base.getState() == MultiblockState.FORMED) {
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5d, y + 3.5d, z + 0.5d);
-				StateMap state = base.modelState();
-				Animation animation = base.getAnimation();
+				StateMap state = base.renderInfoTile().tileRenderState();
+				Animation animation = (Animation) base.renderInfoTile().tileAnimation();
 				if (animation != null) {
-					Double frame = base.getAnimationProgress() + (double) partialTickTime;
+					Double frame = base.renderInfoTile().tileAnimationProgress() + (double) partialTickTime;
 					if (!animation.finished(frame))
 						animation.sampleProperties(state, frame);
 				}

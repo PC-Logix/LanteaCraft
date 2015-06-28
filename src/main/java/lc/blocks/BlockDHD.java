@@ -123,7 +123,7 @@ public class BlockDHD extends LCBlock {
 	}
 
 	@Override
-	public IBlockRenderInfo block() {
+	public IBlockRenderInfo renderInfoBlock() {
 		return BlockDHD.renderInfo;
 	}
 

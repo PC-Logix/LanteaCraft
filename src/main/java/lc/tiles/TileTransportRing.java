@@ -14,6 +14,7 @@ import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.jit.Tag;
+import lc.api.rendering.ITileRenderInfo;
 import lc.api.stargate.ITransportRingAccess;
 import lc.client.animation.Animation;
 import lc.common.LCLog;
@@ -36,7 +37,7 @@ import lc.common.util.math.Trans3;
 import lc.common.util.math.Vector3;
 import lc.server.world.TeleportationHelper;
 
-public class TileTransportRing extends LCMultiblockTile implements ITransportRingAccess {
+public class TileTransportRing extends LCMultiblockTile implements ITransportRingAccess, ITileRenderInfo {
 
 	public final static StructureConfiguration structure = new StructureConfiguration() {
 
@@ -182,13 +183,13 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 				(clientAnimation != null) ? clientAnimation.toString() : "[none]", (next != null) ? next.toString()
 						: "[none]");
 		if (clientAnimation != null) {
-			clientAnimation.sampleProperties(clientRenderState);
+			clientAnimation.sampleProperties(tileRenderState());
 			if (clientAnimation.doAfter != null)
 				clientAnimation.doAfter.run(this);
 		}
 		clientAnimation = next;
 		if (clientAnimation != null && clientAnimation.requiresResampling())
-			clientAnimation.resampleProperties(clientRenderState);
+			clientAnimation.resampleProperties(tileRenderState());
 		if (clientAnimation != null && clientAnimation.doBefore != null)
 			clientAnimation.doBefore.run(this);
 		clientAnimationCounter = 0.0d;
@@ -328,6 +329,26 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 	@Override
 	public String[] debug(Side side) {
 		return new String[] { String.format("Multiblock: %s", getState()) };
+	}
+
+	@Override
+	public ITileRenderInfo renderInfoTile() {
+		return (ITileRenderInfo) this;
+	}
+
+	@Override
+	public StateMap tileRenderState() {
+		return clientRenderState;
+	}
+
+	@Override
+	public Object tileAnimation() {
+		return clientAnimation;
+	}
+
+	@Override
+	public double tileAnimationProgress() {
+		return clientAnimationCounter;
 	}
 
 	@Override

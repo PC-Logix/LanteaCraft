@@ -15,15 +15,15 @@ public interface IRenderInfo {
 	/**
 	 * @return A block rendering info provider
 	 */
-	public IBlockRenderInfo block();
+	public IBlockRenderInfo renderInfoBlock();
 
 	/**
 	 * @return A tile rendering info provider
 	 */
-	public ITileRenderInfo tile();
+	public ITileRenderInfo renderInfoTile();
 
 	/**
 	 * @return An entity rendering info provider
 	 */
-	public IEntityRenderInfo entity();
+	public IEntityRenderInfo renderInfoEntity();
 }

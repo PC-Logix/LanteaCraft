@@ -246,17 +246,17 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo, ICo
 	};
 
 	@Override
-	public IBlockRenderInfo block() {
+	public IBlockRenderInfo renderInfoBlock() {
 		return null;
 	}
 
 	@Override
-	public ITileRenderInfo tile() {
+	public ITileRenderInfo renderInfoTile() {
 		return null;
 	}
 
 	@Override
-	public IEntityRenderInfo entity() {
+	public IEntityRenderInfo renderInfoEntity() {
 		return null;
 	}
 

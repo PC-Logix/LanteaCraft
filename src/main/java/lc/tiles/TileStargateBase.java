@@ -12,6 +12,7 @@ import lc.api.components.IntegrationType;
 import lc.api.jit.Tag;
 import lc.api.jit.DeviceDrivers.DriverCandidate;
 import lc.api.rendering.IBlockSkinnable;
+import lc.api.rendering.ITileRenderInfo;
 import lc.api.stargate.IStargateAccess;
 import lc.api.stargate.IrisState;
 import lc.api.stargate.IrisType;
@@ -72,7 +73,7 @@ import cpw.mods.fml.relauncher.Side;
  *
  */
 @DriverCandidate(types = { IntegrationType.POWER, IntegrationType.COMPUTERS })
-public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnable, IStargateAccess {
+public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnable, IStargateAccess, ITileRenderInfo {
 
 	static {
 		registerChannel(TileStargateBase.class, new ChannelDescriptor("spin", "stargate/milkyway/milkyway_roll.ogg",
@@ -279,8 +280,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		switch (command.type) {
 		case CONNECT:
 			for (int i = 0; i < 9; i++) {
-				clientRenderState.set("chevron-dist-" + i, 1.0d / 8.0d);
-				clientRenderState.set("chevron-light-" + i, 0.5d);
+				tileRenderState().set("chevron-dist-" + i, 1.0d / 8.0d);
+				tileRenderState().set("chevron-light-" + i, 0.5d);
 			}
 			break;
 		case DISCONNECT:
@@ -307,8 +308,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			double aangle = MathUtils.normaliseAngle(symbolRotation);
 			clientAnimationQueue.push(new RingSpinAnimation(stargateSpinTime, 0.0d, aangle, true));
 			for (int i = 0; i < clientEngagedGlyphs.size() - 1; i++) {
-				clientRenderState.set("chevron-dist-" + clientChevronQueue[i], 1.0d / 8.0d);
-				clientRenderState.set("chevron-light-" + clientChevronQueue[i], 0.5d);
+				tileRenderState().set("chevron-dist-" + clientChevronQueue[i], 1.0d / 8.0d);
+				tileRenderState().set("chevron-light-" + clientChevronQueue[i], 0.5d);
 			}
 			break;
 		case CLOSEIRIS:
@@ -340,7 +341,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		if (updated) {
 			switch (clientStargateState) {
 			case CONNECTED:
-				clientRenderState.set("event-horizon", true);
+				tileRenderState().set("event-horizon", true);
 				break;
 			case DIALLING:
 				if (!clientDiallingIsSource) {
@@ -351,12 +352,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				}
 				break;
 			case DISCONNECTING:
-				clientRenderState.set("event-horizon", false);
+				tileRenderState().set("event-horizon", false);
 				break;
 			case FAILED:
 				break;
 			case IDLE:
-				clientRenderState.set("event-horizon", false);
+				tileRenderState().set("event-horizon", false);
 				break;
 			default:
 				break;
@@ -399,13 +400,13 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				(clientAnimation != null) ? clientAnimation.toString() : "[none]", (next != null) ? next.toString()
 						: "[none]");
 		if (clientAnimation != null) {
-			clientAnimation.sampleProperties(clientRenderState);
+			clientAnimation.sampleProperties(tileRenderState());
 			if (clientAnimation.doAfter != null)
 				clientAnimation.doAfter.run(this);
 		}
 		clientAnimation = next;
 		if (clientAnimation != null && clientAnimation.requiresResampling())
-			clientAnimation.resampleProperties(clientRenderState);
+			clientAnimation.resampleProperties(tileRenderState());
 		if (clientAnimation != null && clientAnimation.doBefore != null)
 			clientAnimation.doBefore.run(this);
 		clientAnimationCounter = 0.0d;
@@ -561,14 +562,6 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		return structure.mapType(xCoord, yCoord, zCoord, 2, rotation);
 	}
 
-	public Animation getAnimation() {
-		return clientAnimation;
-	}
-
-	public double getAnimationProgress() {
-		return clientAnimationCounter;
-	}
-
 	public double[][][] getGfxGrid() {
 		if (clientGfxGrid == null) {
 			int m = 10, n = 38;
@@ -671,10 +664,6 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 	}
 
-	public StateMap modelState() {
-		return clientRenderState;
-	}
-
 	public boolean hasConnectionState() {
 		if (!getWorldObj().isRemote)
 			return currentConnection != null;
@@ -697,6 +686,26 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					currentConnection.stateTimeout, currentConnection.tileFrom == this);
 		}
 		sendPacketToClients(state);
+	}
+
+	@Override
+	public ITileRenderInfo renderInfoTile() {
+		return (ITileRenderInfo) this;
+	}
+
+	@Override
+	public StateMap tileRenderState() {
+		return clientRenderState;
+	}
+
+	@Override
+	public Object tileAnimation() {
+		return clientAnimation;
+	}
+
+	@Override
+	public double tileAnimationProgress() {
+		return clientAnimationCounter;
 	}
 
 	@Override

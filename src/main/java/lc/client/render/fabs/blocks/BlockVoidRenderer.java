@@ -32,7 +32,7 @@ public abstract class BlockVoidRenderer extends LCBlockRenderer {
 		if (!(block instanceof LCBlock))
 			return false;
 		LCBlock lcb = (LCBlock) block;
-		IBlockRenderInfo info = lcb.block();
+		IBlockRenderInfo info = lcb.renderInfoBlock();
 		if (info == null)
 			return false;
 		return info.doProperty("noRender", world, world.getBlockMetadata(x, y, z), x, y, z, false);

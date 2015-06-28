@@ -2,9 +2,11 @@ package lc.tiles;
 
 import net.minecraft.inventory.IInventory;
 import cpw.mods.fml.relauncher.Side;
+import lc.api.rendering.ITileRenderInfo;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.StructureConfiguration;
 import lc.common.configuration.xml.ComponentConfig;
+import lc.common.util.data.StateMap;
 
 public class TileFrame extends LCMultiblockTile {
 
@@ -55,6 +57,11 @@ public class TileFrame extends LCMultiblockTile {
 	@Override
 	public String[] debug(Side side) {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ITileRenderInfo renderInfoTile() {
 		return null;
 	}
 

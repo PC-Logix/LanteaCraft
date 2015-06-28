@@ -47,7 +47,7 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		LCBlock theBlock = (LCBlock) block;
 		IBlockRenderInfo info = null;
 		if (theBlock instanceof IRenderInfo)
-			info = ((IRenderInfo) theBlock).block();
+			info = ((IRenderInfo) theBlock).renderInfoBlock();
 		Trans3 trans = new Trans3(0.0, 0.0, 0.0);
 		trans = preRenderInInventory(theBlock, info, metadata, renderer, trans);
 		if (info == null || info.doInventoryRender(metadata))
@@ -63,7 +63,7 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		LCBlock theBlock = (LCBlock) block;
 		IBlockRenderInfo info = null;
 		if (theBlock instanceof IRenderInfo)
-			info = ((IRenderInfo) theBlock).block();
+			info = ((IRenderInfo) theBlock).renderInfoBlock();
 		Trans3 trans = new Trans3(x + 0.5, y + 0.5, z + 0.5);
 		trans = preRenderInWorld(theBlock, info, world, renderer, trans, x, y, z);
 		boolean flag = true;

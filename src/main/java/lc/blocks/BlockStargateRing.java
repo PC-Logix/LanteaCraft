@@ -129,7 +129,7 @@ public class BlockStargateRing extends LCBlock {
 	}
 
 	@Override
-	public IBlockRenderInfo block() {
+	public IBlockRenderInfo renderInfoBlock() {
 		return BlockStargateRing.renderInfo;
 	}
 

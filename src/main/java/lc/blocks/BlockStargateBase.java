@@ -129,7 +129,7 @@ public class BlockStargateBase extends LCBlock {
 	}
 
 	@Override
-	public IBlockRenderInfo block() {
+	public IBlockRenderInfo renderInfoBlock() {
 		return BlockStargateBase.renderInfo;
 	}
 

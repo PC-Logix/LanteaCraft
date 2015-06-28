@@ -4,6 +4,8 @@
  */
 package lc.api.rendering;
 
+import lc.common.util.data.StateMap;
+
 /**
  * Contract interface for tile entity rendering information providers.
  *
@@ -12,6 +14,15 @@ package lc.api.rendering;
  */
 public interface ITileRenderInfo {
 
-	/* No contract elements */
+	/**
+	 * Get the rendering state map.
+	 * 
+	 * @return The state map.
+	 */
+	public StateMap tileRenderState();
+
+	public Object tileAnimation();
+
+	public double tileAnimationProgress();
 
 }

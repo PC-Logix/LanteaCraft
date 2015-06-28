@@ -7,15 +7,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
+import lc.api.rendering.ITileRenderInfo;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
+import lc.common.util.data.StateMap;
 
-public class TileLanteaDoor extends LCTile {
+public class TileLanteaDoor extends LCTile implements ITileRenderInfo {
 
+	/** TODO: Port property */
 	public boolean clientLastState;
+	/** TODO: Port property */
 	public int clientAnimation;
 
 	@Override
@@ -79,6 +83,29 @@ public class TileLanteaDoor extends LCTile {
 						((compound == null || !compound.hasKey("isOpen")) ? "??" : compound.getBoolean("isOpen"))),
 				String.format("neighborCount: %s", ((compound == null || !compound.hasKey("neighborCount")) ? "??"
 						: compound.getInteger("neighborCount"))) };
+	}
+
+	@Override
+	public ITileRenderInfo renderInfoTile() {
+		return (ITileRenderInfo) this;
+	}
+
+	@Override
+	public StateMap tileRenderState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object tileAnimation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double tileAnimationProgress() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	private void recalculateState() {
