@@ -65,8 +65,7 @@ public class DriverBindingCompiler implements ICompilerFeature {
 		if (annotations == null)
 			return basicClass;
 
-		AnnotationNode providerNode = ASMAssist.findAnnotation(sourceNode,
-				"Llc/api/jit/DeviceDrivers$DriverProvider;");
+		AnnotationNode providerNode = ASMAssist.findAnnotation(sourceNode, "Llc/api/jit/DeviceDrivers$DriverProvider;");
 		if (providerNode != null) {
 			LCLog.debug("Found definition driver class %s.", name);
 			driverImplCache.put(name, basicClass.clone());
@@ -80,8 +79,7 @@ public class DriverBindingCompiler implements ICompilerFeature {
 
 		ArrayList<IntegrationType> types = new ArrayList<IntegrationType>();
 		HashMap<String, String> events = new HashMap<String, String>();
-		ArrayList<Object> typeList = ASMAssist
-				.findValue(candidateNode, "types");
+		ArrayList<Object> typeList = ASMAssist.findValue(candidateNode, "types");
 		for (Object typeName : typeList)
 			if (typeName instanceof String[]) {
 				String[] params = (String[]) typeName;
@@ -95,27 +93,22 @@ public class DriverBindingCompiler implements ICompilerFeature {
 		for (IntegrationType type : types) {
 			LCLog.debug("Adding drivers for type %s on class %s.", type, name);
 			for (DriverMap mapping : DriverMap.mapOf(type)) {
-				LCLog.debug("Binding mapping %s (mod %s)", mapping,
-						mapping.modName);
+				LCLog.debug("Binding mapping %s (mod %s)", mapping, mapping.modName);
 				byte[] driverSrc = findClass(mapping.className);
 				if (driverSrc == null) {
-					LCLog.warn(
-							"Can't find class %s for driver %s, skipping...",
-							mapping.className, mapping);
+					LCLog.warn("Can't find class %s for driver %s, skipping...", mapping.className, mapping);
 					continue;
 				}
 				try {
 					mapping.trySpinUpDriver();
 				} catch (Exception failure) {
-					LCLog.fatal(
-							"Failed to spin up driver manager class %s for driver %s. Problems may occur.",
+					LCLog.fatal("Failed to spin up driver manager class %s for driver %s. Problems may occur.",
 							mapping.managerClassName, mapping);
 				}
 				ClassNode driverClass = new ClassNode();
 				ClassReader reader = new ClassReader(driverSrc);
 				reader.accept(driverClass, 0);
-				LCCompilerException[] errors = ClassMerger.mergeClasses(
-						driverClass, sourceNode, false);
+				LCCompilerException[] errors = ClassMerger.mergeClasses(driverClass, sourceNode, false);
 				if (errors != null && errors.length != 0) {
 					LCLog.fatal("Problems encountered when recompiling class.");
 					for (LCCompilerException exception : errors)
@@ -125,8 +118,7 @@ public class DriverBindingCompiler implements ICompilerFeature {
 		}
 
 		for (MethodNode method : sourceNode.methods) {
-			AnnotationNode callback = ASMAssist.findAnnotation(method,
-					"Llc/api/jit/DeviceDrivers$DriverRTCallback;");
+			AnnotationNode callback = ASMAssist.findAnnotation(method, "Llc/api/jit/DeviceDrivers$DriverRTCallback;");
 			if (callback != null) {
 				String callMethod = ASMAssist.findValue(callback, "event");
 				if (callMethod != null)
@@ -148,29 +140,20 @@ public class DriverBindingCompiler implements ICompilerFeature {
 				}
 			}
 
-			MethodNode classInitializer = new MethodNode(Opcodes.ACC_STATIC,
-					"<clinit>", Type.getMethodDescriptor(Type.VOID_TYPE,
-							new Type[0]), null, null);
+			MethodNode classInitializer = new MethodNode(Opcodes.ACC_STATIC, "<clinit>", Type.getMethodDescriptor(
+					Type.VOID_TYPE, new Type[0]), null, null);
 			sourceNode.methods.add(0, classInitializer);
 			classInitializer.visitCode();
 			for (Entry<String, String> eventMapItem : events.entrySet()) {
-				classInitializer.visitLdcInsn(Type.getObjectType(name.replace(
-						".", "/")));
+				classInitializer.visitLdcInsn(Type.getObjectType(name.replace(".", "/")));
 				classInitializer.visitLdcInsn(eventMapItem.getKey());
 				classInitializer.visitLdcInsn(eventMapItem.getValue());
-				classInitializer
-						.visitMethodInsn(
-								Opcodes.INVOKESTATIC,
-								"lc/common/base/LCTile",
-								"registerCallback",
-								"(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)V",
-								false);
+				classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, "lc/common/base/LCTile", "registerCallback",
+						"(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)V", false);
 			}
 			if (hasUserInit)
-				classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC,
-						sourceNode.name, "user_clinit",
-						Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]),
-						false);
+				classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC, sourceNode.name, "user_clinit",
+						Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]), false);
 			classInitializer.visitInsn(Opcodes.RETURN);
 			classInitializer.visitMaxs(3, 0);
 			classInitializer.visitEnd();

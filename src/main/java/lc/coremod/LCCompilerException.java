@@ -6,24 +6,23 @@ public class LCCompilerException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
-	public LCCompilerException(String arg0) {
-		super(arg0);
+	public LCCompilerException(String message) {
+		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public LCCompilerException(Throwable arg0) {
-		super(arg0);
+	public LCCompilerException(Throwable cause) {
+		super(cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public LCCompilerException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
+	public LCCompilerException(String message, Throwable cause) {
+		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public LCCompilerException(String arg0, Throwable arg1, boolean arg2,
-			boolean arg3) {
-		super(arg0, arg1, arg2, arg3);
+	public LCCompilerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 

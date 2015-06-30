@@ -29,8 +29,7 @@ public class ASMAssist {
 	 *            The annotation class name
 	 * @return The matching annotation node, if any
 	 */
-	public static AnnotationNode findAnnotation(MethodNode method,
-			String className) {
+	public static AnnotationNode findAnnotation(MethodNode method, String className) {
 		return findAnnotation(method.visibleAnnotations, className);
 	}
 
@@ -43,8 +42,7 @@ public class ASMAssist {
 	 *            The annotation class name
 	 * @return The matching annotation node, if any
 	 */
-	public static AnnotationNode findAnnotation(ClassNode clazz,
-			String className) {
+	public static AnnotationNode findAnnotation(ClassNode clazz, String className) {
 		return findAnnotation(clazz.visibleAnnotations, className);
 	}
 
@@ -57,8 +55,7 @@ public class ASMAssist {
 	 *            The annotation class name
 	 * @return The matching annotation node, if any
 	 */
-	public static AnnotationNode findAnnotation(FieldNode field,
-			String className) {
+	public static AnnotationNode findAnnotation(FieldNode field, String className) {
 		return findAnnotation(field.visibleAnnotations, className);
 	}
 
@@ -71,8 +68,7 @@ public class ASMAssist {
 	 *            The annotation class name
 	 * @return The matching annotation node, if any
 	 */
-	public static AnnotationNode findAnnotation(List<AnnotationNode> nodes,
-			String className) {
+	public static AnnotationNode findAnnotation(List<AnnotationNode> nodes, String className) {
 		if (nodes == null || nodes.size() == 0)
 			return null;
 		Iterator<AnnotationNode> iq = nodes.iterator();
@@ -122,10 +118,9 @@ public class ASMAssist {
 	public static String signature(FieldNode aField) {
 		return signature(aField.name, aField.desc);
 	}
-	
+
 	public static String signature(String aName, String aDesc) {
-		return  new StringBuilder().append(aName).append(aDesc)
-				.toString(); 
+		return new StringBuilder().append(aName).append(aDesc).toString();
 	}
 
 	public static MethodNode[] findMethod(ClassNode clazz, String name) {
@@ -137,18 +132,18 @@ public class ASMAssist {
 		}
 		return result.toArray(new MethodNode[0]);
 	}
-	
+
 	public static MethodNode findMethod(ClassNode clazz, String name, String desc) {
 		MethodNode result = null;
 		if (clazz.methods.size() != 0) {
 			String signature = ASMAssist.signature(name, desc);
-			for (MethodNode method : clazz.methods) 
+			for (MethodNode method : clazz.methods)
 				if (ASMAssist.signature(method).equals(signature))
 					result = method;
 		}
 		return result;
 	}
-	
+
 	public static FieldNode findField(ClassNode clazz, String name) {
 		FieldNode result = null;
 		if (clazz.fields.size() != 0) {
@@ -158,7 +153,7 @@ public class ASMAssist {
 		}
 		return result;
 	}
-	
+
 	public static boolean isMethodEmpty(MethodNode method) {
 		if (method.instructions == null || method.instructions.size() == 0)
 			return true;
@@ -171,5 +166,5 @@ public class ASMAssist {
 		}
 		return true;
 	}
-	
+
 }
