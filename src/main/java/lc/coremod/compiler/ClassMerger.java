@@ -84,7 +84,34 @@ public class ClassMerger {
 
 	private static void performMerge(ClassNode source, ClassNode dest,
 			List<LCCompilerException> errors) {
-
+		if (source.interfaces != null)
+			for (String iface : source.interfaces) {
+				if (dest.interfaces == null)
+					dest.interfaces = new ArrayList<String>();
+				if (!hasDuplicateInterface(iface, dest))
+					dest.interfaces.add(iface);
+			}
+		if (source.methods != null)
+			for (MethodNode method : source.methods)
+				if (!hasDuplicateMethod(method, dest)) {
+					dest.methods
+							.add(remapMethod(source.name, dest.name, method));
+				} else
+					errors.add(new LCCompilerException(
+							String.format(
+									"Skipping method %s#%s, already exists in class %s.",
+									source.name, ASMAssist.signature(method),
+									dest.name)));
+		if (source.fields != null)
+			for (FieldNode field : source.fields)
+				if (!hasDuplicateField(field, dest))
+					dest.fields.add(remapField(source.name, dest.name, field));
+				else
+					errors.add(new LCCompilerException(
+							String.format(
+									"Skipping field %s#%s, already exists in class %s.",
+									source.name, ASMAssist.signature(field),
+									dest.name)));
 	}
 
 	private static MethodNode remapMethod(String sourceName, String destName,

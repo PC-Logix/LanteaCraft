@@ -10,18 +10,14 @@ import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers;
 import lc.common.LCLog;
 import lc.coremod.ASMAssist;
+import lc.coremod.LCCompilerException;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 /**
@@ -61,14 +57,15 @@ public class DriverBindingCompiler implements ICompilerFeature {
 		if (!name.startsWith("lc."))
 			return basicClass;
 
-		ClassNode classNode = new ClassNode();
+		ClassNode sourceNode = new ClassNode();
 		ClassReader classReader = new ClassReader(basicClass);
-		classReader.accept(classNode, 0);
-		List<AnnotationNode> annotations = classNode.visibleAnnotations;
+		classReader.accept(sourceNode, 0);
+		/* If there are no annotations, there is nothing useful to do */
+		List<AnnotationNode> annotations = sourceNode.visibleAnnotations;
 		if (annotations == null)
 			return basicClass;
 
-		AnnotationNode providerNode = ASMAssist.findAnnotation(classNode,
+		AnnotationNode providerNode = ASMAssist.findAnnotation(sourceNode,
 				"Llc/api/jit/DeviceDrivers$DriverProvider;");
 		if (providerNode != null) {
 			LCLog.debug("Found definition driver class %s.", name);
@@ -76,7 +73,7 @@ public class DriverBindingCompiler implements ICompilerFeature {
 			return basicClass;
 		}
 
-		AnnotationNode candidateNode = ASMAssist.findAnnotation(classNode,
+		AnnotationNode candidateNode = ASMAssist.findAnnotation(sourceNode,
 				"Llc/api/jit/DeviceDrivers$DriverCandidate;");
 		if (candidateNode == null)
 			return basicClass;
@@ -95,7 +92,6 @@ public class DriverBindingCompiler implements ICompilerFeature {
 				}
 			}
 
-		int count = 0;
 		for (IntegrationType type : types) {
 			LCLog.debug("Adding drivers for type %s on class %s.", type, name);
 			for (DriverMap mapping : DriverMap.mapOf(type)) {
@@ -118,59 +114,30 @@ public class DriverBindingCompiler implements ICompilerFeature {
 				ClassNode driverClass = new ClassNode();
 				ClassReader reader = new ClassReader(driverSrc);
 				reader.accept(driverClass, 0);
-				if (driverClass.interfaces != null)
-					for (String iface : driverClass.interfaces) {
-						if (classNode.interfaces == null)
-							classNode.interfaces = new ArrayList<String>();
-						/**
-						 * FIXME: BEFORE adding interfaces, we need to confirm
-						 * that we actually have the required methods and that
-						 * their signatures match. It is entirely possible that
-						 * a Driver could contain (A, B, C) and the currently
-						 * defined API version by the owner mod is (A, ZZZ, C);
-						 * given ZZZ is a modified signature. This would result
-						 * in a compiling failure, which is greatly undesirable.
-						 */
-						if (!classNode.interfaces.contains(iface))
-							classNode.interfaces.add(iface);
-					}
-				if (driverClass.methods != null)
-					for (MethodNode method : driverClass.methods)
-						if (!hasDuplicateMethod(method, classNode)) {
-							classNode.methods.add(remapMethod(driverClass.name,
-									classNode.name, method));
-							AnnotationNode callback = ASMAssist
-									.findAnnotation(method,
-											"Llc/api/jit/DeviceDrivers$DriverRTCallback;");
-							if (callback != null) {
-								String callMethod = ASMAssist.findValue(
-										callback, "event");
-								if (callMethod != null)
-									events.put(method.name, callMethod);
-							}
-						} else
-							LCLog.warn(
-									"Skipping method %s#%s, already exists in class %s.",
-									driverClass.name,
-									ASMAssist.signature(method), classNode.name);
-				if (driverClass.fields != null)
-					for (FieldNode field : driverClass.fields)
-						if (!hasDuplicateField(field, classNode))
-							classNode.fields.add(remapField(driverClass.name,
-									classNode.name, field));
-						else
-							LCLog.warn(
-									"Skipping field %s#%s, already exists in class %s.",
-									driverClass.name,
-									ASMAssist.signature(field), classNode.name);
-				count++;
+				LCCompilerException[] errors = ClassMerger.mergeClasses(
+						driverClass, sourceNode, false);
+				if (errors != null && errors.length != 0) {
+					LCLog.fatal("Problems encountered when recompiling class.");
+					for (LCCompilerException exception : errors)
+						LCLog.fatal(exception);
+				}
+			}
+		}
+
+		for (MethodNode method : sourceNode.methods) {
+			AnnotationNode callback = ASMAssist.findAnnotation(method,
+					"Llc/api/jit/DeviceDrivers$DriverRTCallback;");
+			if (callback != null) {
+				String callMethod = ASMAssist.findValue(callback, "event");
+				if (callMethod != null)
+					events.put(method.name, callMethod);
 			}
 		}
 
 		if (events.size() > 0) {
 			LCLog.debug("Adding %s event hooks.", events.size());
 			boolean hasUserInit = false;
-			for (Object o : classNode.methods) {
+			for (Object o : sourceNode.methods) {
 				MethodNode method = (MethodNode) o;
 				if (method.name.equals("<clinit>")) {
 					LCLog.debug("Moving user's <clinit> block to user_clinit...");
@@ -184,7 +151,7 @@ public class DriverBindingCompiler implements ICompilerFeature {
 			MethodNode classInitializer = new MethodNode(Opcodes.ACC_STATIC,
 					"<clinit>", Type.getMethodDescriptor(Type.VOID_TYPE,
 							new Type[0]), null, null);
-			classNode.methods.add(0, classInitializer);
+			sourceNode.methods.add(0, classInitializer);
 			classInitializer.visitCode();
 			for (Entry<String, String> eventMapItem : events.entrySet()) {
 				classInitializer.visitLdcInsn(Type.getObjectType(name.replace(
@@ -201,7 +168,7 @@ public class DriverBindingCompiler implements ICompilerFeature {
 			}
 			if (hasUserInit)
 				classInitializer.visitMethodInsn(Opcodes.INVOKESTATIC,
-						classNode.name, "user_clinit",
+						sourceNode.name, "user_clinit",
 						Type.getMethodDescriptor(Type.VOID_TYPE, new Type[0]),
 						false);
 			classInitializer.visitInsn(Opcodes.RETURN);
@@ -209,10 +176,9 @@ public class DriverBindingCompiler implements ICompilerFeature {
 			classInitializer.visitEnd();
 		}
 
-		LCLog.debug("Injected %s drivers into class %s.", count, name);
-
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		classNode.accept(writer);
+		sourceNode.accept(writer);
+		LCLog.debug("Successfully injected and recompiled class %s.", name);
 		return writer.toByteArray();
 	}
 }
