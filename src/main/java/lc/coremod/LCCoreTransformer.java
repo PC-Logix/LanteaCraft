@@ -39,12 +39,17 @@ public class LCCoreTransformer implements IClassTransformer {
 	 */
 	public static boolean ASM_SUCCESS = false;
 
+	public static LCCoreTransformer $;
+
+	public final HotClassCache classCache = new HotClassCache();
+
 	/**
 	 * Initializes the core transformer. This notifies that hooking at runtime
 	 * was a success, and sets up all transformers registered in the
 	 * {@link LCCoreMod} instance.
 	 */
 	public LCCoreTransformer() {
+		LCCoreTransformer.$ = this;
 		LCCoreTransformer.ASM_SUCCESS = true;
 
 		for (String compiler : compilerDefs)
@@ -123,6 +128,7 @@ public class LCCoreTransformer implements IClassTransformer {
 				LCLog.fatal("Failed to save runtime implementation of class %s.", name, t);
 			}
 
+		classCache.suggestCache(name, transformed);
 		return transformed;
 	}
 

@@ -11,6 +11,7 @@ import lc.api.jit.DeviceDrivers;
 import lc.common.LCLog;
 import lc.coremod.ASMAssist;
 import lc.coremod.LCCompilerException;
+import lc.coremod.LCCoreTransformer;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -28,30 +29,6 @@ import org.objectweb.asm.tree.MethodNode;
  */
 public class DriverBindingCompiler implements ICompilerFeature {
 
-	/** Cache of all byte[] implementations for drivers */
-	private HashMap<String, byte[]> driverImplCache = new HashMap<String, byte[]>();
-
-	/**
-	 * Find a class in the cache. This is cheaty because it tricks the runtime
-	 * into feeding us the byte[] of the class we're interested in if we haven't
-	 * seen them yet. If we have seen them, we can just return what we already
-	 * have.
-	 * 
-	 * @param className
-	 *            The class to find.
-	 * @return The byte[] of the class definition or null if the class doesn't
-	 *         exist or can't be loaded.
-	 */
-	private byte[] findClass(String className) {
-		if (!driverImplCache.containsKey(className))
-			try {
-				getClass().getClassLoader().loadClass(className);
-			} catch (ClassNotFoundException err) {
-				LCLog.warn("Can't find class %s.", className);
-			}
-		return driverImplCache.get(className);
-	}
-
 	@Override
 	public byte[] compile(String name, String transformedName, byte[] basicClass) {
 		if (!name.startsWith("lc."))
@@ -68,7 +45,7 @@ public class DriverBindingCompiler implements ICompilerFeature {
 		AnnotationNode providerNode = ASMAssist.findAnnotation(sourceNode, "Llc/api/jit/DeviceDrivers$DriverProvider;");
 		if (providerNode != null) {
 			LCLog.debug("Found definition driver class %s.", name);
-			driverImplCache.put(name, basicClass.clone());
+			LCCoreTransformer.$.classCache.forceCache(name, basicClass.clone());
 			return basicClass;
 		}
 
@@ -94,7 +71,7 @@ public class DriverBindingCompiler implements ICompilerFeature {
 			LCLog.debug("Adding drivers for type %s on class %s.", type, name);
 			for (DriverMap mapping : DriverMap.mapOf(type)) {
 				LCLog.debug("Binding mapping %s (mod %s)", mapping, mapping.modName);
-				byte[] driverSrc = findClass(mapping.className);
+				byte[] driverSrc = LCCoreTransformer.$.classCache.getCached(mapping.className);
 				if (driverSrc == null) {
 					LCLog.warn("Can't find class %s for driver %s, skipping...", mapping.className, mapping);
 					continue;
@@ -102,17 +79,43 @@ public class DriverBindingCompiler implements ICompilerFeature {
 				try {
 					mapping.trySpinUpDriver();
 				} catch (Exception failure) {
-					LCLog.fatal("Failed to spin up driver manager class %s for driver %s. Problems may occur.",
+					LCLog.warn("Failed to spin up driver manager class %s for driver %s. Problems may occur.",
 							mapping.managerClassName, mapping);
 				}
 				ClassNode driverClass = new ClassNode();
 				ClassReader reader = new ClassReader(driverSrc);
 				reader.accept(driverClass, 0);
-				LCCompilerException[] errors = ClassMerger.mergeClasses(driverClass, sourceNode, false);
-				if (errors != null && errors.length != 0) {
-					LCLog.fatal("Problems encountered when recompiling class.");
-					for (LCCompilerException exception : errors)
-						LCLog.fatal(exception);
+
+				boolean acceptImport = true;
+
+				if (driverClass.interfaces != null && driverClass.interfaces.size() != 0) {
+					LCCompilerException[] implErrors = null;
+					LCLog.debug("Performing introspection on %s future candidate interfaces...",
+							driverClass.interfaces.size());
+					for (String iface : driverClass.interfaces) {
+						byte[] ifaceBytes = LCCoreTransformer.$.classCache.getCached(iface);
+						ClassNode ifaceClazz = new ClassNode();
+						new ClassReader(ifaceBytes).accept(ifaceClazz, 0);
+						implErrors = InterfaceInspector.introspectImplementation(ifaceClazz, driverClass);
+						if (implErrors != null && implErrors.length != 0) {
+							LCLog.warn("%s problems encountered when introspecting interface %s on class %s:",
+									implErrors.length, iface, driverClass.name);
+							for (LCCompilerException exception : implErrors)
+								LCLog.warn("\t%s", exception.getMessage());
+							acceptImport = false;
+						}
+					}
+					LCLog.debug("Performed future interface introspection successfully.");
+				}
+
+				if (acceptImport) {
+					LCCompilerException[] errors = ClassMerger.mergeClasses(driverClass, sourceNode, false);
+					if (errors != null && errors.length != 0) {
+						LCLog.warn("%s problems encountered when merging class %s into destination class %s:",
+								errors.length, driverClass.name, sourceNode.name);
+						for (LCCompilerException exception : errors)
+							LCLog.warn("\t%s", exception.getMessage());
+					}
 				}
 			}
 		}
