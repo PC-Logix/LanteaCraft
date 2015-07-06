@@ -1,13 +1,20 @@
 package lc.common.network;
 
 import java.io.IOException;
+import java.util.WeakHashMap;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 import lc.BuildInfo;
 import lc.LCRuntime;
 import lc.api.event.ITickEventHandler;
+import lc.common.LCLog;
+import lc.common.network.packets.LCNetworkHandshake;
+import lc.common.network.packets.LCServerToServerEnvelope;
+import lc.common.network.packets.LCNetworkHandshake.HandshakeReason;
 
 public class LCNetworkController implements ITickEventHandler {
 
@@ -17,6 +24,10 @@ public class LCNetworkController implements ITickEventHandler {
 	protected final LCNetworkQueue serverQueue = new LCNetworkQueue(this, "Client queue");
 	/** The client-side packet incoming data queue */
 	protected final LCNetworkQueue clientQueue = new LCNetworkQueue(this, "Server queue");
+	/** Client server-to-server envelope buffer */
+	protected final LCPacketBuffer<LCServerToServerEnvelope> envelopeBuffer = new LCPacketBuffer<LCServerToServerEnvelope>();
+	/** Server player-state tracker */
+	protected final WeakHashMap<EntityPlayerMP, LCNetworkPlayer> players = new WeakHashMap<EntityPlayerMP, LCNetworkPlayer>();
 
 	/** Default constructor */
 	public LCNetworkController() {
@@ -65,4 +76,40 @@ public class LCNetworkController implements ITickEventHandler {
 			clientQueue.think(what);
 	}
 
+	public void injectPacket(Side side, LCPacket packet, EntityPlayerMP player) {
+		if (side == Side.CLIENT)
+			clientQueue.queue(packet, side, player);
+		if (side == Side.SERVER)
+			serverQueue.queue(packet, side, player);
+	}
+
+	public void playerConnected(EntityPlayerMP player) {
+		if (!players.containsKey(player))
+			players.put(player, new LCNetworkPlayer(this));
+		LCLog.info("Sending LanteaCraft server handshake to client.");
+		getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.SERVER_HELLO), player);
+	}
+
+	public void playerDisconnected(EntityPlayerMP player) {
+		players.remove(player);
+	}
+
+	public void handleHandshakePacket(EntityPlayerMP player, LCNetworkHandshake packet, Side target) {
+		if (target == Side.CLIENT) {
+			if (packet.reason == HandshakeReason.SERVER_HELLO) {
+				/* If we get HELLO, respond back, then send pending */
+				getPreferredPipe().sendToServer(
+						new LCNetworkHandshake(HandshakeReason.CLIENT_HELLO, envelopeBuffer.size()));
+				LCServerToServerEnvelope[] pending = envelopeBuffer.packets();
+				for (int i = 0; i < pending.length; i++)
+					getPreferredPipe().sendToServer(pending[i]);
+			} else
+				LCLog.warn("Strange handshake packet on client from server: %s", packet.reason);
+		} else {
+			if (packet.reason == HandshakeReason.CLIENT_HELLO) {
+				players.get(player).expectedEnvelopes = (Integer) packet.parameters[0];
+			} else
+				LCLog.warn("Strange handshake packet on server from client: %s", packet.reason);
+		}
+	}
 }

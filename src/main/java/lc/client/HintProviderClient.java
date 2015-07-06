@@ -29,7 +29,6 @@ import lc.common.base.pipeline.LCItemRenderPipeline;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.impl.registry.DefinitionRegistry;
-import lc.common.network.LCClientNetworkForwarder;
 import lc.items.ItemDecorator;
 import lc.server.HintProviderServer;
 import lc.tiles.TileDHD;
@@ -57,8 +56,6 @@ public class HintProviderClient extends HintProviderServer {
 
 	private ComponentConfig renderConfiguration;
 
-	private LCClientNetworkForwarder forwarder;
-
 	/** Default constructor */
 	public HintProviderClient() {
 		super();
@@ -74,7 +71,6 @@ public class HintProviderClient extends HintProviderServer {
 		itemRenderingHook = new LCItemRenderPipeline();
 		soundController = new ClientSoundController();
 		particleMachine = new ParticleMachine();
-		forwarder = new LCClientNetworkForwarder();
 		RenderingRegistry.registerBlockHandler(blockRenderingHook.getRenderId(), blockRenderingHook);
 	}
 
@@ -140,10 +136,6 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public IParticleMachine particles() {
 		return particleMachine;
-	}
-
-	public LCClientNetworkForwarder forwarder() {
-		return forwarder;
 	}
 
 }

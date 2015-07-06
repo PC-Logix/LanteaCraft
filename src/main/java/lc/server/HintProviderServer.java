@@ -149,6 +149,15 @@ public class HintProviderServer implements IHintProvider {
 		return null;
 	}
 
+	/**
+	 * Gets the current key trust chain
+	 * 
+	 * @return The key trust chain
+	 */
+	public KeyTrustRegistry getTrustChain() {
+		return trustChain;
+	}
+
 	@Override
 	public void signatureViolation(FMLFingerprintViolationEvent event) {
 		// TODO Auto-generated method stub

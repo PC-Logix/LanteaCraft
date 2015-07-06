@@ -15,7 +15,7 @@ public abstract class LCPacket {
 
 	/** Primitive type map */
 	private enum PrimType {
-		NULL, BOOLEAN, SHORT, CHARACTER, INTEGER, FLOAT, DOUBLE;
+		NULL, BOOLEAN, SHORT, CHARACTER, INTEGER, FLOAT, DOUBLE, STRING;
 	}
 
 	/**
@@ -60,6 +60,12 @@ public abstract class LCPacket {
 		} else if (prim instanceof Double) {
 			buffer.writeByte(PrimType.DOUBLE.ordinal());
 			buffer.writeDouble((Double) prim);
+		} else if (prim instanceof String) {
+			buffer.writeByte(PrimType.STRING.ordinal());
+			char[] data = ((String) prim).toCharArray();
+			buffer.writeInt(data.length);
+			for (int i = 0; i < data.length; i++)
+				buffer.writeByte((byte) data[i]);
 		} else
 			throw new IOException("Unknown primitive type " + prim.getClass().getName());
 	}
@@ -118,6 +124,12 @@ public abstract class LCPacket {
 			return null;
 		case SHORT:
 			return buffer.readShort();
+		case STRING:
+			int str_sz = buffer.readInt();
+			StringBuilder data = new StringBuilder();
+			for (int i = 0; i < str_sz; i++) 
+				data.append((char) buffer.readByte());
+			return data.toString();
 		}
 		throw new IOException("Unknown primitive type " + typeof);
 	}

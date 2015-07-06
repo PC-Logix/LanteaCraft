@@ -39,7 +39,7 @@ public class DSAProvider {
 	 *             If the VM environment does not support the Sun-provided
 	 *             cryptography system, a NoSuchProviderException is raised.
 	 */
-	public KeyPair generate() throws NoSuchAlgorithmException, NoSuchProviderException {
+	public static KeyPair generate() throws NoSuchAlgorithmException, NoSuchProviderException {
 		KeyPairGenerator gen = KeyPairGenerator.getInstance("DSA", "SUN");
 		gen.initialize(1024, SecureRandom.getInstance("SHA1PRNG", "SUN"));
 		return gen.generateKeyPair();
@@ -62,7 +62,7 @@ public class DSAProvider {
 	 *             If the DSA algorithm or the Sun cryptography provider, a
 	 *             SignatureException will be raised.
 	 */
-	public byte[] digest(byte[] payload, KeyPair chain) throws InvalidKeyException, SignatureException {
+	public static byte[] digest(byte[] payload, KeyPair chain) throws InvalidKeyException, SignatureException {
 		try {
 			Signature signature = Signature.getInstance("SHA1withDSA", "SUN");
 			signature.initSign(chain.getPrivate());
@@ -97,7 +97,8 @@ public class DSAProvider {
 	 *             If the DSA algorithm or the Sun cryptography provider, a
 	 *             SignatureException will be raised.
 	 */
-	public boolean verify(byte[] digest, byte[] payload, PublicKey pk) throws InvalidKeyException, SignatureException {
+	public static boolean verify(byte[] digest, byte[] payload, PublicKey pk) throws InvalidKeyException,
+			SignatureException {
 		try {
 			Signature signature = Signature.getInstance("SHA1withDSA", "SUN");
 			signature.initVerify(pk);
@@ -117,7 +118,7 @@ public class DSAProvider {
 	 *            The private key
 	 * @return The key data
 	 */
-	public byte[] toPKCS8(PrivateKey key) {
+	public static byte[] toPKCS8(PrivateKey key) {
 		return new PKCS8EncodedKeySpec(key.getEncoded()).getEncoded();
 	}
 
@@ -128,7 +129,7 @@ public class DSAProvider {
 	 *            The public key
 	 * @return The key data
 	 */
-	public byte[] toX509(PublicKey key) {
+	public static byte[] toX509(PublicKey key) {
 		return new X509EncodedKeySpec(key.getEncoded()).getEncoded();
 	}
 
@@ -147,7 +148,7 @@ public class DSAProvider {
 	 *             If the key in not valid or is otherwise corrupt, an
 	 *             InvalidKeySpecException
 	 */
-	public PrivateKey fromPKCS8(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public static PrivateKey fromPKCS8(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		KeyFactory keyFactory = KeyFactory.getInstance("DSA");
 		return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(data));
 	}
@@ -167,7 +168,7 @@ public class DSAProvider {
 	 *             If the key in not valid or is otherwise corrupt, an
 	 *             InvalidKeySpecException
 	 */
-	public PublicKey fromX509(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public static PublicKey fromX509(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		KeyFactory keyFactory = KeyFactory.getInstance("DSA");
 		return keyFactory.generatePublic(new X509EncodedKeySpec(data));
 	}

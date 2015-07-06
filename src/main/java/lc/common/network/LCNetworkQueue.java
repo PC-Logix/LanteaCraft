@@ -7,12 +7,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lc.LCRuntime;
 import lc.api.event.ITickEventHandler;
 import lc.client.HintProviderClient;
 import lc.common.LCLog;
+import lc.common.network.packets.LCNetworkHandshake;
 import lc.common.network.packets.LCServerToServerEnvelope;
 import lc.common.network.packets.abs.LCTargetPacket;
 import lc.common.util.Tracer;
@@ -58,17 +60,17 @@ public class LCNetworkQueue implements ITickEventHandler {
 				if (player == null)
 					throw new LCNetworkException("Packet enqueued without player or with dead reference.");
 				LCPacket packet = obj.packet;
-				if (packet instanceof LCTargetPacket) {
+				if (packet instanceof LCNetworkHandshake) {
+					controller.handleHandshakePacket((EntityPlayerMP) player, (LCNetworkHandshake) packet, obj.target);
+				} else if (packet instanceof LCTargetPacket) {
 					LCTargetPacket target = (LCTargetPacket) packet;
 					LCTargetPacket.handlePacket(target, player);
 				} else if (packet instanceof LCServerToServerEnvelope) {
 					LCServerToServerEnvelope envelope = (LCServerToServerEnvelope) packet;
-					if (obj.target == Side.CLIENT) {
-						HintProviderClient client = (HintProviderClient) LCRuntime.runtime.hints();
-						client.forwarder().handle(envelope);
-					} else {
-
-					}
+					if (obj.target == Side.CLIENT)
+						controller.envelopeBuffer.addPacket(envelope);
+					else
+						controller.players.get(player).addEnvelopePacket((EntityPlayerMP) player, envelope);
 				} else
 					throw new LCNetworkException(String.format("Unsupported packet %s.", packet.getClass().getName()));
 			} catch (LCNetworkException exception) {
