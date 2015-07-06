@@ -7,20 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 
 import java.util.EnumMap;
-import java.util.LinkedList;
 import java.util.List;
 
-import lc.LCRuntime;
-import lc.client.HintProviderClient;
 import lc.common.LCLog;
-import lc.common.network.packets.LCClientUpdate;
-import lc.common.network.packets.LCDHDPacket;
-import lc.common.network.packets.LCMultiblockPacket;
-import lc.common.network.packets.LCServerToServerEnvelope;
-import lc.common.network.packets.LCStargateConnectionPacket;
-import lc.common.network.packets.LCStargateStatePacket;
-import lc.common.network.packets.LCTileSync;
-import lc.common.network.packets.LCTransportRingsStatePacket;
 import lc.common.network.packets.abs.LCTargetPacket;
 import lc.common.util.math.DimensionPos;
 import net.minecraft.client.Minecraft;
@@ -67,11 +56,10 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	@Override
 	protected void encode(ChannelHandlerContext ctx, LCPacket msg, List<Object> out) throws Exception {
 		try {
-
 			ByteBuf buffer = Unpooled.buffer();
 			controller.encodePacket(msg, buffer);
-			FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer.copy(), ctx.channel()
-					.attr(NetworkRegistry.FML_CHANNEL).get());
+			FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer, ctx.channel().attr(NetworkRegistry.FML_CHANNEL)
+					.get());
 			out.add(proxyPacket);
 		} catch (Exception e) {
 			LCLog.fatal("Network encode exception.", e);

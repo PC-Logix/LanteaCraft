@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.PublicKey;
 import java.security.SignatureException;
+import java.util.ArrayList;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
@@ -26,19 +28,20 @@ public class LCNetworkPlayer {
 		this.controller = controller;
 	}
 
-	public void sendHandshake(EntityPlayerMP player) {
-		controller.getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.SERVER_HELLO), player);
+	public void sendHandshake(EntityPlayer player) {
+		controller.getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.SERVER_HELLO),
+				(EntityPlayerMP) player);
 	}
 
-	public void handleHandshakePacket(EntityPlayerMP player, LCNetworkHandshake packet, Side target) {
+	public void handleHandshakePacket(EntityPlayer player, LCNetworkHandshake packet, Side target) {
 		if (target == Side.CLIENT) {
 			if (packet.reason == HandshakeReason.SERVER_HELLO) {
 				/* If we get HELLO, respond back, then send pending */
-				LCServerToServerEnvelope[] pending = controller.envelopeBuffer.packets();
+				ArrayList<LCServerToServerEnvelope> pending = controller.envelopeBuffer.packets();
 				controller.getPreferredPipe().sendToServer(
-						new LCNetworkHandshake(HandshakeReason.CLIENT_HELLO, pending.length));
-				for (int i = 0; i < pending.length; i++)
-					controller.getPreferredPipe().sendToServer(pending[i]);
+						new LCNetworkHandshake(HandshakeReason.CLIENT_HELLO, pending.size()));
+				for (int i = 0; i < pending.size(); i++)
+					controller.getPreferredPipe().sendToServer(pending.get(i));
 			} else
 				LCLog.warn("Strange handshake packet on client from server: %s", packet.reason);
 		} else {
@@ -49,7 +52,7 @@ public class LCNetworkPlayer {
 		}
 	}
 
-	public void addEnvelopePacket(EntityPlayerMP player, LCServerToServerEnvelope envelope) {
+	public void addEnvelopePacket(EntityPlayer player, LCServerToServerEnvelope envelope) {
 		if (envelopes == null)
 			envelopes = new LCPacketBuffer<LCServerToServerEnvelope>();
 		envelopes.addPacket(envelope);
@@ -57,10 +60,10 @@ public class LCNetworkPlayer {
 			try {
 				KeyTrustRegistry registry = ((HintProviderServer) LCRuntime.runtime.hints()).getTrustChain();
 				PublicKey[] allKeys = registry.contents();
-				LCServerToServerEnvelope[] blobs = envelopes.packets();
+				ArrayList<LCServerToServerEnvelope> blobs = envelopes.packets();
 				PublicKey foundKey = null;
 				for (PublicKey aKey : allKeys)
-					if (DSAProvider.verify(blobs[0].signature(), blobs[0].data(), aKey))
+					if (DSAProvider.verify(blobs.get(0).signature(), blobs.get(0).data(), aKey))
 						foundKey = aKey;
 				if (foundKey == null) {
 					envelopes.clear();

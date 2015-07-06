@@ -58,7 +58,7 @@ public class ServerEventHooks {
 	}
 
 	public void onServerStopped(FMLServerStoppedEvent event) {
-		// TODO Auto-generated method stub
+		LCRuntime.runtime.network().serverShutdown();
 
 	}
 
@@ -71,12 +71,12 @@ public class ServerEventHooks {
 		serverHints.trustChain.purge();
 		// TODO: Load the keys from /config/LanteaCraft/trust/ into the chain
 	}
-	
+
 	@SubscribeEvent
 	public void onPlayerConnected(PlayerLoggedInEvent event) {
 		LCRuntime.runtime.network().playerConnected((EntityPlayerMP) event.player);
 	}
-	
+
 	@SubscribeEvent
 	public void onPlayerDisconnected(PlayerLoggedOutEvent event) {
 		LCRuntime.runtime.network().playerDisconnected((EntityPlayerMP) event.player);

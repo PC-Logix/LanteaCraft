@@ -11,8 +11,8 @@ public class LCPacketBuffer<T> {
 			buffer.add(t);
 	}
 
-	public <T> T[] packets() {
-		return (T[]) buffer.toArray();
+	public ArrayList<T> packets() {
+		return buffer;
 	}
 
 	public void clear() {

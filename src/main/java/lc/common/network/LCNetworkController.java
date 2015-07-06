@@ -12,9 +12,7 @@ import lc.BuildInfo;
 import lc.LCRuntime;
 import lc.api.event.ITickEventHandler;
 import lc.common.LCLog;
-import lc.common.network.packets.LCNetworkHandshake;
 import lc.common.network.packets.LCServerToServerEnvelope;
-import lc.common.network.packets.LCNetworkHandshake.HandshakeReason;
 
 public class LCNetworkController implements ITickEventHandler {
 
@@ -76,7 +74,7 @@ public class LCNetworkController implements ITickEventHandler {
 			clientQueue.think(what);
 	}
 
-	public void injectPacket(Side side, LCPacket packet, EntityPlayerMP player) {
+	public void injectPacket(Side side, LCPacket packet, EntityPlayer player) {
 		if (side == Side.CLIENT)
 			clientQueue.queue(packet, side, player);
 		if (side == Side.SERVER)
@@ -92,5 +90,9 @@ public class LCNetworkController implements ITickEventHandler {
 
 	public void playerDisconnected(EntityPlayerMP player) {
 		players.remove(player);
+	}
+
+	public void serverShutdown() {
+		players.clear();
 	}
 }
