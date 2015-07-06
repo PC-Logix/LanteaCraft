@@ -19,7 +19,7 @@ import lc.common.resource.ResourceAccess;
  */
 public class ItemLanteaDoor extends LCItemBlock {
 
-	private IIcon doorIcon;
+	private IIcon doorIcon[] = new IIcon[2];
 
 	public ItemLanteaDoor(Block block) {
 		super(block);
@@ -33,13 +33,15 @@ public class ItemLanteaDoor extends LCItemBlock {
 
 	@Override
 	public IIcon getIconFromDamage(int damage) {
-		return doorIcon;
+		return doorIcon[damage];
 	}
 
 	@Override
 	public void registerIcons(IIconRegister register) {
-		doorIcon = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+		doorIcon[0] = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
 				"lantean_door"));
+		doorIcon[1] = register.registerIcon(ResourceAccess.formatResourceName("${ASSET_KEY}:%s_${TEX_QUALITY}",
+				"goauld_door"));
 	}
 
 	@Override
@@ -85,6 +87,15 @@ public class ItemLanteaDoor extends LCItemBlock {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		return subItemName(stack.getItemDamage());
+	}
+
+	private static String subItemName(int i) {
+		return "tile.lanteaDoor." + i;
 	}
 
 }

@@ -30,12 +30,13 @@ public class TileDoorRenderer extends LCTileRenderer {
 			float partialTickTime) {
 
 		TileLanteaDoor door = (TileLanteaDoor) tile;
+		String doorType = (door.getBlockMetadata() != 0) ? "goauld" : "lantean";
 
-		ResourceLocation whatTex = ResourceAccess.getNamedResource(ResourceAccess
-				.formatResourceName("textures/tileentity/lantean_door_bottom_128.png"));
+		ResourceLocation whatTex = ResourceAccess.getNamedResource(ResourceAccess.formatResourceName(
+				"textures/blocks/%s_door_bottom_${TEX_QUALITY}.png", doorType));
 		if (door.hasBlockBelow())
-			whatTex = ResourceAccess.getNamedResource(ResourceAccess
-					.formatResourceName("textures/tileentity/lantean_door_top_128.png"));
+			whatTex = ResourceAccess.getNamedResource(ResourceAccess.formatResourceName(
+					"textures/blocks/%s_door_top_${TEX_QUALITY}.png", doorType));
 		renderer.bind(whatTex);
 
 		GL11.glPushMatrix();
