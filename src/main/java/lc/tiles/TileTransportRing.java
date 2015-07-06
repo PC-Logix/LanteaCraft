@@ -4,6 +4,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.rmi.CORBA.Tie;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +13,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.chunk.Chunk;
 import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.jit.Tag;
@@ -60,12 +63,8 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 
 		@Override
 		public int[][][] getStructureLayout() {
-			return new int[][][] { 
-					{ { 0, 0, 0, 0, 0 } }, 
-					{ { 0, 0, 0, 0, 0 } }, 
-					{ { 0, 0, 1, 0, 0 } },
-					{ { 0, 0, 0, 0, 0 } }, 
-					{ { 0, 0, 0, 0, 0 } } };
+			return new int[][][] { { { 0, 0, 0, 0, 0 } }, { { 0, 0, 0, 0, 0 } }, { { 0, 0, 1, 0, 0 } },
+					{ { 0, 0, 0, 0, 0 } }, { { 0, 0, 0, 0, 0 } } };
 		}
 
 		@Override
@@ -121,7 +120,6 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 	private ArrayDeque<TransportRingCommand> commandQueue = new ArrayDeque<TransportRingCommand>();
 	private TransportRingCommand command;
 	private double commandTimer = 0.0d;
-	private ArrayList<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
 
 	private Block clientSkinBlock = null;
 	private int clientSkinBlockMetadata;
@@ -180,17 +178,21 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 			if (clientAnimationQueue.peek() != null)
 				thinkClientChangeAnimation(clientAnimationQueue.pop());
 		}
-		
-		if (clientAnimationQueue.peek() == null && false) {
-			for (int i = 5; i >= 0; i--)
-				clientAnimationQueue.add(new TransportRingMoveAnimation(10.0d, i, i * 0.5d, null, null));
-			for (int i = 0; i < 6; i++)
-				clientAnimationQueue.add(new TransportRingMoveAnimation(10.0d, i, 0.0d, null, null));
-		}
 	}
 
 	private void thinkClientCommand(TransportRingCommand command) {
-
+		switch (command.type) {
+		case DISENGAGE:
+			for (int i = 0; i < 6; i++)
+				clientAnimationQueue.add(new TransportRingMoveAnimation(10.0d, i, 0.0d, null, null));
+			break;
+		case ENGAGE:
+			for (int i = 5; i >= 0; i--)
+				clientAnimationQueue.add(new TransportRingMoveAnimation(10.0d, i, i * 0.5d, null, null));
+			break;
+		case TRANSPORT:
+			break;
+		}
 	}
 
 	private void thinkClientChangeAnimation(Animation next) {
@@ -212,7 +214,6 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 
 	@Override
 	public void thinkServer() {
-		thinkServerTransport();
 		thinkServerTasks();
 	}
 
@@ -239,8 +240,28 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 		if (command != null)
 			switch (command.type) {
 			case TRANSPORT:
+				doCommand = true;
+				if (command.args.length == 1) {
+					TileTransportRing ring = (TileTransportRing) command.args[0];
+					ring.commandQueue
+							.add(new TransportRingCommand(TransportRingCommandType.TRANSPORT, command.duration));
+					thinkServerTransport(ring);
+				}
 				break;
-			default:
+			case DISENGAGE:
+				doCommand = true;
+				if (command.args.length == 1) {
+					TileTransportRing ring = (TileTransportRing) command.args[0];
+					ring.commandQueue
+							.add(new TransportRingCommand(TransportRingCommandType.DISENGAGE, command.duration));
+				}
+				break;
+			case ENGAGE:
+				doCommand = true;
+				if (command.args.length == 1) {
+					TileTransportRing ring = (TileTransportRing) command.args[0];
+					ring.commandQueue.add(new TransportRingCommand(TransportRingCommandType.ENGAGE, command.duration));
+				}
 				break;
 
 			}
@@ -262,25 +283,48 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 		}
 	}
 
-	private void thinkServerTransport() {
+	private TileTransportRing thinkServerFindSlave() {
+		Chunk chunk = getWorldObj().getChunkFromBlockCoords(xCoord, zCoord);
+		for (Object o : chunk.chunkTileEntityMap.values())
+			if (o instanceof TileTransportRing) {
+				TileTransportRing tile = (TileTransportRing) o;
+				if (tile.getState() == MultiblockState.FORMED && tile != this && !tile.busy()) {
+					LCLog.debug("Found Transport ring at [%s, %s, %s]", tile.xCoord, tile.yCoord, tile.zCoord);
+					return tile;
+				}
+			}
+		return null;
+	}
 
+	private void thinkServerTransport(TileTransportRing ring) {
+		thinkServerDoDispatch(ring);
+	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		Vector3 dim = structure.getStructureDimensions();
+		Vector3 min = new Vector3(this).sub(dim), max = new Vector3(this).add(dim).add(0.0d, 2.5d, 0.0d);
+		return Vector3.makeAABB(min, max);
+	}
+
+	@Override
+	public double getMaxRenderDistanceSquared() {
+		return 999999999.0D;
 	}
 
 	@SuppressWarnings("unchecked")
 	private void thinkServerDoDispatch(TileEntity destination) {
-		for (TrackedEntity trk : trackedEntities)
-			thinkServerDispatchEntity(trk.entity, trk.lastPos, destination);
-		trackedEntities.clear();
 		Matrix3 rotation = Orientations.from(getRotation()).rotation();
 		Vector3 origin = new Vector3(this);
-		Vector3 p0 = rotation.mul(new Vector3(-1.0, 0.0, 0.0));
-		Vector3 p1 = rotation.mul(new Vector3(1.0, 2.5, 1.0));
+		Vector3 dim = structure.getStructureDimensions().mul(0.5d);
+		Vector3 p0 = rotation.mul(Vector3.zero.sub(dim));
+		Vector3 p1 = rotation.mul(Vector3.zero.add(dim).add(0.0d, 2.5d, 0.0d));
 		AxisAlignedBB box = Vector3.makeAABB(p0.add(origin), p1.add(origin));
 		List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
 		// LCLog.debug("Entity box: %s, count %s", box, ents.size());
 		for (Entity entity : ents)
 			if (!entity.isDead && entity.ridingEntity == null)
-				trackedEntities.add(new TrackedEntity(entity));
+				thinkServerDispatchEntity(entity, new Vector3(entity), destination);
 	}
 
 	private void thinkServerDispatchEntity(Entity entity, Vector3 prevPos, TileEntity d) {
@@ -295,6 +339,10 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 
 	private void thinkServerDispatchEntity(Entity entity, Trans3 src, Trans3 dst, TileEntity destination) {
 		TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
+	}
+
+	protected boolean busy() {
+		return commandQueue.size() != 0 || command != null;
 	}
 
 	@Override
@@ -394,9 +442,16 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void activate() {
-		commandQueue.add(new TransportRingCommand(TransportRingCommandType.ENGAGE, 50.0d));
-		commandQueue.add(new TransportRingCommand(TransportRingCommandType.TRANSPORT, 20.0d));
-		commandQueue.add(new TransportRingCommand(TransportRingCommandType.DISENGAGE, 50.0d));
+		if (busy())
+			return;
+		TileTransportRing slave = thinkServerFindSlave();
+		LCLog.debug("finding slave...");
+		if (slave != null) {
+			LCLog.debug("doing transport...");
+			commandQueue.add(new TransportRingCommand(TransportRingCommandType.ENGAGE, 50.0d, slave));
+			commandQueue.add(new TransportRingCommand(TransportRingCommandType.TRANSPORT, 20.0d, slave));
+			commandQueue.add(new TransportRingCommand(TransportRingCommandType.DISENGAGE, 50.0d, slave));
+		}
 	}
 
 }

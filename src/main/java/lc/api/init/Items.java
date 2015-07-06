@@ -28,4 +28,7 @@ public class Items {
 	/** Lantea decorator tool */
 	public IContainerDefinition lanteaDecoratorTool;
 
+	/** Transport ring activator */
+	public IContainerDefinition lanteaTransportRingActivator;
+
 }

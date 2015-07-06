@@ -589,6 +589,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		return Vector3.makeAABB(min, max);
 	}
 
+	@Override
 	public double getMaxRenderDistanceSquared() {
 		return 999999999.0D;
 	}

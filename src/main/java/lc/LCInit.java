@@ -38,6 +38,7 @@ import lc.items.ItemGlasses;
 import lc.items.ItemIrisUpgrade;
 import lc.items.ItemLanteaAlloyIngot;
 import lc.items.ItemLanteaOre;
+import lc.items.ItemTransportRingActivator;
 import lc.recipe.DecoratorSetterRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -99,6 +100,7 @@ public class LCInit {
 		items.lanteaCraftingItem = DefinitionWrapperProvider.provide(ItemCraftingReagent.class);
 		items.lanteaDecoratorTool = DefinitionWrapperProvider.provide(ItemDecorator.class);
 		items.lanteaStargateIris = DefinitionWrapperProvider.provide(ItemIrisUpgrade.class);
+		items.lanteaTransportRingActivator = DefinitionWrapperProvider.provide(ItemTransportRingActivator.class);
 
 		/* Initialize recipes */
 		IDefinitionReference ringBlock = blocks.stargateRingBlock.ref();
