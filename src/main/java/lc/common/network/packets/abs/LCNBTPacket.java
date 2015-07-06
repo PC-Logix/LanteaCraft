@@ -18,10 +18,10 @@ import net.minecraft.nbt.NBTTagCompound;
 public abstract class LCNBTPacket extends LCTargetPacket {
 
 	@Override
-	public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException;
+	public abstract void encodeInto(ByteBuf buffer) throws IOException;
 
 	@Override
-	public abstract void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException;
+	public abstract void decodeFrom(ByteBuf buffer) throws IOException;
 
 	/**
 	 * Read an NBT tag compound from the byte buffer input at the current read

@@ -25,7 +25,7 @@ public class LCTransportRingsStatePacket extends LCTargetPacket {
 	}
 
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+	public void encodeInto(ByteBuf buffer) throws IOException {
 		writeDimensionPosToBuffer(buffer, target);
 		buffer.writeInt(type);
 		buffer.writeDouble(duration);
@@ -33,7 +33,7 @@ public class LCTransportRingsStatePacket extends LCTargetPacket {
 	}
 
 	@Override
-	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+	public void decodeFrom(ByteBuf buffer) throws IOException {
 		target = readDimensionPosFromBuffer(buffer);
 		this.type = buffer.readInt();
 		this.duration = buffer.readDouble();

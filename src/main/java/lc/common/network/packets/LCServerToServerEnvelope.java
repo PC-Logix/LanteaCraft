@@ -7,30 +7,23 @@ import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 
 import lc.LCRuntime;
+import lc.common.network.LCNetworkController;
 import lc.common.network.LCPacket;
 import lc.common.network.LCPacketPipeline;
 
 public class LCServerToServerEnvelope extends LCPacket {
 
 	public static LCServerToServerEnvelope envelope(LCPacket data) throws IOException {
-		LCPacketPipeline pipe = LCRuntime.runtime.network().getPreferredPipe();
+		LCNetworkController controller = LCRuntime.runtime.network();
 		ByteBuf buffer = Unpooled.buffer();
-		buffer.writeByte((byte) pipe.discriminator(data.getClass()));
-		data.encodeInto(null, buffer);
+		controller.encodePacket(data, buffer);
 		return new LCServerToServerEnvelope(buffer.array(), null);
 	}
 
 	public static LCPacket unenvelope(LCServerToServerEnvelope envelope) throws IOException {
-		LCPacketPipeline pipe = LCRuntime.runtime.network().getPreferredPipe();
+		LCNetworkController controller = LCRuntime.runtime.network();
 		ByteBuf buffer = Unpooled.wrappedBuffer(envelope.data);
-		Class<? extends LCPacket> clazz = pipe.packetClass(buffer.readByte());
-		LCPacket packet;
-		try {
-			packet = clazz.newInstance();
-		} catch (Exception e) {
-			throw new IOException("Illegal or unsupported encapsulated packet.", e);
-		}
-		packet.decodeFrom(null, buffer);
+		LCPacket packet = controller.decodePacket(buffer);
 		return packet;
 	}
 
@@ -66,7 +59,7 @@ public class LCServerToServerEnvelope extends LCPacket {
 	}
 
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+	public void encodeInto(ByteBuf buffer) throws IOException {
 		if (data == null || signature == null || data.length == 0 || signature.length == 0)
 			throw new IOException("Illegal encapsulated packet; no data or unsigned.");
 		buffer.writeInt(data.length);
@@ -76,7 +69,7 @@ public class LCServerToServerEnvelope extends LCPacket {
 	}
 
 	@Override
-	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+	public void decodeFrom(ByteBuf buffer) throws IOException {
 		data = new byte[buffer.readInt()];
 		signature = new byte[buffer.readInt()];
 		buffer.readBytes(data);

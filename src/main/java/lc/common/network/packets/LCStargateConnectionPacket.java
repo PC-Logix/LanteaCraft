@@ -43,7 +43,7 @@ public class LCStargateConnectionPacket extends LCTargetPacket {
 	}
 
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+	public void encodeInto(ByteBuf buffer) throws IOException {
 		writeDimensionPosToBuffer(buffer, target);
 		buffer.writeInt(state.ordinal());
 		buffer.writeInt(stateTimeout);
@@ -51,7 +51,7 @@ public class LCStargateConnectionPacket extends LCTargetPacket {
 	}
 
 	@Override
-	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+	public void decodeFrom(ByteBuf buffer) throws IOException {
 		target = readDimensionPosFromBuffer(buffer);
 		this.state = StargateState.values()[buffer.readInt()];
 		this.stateTimeout = buffer.readInt();

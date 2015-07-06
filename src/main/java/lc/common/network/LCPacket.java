@@ -20,15 +20,13 @@ public abstract class LCPacket {
 
 	/**
 	 * Encode a packet into the network stream.
-	 *
-	 * @param ctx
-	 *            The handler context
+	 * 
 	 * @param buffer
 	 *            The write buffer
 	 * @throws IOException
 	 *             If a problem occurs, an I/O exception may be thrown.
 	 */
-	public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException;
+	public abstract void encodeInto(ByteBuf buffer) throws IOException;
 
 	/**
 	 * Encode a boxed primitive into the underlying stream
@@ -41,7 +39,7 @@ public abstract class LCPacket {
 	 *             Any exception which occurs when writing, or if the boxed type
 	 *             is unknown
 	 */
-	protected void encodePrimitiveInto(ByteBuf buffer, Object prim) throws IOException {
+	protected static void encodePrimitiveInto(ByteBuf buffer, Object prim) throws IOException {
 		if (prim == null) {
 			buffer.writeByte(PrimType.NULL.ordinal());
 		} else if (prim instanceof Boolean) {
@@ -77,7 +75,7 @@ public abstract class LCPacket {
 	 *             Any exception which occurs when writing, or if the boxed type
 	 *             is unknown
 	 */
-	protected void encodePrimitiveArrayInto(ByteBuf buffer, Object[] arr) throws IOException {
+	protected static void encodePrimitiveArrayInto(ByteBuf buffer, Object[] arr) throws IOException {
 		buffer.writeInt(arr.length);
 		for (int i = 0; i < arr.length; i++)
 			encodePrimitiveInto(buffer, arr[i]);
@@ -86,14 +84,12 @@ public abstract class LCPacket {
 	/**
 	 * Decode a packet from the network stream.
 	 *
-	 * @param ctx
-	 *            The handler context
 	 * @param buffer
 	 *            The read buffer
 	 * @throws IOException
 	 *             If a problem occurs, an I/O exception may be thrown.
 	 */
-	public abstract void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException;
+	public abstract void decodeFrom(ByteBuf buffer) throws IOException;
 
 	/**
 	 * Decode a boxed primitive from the underlying stream
@@ -105,7 +101,7 @@ public abstract class LCPacket {
 	 *             Any exception which occurs when reading, or if the specified
 	 *             boxed type on the stream is unsupported
 	 */
-	protected Object decodePrimitiveFrom(ByteBuf buffer) throws IOException {
+	protected static Object decodePrimitiveFrom(ByteBuf buffer) throws IOException {
 		byte typeof = buffer.readByte();
 		switch (PrimType.values()[typeof]) {
 		case BOOLEAN:
@@ -136,7 +132,7 @@ public abstract class LCPacket {
 	 *             Any exception which occurs when reading, or if the specified
 	 *             boxed type on the stream is unsupported
 	 */
-	protected Object[] decodePrimitiveArrayFrom(ByteBuf buffer) throws IOException {
+	protected static Object[] decodePrimitiveArrayFrom(ByteBuf buffer) throws IOException {
 		int sz = buffer.readInt();
 		Object[] prims = new Object[sz];
 		for (int i = 0; i < sz; i++)

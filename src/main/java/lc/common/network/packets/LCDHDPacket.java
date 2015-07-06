@@ -32,13 +32,13 @@ public class LCDHDPacket extends LCNBTPacket {
 	}
 
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+	public void encodeInto(ByteBuf buffer) throws IOException {
 		writeDimensionPosToBuffer(buffer, target);
 		writeNBTTagCompoundToBuffer(buffer, compound);
 	}
 
 	@Override
-	public void decodeFrom(ChannelHandlerContext ctx, ByteBuf buffer) throws IOException {
+	public void decodeFrom(ByteBuf buffer) throws IOException {
 		target = readDimensionPosFromBuffer(buffer);
 		compound = readNBTTagCompoundFromBuffer(buffer);
 	}

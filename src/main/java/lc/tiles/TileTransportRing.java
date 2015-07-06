@@ -181,7 +181,7 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 				thinkClientChangeAnimation(clientAnimationQueue.pop());
 		}
 		
-		if (clientAnimationQueue.peek() == null) {
+		if (clientAnimationQueue.peek() == null && false) {
 			for (int i = 5; i >= 0; i--)
 				clientAnimationQueue.add(new TransportRingMoveAnimation(10.0d, i, i * 0.5d, null, null));
 			for (int i = 0; i < 6; i++)

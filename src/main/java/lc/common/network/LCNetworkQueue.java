@@ -34,9 +34,11 @@ public class LCNetworkQueue implements ITickEventHandler {
 	private final LinkedBlockingQueue<QueuedPacket> queue = new LinkedBlockingQueue<QueuedPacket>();
 	private final ArrayList<QueuedPacket> drain = new ArrayList<QueuedPacket>();
 	private final LCNetworkController controller;
+	private final String name;
 
-	public LCNetworkQueue(LCNetworkController controller) {
+	public LCNetworkQueue(LCNetworkController controller, String name) {
 		this.controller = controller;
+		this.name = name;
 	}
 
 	public void queue(LCPacket packet, Side target, EntityPlayer player) {
@@ -45,7 +47,7 @@ public class LCNetworkQueue implements ITickEventHandler {
 
 	@Override
 	public void think(Side what) {
-		Tracer.begin(this);
+		Tracer.begin(this, "process queue: " + name);
 		queue.drainTo(drain);
 		Iterator<QueuedPacket> stack = drain.iterator();
 

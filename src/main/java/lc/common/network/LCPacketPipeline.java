@@ -48,33 +48,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPacket> {
 
 	protected EnumMap<Side, FMLEmbeddedChannel> channels;
-	protected LinkedList<Class<? extends LCPacket>> packets = new LinkedList<Class<? extends LCPacket>>();
 	private final LCNetworkController controller;
 
 	public LCPacketPipeline(LCNetworkController controller) {
 		this.controller = controller;
-	}
-
-	public byte discriminator(Class<? extends LCPacket> packetClazz) {
-		return (byte) packets.indexOf(packetClazz);
-	}
-
-	public Class<? extends LCPacket> packetClass(int discriminator) {
-		return packets.get(discriminator);
-	}
-
-	/**
-	 * Register a packet
-	 *
-	 * @param clazz
-	 *            The packet class
-	 * @return If the packet was registered successfully.
-	 */
-	public boolean registerPacket(Class<? extends LCPacket> clazz) {
-		if (packets.size() > 256 || packets.contains(clazz))
-			return false;
-		packets.add(clazz);
-		return true;
 	}
 
 	/**
@@ -85,27 +62,14 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	 */
 	public void init(String channelName) {
 		channels = NetworkRegistry.INSTANCE.newChannel(channelName, this);
-		registerPacket(LCTileSync.class);
-		registerPacket(LCMultiblockPacket.class);
-		registerPacket(LCClientUpdate.class);
-		registerPacket(LCStargateConnectionPacket.class);
-		registerPacket(LCStargateStatePacket.class);
-		registerPacket(LCDHDPacket.class);
-		registerPacket(LCTransportRingsStatePacket.class);
 	}
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, LCPacket msg, List<Object> out) throws Exception {
 		try {
-			Class<? extends LCPacket> clazz = msg.getClass();
-			if (!packets.contains(msg.getClass()))
-				throw new LCNetworkException(String.format("Attempt to send unregistered packet class %s!", msg
-						.getClass().getCanonicalName()));
 
 			ByteBuf buffer = Unpooled.buffer();
-			byte discriminator = (byte) packets.indexOf(clazz);
-			buffer.writeByte(discriminator);
-			msg.encodeInto(ctx, buffer);
+			controller.encodePacket(msg, buffer);
 			FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer.copy(), ctx.channel()
 					.attr(NetworkRegistry.FML_CHANNEL).get());
 			out.add(proxyPacket);
@@ -119,15 +83,7 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 	protected void decode(ChannelHandlerContext ctx, FMLProxyPacket msg, List<Object> out) throws Exception {
 		try {
 			ByteBuf payload = msg.payload();
-			byte discriminator = payload.readByte();
-			Class<? extends LCPacket> clazz = packets.get(discriminator);
-			if (clazz == null)
-				throw new LCNetworkException(String.format("Attempt to handlle unregistered packet class %s!",
-						discriminator));
-
-			LCPacket packet = clazz.newInstance();
-			packet.decodeFrom(ctx, payload.slice());
-
+			LCPacket packet = controller.decodePacket(payload);
 			EntityPlayer player;
 			switch (FMLCommonHandler.instance().getEffectiveSide()) {
 			case CLIENT:
@@ -140,21 +96,10 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 			default:
 				throw new LCNetworkException("Instance is not client or server. Cannot continue!");
 			}
-
-			if (packet instanceof LCTargetPacket) {
-				LCTargetPacket target = (LCTargetPacket) packet;
-				LCTargetPacket.handlePacket(target, player);
-			} else if (packet instanceof LCServerToServerEnvelope) {
-				LCServerToServerEnvelope envelope = (LCServerToServerEnvelope) packet;
-				if (msg.getTarget() == Side.CLIENT) {
-					HintProviderClient client = (HintProviderClient) LCRuntime.runtime.hints();
-					client.forwarder().handle(envelope);
-				} else {
-
-				}
-			} else
-				throw new LCNetworkException(String.format("Unable to handle packet type %s.", clazz.getName()));
-
+			if (msg.getTarget() == Side.SERVER)
+				controller.serverQueue.queue(packet, msg.getTarget(), player);
+			if (msg.getTarget() == Side.CLIENT)
+				controller.clientQueue.queue(packet, msg.getTarget(), player);
 		} catch (Exception e) {
 			LCLog.fatal("Network decode exception on side %s, packet dropped.", FMLCommonHandler.instance()
 					.getEffectiveSide(), e);

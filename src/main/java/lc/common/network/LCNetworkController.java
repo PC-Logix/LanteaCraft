@@ -1,5 +1,8 @@
 package lc.common.network;
 
+import java.io.IOException;
+
+import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 import lc.BuildInfo;
@@ -8,9 +11,14 @@ import lc.api.event.ITickEventHandler;
 
 public class LCNetworkController implements ITickEventHandler {
 
+	/** The network pipe */
 	private final LCPacketPipeline pipe = new LCPacketPipeline(this);
-	private final LCNetworkQueue queue = new LCNetworkQueue(this);
+	/** The server-side packet incoming data queue */
+	protected final LCNetworkQueue serverQueue = new LCNetworkQueue(this, "Client queue");
+	/** The client-side packet incoming data queue */
+	protected final LCNetworkQueue clientQueue = new LCNetworkQueue(this, "Server queue");
 
+	/** Default constructor */
 	public LCNetworkController() {
 		// TODO Auto-generated constructor stub
 	}
@@ -20,17 +28,41 @@ public class LCNetworkController implements ITickEventHandler {
 		runtime.ticks().register(this);
 	}
 
+	/**
+	 * Gets the currently preferred network pipe.
+	 * 
+	 * @return The currently preferred network pipe to use.
+	 */
 	public LCPacketPipeline getPreferredPipe() {
 		return pipe;
 	}
 
-	public LCNetworkQueue getPreferredQueue() {
-		return queue;
+	public void encodePacket(LCPacket packet, ByteBuf stream) throws IOException {
+		Class<? extends LCPacket> clazz = packet.getClass();
+		LCPacket.encodePrimitiveInto(stream, clazz.getName());
+		packet.encodeInto(stream);
+	}
+
+	public LCPacket decodePacket(ByteBuf stream) throws IOException {
+		String clazzName = (String) LCPacket.decodePrimitiveFrom(stream);
+		try {
+			Class<? extends LCPacket> clazz = (Class<? extends LCPacket>) Class.forName(clazzName);
+			LCPacket packet = clazz.newInstance();
+			packet.decodeFrom(stream.slice());
+			return packet;
+		} catch (Exception ex) {
+			if (ex instanceof IOException)
+				throw (IOException) ex;
+			throw new IOException("Decoding exception", ex);
+		}
 	}
 
 	@Override
 	public void think(Side what) {
-		queue.think(what);
+		if (what == Side.SERVER)
+			serverQueue.think(what);
+		if (what == Side.CLIENT)
+			clientQueue.think(what);
 	}
 
 }
