@@ -92,15 +92,20 @@ public class Tracer {
 				worst = value;
 			if (best > value)
 				best = value;
-			history.add(value);
+			synchronized (history) {
+				history.add(value);
+			}
 		}
 
 		public float avg() {
 			long sum = 0;
-			Long[] iheap = history.toArray(new Long[0]);
+			Long[] iheap;
+			synchronized (history) {
+				iheap = history.toArray(new Long[0]);
+			}
 			for (Long lz : iheap)
 				sum += lz;
-			return (float) sum / ((float) history.size());
+			return (float) sum / ((float) iheap.length);
 		}
 	}
 
