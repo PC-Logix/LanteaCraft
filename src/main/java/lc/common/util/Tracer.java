@@ -11,25 +11,31 @@ import java.util.Map.Entry;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
+import com.sun.xml.internal.bind.v2.schemagen.episode.Klass;
+
 import lc.common.LCLog;
 import lc.common.util.data.WindowedArrayList;
 import lc.common.util.java.DeferredTaskExecutor;
+import lc.common.util.java.MethodInvocationResolver;
 
 public class Tracer {
 
 	private static final Tracer tracer = new Tracer();
 
-	public static void begin() {
-		Tracer.begin("<method body>");
+	public static void begin(Object z) {
+		Tracer.begin(z, null);
 	}
 
-	public static void begin(String what) {
+	public static void begin(Object z, String what) {
 		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 		int pz = 1;
 		StackTraceElement src = trace[pz];
 		while (src.getClassName().equals("lc.common.util.Tracer"))
 			src = trace[pz++];
-		Tracer.tracer.traceEnter(src.getClassName() + "#" + src.getMethodName() + ": " + what);
+		if (what != null)
+			Tracer.tracer.traceEnter(z.getClass().getName() + "#" + src.getMethodName() + ": " + what);
+		else
+			Tracer.tracer.traceEnter(z.getClass().getName() + "#" + src.getMethodName());
 	}
 
 	public static void end() {
@@ -50,7 +56,7 @@ public class Tracer {
 				PrintStream stream = new PrintStream(cwd);
 				DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
 				df.setMaximumFractionDigits(340);
-				
+
 				HashMap<String, ProfileHistory> history = (HashMap<String, ProfileHistory>) Tracer.history().clone();
 				for (Entry<String, ProfileHistory> record : history.entrySet()) {
 					stream.print(record.getKey());
@@ -101,7 +107,7 @@ public class Tracer {
 	private HashMap<String, ProfileHistory> history = new HashMap<String, ProfileHistory>();
 	private HashMap<Long, Stack<String>> labels = new HashMap<Long, Stack<String>>();
 	private ProfilePerformanceWriter writer = new ProfilePerformanceWriter();
-	
+
 	static {
 		DeferredTaskExecutor.scheduleWithFixedDelay(Tracer.tracer.writer, 90, 60, TimeUnit.SECONDS);
 	}

@@ -45,7 +45,7 @@ public class LCNetworkQueue implements ITickEventHandler {
 
 	@Override
 	public void think(Side what) {
-		Tracer.begin();
+		Tracer.begin(this);
 		queue.drainTo(drain);
 		Iterator<QueuedPacket> stack = drain.iterator();
 

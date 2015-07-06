@@ -29,7 +29,7 @@ public class LCMasterWorldGen implements IWorldGenerator {
 		 * doesn't matter if the Block[] array is null at this stage.
 		 */
 		try {
-			Tracer.begin("scattered feature generator allocation");
+			Tracer.begin(this, "scattered feature generator allocation");
 			scatteredGenerator.func_151539_a(chunkProvider, world, chunkX, chunkZ, null);
 		} catch (Throwable t) {
 			LCLog.warn("Problem populating scattered features for chunk.", t);
@@ -37,7 +37,7 @@ public class LCMasterWorldGen implements IWorldGenerator {
 			Tracer.end();
 		}
 		try {
-			Tracer.begin("ordered feature generator allocation");
+			Tracer.begin(this, "ordered feature generator allocation");
 			featureGenerator.func_151539_a(chunkProvider, world, chunkX, chunkX, null);
 		} catch (Throwable t) {
 			LCLog.warn("Problem populating features for chunk.", t);
@@ -51,7 +51,7 @@ public class LCMasterWorldGen implements IWorldGenerator {
 		 */
 		boolean flag = false;
 		try {
-			Tracer.begin("scattered feature population");
+			Tracer.begin(this, "scattered feature population");
 			scatteredGenerator.generateStructuresInChunk(world, random, chunkX, chunkZ);
 		} catch (Throwable t) {
 			LCLog.warn("Failed to generate scattered structures.", t);
@@ -60,7 +60,7 @@ public class LCMasterWorldGen implements IWorldGenerator {
 		}
 		if (!flag)
 			try {
-				Tracer.begin("ordered feature population");
+				Tracer.begin(this, "ordered feature population");
 				flag = featureGenerator.generateStructuresInChunk(world, random, chunkX, chunkZ);
 			} catch (Throwable t) {
 				LCLog.warn("Failed to generate structures.", t);

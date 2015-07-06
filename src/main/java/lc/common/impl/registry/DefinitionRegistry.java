@@ -93,7 +93,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 *            The FML event initializing the runtime
 	 */
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
-		Tracer.begin();
+		Tracer.begin(this);
 		IComponentRegistry components = runtime.registries().components();
 		LCLog.debug("Evaluating %s definitions for candidacy.", definitionPool.size());
 		for (IContainerDefinition definition : definitionPool.values())

@@ -95,7 +95,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 	public void init(DefinitionRegistry registry) {
 		if (!LCRuntime.runtime.registries().components().isEnabled(ownerType))
 			return;
-		Tracer.begin();
+		Tracer.begin(this);
 		if (blockType != null && itemBlockType != null) {
 			blockObject = registry.registerBlock(blockType, itemBlockType, defName, ownerType);
 			blockObject.setProvidesTile(tileType);

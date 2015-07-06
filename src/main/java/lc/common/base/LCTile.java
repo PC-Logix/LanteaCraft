@@ -143,7 +143,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 */
 	public static void doCallbacks(Class<? extends LCTile> me, Object meObject, ArrayList<String> methods,
 			Object[] aparams) {
-		Tracer.begin();
+		Tracer.begin(meObject);
 		Method[] meMethods = me.getMethods();
 		for (String methodName : methods)
 			for (Method invoke : meMethods)
@@ -417,7 +417,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 * Send updated data to all clients on the server.
 	 */
 	protected void sendUpdatesToClients() {
-		Tracer.begin();
+		Tracer.begin(this);
 		try {
 			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
 			sendPackets(packets);
@@ -440,7 +440,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	}
 
 	private void sendUpdatesToClient(EntityPlayerMP player) {
-		Tracer.begin();
+		Tracer.begin(this);
 		try {
 			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
 			sendPackets(packets);
@@ -478,7 +478,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 			else
 				throw new LCNetworkException("Can't handle LCClientUpdates on the client!");
 		try {
-			Tracer.begin("thinkPacket implementation");
+			Tracer.begin(this, "thinkPacket implementation");
 			thinkPacket(packetOf, player);
 		} finally {
 			Tracer.end();
@@ -499,10 +499,10 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 */
 	@Override
 	public void updateEntity() {
-		Tracer.begin();
+		Tracer.begin(this);
 		if (worldObj != null)
 			if (worldObj.isRemote) {
-				Tracer.begin("thinkClient implementation");
+				Tracer.begin(this, "thinkClient implementation");
 				thinkClient();
 				thinkClientPost();
 				Tracer.end();
@@ -516,7 +516,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 					}
 				}
 			} else {
-				Tracer.begin("thinkServer implementation");
+				Tracer.begin(this, "thinkServer implementation");
 				thinkServer();
 				thinkServerPost();
 				Tracer.end();

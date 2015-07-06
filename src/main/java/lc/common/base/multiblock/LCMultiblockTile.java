@@ -140,7 +140,7 @@ public abstract class LCMultiblockTile extends LCTile {
 	@Override
 	public void thinkServerPost() {
 		super.thinkServerPost();
-		Tracer.begin();
+		Tracer.begin(this);
 		thinkMultiblock();
 		MultiblockState next = nextState();
 		if (next != null && next != getState()) {
@@ -158,7 +158,7 @@ public abstract class LCMultiblockTile extends LCTile {
 
 	@Override
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
-		Tracer.begin();
+		Tracer.begin(this);
 		if (packet instanceof LCMultiblockPacket)
 			if (worldObj.isRemote) {
 				multiblockCompound = ((LCMultiblockPacket) packet).compound;
@@ -170,7 +170,7 @@ public abstract class LCMultiblockTile extends LCTile {
 	@Override
 	public void sendPackets(List<LCPacket> packets) throws LCNetworkException {
 		super.sendPackets(packets);
-		Tracer.begin();
+		Tracer.begin(this);
 		packets.add(new LCMultiblockPacket(new DimensionPos(this), multiblockCompound));
 		Tracer.end();
 	}

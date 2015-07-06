@@ -67,7 +67,7 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 
 	@Override
 	public void evaluateRecipe() {
-		Tracer.begin();
+		Tracer.begin(this);
 		stackInputs = new HashMap<Integer, ItemStack>();
 		for (Entry<Integer, Object> entry : inputs.entrySet()) {
 			if (entry.getValue() == null)

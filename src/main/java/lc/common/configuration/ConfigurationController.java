@@ -52,7 +52,7 @@ public class ConfigurationController {
 	 *            The current configuration working directory.
 	 */
 	public void initialize(File wd) {
-		Tracer.begin();
+		Tracer.begin(this);
 		workdir = new File(wd, "LanteaCraft");
 		if (!workdir.exists())
 			workdir.mkdir();
@@ -83,7 +83,7 @@ public class ConfigurationController {
 	public void commit() {
 		if (defaultConfig.modified())
 			try {
-				Tracer.begin();
+				Tracer.begin(this);
 				LCLog.debug("Default configuration modified. Saving it...");
 				XMLSaver saver = new XMLSaver();
 				saver.save(defaultConfig, new FileOutputStream(defaultConfigFile));

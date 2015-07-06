@@ -11,6 +11,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import lc.api.event.ITickEventHandler;
 import lc.common.LCLog;
+import lc.common.util.Tracer;
 
 /**
  * Minecraft tick connection manager.
@@ -99,9 +100,12 @@ public class LCTickConnector {
 	private void doTick(Side what) {
 		for (ITickEventHandler host : children)
 			try {
+				Tracer.begin(this, "tick child: " + host.getClass().getName());
 				host.think(what);
 			} catch (Throwable t) {
 				LCLog.warn("Unhandled exception in ITickEventHandler.", t);
+			} finally {
+				Tracer.end();
 			}
 	}
 
