@@ -1,8 +1,8 @@
 # Stargate DHD controller
-tile.DHD0.name=Stargate Controller
-tile.DHD1.name=Pegasus Stargate Controller
-tile.DHD2.name=Wraith Stargate Controller
-tile.DHD3.name=Nox Stargate Controller
+tile.DHD.0.name=Stargate Controller
+tile.DHD.1.name=Pegasus Stargate Controller
+tile.DHD.2.name=Wraith Stargate Controller
+tile.DHD.3.name=Nox Stargate Controller
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Stargate Base
@@ -51,10 +51,10 @@ tile.blockLiquidNaquadah.name=Liquid Naquadah
 item.liquidNaquadahBucket.name=Liquid Naquadah Bucket
 
 # Decor blocks
-tile.lanteaDecor.1.name=Lantean Patterned Steel
-tile.lanteaDecor.2.name=Lantean Steel
-tile.lanteaDecor.3.name=Goa'uld Patterned Gold
-tile.lanteaDecor.4.name=Goa'uld Gold
+tile.lanteaDecor.1.name=Lantean Steel
+tile.lanteaDecor.2.name=Lantean Patterned Steel
+tile.lanteaDecor.3.name=Goa'uld Gold
+tile.lanteaDecor.4.name=Goa'uld Patterned Gold
 tile.lanteaDoor.0.name=Lantean Door
 tile.lanteaDoor.1.name=Goa'uld Door
 
@@ -67,6 +67,11 @@ tile.lanteaSteelDecorStair.name=Lantean Patterned Steel Stairs
 # Decor glass
 tile.lanteaGlassDecor.1.name=Lantean Glass
 
+# Decor obelisks
+tile.blockObelisk.0.name=Obelisk
+tile.blockObelisk.1.name=Obelisk
+tile.blockObelisk.2.name=Obelisk
+
 # Ore / Ore blocks
 tile.lanteaOre.0.name=Naquadah Ore
 item.lanteaOre.0.name=Naquadah
@@ -76,6 +81,7 @@ tile.lanteaOre.2.name=Trinium Ore
 item.lanteaOre.2.name=Trinium
 
 # Machines
+tile.frame.name=Construction Frame
 tile.naquadahGenerator.name=Naquadah Generator
 tile.blockCrystalInfuser.name=Crystal Infuser
 
@@ -83,8 +89,7 @@ tile.blockCrystalInfuser.name=Crystal Infuser
 item.jacksonNotebook.name=Daniel Jackson's Notebook
 
 # Transporter Rings
-tile.transporterRing.0.name=Transporter Ring Frame
-tile.transporterRing.1.name=Transporter Ring Controller
+tile.blockTransportRing.name=Transporter Ring
 item.transportRingActivator.name=Transport Ring Activator
 
 # Debug and other items
