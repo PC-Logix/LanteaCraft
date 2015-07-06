@@ -1,6 +1,7 @@
 package lc;
 
 import lc.common.LCLog;
+import lc.common.util.Tracer;
 
 import org.apache.logging.log4j.Level;
 
@@ -59,7 +60,9 @@ public class LanteaCraft {
 			LCLog.fatal("You should attempt to reinstall a clean copy of LanteaCraft if you did not");
 			LCLog.fatal("modify it yourself. Going to proceed with loading anyway.");
 		}
+		Tracer.begin();
 		LCRuntime.runtime.preinit(event);
+		Tracer.end();
 	}
 
 	/**
@@ -70,7 +73,9 @@ public class LanteaCraft {
 	 */
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		Tracer.begin();
 		LCRuntime.runtime.init(event);
+		Tracer.end();
 	}
 
 	/**
@@ -81,7 +86,9 @@ public class LanteaCraft {
 	 */
 	@Mod.EventHandler
 	public void postinit(FMLPostInitializationEvent event) {
+		Tracer.begin();
 		LCRuntime.runtime.postinit(event);
+		Tracer.end();
 	}
 
 	/**
@@ -92,7 +99,9 @@ public class LanteaCraft {
 	 */
 	@Mod.EventHandler
 	public void beforeServerStarting(FMLServerAboutToStartEvent event) {
+		Tracer.begin();
 		LCRuntime.runtime.beforeServerStarting(event);
+		Tracer.end();
 	}
 
 	/**
@@ -103,7 +112,9 @@ public class LanteaCraft {
 	 */
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
+		Tracer.begin();
 		LCRuntime.runtime.serverStarting(event);
+		Tracer.end();
 	}
 
 	/**
@@ -114,7 +125,9 @@ public class LanteaCraft {
 	 */
 	@Mod.EventHandler
 	public void serverStarted(FMLServerStartedEvent event) {
+		Tracer.begin();
 		LCRuntime.runtime.serverStarted(event);
+		Tracer.end();
 	}
 
 	/**
@@ -125,7 +138,9 @@ public class LanteaCraft {
 	 */
 	@Mod.EventHandler
 	public void serverStopping(FMLServerStoppingEvent event) {
+		Tracer.begin();
 		LCRuntime.runtime.serverStopping(event);
+		Tracer.end();
 	}
 
 	/**
@@ -136,7 +151,9 @@ public class LanteaCraft {
 	 */
 	@Mod.EventHandler
 	public void serverStopped(FMLServerStoppedEvent event) {
+		Tracer.begin();
 		LCRuntime.runtime.serverStopped(event);
+		Tracer.end();
 	}
 
 	/**
@@ -147,7 +164,9 @@ public class LanteaCraft {
 	 */
 	@Mod.EventHandler
 	public void signatureViolation(FMLFingerprintViolationEvent event) {
+		Tracer.begin();
 		LCRuntime.runtime.signatureViolation(event);
+		Tracer.end();
 	}
 
 	/**
@@ -158,6 +177,8 @@ public class LanteaCraft {
 	 */
 	@Mod.EventHandler
 	public void receiveIMC(IMCEvent event) {
+		Tracer.begin();
 		LCRuntime.runtime.receiveIMC(event);
+		Tracer.end();
 	}
 }

@@ -8,6 +8,7 @@ import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
 import lc.common.base.LCItemBlock;
 import lc.common.base.LCTile;
+import lc.common.util.Tracer;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -94,6 +95,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 	public void init(DefinitionRegistry registry) {
 		if (!LCRuntime.runtime.registries().components().isEnabled(ownerType))
 			return;
+		Tracer.begin();
 		if (blockType != null && itemBlockType != null) {
 			blockObject = registry.registerBlock(blockType, itemBlockType, defName, ownerType);
 			blockObject.setProvidesTile(tileType);
@@ -106,6 +108,7 @@ public class BlockItemDefinition implements IContainerDefinition {
 		} else if (itemType != null)
 			itemObject = registry.registerItem(itemType, defName, ownerType);
 		LCRuntime.runtime.hints().provideHints(this);
+		Tracer.end();
 	}
 
 	@Override

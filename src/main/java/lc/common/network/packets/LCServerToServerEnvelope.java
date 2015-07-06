@@ -13,7 +13,7 @@ import lc.common.network.LCPacketPipeline;
 public class LCServerToServerEnvelope extends LCPacket {
 
 	public static LCServerToServerEnvelope envelope(LCPacket data) throws IOException {
-		LCPacketPipeline pipe = LCRuntime.runtime.network();
+		LCPacketPipeline pipe = LCRuntime.runtime.network().getPreferredPipe();
 		ByteBuf buffer = Unpooled.buffer();
 		buffer.writeByte((byte) pipe.discriminator(data.getClass()));
 		data.encodeInto(null, buffer);
@@ -21,7 +21,7 @@ public class LCServerToServerEnvelope extends LCPacket {
 	}
 
 	public static LCPacket unenvelope(LCServerToServerEnvelope envelope) throws IOException {
-		LCPacketPipeline pipe = LCRuntime.runtime.network();
+		LCPacketPipeline pipe = LCRuntime.runtime.network().getPreferredPipe();
 		ByteBuf buffer = Unpooled.wrappedBuffer(envelope.data);
 		Class<? extends LCPacket> clazz = pipe.packetClass(buffer.readByte());
 		LCPacket packet;

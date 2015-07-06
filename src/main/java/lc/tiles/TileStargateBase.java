@@ -264,8 +264,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public void thinkClient() {
 		if (!clientSeenStargateData) {
-			LCRuntime.runtime.network().sendToServer(
-					new LCStargateConnectionPacket(new DimensionPos(this), StargateState.IDLE, 0, false));
+			LCRuntime.runtime.network().getPreferredPipe()
+					.sendToServer(new LCStargateConnectionPacket(new DimensionPos(this), StargateState.IDLE, 0, false));
 		}
 		thinkClientRender(!clientSeenState);
 		thinkClientSound(!clientSeenState);

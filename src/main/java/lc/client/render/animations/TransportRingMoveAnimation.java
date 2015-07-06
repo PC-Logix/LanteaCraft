@@ -28,7 +28,7 @@ public class TransportRingMoveAnimation extends Animation {
 	public TransportRingMoveAnimation(double time, int whichRing, double newHeight, RunnableTileCallback doBefore,
 			RunnableTileCallback doAfter) {
 		super(time, true, doBefore, doAfter);
-		addProperty("ring-height-" + whichRing, 0.0d, newHeight, InterpolationMode.SQUARE);
+		addProperty("ring-height-" + whichRing, 0.0d, newHeight, InterpolationMode.INVSIN);
 	}
 
 }

@@ -57,8 +57,7 @@ public class HintProviderClient extends HintProviderServer {
 
 	private ComponentConfig renderConfiguration;
 
-	/** The connection forwarder */
-	final LCClientNetworkForwarder forwarder = new LCClientNetworkForwarder();
+	private LCClientNetworkForwarder forwarder;
 
 	/** Default constructor */
 	public HintProviderClient() {
@@ -75,6 +74,7 @@ public class HintProviderClient extends HintProviderServer {
 		itemRenderingHook = new LCItemRenderPipeline();
 		soundController = new ClientSoundController();
 		particleMachine = new ParticleMachine();
+		forwarder = new LCClientNetworkForwarder();
 		RenderingRegistry.registerBlockHandler(blockRenderingHook.getRenderId(), blockRenderingHook);
 	}
 
@@ -140,6 +140,10 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public IParticleMachine particles() {
 		return particleMachine;
+	}
+
+	public LCClientNetworkForwarder forwarder() {
+		return forwarder;
 	}
 
 }

@@ -10,10 +10,13 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import lc.LCRuntime;
+import lc.client.HintProviderClient;
 import lc.common.LCLog;
 import lc.common.network.packets.LCClientUpdate;
 import lc.common.network.packets.LCDHDPacket;
 import lc.common.network.packets.LCMultiblockPacket;
+import lc.common.network.packets.LCServerToServerEnvelope;
 import lc.common.network.packets.LCStargateConnectionPacket;
 import lc.common.network.packets.LCStargateStatePacket;
 import lc.common.network.packets.LCTileSync;
@@ -43,8 +46,14 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @ChannelHandler.Sharable
 public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPacket> {
+
 	protected EnumMap<Side, FMLEmbeddedChannel> channels;
 	protected LinkedList<Class<? extends LCPacket>> packets = new LinkedList<Class<? extends LCPacket>>();
+	private final LCNetworkController controller;
+
+	public LCPacketPipeline(LCNetworkController controller) {
+		this.controller = controller;
+	}
 
 	public byte discriminator(Class<? extends LCPacket> packetClazz) {
 		return (byte) packets.indexOf(packetClazz);
@@ -135,6 +144,14 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 			if (packet instanceof LCTargetPacket) {
 				LCTargetPacket target = (LCTargetPacket) packet;
 				LCTargetPacket.handlePacket(target, player);
+			} else if (packet instanceof LCServerToServerEnvelope) {
+				LCServerToServerEnvelope envelope = (LCServerToServerEnvelope) packet;
+				if (msg.getTarget() == Side.CLIENT) {
+					HintProviderClient client = (HintProviderClient) LCRuntime.runtime.hints();
+					client.forwarder().handle(envelope);
+				} else {
+
+				}
 			} else
 				throw new LCNetworkException(String.format("Unable to handle packet type %s.", clazz.getName()));
 

@@ -20,7 +20,7 @@ import lc.common.impl.registry.InterfaceRegistry;
 import lc.common.impl.registry.RecipeRegistry;
 import lc.common.impl.registry.RegistryContainer;
 import lc.common.impl.registry.StructureRegistry;
-import lc.common.network.LCPacketPipeline;
+import lc.common.network.LCNetworkController;
 import lc.common.util.LCCreativeTabManager;
 import lc.common.util.game.LCTickConnector;
 import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
@@ -68,7 +68,7 @@ public class LCRuntime implements ILCAPIProxy {
 
 	private final ConfigurationController config = new ConfigurationController();
 	/** Network driver */
-	private final LCPacketPipeline network = new LCPacketPipeline();
+	private final LCNetworkController network = new LCNetworkController();
 	/** Tick driver */
 	private final LCTickConnector ticks = new LCTickConnector();
 
@@ -133,11 +133,11 @@ public class LCRuntime implements ILCAPIProxy {
 	}
 
 	/**
-	 * Get the network pipeline
+	 * Get the network controller
 	 *
-	 * @return The network pipeline
+	 * @return The network controller
 	 */
-	public LCPacketPipeline network() {
+	public LCNetworkController network() {
 		return network;
 	}
 
@@ -191,7 +191,7 @@ public class LCRuntime implements ILCAPIProxy {
 	public void init(FMLInitializationEvent event) {
 		LCLog.debug("LCRuntime entering phase init");
 		container.init(this, event);
-		network.init(BuildInfo.modID);
+		network.init(this, event);
 		((DefinitionRegistry) registries().definitions()).init(this, event);
 		((RecipeRegistry) registries().recipes()).init(this, event);
 		((StructureRegistry) registries().structures()).init(this, event);

@@ -10,6 +10,7 @@ import lc.api.defs.IDefinitionReference;
 import lc.api.defs.IGameDef;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
+import lc.common.util.Tracer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
@@ -66,6 +67,7 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 
 	@Override
 	public void evaluateRecipe() {
+		Tracer.begin();
 		stackInputs = new HashMap<Integer, ItemStack>();
 		for (Entry<Integer, Object> entry : inputs.entrySet()) {
 			if (entry.getValue() == null)
@@ -84,6 +86,7 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 			else
 				stackOutputs.put(i, (ItemStack) val);
 		}
+		Tracer.end();
 	}
 
 	private ItemStack resolve(Object val) {

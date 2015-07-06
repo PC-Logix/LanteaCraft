@@ -18,6 +18,7 @@ import lc.api.rendering.IBlockSkinnable;
 import lc.api.rendering.ITileRenderInfo;
 import lc.api.stargate.ITransportRingAccess;
 import lc.client.animation.Animation;
+import lc.client.render.animations.TransportRingMoveAnimation;
 import lc.common.LCLog;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
@@ -49,17 +50,22 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 
 		@Override
 		public Vector3 getStructureDimensions() {
-			return new Vector3(3, 1, 3);
+			return new Vector3(5, 1, 5);
 		}
 
 		@Override
 		public Vector3 getStructureCenter() {
-			return new Vector3(1, 0, 1);
+			return new Vector3(2, 0, 2);
 		}
 
 		@Override
 		public int[][][] getStructureLayout() {
-			return new int[][][] { { { 0, 0, 0 } }, { { 0, 1, 0 } }, { { 0, 0, 0 } } };
+			return new int[][][] { 
+					{ { 0, 0, 0, 0, 0 } }, 
+					{ { 0, 0, 0, 0, 0 } }, 
+					{ { 0, 0, 1, 0, 0 } },
+					{ { 0, 0, 0, 0, 0 } }, 
+					{ { 0, 0, 0, 0, 0 } } };
 		}
 
 		@Override
@@ -173,6 +179,13 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 		} else {
 			if (clientAnimationQueue.peek() != null)
 				thinkClientChangeAnimation(clientAnimationQueue.pop());
+		}
+		
+		if (clientAnimationQueue.peek() == null) {
+			for (int i = 5; i >= 0; i--)
+				clientAnimationQueue.add(new TransportRingMoveAnimation(10.0d, i, i * 0.5d, null, null));
+			for (int i = 0; i < 6; i++)
+				clientAnimationQueue.add(new TransportRingMoveAnimation(10.0d, i, 0.0d, null, null));
 		}
 	}
 

@@ -21,6 +21,7 @@ import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
 import lc.common.configuration.IConfigure;
 import lc.common.util.LCCreativeTabManager;
+import lc.common.util.Tracer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.creativetab.CreativeTabs;
@@ -92,6 +93,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 *            The FML event initializing the runtime
 	 */
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
+		Tracer.begin();
 		IComponentRegistry components = runtime.registries().components();
 		LCLog.debug("Evaluating %s definitions for candidacy.", definitionPool.size());
 		for (IContainerDefinition definition : definitionPool.values())
@@ -106,6 +108,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 							element.getComponentOwner());
 			} else
 				LCLog.warn("Strange definition type %s, ignoring it.", definition.getClass().getName());
+		Tracer.end();
 	}
 
 	/**

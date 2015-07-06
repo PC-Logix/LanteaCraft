@@ -61,7 +61,7 @@ public class TeleportationHelper {
 
 				DimensionRegisterMessage packet = new DimensionRegisterMessage(newDimension,
 						DimensionManager.getProviderType(newDimension));
-				LCRuntime.runtime.network().sendForgeMessageTo(packet, player);
+				LCRuntime.runtime.network().getPreferredPipe().sendForgeMessageTo(packet, player);
 
 				player.closeScreen();
 				player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension,

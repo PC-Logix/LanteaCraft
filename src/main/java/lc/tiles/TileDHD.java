@@ -147,7 +147,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 		request.setInteger("typedButton", whichButton);
 		request.setInteger("typedValue", (int) whatValue);
 		LCDHDPacket packet = new LCDHDPacket(new DimensionPos(this), request);
-		LCRuntime.runtime.network().sendToServer(packet);
+		LCRuntime.runtime.network().getPreferredPipe().sendToServer(packet);
 		mixer().replayChannel("click");
 	}
 

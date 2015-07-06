@@ -10,6 +10,7 @@ import lc.common.base.LCTile;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCMultiblockPacket;
+import lc.common.util.Tracer;
 import lc.common.util.math.DimensionPos;
 import lc.common.util.math.Vector3;
 import net.minecraft.entity.player.EntityPlayer;
@@ -139,6 +140,7 @@ public abstract class LCMultiblockTile extends LCTile {
 	@Override
 	public void thinkServerPost() {
 		super.thinkServerPost();
+		Tracer.begin();
 		thinkMultiblock();
 		MultiblockState next = nextState();
 		if (next != null && next != getState()) {
@@ -149,23 +151,28 @@ public abstract class LCMultiblockTile extends LCTile {
 		if (multiblockNbtDirty) {
 			multiblockNbtDirty = false;
 			LCMultiblockPacket update = new LCMultiblockPacket(new DimensionPos(this), multiblockCompound);
-			LCRuntime.runtime.network().sendToAllAround(update, update.target, 128.0d);
+			LCRuntime.runtime.network().getPreferredPipe().sendToAllAround(update, update.target, 128.0d);
 		}
+		Tracer.end();
 	}
 
 	@Override
 	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
+		Tracer.begin();
 		if (packet instanceof LCMultiblockPacket)
 			if (worldObj.isRemote) {
 				multiblockCompound = ((LCMultiblockPacket) packet).compound;
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
+		Tracer.end();
 	}
 
 	@Override
 	public void sendPackets(List<LCPacket> packets) throws LCNetworkException {
 		super.sendPackets(packets);
+		Tracer.begin();
 		packets.add(new LCMultiblockPacket(new DimensionPos(this), multiblockCompound));
+		Tracer.end();
 	}
 
 	@Override

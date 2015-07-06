@@ -38,7 +38,7 @@ public class TileTransportRingRenderer extends LCTileRenderer {
 			return false;
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glTranslated(x, y + 1.0f, z);
+		GL11.glTranslated(x, y + 0.75f, z);
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(ResourceAccess.getNamedResource(ResourceAccess
 				.formatResourceName("textures/models/transport_rings_${TEX_QUALITY}.png")));
 
@@ -52,9 +52,10 @@ public class TileTransportRingRenderer extends LCTileRenderer {
 				animation.sampleProperties(state, frame);
 		}
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			GL11.glPushMatrix();
-			GL11.glTranslatef(0.0f, 0.5f * i, 0.0f);
+			double height = state.get("ring-height-" + i, 0.0d);
+			GL11.glTranslated(0.0d, height, 0.0d);
 			ModelTransportRing.$.prepareAndRender();
 			GL11.glPopMatrix();
 		}

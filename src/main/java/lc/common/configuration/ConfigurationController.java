@@ -15,6 +15,7 @@ import lc.common.configuration.xml.XMLParser;
 import lc.common.configuration.xml.XMLParserException;
 import lc.common.configuration.xml.XMLSaver;
 import lc.common.configuration.xml.XMLSaverException;
+import lc.common.util.Tracer;
 import lc.common.util.java.DeferredTaskExecutor;
 
 /**
@@ -51,6 +52,7 @@ public class ConfigurationController {
 	 *            The current configuration working directory.
 	 */
 	public void initialize(File wd) {
+		Tracer.begin();
 		workdir = new File(wd, "LanteaCraft");
 		if (!workdir.exists())
 			workdir.mkdir();
@@ -69,6 +71,8 @@ public class ConfigurationController {
 			throw new RuntimeException("Error configuring LanteaCraft.", pex);
 		} catch (IOException ioex) {
 			throw new RuntimeException("Error configuring LanteaCraft setting storage.", ioex);
+		} finally {
+			Tracer.end();
 		}
 	}
 
@@ -79,6 +83,7 @@ public class ConfigurationController {
 	public void commit() {
 		if (defaultConfig.modified())
 			try {
+				Tracer.begin();
 				LCLog.debug("Default configuration modified. Saving it...");
 				XMLSaver saver = new XMLSaver();
 				saver.save(defaultConfig, new FileOutputStream(defaultConfigFile));
@@ -87,6 +92,8 @@ public class ConfigurationController {
 				throw new RuntimeException("Error saving LanteaCraft configuration state.", sex);
 			} catch (IOException ioex) {
 				throw new RuntimeException("Error saving to LanteaCraft setting storage.", ioex);
+			} finally {
+				Tracer.end();
 			}
 	}
 

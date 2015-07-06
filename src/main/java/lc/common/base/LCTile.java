@@ -23,6 +23,7 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCClientUpdate;
 import lc.common.network.packets.LCTileSync;
+import lc.common.util.Tracer;
 import lc.common.util.java.DestructableReferenceQueue;
 import lc.common.util.math.DimensionPos;
 import net.minecraft.entity.player.EntityPlayer;
@@ -142,6 +143,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 */
 	public static void doCallbacks(Class<? extends LCTile> me, Object meObject, ArrayList<String> methods,
 			Object[] aparams) {
+		Tracer.begin();
 		Method[] meMethods = me.getMethods();
 		for (String methodName : methods)
 			for (Method invoke : meMethods)
@@ -156,6 +158,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 					}
 					break;
 				}
+		Tracer.end();
 	}
 
 	/**
@@ -414,6 +417,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 * Send updated data to all clients on the server.
 	 */
 	protected void sendUpdatesToClients() {
+		Tracer.begin();
 		try {
 			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
 			sendPackets(packets);
@@ -422,6 +426,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		} catch (LCNetworkException e) {
 			LCLog.warn("Error sending network update.", e);
 		}
+		Tracer.end();
 	}
 
 	/**
@@ -431,10 +436,11 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 *            The packet to send
 	 */
 	protected void sendPacketToClients(LCPacket packet) {
-		LCRuntime.runtime.network().sendScoped(packet, 128.0d);
+		LCRuntime.runtime.network().getPreferredPipe().sendScoped(packet, 128.0d);
 	}
 
 	private void sendUpdatesToClient(EntityPlayerMP player) {
+		Tracer.begin();
 		try {
 			ArrayList<LCPacket> packets = new ArrayList<LCPacket>();
 			sendPackets(packets);
@@ -443,6 +449,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		} catch (LCNetworkException e) {
 			LCLog.warn("Error sending network update.", e);
 		}
+		Tracer.end();
 	}
 
 	/**
@@ -454,7 +461,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 *            The player to send to
 	 */
 	protected void sendPacketToClient(LCPacket packet, EntityPlayerMP player) {
-		LCRuntime.runtime.network().sendTo(packet, player);
+		LCRuntime.runtime.network().getPreferredPipe().sendTo(packet, player);
 	}
 
 	@Override
@@ -470,7 +477,12 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 				sendUpdatesToClient((EntityPlayerMP) player);
 			else
 				throw new LCNetworkException("Can't handle LCClientUpdates on the client!");
-		thinkPacket(packetOf, player);
+		try {
+			Tracer.begin("thinkPacket implementation");
+			thinkPacket(packetOf, player);
+		} finally {
+			Tracer.end();
+		}
 	}
 
 	@Override
@@ -487,27 +499,34 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 */
 	@Override
 	public void updateEntity() {
+		Tracer.begin();
 		if (worldObj != null)
 			if (worldObj.isRemote) {
+				Tracer.begin("thinkClient implementation");
 				thinkClient();
 				thinkClientPost();
+				Tracer.end();
 				if (clientDataDirty) {
 					if (clientDataCooldown > 0)
 						clientDataCooldown--;
 					if (clientDataCooldown <= 0) {
-						LCRuntime.runtime.network().sendToServer(new LCClientUpdate(new DimensionPos(this)));
+						LCRuntime.runtime.network().getPreferredPipe()
+								.sendToServer(new LCClientUpdate(new DimensionPos(this)));
 						clientDataCooldown += (30 * 20);
 					}
 				}
 			} else {
+				Tracer.begin("thinkServer implementation");
 				thinkServer();
 				thinkServerPost();
+				Tracer.end();
 				if (nbtDirty) {
 					nbtDirty = false;
 					LCTileSync packet = new LCTileSync(new DimensionPos(this), compound);
-					LCRuntime.runtime.network().sendToAllAround(packet, packet.target, 128.0d);
+					LCRuntime.runtime.network().getPreferredPipe().sendToAllAround(packet, packet.target, 128.0d);
 				}
 			}
+		Tracer.end();
 	}
 
 	@Override
@@ -624,7 +643,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	@Override
 	public Packet getDescriptionPacket() {
 		if (worldObj.isRemote)
-			LCRuntime.runtime.network().sendToServer(new LCClientUpdate(new DimensionPos(this)));
+			LCRuntime.runtime.network().getPreferredPipe().sendToServer(new LCClientUpdate(new DimensionPos(this)));
 		return null;
 	}
 
