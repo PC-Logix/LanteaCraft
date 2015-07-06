@@ -87,29 +87,10 @@ public class LCNetworkController implements ITickEventHandler {
 		if (!players.containsKey(player))
 			players.put(player, new LCNetworkPlayer(this));
 		LCLog.info("Sending LanteaCraft server handshake to client.");
-		getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.SERVER_HELLO), player);
+		players.get(player).sendHandshake(player);
 	}
 
 	public void playerDisconnected(EntityPlayerMP player) {
 		players.remove(player);
-	}
-
-	public void handleHandshakePacket(EntityPlayerMP player, LCNetworkHandshake packet, Side target) {
-		if (target == Side.CLIENT) {
-			if (packet.reason == HandshakeReason.SERVER_HELLO) {
-				/* If we get HELLO, respond back, then send pending */
-				getPreferredPipe().sendToServer(
-						new LCNetworkHandshake(HandshakeReason.CLIENT_HELLO, envelopeBuffer.size()));
-				LCServerToServerEnvelope[] pending = envelopeBuffer.packets();
-				for (int i = 0; i < pending.length; i++)
-					getPreferredPipe().sendToServer(pending[i]);
-			} else
-				LCLog.warn("Strange handshake packet on client from server: %s", packet.reason);
-		} else {
-			if (packet.reason == HandshakeReason.CLIENT_HELLO) {
-				players.get(player).expectedEnvelopes = (Integer) packet.parameters[0];
-			} else
-				LCLog.warn("Strange handshake packet on server from client: %s", packet.reason);
-		}
 	}
 }

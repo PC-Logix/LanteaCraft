@@ -11,7 +11,9 @@ import lc.LCRuntime;
 import lc.common.LCLog;
 import lc.common.crypto.DSAProvider;
 import lc.common.crypto.KeyTrustRegistry;
+import lc.common.network.packets.LCNetworkHandshake;
 import lc.common.network.packets.LCServerToServerEnvelope;
+import lc.common.network.packets.LCNetworkHandshake.HandshakeReason;
 import lc.server.HintProviderServer;
 
 public class LCNetworkPlayer {
@@ -19,9 +21,32 @@ public class LCNetworkPlayer {
 	private final LCNetworkController controller;
 	public int expectedEnvelopes;
 	private LCPacketBuffer<LCServerToServerEnvelope> envelopes;
-	
-	public LCNetworkPlayer(LCNetworkController controller) { 
+
+	public LCNetworkPlayer(LCNetworkController controller) {
 		this.controller = controller;
+	}
+
+	public void sendHandshake(EntityPlayerMP player) {
+		controller.getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.SERVER_HELLO), player);
+	}
+
+	public void handleHandshakePacket(EntityPlayerMP player, LCNetworkHandshake packet, Side target) {
+		if (target == Side.CLIENT) {
+			if (packet.reason == HandshakeReason.SERVER_HELLO) {
+				/* If we get HELLO, respond back, then send pending */
+				LCServerToServerEnvelope[] pending = controller.envelopeBuffer.packets();
+				controller.getPreferredPipe().sendToServer(
+						new LCNetworkHandshake(HandshakeReason.CLIENT_HELLO, pending.length));
+				for (int i = 0; i < pending.length; i++)
+					controller.getPreferredPipe().sendToServer(pending[i]);
+			} else
+				LCLog.warn("Strange handshake packet on client from server: %s", packet.reason);
+		} else {
+			if (packet.reason == HandshakeReason.CLIENT_HELLO) {
+				expectedEnvelopes = (Integer) packet.parameters[0];
+			} else
+				LCLog.warn("Strange handshake packet on server from client: %s", packet.reason);
+		}
 	}
 
 	public void addEnvelopePacket(EntityPlayerMP player, LCServerToServerEnvelope envelope) {
@@ -44,7 +69,8 @@ public class LCNetworkPlayer {
 				for (LCServerToServerEnvelope blob : blobs) {
 					if (!DSAProvider.verify(blob.signature(), blob.data(), foundKey)) {
 						envelopes.clear();
-						throw new LCNetworkException("Found invalid siganture for signed data. Possibly tampered or invalid packets!");
+						throw new LCNetworkException(
+								"Found invalid siganture for signed data. Possibly tampered or invalid packets!");
 					}
 				}
 				for (LCServerToServerEnvelope blob : blobs) {
