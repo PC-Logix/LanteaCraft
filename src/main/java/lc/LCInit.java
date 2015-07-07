@@ -15,6 +15,7 @@ import lc.blocks.BlockBrazier;
 import lc.blocks.BlockDHD;
 import lc.blocks.BlockDecorative;
 import lc.blocks.BlockDecorative.DecorBlockTypes;
+import lc.blocks.BlockConfigurator;
 import lc.blocks.BlockFrame;
 import lc.blocks.BlockLanteaAlloy;
 import lc.blocks.BlockLanteaDoor;
@@ -87,6 +88,7 @@ public class LCInit {
 		blocks.stargateBaseBlock = DefinitionWrapperProvider.provide(BlockStargateBase.class);
 		blocks.stargateDHDBlock = DefinitionWrapperProvider.provide(BlockDHD.class);
 		blocks.transporterBlock = DefinitionWrapperProvider.provide(BlockTransportRing.class);
+		blocks.configuratorBlock = DefinitionWrapperProvider.provide(BlockConfigurator.class);
 		blocks.frameBlock = DefinitionWrapperProvider.provide(BlockFrame.class);
 		blocks.lanteaOreBlock = DefinitionWrapperProvider.provide(BlockLanteaOre.class);
 		blocks.lanteaAlloyBlock = DefinitionWrapperProvider.provide(BlockLanteaAlloy.class);

@@ -8,16 +8,19 @@ import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.api.rendering.IParticleMachine;
 import lc.blocks.BlockBrazier;
+import lc.blocks.BlockConfigurator;
 import lc.blocks.BlockDHD;
 import lc.blocks.BlockLanteaDoor;
 import lc.blocks.BlockObelisk;
 import lc.client.openal.ClientSoundController;
 import lc.client.opengl.ParticleMachine;
 import lc.client.render.fabs.blocks.BlockBrazierRenderer;
+import lc.client.render.fabs.blocks.BlockConfiguratorRenderer;
 import lc.client.render.fabs.blocks.BlockDHDRenderer;
 import lc.client.render.fabs.blocks.BlockDoorRenderer;
 import lc.client.render.fabs.blocks.BlockObeliskRenderer;
 import lc.client.render.fabs.items.ItemDecoratorRenderer;
+import lc.client.render.fabs.tiles.TileConfiguratorRenderer;
 import lc.client.render.fabs.tiles.TileDHDRenderer;
 import lc.client.render.fabs.tiles.TileDoorRenderer;
 import lc.client.render.fabs.tiles.TileStargateBaseRenderer;
@@ -33,6 +36,7 @@ import lc.common.configuration.xml.ComponentConfig;
 import lc.common.impl.registry.DefinitionRegistry;
 import lc.items.ItemDecorator;
 import lc.server.HintProviderServer;
+import lc.tiles.TileConfigurator;
 import lc.tiles.TileDHD;
 import lc.tiles.TileLanteaDoor;
 import lc.tiles.TileStargateBase;
@@ -88,9 +92,11 @@ public class HintProviderClient extends HintProviderServer {
 		registry.registerBlockRenderer(BlockLanteaDoor.class, BlockDoorRenderer.class);
 		registry.registerBlockRenderer(BlockObelisk.class, BlockObeliskRenderer.class);
 		registry.registerBlockRenderer(BlockBrazier.class, BlockBrazierRenderer.class);
+		registry.registerBlockRenderer(BlockConfigurator.class, BlockConfiguratorRenderer.class);
 		registry.registerBlockRenderer(BlockDHD.class, BlockDHDRenderer.class);
 		registry.registerTileRenderer(TileLanteaDoor.class, TileDoorRenderer.class);
 		registry.registerTileRenderer(TileDHD.class, TileDHDRenderer.class);
+		registry.registerTileRenderer(TileConfigurator.class, TileConfiguratorRenderer.class);
 	}
 
 	@Override
