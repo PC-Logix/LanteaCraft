@@ -20,7 +20,7 @@ public class BlockFilter {
 	 *            The block type
 	 */
 	public BlockFilter(Block block) {
-		this(block, 0);
+		this(block, -1);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class BlockFilter {
 	 */
 	public boolean matches(World world, int x, int y, int z) {
 		Block blockOf = world.getBlock(x, y, z);
-		if (blockOf.equals(targetBlock) && targetMetadata == 0)
+		if (blockOf.equals(targetBlock) && targetMetadata == -1)
 			return true;
 		if (blockOf.equals(targetBlock) && targetMetadata == world.getBlockMetadata(x, y, z))
 			return true;
