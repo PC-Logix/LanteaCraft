@@ -98,7 +98,7 @@ public abstract class LCMultiblockTile extends LCTile {
 			if (!multiblockCompound.hasKey("owner"))
 				return MultiblockState.NONE;
 			Vector3 owner = Vector3.from(multiblockCompound.getCompoundTag("owner"));
-			TileEntity tile = worldObj.getTileEntity(owner.floorX(), owner.floorY(), owner.floorZ());
+			TileEntity tile = worldObj.getTileEntity(owner.fx(), owner.fy(), owner.fz());
 			if (!(tile instanceof LCMultiblockTile))
 				return MultiblockState.NONE;
 			return ((LCMultiblockTile) tile).getState();

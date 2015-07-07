@@ -357,7 +357,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer, IConfigur
 			if (world != null) {
 				ForgeDirection d = ForgeDirection.getOrientation(i);
 				Vector3 p = t.p(d.offsetX, d.offsetY, d.offsetZ);
-				tess.setBrightness(block.getMixedBrightnessForBlock(world, p.floorX(), p.floorY(), p.floorZ()));
+				tess.setBrightness(block.getMixedBrightnessForBlock(world, p.fx(), p.fy(), p.fz()));
 			} else
 				tess.setBrightness(brightness);
 			cubeFace(tess, t.translate(0.5d, 0.5d, 0.5d), cubeMap[i]);

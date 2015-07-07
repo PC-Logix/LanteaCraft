@@ -370,8 +370,8 @@ public class Vector3 {
 	 *
 	 * @return The floored x-component of this Vector3.
 	 */
-	public int floorX() {
-		return (int) Math.round(x);
+	public int fx() {
+		return (int) Math.floor(x);
 	}
 
 	/**
@@ -379,8 +379,8 @@ public class Vector3 {
 	 *
 	 * @return The floored y-component of this Vector3.
 	 */
-	public int floorY() {
-		return (int) Math.round(y);
+	public int fy() {
+		return (int) Math.floor(y);
 	}
 
 	/**
@@ -388,7 +388,34 @@ public class Vector3 {
 	 *
 	 * @return The floored z-component of this Vector3.
 	 */
-	public int floorZ() {
+	public int fz() {
+		return (int) Math.floor(z);
+	}
+	
+	/**
+	 * Calculates the rounded x-component of this Vector3.
+	 *
+	 * @return The floored x-component of this Vector3.
+	 */
+	public int rx() {
+		return (int) Math.round(x);
+	}
+
+	/**
+	 * Calculates the rounded y-component of this Vector3.
+	 *
+	 * @return The floored y-component of this Vector3.
+	 */
+	public int ry() {
+		return (int) Math.round(y);
+	}
+
+	/**
+	 * Calculates the rounded z-component of this Vector3.
+	 *
+	 * @return The floored z-component of this Vector3.
+	 */
+	public int rz() {
 		return (int) Math.round(z);
 	}
 

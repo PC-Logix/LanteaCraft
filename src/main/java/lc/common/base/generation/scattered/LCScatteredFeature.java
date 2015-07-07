@@ -210,7 +210,7 @@ public abstract class LCScatteredFeature extends StructureComponent {
 	 *            If only replacement is permitted
 	 */
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, Block b1, boolean rep) {
-		fillWithBlocks(w, bb, v0.floorX(), v0.floorY(), v0.floorZ(), v1.floorX(), v1.floorY(), v1.floorZ(), b0, b1, rep);
+		fillWithBlocks(w, bb, v0.fx(), v0.fy(), v0.fz(), v1.fx(), v1.fy(), v1.fz(), b0, b1, rep);
 	}
 
 	/**
@@ -237,7 +237,7 @@ public abstract class LCScatteredFeature extends StructureComponent {
 	 */
 	protected void fill(World w, StructureBoundingBox bb, Vector3 v0, Vector3 v1, Block b0, int m0, Block b1, int m1,
 			boolean rep) {
-		fillWithMetadataBlocks(w, bb, v0.floorX(), v0.floorY(), v0.floorZ(), v1.floorX(), v1.floorY(), v1.floorZ(), b0,
+		fillWithMetadataBlocks(w, bb, v0.fx(), v0.fy(), v0.fz(), v1.fx(), v1.fy(), v1.fz(), b0,
 				m0, b1, m1, rep);
 	}
 

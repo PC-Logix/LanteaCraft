@@ -91,9 +91,9 @@ public class VectorAABB {
 	 */
 	public List<Vector3> contents() {
 		ArrayList<Vector3> result = new ArrayList<Vector3>();
-		int x0 = Math.min(0, size.floorX()), x1 = Math.max(0, size.floorX());
-		int y0 = Math.min(0, size.floorY()), y1 = Math.max(0, size.floorY());
-		int z0 = Math.min(0, size.floorZ()), z1 = Math.max(0, size.floorZ());
+		int x0 = Math.min(0, size.fx()), x1 = Math.max(0, size.fx());
+		int y0 = Math.min(0, size.fy()), y1 = Math.max(0, size.fy());
+		int z0 = Math.min(0, size.fz()), z1 = Math.max(0, size.fz());
 		for (int x = x0; x < x1; x++)
 			for (int z = z0; z < z1; z++)
 				for (int y = y0; y < y1; y++)

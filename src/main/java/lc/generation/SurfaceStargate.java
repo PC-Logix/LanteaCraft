@@ -104,7 +104,7 @@ public class SurfaceStargate extends LCScatteredFeatureStart {
 
 			Vector3 center = new Vector3(Math.floor(scatteredFeatureSizeX / 2), 0,
 					Math.floor(scatteredFeatureSizeZ / 2));
-			paintStructure(config, w, bb, center.floorX(), center.floorY(), center.floorZ(), rotation,
+			paintStructure(config, w, bb, center.fx(), center.fy(), center.fz(), rotation,
 					net.minecraft.init.Blocks.sandstone, 0);
 			return true;
 		}
@@ -121,24 +121,24 @@ public class SurfaceStargate extends LCScatteredFeatureStart {
 				Vector3 mapping = each.next();
 				Vector3 tile = origin.add(rotation.mul(mapping));
 				try {
-					int cell = config.getStructureLayout()[mapping.floorX()][mapping.floorY()][mapping.floorZ()];
+					int cell = config.getStructureLayout()[mapping.fx()][mapping.fy()][mapping.fz()];
 					BlockFilter filter = mappings[cell];
 					Block what = filter.getBlock();
 					fill(w, bb, tile, tile, what, filter.getMetadata());
 					if (what instanceof LCBlock) {
-						int tx = getXWithOffset(tile.floorX(), tile.floorZ());
-						int tz = getZWithOffset(tile.floorX(), tile.floorZ());
-						LCTile te = (LCTile) w.getTileEntity(tx, getYWithOffset(tile.floorY()), tz);
+						int tx = getXWithOffset(tile.fx(), tile.fz());
+						int tz = getZWithOffset(tile.fx(), tile.fz());
+						LCTile te = (LCTile) w.getTileEntity(tx, getYWithOffset(tile.fy()), tz);
 						if (te != null && ((LCBlock) what).canRotate())
 							te.setRotation(orientation.forge());
-						if (tile.floorY() == y && te instanceof IBlockSkinnable) {
+						if (tile.fy() == y && te instanceof IBlockSkinnable) {
 							IBlockSkinnable skinnable = (IBlockSkinnable) te;
 							skinnable.setSkinBlock(baseBlock, baseMeta);
 						}
 					}
 				} catch (IndexOutOfBoundsException bounds) {
 					LCLog.fatal("Access out of bounds: " + bounds.getMessage() + ": "
-							+ String.format("%s %s %s", mapping.floorX(), mapping.floorY(), mapping.floorZ()));
+							+ String.format("%s %s %s", mapping.fx(), mapping.fy(), mapping.fz()));
 				}
 			}
 		}
