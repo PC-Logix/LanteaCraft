@@ -7,11 +7,13 @@ import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
 import lc.api.defs.IRecipeDefinition;
 import lc.api.rendering.IParticleMachine;
+import lc.blocks.BlockBrazier;
 import lc.blocks.BlockDHD;
 import lc.blocks.BlockLanteaDoor;
 import lc.blocks.BlockObelisk;
 import lc.client.openal.ClientSoundController;
 import lc.client.opengl.ParticleMachine;
+import lc.client.render.fabs.blocks.BlockBrazierRenderer;
 import lc.client.render.fabs.blocks.BlockDHDRenderer;
 import lc.client.render.fabs.blocks.BlockDoorRenderer;
 import lc.client.render.fabs.blocks.BlockObeliskRenderer;
@@ -85,6 +87,7 @@ public class HintProviderClient extends HintProviderServer {
 
 		registry.registerBlockRenderer(BlockLanteaDoor.class, BlockDoorRenderer.class);
 		registry.registerBlockRenderer(BlockObelisk.class, BlockObeliskRenderer.class);
+		registry.registerBlockRenderer(BlockBrazier.class, BlockBrazierRenderer.class);
 		registry.registerBlockRenderer(BlockDHD.class, BlockDHDRenderer.class);
 		registry.registerTileRenderer(TileLanteaDoor.class, TileDoorRenderer.class);
 		registry.registerTileRenderer(TileDHD.class, TileDHDRenderer.class);

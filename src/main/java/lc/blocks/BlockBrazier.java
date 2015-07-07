@@ -16,22 +16,24 @@ import lc.api.world.OreType;
 import lc.common.base.LCBlock;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
-import lc.items.ItemBlockObelisk;
+import lc.items.ItemBlockBrazier;
+import lc.tiles.TileBrazier;
 
 /**
- * Obelisk block implementation
+ * Brazier block implementation
  * 
  * @author AfterLifeLochie
  *
  */
-@Definition(name = "blockObelisk", type = ComponentType.DECOR, blockClass = BlockObelisk.class, itemBlockClass = ItemBlockObelisk.class)
-public class BlockObelisk extends LCBlock {
+@Definition(name = "blockBrazier", type = ComponentType.DECOR, blockClass = BlockBrazier.class, itemBlockClass = ItemBlockBrazier.class, tileClass = TileBrazier.class)
+public class BlockBrazier extends LCBlock {
 
 	private IIcon missing;
 
 	/** Default constructor */
-	public BlockObelisk() {
+	public BlockBrazier() {
 		super(Material.ground);
+		setLightLevel(1.0F);
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class BlockObelisk extends LCBlock {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		return AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 3, z + 1);
+		return AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1.4, z + 1);
 	}
 
 	@Override
