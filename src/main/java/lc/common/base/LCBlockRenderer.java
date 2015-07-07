@@ -360,7 +360,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer, IConfigur
 				tess.setBrightness(block.getMixedBrightnessForBlock(world, p.floorX(), p.floorY(), p.floorZ()));
 			} else
 				tess.setBrightness(brightness);
-			cubeFace(tess, t, cubeMap[i]);
+			cubeFace(tess, t.translate(0.5d, 0.5d, 0.5d), cubeMap[i]);
 		}
 	}
 

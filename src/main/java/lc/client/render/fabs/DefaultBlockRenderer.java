@@ -64,7 +64,7 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 		IBlockRenderInfo info = null;
 		if (theBlock instanceof IRenderInfo)
 			info = ((IRenderInfo) theBlock).renderInfoBlock();
-		Trans3 trans = new Trans3(x + 0.5, y + 0.5, z + 0.5);
+		Trans3 trans = new Trans3(x, y, z);
 		trans = preRenderInWorld(theBlock, info, world, renderer, trans, x, y, z);
 		boolean flag = true;
 		if (info == null || info.doWorldRender(world, world.getBlockMetadata(x, y, z), x, y, z)) {
