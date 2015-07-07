@@ -11,10 +11,10 @@ import lc.api.init.Recipes;
 import lc.api.init.Structures;
 import lc.api.jit.AnyPredicate;
 import lc.api.world.OreType;
+import lc.blocks.BlockBrazier;
 import lc.blocks.BlockDHD;
 import lc.blocks.BlockDecorative;
 import lc.blocks.BlockDecorative.DecorBlockTypes;
-import lc.blocks.BlockBrazier;
 import lc.blocks.BlockFrame;
 import lc.blocks.BlockLanteaAlloy;
 import lc.blocks.BlockLanteaDoor;
@@ -227,7 +227,7 @@ public class LCInit {
 		IDefinitionReference coreCrystal = items.lanteaCraftingItem.ref().pushAll(1,
 				ItemCraftingReagent.ReagentList.CORECRYSTAL.ordinal());
 		IDefinitionReference frameBlock = blocks.frameBlock.ref();
-		IDefinitionReference transporterBlock = blocks.transporterBlock.ref();
+		blocks.transporterBlock.ref();
 
 		ItemStack cSandstone = new ItemStack(net.minecraft.init.Blocks.sandstone, 1, 1);
 		ItemStack eyeOfEnder = new ItemStack(net.minecraft.init.Items.ender_eye, 1);
