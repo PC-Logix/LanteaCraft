@@ -222,7 +222,7 @@ public abstract class LCContainerGUI extends GuiContainer {
 
 	@Override
 	protected void keyTyped(char c, int key) {
-		super.keyTyped(c, key);
+		//super.keyTyped(c, key);
 		if (activeTab != null)
 			activeTab.keyTyped(this, c, key);
 		if (key == Keyboard.KEY_ESCAPE)
