@@ -60,13 +60,13 @@ public class TileDHD extends LCTile implements IDHDAccess {
 		if (stargate == null || stargate.get() == null) {
 			scanTimeout--;
 			if (scanTimeout <= 0) {
-				AxisAlignedBB box = AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5);
+				AxisAlignedBB box = AxisAlignedBB.getBoundingBox(-7, -7, -7, 7, 7, 7);
 				TileEntity tile = ScanningHelper.findNearestTileEntityOf(getWorldObj(), TileStargateBase.class, xCoord,
 						yCoord, zCoord, box);
 				if (tile != null && tile instanceof TileStargateBase)
 					stargate = new WeakReference<TileStargateBase>((TileStargateBase) tile);
-			} else
 				scanTimeout += 20;
+			}
 		}
 	}
 

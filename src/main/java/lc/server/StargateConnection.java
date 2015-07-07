@@ -10,6 +10,7 @@ import lc.api.stargate.StargateConnectionType;
 import lc.api.stargate.StargateState;
 import lc.common.LCLog;
 import lc.common.base.multiblock.MultiblockState;
+import lc.common.util.java.DestructableReferenceQueue;
 import lc.common.util.math.ChunkPos;
 import lc.server.database.StargateRecord;
 import lc.server.world.LCLoadedChunkManager.LCChunkTicket;
@@ -98,6 +99,16 @@ public class StargateConnection {
 
 	private void thinkConnection() {
 		stateTimeout--;
+		if (tileFrom == null || tileTo == null)
+			stateTimeout = 0;
+		if (DestructableReferenceQueue.queued(tileFrom) || DestructableReferenceQueue.queued(tileTo))
+			stateTimeout = 0;
+		if (tileFrom != null && tileTo != null) {
+			if (tileFrom.getState() != MultiblockState.FORMED)
+				stateTimeout = 0;
+			if (tileTo.getState() != MultiblockState.FORMED)
+				stateTimeout = 0;
+		}
 		if (stateTimeout <= 0)
 			changeState(StargateState.DISCONNECTING, 60);
 	}
