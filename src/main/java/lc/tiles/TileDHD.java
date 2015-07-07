@@ -129,7 +129,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 	public Character[] clientAskEngagedGlpyhs() {
 		if (stargate != null && stargate.get() != null) {
 			TileStargateBase what = stargate.get();
-			return what.getActivatedGlpyhs();
+			return what.getActivatedGlyphs();
 		} else
 			return new Character[0];
 	}

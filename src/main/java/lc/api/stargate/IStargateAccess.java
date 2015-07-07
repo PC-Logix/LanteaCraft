@@ -82,7 +82,7 @@ public interface IStargateAccess {
 	 * 
 	 * @return The active glyphs on the Stargate
 	 */
-	public Character[] getActivatedGlpyhs();
+	public Character[] getActivatedGlyphs();
 
 	/**
 	 * Engage the Stargate to establish a connection

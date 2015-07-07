@@ -798,7 +798,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	@Tag(name = "ComputerCallable")
-	public Character[] getActivatedGlpyhs() {
+	public Character[] getActivatedGlyphs() {
 		if (getWorldObj().isRemote) {
 			return clientEngagedGlyphs.toArray(new Character[0]);
 		} else {
