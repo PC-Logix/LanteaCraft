@@ -37,6 +37,21 @@ public interface IStargateAccess {
 	public StargateAddress getStargateAddress();
 
 	/**
+	 * <p>
+	 * Gets the Stargate address as a string.
+	 * </p>
+	 * <p>
+	 * This method uses {@link IStargateAccess#getStargateAddress()} to obtain
+	 * the Stargate address, then returns it as a String type. It behaves
+	 * identically to getStargateAddress, under the same conditions of return
+	 * value.
+	 * </p>
+	 * 
+	 * @return The Stargate address as a string
+	 */
+	public String getStargateAddressString();
+
+	/**
 	 * Transmit a message through the Stargate
 	 * 
 	 * @param payload

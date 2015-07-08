@@ -27,6 +27,7 @@ import lc.client.render.animations.ChevronReleaseAnimation;
 import lc.client.render.animations.RingSpinAnimation;
 import lc.client.render.gfx.particle.GFXDust;
 import lc.common.LCLog;
+import lc.common.base.LCTile;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
@@ -497,6 +498,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 						StargateAddress address = new StargateAddress(PrimitiveHelper.unbox(addr));
 						currentConnection = server.stargates().openConnection(this, address,
 								(int) stargateConnectTimeout, (int) stargateEstablishedTimeout);
+						LCTile.doCallbacksNow(this, "computerEvent", "connect");
 						doCommand = true;
 					}
 				break;
@@ -505,6 +507,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					boolean state = currentConnection.closeConnection(this);
 					if (state) {
 						engagedGlyphs.clear();
+						LCTile.doCallbacksNow(this, "computerEvent", "disconnect");
 						doCommand = true;
 					}
 				}
@@ -513,6 +516,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				if (currentConnection == null)
 					if (engagedGlyphs.size() > 0) {
 						engagedGlyphs.remove(engagedGlyphs.size() - 1);
+						LCTile.doCallbacksNow(this, "computerEvent", "disengageGlyph");
 						doCommand = true;
 					}
 				break;
@@ -520,6 +524,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				if (currentConnection == null)
 					if (engagedGlyphs.size() < 9) {
 						engagedGlyphs.add(currentGlyph);
+						LCTile.doCallbacksNow(this, "computerEvent", "engageGlyph", currentGlyph);
 						doCommand = true;
 					}
 				break;
@@ -527,6 +532,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				if (currentConnection == null) {
 					if (engagedGlyphs.size() < 9) {
 						currentGlyph = (Character) command.args[0];
+						LCTile.doCallbacksNow(this, "computerEvent", "spinToGlyph", currentGlyph);
 						doCommand = true;
 					}
 				}
@@ -682,6 +688,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	public void notifyConnectionState(StargateConnection connection) {
 		LCStargateConnectionPacket state;
 		if (connection == null || connection.dead || connection.state == null || connection.state == StargateState.IDLE) {
+			if (currentConnection != null)
+				LCTile.doCallbacksNow(this, "computerEvent", "disconnect");
 			currentConnection = null;
 			state = new LCStargateConnectionPacket(new DimensionPos(this), StargateState.IDLE, 0, false);
 		} else {
@@ -734,6 +742,13 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			}
 			return new StargateAddress(compound, "stargate-address");
 		}
+	}
+
+	@Override
+	@Tag(name = "ComputerCallable")
+	public String getStargateAddressString() {
+		StargateAddress theAddress = getStargateAddress();
+		return (theAddress != null) ? theAddress.getAddressString() : null;
 	}
 
 	@Override
