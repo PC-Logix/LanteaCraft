@@ -37,7 +37,7 @@ public class AbydosWorldProvider extends WorldProvider {
 	}
 
 	@Override
-	public boolean doesXZShowFog(int par1, int par2) {
+	public boolean doesXZShowFog(int x, int z) {
 		return false;
 	}
 
@@ -67,7 +67,7 @@ public class AbydosWorldProvider extends WorldProvider {
 	}
 
 	@Override
-	public boolean canCoordinateBeSpawn(int par1, int par2) {
+	public boolean canCoordinateBeSpawn(int x, int z) {
 		return false;
 	}
 

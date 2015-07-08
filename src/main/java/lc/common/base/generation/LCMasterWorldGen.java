@@ -18,8 +18,8 @@ import cpw.mods.fml.common.IWorldGenerator;
  */
 public class LCMasterWorldGen implements IWorldGenerator {
 
-	private final LCScatteredFeatureGenerator scatteredGenerator = new LCScatteredFeatureGenerator();
-	private final LCFeatureGenerator featureGenerator = new LCFeatureGenerator();
+	protected final LCScatteredFeatureGenerator scatteredGenerator = new LCScatteredFeatureGenerator();
+	protected final LCFeatureGenerator featureGenerator = new LCFeatureGenerator();
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,

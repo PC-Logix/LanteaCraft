@@ -3,6 +3,7 @@ package lc.dimensions.abydos;
 import java.util.List;
 import java.util.Random;
 
+import lc.common.base.generation.LCMasterWorldGen;
 import lc.common.base.generation.structure.LCFeatureGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
@@ -26,20 +27,22 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
  */
 public class AbydosChunkProvider implements IChunkProvider {
 
-	private final float[] parabolicField;
-	private final double[] field_147434_q;
-
 	private Random rng;
 	private NoiseGeneratorOctaves ng1, ng2, ng3, ng6;
 	private NoiseGeneratorPerlin ngp4;
 	private BiomeGenBase biomeForGeneration;
+	/**
+	 * FIXME: We should be relying on the LCMasterWorldGen instead of
+	 * referencing the feature generator directly. This will result in an
+	 * inconsistent state.
+	 */
 	private LCFeatureGenerator structureController;
 	private World worldObj;
 
+	private final float[] parabolicField;
+	private final double[] field_147434_q;
 	private double[] stoneNoise = new double[256];
-
-	double[] d_ng3, d_ng1, d_ng2, d_ng6;
-	int[][] field_73219_j = new int[32][32];
+	private double[] d_ng3, d_ng1, d_ng2, d_ng6;
 
 	/**
 	 * Default constructor
@@ -128,16 +131,12 @@ public class AbydosChunkProvider implements IChunkProvider {
 		}
 	}
 
-	private void replaceBlocksForBiome(int p_147422_1_, int p_147422_2_, Block[] p_147422_3_, byte[] p_147422_4_,
-			BiomeGenBase p_147422_5_) {
+	private void replaceBlocksForBiome(int x, int z, Block[] block, byte[] abyte, BiomeGenBase bgb) {
 		double d0 = 0.03125D;
-		stoneNoise = ngp4.func_151599_a(stoneNoise, p_147422_1_ * 16, p_147422_2_ * 16, 16, 16, d0 * 2.0D, d0 * 2.0D,
-				1.0D);
-
+		stoneNoise = ngp4.func_151599_a(stoneNoise, x * 16, z * 16, 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
 		for (int k = 0; k < 16; ++k)
 			for (int l = 0; l < 16; ++l)
-				p_147422_5_.genTerrainBlocks(worldObj, rng, p_147422_3_, p_147422_4_, p_147422_1_ * 16 + k, p_147422_2_
-						* 16 + l, stoneNoise[l + k * 16]);
+				bgb.genTerrainBlocks(worldObj, rng, block, abyte, x * 16 + k, z * 16 + l, stoneNoise[l + k * 16]);
 	}
 
 	/**
@@ -254,7 +253,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 	 * Checks to see if a chunk exists at x, y
 	 */
 	@Override
-	public boolean chunkExists(int par1, int par2) {
+	public boolean chunkExists(int x, int y) {
 		return true;
 	}
 
@@ -262,7 +261,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 	 * Populates chunk with ores etc etc
 	 */
 	@Override
-	public void populate(IChunkProvider par1IChunkProvider, int cx, int cz) {
+	public void populate(IChunkProvider provider, int cx, int cz) {
 		BlockFalling.fallInstantly = true;
 		int x = cx * 16;
 		int z = cz * 16;
@@ -282,7 +281,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 	 * saved.
 	 */
 	@Override
-	public boolean saveChunks(boolean par1, IProgressUpdate par2IProgressUpdate) {
+	public boolean saveChunks(boolean saveAll, IProgressUpdate p) {
 		return true;
 	}
 
@@ -331,8 +330,7 @@ public class AbydosChunkProvider implements IChunkProvider {
 	}
 
 	@Override
-	public ChunkPosition func_147416_a(World world, String p_147416_2_, int p_147416_3_, int p_147416_4_,
-			int p_147416_5_) {
+	public ChunkPosition func_147416_a(World world, String strucClazz, int x, int y, int z) {
 		return null;
 	}
 
