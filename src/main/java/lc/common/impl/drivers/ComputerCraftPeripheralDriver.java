@@ -6,10 +6,12 @@ import java.util.ArrayList;
 
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverProvider;
+import lc.api.jit.DeviceDrivers.DriverRTCallback;
 import lc.api.jit.ASMTag;
 import lc.api.jit.Tag;
 import lc.api.jit.TagMap;
 import lc.common.LCLog;
+import lc.common.base.LCTile;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -19,9 +21,18 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 public class ComputerCraftPeripheralDriver implements IPeripheral {
 
 	private String[] computercraft_methodcache;
+	private ArrayList<IComputerAccess> computercraft_icalist = new ArrayList<IComputerAccess>();
 
 	public ComputerCraftPeripheralDriver() {
 		// TODO Auto-generated constructor stub
+	}
+
+	@DriverRTCallback(event = "computerEvent")
+	public void computerCraft_handleEvent(LCTile me, String event, Object[] args) {
+		synchronized (computercraft_icalist) {
+			for (IComputerAccess azz : computercraft_icalist)
+				azz.queueEvent(event, args);
+		}
 	}
 
 	@Override
@@ -75,14 +86,16 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 
 	@Override
 	public void attach(IComputerAccess computer) {
-		// TODO Auto-generated method stub
-
+		synchronized (computercraft_icalist) {
+			computercraft_icalist.add(computer);
+		}
 	}
 
 	@Override
 	public void detach(IComputerAccess computer) {
-		// TODO Auto-generated method stub
-
+		synchronized (computercraft_icalist) {
+			computercraft_icalist.remove(computer);
+		}
 	}
 
 	@Override
