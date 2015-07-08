@@ -60,9 +60,11 @@ public class GFXBeam extends LCEntityFX {
 
 	private Vector3 resolvePosition(Object zz) {
 		if (zz instanceof TileEntity)
-			return new Vector3((TileEntity) zz);
-		if (zz instanceof Entity)
-			return new Vector3((Entity) zz);
+			return new Vector3((TileEntity) zz).add(0.5f, 0.5f, 0.5f);
+		if (zz instanceof Entity) {
+			Entity ee = (Entity) zz;
+			return new Vector3((Entity) ee).add(ee.width, ee.height, ee.width);
+		}
 		throw new IllegalArgumentException("Unknown or unsupported tracer: " + zz.getClass().getName());
 	}
 
