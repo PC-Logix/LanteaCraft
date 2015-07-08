@@ -1,8 +1,8 @@
 # Stargate DHD controller
-tile.DHD0.name=Ovládací panel brány
-tile.DHD1.name=Ovládací panel pegasuské brány
-tile.DHD2.name=Ovládací panel wraithské brány
-tile.DHD3.name=Ovládací panel noxské brány
+tile.DHD.0.name=Ovládací panel brány
+tile.DHD.1.name=Ovládací panel pegasuské brány
+tile.DHD.2.name=Ovládací panel wraithské brány
+tile.DHD.3.name=Ovládací panel noxské brány
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Základní segment brány
@@ -51,10 +51,10 @@ tile.blockLiquidNaquadah.name=Tekutý naquadah
 item.liquidNaquadahBucket.name=Kbelík tekutého naquadahu
 
 # Decor blocks
-tile.lanteaDecor.1.name=Lanteanský kov s ornamenty
-tile.lanteaDecor.2.name=Lanteanský kov
-tile.lanteaDecor.3.name=Goa'uldské zlato s ornamenty
-tile.lanteaDecor.4.name=Goa'uldské zlato
+tile.lanteaDecor.1.name=Lanteanský kov
+tile.lanteaDecor.2.name=Lanteanský kov s ornamenty
+tile.lanteaDecor.3.name=Goa'uldské zlato
+tile.lanteaDecor.4.name=Goa'uldské zlato s ornamenty
 tile.lanteaDoor.0.name=Lanteanské dveře
 tile.lanteaDoor.1.name=Goa'uldské dveře
 
@@ -67,6 +67,11 @@ tile.lanteaSteelDecorStair.name=Lanteanské schody
 # Decor glass
 tile.lanteaGlassDecor.1.name=Lanteanské sklo
 
+# Decor obelisks
+tile.blockObelisk.0.name=Obelisk
+tile.blockObelisk.1.name=Obelisk
+tile.blockObelisk.2.name=Obelisk
+
 # Ore / Ore blocks
 tile.lanteaOre.0.name=Naquadahová ruda
 item.lanteaOre.0.name=Naquadah
@@ -76,6 +81,7 @@ tile.lanteaOre.2.name=Triniová ruda
 item.lanteaOre.2.name=Trinium
 
 # Machines
+tile.frame.name=Konstrukcni ram
 tile.naquadahGenerator.name=Naquadahový generátor
 tile.blockCrystalInfuser.name=Plnič krystalů
 
@@ -83,8 +89,7 @@ tile.blockCrystalInfuser.name=Plnič krystalů
 item.jacksonNotebook.name=Notebook Daniela Jacksona
 
 # Transporter Rings
-tile.transporterRing.0.name=Rám transportních kruhů
-tile.transporterRing.1.name=Ovládání transportních kruhů
+tile.blockTransportRing.name=Transportní kruhy
 item.transportRingActivator.name=Aktivátor transportních kruhů
 
 # Debug and other items
