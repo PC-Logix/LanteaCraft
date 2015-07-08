@@ -59,8 +59,11 @@ public class LCNetworkQueue implements ITickEventHandler {
 					throw new LCNetworkException("Packet enqueued without player or with dead reference.");
 				LCPacket packet = obj.packet;
 				if (packet instanceof LCNetworkHandshake) {
-					controller.players.get(player).handleHandshakePacket(player, (LCNetworkHandshake) packet,
-							obj.target);
+					if (obj.target == Side.SERVER)
+						controller.players.get(player).handleHandshakePacket(player, (LCNetworkHandshake) packet,
+								obj.target);
+					if (obj.target == Side.CLIENT)
+						controller.clientPlayer.handleHandshakePacket(player, (LCNetworkHandshake) packet, obj.target);
 				} else if (packet instanceof LCTargetPacket) {
 					LCTargetPacket target = (LCTargetPacket) packet;
 					LCTargetPacket.handlePacket(target, player);

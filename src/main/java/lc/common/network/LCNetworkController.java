@@ -24,6 +24,8 @@ public class LCNetworkController implements ITickEventHandler {
 	protected final LCNetworkQueue clientQueue = new LCNetworkQueue(this, "Server queue");
 	/** Client server-to-server envelope buffer */
 	protected final LCPacketBuffer<LCServerToServerEnvelope> envelopeBuffer = new LCPacketBuffer<LCServerToServerEnvelope>();
+	/** Client player */
+	protected final LCNetworkPlayer clientPlayer = new LCNetworkPlayer(this);
 	/** Server player-state tracker */
 	protected final WeakHashMap<EntityPlayerMP, LCNetworkPlayer> players = new WeakHashMap<EntityPlayerMP, LCNetworkPlayer>();
 
