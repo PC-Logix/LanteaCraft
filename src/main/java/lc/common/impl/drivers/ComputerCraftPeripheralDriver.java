@@ -21,14 +21,21 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 public class ComputerCraftPeripheralDriver implements IPeripheral {
 
 	private String[] computercraft_methodcache;
-	private ArrayList<IComputerAccess> computercraft_icalist = new ArrayList<IComputerAccess>();
+	private ArrayList<IComputerAccess> computercraft_icalist;
 
 	public ComputerCraftPeripheralDriver() {
 		// TODO Auto-generated constructor stub
 	}
 
+	private void computercraft_assertReady() {
+		if (computercraft_icalist == null) {
+			computercraft_icalist = new ArrayList<IComputerAccess>();
+		}
+	}
+
 	@DriverRTCallback(event = "computerEvent")
 	public void computerCraft_handleEvent(LCTile me, String event, Object[] args) {
+		computercraft_assertReady();
 		synchronized (computercraft_icalist) {
 			for (IComputerAccess azz : computercraft_icalist)
 				azz.queueEvent(event, args);
@@ -86,6 +93,7 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 
 	@Override
 	public void attach(IComputerAccess computer) {
+		computercraft_assertReady();
 		synchronized (computercraft_icalist) {
 			computercraft_icalist.add(computer);
 		}
@@ -93,6 +101,7 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 
 	@Override
 	public void detach(IComputerAccess computer) {
+		computercraft_assertReady();
 		synchronized (computercraft_icalist) {
 			computercraft_icalist.remove(computer);
 		}

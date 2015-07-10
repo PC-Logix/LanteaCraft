@@ -22,22 +22,30 @@ import li.cil.oc.api.network.Visibility;
 public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 
 	private String[] opencomputers_methodcache;
-	private Node opencomputers_node = Network.newNode(this, Visibility.Network).withComponent(getComponentName())
-			.create();
+	private Node opencomputers_node;
+
+	private void opencomputers_assertReady() {
+		if (opencomputers_node == null) {
+			opencomputers_node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
+		}
+	}
 
 	@Override
 	public Node node() {
+		opencomputers_assertReady();
 		return opencomputers_node;
 	}
 
 	@Override
 	public void load(final NBTTagCompound nbt) {
+		opencomputers_assertReady();
 		if (opencomputers_node != null)
 			opencomputers_node.load(nbt.getCompoundTag("node"));
 	}
 
 	@Override
 	public void save(final NBTTagCompound nbt) {
+		opencomputers_assertReady();
 		if (opencomputers_node != null) {
 			NBTTagCompound nodeTag = new NBTTagCompound();
 			opencomputers_node.save(nodeTag);
@@ -52,14 +60,17 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 
 	@Override
 	public void onConnect(Node node) {
+		opencomputers_assertReady();
 	}
 
 	@Override
 	public void onDisconnect(Node node) {
+		opencomputers_assertReady();
 	}
 
 	@Override
 	public void onMessage(Message message) {
+		opencomputers_assertReady();
 	}
 
 	@Override
