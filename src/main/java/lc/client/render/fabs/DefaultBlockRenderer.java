@@ -103,7 +103,9 @@ public class DefaultBlockRenderer extends LCBlockRenderer {
 			Trans3 trans, int x, int y, int z) {
 		if (block.canRotate()) {
 			ForgeDirection rotation = block.getRotation(world, x, y, z);
-			trans = trans.side(0).turn(rotationMap[rotation.ordinal()]);
+			trans = trans.side(0).translate(0.5d, 0.5d, 0.5d);
+			trans = trans.turn(rotationMap[rotation.ordinal()]);
+			trans = trans.translate(-0.5d, -0.5d, -0.5d);
 		}
 		return trans;
 	}
