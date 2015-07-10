@@ -1,6 +1,7 @@
 package lc.common.util.game;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 
 /**
@@ -55,7 +56,7 @@ public class BlockFilter {
 	 */
 	public boolean matches(World world, int x, int y, int z) {
 		Block blockOf = world.getBlock(x, y, z);
-		if (targetBlock.isAir(world, x, y, z) && blockOf.isAir(world, x, y, z))
+		if (targetBlock.getMaterial() == Material.air && blockOf.isAir(world, x, y, z))
 			return true;
 		if (blockOf.equals(targetBlock) && targetMetadata == -1)
 			return true;
