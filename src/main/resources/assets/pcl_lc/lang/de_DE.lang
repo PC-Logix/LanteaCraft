@@ -1,12 +1,15 @@
 # Stargate DHD controller
-tile.stargateDHD.name=DHD
+tile.DHD0.name=DHD
++tile.DHD1.name=Pegasus DHD
++tile.DHD2.name=Wraith DHD
++tile.DHD3.name=Nox DHD
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Stargate Basis
 tile.stargateBase.4.name=Pegasus Stargate Basis
 tile.stargateBase.8.name=Wraith Stargate Basis
 tile.stargateBase.12.name=Nox Stargate Basis
-screen.stargate_base.title=Stargate Einstellungen
+screen.stargate_base.title=Stargate Einstellung
 
 # Stargate Ring and Chevrons
 tile.stargateRing.0.name=Stargate Ring
@@ -19,23 +22,12 @@ tile.stargateRing.6.name=Nox Stargate Ring
 tile.stargateRing.7.name=Nox Stargate Chevron
 
 # Iris items & tags
-item.iris.name=Stargate Iris
+item.irisUpgrade.name=Stargate Iris
 item.gdo.name=GDO
-# Iris types
-iris.mechanical.name=Mechanische
-iris.energy.name=Energie
-# Label used to display iris type, 1 param
-iris.type.text=%s Iris
-# Label used to display iris %damage, 1 param
-iris.damage.text=%s Schäden
 
 # Power-related items
-item.energyCrystal.name=Energie Kristal
+item.energyCrystal.name=Energie Kristall
 item.zpm.name=ZPM
-# Label used to display energy, 1 param
-energy.text=Energie: %s
-# Label used to display used entropy, 1 param
-entropy.text=Entropie: %s
 
 # Crafting reagents
 item.craftingReagent.0.name=Zerbrochenes Reagens
@@ -43,64 +35,60 @@ item.craftingReagent.1.name=Leerer Kristall
 item.craftingReagent.2.name=Stargate Kernkristall
 item.craftingReagent.3.name=Stargate Kontrollkristall
 item.craftingReagent.4.name=Eisenplatte
-item.craftingReagent.5.name=Naquadah-Legierung Platte
-item.craftingReagent.6.name=Trinium-Legierung Platte
+item.craftingReagent.5.name=Naquadah-Legierung
+item.craftingReagent.6.name=Trinium-Legierung
+
+# Ingots and alloys
+item.lanteaAlloy.0.name=Naquadah Barren
+tile.lanteaAlloy.0.name=Naquadah Block
+item.lanteaAlloy.1.name=Naqahdriah Barren
+tile.lanteaAlloy.1.name=Naqahdriah Block
+item.lanteaAlloy.2.name=Trinium Barren
+tile.lanteaAlloy.2.name=Trinium Block
 
 # Fluids
-fluid.liquid_naquadah=Flüssiges Naquadah
 tile.blockLiquidNaquadah.name=Flüssiges Naquadah
-item.liquidNaquadahBucket.name=Eimer mit flüssigem Naquadah
+item.liquidNaquadahBucket.name=Eimer mit flüssigen Naquadah
 
 # Decor blocks
 tile.lanteaDecor.1.name=Verzierter Antiker Stahl
 tile.lanteaDecor.2.name=Antiker Stahl
 tile.lanteaDecor.3.name=Verziertes Goa'uld Gold
 tile.lanteaDecor.4.name=Goa'uld Gold
+tile.lanteaDoor.0.name=Antiker Tür
+tile.lanteaDoor.1.name=Goa'uld Tür
 
 # Decor stairs
-tile.lanteaPatternedSteelDecorStair.name=Antiker Stahltreppe
-tile.lanteaSteelDecorStair.name=Verzierte Antiker Stahltreppe
 tile.goauldPatternedGoldDecorStair.name=Goa'uld Goldtreppe
 tile.goauldGoldDecorStair.name=Verzierte Goa'uld Goldtreppe
+tile.lanteaPatternedSteelDecorStair.name=Antiker Stahltreppe
+tile.lanteaSteelDecorStair.name=Verzierte Antiker Stahltreppe
 
 # Decor glass
-tile.lanteaGlassDecor.1.name=Antiker-Glas
+tile.lanteaGlassDecor.1.name=Antiker Glas
 
-# Naquadah Ore / Ingots / Blocks
+# Ore / Ore blocks
 tile.lanteaOre.0.name=Naquadah Erz
 item.lanteaOre.0.name=Naquadah
-item.lanteaOreIngot.0.name=Naquadah Barren
-tile.lanteaOreIngotBlock.0.name=Naquadah Block
-
-# Naquadriah Ore / Ingots / Blocks
-tile.lanteaOre.1.name=Naquahdriah Erz
-item.lanteaOre.1.name=Naquahdriah
-item.lanteaOreIngot.1.name=Naquahdriah Barren
-tile.lanteaOreIngotBlock.1.name=Naquahdriah Block
-
-# Trinium Ore / Ingots / Blocks
+tile.lanteaOre.1.name=Naquadriah Erz
+item.lanteaOre.1.name=Naquadriah
 tile.lanteaOre.2.name=Trinium Erz
 item.lanteaOre.2.name=Trinium
-item.lanteaOreIngot.2.name=Trinium Barren
-tile.lanteaOreIngotBlock.2.name=Trinium Block
 
 # Machines
 tile.naquadahGenerator.name=Naquadah Generator
-# Label used to display fill level of fluid tanks, 1 param
-tank.text=Tank: %s
-tile.blockCrystalInfuser.name=Kristal Infuser
+tile.blockCrystalInfuser.name=Kristall Infuser
 
 # Help Notebook
-item.jacksonNotebook.name=Notebook von Daniel Jackson
+item.jacksonNotebook.name=Daniel Jackson's Notizbuch
 
 # Transporter Rings
-tile.transporterRing.0.name=Ring Stück
-tile.transporterRing.1.name=Ring Kontroller
-item.transportRingActivator.name=Ring Aktivator
+tile.transporterRing.0.name=Ringtransporter Rahmen 
+tile.transporterRing.1.name=Ringtransporter Kontroller
+item.transportRingActivator.name=Ringtransporter Aktivator
 
 # Debug and other items
-item.tokraSpawnEgg.name=Erschaffe Tok'ra
-item.lanteadebug.name=LanteaCraft Debugger
+item.debugGlasses.name=AfterLifeLochie's Glasses
 
 # Integration blocks and items
 tile.integration.computercraft.name=ComputerCraft Adapter
@@ -108,11 +96,34 @@ tile.integration.computercraft.name=ComputerCraft Adapter
 # Death messages
 death.attack.wormhole_transient=%1$s wurde vom Ereignishorizont in Stücke gerissen.
 
-# Clipboard operations; used as a single string only (no context).
-lc.clipboard.put_success.text=In Zwischenablage kopiert!
-lc.clipboard.put_address.text=Adresse kopieren
+# Interfaces
+lc.interface.stargate.name=Stargate
+lc.interface.redstone.name=Redstone
 
-# Stargate error messages; used as a single string only (no context).
-lc.stargate.coord_out_of_range.text=Die Koordinaten sind ausserhalb der Reichweite des Gates.
-lc.stargate.dimension_out_of_range.text=Dimension ist ist nicht anwählbar!
-lc.stargate.general_address_error.text=Addressfehler: Changelog prüfen.
+lc.interface.storage.items=Items
+lc.interface.storage.fluids=Flüssigkeiten
+lc.interface.storage.fluids.level=Tank: %s
+
+lc.interface.clipboard.write=Kopieren
+lc.interface.clipboard.write_ok=In Zwischenablage kopiert
+lc.interface.clipboard.write_fail=Nicht in Zwischenablage kopiert
+
+lc.interface.options.redstone_mode=Redstone
+lc.interface.options.iris_mode=Iris Kontrolle
+
+lc.interface.redstone.active_ignore=Ignoriere Redstone
+lc.interface.redstone.active_low=Activ bei schwachen Signal
+lc.interface.redstone.active_high=Activ bei starken Signal
+lc.interface.redstone.active_ext=Digitale Kontrolle
+
+lc.interface.redstone.emit_nothing=Kein Signal
+lc.interface.redstone.emit_low=Normal aus
+lc.interface.redstone.emit_high=Normal an
+
+lc.interface.iris.type.mechanical.name=Mechanische
+lc.interface.iris.type.energy.name=Energie
+
+lc.interface.iris.type.text=%s Iris
+lc.interface.iris.damage.text=%s beschädigt
+lc.interface.energy.text=Energie: %s
+lc.interface.entropy.text=Entropy: %s
