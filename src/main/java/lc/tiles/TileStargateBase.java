@@ -25,7 +25,6 @@ import lc.client.openal.StreamingSoundProperties;
 import lc.client.render.animations.ChevronMoveAnimation;
 import lc.client.render.animations.ChevronReleaseAnimation;
 import lc.client.render.animations.RingSpinAnimation;
-import lc.client.render.gfx.particle.GFXDust;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
 import lc.common.base.inventory.FilteredInventory;
@@ -488,62 +487,65 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				(next != null) ? next.toString() : "[none]");
 		command = next;
 		boolean doCommand = false;
-		if (command != null)
-			switch (command.type) {
-			case CONNECT:
-				if (currentConnection == null)
-					if (engagedGlyphs.size() == 9) {
-						HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
-						Character[] addr = engagedGlyphs.toArray(new Character[0]);
-						StargateAddress address = new StargateAddress(PrimitiveHelper.unbox(addr));
-						currentConnection = server.stargates().openConnection(this, address,
-								(int) stargateConnectTimeout, (int) stargateEstablishedTimeout);
-						LCTile.doCallbacksNow(this, "computerEvent", "connect");
-						doCommand = true;
+		if (command != null) {
+			if (getState() == MultiblockState.FORMED) {
+				switch (command.type) {
+				case CONNECT:
+					if (currentConnection == null)
+						if (engagedGlyphs.size() == 9) {
+							HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
+							Character[] addr = engagedGlyphs.toArray(new Character[0]);
+							StargateAddress address = new StargateAddress(PrimitiveHelper.unbox(addr));
+							currentConnection = server.stargates().openConnection(this, address,
+									(int) stargateConnectTimeout, (int) stargateEstablishedTimeout);
+							LCTile.doCallbacksNow(this, "computerEvent", "connect");
+							doCommand = true;
+						}
+					break;
+				case DISCONNECT:
+					if (currentConnection != null && currentConnection.state == StargateState.CONNECTED) {
+						boolean state = currentConnection.closeConnection(this);
+						if (state) {
+							engagedGlyphs.clear();
+							LCTile.doCallbacksNow(this, "computerEvent", "disconnect");
+							doCommand = true;
+						}
 					}
-				break;
-			case DISCONNECT:
-				if (currentConnection != null && currentConnection.state == StargateState.CONNECTED) {
-					boolean state = currentConnection.closeConnection(this);
-					if (state) {
-						engagedGlyphs.clear();
-						LCTile.doCallbacksNow(this, "computerEvent", "disconnect");
-						doCommand = true;
+					break;
+				case DISENGAGE:
+					if (currentConnection == null)
+						if (engagedGlyphs.size() > 0) {
+							engagedGlyphs.remove(engagedGlyphs.size() - 1);
+							LCTile.doCallbacksNow(this, "computerEvent", "disengageGlyph");
+							doCommand = true;
+						}
+					break;
+				case ENGAGE:
+					if (currentConnection == null)
+						if (engagedGlyphs.size() < 9) {
+							engagedGlyphs.add(currentGlyph);
+							LCTile.doCallbacksNow(this, "computerEvent", "engageGlyph", currentGlyph);
+							doCommand = true;
+						}
+					break;
+				case SPIN:
+					if (currentConnection == null) {
+						if (engagedGlyphs.size() < 9) {
+							currentGlyph = (Character) command.args[0];
+							LCTile.doCallbacksNow(this, "computerEvent", "spinToGlyph", currentGlyph);
+							doCommand = true;
+						}
 					}
+					break;
+				case CLOSEIRIS:
+					// TODO: Server-side close iris task
+					break;
+				case OPENIRIS:
+					// TODO: Server-side open iris task
+					break;
 				}
-				break;
-			case DISENGAGE:
-				if (currentConnection == null)
-					if (engagedGlyphs.size() > 0) {
-						engagedGlyphs.remove(engagedGlyphs.size() - 1);
-						LCTile.doCallbacksNow(this, "computerEvent", "disengageGlyph");
-						doCommand = true;
-					}
-				break;
-			case ENGAGE:
-				if (currentConnection == null)
-					if (engagedGlyphs.size() < 9) {
-						engagedGlyphs.add(currentGlyph);
-						LCTile.doCallbacksNow(this, "computerEvent", "engageGlyph", currentGlyph);
-						doCommand = true;
-					}
-				break;
-			case SPIN:
-				if (currentConnection == null) {
-					if (engagedGlyphs.size() < 9) {
-						currentGlyph = (Character) command.args[0];
-						LCTile.doCallbacksNow(this, "computerEvent", "spinToGlyph", currentGlyph);
-						doCommand = true;
-					}
-				}
-				break;
-			case CLOSEIRIS:
-				// TODO: Server-side close iris task
-				break;
-			case OPENIRIS:
-				// TODO: Server-side open iris task
-				break;
 			}
+		}
 		if (doCommand) {
 			thinkServerDispatchState(command);
 			commandTimer = 0.0d;
