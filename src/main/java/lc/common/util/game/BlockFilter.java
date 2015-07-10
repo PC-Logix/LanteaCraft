@@ -55,6 +55,8 @@ public class BlockFilter {
 	 */
 	public boolean matches(World world, int x, int y, int z) {
 		Block blockOf = world.getBlock(x, y, z);
+		if (targetBlock.isAir(world, x, y, z) && blockOf.isAir(world, x, y, z))
+			return true;
 		if (blockOf.equals(targetBlock) && targetMetadata == -1)
 			return true;
 		if (blockOf.equals(targetBlock) && targetMetadata == world.getBlockMetadata(x, y, z))
