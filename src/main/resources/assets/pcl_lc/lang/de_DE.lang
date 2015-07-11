@@ -1,8 +1,8 @@
 # Stargate DHD controller
-tile.DHD0.name=DHD
-+tile.DHD1.name=Pegasus DHD
-+tile.DHD2.name=Wraith DHD
-+tile.DHD3.name=Nox DHD
+tile.DHD.0.name=DHD
+tile.DHD.1.name=Pegasus DHD
+tile.DHD.2.name=Wraith DHD
+tile.DHD.3.name=Nox DHD
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Stargate Basis
@@ -34,7 +34,7 @@ item.craftingReagent.0.name=Zerbrochenes Reagens
 item.craftingReagent.1.name=Leerer Kristall
 item.craftingReagent.2.name=Stargate Kernkristall
 item.craftingReagent.3.name=Stargate Kontrollkristall
-item.craftingReagent.4.name=Eisenplatte
+item.craftingReagent.4.name=Eisen-Legierung
 item.craftingReagent.5.name=Naquadah-Legierung
 item.craftingReagent.6.name=Trinium-Legierung
 
@@ -51,10 +51,10 @@ tile.blockLiquidNaquadah.name=Flüssiges Naquadah
 item.liquidNaquadahBucket.name=Eimer mit flüssigen Naquadah
 
 # Decor blocks
-tile.lanteaDecor.1.name=Verzierter Antiker Stahl
-tile.lanteaDecor.2.name=Antiker Stahl
-tile.lanteaDecor.3.name=Verziertes Goa'uld Gold
-tile.lanteaDecor.4.name=Goa'uld Gold
+tile.lanteaDecor.1.name=Antiker Stahl
+tile.lanteaDecor.2.name=Verzierter Antiker Stahl
+tile.lanteaDecor.3.name=Goa'uld Gold
+tile.lanteaDecor.4.name=Verziertes Goa'uld Gold
 tile.lanteaDoor.0.name=Antiker Tür
 tile.lanteaDoor.1.name=Goa'uld Tür
 
@@ -67,6 +67,11 @@ tile.lanteaSteelDecorStair.name=Verzierte Antiker Stahltreppe
 # Decor glass
 tile.lanteaGlassDecor.1.name=Antiker Glas
 
+# Decor obelisks
+tile.blockObelisk.0.name=Obelisk
+tile.blockObelisk.1.name=Obelisk
+tile.blockObelisk.2.name=Obelisk
+
 # Ore / Ore blocks
 tile.lanteaOre.0.name=Naquadah Erz
 item.lanteaOre.0.name=Naquadah
@@ -76,14 +81,14 @@ tile.lanteaOre.2.name=Trinium Erz
 item.lanteaOre.2.name=Trinium
 
 # Machines
+tile.frame.name=Konstruktionsrahmen
 tile.naquadahGenerator.name=Naquadah Generator
 tile.blockCrystalInfuser.name=Kristall Infuser
 
 # Help Notebook
-item.jacksonNotebook.name=Daniel Jackson's Notizbuch
+item.jacksonNotebook.name=Daniel Jackson's Notebook
 
 # Transporter Rings
-tile.transporterRing.0.name=Ringtransporter Rahmen 
 tile.transporterRing.1.name=Ringtransporter Kontroller
 item.transportRingActivator.name=Ringtransporter Aktivator
 
