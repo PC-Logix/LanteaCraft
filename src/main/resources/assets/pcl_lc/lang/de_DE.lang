@@ -89,7 +89,7 @@ tile.blockCrystalInfuser.name=Kristall Infuser
 item.jacksonNotebook.name=Daniel Jackson's Notebook
 
 # Transporter Rings
-tile.transporterRing.1.name=Ringtransporter Kontroller
+tile.blockTransportRing.name=Ringtransporter Kontroller
 item.transportRingActivator.name=Ringtransporter Aktivator
 
 # Debug and other items
