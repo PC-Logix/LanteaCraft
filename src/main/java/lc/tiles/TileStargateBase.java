@@ -498,7 +498,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 							StargateAddress address = new StargateAddress(PrimitiveHelper.unbox(addr));
 							currentConnection = server.stargates().openConnection(this, address,
 									(int) stargateConnectTimeout, (int) stargateEstablishedTimeout);
-							LCTile.doCallbacksNow(this, "computerEvent", "connect");
+							LCTile.doCallbacksNow(this, "computerEvent", "connect", null);
 							doCommand = true;
 						}
 					break;
@@ -507,7 +507,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 						boolean state = currentConnection.closeConnection(this);
 						if (state) {
 							engagedGlyphs.clear();
-							LCTile.doCallbacksNow(this, "computerEvent", "disconnect");
+							LCTile.doCallbacksNow(this, "computerEvent", "disconnect", null);
 							doCommand = true;
 						}
 					}
@@ -516,7 +516,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					if (currentConnection == null)
 						if (engagedGlyphs.size() > 0) {
 							engagedGlyphs.remove(engagedGlyphs.size() - 1);
-							LCTile.doCallbacksNow(this, "computerEvent", "disengageGlyph");
+							LCTile.doCallbacksNow(this, "computerEvent", "disengageGlyph", null);
 							doCommand = true;
 						}
 					break;
@@ -524,7 +524,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					if (currentConnection == null)
 						if (engagedGlyphs.size() < 9) {
 							engagedGlyphs.add(currentGlyph);
-							LCTile.doCallbacksNow(this, "computerEvent", "engageGlyph", currentGlyph);
+							LCTile.doCallbacksNow(this, "computerEvent", "engageGlyph", new Object[] { currentGlyph });
 							doCommand = true;
 						}
 					break;
@@ -532,7 +532,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					if (currentConnection == null) {
 						if (engagedGlyphs.size() < 9) {
 							currentGlyph = (Character) command.args[0];
-							LCTile.doCallbacksNow(this, "computerEvent", "spinToGlyph", currentGlyph);
+							LCTile.doCallbacksNow(this, "computerEvent", "spinToGlyph", new Object[] { currentGlyph });
 							doCommand = true;
 						}
 					}

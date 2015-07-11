@@ -34,7 +34,7 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 	}
 
 	@DriverRTCallback(event = "computerEvent")
-	public void computerCraft_handleEvent(LCTile me, String event, Object[] args) {
+	public void computerCraft_handleEvent(String event, Object... args) {
 		computercraft_assertReady();
 		synchronized (computercraft_icalist) {
 			for (IComputerAccess azz : computercraft_icalist)
