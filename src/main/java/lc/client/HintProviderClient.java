@@ -60,8 +60,6 @@ public class HintProviderClient extends HintProviderServer {
 	private ClientSoundController soundController;
 	private ParticleMachine particleMachine;
 
-	private ComponentConfig renderConfiguration;
-
 	/** Default constructor */
 	public HintProviderClient() {
 		super();
@@ -71,7 +69,6 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public void preInit() {
 		super.preInit();
-		renderConfiguration = LCRuntime.runtime.config().config(ComponentType.CLIENT);
 		blockRenderingHook = new LCBlockRenderPipeline(RenderingRegistry.getNextAvailableRenderId());
 		tileRenderingHook = new LCTileRenderPipeline();
 		itemRenderingHook = new LCItemRenderPipeline();
@@ -135,11 +132,6 @@ public class HintProviderClient extends HintProviderServer {
 	@Override
 	public ISoundController audio() {
 		return soundController;
-	}
-
-	@Override
-	public IConfigurationProvider config() {
-		return renderConfiguration;
 	}
 
 	@Override

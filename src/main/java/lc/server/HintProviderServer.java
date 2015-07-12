@@ -13,8 +13,10 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import lc.LCRuntime;
 import lc.LanteaCraft;
 import lc.api.audio.ISoundController;
+import lc.api.components.ComponentType;
 import lc.api.components.DriverMap;
 import lc.api.components.IConfigurationProvider;
 import lc.api.defs.IContainerDefinition;
@@ -23,6 +25,7 @@ import lc.api.rendering.IParticleMachine;
 import lc.common.IHintProvider;
 import lc.common.LCLog;
 import lc.common.base.generation.LCMasterWorldGen;
+import lc.common.configuration.xml.ComponentConfig;
 import lc.common.crypto.KeyTrustRegistry;
 import lc.common.util.BeaconStreamThread;
 import lc.common.util.StatsProvider;
@@ -63,6 +66,8 @@ public class HintProviderServer implements IHintProvider {
 	/** The master world generator service */
 	LCMasterWorldGen worldGenerator;
 
+	ComponentConfig renderConfiguration;
+
 	/** Default constructor */
 	public HintProviderServer() {
 		LCLog.debug("HintProviderServer providing server-side hints");
@@ -78,6 +83,7 @@ public class HintProviderServer implements IHintProvider {
 		trustChain = new KeyTrustRegistry();
 		chunkLoadCallback = new LCChunkLoadCallback();
 		chunkLoadManager = new LCLoadedChunkManager();
+		renderConfiguration = LCRuntime.runtime.config().config(ComponentType.CLIENT);
 		FMLCommonHandler.instance().bus().register(serverHookBus);
 		MinecraftForge.EVENT_BUS.register(serverHookBus);
 		ForgeChunkManager.setForcedChunkLoadingCallback(LanteaCraft.instance, chunkLoadCallback);
@@ -146,7 +152,7 @@ public class HintProviderServer implements IHintProvider {
 
 	@Override
 	public IConfigurationProvider config() {
-		return null;
+		return renderConfiguration;
 	}
 
 	/**
