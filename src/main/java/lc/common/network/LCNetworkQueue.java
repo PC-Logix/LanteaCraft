@@ -7,7 +7,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lc.api.event.ITickEventHandler;

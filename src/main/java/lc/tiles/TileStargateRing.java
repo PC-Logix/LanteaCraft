@@ -11,7 +11,6 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.util.data.ImmutablePair;
-import lc.common.util.data.StateMap;
 import lc.common.util.game.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

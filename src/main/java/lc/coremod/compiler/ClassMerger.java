@@ -14,8 +14,26 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+/**
+ * Class merging utility.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class ClassMerger {
 
+	/**
+	 * Merge two ClassNode objects together, writing directly to the destination
+	 * ClassNode without making a copy.
+	 * 
+	 * @param source
+	 *            The source class node
+	 * @param destination
+	 *            The destination class node
+	 * @param force
+	 *            If any pre-compile conditions should be ignored
+	 * @return Any compile exceptions, if any.
+	 */
 	public static LCCompilerException[] mergeClasses(ClassNode source, ClassNode destination, boolean force) {
 		ArrayList<LCCompilerException> errors = new ArrayList<LCCompilerException>();
 		walkMergePreconditions(source, destination, errors);

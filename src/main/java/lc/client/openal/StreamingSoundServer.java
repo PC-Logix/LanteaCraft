@@ -222,7 +222,6 @@ public class StreamingSoundServer implements ISoundServer {
 				if (entry.getKey().isEnqueued())
 					purge.add(entry.getKey());
 				else {
-					ArrayList<StreamingSound> renew = new ArrayList<StreamingSound>();
 					for (ISound sound : entry.getValue()) {
 						sound.think(this, client);
 						if (sound.realvol() > 0.0F)

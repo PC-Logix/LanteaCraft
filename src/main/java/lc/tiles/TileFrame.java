@@ -14,7 +14,6 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.util.data.ImmutablePair;
-import lc.common.util.data.StateMap;
 import lc.common.util.game.BlockHelper;
 
 public class TileFrame extends LCMultiblockTile implements IBlockSkinnable {

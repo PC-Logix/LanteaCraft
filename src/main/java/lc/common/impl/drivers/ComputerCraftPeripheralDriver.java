@@ -1,6 +1,5 @@
 package lc.common.impl.drivers;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -9,9 +8,7 @@ import lc.api.jit.DeviceDrivers.DriverProvider;
 import lc.api.jit.DeviceDrivers.DriverRTCallback;
 import lc.api.jit.ASMTag;
 import lc.api.jit.Tag;
-import lc.api.jit.TagMap;
 import lc.common.LCLog;
-import lc.common.base.LCTile;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;

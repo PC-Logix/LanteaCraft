@@ -2,14 +2,11 @@ package lc.common.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-
 import java.io.IOException;
 
 import lc.LCRuntime;
 import lc.common.network.LCNetworkController;
 import lc.common.network.LCPacket;
-import lc.common.network.LCPacketPipeline;
 
 public class LCServerToServerEnvelope extends LCPacket {
 

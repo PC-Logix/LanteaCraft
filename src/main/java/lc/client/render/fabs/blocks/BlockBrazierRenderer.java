@@ -57,7 +57,7 @@ public class BlockBrazierRenderer extends LCBlockRenderer {
 		double z0 = z + 0, z1 = z + de;
 
 		double ifrac = 1.0f - frac;
-		double x2 = (wi * ifrac), y2 = (hi * ifrac), z2 = (de * ifrac);
+		double x2 = (wi * ifrac), z2 = (de * ifrac);
 
 		tessellator.addVertexWithUV(x0 + x2, y0, z1 - z2, u0, v1);
 		tessellator.addVertexWithUV(x0 + x2, y0, z0 + z2, u0, v0);
@@ -100,7 +100,7 @@ public class BlockBrazierRenderer extends LCBlockRenderer {
 		tessellator.addVertexWithUV(x0 + x2, y0, z0 + x2, u0, v1);
 	}
 
-	public void renderTaperBox(double x, double y, double z, double wi, double hi, double de, double frac, IIcon icon) {
+	private void renderTaperBox(double x, double y, double z, double wi, double hi, double de, double frac, IIcon icon) {
 		Tessellator tessellator = Tessellator.instance;
 
 		double u0 = (double) icon.getInterpolatedU(0.0D), u1 = (double) icon.getInterpolatedU(16.0D);
@@ -111,7 +111,7 @@ public class BlockBrazierRenderer extends LCBlockRenderer {
 		double z0 = z + 0, z1 = z + de;
 
 		double ifrac = 1.0f - frac;
-		double x2 = (wi * ifrac), y2 = (hi * ifrac), z2 = (de * ifrac);
+		double x2 = (wi * ifrac), z2 = (de * ifrac);
 
 		tessellator.addVertexWithUV(x0 + x2, y1, z1 - z2, u0, v1);
 		tessellator.addVertexWithUV(x0 + x2, y1, z0 + z2, u0, v0);

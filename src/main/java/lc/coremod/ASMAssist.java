@@ -118,10 +118,28 @@ public class ASMAssist {
 		return signature(aField.name, aField.desc);
 	}
 
+	/**
+	 * Generate a signature on a patter1n
+	 * 
+	 * @param aName
+	 *            The object path
+	 * @param aDesc
+	 *            The object description
+	 * @return The formalized signature, usually path + description
+	 */
 	public static String signature(String aName, String aDesc) {
 		return new StringBuilder().append(aName).append(aDesc).toString();
 	}
 
+	/**
+	 * Find all instances of a method with a given name in a class.
+	 * 
+	 * @param clazz
+	 *            The class to search
+	 * @param name
+	 *            The method name
+	 * @return All instances of the method in the class.
+	 */
 	public static MethodNode[] findMethod(ClassNode clazz, String name) {
 		ArrayList<MethodNode> result = new ArrayList<MethodNode>();
 		if (clazz.methods.size() != 0) {
@@ -132,6 +150,17 @@ public class ASMAssist {
 		return result.toArray(new MethodNode[0]);
 	}
 
+	/**
+	 * Find a method with a particular signature in a class.
+	 * 
+	 * @param clazz
+	 *            The class to search
+	 * @param name
+	 *            The method name
+	 * @param desc
+	 *            The method description
+	 * @return The method, or null.
+	 */
 	public static MethodNode findMethod(ClassNode clazz, String name, String desc) {
 		MethodNode result = null;
 		if (clazz.methods.size() != 0) {
@@ -143,6 +172,15 @@ public class ASMAssist {
 		return result;
 	}
 
+	/**
+	 * Find a field in a class
+	 * 
+	 * @param clazz
+	 *            The class
+	 * @param name
+	 *            The field name
+	 * @return The field, or null.
+	 */
 	public static FieldNode findField(ClassNode clazz, String name) {
 		FieldNode result = null;
 		if (clazz.fields.size() != 0) {
@@ -153,6 +191,15 @@ public class ASMAssist {
 		return result;
 	}
 
+	/**
+	 * Determine if a provided method is empty. A method is empty if it only
+	 * contains a return op (ARETURN, RETURN) and does not include any
+	 * operations.
+	 * 
+	 * @param method
+	 *            The method to inspect
+	 * @return If the method is empty or not
+	 */
 	public static boolean isMethodEmpty(MethodNode method) {
 		if (method.instructions == null || method.instructions.size() == 0)
 			return true;

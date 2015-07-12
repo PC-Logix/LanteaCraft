@@ -6,13 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
-import lc.api.stargate.StargateType;
-import lc.client.models.ModelDHD;
 import lc.client.models.ModelLaptop;
 import lc.common.base.LCBlockRenderer;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
-import lc.common.util.math.Orientations;
 
 public class BlockConfiguratorRenderer extends LCBlockRenderer {
 

@@ -22,7 +22,6 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCDHDPacket;
 import lc.common.util.ScanningHelper;
-import lc.common.util.data.StateMap;
 import lc.common.util.math.DimensionPos;
 
 public class TileDHD extends LCTile implements IDHDAccess {

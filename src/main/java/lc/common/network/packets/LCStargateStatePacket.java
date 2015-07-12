@@ -1,8 +1,6 @@
 package lc.common.network.packets;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-
 import java.io.IOException;
 
 import lc.common.network.packets.abs.LCTargetPacket;

@@ -36,9 +36,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 @ChannelHandler.Sharable
 public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPacket> {
 
+	/** The channels currently controlled by this pipe */
 	protected EnumMap<Side, FMLEmbeddedChannel> channels;
 	private final LCNetworkController controller;
 
+	/**
+	 * Create a new packet pipeline.
+	 * 
+	 * @param controller
+	 *            The network controller instance to bind.
+	 */
 	public LCPacketPipeline(LCNetworkController controller) {
 		this.controller = controller;
 	}

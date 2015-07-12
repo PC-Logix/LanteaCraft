@@ -1,8 +1,6 @@
 package lc.common.network.packets.abs;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-
 import java.io.IOException;
 
 import net.minecraft.nbt.CompressedStreamTools;

@@ -1,7 +1,6 @@
 package lc.items;
 
 import net.minecraft.block.Block;
-import lc.common.base.LCBlock;
 import lc.common.base.LCItemBlock;
 import lc.common.configuration.xml.ComponentConfig;
 

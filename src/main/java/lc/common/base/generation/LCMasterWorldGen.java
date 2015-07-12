@@ -18,7 +18,9 @@ import cpw.mods.fml.common.IWorldGenerator;
  */
 public class LCMasterWorldGen implements IWorldGenerator {
 
+	/** Scattered feature generator */
 	protected final LCScatteredFeatureGenerator scatteredGenerator = new LCScatteredFeatureGenerator();
+	/** Special feature generator */
 	protected final LCFeatureGenerator featureGenerator = new LCFeatureGenerator();
 
 	@Override

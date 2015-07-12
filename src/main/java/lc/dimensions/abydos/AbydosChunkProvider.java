@@ -3,7 +3,6 @@ package lc.dimensions.abydos;
 import java.util.List;
 import java.util.Random;
 
-import lc.common.base.generation.LCMasterWorldGen;
 import lc.common.base.generation.structure.LCFeatureGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;

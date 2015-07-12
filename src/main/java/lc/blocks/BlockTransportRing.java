@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
-import lc.api.stargate.StargateType;
 import lc.common.base.LCBlock;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;

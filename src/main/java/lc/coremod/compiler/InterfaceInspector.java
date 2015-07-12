@@ -9,8 +9,35 @@ import org.objectweb.asm.tree.MethodNode;
 import lc.coremod.ASMAssist;
 import lc.coremod.LCCompilerException;
 
+/**
+ * Interface introspector utility.
+ * 
+ * @author AfterLifeLochie
+ *
+ */
 public class InterfaceInspector {
 
+	/**
+	 * <p>
+	 * Introspect an implementation of an interface in a class. Given the
+	 * ClassNode for the Interface and the Class in question, the introspector
+	 * will assess whether the given Class is a valid implementation (and thus
+	 * instanceof) an Interface.
+	 * </p>
+	 * <p>
+	 * The introspector returns a list of missing interface functional
+	 * implementations which can be used to detect and avoid
+	 * {@link IncompatibleClassChangeError}s from being raised at launch-time.
+	 * </p>
+	 * 
+	 * @param intDec
+	 *            The interface declaration
+	 * @param impl
+	 *            The class declaration
+	 * @return The list of errors when asserting that class is a well-formed
+	 *         instance of the provided class, or an empty list if no mismatch
+	 *         and no other errors were detected.
+	 */
 	public static LCCompilerException[] introspectImplementation(ClassNode intDec, ClassNode impl) {
 		ArrayList<LCCompilerException> errors = new ArrayList<LCCompilerException>();
 		introspectMethods(intDec, impl, errors);

@@ -1,10 +1,7 @@
 package lc.tiles;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.rmi.CORBA.Tie;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -72,21 +69,6 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 			return filters;
 		}
 	};
-
-	/**
-	 * Used to track an entity position and velocity
-	 * 
-	 * @author AfterLifeLochie
-	 */
-	private class TrackedEntity {
-		public Entity entity;
-		public Vector3 lastPos;
-
-		public TrackedEntity(Entity entity) {
-			this.entity = entity;
-			lastPos = new Vector3(entity);
-		}
-	}
 
 	private enum TransportRingCommandType {
 		ENGAGE, TRANSPORT, DISENGAGE;
@@ -341,6 +323,11 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 		TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
 	}
 
+	/**
+	 * Determine if the transport ring is busy currently.
+	 * 
+	 * @return If the transport ring is busy.
+	 */
 	protected boolean busy() {
 		return commandQueue.size() != 0 || command != null;
 	}

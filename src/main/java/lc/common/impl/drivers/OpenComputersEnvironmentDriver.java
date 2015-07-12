@@ -10,13 +10,10 @@ import lc.api.jit.Tag;
 import lc.common.LCLog;
 import lc.common.impl.drivers.OpenComputersDriverManager.IOCManagedEnvPerp;
 import li.cil.oc.api.Network;
-import li.cil.oc.api.driver.MethodWhitelist;
 import li.cil.oc.api.network.Arguments;
 import li.cil.oc.api.network.Context;
-import li.cil.oc.api.network.ManagedPeripheral;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
-import li.cil.oc.api.network.SimpleComponent;
 import li.cil.oc.api.network.Visibility;
 
 public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {

@@ -2,8 +2,6 @@ package lc.client.render.fabs.tiles;
 
 import org.lwjgl.opengl.GL11;
 
-import lc.api.stargate.StargateType;
-import lc.client.models.ModelDHD;
 import lc.client.models.ModelLaptop;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
@@ -11,7 +9,6 @@ import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
 import lc.common.util.math.Orientations;
-import lc.tiles.TileDHD;
 
 public class TileConfiguratorRenderer extends LCTileRenderer {
 

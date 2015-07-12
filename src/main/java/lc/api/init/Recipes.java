@@ -5,7 +5,6 @@
 package lc.api.init;
 
 import lc.api.defs.IRecipeDefinition;
-import lc.common.impl.registry.SimpleRecipeDefinition;
 
 /**
  * Recipe definition list
