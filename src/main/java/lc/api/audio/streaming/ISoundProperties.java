@@ -4,7 +4,7 @@
  */
 package lc.api.audio.streaming;
 
-import net.minecraft.client.audio.SoundCategory;
+import lc.api.audio.SoundPlaybackChannel;
 
 /**
  * Interface for sound property containers at runtime.
@@ -37,7 +37,7 @@ public interface ISoundProperties {
 	/**
 	 * @return The sound's playback category
 	 */
-	SoundCategory category();
+	SoundPlaybackChannel category();
 
 	/**
 	 * @param b
@@ -68,5 +68,5 @@ public interface ISoundProperties {
 	 * @param cat
 	 *            The sound's playback category
 	 */
-	void category(SoundCategory cat);
+	void category(SoundPlaybackChannel cat);
 }

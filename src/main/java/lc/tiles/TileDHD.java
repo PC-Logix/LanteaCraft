@@ -2,7 +2,6 @@ package lc.tiles;
 
 import java.lang.ref.WeakReference;
 
-import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
+import lc.api.audio.SoundPlaybackChannel;
 import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.rendering.ITileRenderInfo;
 import lc.api.stargate.IDHDAccess;
@@ -28,7 +28,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 
 	static {
 		registerChannel(TileDHD.class, new ChannelDescriptor("click", "stargate/milkyway/milkyway_dhd_button.ogg",
-				new StreamingSoundProperties(SoundCategory.MASTER)));
+				new StreamingSoundProperties(SoundPlaybackChannel.MASTER)));
 	}
 
 	private WeakReference<TileStargateBase> stargate;

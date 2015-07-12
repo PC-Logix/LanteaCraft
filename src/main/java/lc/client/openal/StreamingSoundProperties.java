@@ -1,35 +1,36 @@
 package lc.client.openal;
 
-import net.minecraft.client.audio.SoundCategory;
+import lc.api.audio.SoundPlaybackChannel;
 import lc.api.audio.streaming.ISoundProperties;
 
 public class StreamingSoundProperties implements ISoundProperties {
 
 	private boolean loop, override;
 	private float volume, pitch;
-	private SoundCategory category;
+	private SoundPlaybackChannel category;
 
 	public StreamingSoundProperties() {
-		this(SoundCategory.MASTER);
+		this(SoundPlaybackChannel.MASTER);
 	}
 
-	public StreamingSoundProperties(SoundCategory category) {
+	public StreamingSoundProperties(SoundPlaybackChannel category) {
 		this(1.0f, category);
 	}
 
-	public StreamingSoundProperties(float volume, SoundCategory category) {
+	public StreamingSoundProperties(float volume, SoundPlaybackChannel category) {
 		this(false, volume, category);
 	}
 
-	public StreamingSoundProperties(boolean loop, float volume, SoundCategory category) {
+	public StreamingSoundProperties(boolean loop, float volume, SoundPlaybackChannel category) {
 		this(loop, false, volume, category);
 	}
 
-	public StreamingSoundProperties(boolean loop, boolean override, float volume, SoundCategory category) {
+	public StreamingSoundProperties(boolean loop, boolean override, float volume, SoundPlaybackChannel category) {
 		this(loop, override, volume, 1.0f, category);
 	}
 
-	public StreamingSoundProperties(boolean loop, boolean override, float volume, float pitch, SoundCategory category) {
+	public StreamingSoundProperties(boolean loop, boolean override, float volume, float pitch,
+			SoundPlaybackChannel category) {
 		this.loop = loop;
 		this.override = override;
 		this.volume = volume;
@@ -58,7 +59,7 @@ public class StreamingSoundProperties implements ISoundProperties {
 	}
 
 	@Override
-	public SoundCategory category() {
+	public SoundPlaybackChannel category() {
 		return category;
 	}
 
@@ -83,7 +84,7 @@ public class StreamingSoundProperties implements ISoundProperties {
 	}
 
 	@Override
-	public void category(SoundCategory cat) {
+	public void category(SoundPlaybackChannel cat) {
 		category = cat;
 	}
 
