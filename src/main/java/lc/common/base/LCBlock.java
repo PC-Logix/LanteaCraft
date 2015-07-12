@@ -5,6 +5,7 @@ import lc.api.rendering.IBlockRenderInfo;
 import lc.api.rendering.IEntityRenderInfo;
 import lc.api.rendering.IRenderInfo;
 import lc.api.rendering.ITileRenderInfo;
+import lc.common.LCLog;
 import lc.common.configuration.IConfigure;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -204,7 +205,11 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo, ICo
 			try {
 				return tileType.newInstance();
 			} catch (Throwable t) {
-				throw new RuntimeException(t);
+				LCLog.fatal("Couldn't create new instance of tile type.", t);
+				if (t instanceof Error)
+					throw (Error) t;
+				else
+					throw new RuntimeException("Couldn't create new instance of tile type.", t);
 			}
 		return null;
 	}
