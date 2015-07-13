@@ -1,7 +1,10 @@
 package lc.common.network;
 
 import io.netty.buffer.ByteBuf;
+
 import java.io.IOException;
+
+import lc.common.util.math.Vector3;
 
 /**
  * Generic packet implementation
@@ -13,7 +16,7 @@ public abstract class LCPacket {
 
 	/** Primitive type map */
 	private enum PrimType {
-		NULL, BOOLEAN, SHORT, CHARACTER, INTEGER, FLOAT, DOUBLE, STRING;
+		NULL, BOOLEAN, SHORT, CHARACTER, INTEGER, FLOAT, DOUBLE, STRING, VECTOR;
 	}
 
 	/**
@@ -64,6 +67,12 @@ public abstract class LCPacket {
 			buffer.writeInt(data.length);
 			for (int i = 0; i < data.length; i++)
 				buffer.writeByte((byte) data[i]);
+		} else if (prim instanceof Vector3) {
+			buffer.writeByte(PrimType.VECTOR.ordinal());
+			Vector3 vec = (Vector3) prim;
+			buffer.writeDouble(vec.x);
+			buffer.writeDouble(vec.y);
+			buffer.writeDouble(vec.z);
 		} else
 			throw new IOException("Unknown primitive type " + prim.getClass().getName());
 	}
@@ -125,9 +134,11 @@ public abstract class LCPacket {
 		case STRING:
 			int str_sz = buffer.readInt();
 			StringBuilder data = new StringBuilder();
-			for (int i = 0; i < str_sz; i++) 
+			for (int i = 0; i < str_sz; i++)
 				data.append((char) buffer.readByte());
 			return data.toString();
+		case VECTOR:
+			return new Vector3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 		}
 		throw new IOException("Unknown primitive type " + typeof);
 	}

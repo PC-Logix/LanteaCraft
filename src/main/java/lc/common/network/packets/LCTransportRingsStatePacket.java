@@ -27,6 +27,7 @@ public class LCTransportRingsStatePacket extends LCTargetPacket {
 		writeDimensionPosToBuffer(buffer, target);
 		buffer.writeInt(type);
 		buffer.writeDouble(duration);
+		encodePrimitiveArrayInto(buffer, args);
 	}
 
 	@Override
@@ -34,6 +35,7 @@ public class LCTransportRingsStatePacket extends LCTargetPacket {
 		target = readDimensionPosFromBuffer(buffer);
 		this.type = buffer.readInt();
 		this.duration = buffer.readDouble();
+		this.args = decodePrimitiveArrayFrom(buffer);
 	}
 
 }

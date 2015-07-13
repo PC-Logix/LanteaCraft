@@ -19,6 +19,7 @@ import lc.api.rendering.ITileRenderInfo;
 import lc.api.stargate.ITransportRingAccess;
 import lc.client.animation.Animation;
 import lc.client.render.animations.TransportRingMoveAnimation;
+import lc.client.render.gfx.beam.GFXBeam;
 import lc.common.LCLog;
 import lc.common.base.multiblock.LCMultiblockTile;
 import lc.common.base.multiblock.MultiblockState;
@@ -163,6 +164,7 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 	}
 
 	private void thinkClientCommand(TransportRingCommand command) {
+		LCLog.debug("thinkClientCommand: %s", (command != null) ? command.toString() : "[none]");
 		switch (command.type) {
 		case DISENGAGE:
 			for (int i = 0; i < 6; i++)
@@ -173,6 +175,11 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 				clientAnimationQueue.add(new TransportRingMoveAnimation(10.0d, i, i * 0.5d, null, null));
 			break;
 		case TRANSPORT:
+			if (command.args.length == 1) {
+				Vector3 destination = (Vector3) command.args[0];
+				GFXBeam beam = new GFXBeam(getWorldObj(), this, destination.add(0.5f, 0.5f, 0.5f), true, 0.55f, 16, 6, 9.0f);
+				LCRuntime.runtime.hints().particles().placeParticle(getWorldObj(), beam);
+			}
 			break;
 		}
 	}
@@ -228,6 +235,8 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 					ring.commandQueue
 							.add(new TransportRingCommand(TransportRingCommandType.TRANSPORT, command.duration));
 					thinkServerTransport(ring);
+					command = new TransportRingCommand(command.type, command.duration,
+							new Object[] { new Vector3(ring) });
 				}
 				break;
 			case DISENGAGE:
@@ -236,6 +245,7 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 					TileTransportRing ring = (TileTransportRing) command.args[0];
 					ring.commandQueue
 							.add(new TransportRingCommand(TransportRingCommandType.DISENGAGE, command.duration));
+					command = new TransportRingCommand(command.type, command.duration, new Object[] {});
 				}
 				break;
 			case ENGAGE:
@@ -243,6 +253,7 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 				if (command.args.length == 1) {
 					TileTransportRing ring = (TileTransportRing) command.args[0];
 					ring.commandQueue.add(new TransportRingCommand(TransportRingCommandType.ENGAGE, command.duration));
+					command = new TransportRingCommand(command.type, command.duration, new Object[] {});
 				}
 				break;
 
