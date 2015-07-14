@@ -124,7 +124,8 @@ public class SurfaceStargate extends LCScatteredFeatureStart {
 					int cell = config.getStructureLayout()[mapping.fx()][mapping.fy()][mapping.fz()];
 					BlockFilter filter = mappings[cell];
 					Block what = filter.getBlock();
-					fill(w, bb, tile, tile, what, filter.getMetadata());
+					int metadata = Math.max(0, filter.getMetadata());
+					fill(w, bb, tile, tile, what, metadata);
 					if (what instanceof LCBlock) {
 						int tx = getXWithOffset(tile.fx(), tile.fz());
 						int tz = getZWithOffset(tile.fx(), tile.fz());
