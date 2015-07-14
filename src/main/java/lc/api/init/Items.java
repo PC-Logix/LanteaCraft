@@ -30,5 +30,8 @@ public class Items {
 
 	/** Transport ring activator */
 	public IContainerDefinition lanteaTransportRingActivator;
+	
+	/** Portable DHD */
+	public IContainerDefinition lanteaPortableDHD;
 
 }
