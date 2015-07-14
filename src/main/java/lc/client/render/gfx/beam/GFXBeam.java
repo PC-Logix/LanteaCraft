@@ -2,7 +2,6 @@ package lc.client.render.gfx.beam;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
@@ -24,8 +23,9 @@ public class GFXBeam extends LCEntityFX {
 
 	private int fins;
 	private float scale;
-	
-	public GFXBeam(World world, Object src, Object dst, boolean solid, float alpha, int maxAge, int maxFins, float beamScale) {
+
+	public GFXBeam(World world, Object src, Object dst, boolean solid, float alpha, int maxAge, int maxFins,
+			float beamScale) {
 		super(world, 0, 0, 0);
 		from = src;
 		origin = resolvePosition(from);
@@ -89,9 +89,9 @@ public class GFXBeam extends LCEntityFX {
 			tessellator.setBrightness(200);
 			tessellator.setColorRGBA_F(particleRed, particleGreen, particleBlue, 1.0f);
 			tessellator.addVertexWithUV(var44, var44, 0.0f, 0.0f, 0.0f);
-			tessellator.addVertexWithUV(var44, var17 + length, 0.0f, 0.0f, 1.0f);
-			tessellator.addVertexWithUV(var17, var17 + length, 0.0f, 1.0f, 1.0f);
-			tessellator.addVertexWithUV(var17, var44, 0.0f, 1.0f, 0.0f);
+			tessellator.addVertexWithUV(var44, var17 + length, 0.0f, 0.0f, length);
+			tessellator.addVertexWithUV(var17, var17 + length, 0.0f, length, length);
+			tessellator.addVertexWithUV(var17, var44, 0.0f, length, 0.0f);
 			tessellator.draw();
 		}
 

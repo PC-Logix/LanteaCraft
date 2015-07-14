@@ -177,7 +177,7 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 		case TRANSPORT:
 			if (command.args.length == 1) {
 				Vector3 destination = (Vector3) command.args[0];
-				GFXBeam beam = new GFXBeam(getWorldObj(), this, destination.add(0.5f, 0.5f, 0.5f), true, 0.55f, 16, 6, 9.0f);
+				GFXBeam beam = new GFXBeam(getWorldObj(), this, destination.add(0.5f, 0.5f, 0.5f), true, 0.55f, 16, 4, 12.5f);
 				LCRuntime.runtime.hints().particles().placeParticle(getWorldObj(), beam);
 			}
 			break;
