@@ -30,8 +30,11 @@ public class Items {
 
 	/** Transport ring activator */
 	public IContainerDefinition lanteaTransportRingActivator;
-	
+
 	/** Portable DHD */
 	public IContainerDefinition lanteaPortableDHD;
+
+	/** Staff weapon */
+	public IContainerDefinition goauldStaffWeapon;
 
 }

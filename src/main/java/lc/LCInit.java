@@ -41,6 +41,7 @@ import lc.items.ItemIrisUpgrade;
 import lc.items.ItemLanteaAlloyIngot;
 import lc.items.ItemLanteaOre;
 import lc.items.ItemPortableDHD;
+import lc.items.ItemStaff;
 import lc.items.ItemTransportRingActivator;
 import lc.recipe.DecoratorSetterRecipe;
 import net.minecraft.item.ItemStack;
@@ -107,6 +108,7 @@ public class LCInit {
 		items.lanteaStargateIris = DefinitionWrapperProvider.provide(ItemIrisUpgrade.class);
 		items.lanteaTransportRingActivator = DefinitionWrapperProvider.provide(ItemTransportRingActivator.class);
 		items.lanteaPortableDHD = DefinitionWrapperProvider.provide(ItemPortableDHD.class);
+		items.goauldStaffWeapon = DefinitionWrapperProvider.provide(ItemStaff.class);
 
 		/* Initialize recipes */
 		initStargateRecipes(runtime, recipes, blocks, items);
