@@ -73,30 +73,21 @@ import cpw.mods.fml.relauncher.Side;
  * 
  */
 @DriverCandidate(types = { IntegrationType.POWER, IntegrationType.COMPUTERS })
-public class TileStargateBase extends LCMultiblockTile implements
-		IBlockSkinnable, IStargateAccess, ITileRenderInfo {
+public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnable, IStargateAccess, ITileRenderInfo {
 
 	static {
-		registerChannel(TileStargateBase.class, new ChannelDescriptor("spin",
-				"stargate/milkyway/milkyway_roll.ogg",
+		registerChannel(TileStargateBase.class, new ChannelDescriptor("spin", "stargate/milkyway/milkyway_roll.ogg",
 				new StreamingSoundProperties()));
 		registerChannel(TileStargateBase.class, new ChannelDescriptor("lock",
-				"stargate/milkyway/milkyway_chevron_lock.ogg",
-				new StreamingSoundProperties()));
+				"stargate/milkyway/milkyway_chevron_lock.ogg", new StreamingSoundProperties()));
 	}
 
 	public final static StructureConfiguration structure = new StructureConfiguration() {
 
-		private final BlockFilter[] filters = new BlockFilter[] {
-				new BlockFilter(Blocks.air),
-				new BlockFilter(
-						LCRuntime.runtime.blocks().stargateRingBlock.getBlock(),
-						0),
-				new BlockFilter(
-						LCRuntime.runtime.blocks().stargateRingBlock.getBlock(),
-						1),
-				new BlockFilter(
-						LCRuntime.runtime.blocks().stargateBaseBlock.getBlock()) };
+		private final BlockFilter[] filters = new BlockFilter[] { new BlockFilter(Blocks.air),
+				new BlockFilter(LCRuntime.runtime.blocks().stargateRingBlock.getBlock(), 0),
+				new BlockFilter(LCRuntime.runtime.blocks().stargateRingBlock.getBlock(), 1),
+				new BlockFilter(LCRuntime.runtime.blocks().stargateBaseBlock.getBlock()) };
 
 		@Override
 		public Vector3 getStructureDimensions() {
@@ -110,8 +101,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 
 		@Override
 		public int[][][] getStructureLayout() {
-			return new int[][][] {
-					{ { 1 }, { 2 }, { 1 }, { 1 }, { 2 }, { 1 }, { 1 } },
+			return new int[][][] { { { 1 }, { 2 }, { 1 }, { 1 }, { 2 }, { 1 }, { 1 } },
 					{ { 2 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 2 } },
 					{ { 1 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 1 } },
 					{ { 3 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 2 } },
@@ -150,8 +140,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 		public final double duration;
 		public final Object[] args;
 
-		public StargateCommand(StargateCommandType type, double duration,
-				Object... args) {
+		public StargateCommand(StargateCommandType type, double duration, Object... args) {
 			this.type = type;
 			this.duration = duration;
 			this.args = args;
@@ -160,13 +149,11 @@ public class TileStargateBase extends LCMultiblockTile implements
 		@Override
 		public String toString() {
 			StringBuilder zz = new StringBuilder();
-			zz.append("StargateCommand{").append(type).append(":")
-					.append(duration);
+			zz.append("StargateCommand{").append(type).append(":").append(duration);
 			if (args != null) {
 				zz.append(", [");
 				for (int i = 0; i < args.length; i++)
-					zz.append((args[i] != null) ? args[i].toString() : "<null>")
-							.append(",");
+					zz.append((args[i] != null) ? args[i].toString() : "<null>").append(",");
 				zz.append("]");
 			}
 			return zz.append("}").toString();
@@ -238,11 +225,8 @@ public class TileStargateBase extends LCMultiblockTile implements
 		public String getInventoryName() {
 			return "Stargate";
 		}
-	}.setFilterRule(
-			0,
-			new SlotFilter(
-					new ItemStack[] { LCRuntime.runtime.items().lanteaStargateIris
-							.getStackOf(1) }, null, true, false));
+	}.setFilterRule(0, new SlotFilter(new ItemStack[] { LCRuntime.runtime.items().lanteaStargateIris.getStackOf(1) },
+			null, true, false));
 
 	@Override
 	public void configure(ComponentConfig c) {
@@ -261,16 +245,13 @@ public class TileStargateBase extends LCMultiblockTile implements
 			Orientations rotation = Orientations.from(getRotation());
 			if (structure.test(getWorldObj(), xCoord, yCoord, zCoord, rotation)) {
 				changeState(MultiblockState.FORMED);
-				structure.apply(getWorldObj(), xCoord, yCoord, zCoord,
-						rotation, this);
+				structure.apply(getWorldObj(), xCoord, yCoord, zCoord, rotation, this);
 			}
 		} else {
 			Orientations rotation = Orientations.from(getRotation());
-			if (!structure
-					.test(getWorldObj(), xCoord, yCoord, zCoord, rotation)) {
+			if (!structure.test(getWorldObj(), xCoord, yCoord, zCoord, rotation)) {
 				changeState(MultiblockState.NONE);
-				structure.apply(getWorldObj(), xCoord, yCoord, zCoord,
-						rotation, null);
+				structure.apply(getWorldObj(), xCoord, yCoord, zCoord, rotation, null);
 			}
 		}
 	}
@@ -283,12 +264,8 @@ public class TileStargateBase extends LCMultiblockTile implements
 	@Override
 	public void thinkClient() {
 		if (!clientSeenStargateData) {
-			LCRuntime.runtime
-					.network()
-					.getPreferredPipe()
-					.sendToServer(
-							new LCStargateConnectionPacket(new DimensionPos(
-									this), StargateState.IDLE, 0, false));
+			LCRuntime.runtime.network().getPreferredPipe()
+					.sendToServer(new LCStargateConnectionPacket(new DimensionPos(this), StargateState.IDLE, 0, false));
 		}
 		thinkClientRender(!clientSeenState);
 		thinkClientSound(!clientSeenState);
@@ -310,39 +287,30 @@ public class TileStargateBase extends LCMultiblockTile implements
 			break;
 		case DISCONNECT:
 			clientAnimationQueue.push(new ChevronReleaseAnimation(9, true));
-			clientAnimationQueue.push(new RingSpinAnimation(stargateSpinTime,
-					0.0d, 0.0d, true));
+			clientAnimationQueue.push(new RingSpinAnimation(stargateSpinTime, 0.0d, 0.0d, true));
 			clientEngagedGlyphs.clear();
 			break;
 		case DISENGAGE:
 			if (clientEngagedGlyphs.size() > 0) {
-				clientAnimationQueue.push(new ChevronMoveAnimation(
-						stargateChevronMoveTime,
-						clientChevronQueue[clientEngagedGlyphs.size() - 1],
-						0.0d, 0.0d, true));
+				clientAnimationQueue.push(new ChevronMoveAnimation(stargateChevronMoveTime,
+						clientChevronQueue[clientEngagedGlyphs.size() - 1], 0.0d, 0.0d, true));
 				clientEngagedGlyphs.remove(clientEngagedGlyphs.size() - 1);
 			}
 			break;
 		case ENGAGE:
 			clientEngagedGlyphs.add(clientCurrentGlyph);
-			clientAnimationQueue.push(new ChevronMoveAnimation(
-					stargateChevronMoveTime,
-					clientChevronQueue[clientEngagedGlyphs.size() - 1],
-					1.0d / 8.0d, 0.5d, true));
+			clientAnimationQueue.push(new ChevronMoveAnimation(stargateChevronMoveTime,
+					clientChevronQueue[clientEngagedGlyphs.size() - 1], 1.0d / 8.0d, 0.5d, true));
 			break;
 		case SPIN:
 			clientCurrentGlyph = (Character) command.args[0];
-			int symbolIndex = StargateCharsetHelper.singleton().index(
-					(char) clientCurrentGlyph);
+			int symbolIndex = StargateCharsetHelper.singleton().index((char) clientCurrentGlyph);
 			double symbolRotation = symbolIndex * (360.0 / 38.0d);
 			double aangle = MathUtils.normaliseAngle(symbolRotation);
-			clientAnimationQueue.push(new RingSpinAnimation(stargateSpinTime,
-					0.0d, aangle, true));
+			clientAnimationQueue.push(new RingSpinAnimation(stargateSpinTime, 0.0d, aangle, true));
 			for (int i = 0; i < clientEngagedGlyphs.size() - 1; i++) {
-				tileRenderState().set("chevron-dist-" + clientChevronQueue[i],
-						1.0d / 8.0d);
-				tileRenderState().set("chevron-light-" + clientChevronQueue[i],
-						0.5d);
+				tileRenderState().set("chevron-dist-" + clientChevronQueue[i], 1.0d / 8.0d);
+				tileRenderState().set("chevron-light-" + clientChevronQueue[i], 0.5d);
 			}
 			break;
 		case CLOSEIRIS:
@@ -380,8 +348,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 				if (!clientDiallingIsSource) {
 					if (clientEngagedChevrons == 8) {
 						for (int i = 0; i < 9; i++)
-							clientAnimationQueue.push(new ChevronMoveAnimation(
-									5.0d, i, 1.0d / 8.0d, 0.5d, true));
+							clientAnimationQueue.push(new ChevronMoveAnimation(5.0d, i, 1.0d / 8.0d, 0.5d, true));
 					}
 				}
 				break;
@@ -403,16 +370,14 @@ public class TileStargateBase extends LCMultiblockTile implements
 			final int m = 10, n = 38;
 			double u[][] = grid[0], v[][] = grid[1];
 			double dt = 1.0, asq = 0.03, d = 0.95;
-			int r = clientRandomProvider.nextInt(m - 1) + 1, t = clientRandomProvider
-					.nextInt(n) + 1;
+			int r = clientRandomProvider.nextInt(m - 1) + 1, t = clientRandomProvider.nextInt(n) + 1;
 			v[t][r] += 0.05 * clientRandomProvider.nextGaussian();
 			for (int i = 1; i < m; i++)
 				for (int j = 1; j <= n; j++) {
 					double du_dr = 0.5 * (u[j][i + 1] - u[j][i - 1]);
 					double d2u_drsq = u[j][i + 1] - 2 * u[j][i] + u[j][i - 1];
 					double d2u_dthsq = u[j + 1][i] - 2 * u[j][i] + u[j - 1][i];
-					v[j][i] = d * v[j][i] + asq * dt
-							* (d2u_drsq + du_dr / i + d2u_dthsq / (i * i));
+					v[j][i] = d * v[j][i] + asq * dt * (d2u_drsq + du_dr / i + d2u_dthsq / (i * i));
 				}
 			for (int i = 1; i < m; i++)
 				for (int j = 1; j <= n; j++)
@@ -433,8 +398,8 @@ public class TileStargateBase extends LCMultiblockTile implements
 
 	private void thinkClientChangeAnimation(Animation next) {
 		LCLog.debug("thinkChangeAnimation: %s => %s",
-				(clientAnimation != null) ? clientAnimation.toString()
-						: "[none]", (next != null) ? next.toString() : "[none]");
+				(clientAnimation != null) ? clientAnimation.toString() : "[none]", (next != null) ? next.toString()
+						: "[none]");
 		if (clientAnimation != null) {
 			clientAnimation.sampleProperties(tileRenderState());
 			if (clientAnimation.doAfter != null)
@@ -459,8 +424,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 	/** Called to update the wormhole behaviour */
 	@SuppressWarnings("unchecked")
 	private void thinkServerWormhole() {
-		if (currentConnection.tileFrom == this
-				&& currentConnection.state == StargateState.CONNECTED) {
+		if (currentConnection.tileFrom == this && currentConnection.state == StargateState.CONNECTED) {
 			for (TrackedEntity trk : trackedEntities)
 				thinkServerEntityInWormhole(trk.entity, trk.lastPos);
 			trackedEntities.clear();
@@ -468,10 +432,8 @@ public class TileStargateBase extends LCMultiblockTile implements
 			Vector3 origin = new Vector3(this);
 			Vector3 p0 = rotation.mul(new Vector3(-2.5, 0.5, 0.0));
 			Vector3 p1 = rotation.mul(new Vector3(2.5, 5.5, 1.0));
-			AxisAlignedBB box = Vector3
-					.makeAABB(p0.add(origin), p1.add(origin));
-			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class,
-					box);
+			AxisAlignedBB box = Vector3.makeAABB(p0.add(origin), p1.add(origin));
+			List<Entity> ents = worldObj.getEntitiesWithinAABB(Entity.class, box);
 			// LCLog.debug("Entity box: %s, count %s", box, ents.size());
 			for (Entity entity : ents)
 				if (!entity.isDead && entity.ridingEntity == null)
@@ -483,32 +445,26 @@ public class TileStargateBase extends LCMultiblockTile implements
 		if (!entity.isDead) {
 			Matrix3 rotation = Orientations.from(getRotation()).rotation();
 			Vector3 or = new Vector3(this);
-			Vector3 p1 = rotation.mul(new Vector3(entity.posX, entity.posY,
-					entity.posZ).sub(or));
-			Vector3 p0 = rotation.mul(new Vector3(2 * prevPos.x - entity.posX,
-					2 * prevPos.y - entity.posY, 2 * prevPos.z - entity.posZ)
-					.sub(or));
+			Vector3 p1 = rotation.mul(new Vector3(entity.posX, entity.posY, entity.posZ).sub(or));
+			Vector3 p0 = rotation.mul(new Vector3(2 * prevPos.x - entity.posX, 2 * prevPos.y - entity.posY, 2
+					* prevPos.z - entity.posZ).sub(or));
 			double z0 = 0.0;
 			if (p0.z >= z0 && p1.z < z0) {
 				TileStargateBase dte = currentConnection.tileTo;
 				if (dte != null) {
-					Trans3 dt = new Trans3(dte.xCoord, dte.yCoord, dte.zCoord)
-							.rotate(Orientations.from(dte.getRotation())
-									.rotation());
+					Trans3 dt = new Trans3(dte.xCoord, dte.yCoord, dte.zCoord).rotate(Orientations.from(
+							dte.getRotation()).rotation());
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
-					Trans3 t = new Trans3(xCoord, yCoord, zCoord)
-							.rotate(Orientations.from(getRotation()).rotation());
+					Trans3 t = new Trans3(xCoord, yCoord, zCoord).rotate(Orientations.from(getRotation()).rotation());
 					thinkServerDispatchEntity(entity, t, dt, dte);
 				}
 			}
 		}
 	}
 
-	private void thinkServerDispatchEntity(Entity entity, Trans3 src,
-			Trans3 dst, TileStargateBase destination) {
-		TeleportationHelper.sendEntityToWorld(entity, src, dst,
-				destination.getWorldObj().provider.dimensionId);
+	private void thinkServerDispatchEntity(Entity entity, Trans3 src, Trans3 dst, TileStargateBase destination) {
+		TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
 	}
 
 	private void thinkServerTasks() {
@@ -527,8 +483,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 	}
 
 	private void thinkServerChangeCommand(StargateCommand next) {
-		LCLog.debug("thinkChangeCommand: %s => %s",
-				(command != null) ? command.toString() : "[none]",
+		LCLog.debug("thinkChangeCommand: %s => %s", (command != null) ? command.toString() : "[none]",
 				(next != null) ? next.toString() : "[none]");
 		command = next;
 		boolean doCommand = false;
@@ -538,29 +493,22 @@ public class TileStargateBase extends LCMultiblockTile implements
 				case CONNECT:
 					if (currentConnection == null)
 						if (engagedGlyphs.size() == 9) {
-							HintProviderServer server = (HintProviderServer) LCRuntime.runtime
-									.hints();
-							Character[] addr = engagedGlyphs
-									.toArray(new Character[0]);
-							StargateAddress address = new StargateAddress(
-									PrimitiveHelper.unbox(addr));
-							currentConnection = server.stargates()
-									.openConnection(this, address,
-											(int) stargateConnectTimeout,
-											(int) stargateEstablishedTimeout);
-							LCTile.doCallbacksNow(this, "computerEvent",
-									"connect", null);
+							HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
+							Character[] addr = engagedGlyphs.toArray(new Character[0]);
+							StargateAddress address = new StargateAddress(PrimitiveHelper.unbox(addr));
+							currentConnection = server.stargates().openConnection(this, address,
+									(int) stargateConnectTimeout, (int) stargateEstablishedTimeout);
+							if (currentConnection != null)
+								LCTile.doCallbacksNow(this, "computerEvent", "connect", null);
 							doCommand = true;
 						}
 					break;
 				case DISCONNECT:
-					if (currentConnection != null
-							&& currentConnection.state == StargateState.CONNECTED) {
+					if (currentConnection != null && currentConnection.state == StargateState.CONNECTED) {
 						boolean state = currentConnection.closeConnection(this);
 						if (state) {
 							engagedGlyphs.clear();
-							LCTile.doCallbacksNow(this, "computerEvent",
-									"disconnect", null);
+							LCTile.doCallbacksNow(this, "computerEvent", "disconnect", null);
 							doCommand = true;
 						}
 					}
@@ -569,8 +517,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 					if (currentConnection == null)
 						if (engagedGlyphs.size() > 0) {
 							engagedGlyphs.remove(engagedGlyphs.size() - 1);
-							LCTile.doCallbacksNow(this, "computerEvent",
-									"disengageGlyph", null);
+							LCTile.doCallbacksNow(this, "computerEvent", "disengageGlyph", null);
 							doCommand = true;
 						}
 					break;
@@ -578,9 +525,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 					if (currentConnection == null)
 						if (engagedGlyphs.size() < 9) {
 							engagedGlyphs.add(currentGlyph);
-							LCTile.doCallbacksNow(this, "computerEvent",
-									"engageGlyph",
-									new Object[] { currentGlyph });
+							LCTile.doCallbacksNow(this, "computerEvent", "engageGlyph", new Object[] { currentGlyph });
 							doCommand = true;
 						}
 					break;
@@ -588,9 +533,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 					if (currentConnection == null) {
 						if (engagedGlyphs.size() < 9) {
 							currentGlyph = (Character) command.args[0];
-							LCTile.doCallbacksNow(this, "computerEvent",
-									"spinToGlyph",
-									new Object[] { currentGlyph });
+							LCTile.doCallbacksNow(this, "computerEvent", "spinToGlyph", new Object[] { currentGlyph });
 							doCommand = true;
 						}
 					}
@@ -614,11 +557,9 @@ public class TileStargateBase extends LCMultiblockTile implements
 	}
 
 	private void thinkServerDispatchState(StargateCommand command) {
-		LCLog.debug("thinkServerDispatchState: %s",
-				(command != null) ? command.toString() : "[none]");
+		LCLog.debug("thinkServerDispatchState: %s", (command != null) ? command.toString() : "[none]");
 		if (command != null) {
-			LCStargateStatePacket packet = new LCStargateStatePacket(
-					new DimensionPos(this), command.type.ordinal(),
+			LCStargateStatePacket packet = new LCStargateStatePacket(new DimensionPos(this), command.type.ordinal(),
 					command.duration, command.args);
 			sendPacketToClients(packet);
 		}
@@ -653,8 +594,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		Vector3 dim = structure.getStructureDimensions();
-		Vector3 min = new Vector3(this).sub(dim), max = new Vector3(this)
-				.add(dim);
+		Vector3 min = new Vector3(this).sub(dim), max = new Vector3(this).add(dim);
 		return Vector3.makeAABB(min, max);
 	}
 
@@ -670,15 +610,13 @@ public class TileStargateBase extends LCMultiblockTile implements
 	}
 
 	@Override
-	public void thinkPacket(LCPacket packet, EntityPlayer player)
-			throws LCNetworkException {
+	public void thinkPacket(LCPacket packet, EntityPlayer player) throws LCNetworkException {
 		super.thinkPacket(packet, player);
 		if (packet instanceof LCTileSync)
 			if (getWorldObj().isRemote) {
 				boolean flag = false;
 				if (compound != null && compound.hasKey("skin-block")) {
-					ImmutablePair<Block, Integer> data = BlockHelper
-							.loadBlock(compound.getString("skin-block"));
+					ImmutablePair<Block, Integer> data = BlockHelper.loadBlock(compound.getString("skin-block"));
 					if (data.getA() != null) {
 						clientSkinBlock = data.getA();
 						clientSkinBlockMetadata = data.getB();
@@ -703,8 +641,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 		}
 		if (packet instanceof LCStargateStatePacket) {
 			LCStargateStatePacket state = (LCStargateStatePacket) packet;
-			StargateCommand cmd = new StargateCommand(
-					StargateCommandType.values()[state.type], state.duration,
+			StargateCommand cmd = new StargateCommand(StargateCommandType.values()[state.type], state.duration,
 					state.args);
 			thinkClientCommand(cmd);
 		}
@@ -712,8 +649,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 
 	@Override
 	public String[] debug(Side side) {
-		return new String[] { String.format("Rotation: %s", getRotation()),
-				String.format("Multiblock: %s", getState()) };
+		return new String[] { String.format("Rotation: %s", getRotation()), String.format("Multiblock: %s", getState()) };
 	}
 
 	@Override
@@ -736,8 +672,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 		} else {
 			if (compound == null)
 				compound = new NBTTagCompound();
-			compound.setString("skin-block",
-					BlockHelper.saveBlock(block, metadata));
+			compound.setString("skin-block", BlockHelper.saveBlock(block, metadata));
 			markNbtDirty();
 		}
 	}
@@ -755,18 +690,15 @@ public class TileStargateBase extends LCMultiblockTile implements
 
 	public void notifyConnectionState(StargateConnection connection) {
 		LCStargateConnectionPacket state;
-		if (connection == null || connection.dead || connection.state == null
-				|| connection.state == StargateState.IDLE) {
+		if (connection == null || connection.dead || connection.state == null || connection.state == StargateState.IDLE) {
 			if (currentConnection != null)
 				LCTile.doCallbacksNow(this, "computerEvent", "disconnect");
 			currentConnection = null;
-			state = new LCStargateConnectionPacket(new DimensionPos(this),
-					StargateState.IDLE, 0, false);
+			state = new LCStargateConnectionPacket(new DimensionPos(this), StargateState.IDLE, 0, false);
 		} else {
 			currentConnection = connection;
-			state = new LCStargateConnectionPacket(new DimensionPos(this),
-					currentConnection.state, currentConnection.stateTimeout,
-					currentConnection.tileFrom == this);
+			state = new LCStargateConnectionPacket(new DimensionPos(this), currentConnection.state,
+					currentConnection.stateTimeout, currentConnection.tileFrom == this);
 		}
 		sendPacketToClients(state);
 	}
@@ -806,11 +738,9 @@ public class TileStargateBase extends LCMultiblockTile implements
 			return new StargateAddress(compound, "stargate-address");
 		} else {
 			if (!compound.hasKey("stargate-address")) {
-				HintProviderServer server = (HintProviderServer) LCRuntime.runtime
-						.hints();
+				HintProviderServer server = (HintProviderServer) LCRuntime.runtime.hints();
 				StargateManager stargates = server.stargates();
-				stargates.getStargateAddress(this).toNBT(compound,
-						"stargate-address");
+				stargates.getStargateAddress(this).toNBT(compound, "stargate-address");
 				markNbtDirty();
 			}
 			return new StargateAddress(compound, "stargate-address");
@@ -861,8 +791,7 @@ public class TileStargateBase extends LCMultiblockTile implements
 	public void selectGlyph(char glyph) {
 		try {
 			StargateCharsetHelper.singleton().index(glyph);
-			commandQueue.add(new StargateCommand(StargateCommandType.SPIN,
-					stargateSpinTime, glyph));
+			commandQueue.add(new StargateCommand(StargateCommandType.SPIN, stargateSpinTime, glyph));
 		} catch (NumberFormatException format) {
 		}
 	}
@@ -870,15 +799,13 @@ public class TileStargateBase extends LCMultiblockTile implements
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void activateChevron() {
-		commandQueue.add(new StargateCommand(StargateCommandType.ENGAGE,
-				stargateChevronMoveTime));
+		commandQueue.add(new StargateCommand(StargateCommandType.ENGAGE, stargateChevronMoveTime));
 	}
 
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void deactivateChevron() {
-		commandQueue.add(new StargateCommand(StargateCommandType.DISENGAGE,
-				stargateChevronMoveTime));
+		commandQueue.add(new StargateCommand(StargateCommandType.DISENGAGE, stargateChevronMoveTime));
 	}
 
 	@Override
@@ -904,27 +831,23 @@ public class TileStargateBase extends LCMultiblockTile implements
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void engageStargate() {
-		commandQueue.add(new StargateCommand(StargateCommandType.CONNECT,
-				stargateConnectTimeout));
+		commandQueue.add(new StargateCommand(StargateCommandType.CONNECT, stargateConnectTimeout));
 	}
 
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void disengageStargate() {
-		commandQueue.add(new StargateCommand(StargateCommandType.DISCONNECT,
-				stargateSpinTime));
+		commandQueue.add(new StargateCommand(StargateCommandType.DISCONNECT, stargateSpinTime));
 	}
 
 	@Override
 	public void openIris() {
-		commandQueue.add(new StargateCommand(StargateCommandType.OPENIRIS,
-				stargateIrisSpeed));
+		commandQueue.add(new StargateCommand(StargateCommandType.OPENIRIS, stargateIrisSpeed));
 	}
 
 	@Override
 	public void closeIris() {
-		commandQueue.add(new StargateCommand(StargateCommandType.CLOSEIRIS,
-				stargateIrisSpeed));
+		commandQueue.add(new StargateCommand(StargateCommandType.CLOSEIRIS, stargateIrisSpeed));
 	}
 
 	@Override
