@@ -89,9 +89,13 @@ public abstract class LCPacket {
 	 *             is unknown
 	 */
 	protected static void encodePrimitiveArrayInto(ByteBuf buffer, Object[] arr) throws IOException {
-		buffer.writeInt(arr.length);
-		for (int i = 0; i < arr.length; i++)
-			encodePrimitiveInto(buffer, arr[i]);
+		if (arr == null)
+			buffer.writeInt(-1);
+		else {
+			buffer.writeInt(arr.length);
+			for (int i = 0; i < arr.length; i++)
+				encodePrimitiveInto(buffer, arr[i]);
+		}
 	}
 
 	/**
@@ -155,6 +159,8 @@ public abstract class LCPacket {
 	 */
 	protected static Object[] decodePrimitiveArrayFrom(ByteBuf buffer) throws IOException {
 		int sz = buffer.readInt();
+		if (sz == -1)
+			return null;
 		Object[] prims = new Object[sz];
 		for (int i = 0; i < sz; i++)
 			prims[i] = decodePrimitiveFrom(buffer);

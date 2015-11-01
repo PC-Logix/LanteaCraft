@@ -36,13 +36,13 @@ public class BlockConfiguratorRenderer extends LCBlockRenderer {
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glTranslatef(0.5f, 0.5f, 0.0f);
-		GL11.glRotatef(120, 0, 1, 0);
+		GL11.glRotatef(-65, 0, 1, 0);
 		GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture(ResourceAccess.getNamedResource("textures/models/laptop.png"));
 		GL11.glTranslatef(0.0f, 1.0f, 0.0f);
 		GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
-		GL11.glTranslatef(-0.5f, -0.5f, 0.5f);
+		GL11.glTranslatef(-0.8f, -0.5f, 0.7f);
 		ModelLaptop.$.renderAll(-1.75f);
 		
 		GL11.glEnable(GL11.GL_LIGHTING);

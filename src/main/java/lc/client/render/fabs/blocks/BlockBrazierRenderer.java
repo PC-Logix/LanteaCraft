@@ -1,5 +1,7 @@
 package lc.client.render.fabs.blocks;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -30,8 +32,16 @@ public class BlockBrazierRenderer extends LCBlockRenderer {
 
 	@Override
 	public boolean renderInventoryBlock(Block block, RenderBlocks renderer, int metadata) {
-		// TODO Auto-generated method stub
-		return false;
+		Tessellator t = Tessellator.instance;
+		IIcon blockicon = block.getIcon(0, metadata);
+		t.setBrightness(15);
+		t.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+		t.startDrawingQuads();
+		GL11.glTranslatef(0.0f, -0.25f, 0.0f);
+		renderTaperBox(0.33, 0.0, 0.33, 1.0 - 0.66, 1, 1.0 - 0.66, 0.66, blockicon);
+		renderBackplane(0.11, 1.0, 0.11, 1.0 - 0.22, 0.22, 1.0 - 0.22, 0.56, blockicon);
+		t.draw();
+		return true;
 	}
 
 	@Override
@@ -146,7 +156,7 @@ public class BlockBrazierRenderer extends LCBlockRenderer {
 
 	@Override
 	public boolean renderInventoryItemAs3d() {
-		return false;
+		return true;
 	}
 
 }

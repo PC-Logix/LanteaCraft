@@ -126,6 +126,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer, IConfigur
 		Tessellator tess = Tessellator.instance;
 		tess.setColorOpaque_F(1, 1, 1);
 		tess.startDrawingQuads();
+		GL11.glTranslatef(0.0f, -0.1f, 0.0f);
 		renderCube(tess, trans, null, block, 0, 0, 0, metadata, 0xf000f0);
 		tess.draw();
 	}
