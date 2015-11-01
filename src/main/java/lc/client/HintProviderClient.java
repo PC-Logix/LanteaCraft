@@ -19,6 +19,7 @@ import lc.client.render.fabs.blocks.BlockConfiguratorRenderer;
 import lc.client.render.fabs.blocks.BlockDHDRenderer;
 import lc.client.render.fabs.blocks.BlockDoorRenderer;
 import lc.client.render.fabs.blocks.BlockObeliskRenderer;
+import lc.client.render.fabs.entities.EntityStaffProjectileRenderer;
 import lc.client.render.fabs.items.ItemDecoratorRenderer;
 import lc.client.render.fabs.tiles.TileConfiguratorRenderer;
 import lc.client.render.fabs.tiles.TileDHDRenderer;
@@ -27,13 +28,16 @@ import lc.client.render.fabs.tiles.TileStargateBaseRenderer;
 import lc.client.render.fabs.tiles.TileTransportRingRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
+import lc.common.base.LCEntityRenderer;
 import lc.common.base.LCItem;
 import lc.common.base.LCTile;
 import lc.common.base.pipeline.LCBlockRenderPipeline;
+import lc.common.base.pipeline.LCEntityRenderPipeline;
 import lc.common.base.pipeline.LCItemRenderPipeline;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.impl.registry.DefinitionRegistry;
+import lc.entity.EntityStaffProjectile;
 import lc.items.ItemDecorator;
 import lc.server.HintProviderServer;
 import lc.tiles.TileConfigurator;
@@ -41,6 +45,7 @@ import lc.tiles.TileDHD;
 import lc.tiles.TileLanteaDoor;
 import lc.tiles.TileStargateBase;
 import lc.tiles.TileTransportRing;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -56,6 +61,7 @@ public class HintProviderClient extends HintProviderServer {
 	private LCBlockRenderPipeline blockRenderingHook;
 	private LCTileRenderPipeline tileRenderingHook;
 	private LCItemRenderPipeline itemRenderingHook;
+	private LCEntityRenderPipeline entityRenderingHook;
 
 	private ClientSoundController soundController;
 	private ParticleMachine particleMachine;
@@ -72,6 +78,7 @@ public class HintProviderClient extends HintProviderServer {
 		blockRenderingHook = new LCBlockRenderPipeline(RenderingRegistry.getNextAvailableRenderId());
 		tileRenderingHook = new LCTileRenderPipeline();
 		itemRenderingHook = new LCItemRenderPipeline();
+		entityRenderingHook = new LCEntityRenderPipeline();
 		soundController = new ClientSoundController();
 		particleMachine = new ParticleMachine();
 		RenderingRegistry.registerBlockHandler(blockRenderingHook.getRenderId(), blockRenderingHook);
@@ -94,6 +101,8 @@ public class HintProviderClient extends HintProviderServer {
 		registry.registerTileRenderer(TileLanteaDoor.class, TileDoorRenderer.class);
 		registry.registerTileRenderer(TileDHD.class, TileDHDRenderer.class);
 		registry.registerTileRenderer(TileConfigurator.class, TileConfiguratorRenderer.class);
+
+		registry.registerEntityRenderer(EntityStaffProjectile.class, EntityStaffProjectileRenderer.class);
 	}
 
 	@Override
@@ -118,6 +127,11 @@ public class HintProviderClient extends HintProviderServer {
 		if (definition.getItem() != null && definition.getItem() instanceof LCItem) {
 			LCItem theItem = (LCItem) definition.getItem();
 			MinecraftForgeClient.registerItemRenderer(theItem, itemRenderingHook);
+		}
+
+		if (definition.getEntityType() != null) {
+			Class<? extends Entity> theEntity = definition.getEntityType();
+			RenderingRegistry.registerEntityRenderingHandler(theEntity, entityRenderingHook);
 		}
 
 	}

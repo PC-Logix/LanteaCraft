@@ -5,6 +5,7 @@
 package lc.api.defs;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -50,6 +51,15 @@ public interface IContainerDefinition extends IGameDef {
 	 * @return The class of tile entity for this block definition, or null
 	 */
 	public abstract Class<? extends TileEntity> getTileType();
+
+	/**
+	 * Fetches the entity class for this definition. If the definition has no
+	 * entity (because it is not an entity or does not require one), this method
+	 * must return null.
+	 *
+	 * @return The class of entity for this block definition, or null
+	 */
+	public abstract Class<? extends Entity> getEntityType();
 
 	/**
 	 * Create a stack of a specified size of the item or item-block. If the

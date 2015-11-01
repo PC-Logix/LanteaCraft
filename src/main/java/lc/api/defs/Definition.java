@@ -7,6 +7,7 @@ package lc.api.defs;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import net.minecraft.entity.Entity;
 import lc.api.components.ComponentType;
 import lc.common.base.LCBlock;
 import lc.common.base.LCItem;
@@ -75,5 +76,14 @@ public @interface Definition {
 	 * @return The tile class of this definition.
 	 */
 	Class<?> tileClass() default Void.class;
+
+	/**
+	 * The entity class of this definition. May be any child class of
+	 * {@link Entity} or {@link Void} (implicit). If an entity class is
+	 * configured, a {@link Definition#blockClass()} must be Void.
+	 *
+	 * @return The entity class of this definition.
+	 */
+	Class<?> entityClass() default Void.class;
 
 }

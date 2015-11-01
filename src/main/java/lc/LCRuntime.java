@@ -7,6 +7,7 @@ import lc.api.defs.HintProvider;
 import lc.api.init.Biomes;
 import lc.api.init.Blocks;
 import lc.api.init.Dimensions;
+import lc.api.init.Entities;
 import lc.api.init.Interfaces;
 import lc.api.init.Items;
 import lc.api.init.Recipes;
@@ -50,6 +51,8 @@ public class LCRuntime implements ILCAPIProxy {
 	private final Blocks blocks = new Blocks();
 	/** The LC items container */
 	private final Items items = new Items();
+	/** The LC entities container */
+	private final Entities entities = new Entities();
 	/** Container of all API registries */
 	private final RegistryContainer registries = new RegistryContainer();
 	/** The LC biomes container */
@@ -100,6 +103,11 @@ public class LCRuntime implements ILCAPIProxy {
 	@Override
 	public Items items() {
 		return items;
+	}
+
+	@Override
+	public Entities entities() {
+		return entities;
 	}
 
 	@Override

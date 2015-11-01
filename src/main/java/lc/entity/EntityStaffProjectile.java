@@ -2,6 +2,8 @@ package lc.entity;
 
 import java.util.List;
 
+import lc.api.components.ComponentType;
+import lc.api.defs.Definition;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -19,6 +21,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+@Definition(name = "staffProjectile", type = ComponentType.CORE, entityClass = EntityStaffProjectile.class)
 public class EntityStaffProjectile extends Entity {
 
 	private int blockPosX = -1;
@@ -168,7 +171,7 @@ public class EntityStaffProjectile extends Entity {
 							+ this.motionZ * this.motionZ);
 					int k = MathHelper.ceiling_double_int((double) f2 * this.damage);
 
-					DamageSource damagesource = null;
+					DamageSource damagesource = new DamageSource("lantean_staff");
 
 					if (this.shootingEntity == null) {
 						// damagesource = DamageSource.causeArrowDamage(this,

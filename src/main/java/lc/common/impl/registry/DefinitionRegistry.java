@@ -14,6 +14,7 @@ import lc.api.defs.ILanteaCraftRenderer;
 import lc.common.LCLog;
 import lc.common.base.LCBlock;
 import lc.common.base.LCBlockRenderer;
+import lc.common.base.LCEntityRenderer;
 import lc.common.base.LCItem;
 import lc.common.base.LCItemBucket;
 import lc.common.base.LCItemRenderer;
@@ -23,12 +24,10 @@ import lc.common.configuration.IConfigure;
 import lc.common.util.LCCreativeTabManager;
 import lc.common.util.Tracer;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -99,6 +98,15 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 		for (IContainerDefinition definition : definitionPool.values())
 			if (definition instanceof BlockItemDefinition) {
 				BlockItemDefinition element = (BlockItemDefinition) definition;
+				if (components.isEnabled(element.getComponentOwner())) {
+					LCLog.trace("Registering element %s, component %s enabled.", element.getName(),
+							element.getComponentOwner());
+					element.init(this);
+				} else
+					LCLog.trace("Dropping registration for element %s, component %s disabled.", element.getName(),
+							element.getComponentOwner());
+			} else if (definition instanceof EntityDefinition) {
+				EntityDefinition element = (EntityDefinition) definition;
 				if (components.isEnabled(element.getComponentOwner())) {
 					LCLog.trace("Registering element %s, component %s enabled.", element.getName(),
 							element.getComponentOwner());
@@ -294,8 +302,11 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 	 * @param renderer
 	 *            The renderer object
 	 */
-	public void registerEntityRenderer(Class<? extends Entity> entity, Object renderer) {
-		RenderingRegistry.registerEntityRenderingHandler(entity, (Render) renderer);
+	public void registerEntityRenderer(Class<? extends Entity> entity, Class<? extends LCEntityRenderer> renderer) {
+		if (!registeredRenderers.containsKey(RendererType.ENTITY))
+			registeredRenderers
+					.put(RendererType.ENTITY, new HashMap<Class<?>, Class<? extends ILanteaCraftRenderer>>());
+		registeredRenderers.get(RendererType.ENTITY).put(entity, renderer);
 	}
 
 	/**

@@ -8,6 +8,7 @@ import lc.api.components.IRegistryContainer;
 import lc.api.init.Biomes;
 import lc.api.init.Blocks;
 import lc.api.init.Dimensions;
+import lc.api.init.Entities;
 import lc.api.init.Interfaces;
 import lc.api.init.Items;
 import lc.api.init.Recipes;
@@ -48,6 +49,13 @@ public interface ILCAPIProxy {
 	 * @return The list of items
 	 */
 	public Items items();
+
+	/**
+	 * Get the current LanteaCraft entity registry
+	 *
+	 * @return The list of entities
+	 */
+	public Entities entities();
 
 	/**
 	 * Get the registry container

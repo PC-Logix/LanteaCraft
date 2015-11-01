@@ -5,6 +5,7 @@ import java.util.Random;
 import lc.api.components.RecipeType;
 import lc.api.defs.IDefinitionReference;
 import lc.api.init.Blocks;
+import lc.api.init.Entities;
 import lc.api.init.Interfaces;
 import lc.api.init.Items;
 import lc.api.init.Recipes;
@@ -30,6 +31,7 @@ import lc.common.impl.registry.InterfaceDefinition;
 import lc.common.impl.registry.RecipeProxy;
 import lc.common.impl.registry.SimpleRecipeDefinition;
 import lc.common.impl.registry.StructureDefinition;
+import lc.entity.EntityStaffProjectile;
 import lc.generation.AbydosPyramid;
 import lc.generation.AbydosPyramid.AbydosPyramidFeature;
 import lc.generation.SurfaceStargate;
@@ -81,6 +83,7 @@ public class LCInit {
 	public void init(LCRuntime runtime, FMLInitializationEvent event) {
 		Blocks blocks = runtime.blocks();
 		Items items = runtime.items();
+		Entities entities = runtime.entities();
 		Recipes recipes = runtime.recipes();
 		Structures structures = runtime.structures();
 		Interfaces interfaces = runtime.interfaces();
@@ -109,6 +112,8 @@ public class LCInit {
 		items.lanteaTransportRingActivator = DefinitionWrapperProvider.provide(ItemTransportRingActivator.class);
 		items.lanteaPortableDHD = DefinitionWrapperProvider.provide(ItemPortableDHD.class);
 		items.goauldStaffWeapon = DefinitionWrapperProvider.provide(ItemStaff.class);
+		
+		entities.staffProjectile = DefinitionWrapperProvider.provide(EntityStaffProjectile.class);
 
 		/* Initialize recipes */
 		initStargateRecipes(runtime, recipes, blocks, items);

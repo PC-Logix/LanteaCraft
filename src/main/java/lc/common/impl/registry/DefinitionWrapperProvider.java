@@ -2,6 +2,7 @@ package lc.common.impl.registry;
 
 import java.lang.annotation.Annotation;
 
+import net.minecraft.entity.Entity;
 import lc.LCRuntime;
 import lc.api.components.ComponentType;
 import lc.api.defs.Definition;
@@ -43,6 +44,7 @@ public class DefinitionWrapperProvider {
 				Class<? extends LCItemBlock> itemBlockClass = null;
 				Class<? extends LCItem> itemClass = null;
 				Class<? extends LCTile> tileClass = null;
+				Class<? extends Entity> entityClass = null;
 
 				if (!definition.blockClass().equals(Void.class) && !definition.itemBlockClass().equals(Void.class)) {
 					LCLog.doAssert(definition.itemClass().equals(Void.class),
@@ -62,6 +64,9 @@ public class DefinitionWrapperProvider {
 					itemClass = (Class<? extends LCItem>) definition.itemClass();
 					result = new BlockItemDefinition(type, name, null, itemClass);
 					LCLog.trace("Providing definition: %s: %s, item: %s", type, name, itemClass);
+				} else if (!definition.entityClass().equals(Void.class)) {
+					entityClass = (Class<? extends Entity>) definition.entityClass();
+					result = new EntityDefinition(type, name, entityClass);
 				} else
 					LCLog.warn("No valid definition found, ignoring.");
 			}
