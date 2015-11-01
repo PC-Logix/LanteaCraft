@@ -34,6 +34,7 @@ public class BlockBrazier extends LCBlock {
 	public BlockBrazier() {
 		super(Material.ground);
 		setLightLevel(1.0F);
+		setProvidesTypes(true);
 	}
 
 	@Override

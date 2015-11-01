@@ -3,6 +3,7 @@ tile.DHD.0.name=Stargate Controller
 tile.DHD.1.name=Pegasus Stargate Controller
 tile.DHD.2.name=Wraith Stargate Controller
 tile.DHD.3.name=Nox Stargate Controller
+item.portableDHD.name=Portable DHD
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Stargate Base
@@ -28,6 +29,9 @@ item.gdo.name=Garage Door Opener
 # Power-related items
 item.energyCrystal.name=Energy Crystal
 item.zpm.name=ZPM
+
+# Weapons
+item.itemStaff.name=Staff
 
 # Crafting reagents
 item.craftingReagent.0.name=Broken Reagent Item
@@ -72,6 +76,11 @@ tile.blockObelisk.0.name=Obelisk
 tile.blockObelisk.1.name=Obelisk
 tile.blockObelisk.2.name=Obelisk
 
+# Decor braziers
+tile.blockBrazier.0.name=Obelisk
+tile.blockBrazier.1.name=Obelisk
+tile.blockBrazier.2.name=Obelisk
+
 # Ore / Ore blocks
 tile.lanteaOre.0.name=Naquadah Ore
 item.lanteaOre.0.name=Naquadah
@@ -84,6 +93,7 @@ item.lanteaOre.2.name=Trinium
 tile.frame.name=Construction Frame
 tile.naquadahGenerator.name=Naquadah Generator
 tile.blockCrystalInfuser.name=Crystal Infuser
+tile.blockConfigurator.name=Configurator
 
 # Help Notebook
 item.jacksonNotebook.name=Daniel Jackson's Notebook
@@ -97,6 +107,9 @@ item.debugGlasses.name=AfterLifeLochie's Glasses
 
 # Integration blocks and items
 tile.integration.computercraft.name=ComputerCraft Adapter
+
+# Decorator
+item.decorator.name=Decorator
 
 
 # Death messages
