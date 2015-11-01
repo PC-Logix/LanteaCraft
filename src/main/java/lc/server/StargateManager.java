@@ -81,20 +81,6 @@ public class StargateManager implements ITickEventHandler {
 	}
 
 	/**
-	 * Close a connection
-	 * 
-	 * @param tile
-	 *            The source tile
-	 * @param address
-	 *            The address
-	 */
-	public void closeConnection(TileStargateBase tile, char[] address) {
-		synchronized (connections) {
-			// TODO: WHY?
-		}
-	}
-
-	/**
 	 * Close all connections in a dimension
 	 * 
 	 * @param dimensionId
