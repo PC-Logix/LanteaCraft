@@ -42,8 +42,11 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 	}
 
 	@Override
-	public void placeParticle(World theWorld, EntityFX entity) {
+	public void placeParticle(World theWorld, Object object) {
 		int dimension = theWorld.provider.dimensionId;
+		if (!(object instanceof LCEntityFX))
+			throw new IllegalArgumentException("Must provide LCEntityFX decendant.");
+		LCEntityFX entity = (LCEntityFX) object;
 		if (!particles.get(entity.getFXLayer()).containsKey(dimension))
 			particles.get(entity.getFXLayer()).put(dimension, new ArrayList<LCEntityFX>());
 		particles.get(entity.getFXLayer()).get(dimension).add((LCEntityFX) entity);
@@ -115,14 +118,14 @@ public class ParticleMachine implements ITickEventHandler, IParticleMachine {
 				Iterator<LCEntityFX> entities = list.iterator();
 				while (entities.hasNext()) {
 					LCEntityFX entity = entities.next();
-					
+
 					float f1 = ActiveRenderInfo.rotationX;
-			        float f2 = ActiveRenderInfo.rotationZ;
-			        float f3 = ActiveRenderInfo.rotationYZ;
-			        float f4 = ActiveRenderInfo.rotationXY;
-			        float f5 = ActiveRenderInfo.rotationXZ;
-			        
-			        EntityFX.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * frame;
+					float f2 = ActiveRenderInfo.rotationZ;
+					float f3 = ActiveRenderInfo.rotationYZ;
+					float f4 = ActiveRenderInfo.rotationXY;
+					float f5 = ActiveRenderInfo.rotationXZ;
+
+					EntityFX.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * frame;
 					EntityFX.interpPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * frame;
 					EntityFX.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * frame;
 					tessellator.startDrawingQuads();
