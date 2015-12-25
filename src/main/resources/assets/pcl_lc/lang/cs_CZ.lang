@@ -3,6 +3,7 @@ tile.DHD.0.name=Ovládací panel brány
 tile.DHD.1.name=Ovládací panel pegasuské brány
 tile.DHD.2.name=Ovládací panel wraithské brány
 tile.DHD.3.name=Ovládací panel noxské brány
+item.portableDHD.name=Přenosné DHD
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Základní segment brány
@@ -28,6 +29,9 @@ item.gdo.name=Zadavač kódu iris (GDO)
 # Power-related items
 item.energyCrystal.name=Energetický krystal
 item.zpm.name=ZPM
+
+# Weapons
+item.itemStaff.name=Tyčová zbraň
 
 # Crafting reagents
 item.craftingReagent.0.name=Poškozená ingredience
@@ -72,6 +76,11 @@ tile.blockObelisk.0.name=Obelisk
 tile.blockObelisk.1.name=Obelisk
 tile.blockObelisk.2.name=Obelisk
 
+# Decor braziers
+tile.blockBrazier.0.name=Ohnivý rošt
+tile.blockBrazier.1.name=Ohnivý rošt
+tile.blockBrazier.2.name=Ohnivý rošt
+
 # Ore / Ore blocks
 tile.lanteaOre.0.name=Naquadahová ruda
 item.lanteaOre.0.name=Naquadah
@@ -84,6 +93,7 @@ item.lanteaOre.2.name=Trinium
 tile.frame.name=Konstrukcni ram
 tile.naquadahGenerator.name=Naquadahový generátor
 tile.blockCrystalInfuser.name=Plnič krystalů
+tile.blockConfigurator.name=Konfigurátor
 
 # Help Notebook
 item.jacksonNotebook.name=Notebook Daniela Jacksona
@@ -98,29 +108,41 @@ item.debugGlasses.name=AfterLifeLochieho debugové brejličky
 # Integration blocks and items
 tile.integration.computercraft.name=Počítačový adaptér k bráně
 
+# Decorator
+item.decorator.name=Dekorátor
+
+
 # Death messages
 death.attack.wormhole_transient=%1$s byl rozložen vírem horizontu událostí.
+
 
 # Interfaces
 lc.interface.stargate.name=Hvězdná brána
 lc.interface.redstone.name=Rudit
+
 lc.interface.storage.items=Předměty
 lc.interface.storage.fluids=Kapaliny
 lc.interface.storage.fluids.level=Nádrž: %s
+
 lc.interface.clipboard.write=Kopírovat
 lc.interface.clipboard.write_ok=Zkopírováno so schránky
 lc.interface.clipboard.write_fail=Nelze zkopírovat
+
 lc.interface.options.redstone_mode=Rudit
 lc.interface.options.iris_mode=Ovládání iris
+
 lc.interface.redstone.active_ignore=Ignorovat rudit
 lc.interface.redstone.active_low=Aktivní při slabém signálu
 lc.interface.redstone.active_high=Aktivní při silném signálu
 lc.interface.redstone.active_ext=Digitální ovládání
+
 lc.interface.redstone.emit_nothing=Nedělat nic
 lc.interface.redstone.emit_low=Běžně Off
 lc.interface.redstone.emit_high=Běžně On
+
 lc.interface.iris.type.mechanical.name=Mechanická
 lc.interface.iris.type.energy.name=Energetická
+
 lc.interface.iris.type.text=%s iris
 lc.interface.iris.damage.text=%s poškození
 lc.interface.energy.text=Energie: %s
