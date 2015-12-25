@@ -32,7 +32,7 @@ public class BlockObelisk extends LCBlock {
 	/** Default constructor */
 	public BlockObelisk() {
 		super(Material.ground);
-		setHardness(20);
+		setHardness(20F);
 		setProvidesTypes(true);
 	}
 
