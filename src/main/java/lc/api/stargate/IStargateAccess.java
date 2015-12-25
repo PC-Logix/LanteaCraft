@@ -24,6 +24,19 @@ public interface IStargateAccess {
 
 	/**
 	 * <p>
+	 * Gets the Stargate construction validity state.
+	 * </p>
+	 * <p>
+	 * On the server and client, this always returns the validity state of the
+	 * Stargate.
+	 * </p>
+	 * 
+	 * @return The Stargate validity state
+	 */
+	public boolean isValid();
+
+	/**
+	 * <p>
 	 * Gets the Stargate address.
 	 * </p>
 	 * <p>
@@ -97,7 +110,7 @@ public interface IStargateAccess {
 	 * 
 	 * @return The active glyphs on the Stargate
 	 */
-	public Character[] getActivatedGlyphs();
+	public String getActivatedGlyphs();
 
 	/**
 	 * Engage the Stargate to establish a connection

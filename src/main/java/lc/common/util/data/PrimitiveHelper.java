@@ -2,6 +2,13 @@ package lc.common.util.data;
 
 public class PrimitiveHelper {
 
+	public static Character[] box(char[] unboxed) {
+		Character[] result = new Character[unboxed.length];
+		for (int i = 0; i < result.length; i++)
+			result[i] = unboxed[i];
+		return result;
+	}
+
 	public static char[] unbox(Character[] boxed) {
 		char[] result = new char[boxed.length];
 		for (int i = 0; i < result.length; i++)

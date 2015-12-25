@@ -22,6 +22,7 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCDHDPacket;
 import lc.common.util.ScanningHelper;
+import lc.common.util.data.PrimitiveHelper;
 import lc.common.util.math.DimensionPos;
 
 public class TileDHD extends LCTile implements IDHDAccess {
@@ -128,7 +129,7 @@ public class TileDHD extends LCTile implements IDHDAccess {
 	public Character[] clientAskEngagedGlpyhs() {
 		if (stargate != null && stargate.get() != null) {
 			TileStargateBase what = stargate.get();
-			return what.getActivatedGlyphs();
+			return PrimitiveHelper.box(what.getActivatedGlyphs().toCharArray());
 		} else
 			return new Character[0];
 	}

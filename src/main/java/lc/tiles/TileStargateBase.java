@@ -724,8 +724,15 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public StargateType getStargateType() {
 		return StargateType.fromOrdinal(getBlockMetadata());
+	}
+
+	@Override
+	@Tag(name = "ComputerCallable")
+	public boolean isValid() {
+		return (getState() == MultiblockState.FORMED);
 	}
 
 	@Override
@@ -820,12 +827,14 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	@Tag(name = "ComputerCallable")
-	public Character[] getActivatedGlyphs() {
+	public String getActivatedGlyphs() {
+		Character[] data;
 		if (getWorldObj().isRemote) {
-			return clientEngagedGlyphs.toArray(new Character[0]);
+			data = clientEngagedGlyphs.toArray(new Character[0]);
 		} else {
-			return engagedGlyphs.toArray(new Character[0]);
+			data = engagedGlyphs.toArray(new Character[0]);
 		}
+		return new String(PrimitiveHelper.unbox(data));
 	}
 
 	@Override
