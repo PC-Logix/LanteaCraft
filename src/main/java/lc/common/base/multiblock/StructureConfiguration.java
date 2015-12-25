@@ -88,13 +88,13 @@ public abstract class StructureConfiguration {
 			Vector3 tile = origin.add(rotation.mul(mapping));
 
 			try {
-				int cell = getStructureLayout()[mapping.fx()][mapping.fy()][mapping.fz()];
+				int cell = getStructureLayout()[mapping.rx()][mapping.ry()][mapping.rz()];
 				BlockFilter filter = mappings[cell];
-				if (!filter.matches(world, tile.fx(), tile.fy(), tile.fz()))
+				if (!filter.matches(world, tile.rx(), tile.ry(), tile.rz()))
 					return false;
 			} catch (IndexOutOfBoundsException bounds) {
 				LCLog.fatal("Access out of bounds: " + bounds.getMessage() + ": "
-						+ String.format("%s %s %s", mapping.fx(), mapping.fy(), mapping.fz()));
+						+ String.format("%s %s %s", mapping.rx(), mapping.ry(), mapping.rz()));
 				return false;
 			}
 		}
@@ -127,12 +127,12 @@ public abstract class StructureConfiguration {
 			Vector3 mapping = each.next();
 			Vector3 tile = origin.add(rotation.mul(mapping.add(0.5f, 0.5f, 0.5f)));
 			try {
-				int cell = getStructureLayout()[mapping.fx()][mapping.fy()][mapping.fz()];
+				int cell = getStructureLayout()[mapping.rx()][mapping.ry()][mapping.rz()];
 				if (cell == typeof)
 					vectors.add(tile);
 			} catch (IndexOutOfBoundsException bounds) {
 				LCLog.fatal("Access out of bounds: " + bounds.getMessage() + ": "
-						+ String.format("%s %s %s", mapping.fx(), mapping.fy(), mapping.fz()));
+						+ String.format("%s %s %s", mapping.rx(), mapping.ry(), mapping.rz()));
 			}
 		}
 		return vectors.toArray(new Vector3[0]);
@@ -165,7 +165,7 @@ public abstract class StructureConfiguration {
 			Vector3 mapping = each.next();
 			Vector3 tile = origin.add(rotation.mul(mapping));
 			try {
-				TileEntity wTile = world.getTileEntity(tile.fx(), tile.fy(), tile.fz());
+				TileEntity wTile = world.getTileEntity(tile.rx(), tile.ry(), tile.rz());
 				if (wTile != null && wTile instanceof LCMultiblockTile) {
 					LCMultiblockTile multiTile = (LCMultiblockTile) wTile;
 					if (multiTile.isSlave())
@@ -173,7 +173,7 @@ public abstract class StructureConfiguration {
 				}
 			} catch (IndexOutOfBoundsException bounds) {
 				LCLog.fatal("Access out of bounds: " + bounds.getMessage() + ": "
-						+ String.format("%s %s %s", mapping.fx(), mapping.fy(), mapping.fz()));
+						+ String.format("%s %s %s", mapping.rx(), mapping.ry(), mapping.rz()));
 			}
 		}
 	}
