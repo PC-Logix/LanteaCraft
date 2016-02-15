@@ -1,10 +1,10 @@
 package lc.client.models;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import lc.api.stargate.StargateType;
 import lc.client.models.loader.WavefrontModel;
 import lc.common.LCLog;
 import lc.common.resource.ResourceAccess;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class ModelDHD extends WavefrontModel {
 

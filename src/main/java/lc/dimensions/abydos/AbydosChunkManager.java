@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 
@@ -33,18 +33,11 @@ public class AbydosChunkManager extends WorldChunkManager {
 	}
 
 	/**
-	 * Returns the BiomeGenBase related to the x, z position on the world.
-	 */
-	@Override
-	public BiomeGenBase getBiomeGenAt(int par1, int par2) {
-		return biomeGenerator;
-	}
-
-	/**
 	 * Returns an array of biomes for the location input.
 	 */
 	@Override
-	public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] map, int par2, int par3, int par4, int par5) {
+	public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] map, int par2,
+			int par3, int par4, int par5) {
 		if (map == null || map.length < par4 * par5)
 			map = new BiomeGenBase[par4 * par5];
 
@@ -68,7 +61,8 @@ public class AbydosChunkManager extends WorldChunkManager {
 	 * temperature and humidity onto the WorldChunkManager
 	 */
 	@Override
-	public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] map, int x, int y, int width, int depth) {
+	public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] map, int x,
+			int y, int width, int depth) {
 		if (map == null || map.length < width * depth)
 			map = new BiomeGenBase[width * depth];
 		Arrays.fill(map, 0, width * depth, biomeGenerator);
@@ -81,18 +75,20 @@ public class AbydosChunkManager extends WorldChunkManager {
 	 * infinite loop in BiomeCacheBlock)
 	 */
 	@Override
-	public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5,
-			boolean par6) {
-		return loadBlockGeneratorData(par1ArrayOfBiomeGenBase, par2, par3, par4, par5);
+	public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] par1ArrayOfBiomeGenBase,
+			int par2, int par3, int par4, int par5, boolean par6) {
+		return loadBlockGeneratorData(par1ArrayOfBiomeGenBase, par2, par3,
+				par4, par5);
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public ChunkPosition findBiomePosition(int p_150795_1_, int p_150795_2_, int p_150795_3_, List p_150795_4_,
-			Random p_150795_5_) {
-		return p_150795_4_.contains(biomeGenerator) ? new ChunkPosition(p_150795_1_ - p_150795_3_
-				+ p_150795_5_.nextInt(p_150795_3_ * 2 + 1), 0, p_150795_2_ - p_150795_3_
-				+ p_150795_5_.nextInt(p_150795_3_ * 2 + 1)) : null;
+	public BlockPos findBiomePosition(int p_150795_1_, int p_150795_2_,
+			int p_150795_3_, List p_150795_4_, Random p_150795_5_) {
+		return p_150795_4_.contains(biomeGenerator) ? new BlockPos(p_150795_1_
+				- p_150795_3_ + p_150795_5_.nextInt(p_150795_3_ * 2 + 1), 0,
+				p_150795_2_ - p_150795_3_
+						+ p_150795_5_.nextInt(p_150795_3_ * 2 + 1)) : null;
 	}
 
 	/**

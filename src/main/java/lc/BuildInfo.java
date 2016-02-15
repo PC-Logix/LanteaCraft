@@ -3,9 +3,9 @@ package lc;
 import java.security.CodeSource;
 import java.security.cert.Certificate;
 
+import net.minecraftforge.fml.common.CertificateHelper;
 import lc.api.IModInfo;
 import lc.common.resource.ResourceAccess;
-import cpw.mods.fml.common.CertificateHelper;
 
 /**
  * This file is automatically updated by Jenkins as part of the CI build script

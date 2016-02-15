@@ -9,8 +9,8 @@ import java.util.Stack;
 import lc.LCRuntime;
 import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.components.IntegrationType;
-import lc.api.jit.Tag;
 import lc.api.jit.DeviceDrivers.DriverCandidate;
+import lc.api.jit.Tag;
 import lc.api.rendering.IBlockSkinnable;
 import lc.api.rendering.ITileRenderInfo;
 import lc.api.stargate.IStargateAccess;
@@ -57,14 +57,14 @@ import lc.server.StargateConnection;
 import lc.server.StargateManager;
 import lc.server.world.TeleportationHelper;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * Stargate Base tile implementation.

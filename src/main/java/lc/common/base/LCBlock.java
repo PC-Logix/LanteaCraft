@@ -10,13 +10,15 @@ import lc.common.configuration.IConfigure;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Generic block implementation
@@ -27,8 +29,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 public abstract class LCBlock extends BlockContainer implements IRenderInfo, IConfigure {
 
 	/** Rotation direction map across Y-axis */
-	protected static final ForgeDirection[] directions = new ForgeDirection[] { ForgeDirection.SOUTH,
-			ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.EAST };
+	protected static final EnumFacing[] directions = new EnumFacing[] { EnumFacing.SOUTH, EnumFacing.WEST,
+			EnumFacing.NORTH, EnumFacing.EAST };
 
 	/** If the block instance is opaque */
 	protected boolean isOpaque = false;
@@ -146,16 +148,12 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo, ICo
 	 *
 	 * @param world
 	 *            The world object
-	 * @param x
-	 *            The x-coordinate
-	 * @param y
-	 *            The y-coordinate
-	 * @param z
-	 *            The z-coordinate
+	 * @param pos
+	 *            The BlockPos
 	 * @return The rotation element
 	 */
-	public ForgeDirection getRotation(IBlockAccess world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public EnumFacing getRotation(IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile == null || !(tile instanceof LCTile))
 			return null;
 		return ((LCTile) tile).getRotation();
@@ -166,19 +164,15 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo, ICo
 	 *
 	 * @param world
 	 *            The world object
-	 * @param x
-	 *            The x-coordinate
-	 * @param y
-	 *            The y-coordinate
-	 * @param z
-	 *            The z-coordinate
+	 * @param pos
+	 *            The BlockPos
 	 * @param direction
 	 *            The rotation element
 	 */
-	public void setRotation(World world, int x, int y, int z, ForgeDirection direction) {
+	public void setRotation(World world, BlockPos pos, EnumFacing direction) {
 		if (world.isRemote)
 			return;
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile == null || !(tile instanceof LCTile))
 			return;
 		((LCTile) tile).setRotation(direction);
@@ -186,11 +180,6 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo, ICo
 
 	@Override
 	public final boolean isOpaqueCube() {
-		return isOpaque;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
 		return isOpaque;
 	}
 
@@ -215,39 +204,39 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo, ICo
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
-		super.onBlockPlacedBy(world, x, y, z, player, stack);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack) {
+		super.onBlockPlacedBy(world, pos, state, player, stack);
 		if (canRotate() && !world.isRemote) {
 			int heading = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-			setRotation(world, x, y, z, directions[heading]);
-			world.markBlockForUpdate(x, y, z);
+			setRotation(world, pos, directions[heading]);
+			world.markBlockForUpdate(pos);
 		}
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		super.onBlockAdded(world, x, y, z);
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(world, pos, state);
 		if (tileType != null) {
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof IBlockEventHandler)
 				((IBlockEventHandler) tile).blockPlaced();
 		}
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block a, int b) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile != null && tile instanceof IBlockEventHandler)
 			((IBlockEventHandler) tile).blockBroken();
-		super.breakBlock(world, x, y, z, a, b);
+		super.breakBlock(world, pos, state);
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block b) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile != null && tile instanceof IBlockEventHandler)
 			((IBlockEventHandler) tile).neighborChanged();
-		super.onNeighborBlockChange(world, x, y, z, b);
+		super.onNeighborBlockChange(world, pos, state, neighborBlock);
 	};
 
 	@Override

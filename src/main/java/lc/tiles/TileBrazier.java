@@ -1,9 +1,5 @@
 package lc.tiles;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.rendering.ITileRenderInfo;
 import lc.client.render.gfx.particle.GFXFlame;
@@ -11,6 +7,10 @@ import lc.common.base.LCTile;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class TileBrazier extends LCTile {
 
@@ -38,12 +38,13 @@ public class TileBrazier extends LCTile {
 
 	@Override
 	public void thinkClient() {
-		float rand = getWorldObj().rand.nextFloat();
+		float rand = getWorld().rand.nextFloat();
 		if (rand >= 0.3f) {
-			float px = 0.2f - getWorldObj().rand.nextFloat() * 0.4f;
-			float py = 0.2f - getWorldObj().rand.nextFloat() * 0.4f;
-			GFXFlame flame = new GFXFlame(getWorldObj(), xCoord + 0.5f + px, yCoord + 1.2f, zCoord + 0.5f + py, 0.088f, 0.3f, 0.03f);
-			LCRuntime.runtime.hints().particles().placeParticle(getWorldObj(), flame);
+			float px = 0.2f - getWorld().rand.nextFloat() * 0.4f;
+			float py = 0.2f - getWorld().rand.nextFloat() * 0.4f;
+			GFXFlame flame = new GFXFlame(getWorld(), xCoord + 0.5f + px, yCoord + 1.2f, zCoord + 0.5f + py, 0.088f,
+					0.3f, 0.03f);
+			LCRuntime.runtime.hints().particles().placeParticle(getWorld(), flame);
 		}
 	}
 

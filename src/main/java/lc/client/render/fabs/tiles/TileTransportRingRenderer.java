@@ -1,8 +1,5 @@
 package lc.client.render.fabs.tiles;
 
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.client.FMLClientHandler;
 import lc.client.animation.Animation;
 import lc.client.models.ModelTransportRing;
 import lc.common.base.LCTile;
@@ -12,6 +9,9 @@ import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
 import lc.common.util.data.StateMap;
 import lc.tiles.TileTransportRing;
+import net.minecraftforge.fml.client.FMLClientHandler;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileTransportRingRenderer extends LCTileRenderer {
 

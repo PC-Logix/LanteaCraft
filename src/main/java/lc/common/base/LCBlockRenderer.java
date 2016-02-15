@@ -356,7 +356,7 @@ public abstract class LCBlockRenderer implements ILanteaCraftRenderer, IConfigur
 		for (int i = 0; i < 6; i++) {
 			selectTile(block.getIcon(i, data));
 			if (world != null) {
-				ForgeDirection d = ForgeDirection.getOrientation(i);
+				EnumFacing d = EnumFacing.VALUES[i];
 				Vector3 p = t.p(d.offsetX, d.offsetY, d.offsetZ);
 				tess.setBrightness(block.getMixedBrightnessForBlock(world, p.fx(), p.fy(), p.fz()));
 			} else

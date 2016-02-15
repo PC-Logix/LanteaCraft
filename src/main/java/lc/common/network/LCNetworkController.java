@@ -1,18 +1,19 @@
 package lc.common.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.io.IOException;
 import java.util.WeakHashMap;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import io.netty.buffer.ByteBuf;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.relauncher.Side;
 import lc.BuildInfo;
 import lc.LCRuntime;
 import lc.api.event.ITickEventHandler;
 import lc.common.LCLog;
 import lc.common.network.packets.LCServerToServerEnvelope;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class LCNetworkController implements ITickEventHandler {
 

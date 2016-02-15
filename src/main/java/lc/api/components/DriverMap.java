@@ -7,7 +7,7 @@ package lc.api.components;
 import java.util.EnumSet;
 
 import lc.common.LCLog;
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * Driver list and wrapper class

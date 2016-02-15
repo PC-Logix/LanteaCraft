@@ -2,6 +2,7 @@ package lc.common.util.game;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -45,22 +46,18 @@ public class BlockFilter {
 	 *
 	 * @param world
 	 *            The world object.
-	 * @param x
-	 *            The x-coordinate to test.
-	 * @param y
-	 *            The y-coordinate to test.
-	 * @param z
-	 *            The z-coordinate to test.
+	 * @param pos
+	 *            The BlockPos
 	 * @return If the block at the provided coordinates in the provided world
 	 *         matches this specified filter.
 	 */
-	public boolean matches(World world, int x, int y, int z) {
-		Block blockOf = world.getBlock(x, y, z);
-		if (targetBlock.getMaterial() == Material.air && blockOf.isAir(world, x, y, z))
+	public boolean matches(World world, BlockPos pos) {
+		Block blockOf = world.getBlock(pos);
+		if (targetBlock.getMaterial() == Material.air && blockOf.isAir(world, pos))
 			return true;
 		if (blockOf.equals(targetBlock) && targetMetadata == -1)
 			return true;
-		if (blockOf.equals(targetBlock) && targetMetadata == world.getBlockMetadata(x, y, z))
+		if (blockOf.equals(targetBlock) && targetMetadata == world.getBlockMetadata(pos))
 			return true;
 		return false;
 	}

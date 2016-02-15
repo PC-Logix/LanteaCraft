@@ -1,12 +1,13 @@
 package lc.common.impl.drivers;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
 import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.network.ManagedEnvironment;
 import li.cil.oc.api.network.ManagedPeripheral;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 
 public class OpenComputersDriverManager implements Block {
 
@@ -18,8 +19,8 @@ public class OpenComputersDriverManager implements Block {
 	}
 
 	@Override
-	public boolean worksWith(World world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public boolean worksWith(World world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile == null)
 			return false;
 		if (!(tile instanceof LCTile))
@@ -30,8 +31,8 @@ public class OpenComputersDriverManager implements Block {
 	}
 
 	@Override
-	public ManagedEnvironment createEnvironment(World world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public ManagedEnvironment createEnvironment(World world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 		return (IOCManagedEnvPerp) tile;
 	}
 

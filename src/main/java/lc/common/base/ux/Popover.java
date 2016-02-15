@@ -105,7 +105,7 @@ public class Popover {
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		int boxWidth = 0;
-		FontRenderer font = mc.fontRenderer;
+		FontRenderer font = mc.fontRendererObj;
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, remain);
 

@@ -7,10 +7,11 @@ import lc.api.components.IInterfaceRegistry;
 import lc.api.defs.IInterfaceDefinition;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * LanteaCraft global GUI callback handler implementation
@@ -28,7 +29,7 @@ public class GUIHandler implements IGuiHandler {
 		try {
 			String containerClass = def.getContainerClass();
 			LCLog.debug("Creating container %s", containerClass);
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 			Class<?> container = Class.forName(containerClass);
 			Constructor<?> constr = container.getConstructor(new Class<?>[] { tile.getClass(), EntityPlayer.class });
 			return constr.newInstance(tile, player);
@@ -51,7 +52,7 @@ public class GUIHandler implements IGuiHandler {
 			try {
 				String guiClass = def.getGUIClass();
 				LCLog.debug("Creating GUI %s", guiClass);
-				TileEntity tile = world.getTileEntity(x, y, z);
+				TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 				Class<?> gui = Class.forName(guiClass);
 				Constructor<?> constr = gui.getConstructor(new Class<?>[] { tile.getClass(), EntityPlayer.class });
 				return constr.newInstance(tile, player);

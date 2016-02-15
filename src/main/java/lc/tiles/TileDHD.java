@@ -2,12 +2,6 @@ package lc.tiles;
 
 import java.lang.ref.WeakReference;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.audio.SoundPlaybackChannel;
 import lc.api.audio.channel.ChannelDescriptor;
@@ -24,6 +18,12 @@ import lc.common.network.packets.LCDHDPacket;
 import lc.common.util.ScanningHelper;
 import lc.common.util.data.PrimitiveHelper;
 import lc.common.util.math.DimensionPos;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class TileDHD extends LCTile implements IDHDAccess {
 

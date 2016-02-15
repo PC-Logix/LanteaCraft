@@ -3,15 +3,14 @@ package lc.common.impl.drivers;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.nbt.NBTTagCompound;
 import lc.api.jit.ASMTag;
 import lc.api.jit.Tag;
 import lc.common.LCLog;
 import lc.common.impl.drivers.OpenComputersDriverManager.IOCManagedEnvPerp;
 import li.cil.oc.api.Network;
-import li.cil.oc.api.network.Arguments;
-import li.cil.oc.api.network.Context;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.Visibility;
@@ -23,7 +22,8 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 
 	private void opencomputers_assertReady() {
 		if (opencomputers_node == null) {
-			opencomputers_node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
+			opencomputers_node = Network.newNode(this, Visibility.Network)
+					.withComponent(getComponentName()).create();
 		}
 	}
 
@@ -78,7 +78,8 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 
 	@Override
 	public String getComponentName() {
-		return OpenComputersDriverManager.findComponentName(getClass().getSimpleName());
+		return OpenComputersDriverManager.findComponentName(getClass()
+				.getSimpleName());
 	}
 
 	@Override
@@ -88,38 +89,46 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 			Class<?> zz = getClass();
 			Method[] methods = zz.getMethods();
 			for (Method m : methods) {
-				LCLog.debug("OpenComputers driver: assessing method %s (class %s).", m.getName(), zz.getSimpleName());
-				Tag foundTag = ASMTag.findTag(getClass(), m, "ComputerCallable");
+				LCLog.debug(
+						"OpenComputers driver: assessing method %s (class %s).",
+						m.getName(), zz.getSimpleName());
+				Tag foundTag = ASMTag
+						.findTag(getClass(), m, "ComputerCallable");
 				if (foundTag == null)
 					continue;
-				LCLog.debug("OpenComputers driver: adding method %s", m.getName());
+				LCLog.debug("OpenComputers driver: adding method %s",
+						m.getName());
 				alist.add(m.getName());
 			}
 			opencomputers_methodcache = alist.toArray(new String[0]);
 		}
-		return (opencomputers_methodcache == null) ? new String[0] : opencomputers_methodcache;
+		return (opencomputers_methodcache == null) ? new String[0]
+				: opencomputers_methodcache;
 	}
 
 	@Override
-	public Object[] invoke(String method, Context context, Arguments args) throws Exception {
+	public Object[] invoke(String method, Context context, Arguments args)
+			throws Exception {
 		Method foundMethod = null;
 		for (Method m : getClass().getMethods())
 			if (m.getName().equals(method))
 				foundMethod = m;
 		if (foundMethod == null)
-			throw new LuaException("No such method.");
+			throw new Exception("No such method.");
 		try {
 			Class<?>[] types = foundMethod.getParameterTypes();
 			if (args.count() != types.length)
 				throw new Exception("Incorrect number of parameters.");
 			Object[] aargs = new Object[args.count()];
 			for (int i = 0; i < aargs.length; i++)
-				aargs[i] = OpenComputersDriverManager.performCastToType(args.checkAny(i), types[i]);
+				aargs[i] = OpenComputersDriverManager.performCastToType(
+						args.checkAny(i), types[i]);
 			Object aresult = foundMethod.invoke(this, aargs);
 			return new Object[] { aresult };
 		} catch (Exception exception) {
-			LCLog.warn("Problem calling method from OpenComputer driver!", exception);
-			throw new LuaException(exception.getMessage());
+			LCLog.warn("Problem calling method from OpenComputer driver!",
+					exception);
+			throw new Exception(exception.getMessage());
 		}
 	}
 

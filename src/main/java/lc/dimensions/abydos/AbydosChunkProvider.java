@@ -8,11 +8,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
@@ -101,7 +102,8 @@ public class AbydosChunkProvider implements IChunkProvider {
 						double d13 = (d4 - d2) * d9;
 
 						for (int i3 = 0; i3 < 4; ++i3) {
-							int j3 = i3 + k * 4 << 12 | 0 + j1 * 4 << 8 | k2 * 8 + l2;
+							int j3 = i3 + k * 4 << 12 | 0 + j1 * 4 << 8 | k2
+									* 8 + l2;
 							short short1 = 256;
 							j3 -= short1;
 							double d14 = 0.25D;
@@ -130,12 +132,15 @@ public class AbydosChunkProvider implements IChunkProvider {
 		}
 	}
 
-	private void replaceBlocksForBiome(int x, int z, Block[] block, byte[] abyte, BiomeGenBase bgb) {
+	private void replaceBlocksForBiome(int x, int z, Block[] block,
+			byte[] abyte, BiomeGenBase bgb) {
 		double d0 = 0.03125D;
-		stoneNoise = ngp4.func_151599_a(stoneNoise, x * 16, z * 16, 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+		stoneNoise = ngp4.func_151599_a(stoneNoise, x * 16, z * 16, 16, 16,
+				d0 * 2.0D, d0 * 2.0D, 1.0D);
 		for (int k = 0; k < 16; ++k)
 			for (int l = 0; l < 16; ++l)
-				bgb.genTerrainBlocks(worldObj, rng, block, abyte, x * 16 + k, z * 16 + l, stoneNoise[l + k * 16]);
+				bgb.genTerrainBlocks(worldObj, rng, block, abyte, x * 16 + k, z
+						* 16 + l, stoneNoise[l + k * 16]);
 	}
 
 	/**
@@ -172,11 +177,14 @@ public class AbydosChunkProvider implements IChunkProvider {
 	}
 
 	private void initializeNoise(int x, int y, int z) {
-		d_ng6 = ng6.generateNoiseOctaves(d_ng6, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
-		d_ng3 = ng3.generateNoiseOctaves(d_ng3, x, y, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D,
-				8.555150000000001D);
-		d_ng1 = ng1.generateNoiseOctaves(d_ng1, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
-		d_ng2 = ng2.generateNoiseOctaves(d_ng2, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
+		d_ng6 = ng6.generateNoiseOctaves(d_ng6, x, z, 5, 5, 200.0D, 200.0D,
+				0.5D);
+		d_ng3 = ng3.generateNoiseOctaves(d_ng3, x, y, z, 5, 33, 5,
+				8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
+		d_ng1 = ng1.generateNoiseOctaves(d_ng1, x, y, z, 5, 33, 5, 684.412D,
+				684.412D, 684.412D);
+		d_ng2 = ng2.generateNoiseOctaves(d_ng2, x, y, z, 5, 33, 5, 684.412D,
+				684.412D, 684.412D);
 		int l = 0;
 		int i1 = 0;
 		for (int j1 = 0; j1 < 5; ++j1)
@@ -190,7 +198,8 @@ public class AbydosChunkProvider implements IChunkProvider {
 						BiomeGenBase biomegenbase1 = biomeForGeneration;
 						float f3 = biomegenbase1.rootHeight;
 						float f4 = biomegenbase1.heightVariation;
-						float f5 = parabolicField[l1 + 2 + (i2 + 2) * 5] / (f3 + 2.0F);
+						float f5 = parabolicField[l1 + 2 + (i2 + 2) * 5]
+								/ (f3 + 2.0F);
 						if (biomegenbase1.rootHeight > biomegenbase.rootHeight)
 							f5 /= 2.0F;
 						f += f4 * f5;
@@ -264,7 +273,8 @@ public class AbydosChunkProvider implements IChunkProvider {
 		BlockFalling.fallInstantly = true;
 		int x = cx * 16;
 		int z = cz * 16;
-		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(x + 16, z + 16);
+		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(x + 16,
+				z + 16);
 		rng.setSeed(worldObj.getSeed());
 		long i1 = rng.nextLong() / 2L * 2L + 1L;
 		long j1 = rng.nextLong() / 2L * 2L + 1L;
@@ -317,29 +327,43 @@ public class AbydosChunkProvider implements IChunkProvider {
 		return "AbydosDimensionSource";
 	}
 
-	/**
-	 * Returns a list of creatures of the specified type that can spawn at the
-	 * given location.
-	 */
-	@SuppressWarnings("rawtypes")
-	@Override
-	public List getPossibleCreatures(EnumCreatureType type, int x, int y, int z) {
-		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(x, z);
-		return biomegenbase.getSpawnableList(type);
-	}
-
-	@Override
-	public ChunkPosition func_147416_a(World world, String strucClazz, int x, int y, int z) {
-		return null;
-	}
-
 	@Override
 	public int getLoadedChunkCount() {
 		return 0;
 	}
 
 	@Override
-	public void recreateStructures(int par1, int par2) {
-		structureController.func_151539_a(this, worldObj, par1, par2, null);
+	public Chunk provideChunk(BlockPos blockPosIn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean populateChunk(IChunkProvider chunkProvider,
+			Chunk p_177460_2_, int x, int z) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<SpawnListEntry> getPossibleCreatures(
+			EnumCreatureType creatureType, BlockPos pos) {
+		BiomeGenBase biomegenbase = worldObj.getBiomeGenForCoords(x, z);
+		return biomegenbase.getSpawnableList(type);
+	}
+
+	@Override
+	public BlockPos getStrongholdGen(World worldIn, String structureName,
+			BlockPos position) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void recreateStructures(Chunk p_180514_1_, int p_180514_2_,
+			int p_180514_3_) {
+		structureController.func_151539_a(this, worldObj, p_180514_2_,
+				p_180514_3_, null);
+
 	}
 }

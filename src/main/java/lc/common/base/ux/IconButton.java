@@ -3,6 +3,7 @@ package lc.common.base.ux;
 import lc.common.resource.ResourceAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 
 /**
  * IconButton element. TODO: Clean up, can extend GUIButton(?) instead.
@@ -110,13 +111,14 @@ public class IconButton {
 
 	private static void drawTexturedRectUV(double x, double y, double w, double h, double u, double v, double us,
 			double vs, float zLevel) {
-		Tessellator tess = Tessellator.instance;
-		tess.startDrawingQuads();
-		tess.setColorOpaque_F(1.0f, 1.0f, 1.0f);
-		tess.addVertexWithUV(x, y + h, zLevel, u, v + vs);
-		tess.addVertexWithUV(x + w, y + h, zLevel, u + us, v + vs);
-		tess.addVertexWithUV(x + w, y, zLevel, u + us, v);
-		tess.addVertexWithUV(x, y, zLevel, u, v);
+		Tessellator tess = Tessellator.getInstance();
+		WorldRenderer worldrenderer = tess.getWorldRenderer();
+
+		worldrenderer.setColorOpaque_F(1.0f, 1.0f, 1.0f);
+		worldrenderer.addVertexWithUV(x, y + h, zLevel, u, v + vs);
+		worldrenderer.addVertexWithUV(x + w, y + h, zLevel, u + us, v + vs);
+		worldrenderer.addVertexWithUV(x + w, y, zLevel, u + us, v);
+		worldrenderer.addVertexWithUV(x, y, zLevel, u, v);
 		tess.draw();
 	}
 

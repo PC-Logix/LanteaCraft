@@ -1,8 +1,5 @@
 package lc.server;
 
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
 import lc.LCRuntime;
 import lc.api.stargate.MessagePayload;
 import lc.api.stargate.StargateAddress;
@@ -15,6 +12,9 @@ import lc.common.util.math.ChunkPos;
 import lc.server.database.StargateRecord;
 import lc.server.world.LCLoadedChunkManager.LCChunkTicket;
 import lc.tiles.TileStargateBase;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 
 /**
  * Stargate connection emulation class

@@ -5,7 +5,6 @@
 package lc.api.drivers;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Contract interface for power drivers and drivees.

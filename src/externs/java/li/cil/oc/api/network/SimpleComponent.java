@@ -1,5 +1,10 @@
 package li.cil.oc.api.network;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * This interface can be used to easily convert tile entities to components,
  * without having to implement {@link li.cil.oc.api.network.Environment}
@@ -9,8 +14,8 @@ package li.cil.oc.api.network;
  * couple of methods to the programs running computers.
  * <p/>
  * This is an interface instead of an annotation, to allow stripping via the
- * ever so handy {@link cpw.mods.fml.common.Optional} annotation, meaning there
- * will be no strong dependency on OpenComputers.
+ * ever so handy {@link net.minecraftforge.fml.common.Optional} annotation,
+ * meaning there will be no strong dependency on OpenComputers.
  * <p/>
  * Classes implementing this interface will be expanded with the methods
  * required for them to function as native block components (say, like the
@@ -18,7 +23,7 @@ package li.cil.oc.api.network;
  * interface have to created using a class transformer. If any of the methods
  * already exist, this will fail! If things don't work, check your logs, first.
  * <p/>
- * To expose methods to OC, tag them with {@link li.cil.oc.api.network.Callback}
+ * To expose methods to OC, tag them with {@link li.cil.oc.api.machine.Callback}
  * and have them use the according signature (see the documentation on the
  * <tt>Callback</tt> annotation).
  * <p/>
@@ -93,4 +98,17 @@ public interface SimpleComponent {
      * @return the component's name.
      */
     String getComponentName();
+
+    /**
+     * Use this to skip logic injection for the class this is implemented by.
+     * <p/>
+     * For example, if you have a class transformer that injects logic from a
+     * template class into your actual tile entities, OC's class transformer
+     * would complain when it finds the interface on the template class. That
+     * warning can be suppressed by using this annotation on the template.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @interface SkipInjection {
+    }
 }

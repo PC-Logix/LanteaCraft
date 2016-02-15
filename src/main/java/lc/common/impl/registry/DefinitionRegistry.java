@@ -28,8 +28,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Global definition registry implementation.
@@ -160,7 +160,7 @@ public class DefinitionRegistry implements IDefinitionRegistry {
 		try {
 			Constructor<? extends T> ctor = classOf.getConstructor();
 			T theMysteryBlock = ctor.newInstance();
-			theMysteryBlock.setBlockName(unlocalizedName);
+			theMysteryBlock.setUnlocalizedName(unlocalizedName);
 			theMysteryBlock.setCreativeTab(tab);
 			if (theMysteryBlock instanceof IConfigure)
 				((IConfigure) theMysteryBlock).configure(LCRuntime.runtime.config().config(type));

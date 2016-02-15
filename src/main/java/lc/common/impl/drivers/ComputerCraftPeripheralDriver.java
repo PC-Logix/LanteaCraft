@@ -3,14 +3,13 @@ package lc.common.impl.drivers;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
 import lc.api.components.IntegrationType;
+import lc.api.jit.ASMTag;
 import lc.api.jit.DeviceDrivers.DriverProvider;
 import lc.api.jit.DeviceDrivers.DriverRTCallback;
-import lc.api.jit.ASMTag;
 import lc.api.jit.Tag;
 import lc.common.LCLog;
+import net.minecraft.tileentity.TileEntity;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -111,9 +110,9 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 		if (TileEntity.class.isAssignableFrom(this.getClass()) && other instanceof TileEntity) {
 			TileEntity me = TileEntity.class.cast(this);
 			TileEntity them = (TileEntity) other;
-			if (!me.getWorldObj().equals(them.getWorldObj()))
+			if (!me.getWorld().equals(them.getWorld()))
 				return false;
-			return me.xCoord == them.xCoord && me.yCoord == them.yCoord && me.zCoord == them.zCoord;
+			return me.getPos().equals(them.getPos());
 		}
 		return false;
 	}

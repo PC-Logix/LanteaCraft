@@ -1,14 +1,14 @@
 package lc.tiles;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.relauncher.Side;
 import lc.api.rendering.ITileRenderInfo;
 import lc.common.base.LCTile;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class TileConfigurator extends LCTile {
 

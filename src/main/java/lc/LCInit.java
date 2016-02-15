@@ -13,10 +13,10 @@ import lc.api.init.Structures;
 import lc.api.jit.AnyPredicate;
 import lc.api.world.OreType;
 import lc.blocks.BlockBrazier;
+import lc.blocks.BlockConfigurator;
 import lc.blocks.BlockDHD;
 import lc.blocks.BlockDecorative;
 import lc.blocks.BlockDecorative.DecorBlockTypes;
-import lc.blocks.BlockConfigurator;
 import lc.blocks.BlockFrame;
 import lc.blocks.BlockLanteaAlloy;
 import lc.blocks.BlockLanteaDoor;
@@ -48,9 +48,9 @@ import lc.items.ItemTransportRingActivator;
 import lc.recipe.DecoratorSetterRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 /**
  * Registration initializer
@@ -112,7 +112,7 @@ public class LCInit {
 		items.lanteaTransportRingActivator = DefinitionWrapperProvider.provide(ItemTransportRingActivator.class);
 		items.lanteaPortableDHD = DefinitionWrapperProvider.provide(ItemPortableDHD.class);
 		items.goauldStaffWeapon = DefinitionWrapperProvider.provide(ItemStaff.class);
-		
+
 		entities.staffProjectile = DefinitionWrapperProvider.provide(EntityStaffProjectile.class);
 
 		/* Initialize recipes */
@@ -129,7 +129,7 @@ public class LCInit {
 					Random rng = (Random) t[1];
 					World world = (World) t[0];
 					int x = (Integer) t[2], y = (Integer) t[3];
-					if (world.provider.dimensionId != 0)
+					if (world.provider.getDimensionId() != 0)
 						return false;
 					if (x % 16 != 0 || y % 16 != 0)
 						return false;

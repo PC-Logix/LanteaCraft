@@ -1,6 +1,6 @@
 package lc.api.event;
 
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * Tick event handler interface.

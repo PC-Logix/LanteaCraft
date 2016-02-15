@@ -17,15 +17,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.network.ForgeMessage;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * LanteaCraft network connection driver.
@@ -65,8 +66,8 @@ public class LCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, LCPa
 		try {
 			ByteBuf buffer = Unpooled.buffer();
 			controller.encodePacket(msg, buffer);
-			FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer, ctx.channel().attr(NetworkRegistry.FML_CHANNEL)
-					.get());
+			FMLProxyPacket proxyPacket = new FMLProxyPacket(new PacketBuffer(buffer), ctx.channel()
+					.attr(NetworkRegistry.FML_CHANNEL).get());
 			out.add(proxyPacket);
 		} catch (Exception e) {
 			LCLog.fatal("Network encode exception.", e);

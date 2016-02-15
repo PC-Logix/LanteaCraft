@@ -8,11 +8,9 @@ import lc.api.world.OreType;
 import lc.common.base.LCItem;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 /**
  * Ore block implementation.

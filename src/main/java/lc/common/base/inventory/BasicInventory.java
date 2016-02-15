@@ -45,11 +45,6 @@ public abstract class BasicInventory implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return null;
-	}
-
-	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		items[i] = itemstack;
 	}

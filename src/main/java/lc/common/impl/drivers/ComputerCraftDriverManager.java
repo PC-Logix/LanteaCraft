@@ -3,6 +3,8 @@ package lc.common.impl.drivers;
 import lc.common.LCLog;
 import lc.common.base.LCTile;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -18,8 +20,8 @@ public class ComputerCraftDriverManager {
 
 	private final IPeripheralProvider provider = new IPeripheralProvider() {
 		@Override
-		public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
-			TileEntity whatTile = world.getTileEntity(x, y, z);
+		public IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing facing) {
+			TileEntity whatTile = world.getTileEntity(pos);
 			if (whatTile == null)
 				return null;
 			if (!(whatTile instanceof LCTile))

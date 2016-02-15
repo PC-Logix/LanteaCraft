@@ -1,10 +1,5 @@
 package lc.tiles;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.relauncher.Side;
 import lc.api.rendering.IBlockSkinnable;
 import lc.api.rendering.ITileRenderInfo;
 import lc.common.base.multiblock.LCMultiblockTile;
@@ -15,6 +10,11 @@ import lc.common.network.LCPacket;
 import lc.common.network.packets.LCTileSync;
 import lc.common.util.data.ImmutablePair;
 import lc.common.util.game.BlockHelper;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class TileFrame extends LCMultiblockTile implements IBlockSkinnable {
 

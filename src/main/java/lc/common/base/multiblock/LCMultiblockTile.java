@@ -16,6 +16,7 @@ import lc.common.util.math.Vector3;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
 /**
  * Internal multi-block implementation.
@@ -98,7 +99,7 @@ public abstract class LCMultiblockTile extends LCTile {
 			if (!multiblockCompound.hasKey("owner"))
 				return MultiblockState.NONE;
 			Vector3 owner = Vector3.from(multiblockCompound.getCompoundTag("owner"));
-			TileEntity tile = worldObj.getTileEntity(owner.fx(), owner.fy(), owner.fz());
+			TileEntity tile = worldObj.getTileEntity(new BlockPos(owner.fx(), owner.fy(), owner.fz()));
 			if (!(tile instanceof LCMultiblockTile))
 				return MultiblockState.NONE;
 			return ((LCMultiblockTile) tile).getState();
@@ -162,7 +163,7 @@ public abstract class LCMultiblockTile extends LCTile {
 		if (packet instanceof LCMultiblockPacket)
 			if (worldObj.isRemote) {
 				multiblockCompound = ((LCMultiblockPacket) packet).compound;
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				worldObj.markBlockForUpdate(getPos());
 			}
 		Tracer.end();
 	}

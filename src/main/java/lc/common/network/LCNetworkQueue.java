@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import lc.api.event.ITickEventHandler;
 import lc.common.LCLog;
 import lc.common.network.packets.LCNetworkHandshake;
 import lc.common.network.packets.LCServerToServerEnvelope;
 import lc.common.network.packets.abs.LCTargetPacket;
 import lc.common.util.Tracer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class LCNetworkQueue implements ITickEventHandler {
 
@@ -55,14 +55,18 @@ public class LCNetworkQueue implements ITickEventHandler {
 				QueuedPacket obj = stack.next();
 				EntityPlayer player = obj.player.get();
 				if (player == null)
-					throw new LCNetworkException("Packet enqueued without player or with dead reference.");
+					throw new LCNetworkException(
+							"Packet enqueued without player or with dead reference.");
 				LCPacket packet = obj.packet;
 				if (packet instanceof LCNetworkHandshake) {
 					if (obj.target == Side.SERVER)
-						controller.players.get(player).handleHandshakePacket(player, (LCNetworkHandshake) packet,
-								obj.target);
+						controller.players
+								.get(player)
+								.handleHandshakePacket(player,
+										(LCNetworkHandshake) packet, obj.target);
 					if (obj.target == Side.CLIENT)
-						controller.clientPlayer.handleHandshakePacket(player, (LCNetworkHandshake) packet, obj.target);
+						controller.clientPlayer.handleHandshakePacket(player,
+								(LCNetworkHandshake) packet, obj.target);
 				} else if (packet instanceof LCTargetPacket) {
 					LCTargetPacket target = (LCTargetPacket) packet;
 					LCTargetPacket.handlePacket(target, player);
@@ -71,9 +75,12 @@ public class LCNetworkQueue implements ITickEventHandler {
 					if (obj.target == Side.CLIENT)
 						controller.envelopeBuffer.addPacket(envelope);
 					else
-						controller.players.get(player).addEnvelopePacket(player, envelope);
+						controller.players.get(player).addEnvelopePacket(
+								player, envelope);
 				} else
-					throw new LCNetworkException(String.format("Unsupported packet %s.", packet.getClass().getName()));
+					throw new LCNetworkException(String.format(
+							"Unsupported packet %s.", packet.getClass()
+									.getName()));
 			} catch (LCNetworkException exception) {
 				LCLog.warn("Problem handling packet in queue.", exception);
 			}

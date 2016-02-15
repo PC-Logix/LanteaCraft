@@ -10,6 +10,7 @@ import lc.common.network.LCPacket;
 import lc.common.util.math.DimensionPos;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
 /**
  * Contract class for packets with specific targets in a world.
@@ -32,9 +33,9 @@ public abstract class LCTargetPacket extends LCPacket {
 	public static void handlePacket(LCTargetPacket packet, EntityPlayer player) throws LCNetworkException {
 		if (player.worldObj == null || player.worldObj.provider == null)
 			return;
-		if (packet.target.dimension != player.worldObj.provider.dimensionId)
+		if (packet.target.dimension != player.worldObj.provider.getDimensionId())
 			return;
-		TileEntity tile = player.worldObj.getTileEntity(packet.target.x, packet.target.y, packet.target.z);
+		TileEntity tile = player.worldObj.getTileEntity(new BlockPos(packet.target.x, packet.target.y, packet.target.z));
 		if (tile != null && tile instanceof LCTile) {
 			LCTile theTile = (LCTile) tile;
 			theTile.handlePacket(packet, player);

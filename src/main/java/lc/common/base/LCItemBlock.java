@@ -45,7 +45,7 @@ public abstract class LCItemBlock extends ItemBlock implements IConfigure {
 
 	@Override
 	public String getUnlocalizedName(ItemStack is) {
-		return field_150939_a.getUnlocalizedName();
+		return block.getUnlocalizedName();
 	}
 
 }

@@ -4,8 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Represents a Vector in three-dimensional space.
@@ -132,7 +132,7 @@ public class Vector3 {
 	 *            The tile entity.
 	 */
 	public Vector3(TileEntity tileentity) {
-		this(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
+		this(tileentity.getPos().getX(), tileentity.getPos().getY(), tileentity.getPos().getZ());
 	}
 
 	/**
@@ -141,8 +141,8 @@ public class Vector3 {
 	 * @param direction
 	 *            The forge direction.
 	 */
-	public Vector3(ForgeDirection direction) {
-		this(direction.offsetX, direction.offsetY, direction.offsetZ);
+	public Vector3(EnumFacing direction) {
+		this(direction.getFrontOffsetX(), direction.getFrontOffsetY(), direction.getFrontOffsetZ());
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class Vector3 {
 	 * @return An AABB
 	 */
 	public static AxisAlignedBB makeAABB(Vector3 min, Vector3 max) {
-		return AxisAlignedBB.getBoundingBox(Math.min(min.x, max.x), Math.min(min.y, max.y), Math.min(min.z, max.z), 
+		return AxisAlignedBB.fromBounds(Math.min(min.x, max.x), Math.min(min.y, max.y), Math.min(min.z, max.z),
 				Math.max(max.x, min.x), Math.max(max.y, min.y), Math.max(max.z, min.z));
 	}
 
@@ -178,7 +178,7 @@ public class Vector3 {
 	 * @return A Minecraft Vec3 object.
 	 */
 	public Vec3 toVec3() {
-		return Vec3.createVectorHelper(x, y, z);
+		return new Vec3(x, y, z);
 	}
 
 	/**
@@ -243,8 +243,9 @@ public class Vector3 {
 	 *            The ForgeDirection to translate.
 	 * @return The Vector3 product.
 	 */
-	public Vector3 add(ForgeDirection direction) {
-		return new Vector3(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ);
+	public Vector3 add(EnumFacing direction) {
+		return new Vector3(x + direction.getFrontOffsetX(), y + direction.getFrontOffsetY(), z
+				+ direction.getFrontOffsetZ());
 	}
 
 	/**
@@ -391,7 +392,7 @@ public class Vector3 {
 	public int fz() {
 		return (int) Math.floor(z);
 	}
-	
+
 	/**
 	 * Calculates the rounded x-component of this Vector3.
 	 *

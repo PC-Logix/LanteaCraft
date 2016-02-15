@@ -1,6 +1,10 @@
 package lc.common.network.packets.abs;
 
 import io.netty.buffer.ByteBuf;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInput;
 import java.io.IOException;
 
 import net.minecraft.nbt.CompressedStreamTools;
@@ -39,7 +43,8 @@ public abstract class LCNBTPacket extends LCTargetPacket {
 			return new NBTTagCompound();
 		byte[] bytes = new byte[size];
 		buffer.readBytes(bytes);
-		return CompressedStreamTools.func_152457_a(bytes, new NBTSizeTracker(2097152L));
+		ByteArrayInputStream ios = new ByteArrayInputStream(bytes);
+		return CompressedStreamTools.readCompressed(ios);
 	}
 
 	/**
@@ -59,7 +64,9 @@ public abstract class LCNBTPacket extends LCTargetPacket {
 		else if (tag.hasNoTags())
 			buffer.writeShort(0);
 		else {
-			byte[] bytes = CompressedStreamTools.compress(tag);
+			ByteArrayOutputStream ois = new ByteArrayOutputStream();
+			CompressedStreamTools.writeCompressed(tag, ois);
+			byte[] bytes = ois.toByteArray();
 			buffer.writeShort((short) bytes.length);
 			buffer.writeBytes(bytes);
 		}

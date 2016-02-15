@@ -8,7 +8,7 @@ import lc.common.base.generation.structure.LCFeatureGenerator;
 import lc.common.util.Tracer;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import cpw.mods.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.IWorldGenerator;
 
 /**
  * LanteaCraft world decorator hook.

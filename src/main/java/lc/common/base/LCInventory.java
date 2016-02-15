@@ -73,11 +73,6 @@ public abstract class LCInventory implements ISidedInventory, IConfigure {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return null;
-	}
-
-	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		items[i] = itemstack;
 	}
@@ -106,13 +101,13 @@ public abstract class LCInventory implements ISidedInventory, IConfigure {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 		// TODO Auto-generated method stub
 
 	}

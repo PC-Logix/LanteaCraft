@@ -4,8 +4,6 @@
  */
 package lc.api.world;
 
-import net.minecraft.util.IIcon;
-
 /**
  * Ore type list
  *

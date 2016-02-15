@@ -2,7 +2,6 @@ package lc.dimensions.abydos;
 
 import lc.LCRuntime;
 import lc.biomes.BiomeAbydosDesert;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
@@ -72,11 +71,6 @@ public class AbydosWorldProvider extends WorldProvider {
 	}
 
 	@Override
-	public ChunkCoordinates getEntrancePortalLocation() {
-		return new ChunkCoordinates(50, 5, 0);
-	}
-
-	@Override
 	protected void generateLightBrightnessTable() {
 		float f = 0.0F;
 		for (int i = 0; i <= 15; ++i) {
@@ -138,6 +132,12 @@ public class AbydosWorldProvider extends WorldProvider {
 		f5 *= f2 * 0.0F + 0.15F;
 
 		return Vec3.createVectorHelper(f3, f4, f5);
+	}
+
+	@Override
+	public String getInternalNameSuffix() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

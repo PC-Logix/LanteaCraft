@@ -11,6 +11,7 @@ import lc.common.util.math.Orientations;
 import lc.common.util.math.Vector3;
 import lc.common.util.math.VectorAABB;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -165,7 +166,7 @@ public abstract class StructureConfiguration {
 			Vector3 mapping = each.next();
 			Vector3 tile = origin.add(rotation.mul(mapping));
 			try {
-				TileEntity wTile = world.getTileEntity(tile.rx(), tile.ry(), tile.rz());
+				TileEntity wTile = world.getTileEntity(new BlockPos(tile.rx(), tile.ry(), tile.rz()));
 				if (wTile != null && wTile instanceof LCMultiblockTile) {
 					LCMultiblockTile multiTile = (LCMultiblockTile) wTile;
 					if (multiTile.isSlave())

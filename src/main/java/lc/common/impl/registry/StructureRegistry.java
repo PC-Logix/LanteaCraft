@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureStart;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 import lc.LCRuntime;
 import lc.api.components.IStructureRegistry;
 import lc.api.defs.IStructureDefinition;
 import lc.common.LCLog;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureStart;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 public class StructureRegistry implements IStructureRegistry {
 
@@ -45,7 +45,7 @@ public class StructureRegistry implements IStructureRegistry {
 			Map<String, Class<? extends StructureComponent>> comps = entry.getValue().getAllComponents();
 			for (Entry<String, Class<? extends StructureComponent>> comp : comps.entrySet()) {
 				LCLog.debug("Registring component %s (class: %s)", comp.getKey(), comp.getValue().getName());
-				MapGenStructureIO.func_143031_a(comp.getValue(), comp.getKey());
+				MapGenStructureIO.registerStructureComponent(comp.getValue(), comp.getKey());
 			}
 		}
 	}

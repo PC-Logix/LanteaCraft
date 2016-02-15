@@ -2,7 +2,7 @@ package lc.common.util.game;
 
 import lc.common.util.data.ImmutablePair;
 import net.minecraft.block.Block;
-import cpw.mods.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameData;
 
 /**
  * Block utilities class

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.event.ITickEventHandler;
 import lc.api.stargate.StargateAddress;
@@ -13,6 +12,7 @@ import lc.common.LCLog;
 import lc.common.util.math.ChunkPos;
 import lc.server.database.StargateRecord;
 import lc.tiles.TileStargateBase;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * Stargate state manager

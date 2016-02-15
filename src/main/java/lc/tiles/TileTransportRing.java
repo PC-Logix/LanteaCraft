@@ -3,15 +3,6 @@ package lc.tiles;
 import java.util.ArrayDeque;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.chunk.Chunk;
-import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.api.jit.Tag;
 import lc.api.rendering.IBlockSkinnable;
@@ -39,6 +30,15 @@ import lc.common.util.math.Orientations;
 import lc.common.util.math.Trans3;
 import lc.common.util.math.Vector3;
 import lc.server.world.TeleportationHelper;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class TileTransportRing extends LCMultiblockTile implements ITransportRingAccess, ITileRenderInfo,
 		IBlockSkinnable {

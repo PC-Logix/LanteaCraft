@@ -33,15 +33,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * Generic tile-entity implementation with default handlers.
  *
  * @author AfterLifeLochie
  */
-public abstract class LCTile extends TileEntity implements IInventory, IPacketHandler, IBlockEventHandler, IRenderInfo,
+public abstract class LCTile extends TileEntity implements ITickable, IInventory, IPacketHandler, IBlockEventHandler, IRenderInfo,
 		IConfigure {
 
 	private static HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>> callbacks = new HashMap<Class<? extends LCTile>, HashMap<String, ArrayList<String>>>();
@@ -201,7 +202,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 * Invocation of update methods is as follows:
 	 * 
 	 * <pre>
-	 * updateEntity() [Minecraft] {
+	 * update() [Minecraft] {
 	 * - thinkClient()
 	 * - thinkClientPost()
 	 * - requestUpdatePacket()
@@ -221,7 +222,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 * Invocation of update methods is as follows:
 	 * 
 	 * <pre>
-	 * updateEntity() [Minecraft] {
+	 * update() [Minecraft] {
 	 * - thinkClient()
 	 * - thinkClientPost()
 	 * - requestUpdatePacket()
@@ -241,7 +242,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 * Invocation of update methods is as follows:
 	 * 
 	 * <pre>
-	 * updateEntity() [Minecraft] {
+	 * update() [Minecraft] {
 	 * - thinkServer()
 	 * - thinkServerPost()
 	 * - sendUpdatePackets()
@@ -259,7 +260,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 * Invocation of update methods is as follows:
 	 * 
 	 * <pre>
-	 * updateEntity() [Minecraft] {
+	 * update() [Minecraft] {
 	 * - thinkServer()
 	 * - thinkServerPost()
 	 * - sendUpdatePackets()
@@ -343,10 +344,10 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 *
 	 * @return The canRotate of the block.
 	 */
-	public ForgeDirection getRotation() {
+	public EnumFacing getRotation() {
 		if (compound == null || !compound.hasKey("canRotate"))
-			return ForgeDirection.NORTH;
-		return ForgeDirection.getOrientation(compound.getInteger("canRotate"));
+			return EnumFacing.NORTH;
+		return EnumFacing.VALUES[compound.getInteger("canRotate")];
 	}
 
 	/**
@@ -355,7 +356,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 * @param direction
 	 *            The canRotate.
 	 */
-	public void setRotation(ForgeDirection direction) {
+	public void setRotation(EnumFacing direction) {
 		if (compound == null)
 			compound = new NBTTagCompound();
 		compound.setInteger("canRotate", direction.ordinal());
@@ -470,7 +471,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 			if (worldObj.isRemote) {
 				clientDataDirty = false;
 				compound = ((LCTileSync) packetOf).compound;
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				worldObj.markBlockForUpdate(getPos());
 			}
 		if (packetOf instanceof LCClientUpdate)
 			if (!worldObj.isRemote)
@@ -485,11 +486,6 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		}
 	}
 
-	@Override
-	public boolean canUpdate() {
-		return true;
-	}
-
 	/**
 	 * <p>
 	 * Called to update the tile entity. <b>You should not override this method
@@ -498,7 +494,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 * </p>
 	 */
 	@Override
-	public void updateEntity() {
+	public void update() {
 		Tracer.begin(this);
 		if (worldObj != null)
 			if (worldObj.isRemote) {
@@ -577,32 +573,12 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		return getInventory().decrStackSize(p_70298_1_, p_70298_2_);
 	}
 
-	@Override
-	public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-		if (getInventory() == null)
-			return null;
-		return getInventory().getStackInSlotOnClosing(p_70304_1_);
-	}
 
 	@Override
 	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
 		if (getInventory() == null)
 			return;
 		getInventory().setInventorySlotContents(p_70299_1_, p_70299_2_);
-	}
-
-	@Override
-	public String getInventoryName() {
-		if (getInventory() == null)
-			return null;
-		return getInventory().getInventoryName();
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		if (getInventory() == null)
-			return false;
-		return getInventory().hasCustomInventoryName();
 	}
 
 	@Override
@@ -620,17 +596,17 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 		if (getInventory() == null)
 			return;
-		getInventory().openInventory();
+		getInventory().openInventory(player);
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 		if (getInventory() == null)
 			return;
-		getInventory().closeInventory();
+		getInventory().closeInventory(player);
 	}
 
 	@Override

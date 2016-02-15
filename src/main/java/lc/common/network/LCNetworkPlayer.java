@@ -6,17 +6,17 @@ import java.security.PublicKey;
 import java.security.SignatureException;
 import java.util.ArrayList;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import cpw.mods.fml.relauncher.Side;
 import lc.LCRuntime;
 import lc.common.LCLog;
 import lc.common.crypto.DSAProvider;
 import lc.common.crypto.KeyTrustRegistry;
 import lc.common.network.packets.LCNetworkHandshake;
-import lc.common.network.packets.LCServerToServerEnvelope;
 import lc.common.network.packets.LCNetworkHandshake.HandshakeReason;
+import lc.common.network.packets.LCServerToServerEnvelope;
 import lc.server.HintProviderServer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class LCNetworkPlayer {
 

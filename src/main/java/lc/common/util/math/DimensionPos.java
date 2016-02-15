@@ -27,7 +27,7 @@ public class DimensionPos {
 	 *            The tile entity
 	 */
 	public DimensionPos(TileEntity te) {
-		this(te.getWorldObj().provider.dimensionId, te.xCoord, te.yCoord, te.zCoord);
+		this(te.getWorld().provider.getDimensionId(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
 	}
 
 	/**

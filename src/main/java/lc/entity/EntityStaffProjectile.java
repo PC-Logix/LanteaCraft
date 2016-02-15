@@ -213,9 +213,9 @@ public class EntityStaffProjectile extends Entity {
 						this.ticksInAir = 0;
 					}
 				} else {
-					this.blockPosX = movingobjectposition.blockX;
-					this.blockPosY = movingobjectposition.blockY;
-					this.blockPosZ = movingobjectposition.blockZ;
+					this.blockPosX = movingobjectposition.getBlockPos().getX();
+					this.blockPosY = movingobjectposition.getBlockPos().getY();
+					this.blockPosZ = movingobjectposition.getBlockPos().getZ();
 					this.hitBlock = this.worldObj.getBlock(this.blockPosX, this.blockPosY, this.blockPosZ);
 					this.hitBlockMetadata = this.worldObj.getBlockMetadata(this.blockPosX, this.blockPosY,
 							this.blockPosZ);

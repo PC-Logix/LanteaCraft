@@ -7,18 +7,30 @@ package li.cil.oc.api.driver;
  * <p/>
  * This was previously to be implemented on the driver itself, but that has been
  * deprecated. Implement it in the environment returned from the block driver's
- * {@link Block#createEnvironment(net.minecraft.world.World, int, int, int)}
+ * {@link Block#createEnvironment(net.minecraft.world.World, net.minecraft.util.BlockPos)}
  * method instead.
  */
 public interface NamedBlock {
     /**
      * The preferred name, in case the driver is merged with others.
-     * <p/>
-     * If multiple drivers with a preferred name are merged, the first one is
-     * picked. This should usually not happen, since this is only intended to
-     * be implemented by drivers for actual tile entities (not interfaces).
      *
      * @return the preferred name.
      */
     String preferredName();
+
+    /**
+     * This is used to determine which name to use in case multiple
+     * environments with this interface are merged.
+     * <p/>
+     * If multiple named environments are merged the name of the environment
+     * with the <em>highest</em> priority is selected. Negative values are
+     * allowed. The recommended default value is therefore zero.
+     * <p/>
+     * If multiple environments with the same priority exist, the
+     * result is unspecified. It will usually result in the environment
+     * of the driver that was registered first.
+     *
+     * @return the priority with which to use this name.
+     */
+    int priority();
 }
