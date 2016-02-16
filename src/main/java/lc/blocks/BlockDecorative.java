@@ -73,7 +73,7 @@ public class BlockDecorative extends LCBlock {
 	/** Default constructor. */
 	public BlockDecorative() {
 		super(Material.ground);
-		setHardness(10);
+		setHardness(10.0f);
 		setHarvestLevel("pickaxe", 1);
 		setOpaque(true);
 	}

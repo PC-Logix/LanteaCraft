@@ -36,6 +36,7 @@ public class BlockLanteaDoor extends LCBlock {
 	/** Default constructor */
 	public BlockLanteaDoor() {
 		super(Material.ground);
+		setHardness(5.0f);
 		setOpaque(false).setProvidesInventory(false).setProvidesTypes(true).setCanRotate(true);
 	}
 
