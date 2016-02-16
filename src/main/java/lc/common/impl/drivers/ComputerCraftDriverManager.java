@@ -1,5 +1,7 @@
 package lc.common.impl.drivers;
 
+import java.util.Enumeration;
+
 import lc.common.LCLog;
 import lc.common.base.LCTile;
 import net.minecraft.tileentity.TileEntity;
@@ -46,6 +48,13 @@ public class ComputerCraftDriverManager {
 			return xxx.charAt(0);
 		}
 		return xx;
+	}
+
+	public static Object castToComputerSafe(Object aresult) {
+		if (aresult instanceof Enumeration) {
+			return ((Enumeration) aresult).toString();
+		}
+		return aresult;
 	}
 
 }

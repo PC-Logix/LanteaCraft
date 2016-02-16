@@ -116,7 +116,7 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 			for (int i = 0; i < aargs.length; i++)
 				aargs[i] = OpenComputersDriverManager.performCastToType(args.checkAny(i), types[i]);
 			Object aresult = foundMethod.invoke(this, aargs);
-			return new Object[] { aresult };
+			return new Object[] { OpenComputersDriverManager.castToComputerSafe(aresult) };
 		} catch (Exception exception) {
 			LCLog.warn("Problem calling method from OpenComputer driver!", exception);
 			throw new LuaException(exception.getMessage());

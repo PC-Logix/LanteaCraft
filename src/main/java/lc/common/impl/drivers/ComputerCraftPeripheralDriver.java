@@ -83,7 +83,7 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 			for (int i = 0; i < aargs.length; i++)
 				aargs[i] = ComputerCraftDriverManager.performCastToType(arguments[i], types[i]);
 			Object aresult = foundMethod.invoke(this, aargs);
-			return new Object[] { aresult };
+			return new Object[] { ComputerCraftDriverManager.castToComputerSafe(aresult) };
 		} catch (Exception exception) {
 			LCLog.warn("Problem calling method from ComputerCraft driver!", exception);
 			throw new LuaException(exception.getMessage());

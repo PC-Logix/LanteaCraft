@@ -1,5 +1,7 @@
 package lc.common.impl.drivers;
 
+import java.util.Enumeration;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import lc.common.LCLog;
@@ -55,6 +57,13 @@ public class OpenComputersDriverManager implements Block {
 			return m.toString();
 		}
 		return xx;
+	}
+
+	public static Object castToComputerSafe(Object aresult) {
+		if (aresult instanceof Enumeration) {
+			return ((Enumeration) aresult).toString();
+		}
+		return aresult;
 	}
 
 	public static String findComponentName(String rzc) {
