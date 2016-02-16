@@ -157,10 +157,10 @@ public class GUIStargate extends LCContainerGUI {
 			IconButton.drawIcon(Minecraft.getMinecraft(), "icon_iris", 0, 5, 0.5f, 1.0f);
 			container.setTextColor(0xFFFFFF);
 			container.drawString(I18n.format("lc.interface.options.iris_mode"), 15, 7);
-			IconButton.drawButton(Minecraft.getMinecraft(), "icon_ethernet", 85, 5, mouseX - container.offsetLeft(),
+			IconButton.drawButton(Minecraft.getMinecraft(), "icon_rstorchon", 85, 5, mouseX - container.offsetLeft(),
 					mouseY - container.offsetTop(), container.isMouseDown(), 0.5, 1.0f);
 			if (IconButton.buttonHovered(85, 5, mouseX - container.offsetLeft(), mouseY - container.offsetTop(), 0.5))
-				container.drawTooltip(I18n.format("lc.interface.redstone.active_ext"), mouseX - container.offsetLeft(),
+				container.drawTooltip(I18n.format("lc.interface.redstone.active_high"), mouseX - container.offsetLeft(),
 						mouseY - container.offsetTop());
 
 		}

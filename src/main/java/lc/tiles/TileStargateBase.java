@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
+import com.sun.imageio.plugins.common.I18N;
+
 import lc.LCRuntime;
 import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.components.IntegrationType;
@@ -24,8 +26,10 @@ import lc.client.animation.Animation;
 import lc.client.openal.StreamingSoundProperties;
 import lc.client.render.animations.ChevronMoveAnimation;
 import lc.client.render.animations.ChevronReleaseAnimation;
+import lc.client.render.animations.IrisMoveAnimation;
 import lc.client.render.animations.RingSpinAnimation;
 import lc.common.LCLog;
+import lc.common.base.LCBlock;
 import lc.common.base.LCTile;
 import lc.common.base.inventory.FilteredInventory;
 import lc.common.base.multiblock.LCMultiblockTile;
@@ -37,6 +41,7 @@ import lc.common.network.LCPacket;
 import lc.common.network.packets.LCStargateConnectionPacket;
 import lc.common.network.packets.LCStargateStatePacket;
 import lc.common.network.packets.LCTileSync;
+import lc.common.resource.ResourceAccess;
 import lc.common.stargate.MessageStringPayload;
 import lc.common.stargate.StargateCharsetHelper;
 import lc.common.util.data.ImmutablePair;
@@ -57,6 +62,7 @@ import lc.server.StargateConnection;
 import lc.server.StargateManager;
 import lc.server.world.TeleportationHelper;
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -64,6 +70,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.StatCollector;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -159,6 +168,18 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			return zz.append("}").toString();
 		}
 	}
+
+	private static class OuchDamageSource extends DamageSource {
+		public OuchDamageSource(String typeof) {
+			super(ResourceAccess.getAssetKey() + ":" + typeof);
+			setDamageBypassesArmor();
+			setDamageIsAbsolute();
+		}
+	};
+
+	private static final OuchDamageSource irisDamSrc = new OuchDamageSource("iris");
+	private static final OuchDamageSource unstableWholeDamSrc = new OuchDamageSource("unstable_wormhole");
+	private static final OuchDamageSource transDamSrc = new OuchDamageSource("unstable_transient");
 
 	private static final double stargateSpinTime = 20.0d;
 	private static final double stargateChevronMoveTime = 5.0d;
@@ -314,10 +335,10 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			}
 			break;
 		case CLOSEIRIS:
-			// TODO: Client-side iris render
+			clientAnimationQueue.push(new IrisMoveAnimation(stargateIrisSpeed, 1.0f));
 			break;
 		case OPENIRIS:
-			// TODO: Client-side iris render
+			clientAnimationQueue.push(new IrisMoveAnimation(stargateIrisSpeed, 0.0f));
 			break;
 		default:
 			break;
@@ -363,6 +384,15 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			default:
 				break;
 			}
+		}
+
+		if (inventory.getStackInSlot(0) != null && inventory.getStackInSlot(0).stackSize > 0) {
+			renderInfoTile().tileRenderState().set("iris", true);
+			ItemIrisUpgrade upgrade = (ItemIrisUpgrade) inventory.getStackInSlot(0).getItem();
+			IrisType type = upgrade.getType(inventory.getStackInSlot(0));
+			renderInfoTile().tileRenderState().set("iris-type", type.getName());
+		} else {
+			renderInfoTile().tileRenderState().set("iris", false);
 		}
 
 		if (clientStargateState == StargateState.CONNECTED) {
@@ -464,7 +494,33 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	private void thinkServerDispatchEntity(Entity entity, Trans3 src, Trans3 dst, TileStargateBase destination) {
-		TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
+		boolean flag = destination.thinkServerAcceptEntity(entity, src, dst, this);
+		if (flag)
+			TeleportationHelper.sendEntityToWorld(entity, src, dst, destination.getWorldObj().provider.dimensionId);
+
+	}
+
+	private boolean thinkServerAcceptEntity(Entity entity, Trans3 src, Trans3 dst, TileStargateBase source) {
+		if (getIrisType() != null) {
+			if (getIrisState() == IrisState.CLOSED) {
+				if (entity instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) entity;
+					if (player.capabilities.isCreativeMode || player.capabilities.disableDamage
+							|| player.isEntityInvulnerable()) {
+						player.addChatMessage(new ChatComponentText(StatCollector
+								.translateToLocal("lc.interface.stargate.obstructed")));
+					} else {
+						if (!player.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
+							player.inventory.clearInventory(null, -1);
+						player.attackEntityFrom(irisDamSrc, 999999);
+					}
+				} else
+					entity.setDead();
+				return false;
+			} else
+				return true;
+		} else
+			return true;
 	}
 
 	private void thinkServerTasks() {
@@ -539,10 +595,20 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					}
 					break;
 				case CLOSEIRIS:
-					// TODO: Server-side close iris task
+					if (getIrisType() != null) {
+						if (getIrisState() != IrisState.CLOSED) {
+							irisState = IrisState.CLOSED;
+							LCTile.doCallbacksNow(this, "computerEvent", "irisClosed", null);
+							doCommand = true;
+						}
+					}
 					break;
 				case OPENIRIS:
-					// TODO: Server-side open iris task
+					if (getIrisState() != IrisState.OPEN) {
+						irisState = IrisState.OPEN;
+						LCTile.doCallbacksNow(this, "computerEvent", "irisOpened", null);
+						doCommand = true;
+					}
 					break;
 				}
 			}
@@ -566,7 +632,26 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	private void thinkServerIris() {
-		// TODO: Control the iris, send state to client
+		if (inventory.getStackInSlot(0) != null && inventory.getStackInSlot(0).stackSize > 0) {
+			ItemStack stack = inventory.getStackInSlot(0);
+			ItemIrisUpgrade upgrade = (ItemIrisUpgrade) stack.getItem();
+			if (upgrade.getIrisDamage(stack) > upgrade.getMaximumDamage(upgrade.getType(stack))) {
+				inventory.setInventorySlotContents(0, null);
+				inventory.markDirty();
+				LCTile.doCallbacksNow(this, "computerEvent", "irisDestroyed", null);
+				openIris();
+			} else {
+				LCBlock block = (LCBlock) getBlockType();
+				boolean power = block.isGettingAnyInput(worldObj, xCoord, yCoord, zCoord);
+				if (power) {
+					if (getIrisType() != null & getIrisState() != IrisState.CLOSED)
+						closeIris();
+				} else {
+					if (getIrisType() != null & getIrisState() != IrisState.OPEN)
+						openIris();
+				}
+			}
+		}
 	}
 
 	public Vector3[] getChevronBlocks() {
@@ -773,8 +858,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	public IrisState getIrisState() {
 		if (getIrisType() == null)
-			return IrisState.None;
-		return IrisState.Closed;
+			return IrisState.NONE;
+		return irisState;
 	}
 
 	@Override
@@ -850,16 +935,19 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public void openIris() {
 		commandQueue.add(new StargateCommand(StargateCommandType.OPENIRIS, stargateIrisSpeed));
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public void closeIris() {
 		commandQueue.add(new StargateCommand(StargateCommandType.CLOSEIRIS, stargateIrisSpeed));
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public double getIrisHealth() {
 		// TODO Auto-generated method stub
 		return 0;

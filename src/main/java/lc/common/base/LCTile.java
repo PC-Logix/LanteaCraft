@@ -31,8 +31,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 
@@ -536,6 +538,18 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 			compound = p_145839_1_.getCompoundTag("base-tag");
 		else
 			compound = new NBTTagCompound();
+
+		if (p_145839_1_.hasKey("inventory") && getInventory() != null) {
+			IInventory inventory = getInventory();
+			NBTTagList tagList = p_145839_1_.getTagList("inventory", Constants.NBT.TAG_COMPOUND);
+			for (int i = 0; i < tagList.tagCount(); i++) {
+				NBTTagCompound tag = (NBTTagCompound) tagList.getCompoundTagAt(i);
+				byte slot = tag.getByte("slot");
+				if (slot >= 0 && slot < inventory.getSizeInventory())
+					inventory.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(tag));
+			}
+		}
+
 		markNbtDirty();
 		try {
 			load(p_145839_1_);
@@ -549,6 +563,22 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		super.writeToNBT(p_145841_1_);
 		if (compound != null)
 			p_145841_1_.setTag("base-tag", compound);
+
+		if (getInventory() != null) {
+			IInventory inventory = getInventory();
+			NBTTagList itemList = new NBTTagList();
+			for (int i = 0; i < inventory.getSizeInventory(); i++) {
+				ItemStack stack = inventory.getStackInSlot(i);
+				if (stack != null) {
+					NBTTagCompound tag = new NBTTagCompound();
+					tag.setByte("slot", (byte) i);
+					stack.writeToNBT(tag);
+					itemList.appendTag(tag);
+				}
+			}
+			p_145841_1_.setTag("inventory", itemList);
+		}
+
 		try {
 			save(p_145841_1_);
 		} catch (Throwable t) {
@@ -694,6 +724,14 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		if (server == null || !server.ready())
 			return null;
 		return server.assign(this, filename, sys.getPosition(this), properties);
+	}
+
+	public int getRedstoneOutput(int side) {
+		return 0;
+	}
+
+	public boolean canConnectRedstone(int side) {
+		return false;
 	}
 
 }

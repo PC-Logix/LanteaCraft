@@ -113,8 +113,9 @@ item.decorator.name=Decorator
 
 
 # Death messages
-death.attack.wormhole_transient=%1$s was torn apart by an event horizon.
-
+death.attack.unstable_transient=%1$s was torn apart by an event horizon.
+death.attack.unstable_wormhole=%1$s was torn apart by an unstable wormhole.
+death.attack.iris=%1$s collided with an iris.
 
 # Interfaces
 lc.interface.stargate.name=Stargate
@@ -139,6 +140,8 @@ lc.interface.redstone.active_ext=Digital Control
 lc.interface.redstone.emit_nothing=Do Nothing
 lc.interface.redstone.emit_low=Normally Off
 lc.interface.redstone.emit_high=Normally On
+
+lc.interface.stargate.obstructed=Remote Stargate obstructed
 
 lc.interface.iris.type.mechanical.name=Mechanical
 lc.interface.iris.type.energy.name=Energy

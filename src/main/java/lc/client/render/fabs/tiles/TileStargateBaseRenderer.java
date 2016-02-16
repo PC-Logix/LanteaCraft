@@ -31,6 +31,7 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 			.formatResourceName("textures/fx/eventhorizon_${TEX_QUALITY}.png"));
 
 	public final static int ehGridRadialSize = 10;
+	public final static int irBladeSize = 32;
 	public final static int ehGridPolarSize = ModelStargate.numRingSegments;
 	public final static double ehBandWidth = ModelStargate.ringInnerRadius / ehGridRadialSize;
 
@@ -84,16 +85,78 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 						animation.sampleProperties(state, frame);
 				}
 				model.render(this, renderer, base, state);
+				
+				if (state.get("iris", false)) {
+					if (state.get("iris-type", "mechanical").equals("mechanical")) {
+						renderMechIrisImmediate(base, renderer, state, x, y, z, partialTickTime);
+					} else {
+						renderGhostIrisImmediate(base, renderer, state, x, y, z, partialTickTime);
+					}
+				}
+
 				if (state.get("event-horizon", false))
-					renderGfxHorizonImmediate(base, renderer, x, y, z);
+					renderGfxHorizonImmediate(base, renderer, state, x, y, z);
+
 				GL11.glPopMatrix();
 			}
 		}
 		return true;
 	}
 
-	private void renderGfxHorizonImmediate(TileStargateBase tile, LCTileRenderPipeline pipeline, double x, double y,
-			double z) {
+	private void renderMechIrisImmediate(TileStargateBase tile, LCTileRenderPipeline pipeline, StateMap state,
+			double x, double y, double z, float t) {
+		double progress = 1.0d - state.get("iris-progress", 0.0d);
+		for (int i = 0; i < irBladeSize; i++) {
+			GL11.glPushMatrix();
+			GL11.glRotated(360.0 * i / irBladeSize, 0.0, 0.0, 1.0);
+			double tiltAngle = progress * 60;
+			double radius = ModelStargate.ringMidRadius;
+			double longW = ModelStargate.ringMidRadius, shortW = ModelStargate.ringInnerRadius;
+			double heightZ = 0.2, heightQ = 1.00;
+			double length = heightQ - (heightQ - heightZ) * progress * progress;
+			double u0 = shortW / longW, v0 = length / heightQ;
+			double v1 = heightZ / heightQ;
+			double depth0 = 0.05, depth1 = 0.01;
+
+			GL11.glTranslated(radius, 0, 0);
+			GL11.glRotated(-tiltAngle, 0, 0, 1);
+			GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+			GL11.glTexCoord2d(0, 0);
+			GL11.glVertex3d(-longW, 0, depth0);
+			GL11.glTexCoord2d(1, 0);
+			GL11.glVertex3d(0, 0, depth0 + depth1);
+			GL11.glTexCoord2d(1, v1);
+			GL11.glVertex3d(0, heightZ, depth0 + depth1);
+			GL11.glTexCoord2d(u0, v0);
+			GL11.glVertex3d(-longW + shortW, length, depth0);
+			GL11.glTexCoord2d(0, v0);
+			GL11.glVertex3d(-longW, length, depth0);
+			GL11.glEnd();
+
+			GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+			GL11.glTexCoord2d(0, 0);
+			GL11.glVertex3d(-longW, 0, depth0);
+			GL11.glTexCoord2d(0, v0);
+			GL11.glVertex3d(-longW, length, depth0);
+			GL11.glTexCoord2d(u0, v0);
+			GL11.glVertex3d(-longW + shortW, length, depth0);
+			GL11.glTexCoord2d(1, v1);
+			GL11.glVertex3d(0, heightZ, depth0 - depth1);
+			GL11.glTexCoord2d(1, 0);
+			GL11.glVertex3d(0, 0, depth0 - depth1);
+			GL11.glEnd();
+			GL11.glPopMatrix();
+		}
+
+	}
+
+	private void renderGhostIrisImmediate(TileStargateBase tile, LCTileRenderPipeline pipeline, StateMap state,
+			double x, double y, double z, float t) {
+
+	}
+
+	private void renderGfxHorizonImmediate(TileStargateBase tile, LCTileRenderPipeline pipeline, StateMap state,
+			double x, double y, double z) {
 		pipeline.bind(fxHorizon);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glNormal3d(0, 0, 1);
@@ -101,8 +164,8 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 		for (int i = 1; i < ehGridRadialSize; i++) {
 			GL11.glBegin(GL11.GL_QUAD_STRIP);
 			for (int j = 0; j <= ehGridPolarSize; j++) {
-				eventHVertex(grid, i, j);
-				eventHVertex(grid, i + 1, j);
+				eventHVertex(state, grid, i, j);
+				eventHVertex(state, grid, i + 1, j);
 			}
 			GL11.glEnd();
 		}
@@ -111,13 +174,13 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 		GL11.glTexCoord2d(0.5, 0.5);
 		GL11.glVertex3d(0, 0, grid[1][0]);
 		for (int j = 0; j <= ehGridPolarSize; j++)
-			eventHVertex(grid, 1, j);
+			eventHVertex(state, grid, 1, j);
 		GL11.glEnd();
 		GL11.glEnable(GL11.GL_CULL_FACE);
 
 	}
 
-	private void eventHVertex(double[][] grid, int i, int j) {
+	private void eventHVertex(StateMap state, double[][] grid, int i, int j) {
 		double r = i * 2.75d / 10.0d;
 		double x = r * ModelStargate.cos[j];
 		double y = r * ModelStargate.sin[j];
@@ -125,6 +188,9 @@ public class TileStargateBaseRenderer extends LCTileRenderer {
 		double u = (x + 3) / 6;
 		double v = (y + 3) / 6;
 		GL11.glTexCoord2d(u, v);
-		GL11.glVertex3d(x, y, grid[j + 1][i]);
+		if (state.get("iris", false)) {
+			GL11.glVertex3d(x, y, Math.min(grid[j + 1][i], 0.035));
+		} else
+			GL11.glVertex3d(x, y, grid[j + 1][i]);
 	}
 }

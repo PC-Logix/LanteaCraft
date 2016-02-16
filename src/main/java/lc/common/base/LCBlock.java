@@ -11,8 +11,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -249,6 +251,52 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo, ICo
 			((IBlockEventHandler) tile).neighborChanged();
 		super.onNeighborBlockChange(world, x, y, z, b);
 	};
+
+	@Override
+	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile == null || !(tile instanceof LCTile))
+			return false;
+		return ((LCTile) tile).canConnectRedstone(side);
+	}
+
+	@Override
+	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int side) {
+		return isProvidingWeakPower(world, x, y, z, side);
+	}
+
+	@Override
+	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int side) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile == null || !(tile instanceof LCTile))
+			return 0;
+		return ((LCTile) tile).getRedstoneOutput(side);
+	}
+
+	public boolean isGettingInput(World world, int x, int y, int z, ForgeDirection side) {
+		return getInputStrength(world, x, y, z, side) > 0;
+	}
+	
+	public boolean isGettingAnyInput(World world, int x, int y, int z) {
+		return getBestInputStrength(world, x, y, z) > 0;
+	}
+	
+	public int getBestInputStrength(World world, int x, int y, int z) {
+		int best = 0;
+		for (ForgeDirection side : ForgeDirection.values())
+			best = Math.max(best, getInputStrength(world, x, y, z, side));
+		return best;
+	}
+
+	public int getInputStrength(World world, int x, int y, int z, ForgeDirection side) {
+		int dx = x + side.offsetX;
+		int dy = y + side.offsetY;
+		int dz = z + side.offsetZ;
+		int l1 = world.getIndirectPowerLevelTo(dx, dy, dz, side.getOpposite().ordinal());
+		int l2 = world.getBlock(dx, dy, dz) == Blocks.redstone_wire ? world.getBlockMetadata(dx, dy, dz) : 0;
+		int l3 = world.getBlock(dx, dy, dz) == Blocks.redstone_torch ? 15 : 0;
+		return Math.max(l1, Math.max(l2, l3));
+	}
 
 	@Override
 	public IBlockRenderInfo renderInfoBlock() {
