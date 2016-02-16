@@ -3,7 +3,6 @@ package lc.common.impl.drivers;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.nbt.NBTTagCompound;
 import lc.LanteaCraft;
 import lc.api.jit.ASMTag;
@@ -123,7 +122,7 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 			if (m.getName().equals(method))
 				foundMethod = m;
 		if (foundMethod == null)
-			throw new LuaException("No such method.");
+			throw new Exception("No such method.");
 		try {
 			Class<?>[] types = foundMethod.getParameterTypes();
 			if (args.count() != types.length)
@@ -135,7 +134,7 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 			return new Object[] { OpenComputersDriverManager.castToComputerSafe(aresult) };
 		} catch (Exception exception) {
 			LCLog.warn("Problem calling method from OpenComputer driver!", exception);
-			throw new LuaException(exception.getMessage());
+			throw new Exception(exception.getMessage());
 		}
 	}
 
