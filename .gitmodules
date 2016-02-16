@@ -1,0 +1,3 @@
+[submodule "src/main/resources/assets/pcl_lc/drivers"]
+	path = src/main/resources/assets/pcl_lc/drivers
+	url = https://github.com/PC-Logix/LanteaCraft-Drivers.git
