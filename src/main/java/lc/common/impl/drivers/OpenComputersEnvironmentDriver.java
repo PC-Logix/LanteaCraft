@@ -5,10 +5,13 @@ import java.util.ArrayList;
 
 import dan200.computercraft.api.lua.LuaException;
 import net.minecraft.nbt.NBTTagCompound;
+import lc.LanteaCraft;
 import lc.api.jit.ASMTag;
 import lc.api.jit.Tag;
 import lc.common.LCLog;
 import lc.common.impl.drivers.OpenComputersDriverManager.IOCManagedEnvPerp;
+import lc.common.resource.ResourceAccess;
+import li.cil.oc.api.FileSystem;
 import li.cil.oc.api.Network;
 import li.cil.oc.api.network.Arguments;
 import li.cil.oc.api.network.Context;
@@ -20,10 +23,15 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 
 	private String[] opencomputers_methodcache;
 	private Node opencomputers_node;
+	private Node opencomputers_fs;
 
 	private void opencomputers_assertReady() {
 		if (opencomputers_node == null) {
 			opencomputers_node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
+			opencomputers_fs = (Node) FileSystem.asManagedEnvironment(
+					FileSystem.fromClass(LanteaCraft.class, ResourceAccess.getAssetKey(), "drivers/opencomputers"),
+					"lanteacraft");
+
 		}
 	}
 
@@ -58,11 +66,19 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 	@Override
 	public void onConnect(Node node) {
 		opencomputers_assertReady();
+		if (node.host() instanceof Context) {
+			node.connect(opencomputers_fs);
+		}
 	}
 
 	@Override
 	public void onDisconnect(Node node) {
 		opencomputers_assertReady();
+		if (node.host() instanceof Context) {
+			node.disconnect(opencomputers_fs);
+		} else if (node == this.opencomputers_node) {
+			opencomputers_fs.remove();
+		}
 	}
 
 	@Override

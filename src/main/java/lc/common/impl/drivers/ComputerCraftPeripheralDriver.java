@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
+import lc.LanteaCraft;
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverProvider;
 import lc.api.jit.DeviceDrivers.DriverRTCallback;
 import lc.api.jit.ASMTag;
 import lc.api.jit.Tag;
 import lc.common.LCLog;
+import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -96,6 +98,8 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 		synchronized (computercraft_icalist) {
 			computercraft_icalist.add(computer);
 		}
+		computer.mount("/lanteacraft",
+				ComputerCraftAPI.createResourceMount(LanteaCraft.class, "pcl_lc", "drivers/computercraft"));
 	}
 
 	@Override
@@ -104,6 +108,7 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 		synchronized (computercraft_icalist) {
 			computercraft_icalist.remove(computer);
 		}
+		computer.unmount("/lanteacraft");
 	}
 
 	@Override
