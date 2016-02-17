@@ -98,7 +98,7 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 			computercraft_icalist.add(computer);
 		}
 		computer.mount("/lanteacraft",
-				ComputerCraftAPI.createResourceMount(LanteaCraft.class, "pcl_lc", "drivers/computercraft"));
+				ComputerCraftAPI.createResourceMount(LanteaCraft.class, "pcl_lc", "support/computercraft/software"));
 	}
 
 	@Override

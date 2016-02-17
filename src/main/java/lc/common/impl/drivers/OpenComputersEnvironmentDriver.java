@@ -28,7 +28,7 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 		if (opencomputers_node == null) {
 			opencomputers_node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
 			opencomputers_fs = (Node) FileSystem.asManagedEnvironment(
-					FileSystem.fromClass(LanteaCraft.class, ResourceAccess.getAssetKey(), "drivers/opencomputers"),
+					FileSystem.fromClass(LanteaCraft.class, ResourceAccess.getAssetKey(), "support/opencomputers/software"),
 					"lanteacraft");
 
 		}
