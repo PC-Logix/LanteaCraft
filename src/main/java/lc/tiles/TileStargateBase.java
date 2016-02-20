@@ -91,12 +91,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				"stargate/milkyway/milkyway_chevron_lock.ogg", new StreamingSoundProperties()));
 	}
 
-	public final static StructureConfiguration structure = new StructureConfiguration() {
+	private static class SGStructureConfig extends StructureConfiguration {
+		private BlockFilter[] filters;
 
-		private final BlockFilter[] filters = new BlockFilter[] { new BlockFilter(Blocks.air),
-				new BlockFilter(LCRuntime.runtime.blocks().stargateRingBlock.getBlock(), 0),
-				new BlockFilter(LCRuntime.runtime.blocks().stargateRingBlock.getBlock(), 1),
-				new BlockFilter(LCRuntime.runtime.blocks().stargateBaseBlock.getBlock()) };
+		public SGStructureConfig(BlockFilter[] filters) {
+			this.filters = filters;
+		}
 
 		@Override
 		public Vector3 getStructureDimensions() {
@@ -123,7 +123,17 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		public BlockFilter[] getBlockMappings() {
 			return filters;
 		}
-	};
+	}
+
+	public final static StructureConfiguration milkyStructure = new SGStructureConfig(new BlockFilter[] {
+			new BlockFilter(Blocks.air), new BlockFilter(LCRuntime.runtime.blocks().stargateRingBlock.getBlock(), 0),
+			new BlockFilter(LCRuntime.runtime.blocks().stargateRingBlock.getBlock(), 1),
+			new BlockFilter(LCRuntime.runtime.blocks().stargateBaseBlock.getBlock()) });
+
+	public final static StructureConfiguration atlStructure = new SGStructureConfig(new BlockFilter[] {
+			new BlockFilter(Blocks.air), new BlockFilter(LCRuntime.runtime.blocks().stargateRingBlock.getBlock(), 2),
+			new BlockFilter(LCRuntime.runtime.blocks().stargateRingBlock.getBlock(), 3),
+			new BlockFilter(LCRuntime.runtime.blocks().stargateBaseBlock.getBlock(), 1) });
 
 	/**
 	 * Used to track an entity position and velocity
@@ -257,22 +267,26 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public StructureConfiguration getConfiguration() {
-		return structure;
+		if (getStargateType() == StargateType.STANDARD)
+			return milkyStructure;
+		else
+			return atlStructure;
+
 	}
 
 	@Override
 	public void thinkMultiblock() {
 		if (getState() == MultiblockState.NONE) {
 			Orientations rotation = Orientations.from(getRotation());
-			if (structure.test(getWorldObj(), xCoord, yCoord, zCoord, rotation)) {
+			if (getConfiguration().test(getWorldObj(), xCoord, yCoord, zCoord, rotation)) {
 				changeState(MultiblockState.FORMED);
-				structure.apply(getWorldObj(), xCoord, yCoord, zCoord, rotation, this);
+				getConfiguration().apply(getWorldObj(), xCoord, yCoord, zCoord, rotation, this);
 			}
 		} else {
 			Orientations rotation = Orientations.from(getRotation());
-			if (!structure.test(getWorldObj(), xCoord, yCoord, zCoord, rotation)) {
+			if (!getConfiguration().test(getWorldObj(), xCoord, yCoord, zCoord, rotation)) {
 				changeState(MultiblockState.NONE);
-				structure.apply(getWorldObj(), xCoord, yCoord, zCoord, rotation, null);
+				getConfiguration().apply(getWorldObj(), xCoord, yCoord, zCoord, rotation, null);
 			}
 		}
 	}
@@ -656,7 +670,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	public Vector3[] getChevronBlocks() {
 		Orientations rotation = Orientations.from(getRotation());
-		return structure.mapType(xCoord, yCoord, zCoord, 2, rotation);
+		return getConfiguration().mapType(xCoord, yCoord, zCoord, 2, rotation);
 	}
 
 	public double[][][] getGfxGrid() {
@@ -678,7 +692,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		Vector3 dim = structure.getStructureDimensions();
+		Vector3 dim = getConfiguration().getStructureDimensions();
 		Vector3 min = new Vector3(this).sub(dim), max = new Vector3(this).add(dim);
 		return Vector3.makeAABB(min, max);
 	}

@@ -100,7 +100,7 @@ public class SurfaceStargate extends LCScatteredFeatureStart {
 			Vector3 vMax = new Vector3(scatteredFeatureSizeX - 1, scatteredFeatureSizeY - 1, scatteredFeatureSizeZ - 1);
 			fill(w, bb, vMin, vMax, net.minecraft.init.Blocks.air);
 			fill(w, bb, v0, v1, net.minecraft.init.Blocks.sandstone);
-			StructureConfiguration config = TileStargateBase.structure;
+			StructureConfiguration config = TileStargateBase.milkyStructure;
 
 			Vector3 center = new Vector3(Math.floor(scatteredFeatureSizeX / 2), 0,
 					Math.floor(scatteredFeatureSizeZ / 2));
