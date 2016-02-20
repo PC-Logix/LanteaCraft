@@ -40,7 +40,10 @@ LanteaCraft License
 4  Contributing
 ----------------
 1. By contributing to LanteaCraft you grant PC-Logix a perpetual, worldwide, non-exclusive, transferable, royalty-free, irrevocable license for your contribution with the right to sublicense such rights through multiple tiers of sublicensees, to reproduce, modify, display, perform and distribute in whole or part your contribution as part of LanteaCraft or any other project.
-2. You **may** fork and edit the Github repository for the purpose of contributing to the language translation files in the project. 
+2. If you suggest any ideas to LanteaCraft or PC-Logix:
+  * You grant us the right to use your idea or concept as we see fit; and
+  * If you expect us to pay you for your idea or concept, you must tell us so in advance.
+3. You **may** fork and edit the Github repository for the purpose of contributing to the language translation files in the project. 
 
 5  External Repositories
 ----------------
@@ -52,4 +55,5 @@ LanteaCraft License
 
 6  Third Party Technologies
 ----------------
-1. LanteaCraft utilizes third party technologies (libraries and sources) which are copyrighted and are excluded from this license. The individual license for each third party technology is provided in separate sub-files in any distribution of this LICENSE file.
+1. LanteaCraft utilizes third party technologies (libraries and sources) which are copyrighted and are excluded from this license. 
+2. The individual license for each third party technology is provided in separate sub-files in any distribution of this LICENSE file.
