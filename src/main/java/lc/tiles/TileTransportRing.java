@@ -177,7 +177,7 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 		case TRANSPORT:
 			if (command.args.length == 1) {
 				Vector3 destination = (Vector3) command.args[0];
-				GFXBeam beam = new GFXBeam(getWorldObj(), this, destination.add(0.5f, 0.5f, 0.5f), true, 0.55f, 16, 4,
+				GFXBeam beam = new GFXBeam(getWorldObj(), this, destination.add(0.5f, 1.5f, 0.5f), true, 0.55f, 16, 4,
 						12.5f);
 				LCRuntime.runtime.hints().particles().placeParticle(getWorldObj(), beam);
 			}
@@ -441,12 +441,12 @@ public class TileTransportRing extends LCMultiblockTile implements ITransportRin
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void activate() {
+		if (getState() != MultiblockState.FORMED)
+			return;
 		if (busy())
 			return;
 		TileTransportRing slave = thinkServerFindSlave();
-		LCLog.debug("finding slave...");
 		if (slave != null) {
-			LCLog.debug("doing transport...");
 			commandQueue.add(new TransportRingCommand(TransportRingCommandType.ENGAGE, 50.0d, slave));
 			commandQueue.add(new TransportRingCommand(TransportRingCommandType.TRANSPORT, 20.0d, slave));
 			commandQueue.add(new TransportRingCommand(TransportRingCommandType.DISENGAGE, 50.0d, slave));

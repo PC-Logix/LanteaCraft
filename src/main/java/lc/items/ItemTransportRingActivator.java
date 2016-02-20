@@ -39,11 +39,9 @@ public class ItemTransportRingActivator extends LCItem {
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int p_77648_7_,
 			float p_77648_8_, float p_77648_9_, float p_77648_10_) {
 		if (!world.isRemote) {
-			LCLog.debug("activating...");
 			TileTransportRing ring = (TileTransportRing) ScanningHelper.findNearestTileEntityOf(world,
 					TileTransportRing.class, x, y, z, AxisAlignedBB.getBoundingBox(-5, -5, -5, 5, 5, 5));
 			if (ring != null) {
-				LCLog.debug("transporting...");
 				ring.activate();
 			}
 		}

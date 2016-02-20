@@ -7,6 +7,7 @@ import lc.client.animation.Animation;
 import lc.client.models.ModelTransportRing;
 import lc.common.base.LCTile;
 import lc.common.base.LCTileRenderer;
+import lc.common.base.multiblock.MultiblockState;
 import lc.common.base.pipeline.LCTileRenderPipeline;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.resource.ResourceAccess;
@@ -44,20 +45,22 @@ public class TileTransportRingRenderer extends LCTileRenderer {
 
 		TileTransportRing ring = (TileTransportRing) tile;
 
-		StateMap state = ring.renderInfoTile().tileRenderState();
-		Animation animation = (Animation) ring.renderInfoTile().tileAnimation();
-		if (animation != null) {
-			Double frame = ring.renderInfoTile().tileAnimationProgress() + (double) partialTickTime;
-			if (!animation.finished(frame))
-				animation.sampleProperties(state, frame);
-		}
+		if (ring.getState() == MultiblockState.FORMED) {
+			StateMap state = ring.renderInfoTile().tileRenderState();
+			Animation animation = (Animation) ring.renderInfoTile().tileAnimation();
+			if (animation != null) {
+				Double frame = ring.renderInfoTile().tileAnimationProgress() + (double) partialTickTime;
+				if (!animation.finished(frame))
+					animation.sampleProperties(state, frame);
+			}
 
-		for (int i = 0; i < 6; i++) {
-			GL11.glPushMatrix();
-			double height = state.get("ring-height-" + i, 0.0d);
-			GL11.glTranslated(0.0d, height, 0.0d);
-			ModelTransportRing.$.prepareAndRender();
-			GL11.glPopMatrix();
+			for (int i = 0; i < 6; i++) {
+				GL11.glPushMatrix();
+				double height = state.get("ring-height-" + i, 0.0d);
+				GL11.glTranslated(0.0d, height, 0.0d);
+				ModelTransportRing.$.prepareAndRender();
+				GL11.glPopMatrix();
+			}
 		}
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
