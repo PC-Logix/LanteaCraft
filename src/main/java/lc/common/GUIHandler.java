@@ -73,7 +73,7 @@ public class GUIHandler implements IGuiHandler {
 				}
 				if (constr == null)
 					throw new Exception("Can't find legal constructor.");
-				if (constr.getParameterTypes().length == 2)
+				if (tile != null && constr.getParameterTypes().length > 1)
 					return constr.newInstance(tile, player);
 				return constr.newInstance(player);
 			} catch (Throwable t) {
