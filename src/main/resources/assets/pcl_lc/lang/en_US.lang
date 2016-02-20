@@ -7,9 +7,9 @@ item.portableDHD.name=Portable DHD
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Stargate Base
-tile.stargateBase.4.name=Pegasus Stargate Base
-tile.stargateBase.8.name=Wraith Stargate Base
-tile.stargateBase.12.name=Nox Stargate Base
+tile.stargateBase.1.name=Pegasus Stargate Base
+tile.stargateBase.2.name=Wraith Stargate Base
+tile.stargateBase.3.name=Nox Stargate Base
 screen.stargate_base.title=Stargate Settings
 
 # Stargate Ring and Chevrons
