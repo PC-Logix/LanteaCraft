@@ -38,6 +38,7 @@ import lc.generation.SurfaceStargate;
 import lc.generation.SurfaceStargate.SurfaceStargateFeature;
 import lc.items.ItemCraftingReagent;
 import lc.items.ItemDecorator;
+import lc.items.ItemGDO;
 import lc.items.ItemGlasses;
 import lc.items.ItemIrisUpgrade;
 import lc.items.ItemLanteaAlloyIngot;
@@ -109,10 +110,11 @@ public class LCInit {
 		items.lanteaCraftingItem = DefinitionWrapperProvider.provide(ItemCraftingReagent.class);
 		items.lanteaDecoratorTool = DefinitionWrapperProvider.provide(ItemDecorator.class);
 		items.lanteaStargateIris = DefinitionWrapperProvider.provide(ItemIrisUpgrade.class);
+		items.gdo = DefinitionWrapperProvider.provide(ItemGDO.class);
 		items.lanteaTransportRingActivator = DefinitionWrapperProvider.provide(ItemTransportRingActivator.class);
 		items.lanteaPortableDHD = DefinitionWrapperProvider.provide(ItemPortableDHD.class);
 		items.goauldStaffWeapon = DefinitionWrapperProvider.provide(ItemStaff.class);
-		
+
 		entities.staffProjectile = DefinitionWrapperProvider.provide(EntityStaffProjectile.class);
 
 		/* Initialize recipes */
@@ -164,8 +166,10 @@ public class LCInit {
 		interfaces.stargateUI = new InterfaceDefinition("stargateUI", "lc.container.ContainerStargate",
 				"lc.gui.GUIStargate");
 		interfaces.dhdUI = new InterfaceDefinition("dhdUI", "lc.container.ContainerDHD", "lc.gui.GUIDHD");
+		interfaces.gdoUI = new InterfaceDefinition("gdoUI", null, "lc.gui.GUIGDO");
 		runtime.registries().interfaces().addDefinition(interfaces.stargateUI);
 		runtime.registries().interfaces().addDefinition(interfaces.dhdUI);
+		runtime.registries().interfaces().addDefinition(interfaces.gdoUI);
 
 	}
 

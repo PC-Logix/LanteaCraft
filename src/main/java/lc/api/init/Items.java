@@ -24,6 +24,8 @@ public class Items {
 
 	/** Stargate iris item */
 	public IContainerDefinition lanteaStargateIris;
+	/** Stargate GDO controller item */
+	public IContainerDefinition gdo;
 
 	/** Lantea decorator tool */
 	public IContainerDefinition lanteaDecoratorTool;

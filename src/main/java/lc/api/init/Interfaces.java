@@ -18,5 +18,7 @@ public class Interfaces {
 	public IInterfaceDefinition stargateUI;
 	/** DHD UI */
 	public IInterfaceDefinition dhdUI;
+	/** GDO UI */
+	public IInterfaceDefinition gdoUI;
 
 }

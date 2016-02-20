@@ -51,10 +51,31 @@ public class GUIHandler implements IGuiHandler {
 			try {
 				String guiClass = def.getGUIClass();
 				LCLog.debug("Creating GUI %s", guiClass);
-				TileEntity tile = world.getTileEntity(x, y, z);
 				Class<?> gui = Class.forName(guiClass);
-				Constructor<?> constr = gui.getConstructor(new Class<?>[] { tile.getClass(), EntityPlayer.class });
-				return constr.newInstance(tile, player);
+				Constructor<?> constr = null;
+
+				TileEntity tile = world.getTileEntity(x, y, z);
+				if (tile == null) {
+					try {
+						constr = gui.getConstructor(new Class<?>[] { EntityPlayer.class });
+					} catch (NoSuchMethodException nsme) {
+					}
+				} else {
+					try {
+						constr = gui.getConstructor(new Class<?>[] { tile.getClass(), EntityPlayer.class });
+					} catch (NoSuchMethodException nsme) {
+					}
+					if (constr == null)
+						try {
+							constr = gui.getConstructor(new Class<?>[] { EntityPlayer.class });
+						} catch (NoSuchMethodException nsme) {
+						}
+				}
+				if (constr == null)
+					throw new Exception("Can't find legal constructor.");
+				if (constr.getParameterTypes().length == 2)
+					return constr.newInstance(tile, player);
+				return constr.newInstance(player);
 			} catch (Throwable t) {
 				LCLog.warn("Failed to create GUI object!", t);
 				return null;
