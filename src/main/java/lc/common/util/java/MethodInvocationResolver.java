@@ -18,6 +18,14 @@ public class MethodInvocationResolver extends SecurityManager {
 		return super.getClassContext();
 	}
 
+	public static String[] getCallerClassNames(int callerOffset) {
+		Class<?>[] klasses = RR.getClassContext();
+		String[] classNames = new String[klasses.length];
+		for (int i = 0; i < klasses.length; i++)
+			classNames[i] = klasses[i].getName();
+		return classNames;
+	}
+
 	/**
 	 * Get the caller class context on the stack currently.
 	 * 

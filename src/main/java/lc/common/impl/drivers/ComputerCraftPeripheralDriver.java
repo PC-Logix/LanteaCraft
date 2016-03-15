@@ -33,6 +33,14 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 		}
 	}
 
+	@DriverRTCallback(event = "isSideSolid")
+	public void computerCraft_checkIsSideSolid(Object[] args) {
+		String[] klasses = (String[]) args[1];
+		for (String klass : klasses)
+			if (klass.startsWith("dan200"))
+				args[0] = true;
+	}
+
 	@DriverRTCallback(event = "computerEvent")
 	public void computerCraft_handleEvent(String event, Object... args) {
 		computercraft_assertReady();
@@ -97,8 +105,8 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 		synchronized (computercraft_icalist) {
 			computercraft_icalist.add(computer);
 		}
-		computer.mount("/lanteacraft",
-				ComputerCraftAPI.createResourceMount(LanteaCraft.class, "pcl_lc", "drivers/support/computercraft/software"));
+		computer.mount("/lanteacraft", ComputerCraftAPI.createResourceMount(LanteaCraft.class, "pcl_lc",
+				"drivers/support/computercraft/software"));
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import lc.api.rendering.IRenderInfo;
 import lc.api.rendering.ITileRenderInfo;
 import lc.common.LCLog;
 import lc.common.configuration.IConfigure;
+import lc.common.util.java.MethodInvocationResolver;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -14,7 +15,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -190,6 +190,21 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo, ICo
 	public final boolean isOpaqueCube() {
 		return isOpaque;
 	}
+	
+	@Override
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+		boolean def = super.isSideSolid(world, x, y, z, side);
+		if (tileType != null) {
+			TileEntity t = world.getTileEntity(x, y, z);
+			if (t instanceof LCTile){
+				String[] klasses = MethodInvocationResolver.getCallerClassNames(0);
+				Object[] map = new Object[] { def, klasses };
+				LCTile.doCallbacksNow(t, "isSideSolid", new Object[] { map });
+				return (Boolean) map[0];
+			}
+		}
+		return def;
+	}
 
 	@Override
 	public boolean renderAsNormalBlock() {
@@ -276,11 +291,11 @@ public abstract class LCBlock extends BlockContainer implements IRenderInfo, ICo
 	public boolean isGettingInput(World world, int x, int y, int z, ForgeDirection side) {
 		return getInputStrength(world, x, y, z, side) > 0;
 	}
-	
+
 	public boolean isGettingAnyInput(World world, int x, int y, int z) {
 		return getBestInputStrength(world, x, y, z) > 0;
 	}
-	
+
 	public int getBestInputStrength(World world, int x, int y, int z) {
 		int best = 0;
 		for (ForgeDirection side : ForgeDirection.values())
