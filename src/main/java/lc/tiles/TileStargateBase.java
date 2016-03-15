@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
-import com.sun.imageio.plugins.common.I18N;
-
 import lc.LCRuntime;
 import lc.api.audio.channel.ChannelDescriptor;
 import lc.api.components.IntegrationType;
@@ -62,7 +60,6 @@ import lc.server.StargateConnection;
 import lc.server.StargateManager;
 import lc.server.world.TeleportationHelper;
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -570,6 +567,11 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 									(int) stargateConnectTimeout, (int) stargateEstablishedTimeout);
 							if (currentConnection != null)
 								LCTile.doCallbacksNow(this, "computerEvent", "connect", null);
+							else {
+								engagedGlyphs.clear();
+								LCTile.doCallbacksNow(this, "computerEvent", "disconnect", null);
+								command = new StargateCommand(StargateCommandType.DISCONNECT, stargateSpinTime);
+							}
 							doCommand = true;
 						}
 					break;
