@@ -109,11 +109,31 @@ public class ChunkPos {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof ChunkPos))
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + cx;
+		result = prime * result + cz;
+		result = prime * result + dimension;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-		ChunkPos location = (ChunkPos) o;
-		return location.dimension == dimension && location.cx == cx && location.cz == cz;
+		if (getClass() != obj.getClass())
+			return false;
+		ChunkPos other = (ChunkPos) obj;
+		if (cx != other.cx)
+			return false;
+		if (cz != other.cz)
+			return false;
+		if (dimension != other.dimension)
+			return false;
+		return true;
 	}
 
 }
