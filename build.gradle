@@ -33,6 +33,7 @@ minecraft {
 	replace "@BUILD@", project.ext.buildNumber
 }
 
+sourceSets.main.java.srcDir("./src/libs")
 sourceSets.main.java.srcDir("./src/externs/java")
 
 jar.doFirst {
