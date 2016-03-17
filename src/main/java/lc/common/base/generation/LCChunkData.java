@@ -27,10 +27,10 @@ public class LCChunkData {
 		LCChunkData data = LCChunkData.forChunk(chunk);
 		if (!data.dirty) {
 			data.readFromNBT(e.getData());
-			LCLog.debug("Performing repaint");
 			((HintProviderServer) LCRuntime.runtime.hints()).generator().decorator.paint(e.world.rand, e.world, chunk,
 					data);
 		} else {
+			LCLog.warn("Detected chunk data load before data commit, forcing a commit now.");
 			data.writeToNBT(e.getData());
 			data.dirty = false;
 		}
@@ -60,7 +60,6 @@ public class LCChunkData {
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
-		LCLog.debug("LC2DS: %s", nbt.hasKey("LC2DS"));
 		if (nbt.hasKey("LC2DS"))
 			this.compound = nbt.getCompoundTag("LC2DS");
 		if (nbt.hasKey("LanteaCraftMeta"))
