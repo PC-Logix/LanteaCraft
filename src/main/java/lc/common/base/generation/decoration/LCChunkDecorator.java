@@ -5,6 +5,7 @@ import java.util.Random;
 import lc.BuildInfo;
 import lc.LCRuntime;
 import lc.api.defs.IStructureDefinition;
+import lc.common.LCLog;
 import lc.common.base.generation.LCChunkData;
 import lc.common.impl.registry.StructureRegistry;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,12 +24,16 @@ public class LCChunkDecorator {
 		IStructureDefinition[] defs = registry.allDefs(LCChunkDecoration.class);
 		NBTTagCompound compound = data.compound.getCompoundTag("Decorators");
 		for (IStructureDefinition def : defs) {
-			if (compound.hasKey(def.getName()))
-				continue;
-			compound.setInteger(def.getName(), BuildInfo.$.build());
-			if (def.canGenerateAt(world, random, achunk.xPosition, achunk.zPosition))
-				((LCChunkDecoration) def).decorateChunk(random, world, achunk, data);
+			if (compound.getInteger(def.getName()) == 0) {
+				LCLog.debug("Performing decoration %s on chunk %s %s.", def.getName(), achunk.xPosition,
+						achunk.zPosition);
+				compound.setInteger(def.getName(), (BuildInfo.$.build() == 0) ? -1 : BuildInfo.$.build());
+				if (def.canGenerateAt(world, random, achunk.xPosition, achunk.zPosition))
+					((LCChunkDecoration) def).decorateChunk(random, world, achunk, data);
+			}
 		}
+		data.compound.setTag("Decorators", compound);
+		data.dirty();
 	}
 
 }

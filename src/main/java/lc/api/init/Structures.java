@@ -18,4 +18,6 @@ public class Structures {
 
 	public IStructureDefinition scatteredSurfaceStargate;
 
+	public IStructureDefinition decoratorNaquadahOre;
+
 }

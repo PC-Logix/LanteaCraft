@@ -31,6 +31,7 @@ import lc.common.impl.registry.InterfaceDefinition;
 import lc.common.impl.registry.RecipeProxy;
 import lc.common.impl.registry.SimpleRecipeDefinition;
 import lc.common.impl.registry.StructureDefinition;
+import lc.dimensions.any.LCOreDecorator;
 import lc.entity.EntityStaffProjectile;
 import lc.generation.AbydosPyramid;
 import lc.generation.AbydosPyramid.AbydosPyramidFeature;
@@ -161,6 +162,18 @@ public class LCInit {
 			}
 		}.addComp("AbydosPyramid", AbydosPyramidFeature.class);
 		// runtime.registries().structures().register(structures.scatteredAbydosPyramid);
+
+		structures.decoratorNaquadahOre = new LCOreDecorator(OreType.NAQUADAH, blocks.lanteaOreBlock.ref()) {
+			@Override
+			public boolean canGenerateAt(World world, Random rng, int x, int z) {
+				if (world.provider.dimensionId != 0)
+					return false;
+				if (x % 16 != 0 || z % 16 != 0)
+					return false;
+				return true;
+			}
+		};
+		runtime.registries().structures().register(structures.decoratorNaquadahOre);
 
 		/* Initialize interfaces */
 		interfaces.stargateUI = new InterfaceDefinition("stargateUI", "lc.container.ContainerStargate",

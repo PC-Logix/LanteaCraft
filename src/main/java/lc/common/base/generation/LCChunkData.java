@@ -3,6 +3,7 @@ package lc.common.base.generation;
 import java.util.WeakHashMap;
 
 import lc.LCRuntime;
+import lc.common.LCLog;
 import lc.server.HintProviderServer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.chunk.Chunk;
@@ -24,15 +25,23 @@ public class LCChunkData {
 	public static void onChunkLoad(ChunkDataEvent.Load e) {
 		Chunk chunk = e.getChunk();
 		LCChunkData data = LCChunkData.forChunk(chunk);
-		data.readFromNBT(e.getData());
-		((HintProviderServer) LCRuntime.runtime.hints()).generator().decorator
-				.paint(e.world.rand, e.world, chunk, data);
+		if (!data.dirty) {
+			data.readFromNBT(e.getData());
+			LCLog.debug("Performing repaint");
+			((HintProviderServer) LCRuntime.runtime.hints()).generator().decorator.paint(e.world.rand, e.world, chunk,
+					data);
+		} else {
+			data.writeToNBT(e.getData());
+			data.dirty = false;
+		}
 	}
 
 	public static void onChunkSave(ChunkDataEvent.Save e) {
 		Chunk chunk = e.getChunk();
 		LCChunkData data = LCChunkData.forChunk(chunk);
+		LCLog.debug("Performing commit");
 		data.writeToNBT(e.getData());
+		data.dirty = false;
 	}
 
 	public static void flush() {
@@ -41,11 +50,17 @@ public class LCChunkData {
 
 	public NBTTagCompound compound = new NBTTagCompound();
 	public NBTTagCompound legacyCompound;
+	private boolean dirty = false;
 
 	private LCChunkData() {
 	}
 
+	public void dirty() {
+		this.dirty = true;
+	}
+
 	public void readFromNBT(NBTTagCompound nbt) {
+		LCLog.debug("LC2DS: %s", nbt.hasKey("LC2DS"));
 		if (nbt.hasKey("LC2DS"))
 			this.compound = nbt.getCompoundTag("LC2DS");
 		if (nbt.hasKey("LanteaCraftMeta"))
@@ -53,8 +68,9 @@ public class LCChunkData {
 	}
 
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setTag("LanteaCraftMeta", legacyCompound);
 		nbt.setTag("LC2DS", compound);
+		if (legacyCompound != null)
+			nbt.setTag("LanteaCraftMeta", legacyCompound);
 	}
 
 }

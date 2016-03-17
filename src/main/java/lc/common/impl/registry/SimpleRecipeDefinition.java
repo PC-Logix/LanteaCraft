@@ -11,6 +11,7 @@ import lc.api.defs.IGameDef;
 import lc.api.defs.IRecipeDefinition;
 import lc.common.LCLog;
 import lc.common.util.Tracer;
+import lc.common.util.game.DataResolver;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
@@ -73,7 +74,7 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 			if (entry.getValue() == null)
 				continue;
 			else if (!(entry.getValue() instanceof ItemStack))
-				stackInputs.put(entry.getKey(), resolve(entry.getValue()));
+				stackInputs.put(entry.getKey(), DataResolver.resolve(entry.getValue()));
 			else
 				stackInputs.put(entry.getKey(), (ItemStack) entry.getValue());
 		}
@@ -82,44 +83,11 @@ public class SimpleRecipeDefinition implements IRecipeDefinition {
 		for (int i = 0; i < outputs.size(); i++) {
 			Object val = outputs.get(i);
 			if (!(val instanceof ItemStack))
-				stackOutputs.put(i, resolve(val));
+				stackOutputs.put(i, DataResolver.resolve(val));
 			else
 				stackOutputs.put(i, (ItemStack) val);
 		}
 		Tracer.end();
-	}
-
-	private ItemStack resolve(Object val) {
-		if (val instanceof DefinitionReference) {
-			DefinitionReference reference = (DefinitionReference) val;
-			IGameDef def = reference.reference();
-			if (def == null) {
-				LCLog.fatal("Invalid reference, cannot resolve recipe.");
-				return null;
-			}
-			Object[] params = reference.parameters();
-			Integer count = null, metadata = null;
-			if (params != null) {
-				if (params.length >= 1)
-					count = (Integer) params[0];
-				if (params.length == 2)
-					metadata = (Integer) params[1];
-			}
-			if (def instanceof IContainerDefinition) {
-				IContainerDefinition blockItemDef = (IContainerDefinition) def;
-				if (blockItemDef.getBlock() != null)
-					return new ItemStack(blockItemDef.getBlock(), count == null ? 1 : count, metadata == null ? 0
-							: metadata);
-				else if (blockItemDef.getItem() != null)
-					return new ItemStack(blockItemDef.getItem(), count == null ? 1 : count, metadata == null ? 0
-							: metadata);
-			} else {
-				LCLog.fatal("Unsupported definition type %s.", def.getClass().getName());
-				return null;
-			}
-		}
-		LCLog.fatal("Cannot resolve object of type %s into ItemStack.", val.getClass().getName());
-		return null;
 	}
 
 	@Override
