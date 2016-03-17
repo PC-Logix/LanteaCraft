@@ -16,9 +16,17 @@ import cpw.mods.fml.common.Loader;
  *
  */
 public enum DriverMap {
+	/** LC internal driver */
+	LANTEACRAFT("LanteaCraft", "LanteaCraft", "lc.common.impl.drivers.LanteaCraftPeripheralDriver",
+			"lc.common.impl.drivers.LanteaCraftDriverManager", IntegrationType.COMPUTERS),
+
 	/** CC computer driver */
 	COMPUTERCRAFT("ComputerCraft", "ComputerCraft", "lc.common.impl.drivers.ComputerCraftPeripheralDriver",
 			"lc.common.impl.drivers.ComputerCraftDriverManager", IntegrationType.COMPUTERS),
+
+	/** OC computer driver */
+	OPENCOMPUTERS("OpenComputers", "OpenComputers", "lc.common.impl.drivers.OpenComputersEnvironmentDriver",
+			"lc.common.impl.drivers.OpenComputersDriverManager", IntegrationType.COMPUTERS)
 
 	/** Waila support driver */
 	/*
