@@ -1,5 +1,6 @@
 package lc.common;
 
+import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
@@ -117,4 +118,12 @@ public interface IHintProvider {
 	 *            The start event
 	 */
 	public void beforeServerStarting(FMLServerAboutToStartEvent event);
+
+	/**
+	 * Called by the system when the world generator is being initialized
+	 * 
+	 * @param event
+	 *            The world generator event
+	 */
+	public void initMapGen(InitMapGenEvent event);
 }

@@ -13,6 +13,7 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import lc.LCRuntime;
 import lc.LanteaCraft;
 import lc.api.audio.ISoundController;
@@ -86,6 +87,7 @@ public class HintProviderServer implements IHintProvider {
 		renderConfiguration = LCRuntime.runtime.config().config(ComponentType.CLIENT);
 		FMLCommonHandler.instance().bus().register(serverHookBus);
 		MinecraftForge.EVENT_BUS.register(serverHookBus);
+		MinecraftForge.TERRAIN_GEN_BUS.register(serverHookBus);
 		ForgeChunkManager.setForcedChunkLoadingCallback(LanteaCraft.instance, chunkLoadCallback);
 	}
 
@@ -144,6 +146,10 @@ public class HintProviderServer implements IHintProvider {
 	public LCLoadedChunkManager chunkLoaders() {
 		return chunkLoadManager;
 	}
+	
+	public LCMasterWorldGen generator() {
+		return worldGenerator;
+	}
 
 	@Override
 	public ISoundController audio() {
@@ -193,6 +199,12 @@ public class HintProviderServer implements IHintProvider {
 	@Override
 	public IParticleMachine particles() {
 		throw new RuntimeException("Particles not permitted on server.");
+	}
+
+	@Override
+	public void initMapGen(InitMapGenEvent event) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

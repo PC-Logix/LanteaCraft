@@ -3,10 +3,12 @@ package lc.common.base.generation;
 import java.util.Random;
 
 import lc.common.LCLog;
+import lc.common.base.generation.decoration.LCChunkDecorator;
 import lc.common.base.generation.scattered.LCScatteredFeatureGenerator;
 import lc.common.base.generation.structure.LCFeatureGenerator;
 import lc.common.util.Tracer;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import cpw.mods.fml.common.IWorldGenerator;
 
@@ -22,10 +24,21 @@ public class LCMasterWorldGen implements IWorldGenerator {
 	protected final LCScatteredFeatureGenerator scatteredGenerator = new LCScatteredFeatureGenerator();
 	/** Special feature generator */
 	protected final LCFeatureGenerator featureGenerator = new LCFeatureGenerator();
+	/** Chunk decorator generator */
+	protected final LCChunkDecorator decorator = new LCChunkDecorator();
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,
 			IChunkProvider chunkProvider) {
+		try {
+			Tracer.begin(this, "chunk decorator pass");
+			Chunk achunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
+			decorator.paint(random, world, achunk, LCChunkData.forChunk(achunk));
+		} catch (Throwable t) {
+			LCLog.warn("Problem decoration chunk.", t);
+		} finally {
+			Tracer.end();
+		}
 		/*
 		 * Ask the master generators to generate all known structures. It
 		 * doesn't matter if the Block[] array is null at this stage.

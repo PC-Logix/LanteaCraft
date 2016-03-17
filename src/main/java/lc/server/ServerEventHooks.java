@@ -1,7 +1,13 @@
 package lc.server;
 
 import lc.LCRuntime;
+import lc.common.base.generation.LCChunkData;
+import lc.common.base.generation.LCWorldData;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.event.terraingen.InitMapGenEvent;
+import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
@@ -43,11 +49,13 @@ public class ServerEventHooks {
 
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event) {
+		LCWorldData.forWorld(event.world);
 		serverHints.universeMgr.loadGalaxy(event);
 	}
 
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
+		LCWorldData.forWorld(event.world).markDirty();
 		serverHints.universeMgr.unloadGalaxy(event);
 		serverHints.stargateMgr.closeConnectionsIn(event.world.provider.dimensionId);
 	}
@@ -57,16 +65,23 @@ public class ServerEventHooks {
 		serverHints.universeMgr.autosaveGalaxy(event);
 	}
 
-	public void onServerStopped(FMLServerStoppedEvent event) {
-		LCRuntime.runtime.network().serverShutdown();
-
+	@SubscribeEvent
+	public void onInitMapGen(InitMapGenEvent e) {
+		serverHints.initMapGen(e);
 	}
 
+	@SubscribeEvent
+	public void onServerStopped(FMLServerStoppedEvent event) {
+		LCRuntime.runtime.network().serverShutdown();
+	}
+
+	@SubscribeEvent
 	public void onServerStarted(FMLServerStartedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@SubscribeEvent
 	public void beforeServerStarted(FMLServerAboutToStartEvent event) {
 		serverHints.trustChain.purge();
 		// TODO: Load the keys from /config/LanteaCraft/trust/ into the chain
@@ -80,6 +95,16 @@ public class ServerEventHooks {
 	@SubscribeEvent
 	public void onPlayerDisconnected(PlayerLoggedOutEvent event) {
 		LCRuntime.runtime.network().playerDisconnected((EntityPlayerMP) event.player);
+	}
+
+	@SubscribeEvent
+	public void onChunkLoad(ChunkDataEvent.Load event) {
+		LCChunkData.onChunkLoad(event);
+	}
+
+	@SubscribeEvent
+	public void onChunkSave(ChunkDataEvent.Save event) {
+		LCChunkData.onChunkSave(event);
 	}
 
 }
