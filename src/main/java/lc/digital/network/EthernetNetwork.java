@@ -3,7 +3,7 @@ package lc.digital.network;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class EthernetNetwork {
+public class EthernetNetwork implements INetwork {
 
 	private HashMap<NetDevicePosition, INetDevice> devices;
 
@@ -27,6 +27,20 @@ public class EthernetNetwork {
 			that.removeDevice(device);
 			this.addDevice(device);
 		}
+	}
+
+	@Override
+	public void sendEvent(INetDevice device, String event, Object[] data) {
+		if (!devices.containsValue(device))
+			return;
+		Iterator<INetDevice> q = devices.values().iterator();
+		while (q.hasNext()) {
+			INetDevice d = q.next();
+			if (d.equals(device))
+				continue;
+			d.receiveEvent(device, event, data);
+		}
+
 	}
 
 }
