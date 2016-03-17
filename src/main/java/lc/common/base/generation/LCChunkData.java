@@ -39,7 +39,6 @@ public class LCChunkData {
 	public static void onChunkSave(ChunkDataEvent.Save e) {
 		Chunk chunk = e.getChunk();
 		LCChunkData data = LCChunkData.forChunk(chunk);
-		LCLog.debug("Performing commit");
 		data.writeToNBT(e.getData());
 		data.dirty = false;
 	}
