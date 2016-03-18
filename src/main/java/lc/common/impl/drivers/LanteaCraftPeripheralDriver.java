@@ -9,7 +9,6 @@ import lc.api.jit.DeviceDrivers.DriverRTCallback;
 import lc.api.jit.ASMTag;
 import lc.api.jit.Tag;
 import lc.common.LCLog;
-import lc.digital.network.INetwork;
 import lc.digital.vm.IDeviceAccess;
 import lc.digital.vm.peripheral.ILCPeripheral;
 
@@ -18,9 +17,9 @@ public class LanteaCraftPeripheralDriver implements ILCPeripheral {
 
 	private String[] lcpd_methodcache;
 	private ArrayList<IDeviceAccess> lcpd_devices;
-	
+
 	private void lcpd_assertReady() {
-		if (this.lcpd_devices == null) 
+		if (this.lcpd_devices == null)
 			this.lcpd_devices = new ArrayList<IDeviceAccess>();
 	}
 
