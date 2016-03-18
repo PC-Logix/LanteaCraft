@@ -23,6 +23,7 @@ import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.network.packets.LCClientUpdate;
 import lc.common.network.packets.LCTileSync;
+import lc.common.util.ReflectionHelper;
 import lc.common.util.Tracer;
 import lc.common.util.java.DestructableReferenceQueue;
 import lc.common.util.math.DimensionPos;
@@ -150,11 +151,10 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		for (String methodName : methods)
 			for (Method invoke : meMethods)
 				if (invoke.getName().equalsIgnoreCase(methodName)) {
+					if (aparams == null)
+						aparams = new Object[] { meObject };
 					try {
-						if (aparams == null)
-							invoke.invoke(meObject, new Object[] { (LCTile) meObject });
-						else
-							invoke.invoke(meObject, aparams);
+						ReflectionHelper.invokeWithExpansions(meObject, invoke, aparams);
 					} catch (Throwable t) {
 						LCLog.warn("Error when processing callback %s!", methodName, t);
 					}

@@ -1,7 +1,12 @@
 package lc.common.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import lc.common.LCLog;
+import lc.common.base.LCTile;
 
 /**
  * Reflection utilities
@@ -40,5 +45,25 @@ public class ReflectionHelper {
 					ifaces.add(super_iface);
 		}
 		return ifaces;
+	}
+
+	public static void invokeWithExpansions(Object target, Method method, Object[] parameters)
+			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Class<?>[] types = method.getParameterTypes();
+		boolean flag = method.isVarArgs();
+
+		Object[] paramFills = new Object[types.length];
+		for (int i = 0; i < types.length; i++) {
+			if (i == (types.length - 1) && flag) {
+				/* remaining args are varargs */
+				Object[] varargs = new Object[parameters.length - types.length];
+				for (int j = 0; j < varargs.length; j++)
+					varargs[j] = parameters[types.length - 1 + j];
+				paramFills[i] = varargs;
+			} else {
+				paramFills[i] = parameters[i];
+			}
+		}
+		method.invoke(target, paramFills);
 	}
 }
