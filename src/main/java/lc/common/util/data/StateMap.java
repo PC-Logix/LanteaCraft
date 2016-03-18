@@ -1,6 +1,7 @@
 package lc.common.util.data;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * An untyped map of states.
@@ -54,5 +55,25 @@ public class StateMap {
 	 */
 	public void set(String index, Object value) {
 		state.put(index, value);
+	}
+
+	/**
+	 * Set all values from a named map into this map.
+	 * 
+	 * @param values
+	 *            The named HashMap
+	 */
+	public void setAllNamed(HashMap<String, Object> values) {
+		for (Entry<String, Object> entry : values.entrySet())
+			set(entry.getKey(), entry.getValue());
+	}
+
+	/**
+	 * Get the raw underlying map in the state.
+	 * 
+	 * @return The raw map
+	 */
+	public HashMap<String, Object> raw() {
+		return state;
 	}
 }

@@ -2,6 +2,7 @@ package lc.tiles;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
@@ -36,6 +37,7 @@ import lc.common.base.multiblock.StructureConfiguration;
 import lc.common.configuration.xml.ComponentConfig;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
+import lc.common.network.packets.LCRenderSuggestPacket;
 import lc.common.network.packets.LCStargateConnectionPacket;
 import lc.common.network.packets.LCStargateStatePacket;
 import lc.common.network.packets.LCTileSync;
@@ -63,6 +65,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -738,7 +741,14 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				clientSeenState = false;
 			} else {
 				notifyConnectionState(currentConnection);
+				suggestRenderState(player);
 			}
+		}
+		if (packet instanceof LCRenderSuggestPacket) {
+			if (getWorldObj().isRemote) {
+				handleRenderState((LCRenderSuggestPacket) packet);
+			} else
+				LCLog.warn("Unexpected LCRenderSuggestPacket from client %s.", player);
 		}
 		if (packet instanceof LCStargateStatePacket) {
 			LCStargateStatePacket state = (LCStargateStatePacket) packet;
@@ -746,6 +756,32 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					state.args);
 			thinkClientCommand(cmd);
 		}
+	}
+
+	private void handleRenderState(LCRenderSuggestPacket packet) {
+		StateMap suggest = packet.toStateMap();
+		tileRenderState().set("iris", suggest.get("iris"));
+		tileRenderState().set("event-horizon", suggest.get("event-horizon"));
+		for (int i = 0; i < 9; i++) {
+			boolean flag = suggest.get("chevron-state-" + i);
+			if (flag) {
+				tileRenderState().set("chevron-dist-" + i, 1.0d / 8.0d);
+				tileRenderState().set("chevron-light-" + i, 0.5d);
+			} else {
+				tileRenderState().set("chevron-dist-" + i, 0.0d);
+				tileRenderState().set("chevron-light-" + i, 0.0d);
+			}
+		}
+	}
+
+	private void suggestRenderState(EntityPlayer player) {
+		HashMap<String, Object> interest = new HashMap<String, Object>();
+		interest.put("iris", getIrisState() == IrisState.CLOSED);
+		interest.put("event-horizon", hasConnectionState());
+		for (int i = 0; i < 9; i++)
+			interest.put("chevron-state-" + i, getActivatedChevrons() > i);
+		LCRenderSuggestPacket packet = new LCRenderSuggestPacket(new DimensionPos(this), interest);
+		sendPacketToClient(packet, (EntityPlayerMP) player);
 	}
 
 	@Override
