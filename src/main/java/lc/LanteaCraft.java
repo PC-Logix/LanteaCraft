@@ -2,7 +2,6 @@ package lc;
 
 import lc.common.LCLog;
 import lc.common.util.Tracer;
-import net.minecraftforge.event.terraingen.InitMapGenEvent;
 
 import org.apache.logging.log4j.Level;
 
@@ -18,7 +17,6 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.FMLRelaunchLog;
 
 /**

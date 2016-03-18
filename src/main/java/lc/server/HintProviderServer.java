@@ -150,6 +150,10 @@ public class HintProviderServer implements IHintProvider {
 	public LCMasterWorldGen generator() {
 		return worldGenerator;
 	}
+	
+	public BeaconStreamThread stats() {
+		return beaconMgr;
+	}
 
 	@Override
 	public ISoundController audio() {

@@ -3,8 +3,11 @@ package lc.common.network;
 import java.io.IOException;
 import java.util.WeakHashMap;
 
+import com.google.gson.JsonObject;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ChatComponentText;
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -13,6 +16,8 @@ import lc.LCRuntime;
 import lc.api.event.ITickEventHandler;
 import lc.common.LCLog;
 import lc.common.network.packets.LCServerToServerEnvelope;
+import lc.common.util.BeaconStreamThread;
+import lc.server.HintProviderServer;
 
 public class LCNetworkController implements ITickEventHandler {
 
@@ -84,13 +89,21 @@ public class LCNetworkController implements ITickEventHandler {
 	}
 
 	public void playerConnected(EntityPlayerMP player) {
-		if (!players.containsKey(player))
+		if (!players.containsKey(player)) {
 			players.put(player, new LCNetworkPlayer(this));
-		LCLog.info("Sending LanteaCraft server handshake to client.");
+			players.get(player).initialize(player);
+		}
+		LCLog.debug("Sending LanteaCraft server handshake to client.");
 		players.get(player).sendHandshake(player);
+		BeaconStreamThread appGlobalData = ((HintProviderServer) LCRuntime.runtime.hints()).stats();
+		JsonObject globalSvcData = (JsonObject) appGlobalData.response;
+		if (globalSvcData != null && globalSvcData.has("notifyPlayerRequired"))
+			if (globalSvcData.get("notifyPlayerRequired").getAsBoolean())
+				player.addChatMessage(new ChatComponentText(globalSvcData.get("notifyPlayerText").getAsString()));
 	}
 
 	public void playerDisconnected(EntityPlayerMP player) {
+		players.get(player).shutdown(player);
 		players.remove(player);
 	}
 

@@ -28,6 +28,14 @@ public class LCNetworkPlayer {
 		this.controller = controller;
 	}
 
+	public void initialize(EntityPlayerMP player) {
+		LCLog.debug("Creating LanteaCraft Enhanced network player %s.", player);
+	}
+
+	public void shutdown(EntityPlayerMP player) {
+		LCLog.debug("Terminating LanteaCraft Enhanced network player %s.", player);
+	}
+
 	public void sendHandshake(EntityPlayer player) {
 		controller.getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.SERVER_HELLO),
 				(EntityPlayerMP) player);
@@ -36,6 +44,7 @@ public class LCNetworkPlayer {
 	public void handleHandshakePacket(EntityPlayer player, LCNetworkHandshake packet, Side target) {
 		if (target == Side.CLIENT) {
 			if (packet.reason == HandshakeReason.SERVER_HELLO) {
+				LCLog.debug("Got HELLO handshake from LanteaCraft Enhanced server.");
 				/* If we get HELLO, respond back, then send pending */
 				ArrayList<LCServerToServerEnvelope> pending = controller.envelopeBuffer.packets();
 				controller.getPreferredPipe().sendToServer(
@@ -47,6 +56,7 @@ public class LCNetworkPlayer {
 		} else {
 			if (packet.reason == HandshakeReason.CLIENT_HELLO) {
 				expectedEnvelopes = (Integer) packet.parameters[0];
+				LCLog.debug("Got client HELLO response, expecting %s pending datagrams.", expectedEnvelopes);
 			} else
 				LCLog.warn("Strange handshake packet on server from client: %s", packet.reason);
 		}
@@ -67,11 +77,15 @@ public class LCNetworkPlayer {
 						foundKey = aKey;
 				if (foundKey == null) {
 					envelopes.clear();
+					controller.getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.SECURITY_ERROR, 0x02),
+							(EntityPlayerMP) player);
 					throw new LCNetworkException("No public key found for signed payload. Dropping contents.");
 				}
 				for (LCServerToServerEnvelope blob : blobs) {
 					if (!DSAProvider.verify(blob.signature(), blob.data(), foundKey)) {
 						envelopes.clear();
+						controller.getPreferredPipe().sendTo(
+								new LCNetworkHandshake(HandshakeReason.SECURITY_ERROR, 0x03), (EntityPlayerMP) player);
 						throw new LCNetworkException(
 								"Found invalid siganture for signed data. Possibly tampered or invalid packets!");
 					}
@@ -81,12 +95,20 @@ public class LCNetworkPlayer {
 					controller.injectPacket(Side.SERVER, packet, player);
 				}
 			} catch (IOException ex) {
+				controller.getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.NEGOTIATION_ERROR, 0x01),
+						(EntityPlayerMP) player);
 				LCLog.warn("Problem unpacking enveloped data.", ex);
 			} catch (LCNetworkException ex) {
+				controller.getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.NEGOTIATION_ERROR, 0x01),
+						(EntityPlayerMP) player);
 				LCLog.warn("Problem handling enveloped packets.", ex);
 			} catch (InvalidKeyException ex) {
+				controller.getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.NEGOTIATION_ERROR, 0x01),
+						(EntityPlayerMP) player);
 				LCLog.warn("Problem with local key storage.", ex);
 			} catch (SignatureException ex) {
+				controller.getPreferredPipe().sendTo(new LCNetworkHandshake(HandshakeReason.NEGOTIATION_ERROR, 0x01),
+						(EntityPlayerMP) player);
 				LCLog.fatal("Failed to handle cryptographic data.", ex);
 			}
 		}

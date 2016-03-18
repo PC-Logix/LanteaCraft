@@ -9,7 +9,7 @@ import lc.common.network.LCPacket;
 public class LCNetworkHandshake extends LCPacket {
 
 	public static enum HandshakeReason {
-		SERVER_HELLO, CLIENT_HELLO;
+		SERVER_HELLO, CLIENT_HELLO, NEGOTIATION_ERROR, SECURITY_ERROR;
 	}
 
 	public HandshakeReason reason;
