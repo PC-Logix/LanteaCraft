@@ -751,10 +751,16 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				LCLog.warn("Unexpected LCRenderSuggestPacket from client %s.", player);
 		}
 		if (packet instanceof LCStargateStatePacket) {
-			LCStargateStatePacket state = (LCStargateStatePacket) packet;
-			StargateCommand cmd = new StargateCommand(StargateCommandType.values()[state.type], state.duration,
-					state.args);
-			thinkClientCommand(cmd);
+			if (getWorldObj().isRemote) {
+				LCStargateStatePacket state = (LCStargateStatePacket) packet;
+				StargateCommand cmd = new StargateCommand(StargateCommandType.values()[state.type], state.duration,
+						state.args);
+				thinkClientCommand(cmd);
+			} else {
+				LCStargateStatePacket state = (LCStargateStatePacket) packet;
+				commandQueue.add(new StargateCommand(StargateCommandType.values()[state.type], state.duration,
+						state.args));
+			}
 		}
 	}
 
@@ -782,6 +788,17 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			interest.put("chevron-state-" + i, getActivatedChevrons() > i);
 		LCRenderSuggestPacket packet = new LCRenderSuggestPacket(new DimensionPos(this), interest);
 		sendPacketToClient(packet, (EntityPlayerMP) player);
+	}
+	
+	private void handleCommandDispatch(StargateCommand command) {
+		if (getWorldObj().isRemote) {
+			LCStargateStatePacket packet = new LCStargateStatePacket(new DimensionPos(this), command.type.ordinal(),
+					command.duration, command.args);
+			LCLog.debug("sendCommandToServer: %s %s %s", command.type, command.duration, command.args);
+			LCRuntime.runtime.network().getPreferredPipe().sendToServer(packet);
+		} else {
+			commandQueue.add(command);
+		}
 	}
 
 	@Override
@@ -935,7 +952,8 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	public void selectGlyph(char glyph) {
 		try {
 			StargateCharsetHelper.singleton().index(glyph);
-			commandQueue.add(new StargateCommand(StargateCommandType.SPIN, stargateSpinTime, glyph));
+			StargateCommand cmd = new StargateCommand(StargateCommandType.SPIN, stargateSpinTime, glyph);
+			handleCommandDispatch(cmd);
 		} catch (NumberFormatException format) {
 		}
 	}
@@ -943,13 +961,13 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void activateChevron() {
-		commandQueue.add(new StargateCommand(StargateCommandType.ENGAGE, stargateChevronMoveTime));
+		handleCommandDispatch(new StargateCommand(StargateCommandType.ENGAGE, stargateChevronMoveTime));
 	}
 
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void deactivateChevron() {
-		commandQueue.add(new StargateCommand(StargateCommandType.DISENGAGE, stargateChevronMoveTime));
+		handleCommandDispatch(new StargateCommand(StargateCommandType.DISENGAGE, stargateChevronMoveTime));
 	}
 
 	@Override
@@ -977,25 +995,25 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void engageStargate() {
-		commandQueue.add(new StargateCommand(StargateCommandType.CONNECT, stargateConnectTimeout));
+		handleCommandDispatch(new StargateCommand(StargateCommandType.CONNECT, stargateConnectTimeout));
 	}
 
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void disengageStargate() {
-		commandQueue.add(new StargateCommand(StargateCommandType.DISCONNECT, stargateSpinTime));
+		handleCommandDispatch(new StargateCommand(StargateCommandType.DISCONNECT, stargateSpinTime));
 	}
 
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void openIris() {
-		commandQueue.add(new StargateCommand(StargateCommandType.OPENIRIS, stargateIrisSpeed));
+		handleCommandDispatch(new StargateCommand(StargateCommandType.OPENIRIS, stargateIrisSpeed));
 	}
 
 	@Override
 	@Tag(name = "ComputerCallable")
 	public void closeIris() {
-		commandQueue.add(new StargateCommand(StargateCommandType.CLOSEIRIS, stargateIrisSpeed));
+		handleCommandDispatch(new StargateCommand(StargateCommandType.CLOSEIRIS, stargateIrisSpeed));
 	}
 
 	@Override
