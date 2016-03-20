@@ -27,11 +27,17 @@ public class GUIHandler implements IGuiHandler {
 		LCLog.doAssert(def != null, "Can't handle server GUI request for element ID %s.", id);
 		try {
 			String containerClass = def.getContainerClass();
-			LCLog.debug("Creating container %s", containerClass);
-			TileEntity tile = world.getTileEntity(x, y, z);
-			Class<?> container = Class.forName(containerClass);
-			Constructor<?> constr = container.getConstructor(new Class<?>[] { tile.getClass(), EntityPlayer.class });
-			return constr.newInstance(tile, player);
+			if (containerClass != null) {
+				LCLog.debug("Creating container %s", containerClass);
+				TileEntity tile = world.getTileEntity(x, y, z);
+				Class<?> container = Class.forName(containerClass);
+				Constructor<?> constr = container
+						.getConstructor(new Class<?>[] { tile.getClass(), EntityPlayer.class });
+				return constr.newInstance(tile, player);
+			} else {
+				LCLog.warn("Attempted to open client-side only UI %s on server.", def.getName());
+				return null;
+			}
 		} catch (Throwable t) {
 			LCLog.warn("Failed to create container object!", t);
 			return null;
