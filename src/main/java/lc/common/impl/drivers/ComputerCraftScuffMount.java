@@ -12,6 +12,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import lc.LanteaCraft;
+import lc.common.LCLog;
 import dan200.computercraft.api.filesystem.IMount;
 
 /**
@@ -22,6 +24,13 @@ import dan200.computercraft.api.filesystem.IMount;
  *
  */
 public class ComputerCraftScuffMount implements IMount {
+
+	public static ComputerCraftScuffMount generateMount() {
+		String path = LanteaCraft.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		if (path.indexOf("!") >= 0)
+			path = path.substring(0, path.indexOf("!"));
+		return new ComputerCraftScuffMount(new File(path), "assets/pcl_lc/drivers/support/computercraft");
+	}
 
 	/**
 	 * Mounted file
@@ -90,6 +99,17 @@ public class ComputerCraftScuffMount implements IMount {
 		if (!isFilesystemMount())
 			mountDataArchive = new ZipFile(mountFile);
 		prepareDataIndex();
+	}
+
+	public void shutdown() {
+		try {
+			if (mountDataArchive != null)
+				mountDataArchive.close();
+		} catch (IOException ioex) {
+			LCLog.debug("Problem shutting down virtual filesystem.", ioex);
+		} finally {
+			mountDataArchive = null;
+		}
 	}
 
 	public boolean isFilesystemMount() {

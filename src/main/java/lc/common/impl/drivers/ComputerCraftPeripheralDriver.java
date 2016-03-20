@@ -2,16 +2,15 @@ package lc.common.impl.drivers;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.tileentity.TileEntity;
-import lc.LanteaCraft;
 import lc.api.components.IntegrationType;
 import lc.api.jit.DeviceDrivers.DriverProvider;
 import lc.api.jit.DeviceDrivers.DriverRTCallback;
 import lc.api.jit.ASMTag;
 import lc.api.jit.Tag;
 import lc.common.LCLog;
-import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -22,6 +21,7 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 
 	private String[] computercraft_methodcache;
 	private ArrayList<IComputerAccess> computercraft_icalist;
+	private HashMap<IComputerAccess, ComputerCraftScuffMount> computercraft_mounts;
 
 	public ComputerCraftPeripheralDriver() {
 		// TODO Auto-generated constructor stub
@@ -30,6 +30,7 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 	private void computercraft_assertReady() {
 		if (computercraft_icalist == null) {
 			computercraft_icalist = new ArrayList<IComputerAccess>();
+			computercraft_mounts = new HashMap<IComputerAccess, ComputerCraftScuffMount>();
 		}
 	}
 
@@ -105,8 +106,14 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 		synchronized (computercraft_icalist) {
 			computercraft_icalist.add(computer);
 		}
-		computer.mount("/lanteacraft", ComputerCraftAPI.createResourceMount(LanteaCraft.class, "pcl_lc",
-				"drivers/support/computercraft/software"));
+		try {
+			ComputerCraftScuffMount mount = ComputerCraftScuffMount.generateMount();
+			mount.init();
+			computercraft_mounts.put(computer, mount);
+			computer.mount("/lanteacraft", mount);
+		} catch (Exception ex) {
+			LCLog.fatal("Unable to generate Computer mount.", ex);
+		}
 	}
 
 	@Override
@@ -115,7 +122,15 @@ public class ComputerCraftPeripheralDriver implements IPeripheral {
 		synchronized (computercraft_icalist) {
 			computercraft_icalist.remove(computer);
 		}
-		computer.unmount("/lanteacraft");
+		try {
+			computer.unmount("/lanteacraft");
+			ComputerCraftScuffMount mount = computercraft_mounts.get(computer);
+			if (mount != null)
+				mount.shutdown();
+		} catch (Exception ex) {
+			LCLog.fatal("Unable to garbage collect Computer mount.", ex);
+		}
+
 	}
 
 	@Override
