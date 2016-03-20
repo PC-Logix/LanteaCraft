@@ -179,9 +179,11 @@ public class LCInit {
 		interfaces.stargateUI = new InterfaceDefinition("stargateUI", "lc.container.ContainerStargate",
 				"lc.gui.GUIStargate");
 		interfaces.dhdUI = new InterfaceDefinition("dhdUI", "lc.container.ContainerDHD", "lc.gui.GUIDHD");
+		interfaces.dhdPortableUI = new InterfaceDefinition("dhdPortableUI", null, "lc.gui.GUIPortableDHD");
 		interfaces.gdoUI = new InterfaceDefinition("gdoUI", null, "lc.gui.GUIGDO");
 		runtime.registries().interfaces().addDefinition(interfaces.stargateUI);
 		runtime.registries().interfaces().addDefinition(interfaces.dhdUI);
+		runtime.registries().interfaces().addDefinition(interfaces.dhdPortableUI);
 		runtime.registries().interfaces().addDefinition(interfaces.gdoUI);
 
 	}
