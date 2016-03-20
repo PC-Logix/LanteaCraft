@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,10 @@ public class ComputerCraftScuffMount implements IMount {
 		String path = LanteaCraft.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		if (path.indexOf("!") >= 0)
 			path = path.substring(0, path.indexOf("!"));
+		if (path.endsWith(".class")) { /* expanded BIN */
+			path = path.replace("lc/LanteaCraft.class", "");
+		}
+		LCLog.debug("Working path: %s", path);
 		return new ComputerCraftScuffMount(new File(path), "assets/pcl_lc/drivers/support/computercraft");
 	}
 
@@ -99,6 +104,10 @@ public class ComputerCraftScuffMount implements IMount {
 		if (!isFilesystemMount())
 			mountDataArchive = new ZipFile(mountFile);
 		prepareDataIndex();
+		if (!index.isDirectory())
+			LCLog.warn("Failed to generate directory");
+		if (index.subfiles.isEmpty())
+			LCLog.warn("Didn't index any files");
 	}
 
 	public void shutdown() {
@@ -182,7 +191,12 @@ public class ComputerCraftScuffMount implements IMount {
 			path = path.substring(1); /* no lead */
 		if (path.endsWith("/")) /* trail slash? */
 			path = path.substring(0, path.length() - 1); /* no trail */
-		return path.split("/"); /* break it */
+		String[] bits = path.trim().split("/"); /* break it */
+		ArrayList<String> result = new ArrayList<String>();
+		for (String bit : bits)
+			if (bit.length() != 0)
+				result.add(bit);
+		return result.toArray(new String[0]);
 	}
 
 	private ScuffMappedFile fileForPath(String path) {
