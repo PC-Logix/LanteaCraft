@@ -17,7 +17,7 @@ import lc.tiles.TileTransportRing;
  * @author AfterLifeLochie
  *
  */
-@Definition(name = "blockTransportRing", type = ComponentType.STARGATE, blockClass = BlockTransportRing.class, itemBlockClass = ItemBlockTransportRing.class, tileClass = TileTransportRing.class)
+@Definition(name = "blockTransportRing", type = ComponentType.MACHINE, blockClass = BlockTransportRing.class, itemBlockClass = ItemBlockTransportRing.class, tileClass = TileTransportRing.class)
 public class BlockTransportRing extends LCBlock {
 
 	IIcon topAndBottomTexture;
