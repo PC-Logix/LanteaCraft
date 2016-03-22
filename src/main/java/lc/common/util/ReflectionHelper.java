@@ -47,11 +47,11 @@ public class ReflectionHelper {
 	public static void invokeWithExpansions(Object target, Method method, Object[] parameters)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Class<?>[] types = method.getParameterTypes();
-		boolean flag = method.isVarArgs();
+		boolean flag = method.isVarArgs(), flag1 = (parameters.length - types.length) > 0;
 
 		Object[] paramFills = new Object[types.length];
 		for (int i = 0; i < types.length; i++) {
-			if (i == (types.length - 1) && flag) {
+			if (i == (types.length - 1) && flag && flag1) {
 				/* remaining args are varargs */
 				Object[] varargs = new Object[parameters.length - types.length];
 				for (int j = 0; j < varargs.length; j++)
