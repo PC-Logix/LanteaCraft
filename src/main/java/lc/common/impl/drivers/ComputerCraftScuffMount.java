@@ -28,10 +28,15 @@ public class ComputerCraftScuffMount implements IMount {
 
 	public static ComputerCraftScuffMount generateMount() {
 		String path = LanteaCraft.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		if (path.indexOf("!") >= 0)
+		if (path.indexOf("!") >= 0) /* inside JAR? */
 			path = path.substring(0, path.indexOf("!"));
 		if (path.endsWith(".class")) { /* expanded BIN */
 			path = path.replace("lc/LanteaCraft.class", "");
+			path = path.replace("lc\\LanteaCraft.class", "");
+		}
+		if (path.startsWith("file")) { /* has URI suffix? */
+			path = path.replace("file:\\", "");
+			path = path.replace("file:/", "");
 		}
 		LCLog.debug("Working path: %s", path);
 		return new ComputerCraftScuffMount(new File(path), "assets/pcl_lc/drivers/support/computercraft");
