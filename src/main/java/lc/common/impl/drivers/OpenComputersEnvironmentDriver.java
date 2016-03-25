@@ -12,8 +12,8 @@ import lc.common.impl.drivers.OpenComputersDriverManager.IOCManagedEnvPerp;
 import lc.common.resource.ResourceAccess;
 import li.cil.oc.api.FileSystem;
 import li.cil.oc.api.Network;
-import li.cil.oc.api.network.Arguments;
-import li.cil.oc.api.network.Context;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.Visibility;
@@ -137,5 +137,6 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 			throw new Exception(exception.getMessage());
 		}
 	}
+
 
 }

@@ -1,6 +1,10 @@
 package li.cil.oc.api.detail;
 
-import li.cil.oc.api.network.*;
+import li.cil.oc.api.network.Environment;
+import li.cil.oc.api.network.Node;
+import li.cil.oc.api.network.Packet;
+import li.cil.oc.api.network.Visibility;
+import li.cil.oc.api.network.WirelessEndpoint;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -75,6 +79,19 @@ public interface NetworkAPI {
      * @param endpoint the endpoint to remove from the wireless network.
      */
     void leaveWirelessNetwork(WirelessEndpoint endpoint);
+
+    /**
+     * Removes a wireless endpoint from the wireless network of a specific dimension.
+     * <p/>
+     * This may be useful if the dimension of an endpoint changed and you can only
+     * react to that change (e.g. a player changing dimensions).
+     * <p/>
+     * Calling this for an endpoint that was not added before does nothing.
+     *
+     * @param endpoint  the endpoint to remove from the wireless network.
+     * @param dimension the dimension with the wireless network to remove the endpoint from.
+     */
+    void leaveWirelessNetwork(WirelessEndpoint endpoint, int dimension);
 
     /**
      * Sends a packet via the wireless network.
