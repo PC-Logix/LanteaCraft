@@ -1,9 +1,8 @@
 # Stargate DHD controller
-tile.DHD.0.name=DHD
-tile.DHD.1.name=Pegasus DHD
-tile.DHD.2.name=Wraith DHD
-tile.DHD.3.name=Nox DHD
-item.portableDHD.name=Tragbares DHD
+tile.DHD0.name=DHD
++tile.DHD1.name=Pegasus DHD
++tile.DHD2.name=Wraith DHD
++tile.DHD3.name=Nox DHD
 
 # Stargate Base & settings screens
 tile.stargateBase.0.name=Stargate Basis
@@ -29,9 +28,6 @@ item.gdo.name=GDO
 # Power-related items
 item.energyCrystal.name=Energie Kristall
 item.zpm.name=ZPM
-
-# Weapons
-item.itemStaff.name=Stabwaffe
 
 # Crafting reagents
 item.craftingReagent.0.name=Zerbrochenes Reagens
@@ -71,16 +67,6 @@ tile.lanteaSteelDecorStair.name=Verzierte Antiker Stahltreppe
 # Decor glass
 tile.lanteaGlassDecor.1.name=Antiker Glas
 
-# Decor obelisks
-tile.blockObelisk.0.name=Obelisk
-tile.blockObelisk.1.name=Obelisk
-tile.blockObelisk.2.name=Obelisk
-
-# Decor braziers
-tile.blockBrazier.0.name=Obelisk
-tile.blockBrazier.1.name=Obelisk
-tile.blockBrazier.2.name=Obelisk
-
 # Ore / Ore blocks
 tile.lanteaOre.0.name=Naquadah Erz
 item.lanteaOre.0.name=Naquadah
@@ -90,16 +76,15 @@ tile.lanteaOre.2.name=Trinium Erz
 item.lanteaOre.2.name=Trinium
 
 # Machines
-tile.frame.name=Konstruktionsrahmen
 tile.naquadahGenerator.name=Naquadah Generator
 tile.blockCrystalInfuser.name=Kristall Infuser
-tile.blockConfigurator.name=Configurator
 
 # Help Notebook
 item.jacksonNotebook.name=Daniel Jackson's Notizbuch
 
 # Transporter Rings
-tile.blockTransportRing.name=Ringtransporter Kontroller
+tile.transporterRing.0.name=Ringtransporter Rahmen 
+tile.transporterRing.1.name=Ringtransporter Kontroller
 item.transportRingActivator.name=Ringtransporter Aktivator
 
 # Debug and other items
@@ -108,17 +93,12 @@ item.debugGlasses.name=AfterLifeLochie's Glasses
 # Integration blocks and items
 tile.integration.computercraft.name=ComputerCraft Adapter
 
-# Decorator
-item.decorator.name=Decorator
-
 # Death messages
 death.attack.wormhole_transient=%1$s wurde vom Ereignishorizont in Stücke gerissen.
-death.attack.pcl_lc:iris=%1$s dematerialisierte an einer verschlossenen Iris.
 
 # Interfaces
 lc.interface.stargate.name=Stargate
 lc.interface.redstone.name=Redstone
-lc.interface.dhd.name=DHD
 
 lc.interface.storage.items=Items
 lc.interface.storage.fluids=Flüssigkeiten
