@@ -12,7 +12,11 @@ public enum IrisState {
 	/** Iris is open */
 	OPEN,
 	/** Iris is closed */
-	CLOSED;
+	CLOSED,
+	/** Iris is opening */
+	OPENING,
+	/** Iris is closing */
+	CLOSING;
 
 	/**
 	 * Find an iris state from an ordinal

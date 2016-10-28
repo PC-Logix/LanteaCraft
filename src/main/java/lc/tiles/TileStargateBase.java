@@ -207,6 +207,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	private ArrayList<TrackedEntity> trackedEntities = new ArrayList<TrackedEntity>();
 
 	private IrisState irisState;
+	private double irisTimer = 0.0d;
 
 	private Block clientSkinBlock = null;
 	private int clientSkinBlockMetadata;
@@ -615,17 +616,19 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 					break;
 				case CLOSEIRIS:
 					if (getIrisType() != null) {
-						if (getIrisState() != IrisState.CLOSED) {
-							irisState = IrisState.CLOSED;
-							LCTile.doCallbacksNow(this, "computerEvent", "irisClosed", null);
+						if (getIrisState() == IrisState.OPEN) {
+							irisTimer = stargateIrisSpeed;
+							irisState = IrisState.CLOSING;
+							LCTile.doCallbacksNow(this, "computerEvent", "irisClosing", null);
 							doCommand = true;
 						}
 					}
 					break;
 				case OPENIRIS:
-					if (getIrisState() != IrisState.OPEN) {
-						irisState = IrisState.OPEN;
-						LCTile.doCallbacksNow(this, "computerEvent", "irisOpened", null);
+					if (getIrisState() == IrisState.CLOSED) {
+						irisTimer = stargateIrisSpeed;
+						irisState = IrisState.OPENING;
+						LCTile.doCallbacksNow(this, "computerEvent", "irisOpening", null);
 						doCommand = true;
 					}
 					break;
@@ -652,24 +655,45 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	private void thinkServerIris() {
 		if (inventory.getStackInSlot(0) != null && inventory.getStackInSlot(0).stackSize > 0) {
+			if (irisState == null || irisState == IrisState.NONE)
+				irisState = IrisState.OPEN;
 			ItemStack stack = inventory.getStackInSlot(0);
 			ItemIrisUpgrade upgrade = (ItemIrisUpgrade) stack.getItem();
+
+			IrisState is = getIrisState();
+			if (is == IrisState.OPENING || is == IrisState.CLOSING) {
+				irisTimer -= 1.0;
+				if (irisTimer <= 0.0) {
+					if (is == IrisState.OPENING) {
+						irisState = IrisState.OPEN;
+						LCTile.doCallbacksNow(this, "computerEvent", "irisOpened", null);
+					}
+					if (is == IrisState.CLOSING) {
+						irisState = IrisState.CLOSED;
+						LCTile.doCallbacksNow(this, "computerEvent", "irisClosed", null);
+					}
+				}
+			}
+
 			if (upgrade.getIrisDamage(stack) > upgrade.getMaximumDamage(upgrade.getType(stack))) {
 				inventory.setInventorySlotContents(0, null);
 				inventory.markDirty();
 				LCTile.doCallbacksNow(this, "computerEvent", "irisDestroyed", null);
-				openIris();
+				irisState = IrisState.OPEN;
+				suggestRenderStateVisible();
 			} else {
 				LCBlock block = (LCBlock) getBlockType();
 				boolean power = block.isGettingAnyInput(worldObj, xCoord, yCoord, zCoord);
 				if (power) {
-					if (getIrisType() != null & getIrisState() != IrisState.CLOSED)
+					if (getIrisType() != null & is == IrisState.OPEN)
 						closeIris();
 				} else {
-					if (getIrisType() != null & getIrisState() != IrisState.OPEN)
+					if (getIrisType() != null & is == IrisState.CLOSED)
 						openIris();
 				}
 			}
+		} else {
+			irisState = IrisState.NONE;
 		}
 	}
 
@@ -702,9 +726,16 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		return Vector3.makeAABB(min, max);
 	}
 
+	/**
+	 * This is explicitly not defined as SideOnly.CLIENT since we use it to
+	 * determine who is in visible range of the Stargate. 30000 is the
+	 * theoretical maximum MRDS value, unless a mod is used to increase that.
+	 * 
+	 * TODO: Turn this into a configuration option.
+	 */
 	@Override
 	public double getMaxRenderDistanceSquared() {
-		return 999999999.0D;
+		return 90000;
 	}
 
 	@Override
@@ -780,16 +811,29 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 		}
 	}
 
+	private void suggestRenderStateVisible() {
+		for (Object o : getWorldObj().playerEntities) {
+			if (o instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) o;
+				double dt = Math.pow(player.getDistance(xCoord, yCoord, zCoord), 2);
+				if (dt < getMaxRenderDistanceSquared()) {
+					suggestRenderState(player);
+				}
+			}
+		}
+	}
+
 	private void suggestRenderState(EntityPlayer player) {
 		HashMap<String, Object> interest = new HashMap<String, Object>();
-		interest.put("iris", getIrisState() == IrisState.CLOSED);
+		IrisState is = getIrisState();
+		interest.put("iris", is == IrisState.CLOSING || is == IrisState.CLOSED);
 		interest.put("event-horizon", hasConnectionState());
 		for (int i = 0; i < 9; i++)
 			interest.put("chevron-state-" + i, getActivatedChevrons() > i);
 		LCRenderSuggestPacket packet = new LCRenderSuggestPacket(new DimensionPos(this), interest);
 		sendPacketToClient(packet, (EntityPlayerMP) player);
 	}
-	
+
 	private void handleCommandDispatch(StargateCommand command) {
 		if (getWorldObj().isRemote) {
 			LCStargateStatePacket packet = new LCStargateStatePacket(new DimensionPos(this), command.type.ordinal(),
