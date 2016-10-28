@@ -37,24 +37,4 @@ public class ComputerCraftDriverManager {
 		ComputerCraftAPI.registerPeripheralProvider(provider);
 	}
 
-	public static Object performCastToType(Object xx, Class<?> yy) throws Exception {
-		LCLog.debug("ComputerCraft driver: perform cast: %s to %s", xx.getClass().getName(), yy.getName());
-		if (yy == Character.class || yy == char.class) {
-			if (!(xx instanceof String))
-				throw new Exception("Cannot cast " + xx.getClass().getSimpleName() + " to Character");
-			String xxx = (String) xx;
-			if (xxx.length() != 1)
-				throw new Exception("Illegal Character length.");
-			return xxx.charAt(0);
-		}
-		return xx;
-	}
-
-	public static Object castToComputerSafe(Object aresult) {
-		if (aresult instanceof Enumeration) {
-			return ((Enumeration) aresult).toString();
-		}
-		return aresult;
-	}
-
 }

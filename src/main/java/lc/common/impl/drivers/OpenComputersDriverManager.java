@@ -37,35 +37,6 @@ public class OpenComputersDriverManager implements Block {
 		return (IOCManagedEnvPerp) tile;
 	}
 
-	public static Object performCastToType(Object xx, Class<?> yy) throws Exception {
-		LCLog.debug("ComputerCraft driver: perform cast: %s to %s", xx.getClass().getName(), yy.getName());
-		if (yy == Character.class || yy == char.class) {
-			if (!(xx instanceof byte[]))
-				throw new Exception("Cannot cast " + xx.getClass().getSimpleName() + " to Character");
-			byte[] xxx = (byte[]) xx;
-			if (xxx.length != 1)
-				throw new Exception("Illegal Character length.");
-			return (char) xxx[0];
-		}
-		if (yy == String.class) {
-			if (!(xx instanceof byte[]))
-				throw new Exception("Cannot cast " + xx.getClass().getSimpleName() + " to String");
-			byte[] xxx = (byte[]) xx;
-			StringBuilder m = new StringBuilder();
-			for (int i = 0; i < xxx.length; i++)
-				m.append(xxx[i]);
-			return m.toString();
-		}
-		return xx;
-	}
-
-	public static Object castToComputerSafe(Object aresult) {
-		if (aresult instanceof Enumeration) {
-			return ((Enumeration) aresult).toString();
-		}
-		return aresult;
-	}
-
 	public static String findComponentName(String rzc) {
 		rzc = rzc.replace("Tile", "").replace("tile", "");
 		return rzc.replaceAll("(.)(\\p{Upper})", "$1_$2").toLowerCase();

@@ -21,6 +21,7 @@ import lc.api.stargate.MessagePayload;
 import lc.api.stargate.StargateAddress;
 import lc.api.stargate.StargateState;
 import lc.api.stargate.StargateType;
+import lc.api.world.IOControlBaton;
 import lc.client.animation.Animation;
 import lc.client.openal.StreamingSoundProperties;
 import lc.client.render.animations.ChevronMoveAnimation;
@@ -208,6 +209,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 
 	private IrisState irisState;
 	private double irisTimer = 0.0d;
+	private IOControlBaton irisBaton = IOControlBaton.NONE;
 
 	private Block clientSkinBlock = null;
 	private int clientSkinBlockMetadata;
@@ -684,13 +686,12 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 			} else {
 				LCBlock block = (LCBlock) getBlockType();
 				boolean power = block.isGettingAnyInput(worldObj, xCoord, yCoord, zCoord);
-				if (power) {
-					if (getIrisType() != null & is == IrisState.OPEN)
-						closeIris();
-				} else {
-					if (getIrisType() != null & is == IrisState.CLOSED)
-						openIris();
+				if (power && getIrisType() != null & is == IrisState.OPEN) {
+					irisBaton = IOControlBaton.REDSTONE;
+					closeIris();
 				}
+				if (!power && irisBaton == IOControlBaton.REDSTONE && getIrisType() != null & is == IrisState.CLOSED)
+					openIris();
 			}
 		} else {
 			irisState = IrisState.NONE;
@@ -960,6 +961,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public IrisType getIrisType() {
 		ItemStack stack = getInventory().getStackInSlot(0);
 		if (stack == null || !(stack.getItem() instanceof ItemIrisUpgrade))
@@ -969,6 +971,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 	}
 
 	@Override
+	@Tag(name = "ComputerCallable")
 	public IrisState getIrisState() {
 		if (getIrisType() == null)
 			return IrisState.NONE;

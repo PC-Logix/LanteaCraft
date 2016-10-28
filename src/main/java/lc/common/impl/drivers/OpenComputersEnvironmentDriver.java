@@ -27,9 +27,8 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 	private void opencomputers_assertReady() {
 		if (opencomputers_node == null) {
 			opencomputers_node = Network.newNode(this, Visibility.Network).withComponent(getComponentName()).create();
-			opencomputers_fs = (Node) FileSystem.asManagedEnvironment(
-					FileSystem.fromClass(LanteaCraft.class, ResourceAccess.getAssetKey(), "support/opencomputers/software"),
-					"lanteacraft");
+			opencomputers_fs = (Node) FileSystem.asManagedEnvironment(FileSystem.fromClass(LanteaCraft.class,
+					ResourceAccess.getAssetKey(), "support/opencomputers/software"), "lanteacraft");
 
 		}
 	}
@@ -117,26 +116,17 @@ public class OpenComputersEnvironmentDriver implements IOCManagedEnvPerp {
 
 	@Override
 	public Object[] invoke(String method, Context context, Arguments args) throws Exception {
-		Method foundMethod = null;
-		for (Method m : getClass().getMethods())
-			if (m.getName().equals(method))
-				foundMethod = m;
-		if (foundMethod == null)
-			throw new Exception("No such method.");
 		try {
-			Class<?>[] types = foundMethod.getParameterTypes();
-			if (args.count() != types.length)
-				throw new Exception("Incorrect number of parameters.");
 			Object[] aargs = new Object[args.count()];
 			for (int i = 0; i < aargs.length; i++)
-				aargs[i] = OpenComputersDriverManager.performCastToType(args.checkAny(i), types[i]);
-			Object aresult = foundMethod.invoke(this, aargs);
-			return new Object[] { OpenComputersDriverManager.castToComputerSafe(aresult) };
+				aargs[i] = args.checkAny(i);
+			Object aresult = ComputerMethodExecutor.executor().invokeMethod(getClass(), this, IComputerTypeCaster.typeCastOC,
+					method, aargs);
+			return new Object[] { aresult };
 		} catch (Exception exception) {
 			LCLog.warn("Problem calling method from OpenComputer driver!", exception);
 			throw new Exception(exception.getMessage());
 		}
 	}
-
 
 }
