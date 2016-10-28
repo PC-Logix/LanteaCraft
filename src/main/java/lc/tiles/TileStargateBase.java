@@ -500,7 +500,7 @@ public class TileStargateBase extends LCMultiblockTile implements IBlockSkinnabl
 				TileStargateBase dte = currentConnection.tileTo;
 				if (dte != null) {
 					Trans3 dt = new Trans3(dte.xCoord, dte.yCoord, dte.zCoord).rotate(Orientations.from(
-							dte.getRotation()).rotation());
+							dte.getRotation().getOpposite()).rotation());
 					while (entity.ridingEntity != null)
 						entity = entity.ridingEntity;
 					Trans3 t = new Trans3(xCoord, yCoord, zCoord).rotate(Orientations.from(getRotation()).rotation());
