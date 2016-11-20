@@ -103,6 +103,10 @@ public class LCNetworkController implements ITickEventHandler {
 	}
 
 	public void playerDisconnected(EntityPlayerMP player) {
+		if (!players.containsKey(player)) {
+			LCLog.warn("Detected playerDisconnected but could not find network player.");
+			return;
+		}
 		players.get(player).shutdown(player);
 		players.remove(player);
 	}
