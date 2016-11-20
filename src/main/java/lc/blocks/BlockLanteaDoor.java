@@ -132,14 +132,6 @@ public class BlockLanteaDoor extends LCBlock {
 	}
 
 	@Override
-	public void onBlockHarvested(World w, int x, int y, int z, int md, EntityPlayer p) {
-		if (w.getBlock(x, y - 1, z) == this)
-			w.setBlockToAir(x, y - 1, z);
-		if (w.getBlock(x, y + 1, z) == this)
-			w.setBlockToAir(x, y + 1, z);
-	}
-
-	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block b) {
 		if (!world.isRemote) {
 			int strength = world.getStrongestIndirectPower(x, y, z);

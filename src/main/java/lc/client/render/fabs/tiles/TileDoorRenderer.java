@@ -34,7 +34,7 @@ public class TileDoorRenderer extends LCTileRenderer {
 
 		ResourceLocation whatTex = ResourceAccess.getNamedResource(ResourceAccess.formatResourceName(
 				"textures/blocks/%s_door_bottom_${TEX_QUALITY}.png", doorType));
-		if (door.hasBlockBelow())
+		if (!door.hasBlockAbove())
 			whatTex = ResourceAccess.getNamedResource(ResourceAccess.formatResourceName(
 					"textures/blocks/%s_door_top_${TEX_QUALITY}.png", doorType));
 		renderer.bind(whatTex);
@@ -90,12 +90,14 @@ public class TileDoorRenderer extends LCTileRenderer {
 		GL11.glVertex3f(0, 1, d1);
 		GL11.glVertex3f(0, 1, d0);
 
-		if (door.hasBlockBelow()) {
+		if (!door.hasBlockAbove()) { // face cull
 			GL11.glVertex3f(0, 1, d0);
 			GL11.glVertex3f(0, 1, d1);
 			GL11.glVertex3f(1, 1, d1);
 			GL11.glVertex3f(1, 1, d0);
-		} else {
+		}
+		
+		if (!door.hasBlockBelow()) { // face cull
 			GL11.glVertex3f(0, 0, d0);
 			GL11.glVertex3f(1, 0, d0);
 			GL11.glVertex3f(1, 0, d1);

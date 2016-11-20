@@ -71,7 +71,7 @@ public class TileLanteaDoor extends LCTile implements ITileRenderInfo {
 	@Override
 	public void load(NBTTagCompound compound) {
 		// TODO Auto-generated method stub
-
+		recalculateState();
 	}
 
 	@Override
@@ -81,8 +81,8 @@ public class TileLanteaDoor extends LCTile implements ITileRenderInfo {
 						: compound.getBoolean("hasBlockBelow"))),
 				String.format("isOpen: %s",
 						((compound == null || !compound.hasKey("isOpen")) ? "??" : compound.getBoolean("isOpen"))),
-				String.format("neighborCount: %s", ((compound == null || !compound.hasKey("neighborCount")) ? "??"
-						: compound.getInteger("neighborCount"))) };
+				String.format("hasBlockAbove: %s", ((compound == null || !compound.hasKey("hasBlockAbove")) ? "??"
+						: compound.getBoolean("hasBlockAbove"))) };
 	}
 
 	@Override
@@ -113,17 +113,8 @@ public class TileLanteaDoor extends LCTile implements ITileRenderInfo {
 			compound = new NBTTagCompound();
 		compound.setBoolean("hasBlockBelow",
 				worldObj.getTileEntity(xCoord, yCoord - 1, zCoord) instanceof TileLanteaDoor);
-		ForgeDirection qx = getMotionDirection();
-		TileEntity tile = worldObj.getTileEntity(xCoord + qx.offsetX, yCoord + qx.offsetY, zCoord + qx.offsetZ);
-		if (tile == null || !(tile instanceof TileLanteaDoor))
-			compound.setInteger("neighborCount", 0);
-		else {
-			compound.setInteger("neighborCount", ((TileLanteaDoor) tile).getNeighborChainSize() + 1);
-			ForgeDirection qz = qx.getOpposite();
-			TileEntity tz = worldObj.getTileEntity(xCoord + qz.offsetX, yCoord + qz.offsetY, zCoord + qz.offsetZ);
-			if (tz != null && tz instanceof TileLanteaDoor)
-				((TileLanteaDoor) tz).recalculateState();
-		}
+		compound.setBoolean("hasBlockAbove",
+				worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof TileLanteaDoor);
 		markNbtDirty();
 	}
 
@@ -183,20 +174,16 @@ public class TileLanteaDoor extends LCTile implements ITileRenderInfo {
 		return compound.hasKey("isOpen") ? compound.getBoolean("isOpen") : false;
 	}
 
-	public boolean hasNeighborBlock() {
-		return getNeighborChainSize() != 0;
-	}
-
-	public int getNeighborChainSize() {
-		if (compound == null)
-			compound = new NBTTagCompound();
-		return compound.hasKey("neighborCount") ? compound.getInteger("neighborCount") : 0;
-	}
-
 	public boolean hasBlockBelow() {
 		if (compound == null)
 			compound = new NBTTagCompound();
 		return compound.hasKey("hasBlockBelow") ? compound.getBoolean("hasBlockBelow") : false;
+	}
+
+	public boolean hasBlockAbove() {
+		if (compound == null)
+			compound = new NBTTagCompound();
+		return compound.hasKey("hasBlockAbove") ? compound.getBoolean("hasBlockAbove") : false;
 	}
 
 	public ForgeDirection getMotionDirection() {
@@ -209,10 +196,9 @@ public class TileLanteaDoor extends LCTile implements ITileRenderInfo {
 			return ForgeDirection.EAST;
 		case WEST:
 			return ForgeDirection.SOUTH;
-		default:
-			LCLog.fatal("Invalid door state rotation!");
 		}
-		return ForgeDirection.WEST;
+		LCLog.fatal("Invalid door state rotation!");
+		return null;
 	}
 
 	public AxisAlignedBB getBoundingBox() {
