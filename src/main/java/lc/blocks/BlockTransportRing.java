@@ -26,6 +26,8 @@ public class BlockTransportRing extends LCBlock {
 	/** Default constructor */
 	public BlockTransportRing() {
 		super(Material.ground);
+		setHardness(3F).setResistance(2000F);
+		setOpaque(false).setProvidesInventory(false);
 		// TODO Auto-generated constructor stub
 	}
 
