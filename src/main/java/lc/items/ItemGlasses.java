@@ -56,15 +56,29 @@ public class ItemGlasses extends ItemArmor {
 			if (tile != null)
 				if (tile instanceof LCTile) {
 					LCTile ownTile = (LCTile) tile;
+					ArrayList<String> stats = new ArrayList<String>();
+					if (gameSide == Side.CLIENT) {
+						stats.add(String.format("!RenderBox: %s", ownTile.getRenderBoundingBox()));
+						stats.add(String.format("!HitBox: %s", ownBlock.getCollisionBoundingBoxFromPool(world, x, y, z)));
+					}
+					
+					if (gameSide == Side.SERVER) {
+						stats.add(String.format("#HitBox: %s", ownBlock.getCollisionBoundingBoxFromPool(world, x, y, z)));
+					}
+					
+
 					try {
 						String[] dparams = ownTile.debug(gameSide);
 						if (dparams != null)
-							for (String v : dparams)
-								messages.add(String.format("   %s", v));
+							for (String s : dparams)
+								stats.add(s);
 					} catch (Throwable t) {
 						messages.add("Problem asking for tile debug data.");
 						LCLog.warn("Error fetching debugger data.", t);
 					}
+
+					for (String v : stats)
+						messages.add(String.format(" %s", v));
 				} else
 					messages.add(String.format("Unsupported tile type: %s", tile.getClass().getName()));
 		} else
