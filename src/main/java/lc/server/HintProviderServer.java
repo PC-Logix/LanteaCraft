@@ -30,8 +30,9 @@ import lc.common.configuration.xml.ComponentConfig;
 import lc.common.crypto.KeyTrustRegistry;
 import lc.common.util.BeaconStreamThread;
 import lc.common.util.StatsProvider;
-import lc.server.database.UniverseManager;
 import lc.server.openal.VoidSoundController;
+import lc.server.stargate.StargateManager;
+import lc.server.stargate.UniverseManager;
 import lc.server.world.LCChunkLoadCallback;
 import lc.server.world.LCLoadedChunkManager;
 
@@ -79,8 +80,8 @@ public class HintProviderServer implements IHintProvider {
 		LCLog.debug("Providing base initialization helpers.");
 		serverHookBus = new ServerEventHooks(this);
 		beaconMgr = new BeaconStreamThread(this);
-		stargateMgr = new StargateManager(this);
 		universeMgr = new UniverseManager();
+		stargateMgr = new StargateManager(universeMgr);
 		trustChain = new KeyTrustRegistry();
 		chunkLoadCallback = new LCChunkLoadCallback();
 		chunkLoadManager = new LCLoadedChunkManager();
