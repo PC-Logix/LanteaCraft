@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.io.IOException;
 
 import lc.common.base.LCTile;
+import lc.common.network.DropPacketException;
 import lc.common.network.LCNetworkException;
 import lc.common.network.LCPacket;
 import lc.common.util.math.DimensionPos;
@@ -31,15 +32,17 @@ public abstract class LCTargetPacket extends LCPacket {
 	 */
 	public static void handlePacket(LCTargetPacket packet, EntityPlayer player) throws LCNetworkException {
 		if (player.worldObj == null || player.worldObj.provider == null)
-			return;
+			throw new DropPacketException("World not defined right now");
 		if (packet.target.dimension != player.worldObj.provider.dimensionId)
-			return;
+			throw new DropPacketException("Illegal dimension provided");
 		TileEntity tile = player.worldObj.getTileEntity(packet.target.x, packet.target.y, packet.target.z);
-		if (tile != null && tile instanceof LCTile) {
+		if (tile == null)
+			throw new DropPacketException("Tile not loaded");
+		if (tile instanceof LCTile) {
 			LCTile theTile = (LCTile) tile;
 			theTile.handlePacket(packet, player);
 		} else
-			throw new LCNetworkException("Invalid target tile specified.");
+			throw new DropPacketException("Not a LanteaCraft tile right now");
 	}
 
 	/** The dimension target */

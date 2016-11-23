@@ -55,7 +55,7 @@ public class LCNetworkQueue implements ITickEventHandler {
 				QueuedPacket obj = stack.next();
 				EntityPlayer player = obj.player.get();
 				if (player == null)
-					throw new LCNetworkException("Packet enqueued without player or with dead reference.");
+					throw new DropPacketException("Packet enqueued without player or with dead reference");
 				LCPacket packet = obj.packet;
 				if (packet instanceof LCNetworkHandshake) {
 					if (obj.target == Side.SERVER)
@@ -73,11 +73,15 @@ public class LCNetworkQueue implements ITickEventHandler {
 					else
 						controller.players.get(player).addEnvelopePacket(player, envelope);
 				} else
-					throw new LCNetworkException(String.format("Unsupported packet %s.", packet.getClass().getName()));
+					throw new DropPacketException(String.format("Unsupported packet %s.", packet.getClass().getName()));
+			} catch (DropPacketException exception) {
+				// TODO: do we want to log this?
+				LCLog.warn("Dropping network packet.", exception);
 			} catch (LCNetworkException exception) {
 				LCLog.warn("Problem handling packet in queue.", exception);
 			}
 		}
+		LCLog.doSoftAssert(drain.size() == 0, "Network drain not empty before clear: still have %s to go", drain.size());
 		drain.clear();
 		Tracer.end();
 	}
