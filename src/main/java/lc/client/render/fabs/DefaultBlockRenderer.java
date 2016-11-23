@@ -26,7 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class DefaultBlockRenderer extends LCBlockRenderer {
 
 	/** Map of ForgeDirection to rotations on axis 0 */
-	private static int[] rotationMap = new int[] { 0, 0, 0, 2, 1, 3 };
+	protected static int[] rotationMap = new int[] { 0, 0, 0, 2, 1, 3 };
 
 	@Override
 	public void configure(ComponentConfig c) {
