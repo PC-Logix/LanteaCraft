@@ -24,15 +24,13 @@ public class Tracer {
 	}
 
 	public static void begin(Object z, String what) {
-		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-		int pz = 1;
-		StackTraceElement src = trace[pz];
-		while (src.getClassName().equals("lc.common.util.Tracer"))
-			src = trace[pz++];
+		StackTraceElement src = trace();
 		if (what != null)
-			Tracer.tracer.traceEnter(z.getClass().getName() + "#" + src.getMethodName() + ": " + what);
+			Tracer.tracer.traceEnter(((z instanceof Class) ? ((Class<?>) z).getName() : z.getClass().getName()) + "#"
+					+ src.getMethodName() + ": " + what, src);
 		else
-			Tracer.tracer.traceEnter(z.getClass().getName() + "#" + src.getMethodName());
+			Tracer.tracer.traceEnter(((z instanceof Class) ? ((Class<?>) z).getName() : z.getClass().getName()) + "#"
+					+ src.getMethodName(), src);
 	}
 
 	public static void end() {
@@ -41,6 +39,15 @@ public class Tracer {
 
 	public static HashMap<String, ProfileHistory> history() {
 		return Tracer.tracer.history;
+	}
+
+	private static StackTraceElement trace() {
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+		int pz = 1;
+		StackTraceElement src = trace[pz];
+		while (src.getClassName().equals("lc.common.util.Tracer"))
+			src = trace[pz++];
+		return src;
 	}
 
 	public static class ProfilePerformanceWriter implements Runnable {
@@ -76,11 +83,13 @@ public class Tracer {
 
 	public static class ProfileHistory {
 		public volatile long stamp;
+		public final String sig;
 		public long best = Long.MAX_VALUE;
 		public long worst = Long.MIN_VALUE;
 		private WindowedArrayList<Long> history;
 
-		public ProfileHistory(int heap) {
+		public ProfileHistory(int heap, String sig) {
+			this.sig = sig;
 			history = new WindowedArrayList<Long>(heap);
 		}
 
@@ -114,20 +123,54 @@ public class Tracer {
 		DeferredTaskExecutor.scheduleWithFixedDelay(Tracer.tracer.writer, 90, 60, TimeUnit.SECONDS);
 	}
 
-	private void traceEnter(String blob) {
+	private String makeSignature(StackTraceElement tracer) {
+		StringBuilder sig = new StringBuilder();
+		sig.append(tracer.getClassName()).append("#").append(tracer.getMethodName());
+		return sig.toString();
+	}
+
+	private void traceEnter(String blob, StackTraceElement tracer) {
 		long tz = Thread.currentThread().getId();
 		if (!labels.containsKey(tz))
 			labels.put(tz, new Stack<String>());
 		labels.get(tz).push(blob);
 		if (!history.containsKey(blob))
-			history.put(blob, new ProfileHistory(10));
+			history.put(blob, new ProfileHistory(10, makeSignature(tracer)));
 		history.get(blob).stamp = System.nanoTime();
 	}
 
 	private void traceExit() {
 		long m0 = System.nanoTime();
-		ProfileHistory hist = history.get(labels.get(Thread.currentThread().getId()).pop());
-		hist.push(m0 - hist.stamp);
+		String key = makeSignature(Tracer.trace());
+		long threadId = Thread.currentThread().getId();
+		if (labels.get(threadId).size() == 0) {
+			LCLog.warn("Tracer: requested trace exit but the trace stack for thread %s is empty.", threadId);
+			return;
+		}
+		String tracer = labels.get(threadId).pop();
+		ProfileHistory hist = history.get(tracer);
+		if (hist.sig.equals(key)) {
+			hist.push(m0 - hist.stamp);
+			return;
+		} else {
+			LCLog.warn("Tracer: detected unclosed trace %s on thread %s from call %s, unwinding stack.", threadId,
+					tracer, hist.sig);
+			Stack<String> tstack = labels.get(threadId);
+			while (tstack.size() > 0) {
+				tracer = tstack.peek();
+				hist = history.get(tracer);
+				if (hist.sig.equals(key)) {
+					hist.push(m0 - hist.stamp);
+					LCLog.warn("Tracer: unwound the trace stack on thread %s to trace %s from call %s...", threadId,
+							tracer, hist.sig);
+					return;
+				} else {
+					LCLog.warn("Tracer: detected nested unclosed trace on thread %s with trace %s from call %s...",
+							tracer, hist.sig);
+				}
+			}
+			LCLog.warn("Tracer: fully unwound the trace stack.");
+		}
 	}
 
 }
