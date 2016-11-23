@@ -70,6 +70,24 @@ public class Matrix3 {
 		r.m[j][j] = c;
 		return r;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Matrix3{Gamut:(");
+		sb.append(Math.toDegrees(Math.atan2(m[2][1], m[2][2]))).append(",");
+		sb.append(Math.toDegrees(Math.atan2(-m[2][0], Math.sqrt(Math.pow(m[2][1], 2) + Math.pow(m[2][2], 2))))).append(",");
+		sb.append(Math.toDegrees(Math.atan2(m[1][0], m[0][0]))).append("),M(");
+		for (int i = 0; i < 3; i++) {
+			sb.append(i).append(":[");
+			for (int j = 0; j < 3; j++) {
+				sb.append(m[i][j]).append(",");
+			}
+			sb.append("],");
+		}
+		sb.append(")}");
+		return sb.toString();
+	}
 
 	/**
 	 * Multiply this matrix against another matrix

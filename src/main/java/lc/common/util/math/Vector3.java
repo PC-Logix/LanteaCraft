@@ -168,7 +168,7 @@ public class Vector3 {
 	 * @return An AABB
 	 */
 	public static AxisAlignedBB makeAABB(Vector3 min, Vector3 max) {
-		return AxisAlignedBB.getBoundingBox(Math.min(min.x, max.x), Math.min(min.y, max.y), Math.min(min.z, max.z), 
+		return AxisAlignedBB.getBoundingBox(Math.min(min.x, max.x), Math.min(min.y, max.y), Math.min(min.z, max.z),
 				Math.max(max.x, min.x), Math.max(max.y, min.y), Math.max(max.z, min.z));
 	}
 
@@ -196,7 +196,12 @@ public class Vector3 {
 
 	@Override
 	public String toString() {
-		return "Vector3(" + x + "," + y + "," + z + ")";
+		StringBuilder sb = new StringBuilder();
+		sb.append("Vector3{(");
+		sb.append(x).append(",");
+		sb.append(y).append(",");
+		sb.append(z).append(")}");
+		return sb.toString();
 	}
 
 	/**
@@ -391,7 +396,7 @@ public class Vector3 {
 	public int fz() {
 		return (int) Math.floor(z);
 	}
-	
+
 	/**
 	 * Calculates the rounded x-component of this Vector3.
 	 *

@@ -48,6 +48,16 @@ public class Trans3 {
 		scaling = s;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Trans3{");
+		sb.append("Offset:(").append(offset).append("),");
+		sb.append("Scaling:(").append(scaling).append("),");
+		sb.append("Rotation:(").append(rotation).append(")}");
+		return sb.toString();
+	}
+
 	/**
 	 * Creates a new Trans3.
 	 *
@@ -135,7 +145,8 @@ public class Trans3 {
 	}
 
 	/**
-	 * Create a new Vector3 from an xyz coordinate pair
+	 * Apply the offset, rotation and scaling of this Translation to the xyz
+	 * coordinate pair
 	 *
 	 * @param x
 	 *            The x-coordinate
