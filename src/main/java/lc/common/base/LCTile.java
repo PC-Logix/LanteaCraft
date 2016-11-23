@@ -110,7 +110,9 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		ArrayList<String> cbs = getCallbacks(meClazz, type);
 		if (cbs == null)
 			return;
+		Tracer.begin(meClazz, String.format("doCallbacksNow invocation: %s", type));
 		doCallbacks(meClazz, me, cbs, params);
+		Tracer.end();
 	}
 
 	/**
@@ -146,18 +148,20 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 	 */
 	public static void doCallbacks(Class<? extends LCTile> me, Object meObject, ArrayList<String> methods,
 			Object[] aparams) {
-		Tracer.begin(meObject);
+		Tracer.begin(me, String.format("doCallbacks invocation: %s", methods.size()));
 		Method[] meMethods = me.getMethods();
 		for (String methodName : methods)
 			for (Method invoke : meMethods)
 				if (invoke.getName().equalsIgnoreCase(methodName)) {
 					if (aparams == null)
 						aparams = new Object[] { meObject };
+					Tracer.begin(me, String.format("doCallbacks method invocation: %s", invoke));
 					try {
 						ReflectionHelper.invokeWithExpansions(meObject, invoke, aparams);
 					} catch (Throwable t) {
 						LCLog.warn("Error when processing callback %s!", methodName, t);
 					}
+					Tracer.end();
 					break;
 				}
 		Tracer.end();
@@ -468,6 +472,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 
 	@Override
 	public void handlePacket(LCPacket packetOf, EntityPlayer player) throws LCNetworkException {
+		Tracer.begin(this);
 		if (packetOf instanceof LCTileSync)
 			if (worldObj.isRemote) {
 				clientDataDirty = false;
@@ -485,6 +490,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 		} finally {
 			Tracer.end();
 		}
+		Tracer.end();
 	}
 
 	@Override
@@ -509,6 +515,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 				thinkClientPost();
 				Tracer.end();
 				if (clientDataDirty) {
+					Tracer.begin(this, "enqueueClientDataUpdateReq");
 					if (clientDataCooldown > 0)
 						clientDataCooldown--;
 					if (clientDataCooldown <= 0) {
@@ -516,6 +523,7 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 								.sendToServer(new LCClientUpdate(new DimensionPos(this)));
 						clientDataCooldown += (30 * 20);
 					}
+					Tracer.end();
 				}
 			} else {
 				Tracer.begin(this, "thinkServer implementation");
@@ -524,8 +532,10 @@ public abstract class LCTile extends TileEntity implements IInventory, IPacketHa
 				Tracer.end();
 				if (nbtDirty) {
 					nbtDirty = false;
+					Tracer.begin(this, "enqueueNBTDataUpdate");
 					LCTileSync packet = new LCTileSync(new DimensionPos(this), compound);
 					LCRuntime.runtime.network().getPreferredPipe().sendToAllAround(packet, packet.target, 128.0d);
+					Tracer.end();
 				}
 			}
 		Tracer.end();

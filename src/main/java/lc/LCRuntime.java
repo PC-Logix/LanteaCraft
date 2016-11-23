@@ -23,6 +23,7 @@ import lc.common.impl.registry.RegistryContainer;
 import lc.common.impl.registry.StructureRegistry;
 import lc.common.network.LCNetworkController;
 import lc.common.util.LCCreativeTabManager;
+import lc.common.util.Tracer;
 import lc.common.util.game.LCTickConnector;
 import cpw.mods.fml.common.event.FMLFingerprintViolationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -184,10 +185,12 @@ public class LCRuntime implements ILCAPIProxy {
 	 */
 	public void preinit(FMLPreInitializationEvent event) {
 		LCLog.debug("LCRuntime entering phase preinit");
+		Tracer.begin(this, "LCRuntime pre-initialization");
 		config.initialize(event.getSuggestedConfigurationFile().getParentFile());
 		LCCreativeTabManager.registerTab("LanteaCraft", null);
 		container.preinit(this, event);
 		hints.preInit();
+		Tracer.end();
 	}
 
 	/**
@@ -198,6 +201,7 @@ public class LCRuntime implements ILCAPIProxy {
 	 */
 	public void init(FMLInitializationEvent event) {
 		LCLog.debug("LCRuntime entering phase init");
+		Tracer.begin(this, "LCRuntime initialization");
 		container.init(this, event);
 		network.init(this, event);
 		((DefinitionRegistry) registries().definitions()).init(this, event);
@@ -206,6 +210,7 @@ public class LCRuntime implements ILCAPIProxy {
 		((InterfaceRegistry) registries().interfaces()).init(this, event);
 		NetworkRegistry.INSTANCE.registerGuiHandler(LanteaCraft.instance, interfaceHook);
 		hints.init();
+		Tracer.end();
 	}
 
 	/**
@@ -216,9 +221,11 @@ public class LCRuntime implements ILCAPIProxy {
 	 */
 	public void postinit(FMLPostInitializationEvent event) {
 		LCLog.debug("LCRuntime entering phase postinit");
+		Tracer.begin(this, "LCRuntime post-initialization");
 		container.postinit(this, event);
 		hints.postInit();
 		config.commit();
+		Tracer.end();
 	}
 
 	/**
@@ -228,7 +235,9 @@ public class LCRuntime implements ILCAPIProxy {
 	 *            The server.
 	 */
 	public void serverStarting(FMLServerStartingEvent event) {
+		Tracer.begin(this, "serverStarting");
 		hints.serverStarting(event);
+		Tracer.end();
 	}
 
 	/**
@@ -238,7 +247,9 @@ public class LCRuntime implements ILCAPIProxy {
 	 *            The server.
 	 */
 	public void serverStopping(FMLServerStoppingEvent event) {
+		Tracer.begin(this, "serverStopping");
 		hints.serverStopping(event);
+		Tracer.end();
 	}
 
 	/**
@@ -248,7 +259,9 @@ public class LCRuntime implements ILCAPIProxy {
 	 *            The event
 	 */
 	public void signatureViolation(FMLFingerprintViolationEvent event) {
+		Tracer.begin(this, "signatureViolation");
 		hints.signatureViolation(event);
+		Tracer.end();
 	}
 
 	/**
@@ -268,7 +281,9 @@ public class LCRuntime implements ILCAPIProxy {
 	 *            The server.
 	 */
 	public void serverStopped(FMLServerStoppedEvent event) {
+		Tracer.begin(this, "serverStopped");
 		hints.serverStopped(event);
+		Tracer.end();
 	}
 
 	/**
@@ -278,7 +293,9 @@ public class LCRuntime implements ILCAPIProxy {
 	 *            The server.
 	 */
 	public void serverStarted(FMLServerStartedEvent event) {
+		Tracer.begin(this, "serverStarted");
 		hints.serverStarted(event);
+		Tracer.end();
 	}
 
 	/**
@@ -288,7 +305,9 @@ public class LCRuntime implements ILCAPIProxy {
 	 *            The server.
 	 */
 	public void beforeServerStarting(FMLServerAboutToStartEvent event) {
+		Tracer.begin(this, "beforeServerStarting");
 		hints.beforeServerStarting(event);
+		Tracer.end();
 	}
 
 }
