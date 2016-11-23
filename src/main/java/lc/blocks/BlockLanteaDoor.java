@@ -106,7 +106,7 @@ public class BlockLanteaDoor extends LCBlock {
 		TileLanteaDoor te = (TileLanteaDoor) world.getTileEntity(x, y, z);
 		if (te == null)
 			return;
-		setBlockBounds(te.getBoundingBox());
+		setBlockBounds(te.getBoundingBox(true));
 	}
 
 	@Override
@@ -114,9 +114,10 @@ public class BlockLanteaDoor extends LCBlock {
 		TileLanteaDoor te = (TileLanteaDoor) world.getTileEntity(x, y, z);
 		if (te == null)
 			return AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-		AxisAlignedBB aabb = te.getBoundingBox();
-		if (aabb == null)
+		AxisAlignedBB aabb = te.getBoundingBox(true);
+		if (aabb == null) {
 			return AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+		}
 		return aabb.offset(x, y, z);
 	}
 
@@ -125,7 +126,7 @@ public class BlockLanteaDoor extends LCBlock {
 		TileLanteaDoor te = (TileLanteaDoor) world.getTileEntity(x, y, z);
 		if (te == null)
 			return null;
-		AxisAlignedBB aabb = te.getBoundingBox();
+		AxisAlignedBB aabb = te.getBoundingBox(true);
 		if (aabb == null)
 			return null;
 		return setBlockBounds(aabb.offset(x, y, z));

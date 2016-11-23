@@ -82,7 +82,7 @@ public class TileLanteaDoor extends LCTile implements ITileRenderInfo {
 				String.format("isOpen: %s",
 						((compound == null || !compound.hasKey("isOpen")) ? "??" : compound.getBoolean("isOpen"))),
 				String.format("hasBlockAbove: %s", ((compound == null || !compound.hasKey("hasBlockAbove")) ? "??"
-						: compound.getBoolean("hasBlockAbove"))) };
+						: compound.getBoolean("hasBlockAbove"))), String.format("getRotation: %s", getRotation()) };
 	}
 
 	@Override
@@ -201,12 +201,18 @@ public class TileLanteaDoor extends LCTile implements ITileRenderInfo {
 		return null;
 	}
 
-	public AxisAlignedBB getBoundingBox() {
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return getBoundingBox(false);
+	}
+
+	public AxisAlignedBB getBoundingBox(boolean clip) {
 		float w = 0.085f;
 		float d0 = 0.5f - w, d1 = 0.5f + w;
-		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+		AxisAlignedBB box = AxisAlignedBB.getBoundingBox(-0.4d, -0.4d, -0.4d, 1.4d, 1.4d, 1.4d);
 		if (clientAnimation != 0)
-			return null;
+			return (clip) ? null : AxisAlignedBB.getBoundingBox(xCoord + box.minX, yCoord + box.minY,
+					zCoord + box.minZ, xCoord + box.maxX, yCoord + box.maxY, zCoord + box.maxZ);
 		if (!getDoorState()) {
 			switch (getRotation()) {
 			case NORTH:
@@ -238,6 +244,9 @@ public class TileLanteaDoor extends LCTile implements ITileRenderInfo {
 				LCLog.fatal("Invalid door state rotation!");
 			}
 		}
+		if (!clip)
+			return AxisAlignedBB.getBoundingBox(xCoord + box.minX, yCoord + box.minY, zCoord + box.minZ, xCoord
+					+ box.maxX, yCoord + box.maxY, zCoord + box.maxZ);
 		return box;
 	}
 
