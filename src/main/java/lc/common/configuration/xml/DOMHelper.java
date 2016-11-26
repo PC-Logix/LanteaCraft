@@ -1,6 +1,7 @@
 package lc.common.configuration.xml;
 
 import java.util.ArrayList;
+
 import org.w3c.dom.Comment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -210,5 +211,23 @@ public class DOMHelper {
 			else if (!caseSensitive && input.equalsIgnoreCase(legal))
 				return true;
 		return false;
+	}
+
+	/**
+	 * Attempts to export the first found CDATA section within the element
+	 * provided.
+	 * 
+	 * @param node
+	 *            The node to probe.
+	 * @return The exported first found CDATA section's text.
+	 * @throws XMLParserException
+	 *             If no CDATA is found an XMLParserException will be thrown.
+	 */
+	public static String exportCDATA(Element node) throws XMLParserException {
+		NodeList alist = node.getChildNodes();
+		for (int i = 0; i < alist.getLength(); i++)
+			if (alist.item(i).getNodeType() == Element.CDATA_SECTION_NODE)
+				return alist.item(i).getTextContent();
+		throw new XMLParserException("Couldn't find CDATA section in block.");
 	}
 }
