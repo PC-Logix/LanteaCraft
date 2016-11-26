@@ -15,6 +15,8 @@ public interface IComputerTypeCaster {
 
 		@Override
 		public Object performCastToType(Object xx, Class<?> yy) throws Exception {
+			if (xx == null)
+				return null;
 			LCLog.debug("ComputerCraft driver: perform cast: %s to %s", xx.getClass().getName(), yy.getName());
 			if (yy == Character.class || yy == char.class) {
 				if (!(xx instanceof String))
@@ -29,6 +31,8 @@ public interface IComputerTypeCaster {
 
 		@Override
 		public Object castToComputerSafe(Object aresult) throws Exception {
+			if (aresult == null)
+				return null;
 			LCLog.debug("ComputerCraft driver: perform 2luacast: %s", aresult.getClass().getName());
 			if (aresult instanceof Enum<?>) {
 				return ((Enum<?>) aresult).name();
@@ -42,6 +46,8 @@ public interface IComputerTypeCaster {
 
 		@Override
 		public Object performCastToType(Object xx, Class<?> yy) throws Exception {
+			if (xx == null)
+				return null;
 			LCLog.debug("OpenComputers driver: perform cast: %s to %s", xx.getClass().getName(), yy.getName());
 			if (yy == Character.class || yy == char.class) {
 				if (!(xx instanceof byte[]))
@@ -65,6 +71,8 @@ public interface IComputerTypeCaster {
 
 		@Override
 		public Object castToComputerSafe(Object aresult) throws Exception {
+			if (aresult == null)
+				return null;
 			LCLog.debug("OpenComputers driver: perform 2luacast: %s", aresult.getClass().getName());
 			if (aresult instanceof Enum<?>) {
 				return ((Enum<?>) aresult).name();
