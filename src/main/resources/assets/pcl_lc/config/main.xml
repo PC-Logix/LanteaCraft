@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConfDef>
+	<!-- The LanteaCraft configuration root def file -->
+	<ConfRoot Name="ModConfig">
+		<!-- Core client configuration options -->
+		<ConfTree Name="Component">
+			<Parameter Name="Name" Type="String" Value="CLIENT"></Parameter>
+			<Parameter Name="Enabled" Type="Boolean" DefaultValue="true"></Parameter>
+			<!-- Renderer general parameters -->
+			<ConfNode Name="Render">
+				<Parameter Name="TextureQuality" Type="Int32"
+					DefaultValue="32" AcceptableValueList="16,32,64,128,256">
+				</Parameter>
+			</ConfNode>
+		</ConfTree>
+		<!-- Core mod options -->
+		<ConfTree Name="Component">
+			<Parameter Name="Name" Type="String" Value="CORE"></Parameter>
+			<Parameter Name="Enabled" Type="Boolean" DefaultValue="true">
+			</Parameter>
+		</ConfTree>
+
+		<!-- Stargate options -->
+		<ConfTree Name="Component">
+			<Parameter Name="Name" Type="String" Value="STARGATE"></Parameter>
+			<Parameter Name="Enabled" Type="Boolean" DefaultValue="true">
+			</Parameter>
+		</ConfTree>
+
+		<!-- Machine options -->
+		<ConfTree Name="Component">
+			<Parameter Name="Name" Type="String" Value="MACHINE"></Parameter>
+			<Parameter Name="Enabled" Type="Boolean" DefaultValue="true">
+			</Parameter>
+		</ConfTree>
+
+		<!-- Component options -->
+		<ConfTree Name="Component">
+			<Parameter Name="Name" Type="String" Value="DECOR"></Parameter>
+			<Parameter Name="Enabled" Type="Boolean" DefaultValue="true">
+			</Parameter>
+		</ConfTree>
+	</ConfRoot>
+</ConfDef>
