@@ -13,6 +13,7 @@ public class BlockConfigurator extends LCBlock {
 
 	public BlockConfigurator() {
 		super(Material.ground);
+		setHardness(3);
 		setProvidesInventory(true).setCanRotate(true);
 		// TODO Auto-generated constructor stub
 	}
