@@ -33,6 +33,7 @@ public class BlockBrazier extends LCBlock {
 	/** Default constructor */
 	public BlockBrazier() {
 		super(Material.ground);
+		setHardness(5F);
 		setLightLevel(1.0F);
 		setProvidesTypes(true);
 	}
