@@ -1,0 +1,13 @@
+{
+  "itemGroup.lanteacraft": "Example Mod Tab",
+  "block.lanteacraft.example_block": "Example Block",
+  "item.lanteacraft.example_item": "Example Item",
+
+  "lanteacraft.configuration.title": "LanteaCraft Configs",
+  "lanteacraft.configuration.section.lanteacraft.common.toml": "LanteaCraft Configs",
+  "lanteacraft.configuration.section.lanteacraft.common.toml.title": "LanteaCraft Configs",
+  "lanteacraft.configuration.items": "Item List",
+  "lanteacraft.configuration.logDirtBlock": "Log Dirt Block",
+  "lanteacraft.configuration.magicNumberIntroduction": "Magic Number Text",
+  "lanteacraft.configuration.magicNumber": "Magic Number"
+}

@@ -1,24 +1,25 @@
-LanteaCraft
-================
-LanteaCraft is a mod created for Minecraft by MichiyoRavencroft and AfterLifeLochie that adds Stargates and other technology from the many Stargate series. You can use ComputerCraft, BuildCraft, IndustrialCraft2 and even Thermal Expansion to work alongside LanteaCraft technology for the best experience.
 
+Installation information
+=======
 
-License
-================
+This template repository can be directly cloned to get you started with a new
+mod. Simply create a new repository cloned from this one, by following the
+instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
 
-LanteaCraft is provided to all persons for free (free as in beer; gratis). 
+Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
 
-In short, LanteaCraft may be distributed by anyone - this includes modpacks - under the following conditions:
-* You don't make money (profits or remuneration) from downloads - be this pay-gating (AdFly) or other revenue;
-* You distribute LanteaCraft un-modified and in whole; and
-* We'd much like it if you linked back to our topic (or the Github repository).
+If at any point you are missing libraries in your IDE, or you've run into problems you can
+run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
+{this does not affect your code} and then start the process again.
 
-For more information about what is permitted and what is not permitted by the license, please see [license.md](LICENSE.md).
+Mapping Names:
+============
+By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
+in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
+license. For the latest license text, refer to the mapping file itself, or the reference copy here:
+https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
 
-
-Credits:
-================
-* Michiyo Ravencroft: Coder, Founder.
-* AfterLifeLochie: Head Code monkey, Co-Founder. 
-* DrakeBD & TempusBD (DeltaStrium): Textures, sounds and models.
-* Greg Ewing: Original SGCraft sourcecode, since refactored & rewritten.
+Additional Resources: 
+==========
+Community Documentation: https://docs.neoforged.net/  
+NeoForged Discord: https://discord.neoforged.net/
