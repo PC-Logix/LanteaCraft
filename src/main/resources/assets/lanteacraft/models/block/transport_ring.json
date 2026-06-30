@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "lanteacraft:block/transport_rings_base_64"
+  }
+}

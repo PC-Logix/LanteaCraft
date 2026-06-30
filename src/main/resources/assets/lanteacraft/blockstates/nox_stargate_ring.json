@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "assembled=false": {
+      "model": "lanteacraft:block/nox_stargate_ring"
+    },
+    "assembled=true": {
+      "model": "lanteacraft:block/empty"
+    }
+  }
+}

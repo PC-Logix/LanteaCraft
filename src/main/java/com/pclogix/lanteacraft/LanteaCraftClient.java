@@ -1,8 +1,15 @@
 package com.pclogix.lanteacraft;
 
+import com.pclogix.lanteacraft.client.StargateScreen;
+import com.pclogix.lanteacraft.client.render.StargateBaseRenderer;
+import com.pclogix.lanteacraft.client.render.TransportRingRenderer;
+import com.pclogix.lanteacraft.registry.ModBlockEntities;
+import com.pclogix.lanteacraft.registry.ModMenus;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
@@ -27,5 +34,16 @@ public class LanteaCraftClient {
         // Some client setup code
         LanteaCraft.LOGGER.info("HELLO FROM CLIENT SETUP");
         LanteaCraft.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+    }
+
+    @SubscribeEvent
+    static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.STARGATE_BASE.get(), StargateBaseRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.TRANSPORT_RING.get(), TransportRingRenderer::new);
+    }
+
+    @SubscribeEvent
+    static void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(ModMenus.STARGATE.get(), StargateScreen::new);
     }
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "lanteacraft:trinium"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "lanteacraft:trinium_ingot"
+  }
+}

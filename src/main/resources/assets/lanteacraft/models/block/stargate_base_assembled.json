@@ -1,0 +1,6 @@
+{
+  "parent": "lanteacraft:block/stargate_base",
+  "textures": {
+    "particle": "lanteacraft:block/stargate_base_front"
+  }
+}

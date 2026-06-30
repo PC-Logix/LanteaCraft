@@ -46,7 +46,7 @@ authors="Michiyo, AfterLifeLochie"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Example mod description.
+Stargates, DHDs, transport rings, and Tau'ri-adjacent machinery for modern Minecraft.
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
@@ -86,6 +86,13 @@ config="${mod_id}.mixins.json"
     # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="${minecraft_version_range}"
     ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="computercraft"
+    type="optional"
+    versionRange="[1.120.0,)"
+    ordering="AFTER"
     side="BOTH"
 
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares

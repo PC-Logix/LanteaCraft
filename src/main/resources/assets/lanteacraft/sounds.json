@@ -1,0 +1,57 @@
+{
+  "stargate_roll": {
+    "sounds": [
+      "lanteacraft:stargate/milkyway/milkyway_roll"
+    ]
+  },
+  "stargate_chevron_lock": {
+    "sounds": [
+      "lanteacraft:stargate/milkyway/milkyway_chevron_lock"
+    ]
+  },
+  "stargate_open": {
+    "sounds": [
+      "lanteacraft:stargate/milkyway/milkyway_open"
+    ]
+  },
+  "stargate_close": {
+    "sounds": [
+      "lanteacraft:stargate/milkyway/milkyway_close"
+    ]
+  },
+  "stargate_ambient": {
+    "sounds": [
+      "lanteacraft:stargate/ambience/event_horizon_ripple"
+    ]
+  },
+  "dhd_button": {
+    "sounds": [
+      "lanteacraft:stargate/milkyway/milkyway_dhd_button"
+    ]
+  },
+  "mechanical_iris_open": {
+    "sounds": [
+      "lanteacraft:stargate/iris/metal_iris_open"
+    ]
+  },
+  "mechanical_iris_close": {
+    "sounds": [
+      "lanteacraft:stargate/iris/metal_iris_close"
+    ]
+  },
+  "energy_iris_on": {
+    "sounds": [
+      "lanteacraft:stargate/iris/energy_iris_on"
+    ]
+  },
+  "energy_iris_off": {
+    "sounds": [
+      "lanteacraft:stargate/iris/energy_iris_off"
+    ]
+  },
+  "energy_iris_active": {
+    "sounds": [
+      "lanteacraft:stargate/iris/energy_iris_active"
+    ]
+  }
+}

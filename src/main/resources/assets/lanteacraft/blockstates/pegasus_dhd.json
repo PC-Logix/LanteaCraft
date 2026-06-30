@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "active=false,facing=north": { "model": "lanteacraft:block/pegasus_dhd", "y": 180 },
+    "active=false,facing=east": { "model": "lanteacraft:block/pegasus_dhd", "y": 270 },
+    "active=false,facing=south": { "model": "lanteacraft:block/pegasus_dhd" },
+    "active=false,facing=west": { "model": "lanteacraft:block/pegasus_dhd", "y": 90 },
+    "active=true,facing=north": { "model": "lanteacraft:block/pegasus_dhd_on", "y": 180 },
+    "active=true,facing=east": { "model": "lanteacraft:block/pegasus_dhd_on", "y": 270 },
+    "active=true,facing=south": { "model": "lanteacraft:block/pegasus_dhd_on" },
+    "active=true,facing=west": { "model": "lanteacraft:block/pegasus_dhd_on", "y": 90 }
+  }
+}

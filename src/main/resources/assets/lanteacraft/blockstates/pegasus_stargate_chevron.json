@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "assembled=false": {
+      "model": "lanteacraft:block/pegasus_stargate_chevron"
+    },
+    "assembled=true": {
+      "model": "lanteacraft:block/empty"
+    }
+  }
+}

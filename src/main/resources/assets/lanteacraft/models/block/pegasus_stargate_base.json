@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "lanteacraft:block/stargate_block_pegasus",
+    "down": "lanteacraft:block/stargate_block_pegasus",
+    "up": "lanteacraft:block/stargate_block_pegasus",
+    "north": "lanteacraft:block/stargate_base_front_pegasus",
+    "south": "lanteacraft:block/stargate_block_pegasus",
+    "west": "lanteacraft:block/stargate_block_pegasus",
+    "east": "lanteacraft:block/stargate_block_pegasus"
+  }
+}

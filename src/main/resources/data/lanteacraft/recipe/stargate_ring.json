@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "item": "lanteacraft:naquadah_ingot"
+    },
+    "S": {
+      "item": "minecraft:chiseled_sandstone"
+    }
+  },
+  "pattern": [
+    "ISI",
+    "NNN",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lanteacraft:stargate_ring"
+  }
+}

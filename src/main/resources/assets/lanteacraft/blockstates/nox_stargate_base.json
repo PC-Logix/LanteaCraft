@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "assembled=false,facing=north": { "model": "lanteacraft:block/nox_stargate_base" },
+    "assembled=false,facing=east": { "model": "lanteacraft:block/nox_stargate_base", "y": 90 },
+    "assembled=false,facing=south": { "model": "lanteacraft:block/nox_stargate_base", "y": 180 },
+    "assembled=false,facing=west": { "model": "lanteacraft:block/nox_stargate_base", "y": 270 },
+    "assembled=true,facing=north": { "model": "lanteacraft:block/empty" },
+    "assembled=true,facing=east": { "model": "lanteacraft:block/empty", "y": 90 },
+    "assembled=true,facing=south": { "model": "lanteacraft:block/empty", "y": 180 },
+    "assembled=true,facing=west": { "model": "lanteacraft:block/empty", "y": 270 }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lanteacraft:naquadah_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "lanteacraft:naquadah_ingot"
+  }
+}

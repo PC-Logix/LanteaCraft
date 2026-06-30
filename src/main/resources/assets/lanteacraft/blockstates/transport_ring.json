@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "lanteacraft:block/transport_ring" },
+    "facing=east": { "model": "lanteacraft:block/transport_ring", "y": 90 },
+    "facing=south": { "model": "lanteacraft:block/transport_ring", "y": 180 },
+    "facing=west": { "model": "lanteacraft:block/transport_ring", "y": 270 }
+  }
+}

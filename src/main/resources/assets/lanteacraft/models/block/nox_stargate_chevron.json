@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "lanteacraft:block/stargate_chevron_nox"
+  }
+}

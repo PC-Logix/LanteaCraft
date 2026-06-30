@@ -28,10 +28,16 @@ sourceSets.main.resources {
 
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
+    maven {
+        url "https://maven.squiddev.cc"
+        content {
+            includeGroup("cc.tweaked")
+        }
+    }
 }
 
 base {
-    archivesName = mod_id
+    archivesName = "${mod_id}-${minecraft_version}"
 }
 
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
@@ -139,6 +145,10 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-common-api:1.120.0")
+    compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-core-api:1.120.0")
+    compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-forge-api:1.120.0")
+    localRuntime("cc.tweaked:cc-tweaked-${minecraft_version}-forge:1.120.0")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

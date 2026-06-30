@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "lanteacraft:ore_naquadah",
+    "lanteacraft:ore_trinium"
+  ],
+  "step": "underground_ores"
+}

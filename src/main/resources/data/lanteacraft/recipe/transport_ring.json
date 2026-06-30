@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": {
+      "item": "lanteacraft:control_crystal"
+    },
+    "E": {
+      "item": "minecraft:ender_pearl"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "N": {
+      "item": "lanteacraft:naquadah_ingot"
+    },
+    "T": {
+      "item": "lanteacraft:trinium_ingot"
+    }
+  },
+  "pattern": [
+    "TGT",
+    "NCN",
+    "TET"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lanteacraft:transport_ring"
+  }
+}
