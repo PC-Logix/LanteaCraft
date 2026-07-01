@@ -228,34 +228,40 @@ public class StargateBaseBlockEntity extends BlockEntity {
         irisItems.setStackInSlot(0, ItemStack.EMPTY);
     }
 
-    public void toggleIris() {
+    public boolean toggleIris() {
         if (isIrisClosedOrClosing()) {
-            openIris();
+            return openIris();
         } else {
-            closeIris();
+            return closeIris();
         }
     }
 
-    public void openIris() {
+    public boolean openIris() {
         if (!hasIris() || irisState == IrisState.OPEN || irisState == IrisState.OPENING) {
-            return;
+            return false;
+        }
+
+        if (isIrisRedstoneLocked()) {
+            return false;
         }
 
         irisState = IrisState.OPENING;
         irisMoveTicks = IRIS_MOVE_TICKS;
         playIrisSound(true);
         sync();
+        return true;
     }
 
-    public void closeIris() {
+    public boolean closeIris() {
         if (!hasIris() || irisState == IrisState.CLOSED || irisState == IrisState.CLOSING) {
-            return;
+            return false;
         }
 
         irisState = IrisState.CLOSING;
         irisMoveTicks = IRIS_MOVE_TICKS;
         playIrisSound(false);
         sync();
+        return true;
     }
 
     public String gdoCode() {
@@ -283,10 +289,22 @@ public class StargateBaseBlockEntity extends BlockEntity {
         return irisRedstoneEnabled;
     }
 
+    public boolean isIrisRedstoneLocked() {
+        return hasIris() && irisRedstoneEnabled && level != null && level.hasNeighborSignal(worldPosition);
+    }
+
     public void toggleIrisRedstone() {
-        irisRedstoneEnabled = !irisRedstoneEnabled;
+        setIrisRedstoneEnabled(!irisRedstoneEnabled);
+    }
+
+    public void setIrisRedstoneEnabled(boolean enabled) {
+        boolean wasRedstoneLocked = irisRedstoneEnabled && irisRedstoneActive;
+        irisRedstoneEnabled = enabled;
         if (!irisRedstoneEnabled) {
             irisRedstoneActive = false;
+            if (wasRedstoneLocked) {
+                openIris();
+            }
         }
         sync();
     }
@@ -317,6 +335,10 @@ public class StargateBaseBlockEntity extends BlockEntity {
         }
 
         boolean powered = irisRedstoneEnabled && level != null && level.hasNeighborSignal(worldPosition);
+        if (powered && irisState != IrisState.CLOSED && irisState != IrisState.CLOSING) {
+            closeIris();
+        }
+
         if (powered != irisRedstoneActive) {
             irisRedstoneActive = powered;
             if (powered) {
@@ -406,6 +428,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
         tag.putString("irisState", irisState.serializedName());
         tag.putInt("irisMoveTicks", irisMoveTicks);
         tag.putBoolean("irisRedstoneEnabled", irisRedstoneEnabled);
+        tag.putBoolean("irisRedstoneActive", irisRedstoneActive);
         tag.putString("gdoCode", gdoCode);
         tag.put("irisItems", irisItems.serializeNBT(registries));
         if (bottomCamouflage != null) {
@@ -421,10 +444,13 @@ public class StargateBaseBlockEntity extends BlockEntity {
         openSoundPlayed = tag.contains("openSoundPlayed") ? tag.getBoolean("openSoundPlayed") : !connectedAddress.isBlank();
         lastChevronSound = dialingStartGameTime >= 0L ? dialingAddress.length() - 1 : -1;
         nextAmbientSoundTime = 0L;
+        IrisState savedIrisState = tag.contains("irisState") ? IrisState.byName(tag.getString("irisState")) : IrisState.NONE;
+        int savedIrisMoveTicks = tag.contains("irisMoveTicks") ? tag.getInt("irisMoveTicks") : 0;
         irisType = tag.contains("irisType") ? IrisType.byName(tag.getString("irisType")) : null;
-        irisState = tag.contains("irisState") ? IrisState.byName(tag.getString("irisState")) : IrisState.NONE;
-        irisMoveTicks = tag.contains("irisMoveTicks") ? tag.getInt("irisMoveTicks") : 0;
+        irisState = savedIrisState;
+        irisMoveTicks = savedIrisMoveTicks;
         irisRedstoneEnabled = !tag.contains("irisRedstoneEnabled") || tag.getBoolean("irisRedstoneEnabled");
+        irisRedstoneActive = tag.contains("irisRedstoneActive") && tag.getBoolean("irisRedstoneActive");
         gdoCode = tag.getString("gdoCode");
         if (tag.contains("irisItems")) {
             irisItems.deserializeNBT(registries, tag.getCompound("irisItems"));
@@ -432,6 +458,13 @@ public class StargateBaseBlockEntity extends BlockEntity {
         if (irisType == null) {
             irisState = IrisState.NONE;
             irisMoveTicks = 0;
+            irisRedstoneActive = false;
+        } else if (savedIrisState != IrisState.NONE) {
+            // Deserializing the item handler invokes refreshIrisFromSlot(), so
+            // restore the authoritative saved state afterward. Otherwise an
+            // installed iris can be reset to the slot-refresh default on load.
+            irisState = savedIrisState;
+            irisMoveTicks = savedIrisMoveTicks;
         }
         bottomCamouflage = null;
         if (tag.contains("bottomCamouflage")) {

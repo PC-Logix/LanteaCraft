@@ -395,6 +395,8 @@ The common config currently exposes:
 | `gateTimeoutSeconds` | `60` | How long an open wormhole remains active. Set to `0` to disable automatic timeout. |
 | `dhdSearchRadius` | `8` | Maximum block radius a DHD searches for a nearby assembled Stargate. |
 | `gateTeleportCooldownTicks` | `40` | Cooldown before the same entity can trigger Stargate travel again. |
+| `enableOreRetrogen` | `false` | Generates LanteaCraft ores in already-existing chunks as they load. |
+| `oreRetrogenChunksPerTick` | `1` | Maximum old chunks processed for ore retrogen per dimension tick. |
 
 ## CC:Tweaked / ComputerCraft Support
 
@@ -411,6 +413,8 @@ Current Lua-facing functions include:
 - `disconnect()`
 
 Attached computers receive `stargate_event` events for gate activity such as dialing, opening, closing, timeout, disconnects, and entity transit/local gate interactions.
+
+Active Stargate wormholes also act as CC:Tweaked wireless repeaters. A wireless modem within range of one connected gate can transmit a `modem_message` through the wormhole; the packet is re-broadcast as a fresh wireless hop from the remote gate, allowing interdimensional links or long-distance same-dimension links between computers near each gate.
 
 ComputerCraft support is optional. LanteaCraft compiles against the CC:Tweaked API and declares the mod dependency as optional.
 

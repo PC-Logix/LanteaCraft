@@ -51,10 +51,14 @@ public final class StargateEventDispatcher {
         publish(GateEvent.entity("entity_transit", gate, null, direction, entity));
     }
 
-    public static void gdoSignal(StargateEntry receiver, StargateEntry transmitter, Entity entity, String code, boolean accepted) {
+    public static void gdoSignal(StargateEntry receiver, StargateEntry transmitter, Entity entity, String code, boolean accepted, String action, String irisState, boolean irisClosed, boolean redstoneLocked) {
         publish(GateEvent.data("gdo_signal", receiver, transmitter, "incoming", entity, Map.of(
                 "code", code,
                 "accepted", accepted,
+                "action", action,
+                "irisState", irisState,
+                "irisClosed", irisClosed,
+                "redstoneLocked", redstoneLocked,
                 "transmitterAddress", transmitter.address())));
     }
 

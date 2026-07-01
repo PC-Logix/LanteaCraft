@@ -157,10 +157,14 @@ public class StargateBaseBlock extends HorizontalDirectionalBlock implements Ent
                     }
                     player.displayClientMessage(Component.translatable("message.lanteacraft.iris_installed"), true);
                 } else {
-                    base.toggleIris();
-                    player.displayClientMessage(Component.translatable(base.isIrisClosedOrClosing()
-                            ? "message.lanteacraft.iris_closing"
-                            : "message.lanteacraft.iris_opening"), true);
+                    boolean changed = base.toggleIris();
+                    if (!changed && base.isIrisRedstoneLocked()) {
+                        player.displayClientMessage(Component.translatable("message.lanteacraft.iris_redstone_locked"), true);
+                    } else {
+                        player.displayClientMessage(Component.translatable(base.isIrisClosedOrClosing()
+                                ? "message.lanteacraft.iris_closing"
+                                : "message.lanteacraft.iris_opening"), true);
+                    }
                 }
             }
 

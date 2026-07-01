@@ -97,8 +97,21 @@ public class GdoItem extends Item {
 
         String code = data.getString(TAG_CODE);
         boolean accepted = base.authorizeGdo(code);
-        StargateEventDispatcher.gdoSignal(receiver.get(), transmitter.get(), player, code, accepted);
+        boolean closeRequest = player.isShiftKeyDown();
+        boolean redstoneLocked = base.isIrisRedstoneLocked();
+        StargateEventDispatcher.gdoSignal(receiver.get(), transmitter.get(), player, code, accepted, closeRequest ? "close" : "open", base.irisState().serializedName(), base.isIrisObstructing(), redstoneLocked);
         if (accepted) {
+            if (closeRequest) {
+                base.closeIris();
+                player.displayClientMessage(Component.translatable("message.lanteacraft.gdo_closed").withStyle(ChatFormatting.GRAY), true);
+                return InteractionResultHolder.success(stack);
+            }
+
+            if (redstoneLocked) {
+                player.displayClientMessage(Component.translatable("message.lanteacraft.gdo_locked_down").withStyle(ChatFormatting.RED), true);
+                return InteractionResultHolder.fail(stack);
+            }
+
             base.openIris();
             player.displayClientMessage(Component.translatable("message.lanteacraft.gdo_accepted").withStyle(ChatFormatting.GREEN), true);
             return InteractionResultHolder.success(stack);

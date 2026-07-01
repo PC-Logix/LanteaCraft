@@ -20,11 +20,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * Renders the complete assembled Stargate as generated geometry.
+ *
+ * <p>The multiblock itself is made of blocks, but the visible ring, spinning
+ * glyph track, chevrons, event horizon, kawoosh, and iris are all emitted here
+ * as quads. Coordinates below are in a local gate space centered on the middle
+ * of the ring: X/Y form the face of the gate and Z is the depth coming out of
+ * the gate face.</p>
+ */
 public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlockEntity> {
     private static final ResourceLocation EVENT_HORIZON_TEXTURE = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "textures/fx/eventhorizon.png");
     private static final ResourceLocation MECHANICAL_IRIS_TEXTURE = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "textures/fx/iris.png");
     private static final ResourceLocation ENERGY_IRIS_TEXTURE = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "textures/fx/energy_iris.png");
 
+    // The frame texture is treated as a 16x16 tile atlas. The tile constants
+    // below are packed as 0xYX, matching the nibble math in tileU/tileV.
     private static final double FRAME_SHEET_SIZE = 1024.0D;
     private static final double FRAME_TILE_SIZE = FRAME_SHEET_SIZE / 16.0D;
     private static final int OUTER_TEXTURE = 0x04;
@@ -34,28 +45,51 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     private static final int CHEVRON_LIT_TEXTURE = 0x16;
     private static final String LEGACY_GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-+";
 
+    // The classic gate has 38 addressable glyph positions and 9 chevrons.
+    // Keeping the generated mesh segmented the same way makes the rotating
+    // glyph strip line up with address symbols.
     private static final int RING_SEGMENTS = 38;
+    private static final double RING_SYMBOL_ANGLE = 360.0D / RING_SEGMENTS;
+    private static final double RING_SYMBOL_CENTER_OFFSET = RING_SYMBOL_ANGLE / 2.0D;
     private static final int CHEVRONS = 9;
+
+    // Ring radii. The "moving" radius is the inner edge of the spinning glyph
+    // ring, while INNER_RADIUS is the beveled inner mouth of the fixed frame.
     private static final double INNER_RADIUS = 2.75D;
     private static final double INNER_MOVING_RADIUS = INNER_RADIUS + 0.15D;
     private static final double OUTER_RADIUS = 3.5D;
     private static final double MID_RADIUS = INNER_MOVING_RADIUS + (OUTER_RADIUS - INNER_MOVING_RADIUS) / 2.0D;
     private static final double RING_DEPTH = 0.15D;
+
+    // Chevron geometry is built once and then rotated around the ring. The
+    // width is angular-ish rather than literal degrees: renderChevron starts
+    // from a local radial axis and uses this value as the +/- Y spread.
     private static final double CHEVRON_OUTER_RADIUS = OUTER_RADIUS + 1.0D / 16.0D;
     private static final double CHEVRON_WIDTH = 0.5D;
     private static final double CHEVRON_DEPTH = 0.0625D;
     private static final double CHEVRON_ANGLE = 360.0D / CHEVRONS;
     private static final double CHEVRON_ANGLE_OFFSET = -90.0D + CHEVRON_WIDTH;
+
+    // Dialed address symbols do not lock chevrons in visual clockwise order.
+    // This maps address index -> chevron index to mimic the familiar lock
+    // sequence around the gate.
     private static final int[] CHEVRON_LOCK_ORDER = { 8, 7, 6, 3, 2, 1, 0, 5, 4 };
     private static final double SPIN_TICKS = 55.0D;
     private static final double CHEVRON_TICKS = 10.0D;
+
+    // Event horizon and iris are drawn as translucent discs slightly in front
+    // of the ring center so they do not z-fight with frame geometry.
     private static final int HORIZON_BANDS = 10;
     private static final double HORIZON_RADIUS = INNER_MOVING_RADIUS - 1.0D / 32.0D;
     private static final double HORIZON_Z = 0.01D;
+    private static final float HORIZON_ALPHA = 0.88F;
     private static final double IRIS_Z = HORIZON_Z + 0.05D;
     private static final double KAWOOSH_TICKS = 18.0D;
+    private static final double KAWOOSH_ALPHA = 0.82D;
     private static final int IRIS_BLADES = 32;
 
+    // Trig lookup tables for the ring mesh. The +1 lets callers use i + 1 on
+    // the final segment without branching back to zero.
     private static final double[] SIN = new double[RING_SEGMENTS + 1];
     private static final double[] COS = new double[RING_SEGMENTS + 1];
 
@@ -77,26 +111,38 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             return;
         }
 
+        // Move from block-local origin to gate-local origin. The renderer uses
+        // a vertical 7-block-ish ring centered above the base block, then faces
+        // it according to the base block direction.
         poseStack.pushPose();
         poseStack.translate(0.5D, 3.5D, 0.5D);
         poseStack.mulPose(Axis.YP.rotationDegrees(-state.getValue(StargateBaseBlock.FACING).toYRot()));
 
+        // The gate is a magical/tech light source in practice, so render the
+        // generated pieces fullbright even if the actual block light is lower.
         int gateLight = LightTexture.FULL_BRIGHT;
         DialingRenderState dialingState = dialingState(blockEntity, partialTick);
         StargateVariant variant = variant(state);
 
+        // The bottom row belongs visually to the multiblock footprint rather
+        // than the generated ring. Render any camouflage first so the custom
+        // geometry can sit cleanly on top.
         renderBottomCamouflage(blockEntity, poseStack, bufferSource, packedLight, packedOverlay);
 
+        // Static gate frame and chevrons share the frame atlas.
         VertexConsumer frame = bufferSource.getBuffer(RenderType.entitySolid(frameTexture(variant)));
         renderShell(poseStack, frame, gateLight);
         renderChevrons(poseStack, frame, gateLight, dialingState);
 
+        // The glyph strip is a separate cutout texture so it can rotate as one
+        // band while the rest of the frame stays still.
         VertexConsumer glyphs = bufferSource.getBuffer(RenderType.entityCutout(glyphTexture(variant)));
         poseStack.pushPose();
         poseStack.mulPose(Axis.ZP.rotationDegrees((float)dialingState.ringRotation()));
         renderGlyphRing(poseStack, glyphs, gateLight);
         poseStack.popPose();
 
+        // Translucent effects are rendered last in front of the frame.
         VertexConsumer horizon = bufferSource.getBuffer(RenderType.entityTranslucent(EVENT_HORIZON_TEXTURE));
         renderEventHorizon(blockEntity, partialTick, poseStack, horizon, gateLight);
         renderIris(blockEntity, partialTick, poseStack, bufferSource, variant, gateLight);
@@ -125,6 +171,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     }
 
     private AABB gateBounds(StargateBaseBlockEntity blockEntity) {
+        // The base block is only one piece of the multiblock, so inflate upward
+        // and outward enough to keep the generated ring/effects from culling.
         return new AABB(blockEntity.getBlockPos()).inflate(5.0D, 5.0D, 5.0D).expandTowards(0.0D, 6.0D, 0.0D);
     }
 
@@ -146,6 +194,9 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             return;
         }
 
+        // Draw seven camouflage blocks across the lower span of the gate. The
+        // slight scale bump avoids cracks/z-fighting against neighboring gate
+        // blocks when the block model and generated renderer overlap exactly.
         for (int x = -3; x <= 3; x++) {
             poseStack.pushPose();
             poseStack.translate(x, -3.0D, 0.0D);
@@ -164,7 +215,12 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         PoseStack.Pose pose = poseStack.last();
         double bevelDepth = RING_DEPTH - 1.0D / 16.0D;
 
+        // Build the frame as eight quad strips per segment:
+        // outer wall, inner wall, front/back radial faces, and bevels between
+        // the fixed frame and the inset spinning glyph ring. Different shades
+        // fake basic lighting because normals are intentionally simple.
         for (int i = 0; i < RING_SEGMENTS; i++) {
+            // Outer cylindrical rim.
             quad(pose, consumer, packedLight,
                     OUTER_RADIUS * COS[i], OUTER_RADIUS * SIN[i], RING_DEPTH, 0, 0,
                     OUTER_RADIUS * COS[i], OUTER_RADIUS * SIN[i], -RING_DEPTH, 0, 1,
@@ -173,6 +229,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
                     OUTER_TEXTURE,
                     0.85F, 0.85F, 0.85F);
 
+            // Inner cylindrical mouth around the event horizon.
             quad(pose, consumer, packedLight,
                     INNER_RADIUS * COS[i], INNER_RADIUS * SIN[i], bevelDepth, 0, 0,
                     INNER_RADIUS * COS[i + 1], INNER_RADIUS * SIN[i + 1], bevelDepth, 1, 0,
@@ -181,6 +238,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
                     INNER_TEXTURE,
                     0.75F, 0.75F, 0.75F);
 
+            // Middle vertical wall that visually separates outer frame and
+            // spinning glyph track.
             quad(pose, consumer, packedLight,
                     MID_RADIUS * COS[i], MID_RADIUS * SIN[i], RING_DEPTH, 0, 0,
                     MID_RADIUS * COS[i + 1], MID_RADIUS * SIN[i + 1], RING_DEPTH, 16, 0,
@@ -189,6 +248,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
                     FACE_TEXTURE,
                     0.85F, 0.85F, 0.85F);
 
+            // Inner edge of the spinning glyph track.
             quad(pose, consumer, packedLight,
                     INNER_MOVING_RADIUS * COS[i], INNER_MOVING_RADIUS * SIN[i], RING_DEPTH, 0, 0,
                     INNER_MOVING_RADIUS * COS[i], INNER_MOVING_RADIUS * SIN[i], -RING_DEPTH, 0, 16,
@@ -197,6 +257,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
                     FACE_TEXTURE,
                     0.85F, 0.85F, 0.85F);
 
+            // Front face from middle wall out to the outside rim.
             quad(pose, consumer, packedLight,
                     MID_RADIUS * COS[i], MID_RADIUS * SIN[i], RING_DEPTH, 16, 16,
                     OUTER_RADIUS * COS[i], OUTER_RADIUS * SIN[i], RING_DEPTH, 16, 0,
@@ -205,6 +266,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
                     FACE_TEXTURE,
                     1.0F, 1.0F, 1.0F);
 
+            // Front bevel down into the inner mouth.
             quad(pose, consumer, packedLight,
                     INNER_RADIUS * COS[i], INNER_RADIUS * SIN[i], bevelDepth, 16, 16,
                     INNER_MOVING_RADIUS * COS[i], INNER_MOVING_RADIUS * SIN[i], RING_DEPTH, 16, 0,
@@ -213,6 +275,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
                     FACE_TEXTURE,
                     1.0F, 1.0F, 1.0F);
 
+            // Back bevel down into the inner mouth.
             quad(pose, consumer, packedLight,
                     INNER_RADIUS * COS[i], INNER_RADIUS * SIN[i], -bevelDepth, 0, 16,
                     INNER_RADIUS * COS[i + 1], INNER_RADIUS * SIN[i + 1], -bevelDepth, 16, 16,
@@ -221,6 +284,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
                     FACE_TEXTURE,
                     0.55F, 0.55F, 0.55F);
 
+            // Back face across the ring body.
             quad(pose, consumer, packedLight,
                     INNER_MOVING_RADIUS * COS[i], INNER_MOVING_RADIUS * SIN[i], -RING_DEPTH, 0, 16,
                     INNER_MOVING_RADIUS * COS[i + 1], INNER_MOVING_RADIUS * SIN[i + 1], -RING_DEPTH, 16, 16,
@@ -233,11 +297,15 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
 
     private void renderGlyphRing(PoseStack poseStack, VertexConsumer consumer, int packedLight) {
         PoseStack.Pose pose = poseStack.last();
+        // Nudge this strip toward the camera and slightly over the neighboring
+        // radii so the glyph texture covers joins in the procedural shell.
         double inner = INNER_MOVING_RADIUS - 1.0D / 128.0D;
         double outer = MID_RADIUS + 1.0D / 128.0D;
         double z = RING_DEPTH - 1.0D / 64.0D;
 
         for (int i = 0; i < RING_SEGMENTS; i++) {
+            // U runs around the circle; V samples only the upper part of the
+            // glyph texture where the strip artwork lives.
             float u0 = (float)i / RING_SEGMENTS;
             float u1 = (float)(i + 1) / RING_SEGMENTS;
             quad(pose, consumer, packedLight,
@@ -253,8 +321,12 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     private void renderChevrons(PoseStack poseStack, VertexConsumer consumer, int packedLight, DialingRenderState dialingState) {
         for (int i = 0; i < CHEVRONS; i++) {
             poseStack.pushPose();
+            // renderChevron builds a single chevron centered along local +X;
+            // rotate that local geometry into each chevron's ring position.
             poseStack.mulPose(Axis.ZP.rotationDegrees((float)(i * CHEVRON_ANGLE - CHEVRON_ANGLE_OFFSET)));
             double lock = dialingState.chevronLock(i);
+            // Locking pulls the chevron slightly inward to give the address
+            // sequence a visible mechanical "clunk".
             poseStack.translate(-lock / 8.0D, 0.0D, 0.0D);
             renderChevron(poseStack.last(), consumer, packedLight, lock);
             poseStack.popPose();
@@ -267,6 +339,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             return;
         }
 
+        // Energy iris is a simple translucent disc that scales closed/open.
+        // Mechanical iris uses overlapping blades below.
         if (blockEntity.irisType() == IrisType.ENERGY) {
             VertexConsumer energy = bufferSource.getBuffer(RenderType.entityTranslucent(ENERGY_IRIS_TEXTURE));
             renderTexturedIrisDisc(poseStack.last(), energy, packedLight, progress, HORIZON_RADIUS, IRIS_Z, 0.88F);
@@ -278,6 +352,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     }
 
     private void renderMechanicalIris(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, double closedProgress) {
+        // closedProgress is 1 when shut, but the blade math is easier to read
+        // as "how open are we?" because blades get longer/flatter while closing.
         double bladeOpenProgress = 1.0D - closedProgress;
         double tiltAngle = Math.toRadians(bladeOpenProgress * 60.0D);
         double radius = MID_RADIUS;
@@ -291,6 +367,9 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
 
         for (int i = 0; i < IRIS_BLADES; i++) {
             double angle = 2.0D * Math.PI * i / IRIS_BLADES;
+            // Define one blade in a local radial coordinate system, then rotate
+            // it around the gate. p1/p2 are lifted by a tiny bevel so the blade
+            // has a little depth instead of reading as a perfectly flat fan.
             IrisPoint p0 = irisPoint(angle, tiltAngle, radius, -longWidth, 0.0D, depth);
             IrisPoint p1 = irisPoint(angle, tiltAngle, radius, 0.0D, 0.0D, depth + bevel);
             IrisPoint p2 = irisPoint(angle, tiltAngle, radius, 0.0D, heightClosed, depth + bevel);
@@ -315,6 +394,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             return;
         }
 
+        // Draw as concentric bands instead of one triangle fan so UVs remain
+        // stable and the texture does not pinch too hard at the center.
         for (int band = 0; band < HORIZON_BANDS; band++) {
             double r0 = scaledRadius * band / HORIZON_BANDS;
             double r1 = scaledRadius * (band + 1) / HORIZON_BANDS;
@@ -331,6 +412,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     private void irisVertex(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, double x, double y, double z, double uvRadius, float alpha, float shade) {
         consumer.addVertex(pose, (float)x, (float)y, (float)z)
                 .setColor(shade, shade, shade, alpha)
+                // Convert gate-local coordinates into disc texture space:
+                // center of the gate -> 0.5/0.5, edge -> roughly 0 or 1.
                 .setUv((float)(0.5D + x / (uvRadius * 2.0D)), (float)(0.5D + y / (uvRadius * 2.0D)))
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
@@ -338,6 +421,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     }
 
     private IrisPoint irisPoint(double bladeAngle, double tiltAngle, double radius, double localX, double localY, double z) {
+        // First tilt the blade shape in its own local 2D plane, then translate
+        // it out to the ring radius and rotate the whole blade around center.
         double tiltedX = localX * Math.cos(-tiltAngle) - localY * Math.sin(-tiltAngle);
         double tiltedY = localX * Math.sin(-tiltAngle) + localY * Math.cos(-tiltAngle);
         double x = radius + tiltedX;
@@ -348,6 +433,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     }
 
     private void renderChevron(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, double lock) {
+        // Coordinates here are local to a chevron whose point faces +X. The
+        // caller rotates this geometry into its position around the ring.
         double r1 = MID_RADIUS - 1.0D / 18.0D;
         double r2 = CHEVRON_OUTER_RADIUS;
         double zFront = RING_DEPTH + CHEVRON_DEPTH;
@@ -358,6 +445,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         double inset = CHEVRON_WIDTH / 6.0D;
         double litZ = zFront + 1.0D / 256.0D;
 
+        // Two dark/metal quads form the split V-shaped chevron body.
         quad(pose, consumer, packedLight,
                 x2, y2, zFront, 0, 0,
                 x1, y1, zFront, 0, 16,
@@ -373,6 +461,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
                 CHEVRON_TEXTURE,
                 1.0F, 1.0F, 1.0F);
 
+        // The glow never goes fully black, then ramps up as the chevron locks.
         float lit = (float)(0.28D + Math.min(lock, 1.0D) * 0.72D);
         quad(pose, consumer, packedLight,
                 x2, y2 - inset, litZ, 0, 4,
@@ -396,25 +485,35 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         }
 
         double gameTime = blockEntity.getLevel().getGameTime() + partialTick;
+        // While dialing, the ring/chevrons provide the visual feedback. The
+        // actual puddle appears only once the connection is established.
         if (blockEntity.isDialing(blockEntity.getLevel().getGameTime())) {
             return;
         }
 
         double openElapsed = gameTime - (blockEntity.dialingStartGameTime() + blockEntity.dialingDurationTicks());
         PoseStack.Pose pose = poseStack.last();
+        // The kawoosh is a short-lived protrusion that plays at connection
+        // open, unless the iris is already blocking the front of the gate.
         if (!blockEntity.isIrisObstructing() && openElapsed >= 0.0D && openElapsed <= KAWOOSH_TICKS) {
             renderKawoosh(pose, consumer, packedLight, gameTime, openElapsed / KAWOOSH_TICKS);
         }
 
-        renderHorizonDisc(pose, consumer, packedLight, gameTime, 1.0D, HORIZON_RADIUS, HORIZON_Z, 0.88F);
+        // The steady-state event horizon is a rippled translucent disc.
+        renderHorizonDisc(pose, consumer, packedLight, gameTime, 1.0D, HORIZON_RADIUS, HORIZON_Z, HORIZON_ALPHA);
     }
 
     private void renderHorizonDisc(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, double gameTime, double scale, double radius, double baseZ, float alpha) {
+        // The horizon is split into radial bands and angular segments so each
+        // vertex can have its own Z offset, giving the surface a liquid ripple.
         for (int band = 0; band < HORIZON_BANDS; band++) {
             double r0 = radius * scale * band / HORIZON_BANDS;
             double r1 = radius * scale * (band + 1) / HORIZON_BANDS;
 
             for (int i = 0; i < RING_SEGMENTS; i++) {
+                // Sample all four corners independently. This keeps the wave
+                // continuous across band/segment boundaries because adjacent
+                // quads reuse the same band/segment inputs.
                 double z00 = baseZ + horizonRipple(gameTime, band, i);
                 double z01 = baseZ + horizonRipple(gameTime, band + 1, i);
                 double z11 = baseZ + horizonRipple(gameTime, band + 1, i + 1);
@@ -431,15 +530,19 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     }
 
     private void renderKawoosh(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, double gameTime, double progress) {
+        // The first 28% blooms outward quickly; the remainder fades/collapses.
+        // ease(bloom) avoids a harsh start at the exact opening tick.
         double bloom = progress < 0.28D ? progress / 0.28D : 1.0D;
         double radius = HORIZON_RADIUS * Math.min(1.0D, ease(bloom) * 1.18D);
-        float alpha = (float)(0.82D * Math.pow(Math.max(0.0D, 1.0D - progress), 0.7D));
+        float alpha = (float)(KAWOOSH_ALPHA * Math.pow(Math.max(0.0D, 1.0D - progress), 0.7D));
 
         if (radius <= 0.05D || alpha <= 0.0F) {
             return;
         }
 
         for (int band = 0; band < HORIZON_BANDS; band++) {
+            // f0/f1 are normalized radial positions. The displacement profile
+            // uses them to make the center jet out farther than the rim.
             double f0 = (double)band / HORIZON_BANDS;
             double f1 = (double)(band + 1) / HORIZON_BANDS;
             double r0 = radius * f0;
@@ -464,8 +567,12 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     private double horizonRipple(double gameTime, int band, int segment) {
         int wrappedSegment = Math.floorMod(segment, RING_SEGMENTS);
         double radial = (double)band / HORIZON_BANDS;
+        // Fade toward the outside so the puddle edge stays relatively stable
+        // against the frame instead of visibly clipping through it.
         double edgeFade = 1.0D - radial * 0.55D;
         double angle = 2.0D * Math.PI * wrappedSegment / RING_SEGMENTS;
+        // Two low-amplitude waves moving at different speeds/directions create
+        // an organic wobble without needing a noise texture or per-frame state.
         return (Math.sin(gameTime * 0.1D + band * 1.7D + angle * 3.0D)
                 + Math.cos(gameTime * 0.07D + band * 0.9D - angle * 2.0D) * 0.45D)
                 * 0.018D * edgeFade;
@@ -474,14 +581,19 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     private double kawooshDisplacement(double gameTime, double progress, double radialFraction, int segment) {
         int wrappedSegment = Math.floorMod(segment, RING_SEGMENTS);
         double angle = 2.0D * Math.PI * wrappedSegment / RING_SEGMENTS;
+        // bloom controls the initial expansion; collapse controls the later
+        // retraction. They deliberately split at the same 28% used for radius.
         double bloom = progress < 0.28D ? progress / 0.28D : 1.0D;
         double collapse = progress < 0.28D ? 1.0D : 1.0D - (progress - 0.28D) / 0.72D;
         double protrude = 3.25D * ease(bloom) * Math.pow(Math.max(0.0D, collapse), 0.45D);
+        // Add a small animated surface wave on top of the large forward jet.
         double wave = Math.sin(gameTime * 0.45D + angle * 5.5D + radialFraction * 4.0D) * 0.04D * (1.0D - radialFraction);
         return protrude * kawooshProfile(radialFraction) + wave;
     }
 
     private double kawooshProfile(double radialFraction) {
+        // Strong center spike plus a subtle rim bulge makes the shape read more
+        // like an erupting membrane and less like a flat cone.
         double centerJet = Math.pow(1.0D - radialFraction, 2.55D);
         double rimBulge = Math.sin(radialFraction * Math.PI) * 0.18D;
         return centerJet + rimBulge;
@@ -498,6 +610,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             double uvRadius,
             float alpha,
             double gameTime) {
+        // Horizon quads use animated UVs, unlike frame quads, so the texture
+        // appears to swirl independently of the mesh displacement.
         horizonVertex(pose, consumer, packedLight, x1, y1, z1, animatedU(x1, y1, uvRadius, gameTime), animatedV(x1, y1, uvRadius, gameTime), alpha);
         horizonVertex(pose, consumer, packedLight, x2, y2, z2, animatedU(x2, y2, uvRadius, gameTime), animatedV(x2, y2, uvRadius, gameTime), alpha);
         horizonVertex(pose, consumer, packedLight, x3, y3, z3, animatedU(x3, y3, uvRadius, gameTime), animatedV(x3, y3, uvRadius, gameTime), alpha);
@@ -507,6 +621,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     private double animatedU(double x, double y, double radius, double gameTime) {
         double radial = Math.sqrt(x * x + y * y);
         double angle = Math.atan2(y, x);
+        // Start from a normal disc projection, then perturb along radial and
+        // angular waves to keep the puddle texture alive while connected.
         double pulse = Math.sin(gameTime * 0.13D - radial * 4.2D) * 0.012D;
         double shimmer = Math.sin(gameTime * 0.19D + angle * 7.0D + radial * 2.0D) * 0.006D;
         return 0.5D + x / (radius * 2.0D) + Math.cos(angle) * pulse + Math.sin(angle * 3.0D) * shimmer;
@@ -515,6 +631,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     private double animatedV(double x, double y, double radius, double gameTime) {
         double radial = Math.sqrt(x * x + y * y);
         double angle = Math.atan2(y, x);
+        // Different phase/speeds from U avoid a simple back-and-forth slide.
         double pulse = Math.cos(gameTime * 0.12D - radial * 3.8D) * 0.012D;
         double shimmer = Math.cos(gameTime * 0.17D - angle * 6.0D + radial * 2.4D) * 0.006D;
         return 0.5D + y / (radius * 2.0D) + Math.sin(angle) * pulse + Math.cos(angle * 2.0D) * shimmer;
@@ -535,20 +652,29 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         double ringRotation = 0.0D;
         double previousRotation = 0.0D;
 
+        // Each address symbol gets a spin window followed by a chevron lock
+        // window. Later symbols start after the previous symbol's total window,
+        // so the dialing animation advances one glyph/chevron at a time.
         for (int i = 0; i < address.length() && i < CHEVRON_LOCK_ORDER.length; i++) {
             double symbolStart = i * (SPIN_TICKS + CHEVRON_TICKS);
             double spinProgress = clamp((elapsed - symbolStart) / SPIN_TICKS);
-            double targetRotation = symbolRotation(address.charAt(i));
+            double targetRotation = symbolRotation(address.charAt(i), i);
 
+            // Rotate from the previous symbol to the current target using the
+            // shortest path around the circle.
             if (spinProgress > 0.0D) {
                 ringRotation = lerpAngle(previousRotation, targetRotation, ease(spinProgress));
             }
 
+            // Once spinning finishes, the mapped chevron eases into its locked
+            // position and glow.
             double lockProgress = clamp((elapsed - symbolStart - SPIN_TICKS) / CHEVRON_TICKS);
             if (lockProgress > 0.0D) {
                 chevrons[CHEVRON_LOCK_ORDER[i]] = ease(lockProgress);
             }
 
+            // Completed symbols become the new starting angle for subsequent
+            // symbols. This keeps partial ticks from snapping backwards.
             if (elapsed >= symbolStart + SPIN_TICKS) {
                 previousRotation = targetRotation;
                 ringRotation = targetRotation;
@@ -558,13 +684,25 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         return new DialingRenderState(ringRotation, chevrons);
     }
 
-    private double symbolRotation(char symbol) {
+    private double symbolRotation(char symbol, int addressIndex) {
         int index = LEGACY_GLYPHS.indexOf(symbol);
         if (index < 0) {
             return 0.0D;
         }
 
-        return normalizeAngle(index * (360.0D / RING_SEGMENTS));
+        // One glyph per ring segment. Rotate the addressed glyph to the
+        // chevron that is locking this address position, instead of treating
+        // glyph 0 as an arbitrary absolute ring angle. This preserves the
+        // legacy ASCII address format while making the visible ring symbol
+        // match the DHD symbol the player pressed.
+        double symbolRotation = index * RING_SYMBOL_ANGLE;
+        double chevronRotation = chevronRotation(addressIndex);
+        return normalizeAngle(chevronRotation - symbolRotation - RING_SYMBOL_CENTER_OFFSET);
+    }
+
+    private double chevronRotation(int addressIndex) {
+        int lockIndex = CHEVRON_LOCK_ORDER[Math.min(addressIndex, CHEVRON_LOCK_ORDER.length - 1)];
+        return lockIndex * CHEVRON_ANGLE - CHEVRON_ANGLE_OFFSET;
     }
 
     private DialingRenderState connectedState(StargateBaseBlockEntity blockEntity) {
@@ -574,15 +712,21 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
 
         String address = blockEntity.connectedAddress();
         double[] chevrons = new double[CHEVRONS];
+        // A connected gate displays all chevrons for the stored address as
+        // fully locked, even when the active dialing animation is over.
         for (int i = 0; i < address.length() && i < CHEVRON_LOCK_ORDER.length; i++) {
             chevrons[CHEVRON_LOCK_ORDER[i]] = 1.0D;
         }
 
-        double ringRotation = address.isEmpty() ? 0.0D : symbolRotation(address.charAt(Math.min(address.length(), CHEVRON_LOCK_ORDER.length) - 1));
+        // Leave the ring parked on the final dialed symbol.
+        int finalSymbolIndex = Math.min(address.length(), CHEVRON_LOCK_ORDER.length) - 1;
+        double ringRotation = address.isEmpty() ? 0.0D : symbolRotation(address.charAt(finalSymbolIndex), finalSymbolIndex);
         return new DialingRenderState(ringRotation, chevrons);
     }
 
     private double lerpAngle(double start, double end, double progress) {
+        // Interpolate across the wrap boundary correctly. For example, 350 -> 5
+        // should move 15 degrees forward, not 345 degrees backward.
         double delta = normalizeAngle(end - start);
         if (delta > 180.0D) {
             delta -= 360.0D;
@@ -597,6 +741,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     }
 
     private double ease(double progress) {
+        // Cosine ease-in/ease-out in [0, 1]. Used for chunky mechanical motion
+        // so spins and locks do not start/stop linearly.
         return 0.5D - Math.cos(clamp(progress) * Math.PI) * 0.5D;
     }
 
@@ -612,6 +758,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         private static final DialingRenderState IDLE = new DialingRenderState(0.0D, new double[CHEVRONS]);
 
         private double chevronLock(int index) {
+            // Defensive bounds check keeps rendering resilient if constants or
+            // lock-order data change later.
             return index >= 0 && index < chevronLocks.length ? chevronLocks[index] : 0.0D;
         }
     }
@@ -629,6 +777,9 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             double x4, double y4, double z4, double u4, double v4,
             int tile,
             float red, float green, float blue) {
+        // tile >= 0 means the U/V values above are 0..16 pixel coordinates
+        // inside a tile of the 16x16 frame atlas. tile < 0 means the caller
+        // already supplied normalized UVs, as the glyph strip does.
         if (tile >= 0) {
             u1 = tileU(tile, u1);
             v1 = tileV(tile, v1);
@@ -647,14 +798,18 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     }
 
     private double tileU(int tile, double pixelU) {
+        // Low nibble is tile X, pixelU is a 0..16 coordinate inside that tile.
         return ((tile & 0xF) * FRAME_TILE_SIZE + pixelU * (FRAME_TILE_SIZE / 16.0D)) / FRAME_SHEET_SIZE;
     }
 
     private double tileV(int tile, double pixelV) {
+        // High nibble is tile Y, pixelV is a 0..16 coordinate inside that tile.
         return (((tile >> 4) & 0xF) * FRAME_TILE_SIZE + pixelV * (FRAME_TILE_SIZE / 16.0D)) / FRAME_SHEET_SIZE;
     }
 
     private void vertex(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, double x, double y, double z, double u, double v, float red, float green, float blue) {
+        // Frame vertices are opaque and use fixed normals. The manual shade
+        // values passed into quad provide the visual depth cues.
         consumer.addVertex(pose, (float)x, (float)y, (float)z)
                 .setColor(red, green, blue, 1.0F)
                 .setUv((float)u, (float)v)
@@ -664,6 +819,8 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     }
 
     private void horizonVertex(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, double x, double y, double z, double u, double v, float alpha) {
+        // Tint the event horizon blue at the vertex level so the texture can
+        // remain mostly grayscale/white and still pick up the Stargate color.
         consumer.addVertex(pose, (float)x, (float)y, (float)z)
                 .setColor(0.62F, 0.86F, 1.0F, alpha)
                 .setUv((float)u, (float)v)

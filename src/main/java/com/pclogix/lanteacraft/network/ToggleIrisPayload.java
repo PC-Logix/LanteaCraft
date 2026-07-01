@@ -2,8 +2,10 @@ package com.pclogix.lanteacraft.network;
 
 import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +29,9 @@ public record ToggleIrisPayload(BlockPos basePos) implements CustomPacketPayload
     public static void handle(ToggleIrisPayload payload, IPayloadContext context) {
         if (context.player() instanceof ServerPlayer player
                 && player.level().getBlockEntity(payload.basePos()) instanceof StargateBaseBlockEntity base) {
-            base.toggleIris();
+            if (!base.toggleIris() && base.isIrisRedstoneLocked()) {
+                player.displayClientMessage(Component.translatable("message.lanteacraft.iris_redstone_locked").withStyle(ChatFormatting.RED), true);
+            }
         }
     }
 

@@ -3,16 +3,21 @@ package com.pclogix.lanteacraft.compat.computercraft;
 import com.pclogix.lanteacraft.gate.StargateEntry;
 import com.pclogix.lanteacraft.gate.StargateEventDispatcher;
 import com.pclogix.lanteacraft.gate.StargateMultiblock;
+import com.pclogix.lanteacraft.gate.StargateNetworkSavedData;
 import com.pclogix.lanteacraft.registry.ModBlocks;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.PeripheralCapability;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public final class ComputerCraftCompat {
     private static final Map<GateKey, StargatePeripheral> PERIPHERALS = new ConcurrentHashMap<>();
@@ -62,10 +67,53 @@ public final class ComputerCraftCompat {
     }
 
     private static void handleGateEvent(StargateEventDispatcher.GateEvent event) {
-        StargatePeripheral peripheral = PERIPHERALS.get(GateKey.of(event.local()));
-        if (peripheral != null) {
-            peripheral.queue(event);
+        ServerLevel localLevel = serverLevel(event.local());
+        if (localLevel != null) {
+            reconcileActiveConnections(localLevel);
         }
+
+        StargatePeripheral localPeripheral = ensurePeripheral(event.local());
+        if (localPeripheral != null) {
+            if (event.remote() != null && !"closed".equals(event.type())) {
+                localPeripheral.registerWirelessReceiver();
+            }
+            localPeripheral.queue(event);
+            if ("closed".equals(event.type())) {
+                localPeripheral.unregisterWirelessReceiver();
+            }
+        }
+
+        if (event.remote() != null && !"closed".equals(event.type())) {
+            StargatePeripheral remotePeripheral = ensurePeripheral(event.remote());
+            if (remotePeripheral != null) {
+                remotePeripheral.registerWirelessReceiver();
+            }
+        }
+    }
+
+    static void reconcileActiveConnections(ServerLevel level) {
+        StargateNetworkSavedData network = StargateNetworkSavedData.get(level);
+        for (String sourceAddress : network.activeSourceAddresses()) {
+            network.findActiveEntryByAddress(sourceAddress).ifPresent(ComputerCraftCompat::registerWirelessReceiver);
+            network.findConnectedDestination(sourceAddress).ifPresent(ComputerCraftCompat::registerWirelessReceiver);
+        }
+    }
+
+    private static void registerWirelessReceiver(StargateEntry entry) {
+        StargatePeripheral peripheral = ensurePeripheral(entry);
+        if (peripheral != null) {
+            peripheral.registerWirelessReceiver();
+        }
+    }
+
+    private static StargatePeripheral ensurePeripheral(StargateEntry entry) {
+        ServerLevel level = serverLevel(entry);
+        return level == null ? null : peripheral(level, entry);
+    }
+
+    private static ServerLevel serverLevel(StargateEntry entry) {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        return server == null ? null : server.getLevel(ResourceKey.create(Registries.DIMENSION, entry.dimension()));
     }
 
     static GateKey key(ServerLevel level, BlockPos basePos) {

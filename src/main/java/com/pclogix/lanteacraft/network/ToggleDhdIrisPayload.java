@@ -36,10 +36,14 @@ public record ToggleDhdIrisPayload(BlockPos dhdPos) implements CustomPacketPaylo
 
         StargateMultiblock.findNearestEntry(level, payload.dhdPos(), Config.DHD_SEARCH_RADIUS.get()).ifPresentOrElse(entry -> {
             if (level.getBlockEntity(entry.basePos()) instanceof StargateBaseBlockEntity base && base.hasIris()) {
-                base.toggleIris();
-                player.displayClientMessage(Component.translatable(base.isIrisClosedOrClosing()
-                        ? "message.lanteacraft.iris_closing"
-                        : "message.lanteacraft.iris_opening").withStyle(ChatFormatting.GRAY), true);
+                boolean changed = base.toggleIris();
+                if (!changed && base.isIrisRedstoneLocked()) {
+                    player.displayClientMessage(Component.translatable("message.lanteacraft.iris_redstone_locked").withStyle(ChatFormatting.RED), true);
+                } else {
+                    player.displayClientMessage(Component.translatable(base.isIrisClosedOrClosing()
+                            ? "message.lanteacraft.iris_closing"
+                            : "message.lanteacraft.iris_opening").withStyle(ChatFormatting.GRAY), true);
+                }
             } else {
                 LanteaCraft.LOGGER.warn("DHD at {} found Stargate {} for iris toggle, but it has no iris.", payload.dhdPos(), entry.basePos());
                 player.displayClientMessage(Component.translatable("message.lanteacraft.iris_missing").withStyle(ChatFormatting.RED), true);
