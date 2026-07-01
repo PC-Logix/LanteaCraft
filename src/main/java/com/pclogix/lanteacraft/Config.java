@@ -33,6 +33,14 @@ public final class Config {
             .comment("Cooldown in ticks before the same entity can trigger Stargate travel again.")
             .defineInRange("gateTeleportCooldownTicks", 40, 1, 200);
 
+    public static final ModConfigSpec.BooleanValue ENABLE_ORE_RETROGEN = BUILDER
+            .comment("Generates LanteaCraft ores in already-existing chunks when they are loaded. Newly generated chunks already receive ores through normal worldgen.")
+            .define("enableOreRetrogen", false);
+
+    public static final ModConfigSpec.IntValue ORE_RETROGEN_CHUNKS_PER_TICK = BUILDER
+            .comment("Maximum number of old chunks to process for LanteaCraft ore retrogen per dimension tick.")
+            .defineInRange("oreRetrogenChunksPerTick", 1, 1, 16);
+
     static final ModConfigSpec SPEC = BUILDER.build();
 
     private Config() {

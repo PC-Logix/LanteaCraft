@@ -12,6 +12,7 @@ import com.pclogix.lanteacraft.gate.StargateChunkLoading;
 import com.pclogix.lanteacraft.gate.StargateTeleportHandler;
 import com.pclogix.lanteacraft.registry.ModBlockEntities;
 import com.pclogix.lanteacraft.registry.ModSounds;
+import com.pclogix.lanteacraft.worldgen.LanteaRetrogen;
 import com.pclogix.lanteacraft.worldgen.LanteaWorldgenEvents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -40,6 +41,8 @@ public class LanteaCraft {
         }
         StargateTeleportHandler.register(NeoForge.EVENT_BUS);
         NeoForge.EVENT_BUS.addListener(LanteaWorldgenEvents::onLootTableLoad);
+        NeoForge.EVENT_BUS.addListener(LanteaRetrogen::onChunkLoad);
+        NeoForge.EVENT_BUS.addListener(LanteaRetrogen::onLevelTick);
         NeoForge.EVENT_BUS.addListener(LanteaCommands::register);
 
         modEventBus.addListener(StargateChunkLoading::registerTicketController);
