@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "lanteacraft:block/lantean_glass"
+  },
+  "render_type": "minecraft:translucent"
+}

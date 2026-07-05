@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "TNT",
+    "NCN",
+    "TNT"
+  ],
+  "key": {
+    "T": {
+      "item": "lanteacraft:trinium_ingot"
+    },
+    "N": {
+      "item": "lanteacraft:naquadah_ingot"
+    },
+    "C": {
+      "item": "lanteacraft:core_crystal"
+    }
+  },
+  "result": {
+    "id": "lanteacraft:naquadah_generator",
+    "count": 1
+  }
+}

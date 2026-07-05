@@ -1,18 +1,26 @@
 package com.pclogix.lanteacraft.block.entity;
 
+import com.pclogix.lanteacraft.Config;
+import com.pclogix.lanteacraft.block.DhdBlock;
+import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.registry.ModBlockEntities;
 import com.pclogix.lanteacraft.registry.ModSounds;
 import com.pclogix.lanteacraft.gate.IrisState;
 import com.pclogix.lanteacraft.gate.IrisType;
 import com.pclogix.lanteacraft.gate.StargateEventDispatcher;
 import com.pclogix.lanteacraft.gate.StargateMultiblock;
+import com.pclogix.lanteacraft.gate.StargateNetworkSavedData;
 import com.pclogix.lanteacraft.item.IrisUpgradeItem;
+import com.pclogix.lanteacraft.power.ConfigurableEnergyStorage;
+import com.pclogix.lanteacraft.power.StargatePower;
+import java.util.Optional;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Blocks;
@@ -43,6 +51,13 @@ public class StargateBaseBlockEntity extends BlockEntity {
     private boolean irisRedstoneEnabled = true;
     private boolean irisRedstoneActive;
     private String gdoCode = "";
+    private boolean ancientPower;
+    private boolean eighthChevronUnlocked;
+    private final ConfigurableEnergyStorage energy = new ConfigurableEnergyStorage(
+            () -> Config.GATE_BUFFER_CAPACITY.get().intValue(),
+            () -> Config.ENABLE_FE_POWER.getAsBoolean() ? Config.GATE_MAX_RECEIVE.get() : 0,
+            () -> Config.ENABLE_FE_POWER.getAsBoolean() && Config.ALLOW_GATE_ENERGY_EXTRACT.getAsBoolean() ? Config.GATE_MAX_EXTRACT.get() : 0,
+            this::sync);
     private final ItemStackHandler irisItems = new ItemStackHandler(1) {
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
@@ -95,6 +110,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
         if (wasConnected && level != null) {
             level.playSound(null, worldPosition, ModSounds.STARGATE_CLOSE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
         }
+        setWormholeOpen(false);
         sync();
     }
 
@@ -126,7 +142,12 @@ public class StargateBaseBlockEntity extends BlockEntity {
         if (isConnected() && dialingStartGameTime >= 0L && gameTime > dialingStartGameTime + dialingDurationTicks && !openSoundPlayed) {
             openSoundPlayed = true;
             level.playSound(null, worldPosition, ModSounds.STARGATE_OPEN.get(), SoundSource.BLOCKS, 1.25F, 1.0F);
+            setWormholeOpen(true);
             StargateMultiblock.findEntryFrom(level, worldPosition).ifPresent(gate -> StargateEventDispatcher.wormholeOpened((net.minecraft.server.level.ServerLevel)level, gate));
+        }
+
+        if (isConnected() && !isDialing(gameTime)) {
+            setWormholeOpen(true);
         }
 
         if (isConnected() && !isDialing(gameTime) && nextAmbientSoundTime == 0L) {
@@ -138,6 +159,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
             level.playSound(null, worldPosition, ModSounds.STARGATE_AMBIENT.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
         }
 
+        tickWormholePower();
         tickIris();
     }
 
@@ -155,6 +177,41 @@ public class StargateBaseBlockEntity extends BlockEntity {
 
         if (!level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
+    }
+
+    private void setWormholeOpen(boolean open) {
+        if (level == null || level.isClientSide) {
+            return;
+        }
+
+        BlockState state = getBlockState();
+        boolean changed = false;
+        if (state.hasProperty(StargateBaseBlock.WORMHOLE_OPEN) && state.getValue(StargateBaseBlock.WORMHOLE_OPEN) != open) {
+            level.setBlock(worldPosition, state.setValue(StargateBaseBlock.WORMHOLE_OPEN, open), Block.UPDATE_ALL);
+            changed = true;
+        }
+
+        if (changed) {
+            updateLinkedDhds(open);
+        }
+    }
+
+    private void updateLinkedDhds(boolean active) {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        int radius = Config.DHD_SEARCH_RADIUS.get();
+        for (BlockPos pos : BlockPos.betweenClosed(worldPosition.offset(-radius, -radius, -radius), worldPosition.offset(radius, radius, radius))) {
+            BlockPos dhdPos = pos.immutable();
+            if (!(serverLevel.getBlockState(dhdPos).getBlock() instanceof DhdBlock)) {
+                continue;
+            }
+
+            StargateMultiblock.findNearestEntry(serverLevel, dhdPos, radius)
+                    .filter(entry -> entry.basePos().equals(worldPosition))
+                    .ifPresent(entry -> DhdBlock.setActive(serverLevel, dhdPos, active));
         }
     }
 
@@ -206,6 +263,125 @@ public class StargateBaseBlockEntity extends BlockEntity {
 
     public ItemStackHandler irisItems() {
         return irisItems;
+    }
+
+    public ConfigurableEnergyStorage energyStorage() {
+        return energy;
+    }
+
+    public boolean isAncientInstallation() {
+        return ancientPower;
+    }
+
+    public boolean hasAncientPower() {
+        return ancientPower && Config.GENERATED_GATES_HAVE_ANCIENT_POWER.getAsBoolean();
+    }
+
+    public void setAncientPower(boolean ancientPower) {
+        if (this.ancientPower != ancientPower) {
+            this.ancientPower = ancientPower;
+            sync();
+        }
+    }
+
+    public boolean hasEighthChevronUnlocked() {
+        return eighthChevronUnlocked;
+    }
+
+    public boolean installEighthChevronUpgrade() {
+        if (eighthChevronUnlocked) {
+            return false;
+        }
+
+        eighthChevronUnlocked = true;
+        sync();
+        return true;
+    }
+
+    public long energyStored() {
+        if (hasAncientPower()) {
+            return Long.MAX_VALUE;
+        }
+        return playerPowerStored();
+    }
+
+    public boolean consumeEnergy(long amount, boolean simulate) {
+        if (amount <= 0L) {
+            return true;
+        }
+
+        if (hasAncientPower()) {
+            if (Config.GENERATED_GATES_PREFER_PLAYER_POWER.getAsBoolean() && consumePlayerPower(amount, simulate)) {
+                return true;
+            }
+            return true;
+        }
+
+        return consumePlayerPower(amount, simulate);
+    }
+
+    private boolean consumePlayerPower(long amount, boolean simulate) {
+        if (!acceptsPlayerPower()) {
+            return false;
+        }
+
+        long internal = energy.getEnergyStored();
+        long available = internal + linkedDhdEnergyStored();
+        if (available < amount) {
+            return false;
+        }
+
+        if (simulate) {
+            return true;
+        }
+
+        long fromInternal = Math.min(internal, amount);
+        if (fromInternal > 0L) {
+            energy.consume(fromInternal, false);
+        }
+
+        long remaining = amount - fromInternal;
+        if (remaining > 0L) {
+            linkedDhd().ifPresent(dhd -> dhd.extractCrystalEnergy((int)Math.min(Integer.MAX_VALUE, remaining), false));
+        }
+        return true;
+    }
+
+    private long playerPowerStored() {
+        if (!acceptsPlayerPower()) {
+            return 0L;
+        }
+        return energy.getEnergyStored() + linkedDhdEnergyStored();
+    }
+
+    private boolean acceptsPlayerPower() {
+        return !isAncientInstallation() || Config.GENERATED_GATES_ACCEPT_PLAYER_POWER.getAsBoolean();
+    }
+
+    private long linkedDhdEnergyStored() {
+        return linkedDhd().map(DhdBlockEntity::crystalEnergyStored).orElse(0);
+    }
+
+    private Optional<DhdBlockEntity> linkedDhd() {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return Optional.empty();
+        }
+
+        int radius = Config.DHD_SEARCH_RADIUS.get();
+        for (BlockPos pos : BlockPos.betweenClosed(worldPosition.offset(-radius, -radius, -radius), worldPosition.offset(radius, radius, radius))) {
+            BlockPos dhdPos = pos.immutable();
+            if (!(serverLevel.getBlockState(dhdPos).getBlock() instanceof DhdBlock)
+                    || !(serverLevel.getBlockEntity(dhdPos) instanceof DhdBlockEntity dhd)) {
+                continue;
+            }
+
+            if (StargateMultiblock.findNearestEntry(serverLevel, dhdPos, radius)
+                    .map(entry -> entry.basePos().equals(worldPosition))
+                    .orElse(false)) {
+                return Optional.of(dhd);
+            }
+        }
+        return Optional.empty();
     }
 
     public IrisType irisType() {
@@ -349,6 +525,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
         }
 
         if (irisState != IrisState.OPENING && irisState != IrisState.CLOSING) {
+            tickEnergyIrisPower();
             return;
         }
 
@@ -358,6 +535,53 @@ public class StargateBaseBlockEntity extends BlockEntity {
             irisState = irisState == IrisState.OPENING ? IrisState.OPEN : IrisState.CLOSED;
         }
         sync();
+    }
+
+    private void tickEnergyIrisPower() {
+        if (!Config.ENABLE_FE_POWER.getAsBoolean()
+                || !Config.REQUIRE_POWER_FOR_ENERGY_IRIS.getAsBoolean()
+                || irisType != IrisType.ENERGY
+                || irisState != IrisState.CLOSED) {
+            return;
+        }
+
+        long cost = Config.ENERGY_IRIS_CLOSED_COST_PER_TICK.get();
+        if (cost <= 0L || consumeEnergy(cost, false)) {
+            return;
+        }
+
+        if (Config.ENERGY_IRIS_FAIL_OPEN_WHEN_UNPOWERED.getAsBoolean()) {
+            openIris();
+        } else if (Config.DEBUG_LOGGING.getAsBoolean()) {
+            com.pclogix.lanteacraft.LanteaCraft.LOGGER.debug("Energy iris at {} is unpowered.", worldPosition);
+        }
+    }
+
+    private void tickWormholePower() {
+        if (!Config.ENABLE_FE_POWER.getAsBoolean()
+                || !(level instanceof ServerLevel serverLevel)
+                || !isConnected()
+                || isDialing(level.getGameTime())) {
+            return;
+        }
+
+        StargateNetworkSavedData network = StargateNetworkSavedData.get(serverLevel);
+        StargateMultiblock.findEntryFrom(serverLevel, worldPosition).ifPresent(origin -> network.findConnectedDestination(origin.address()).ifPresent(destination -> {
+            long cost = StargatePower.calculateSustainCostPerTick(origin, destination);
+            StargateBaseBlockEntity destinationBase = StargatePower.baseEntity(serverLevel.getServer(), destination);
+            if (!StargatePower.requiresSustainPower(this, destinationBase)) {
+                return;
+            }
+            if (StargatePower.consumeSustainPower(this, destinationBase, cost)) {
+                return;
+            }
+
+            if (Config.CLOSE_WORMHOLE_WHEN_POWER_RUNS_OUT.getAsBoolean()) {
+                com.pclogix.lanteacraft.gate.StargateDialer.disconnect(serverLevel, origin);
+            } else if (Config.DEBUG_LOGGING.getAsBoolean()) {
+                com.pclogix.lanteacraft.LanteaCraft.LOGGER.debug("Stargate wormhole {} -> {} remains open without sustain FE.", origin.address(), destination.address());
+            }
+        }));
     }
 
     private void playIrisSound(boolean opening) {
@@ -430,7 +654,10 @@ public class StargateBaseBlockEntity extends BlockEntity {
         tag.putBoolean("irisRedstoneEnabled", irisRedstoneEnabled);
         tag.putBoolean("irisRedstoneActive", irisRedstoneActive);
         tag.putString("gdoCode", gdoCode);
+        tag.putBoolean("ancientPower", ancientPower);
+        tag.putBoolean("eighthChevronUnlocked", eighthChevronUnlocked);
         tag.put("irisItems", irisItems.serializeNBT(registries));
+        tag.put("energy", energy.serializeNBT(registries));
         if (bottomCamouflage != null) {
             tag.putString("bottomCamouflage", BuiltInRegistries.BLOCK.getKey(bottomCamouflage.getBlock()).toString());
         }
@@ -452,8 +679,13 @@ public class StargateBaseBlockEntity extends BlockEntity {
         irisRedstoneEnabled = !tag.contains("irisRedstoneEnabled") || tag.getBoolean("irisRedstoneEnabled");
         irisRedstoneActive = tag.contains("irisRedstoneActive") && tag.getBoolean("irisRedstoneActive");
         gdoCode = tag.getString("gdoCode");
+        ancientPower = tag.contains("ancientPower") && tag.getBoolean("ancientPower");
+        eighthChevronUnlocked = tag.contains("eighthChevronUnlocked") && tag.getBoolean("eighthChevronUnlocked");
         if (tag.contains("irisItems")) {
             irisItems.deserializeNBT(registries, tag.getCompound("irisItems"));
+        }
+        if (tag.contains("energy")) {
+            energy.deserializeNBT(registries, tag.get("energy"));
         }
         if (irisType == null) {
             irisState = IrisState.NONE;

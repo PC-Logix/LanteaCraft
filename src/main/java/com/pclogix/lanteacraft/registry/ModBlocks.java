@@ -2,6 +2,7 @@ package com.pclogix.lanteacraft.registry;
 
 import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.block.DhdBlock;
+import com.pclogix.lanteacraft.block.NaquadahGeneratorBlock;
 import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.block.StargateComponentBlock;
 import com.pclogix.lanteacraft.block.TransportRingBlock;
@@ -27,11 +28,11 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> STARGATE_BASE = BLOCKS.register(
             "stargate_base",
-            () -> new StargateBaseBlock(machineProperties(MapColor.COLOR_GRAY).strength(10.0F, 1200.0F)));
+            () -> new StargateBaseBlock(stargateBaseProperties(MapColor.COLOR_GRAY)));
 
     public static final DeferredBlock<Block> DHD = BLOCKS.register(
             "dhd",
-            () -> new DhdBlock(machineProperties(MapColor.TERRACOTTA_BLUE).strength(4.0F, 12.0F)));
+            () -> new DhdBlock(dhdProperties(MapColor.TERRACOTTA_BLUE)));
 
     public static final DeferredBlock<Block> NOX_STARGATE_RING = BLOCKS.register(
             "nox_stargate_ring",
@@ -43,11 +44,11 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> NOX_STARGATE_BASE = BLOCKS.register(
             "nox_stargate_base",
-            () -> new StargateBaseBlock(machineProperties(MapColor.PLANT).strength(10.0F, 1200.0F), StargateVariant.NOX));
+            () -> new StargateBaseBlock(stargateBaseProperties(MapColor.PLANT), StargateVariant.NOX));
 
     public static final DeferredBlock<Block> NOX_DHD = BLOCKS.register(
             "nox_dhd",
-            () -> new DhdBlock(machineProperties(MapColor.PLANT).strength(4.0F, 12.0F), StargateVariant.NOX));
+            () -> new DhdBlock(dhdProperties(MapColor.PLANT), StargateVariant.NOX));
 
     public static final DeferredBlock<Block> WRAITH_STARGATE_RING = BLOCKS.register(
             "wraith_stargate_ring",
@@ -59,11 +60,11 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> WRAITH_STARGATE_BASE = BLOCKS.register(
             "wraith_stargate_base",
-            () -> new StargateBaseBlock(machineProperties(MapColor.COLOR_GREEN).strength(10.0F, 1200.0F), StargateVariant.WRAITH));
+            () -> new StargateBaseBlock(stargateBaseProperties(MapColor.COLOR_GREEN), StargateVariant.WRAITH));
 
     public static final DeferredBlock<Block> WRAITH_DHD = BLOCKS.register(
             "wraith_dhd",
-            () -> new DhdBlock(machineProperties(MapColor.COLOR_GREEN).strength(4.0F, 12.0F), StargateVariant.WRAITH));
+            () -> new DhdBlock(dhdProperties(MapColor.COLOR_GREEN), StargateVariant.WRAITH));
 
     public static final DeferredBlock<Block> PEGASUS_STARGATE_RING = BLOCKS.register(
             "pegasus_stargate_ring",
@@ -75,15 +76,20 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> PEGASUS_STARGATE_BASE = BLOCKS.register(
             "pegasus_stargate_base",
-            () -> new StargateBaseBlock(machineProperties(MapColor.COLOR_LIGHT_BLUE).strength(10.0F, 1200.0F), StargateVariant.PEGASUS));
+            () -> new StargateBaseBlock(stargateBaseProperties(MapColor.COLOR_LIGHT_BLUE), StargateVariant.PEGASUS));
 
     public static final DeferredBlock<Block> PEGASUS_DHD = BLOCKS.register(
             "pegasus_dhd",
-            () -> new DhdBlock(machineProperties(MapColor.COLOR_LIGHT_BLUE).strength(4.0F, 12.0F), StargateVariant.PEGASUS));
+            () -> new DhdBlock(dhdProperties(MapColor.COLOR_LIGHT_BLUE), StargateVariant.PEGASUS));
 
     public static final DeferredBlock<Block> TRANSPORT_RING = BLOCKS.register(
             "transport_ring",
             () -> new TransportRingBlock(machineProperties(MapColor.GOLD).strength(5.0F, 20.0F)));
+
+    public static final DeferredBlock<Block> NAQUADAH_GENERATOR = BLOCKS.register(
+            "naquadah_generator",
+            () -> new NaquadahGeneratorBlock(machineProperties(MapColor.COLOR_GREEN).strength(5.0F, 12.0F)
+                    .lightLevel(state -> state.hasProperty(NaquadahGeneratorBlock.ACTIVE) && state.getValue(NaquadahGeneratorBlock.ACTIVE) ? 8 : 0)));
 
     public static final DeferredBlock<Block> NAQUADAH_ORE = BLOCKS.registerSimpleBlock(
             "naquadah_ore",
@@ -101,6 +107,38 @@ public final class ModBlocks {
             "trinium_block",
             metalProperties(MapColor.COLOR_LIGHT_BLUE).strength(5.0F, 6.0F));
 
+    public static final DeferredBlock<Block> LANTEAN_WALL = BLOCKS.registerSimpleBlock(
+            "lantean_wall",
+            lanteanStoneProperties(MapColor.COLOR_LIGHT_BLUE));
+
+    public static final DeferredBlock<Block> LANTEAN_CARVED_WALL = BLOCKS.registerSimpleBlock(
+            "lantean_carved_wall",
+            lanteanStoneProperties(MapColor.COLOR_LIGHT_BLUE));
+
+    public static final DeferredBlock<Block> LANTEAN_PANEL = BLOCKS.registerSimpleBlock(
+            "lantean_panel",
+            lanteanMetalProperties(MapColor.COLOR_CYAN));
+
+    public static final DeferredBlock<Block> LANTEAN_LIGHT_PANEL = BLOCKS.registerSimpleBlock(
+            "lantean_light_panel",
+            lanteanMetalProperties(MapColor.COLOR_CYAN).lightLevel(state -> 10));
+
+    public static final DeferredBlock<Block> LANTEAN_DARK_TRIM = BLOCKS.registerSimpleBlock(
+            "lantean_dark_trim",
+            lanteanMetalProperties(MapColor.COLOR_BLUE));
+
+    public static final DeferredBlock<Block> LANTEAN_GLASS = BLOCKS.register(
+            "lantean_glass",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_CYAN)
+                    .strength(1.2F, 4.0F)
+                    .sound(SoundType.GLASS)
+                    .noOcclusion()
+                    .isValidSpawn((state, level, pos, entityType) -> false)
+                    .isRedstoneConductor((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false)));
+
     private ModBlocks() {
     }
 
@@ -116,6 +154,18 @@ public final class ModBlocks {
                 .sound(SoundType.METAL);
     }
 
+    private static BlockBehaviour.Properties stargateBaseProperties(MapColor mapColor) {
+        return machineProperties(mapColor)
+                .strength(10.0F, 1200.0F)
+                .lightLevel(state -> state.hasProperty(StargateBaseBlock.WORMHOLE_OPEN) && state.getValue(StargateBaseBlock.WORMHOLE_OPEN) ? 12 : 0);
+    }
+
+    private static BlockBehaviour.Properties dhdProperties(MapColor mapColor) {
+        return machineProperties(mapColor)
+                .strength(4.0F, 12.0F)
+                .lightLevel(state -> state.hasProperty(DhdBlock.ACTIVE) && state.getValue(DhdBlock.ACTIVE) ? 5 : 0);
+    }
+
     private static BlockBehaviour.Properties metalProperties(MapColor mapColor) {
         return BlockBehaviour.Properties.of()
                 .mapColor(mapColor)
@@ -129,5 +179,21 @@ public final class ModBlocks {
                 .strength(3.0F, 3.0F)
                 .requiresCorrectToolForDrops()
                 .sound(SoundType.STONE);
+    }
+
+    private static BlockBehaviour.Properties lanteanStoneProperties(MapColor mapColor) {
+        return BlockBehaviour.Properties.of()
+                .mapColor(mapColor)
+                .strength(4.0F, 9.0F)
+                .requiresCorrectToolForDrops()
+                .sound(SoundType.DEEPSLATE_TILES);
+    }
+
+    private static BlockBehaviour.Properties lanteanMetalProperties(MapColor mapColor) {
+        return BlockBehaviour.Properties.of()
+                .mapColor(mapColor)
+                .strength(4.5F, 12.0F)
+                .requiresCorrectToolForDrops()
+                .sound(SoundType.COPPER);
     }
 }

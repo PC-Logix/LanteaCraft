@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "lanteacraft:blank_crystal"
+    },
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "N": {
+      "item": "lanteacraft:naquadah"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "RGR",
+    "NBN",
+    "RGR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lanteacraft:energy_crystal"
+  }
+}

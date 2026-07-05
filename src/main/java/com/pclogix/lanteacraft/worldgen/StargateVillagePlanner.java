@@ -9,7 +9,7 @@ import net.minecraft.world.level.ChunkPos;
 
 public final class StargateVillagePlanner {
     private static final int RARITY_ONE_IN = 6;
-    private static final int VILLAGE_OFFSET_BLOCKS = 48;
+    private static final int VILLAGE_OFFSET_BLOCKS = 96;
     private static final int PLANNED_GATE_Y = 64;
     private static final Direction[] HORIZONTAL_DIRECTIONS = {
             Direction.NORTH,

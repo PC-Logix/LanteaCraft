@@ -1,0 +1,11 @@
+{
+  "type": "lanteacraft:abydos",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "minecraft:desert"
+    },
+    "settings": "minecraft:overworld"
+  }
+}

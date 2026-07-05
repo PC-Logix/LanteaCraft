@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "lanteacraft:core_crystal"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "N": {
+      "item": "lanteacraft:naquadah_ingot"
+    },
+    "T": {
+      "item": "lanteacraft:trinium_ingot"
+    }
+  },
+  "pattern": [
+    "TDT",
+    "NCN",
+    "TDT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lanteacraft:eighth_chevron_crystal"
+  }
+}

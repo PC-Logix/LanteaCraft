@@ -5,13 +5,18 @@ import com.pclogix.lanteacraft.compat.computercraft.ComputerCraftCompat;
 import com.pclogix.lanteacraft.command.LanteaCommands;
 import com.pclogix.lanteacraft.registry.ModBlocks;
 import com.pclogix.lanteacraft.registry.ModCreativeTabs;
+import com.pclogix.lanteacraft.registry.ModDataComponents;
+import com.pclogix.lanteacraft.registry.ModEntities;
 import com.pclogix.lanteacraft.registry.ModItems;
 import com.pclogix.lanteacraft.registry.ModMenus;
 import com.pclogix.lanteacraft.network.ModNetworking;
 import com.pclogix.lanteacraft.gate.StargateChunkLoading;
 import com.pclogix.lanteacraft.gate.StargateTeleportHandler;
+import com.pclogix.lanteacraft.power.LanteaPowerCapabilities;
 import com.pclogix.lanteacraft.registry.ModBlockEntities;
 import com.pclogix.lanteacraft.registry.ModSounds;
+import com.pclogix.lanteacraft.worldgen.AbydosSpawner;
+import com.pclogix.lanteacraft.worldgen.FixedDimensionGateBootstrap;
 import com.pclogix.lanteacraft.worldgen.LanteaRetrogen;
 import com.pclogix.lanteacraft.worldgen.LanteaWorldgenEvents;
 import net.neoforged.bus.api.IEventBus;
@@ -31,11 +36,14 @@ public class LanteaCraft {
     public LanteaCraft(IEventBus modEventBus, ModContainer modContainer) {
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModDataComponents.register(modEventBus);
         ModItems.register(modEventBus);
         ModMenus.register(modEventBus);
         ModCreativeTabs.register(modEventBus);
         ModSounds.register(modEventBus);
+        ModEntities.register(modEventBus);
         ModNetworking.register(modEventBus);
+        modEventBus.addListener(LanteaPowerCapabilities::register);
         if (ModList.get().isLoaded("computercraft")) {
             ComputerCraftCompat.register(modEventBus);
         }
@@ -43,6 +51,9 @@ public class LanteaCraft {
         NeoForge.EVENT_BUS.addListener(LanteaWorldgenEvents::onLootTableLoad);
         NeoForge.EVENT_BUS.addListener(LanteaRetrogen::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(LanteaRetrogen::onLevelTick);
+        NeoForge.EVENT_BUS.addListener(FixedDimensionGateBootstrap::onLevelTick);
+        NeoForge.EVENT_BUS.addListener(AbydosSpawner::onLevelTick);
+        NeoForge.EVENT_BUS.addListener(AbydosSpawner::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(LanteaCommands::register);
 
         modEventBus.addListener(StargateChunkLoading::registerTicketController);

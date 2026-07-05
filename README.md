@@ -398,6 +398,14 @@ The common config currently exposes:
 | `enableOreRetrogen` | `false` | Generates LanteaCraft ores in already-existing chunks as they load. |
 | `oreRetrogenChunksPerTick` | `1` | Maximum old chunks processed for ore retrogen per dimension tick. |
 
+### Optional FE Power
+
+Stargate bases can accept FE into an internal buffer when `power.enableFePower=true`. Classic gate behavior remains available by default: `power.requirePowerToDial=false` and `power.requirePowerToMaintainWormhole=false` mean dialing and active wormholes do not require FE unless a pack enables those rules.
+
+Powered dialing charges the origin gate by default. Active wormholes can draw sustain power from `ORIGIN_ONLY`, `DESTINATION_ONLY`, `BOTH_SIDES`, `PREFER_ORIGIN`, or `PREFER_DESTINATION`, and can use configurable same-dimension distance scaling and cross-dimension multipliers. Energy irises consume FE while closed when enabled and can fail open if unpowered.
+
+The Naquadah Generator is LanteaCraft's native FE source. It uses the legacy 1.7.10 generator model, burns Naquadah fuel, stores FE internally, and outputs to adjacent FE handlers.
+
 ## CC:Tweaked / ComputerCraft Support
 
 If CC:Tweaked is present, assembled Stargate blocks expose a `stargate` peripheral.

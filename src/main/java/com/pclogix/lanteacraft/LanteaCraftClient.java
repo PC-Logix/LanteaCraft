@@ -1,9 +1,15 @@
 package com.pclogix.lanteacraft;
 
+import com.pclogix.lanteacraft.client.NaquadahGeneratorScreen;
+import com.pclogix.lanteacraft.client.DhdPowerScreen;
 import com.pclogix.lanteacraft.client.StargateScreen;
+import com.pclogix.lanteacraft.client.model.GoauldSoldierModel;
+import com.pclogix.lanteacraft.client.render.GoauldSoldierRenderer;
 import com.pclogix.lanteacraft.client.render.StargateBaseRenderer;
+import com.pclogix.lanteacraft.client.render.TokraTraderRenderer;
 import com.pclogix.lanteacraft.client.render.TransportRingRenderer;
 import com.pclogix.lanteacraft.registry.ModBlockEntities;
+import com.pclogix.lanteacraft.registry.ModEntities;
 import com.pclogix.lanteacraft.registry.ModMenus;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -40,10 +46,19 @@ public class LanteaCraftClient {
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.STARGATE_BASE.get(), StargateBaseRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.TRANSPORT_RING.get(), TransportRingRenderer::new);
+        event.registerEntityRenderer(ModEntities.TOKRA_TRADER.get(), TokraTraderRenderer::new);
+        event.registerEntityRenderer(ModEntities.GOAULD_SOLDIER.get(), GoauldSoldierRenderer::new);
+    }
+
+    @SubscribeEvent
+    static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(GoauldSoldierRenderer.MODEL_LAYER, GoauldSoldierModel::createBodyLayer);
     }
 
     @SubscribeEvent
     static void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.STARGATE.get(), StargateScreen::new);
+        event.register(ModMenus.NAQUADAH_GENERATOR.get(), NaquadahGeneratorScreen::new);
+        event.register(ModMenus.DHD_POWER.get(), DhdPowerScreen::new);
     }
 }

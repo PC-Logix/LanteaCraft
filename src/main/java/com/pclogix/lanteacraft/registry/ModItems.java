@@ -4,12 +4,16 @@ import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.gate.IrisType;
 import com.pclogix.lanteacraft.item.AddressTabletItem;
 import com.pclogix.lanteacraft.item.DecoratorItem;
+import com.pclogix.lanteacraft.item.EnergyCrystalItem;
+import com.pclogix.lanteacraft.item.FixedAddressTabletItem;
 import com.pclogix.lanteacraft.item.GdoItem;
 import com.pclogix.lanteacraft.item.IrisUpgradeItem;
+import com.pclogix.lanteacraft.worldgen.FixedDimensionGates;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -33,10 +37,17 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> PEGASUS_STARGATE_BASE = ITEMS.registerSimpleBlockItem("pegasus_stargate_base", ModBlocks.PEGASUS_STARGATE_BASE);
     public static final DeferredItem<BlockItem> PEGASUS_DHD = ITEMS.registerSimpleBlockItem("pegasus_dhd", ModBlocks.PEGASUS_DHD);
     public static final DeferredItem<BlockItem> TRANSPORT_RING = ITEMS.registerSimpleBlockItem("transport_ring", ModBlocks.TRANSPORT_RING);
+    public static final DeferredItem<BlockItem> NAQUADAH_GENERATOR = ITEMS.registerSimpleBlockItem("naquadah_generator", ModBlocks.NAQUADAH_GENERATOR);
     public static final DeferredItem<BlockItem> NAQUADAH_ORE = ITEMS.registerSimpleBlockItem("naquadah_ore", ModBlocks.NAQUADAH_ORE);
     public static final DeferredItem<BlockItem> TRINIUM_ORE = ITEMS.registerSimpleBlockItem("trinium_ore", ModBlocks.TRINIUM_ORE);
     public static final DeferredItem<BlockItem> NAQUADAH_BLOCK = ITEMS.registerSimpleBlockItem("naquadah_block", ModBlocks.NAQUADAH_BLOCK);
     public static final DeferredItem<BlockItem> TRINIUM_BLOCK = ITEMS.registerSimpleBlockItem("trinium_block", ModBlocks.TRINIUM_BLOCK);
+    public static final DeferredItem<BlockItem> LANTEAN_WALL = ITEMS.registerSimpleBlockItem("lantean_wall", ModBlocks.LANTEAN_WALL);
+    public static final DeferredItem<BlockItem> LANTEAN_CARVED_WALL = ITEMS.registerSimpleBlockItem("lantean_carved_wall", ModBlocks.LANTEAN_CARVED_WALL);
+    public static final DeferredItem<BlockItem> LANTEAN_PANEL = ITEMS.registerSimpleBlockItem("lantean_panel", ModBlocks.LANTEAN_PANEL);
+    public static final DeferredItem<BlockItem> LANTEAN_LIGHT_PANEL = ITEMS.registerSimpleBlockItem("lantean_light_panel", ModBlocks.LANTEAN_LIGHT_PANEL);
+    public static final DeferredItem<BlockItem> LANTEAN_DARK_TRIM = ITEMS.registerSimpleBlockItem("lantean_dark_trim", ModBlocks.LANTEAN_DARK_TRIM);
+    public static final DeferredItem<BlockItem> LANTEAN_GLASS = ITEMS.registerSimpleBlockItem("lantean_glass", ModBlocks.LANTEAN_GLASS);
 
     public static final DeferredItem<Item> CONTROL_CRYSTAL = ITEMS.registerSimpleItem(
             "control_crystal",
@@ -47,6 +58,12 @@ public final class ModItems {
     public static final DeferredItem<Item> CORE_CRYSTAL = ITEMS.registerSimpleItem(
             "core_crystal",
             new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> EIGHTH_CHEVRON_CRYSTAL = ITEMS.registerSimpleItem(
+            "eighth_chevron_crystal",
+            new Item.Properties().rarity(Rarity.EPIC).stacksTo(1));
+    public static final DeferredItem<EnergyCrystalItem> ENERGY_CRYSTAL = ITEMS.register(
+            "energy_crystal",
+            () -> new EnergyCrystalItem(new Item.Properties().rarity(Rarity.RARE)));
     public static final DeferredItem<Item> NAQUADAH = ITEMS.registerSimpleItem("naquadah");
     public static final DeferredItem<Item> TRINIUM = ITEMS.registerSimpleItem("trinium");
     public static final DeferredItem<Item> NAQUADAH_INGOT = ITEMS.registerSimpleItem("naquadah_ingot");
@@ -63,9 +80,27 @@ public final class ModItems {
     public static final DeferredItem<AddressTabletItem> ADDRESS_TABLET = ITEMS.register(
             "address_tablet",
             () -> new AddressTabletItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+    public static final DeferredItem<FixedAddressTabletItem> ABYDOS_ADDRESS_TABLET = ITEMS.register(
+            "abydos_address_tablet",
+            () -> new FixedAddressTabletItem(
+                    FixedDimensionGates.ABYDOS_ADDRESS,
+                    "item.lanteacraft.abydos_address_tablet.tooltip",
+                    new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+    public static final DeferredItem<FixedAddressTabletItem> ATLANTIS_ADDRESS_TABLET = ITEMS.register(
+            "atlantis_address_tablet",
+            () -> new FixedAddressTabletItem(
+                    FixedDimensionGates.ATLANTIS_ADDRESS,
+                    "item.lanteacraft.atlantis_address_tablet.tooltip",
+                    new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
     public static final DeferredItem<DecoratorItem> DECORATOR = ITEMS.register(
             "decorator",
             () -> new DecoratorItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<DeferredSpawnEggItem> TOKRA_TRADER_SPAWN_EGG = ITEMS.register(
+            "tokra_trader_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.TOKRA_TRADER, 0x5f4b3b, 0xb8a26a, new Item.Properties()));
+    public static final DeferredItem<DeferredSpawnEggItem> GOAULD_SOLDIER_SPAWN_EGG = ITEMS.register(
+            "goauld_soldier_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.GOAULD_SOLDIER, 0xd2b36a, 0x20252f, new Item.Properties()));
 
     private ModItems() {
     }

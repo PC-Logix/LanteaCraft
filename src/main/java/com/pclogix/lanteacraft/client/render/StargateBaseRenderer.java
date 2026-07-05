@@ -8,14 +8,20 @@ import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.gate.IrisType;
 import com.pclogix.lanteacraft.gate.StargateVariant;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -82,11 +88,12 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     private static final int HORIZON_BANDS = 10;
     private static final double HORIZON_RADIUS = INNER_MOVING_RADIUS - 1.0D / 32.0D;
     private static final double HORIZON_Z = 0.01D;
-    private static final float HORIZON_ALPHA = 0.88F;
+    private static final float HORIZON_ALPHA = 1F;
     private static final double IRIS_Z = HORIZON_Z + 0.05D;
     private static final double KAWOOSH_TICKS = 18.0D;
-    private static final double KAWOOSH_ALPHA = 0.82D;
+    private static final double KAWOOSH_ALPHA = 1D;
     private static final int IRIS_BLADES = 32;
+    private static final int CHEVRON_MIN_BLOCK_LIGHT = 6;
 
     // Trig lookup tables for the ring mesh. The +1 lets callers use i + 1 on
     // the final segment without branching back to zero.
@@ -118,9 +125,9 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         poseStack.translate(0.5D, 3.5D, 0.5D);
         poseStack.mulPose(Axis.YP.rotationDegrees(-state.getValue(StargateBaseBlock.FACING).toYRot()));
 
-        // The gate is a magical/tech light source in practice, so render the
-        // generated pieces fullbright even if the actual block light is lower.
-        int gateLight = LightTexture.FULL_BRIGHT;
+        int frameLight = packedLight;
+        int chevronLight = boostBlockLight(packedLight, CHEVRON_MIN_BLOCK_LIGHT);
+        int effectLight = LightTexture.FULL_BRIGHT;
         DialingRenderState dialingState = dialingState(blockEntity, partialTick);
         StargateVariant variant = variant(state);
 
@@ -131,21 +138,21 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
 
         // Static gate frame and chevrons share the frame atlas.
         VertexConsumer frame = bufferSource.getBuffer(RenderType.entitySolid(frameTexture(variant)));
-        renderShell(poseStack, frame, gateLight);
-        renderChevrons(poseStack, frame, gateLight, dialingState);
+        renderShell(poseStack, frame, frameLight);
+        renderChevrons(poseStack, frame, chevronLight, dialingState);
 
         // The glyph strip is a separate cutout texture so it can rotate as one
         // band while the rest of the frame stays still.
         VertexConsumer glyphs = bufferSource.getBuffer(RenderType.entityCutout(glyphTexture(variant)));
         poseStack.pushPose();
         poseStack.mulPose(Axis.ZP.rotationDegrees((float)dialingState.ringRotation()));
-        renderGlyphRing(poseStack, glyphs, gateLight);
+        renderGlyphRing(poseStack, glyphs, frameLight);
         poseStack.popPose();
 
         // Translucent effects are rendered last in front of the frame.
         VertexConsumer horizon = bufferSource.getBuffer(RenderType.entityTranslucent(EVENT_HORIZON_TEXTURE));
-        renderEventHorizon(blockEntity, partialTick, poseStack, horizon, gateLight);
-        renderIris(blockEntity, partialTick, poseStack, bufferSource, variant, gateLight);
+        renderEventHorizon(blockEntity, partialTick, poseStack, horizon, effectLight);
+        renderIris(blockEntity, partialTick, poseStack, bufferSource, variant, effectLight);
 
         poseStack.popPose();
     }
@@ -206,9 +213,32 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             }
             poseStack.scale(1.004F, 1.004F, 1.004F);
             poseStack.translate(-0.5D, -0.5D, -0.5D);
-            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(camouflage, poseStack, bufferSource, packedLight, packedOverlay);
+            renderCamouflageBlock(blockEntity, camouflage, camouflagePos(blockEntity, x), poseStack, bufferSource, packedLight, packedOverlay);
             poseStack.popPose();
         }
+    }
+
+    private BlockPos camouflagePos(StargateBaseBlockEntity blockEntity, int x) {
+        BlockState state = blockEntity.getBlockState();
+        if (state.hasProperty(StargateBaseBlock.FACING)) {
+            Direction right = state.getValue(StargateBaseBlock.FACING).getClockWise();
+            return blockEntity.getBlockPos().relative(right, x);
+        }
+
+        return blockEntity.getBlockPos().offset(x, 0, 0);
+    }
+
+    private void renderCamouflageBlock(StargateBaseBlockEntity blockEntity, BlockState camouflage, BlockPos pos, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+        Level level = blockEntity.getLevel();
+        BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
+        if (level == null) {
+            blockRenderer.renderSingleBlock(camouflage, poseStack, bufferSource, packedLight, packedOverlay);
+            return;
+        }
+
+        RenderType renderType = ItemBlockRenderTypes.getChunkRenderType(camouflage);
+        VertexConsumer consumer = bufferSource.getBuffer(renderType);
+        blockRenderer.renderBatched(camouflage, pos, level, poseStack, consumer, false, RandomSource.create(camouflage.getSeed(pos)));
     }
 
     private void renderShell(PoseStack poseStack, VertexConsumer consumer, int packedLight) {
@@ -752,6 +782,12 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         }
 
         return Math.min(value, 1.0D);
+    }
+
+    private int boostBlockLight(int packedLight, int minBlockLight) {
+        int blockLight = (packedLight >> 4) & 0xF;
+        int skyLight = (packedLight >> 20) & 0xF;
+        return LightTexture.pack(Math.max(blockLight, minBlockLight), skyLight);
     }
 
     private record DialingRenderState(double ringRotation, double[] chevronLocks) {

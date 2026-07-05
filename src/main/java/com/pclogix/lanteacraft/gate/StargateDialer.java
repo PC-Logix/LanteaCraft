@@ -1,6 +1,7 @@
 package com.pclogix.lanteacraft.gate;
 
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
+import com.pclogix.lanteacraft.power.StargatePower;
 import com.pclogix.lanteacraft.worldgen.PlannedStargateResolver;
 import java.util.Optional;
 import net.minecraft.core.registries.Registries;
@@ -28,6 +29,12 @@ public final class StargateDialer {
             return DialResult.fail("target_unavailable", "Stargate target is unavailable: " + targetAddress);
         }
 
+        StargateBaseBlockEntity localBase = StargatePower.baseEntity(level.getServer(), local);
+        if (targetAddress.length() == StargateAddress.EXTENDED_ADDRESS_LENGTH
+                && (localBase == null || !localBase.hasEighthChevronUnlocked())) {
+            return DialResult.fail("eighth_chevron_locked", "Stargate requires an installed Eighth Chevron Crystal to dial 8-chevron addresses.");
+        }
+
         Optional<StargateEntry> destination = PlannedStargateResolver.resolve(level, targetAddress);
         if (destination.isEmpty()) {
             return DialResult.fail("unknown_address", "Unknown Stargate address: " + targetAddress);
@@ -40,6 +47,14 @@ public final class StargateDialer {
 
         if (network.findIncomingSource(local.address()).isPresent()) {
             return DialResult.fail("incoming_active", "Incoming wormholes cannot be redirected from this gate.");
+        }
+
+        StargateBaseBlockEntity targetBase = StargatePower.baseEntity(level.getServer(), target);
+        if (StargatePower.requiresPowerToDial(localBase)) {
+            long dialCost = StargatePower.calculateDialCost(local, target);
+            if (!StargatePower.consumeDialPower(localBase, targetBase, dialCost)) {
+                return DialResult.fail("insufficient_power", "Stargate lacks " + dialCost + " FE to dial.");
+            }
         }
 
         StargateChunkLoading.forceConnection(level, local, target, true);
@@ -83,7 +98,7 @@ public final class StargateDialer {
     }
 
     public static boolean isValidAddress(String address) {
-        if (address.length() != StargateAddress.ADDRESS_LENGTH) {
+        if (address.length() != StargateAddress.ADDRESS_LENGTH && address.length() != StargateAddress.EXTENDED_ADDRESS_LENGTH) {
             return false;
         }
 

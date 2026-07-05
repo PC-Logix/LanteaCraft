@@ -1,12 +1,24 @@
 {
-  "variants": {
-    "assembled=false,facing=north": { "model": "lanteacraft:block/pegasus_stargate_base" },
-    "assembled=false,facing=east": { "model": "lanteacraft:block/pegasus_stargate_base", "y": 90 },
-    "assembled=false,facing=south": { "model": "lanteacraft:block/pegasus_stargate_base", "y": 180 },
-    "assembled=false,facing=west": { "model": "lanteacraft:block/pegasus_stargate_base", "y": 270 },
-    "assembled=true,facing=north": { "model": "lanteacraft:block/empty" },
-    "assembled=true,facing=east": { "model": "lanteacraft:block/empty", "y": 90 },
-    "assembled=true,facing=south": { "model": "lanteacraft:block/empty", "y": 180 },
-    "assembled=true,facing=west": { "model": "lanteacraft:block/empty", "y": 270 }
-  }
+  "multipart": [
+    {
+      "when": { "assembled": false, "facing": "north" },
+      "apply": { "model": "lanteacraft:block/pegasus_stargate_base" }
+    },
+    {
+      "when": { "assembled": false, "facing": "east" },
+      "apply": { "model": "lanteacraft:block/pegasus_stargate_base", "y": 90 }
+    },
+    {
+      "when": { "assembled": false, "facing": "south" },
+      "apply": { "model": "lanteacraft:block/pegasus_stargate_base", "y": 180 }
+    },
+    {
+      "when": { "assembled": false, "facing": "west" },
+      "apply": { "model": "lanteacraft:block/pegasus_stargate_base", "y": 270 }
+    },
+    {
+      "when": { "assembled": true },
+      "apply": { "model": "lanteacraft:block/empty" }
+    }
+  ]
 }

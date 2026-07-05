@@ -1,6 +1,7 @@
 package com.pclogix.lanteacraft.item;
 
 import com.pclogix.lanteacraft.client.AddressTabletClientActions;
+import com.pclogix.lanteacraft.worldgen.FixedDimensionGates;
 import com.pclogix.lanteacraft.worldgen.PlannedStargate;
 import com.pclogix.lanteacraft.worldgen.PlannedStargateSavedData;
 import java.util.List;
@@ -78,7 +79,7 @@ public class AddressTabletItem extends Item {
         if (!level.isClientSide && entity instanceof Player player && level instanceof ServerLevel serverLevel) {
             PlannedStargateSavedData plans = PlannedStargateSavedData.get(serverLevel);
             if (!hasAddress(stack)) {
-                plans.nearest(serverLevel, player.blockPosition()).ifPresent(plan -> forPlan(stack, plan));
+                nearestDiscoverablePlan(plans, serverLevel, player.blockPosition()).ifPresent(plan -> forPlan(stack, plan));
             } else {
                 planFromStack(stack).ifPresent(plans::remember);
             }
@@ -166,5 +167,11 @@ public class AddressTabletItem extends Item {
 
     private static Optional<PlannedStargate> matchingPlan(ItemStack stack, String address) {
         return planFromStack(stack).filter(plan -> plan.address().equals(address));
+    }
+
+    private static Optional<PlannedStargate> nearestDiscoverablePlan(PlannedStargateSavedData plans, ServerLevel level, BlockPos origin) {
+        return plans.plans(level).stream()
+                .filter(plan -> !FixedDimensionGates.isFixedPlan(plan))
+                .min(java.util.Comparator.comparingDouble(plan -> plan.basePos().distSqr(origin)));
     }
 }

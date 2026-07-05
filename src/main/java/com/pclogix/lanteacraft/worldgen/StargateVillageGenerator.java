@@ -2,6 +2,7 @@ package com.pclogix.lanteacraft.worldgen;
 
 import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.block.DhdBlock;
+import com.pclogix.lanteacraft.block.entity.DhdBlockEntity;
 import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.gate.StargateCamouflage;
@@ -42,12 +43,23 @@ public final class StargateVillageGenerator {
     }
 
     public static boolean placeIfNeeded(ServerLevel level, PlannedStargate plan) {
+        return placeIfNeeded(level, plan, true);
+    }
+
+    public static boolean placeAtPlannedBaseIfNeeded(ServerLevel level, PlannedStargate plan) {
+        return placeIfNeeded(level, plan, false);
+    }
+
+    private static boolean placeIfNeeded(ServerLevel level, PlannedStargate plan, boolean searchForPlacement) {
         PlannedStargateSavedData data = PlannedStargateSavedData.get(level);
         if (data.isPlaced(plan.address())) {
             return false;
         }
 
-        BlockPos basePos = findPlacementBase(level, plan);
+        if (!searchForPlacement) {
+            loadFastPlacementArea(level, fastPlacementAnchor(plan), plan.facing());
+        }
+        BlockPos basePos = searchForPlacement ? findPlacementBase(level, plan) : findFastPlacementBase(level, plan);
         clearPlacementSpace(level, basePos, plan.facing());
         placePlatformTemplate(level, basePos, plan.facing());
         clearFrameSpace(level, basePos, plan.facing());
@@ -57,6 +69,7 @@ public final class StargateVillageGenerator {
         StargateNetworkSavedData.get(level).registerOrUpdateActiveGate(plan.address(), level.dimension(), basePos, plan.facing(), plan.variant(), "planned");
         StargateMultiblock.tryAssembleAtBase(level, basePos);
         applyVillageCamouflage(level, basePos, plan.facing());
+        TokraTraderSpawner.spawnForGate(level, plan, basePos);
         data.markPlaced(plan.address());
         return true;
     }
@@ -119,6 +132,36 @@ public final class StargateVillageGenerator {
         }
 
         return best;
+    }
+
+    private static BlockPos findFastPlacementBase(ServerLevel level, PlannedStargate plan) {
+        BlockPos anchor = fastPlacementAnchor(plan);
+        return surfaceBase(level, anchor);
+    }
+
+    private static BlockPos fastPlacementAnchor(PlannedStargate plan) {
+        if (plan.villagePos().equals(plan.basePos())) {
+            return plan.basePos();
+        }
+        return plan.villagePos().relative(plan.facing(), IDEAL_VILLAGE_DISTANCE).atY(plan.basePos().getY());
+    }
+
+    private static void loadFastPlacementArea(ServerLevel level, BlockPos basePos, Direction facing) {
+        Direction right = facing.getClockWise();
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minZ = Integer.MAX_VALUE;
+        int maxZ = Integer.MIN_VALUE;
+        for (int r = -PLATFORM_RIGHT_RADIUS; r <= PLATFORM_RIGHT_RADIUS; r++) {
+            for (int f = -PLATFORM_BACK_RADIUS; f <= PLATFORM_FRONT_RADIUS; f++) {
+                BlockPos pos = basePos.relative(right, r).relative(facing, f);
+                minX = Math.min(minX, pos.getX());
+                maxX = Math.max(maxX, pos.getX());
+                minZ = Math.min(minZ, pos.getZ());
+                maxZ = Math.max(maxZ, pos.getZ());
+            }
+        }
+        loadSearchArea(level, minX, minZ, maxX, maxZ);
     }
 
     private static void loadSearchArea(ServerLevel level, int minX, int minZ, int maxX, int maxZ) {
@@ -248,13 +291,38 @@ public final class StargateVillageGenerator {
                 || state.is(Blocks.STRIPPED_BIRCH_LOG)
                 || state.is(Blocks.STRIPPED_ACACIA_LOG)
                 || state.is(Blocks.STRIPPED_DARK_OAK_LOG)
+                || state.is(Blocks.ACACIA_STAIRS)
+                || state.is(Blocks.BIRCH_STAIRS)
+                || state.is(Blocks.DARK_OAK_STAIRS)
+                || state.is(Blocks.JUNGLE_STAIRS)
+                || state.is(Blocks.OAK_STAIRS)
+                || state.is(Blocks.SPRUCE_STAIRS)
+                || state.is(Blocks.ACACIA_SLAB)
+                || state.is(Blocks.BIRCH_SLAB)
+                || state.is(Blocks.DARK_OAK_SLAB)
+                || state.is(Blocks.JUNGLE_SLAB)
+                || state.is(Blocks.OAK_SLAB)
+                || state.is(Blocks.SPRUCE_SLAB)
                 || state.is(Blocks.COBBLESTONE)
                 || state.is(Blocks.MOSSY_COBBLESTONE)
                 || state.is(Blocks.COBBLESTONE_STAIRS)
                 || state.is(Blocks.COBBLESTONE_SLAB)
                 || state.is(Blocks.COBBLESTONE_WALL)
                 || state.is(Blocks.MOSSY_COBBLESTONE_WALL)
+                || state.is(Blocks.SANDSTONE)
+                || state.is(Blocks.CUT_SANDSTONE)
+                || state.is(Blocks.SMOOTH_SANDSTONE)
+                || state.is(Blocks.SANDSTONE_STAIRS)
+                || state.is(Blocks.SANDSTONE_SLAB)
+                || state.is(Blocks.SANDSTONE_WALL)
+                || state.is(Blocks.TERRACOTTA)
+                || state.is(Blocks.WHITE_TERRACOTTA)
+                || state.is(Blocks.ORANGE_TERRACOTTA)
+                || state.is(Blocks.YELLOW_TERRACOTTA)
+                || state.is(Blocks.LIGHT_GRAY_TERRACOTTA)
+                || state.is(Blocks.BROWN_TERRACOTTA)
                 || state.is(Blocks.HAY_BLOCK)
+                || state.is(Blocks.GLASS)
                 || state.is(Blocks.GLASS_PANE);
     }
 
@@ -333,6 +401,9 @@ public final class StargateVillageGenerator {
             for (int x = -3; x <= 3; x++) {
                 if (x == 0 && y == 0) {
                     level.setBlock(basePos, baseBlock(variant).defaultBlockState().setValue(StargateBaseBlock.FACING, facing), Block.UPDATE_ALL);
+                    if (level.getBlockEntity(basePos) instanceof StargateBaseBlockEntity base) {
+                        base.setAncientPower(true);
+                    }
                 } else if (isFramePosition(x, y)) {
                     Block block = isChevronPosition(x, y) ? chevronBlock(variant) : ringBlock(variant);
                     level.setBlock(basePos.relative(right, x).above(y), block.defaultBlockState(), Block.UPDATE_ALL);
@@ -348,6 +419,9 @@ public final class StargateVillageGenerator {
             level.setBlock(dhdPos.below(), Blocks.SMOOTH_STONE.defaultBlockState(), Block.UPDATE_ALL);
         }
         level.setBlock(dhdPos, dhdBlock(variant).defaultBlockState().setValue(DhdBlock.FACING, facing), Block.UPDATE_ALL);
+        if (level.getBlockEntity(dhdPos) instanceof DhdBlockEntity dhd) {
+            dhd.installChargedCrystal();
+        }
     }
 
     private static void applyVillageCamouflage(ServerLevel level, BlockPos basePos, Direction facing) {

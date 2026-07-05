@@ -4,6 +4,11 @@
     "lanteacraft:naquadah_ore",
     "lanteacraft:trinium_ore",
     "lanteacraft:naquadah_block",
-    "lanteacraft:trinium_block"
+    "lanteacraft:trinium_block",
+    "lanteacraft:lantean_wall",
+    "lanteacraft:lantean_carved_wall",
+    "lanteacraft:lantean_panel",
+    "lanteacraft:lantean_light_panel",
+    "lanteacraft:lantean_dark_trim"
   ]
 }

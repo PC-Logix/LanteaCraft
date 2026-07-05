@@ -2,6 +2,7 @@ package com.pclogix.lanteacraft.gate;
 
 import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.Config;
+import com.pclogix.lanteacraft.block.DhdBlock;
 import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.block.StargateComponentBlock;
 import com.pclogix.lanteacraft.registry.ModBlocks;
@@ -154,7 +155,12 @@ public final class StargateMultiblock {
             if (partState.hasProperty(StargateComponentBlock.ASSEMBLED)) {
                 level.setBlock(partPos, partState.setValue(StargateComponentBlock.ASSEMBLED, false), Block.UPDATE_ALL);
             } else if (partState.hasProperty(StargateBaseBlock.ASSEMBLED)) {
-                level.setBlock(partPos, partState.setValue(StargateBaseBlock.ASSEMBLED, false), Block.UPDATE_ALL);
+                updateLinkedDhds(level, partPos, false);
+                BlockState disassembledState = partState.setValue(StargateBaseBlock.ASSEMBLED, false);
+                if (disassembledState.hasProperty(StargateBaseBlock.WORMHOLE_OPEN)) {
+                    disassembledState = disassembledState.setValue(StargateBaseBlock.WORMHOLE_OPEN, false);
+                }
+                level.setBlock(partPos, disassembledState, Block.UPDATE_ALL);
             }
         }
 
@@ -175,6 +181,24 @@ public final class StargateMultiblock {
         }
 
         return true;
+    }
+
+    private static void updateLinkedDhds(Level level, BlockPos basePos, boolean active) {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        int radius = Config.DHD_SEARCH_RADIUS.get();
+        for (BlockPos pos : BlockPos.betweenClosed(basePos.offset(-radius, -radius, -radius), basePos.offset(radius, radius, radius))) {
+            BlockPos dhdPos = pos.immutable();
+            if (!(serverLevel.getBlockState(dhdPos).getBlock() instanceof DhdBlock)) {
+                continue;
+            }
+
+            findNearestEntry(serverLevel, dhdPos, radius)
+                    .filter(entry -> entry.basePos().equals(basePos))
+                    .ifPresent(entry -> DhdBlock.setActive(serverLevel, dhdPos, active));
+        }
     }
 
     private static Optional<List<BlockPos>> findValidFrame(Level level, BlockPos basePos, Direction facing, StargateVariant variant) {

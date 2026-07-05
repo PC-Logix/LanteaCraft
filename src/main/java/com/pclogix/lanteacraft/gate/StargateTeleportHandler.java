@@ -30,7 +30,7 @@ public class StargateTeleportHandler {
     private static final double HALF_INTERIOR_WIDTH = 2.35D;
     private static final double MIN_INTERIOR_Y = 0.1D;
     private static final double MAX_INTERIOR_Y = 5.9D;
-    private static final double HALF_INTERIOR_DEPTH = 0.7D;
+    private static final double HALF_INTERIOR_DEPTH = 1.35D;
     private static final double EXIT_DISTANCE = 1.65D;
     private static final double REJECTION_DISTANCE = 1.85D;
     private static final double IRIS_BARRIER_DISTANCE = 0.92D;
@@ -140,11 +140,7 @@ public class StargateTeleportHandler {
                 continue;
             }
 
-            if (isMovingOutSourceFront(entity, source)) {
-                passThroughBackOfSource(entity, source, localPosition.get());
-            } else {
-                teleport(entity, source, destination, localPosition.get());
-            }
+            teleport(entity, source, destination, localPosition.get());
             cooldowns.put(entity.getUUID(), now + teleportCooldownTicks());
         }
     }
@@ -265,20 +261,6 @@ public class StargateTeleportHandler {
         }
     }
 
-    private void passThroughBackOfSource(Entity entity, StargateEntry source, GateLocalPosition localPosition) {
-        Vec3 target = frontOf(source, localPosition, EXIT_DISTANCE);
-        Vec3 forward = step(source.facing());
-        Vec3 velocity = entity.getDeltaMovement();
-        double outwardSpeed = Math.max(Math.abs(velocity.dot(forward)), 0.35D);
-
-        LanteaCraft.LOGGER.info("Passing {} through the back of outgoing gate {} to its front side", entity.getName().getString(), source.address());
-        entity.teleportTo((ServerLevel)entity.level(), target.x, target.y, target.z, Set.<RelativeMovement>of(), entity.getYRot(), entity.getXRot());
-        entity.setDeltaMovement(velocity.subtract(forward.scale(velocity.dot(forward))).add(forward.scale(outwardSpeed)));
-        entity.hurtMarked = true;
-        entity.hasImpulse = true;
-        StargateEventDispatcher.localEntityEvent(entity, source, "outgoing_back");
-    }
-
     private void rejectIncomingTraveler(Entity entity, StargateEntry destination, GateLocalPosition localPosition) {
         Vec3 target = frontOf(destination, localPosition, REJECTION_DISTANCE);
         Vec3 forward = step(destination.facing());
@@ -307,18 +289,6 @@ public class StargateTeleportHandler {
 
     private static Vec3 step(Direction direction) {
         return new Vec3(direction.getStepX(), direction.getStepY(), direction.getStepZ());
-    }
-
-    private boolean isMovingOutSourceFront(Entity entity, StargateEntry source) {
-        Vec3 forward = step(source.facing());
-        double forwardVelocity = entity.getDeltaMovement().dot(forward);
-        if (Math.abs(forwardVelocity) > 0.01D) {
-            return forwardVelocity > 0.0D;
-        }
-
-        return localPositionInGate(entity.position(), source)
-                .map(localPosition -> localPosition.depth() < 0.0D)
-                .orElse(false);
     }
 
     private boolean canGateAffect(Entity entity) {

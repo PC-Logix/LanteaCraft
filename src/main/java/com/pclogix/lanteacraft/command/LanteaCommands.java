@@ -39,7 +39,6 @@ public final class LanteaCommands {
     private static final int LIST_LIMIT = 20;
     private static final int DEBUG_LOOT_SCAN_RADIUS = 512;
     private static final int DEBUG_LOOT_MIN_PLANS = 6;
-
     private LanteaCommands() {
     }
 

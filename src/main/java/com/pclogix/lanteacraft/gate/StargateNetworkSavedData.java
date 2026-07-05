@@ -1,6 +1,8 @@
 package com.pclogix.lanteacraft.gate;
 
 import com.pclogix.lanteacraft.LanteaCraft;
+import com.pclogix.lanteacraft.worldgen.FixedDimensionGates;
+import com.pclogix.lanteacraft.worldgen.PlannedStargate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -126,6 +128,9 @@ public class StargateNetworkSavedData extends SavedData {
     }
 
     public StargateRecord registerOrUpdateActiveGate(String address, ResourceLocation dimension, BlockPos basePos, Direction facing, StargateVariant variant, String origin) {
+        if (FixedDimensionGates.isFixedDimension(dimension)) {
+            address = FixedDimensionGates.forDimension(dimension).map(PlannedStargate::address).orElse(address);
+        }
         String normalizedAddress = normalizeAddress(address);
         StargateRecord existing = recordsByAddress.get(normalizedAddress);
         StargateRecord record = existing == null
@@ -141,6 +146,9 @@ public class StargateNetworkSavedData extends SavedData {
     }
 
     public StargateRecord reserveGate(String address, ResourceLocation dimension, BlockPos plannedPos, Direction facing, StargateVariant variant, String origin) {
+        if (FixedDimensionGates.isFixedDimension(dimension)) {
+            address = FixedDimensionGates.forDimension(dimension).map(PlannedStargate::address).orElse(address);
+        }
         String normalizedAddress = normalizeAddress(address);
         StargateRecord existing = recordsByAddress.get(normalizedAddress);
         StargateRecord record = existing == null

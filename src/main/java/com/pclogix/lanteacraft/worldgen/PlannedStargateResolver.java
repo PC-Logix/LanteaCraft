@@ -9,7 +9,6 @@ import java.util.Optional;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 
 public final class PlannedStargateResolver {
@@ -18,6 +17,20 @@ public final class PlannedStargateResolver {
 
     public static Optional<StargateEntry> resolve(ServerLevel dialingLevel, String address) {
         StargateNetworkSavedData network = StargateNetworkSavedData.get(dialingLevel);
+        Optional<PlannedStargate> fixedGate = FixedDimensionGates.byAddress(address);
+        if (fixedGate.isPresent()) {
+            PlannedStargate plan = fixedGate.get();
+            PlannedStargateSavedData.get(dialingLevel).remember(plan);
+            network.reserveGate(plan.address(), plan.dimension(), plan.basePos(), plan.facing(), plan.variant(), "fixed_dimension");
+            ServerLevel targetLevel = dialingLevel.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, plan.dimension()));
+            if (targetLevel == null) {
+                return Optional.empty();
+            }
+
+            DimensionGateGenerator.placeIfNeeded(targetLevel, plan);
+            return StargateNetworkSavedData.get(targetLevel).findByAddress(plan.address()).flatMap(StargateRecord::activeEntry);
+        }
+
         Optional<StargateRecord> liveGate = network.findByAddress(address);
         if (liveGate.isPresent() && liveGate.get().status() == StargateStatus.ACTIVE) {
             return liveGate.get().activeEntry();
@@ -40,16 +53,11 @@ public final class PlannedStargateResolver {
             return Optional.empty();
         }
 
-        loadPlacementArea(targetLevel, new ChunkPos(plan.basePos()));
-        StargateVillageGenerator.placeIfNeeded(targetLevel, plan);
-        return StargateNetworkSavedData.get(targetLevel).findByAddress(address).flatMap(StargateRecord::activeEntry);
-    }
-
-    private static void loadPlacementArea(ServerLevel level, ChunkPos center) {
-        for (int chunkX = center.x - 1; chunkX <= center.x + 1; chunkX++) {
-            for (int chunkZ = center.z - 1; chunkZ <= center.z + 1; chunkZ++) {
-                level.getChunk(chunkX, chunkZ);
-            }
+        if (FixedDimensionGates.isFixedPlan(plan)) {
+            DimensionGateGenerator.placeIfNeeded(targetLevel, plan);
+        } else {
+            StargateVillageGenerator.placeAtPlannedBaseIfNeeded(targetLevel, plan);
         }
+        return StargateNetworkSavedData.get(targetLevel).findByAddress(address).flatMap(StargateRecord::activeEntry);
     }
 }

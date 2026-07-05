@@ -37,18 +37,24 @@ public final class LanteaWorldgenEvents {
         if (name.equals(BuiltInLootTables.DESERT_PYRAMID.location())) {
             event.getTable().addPool(lanteaPool("desert_pyramid", 1.0F, 3.0F, 7.0F));
             event.getTable().addPool(tabletPool("desert_pyramid_tablets", 1.0F));
+            event.getTable().addPool(fixedTabletPool("desert_pyramid_abydos_tablet", 0.035F, true));
+            event.getTable().addPool(fixedTabletPool("desert_pyramid_atlantis_tablet", 0.01F, false));
             return;
         }
 
         if (DUNGEON_LIKE_TABLES.contains(name)) {
             event.getTable().addPool(lanteaPool("dungeon", 0.55F, 1.0F, 3.0F));
             event.getTable().addPool(tabletPool("dungeon_tablets", 0.25F));
+            event.getTable().addPool(fixedTabletPool("dungeon_abydos_tablet", 0.006F, true));
+            event.getTable().addPool(fixedTabletPool("dungeon_atlantis_tablet", 0.0025F, false));
             return;
         }
 
         if (name.getPath().startsWith("chests/")) {
             event.getTable().addPool(lanteaPool("world_chest", 0.16F, 1.0F, 2.0F));
             event.getTable().addPool(tabletPool("world_chest_tablets", 0.08F));
+            event.getTable().addPool(fixedTabletPool("world_chest_abydos_tablet", 0.0025F, true));
+            event.getTable().addPool(fixedTabletPool("world_chest_atlantis_tablet", 0.001F, false));
         }
     }
 
@@ -76,6 +82,7 @@ public final class LanteaWorldgenEvents {
     private static List<PlannedStargate> tabletPlans(ServerLevel level, ChestBlockEntity chest) {
         long salt = level.getSeed() ^ level.getGameTime() ^ chest.getBlockPos().asLong();
         return PlannedStargateSavedData.get(level).plans(level).stream()
+                .filter(plan -> !FixedDimensionGates.isFixedPlan(plan))
                 .sorted(Comparator.comparingLong(plan -> mix(salt, plan.address().hashCode())))
                 .toList();
     }
@@ -92,6 +99,7 @@ public final class LanteaWorldgenEvents {
                 .add(LootItem.lootTableItem(ModItems.BLANK_CRYSTAL.get()).setWeight(6).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F))))
                 .add(LootItem.lootTableItem(ModItems.CONTROL_CRYSTAL.get()).setWeight(4))
                 .add(LootItem.lootTableItem(ModItems.CORE_CRYSTAL.get()).setWeight(2))
+                .add(LootItem.lootTableItem(ModItems.EIGHTH_CHEVRON_CRYSTAL.get()).setWeight(1))
                 .build();
     }
 
@@ -101,6 +109,15 @@ public final class LanteaWorldgenEvents {
                 .setRolls(ConstantValue.exactly(1.0F))
                 .when(LootItemRandomChanceCondition.randomChance(chance))
                 .add(LootItem.lootTableItem(ModItems.ADDRESS_TABLET.get()))
+                .build();
+    }
+
+    private static LootPool fixedTabletPool(String name, float chance, boolean abydos) {
+        return LootPool.lootPool()
+                .name(LanteaCraft.MODID + "_" + name)
+                .setRolls(ConstantValue.exactly(1.0F))
+                .when(LootItemRandomChanceCondition.randomChance(chance))
+                .add(LootItem.lootTableItem(abydos ? ModItems.ABYDOS_ADDRESS_TABLET.get() : ModItems.ATLANTIS_ADDRESS_TABLET.get()))
                 .build();
     }
 

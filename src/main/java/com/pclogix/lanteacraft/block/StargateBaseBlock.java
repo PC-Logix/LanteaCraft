@@ -9,6 +9,7 @@ import com.pclogix.lanteacraft.gate.StargateVariant;
 import com.pclogix.lanteacraft.item.IrisUpgradeItem;
 import com.pclogix.lanteacraft.menu.StargateMenu;
 import com.pclogix.lanteacraft.registry.ModBlockEntities;
+import com.pclogix.lanteacraft.registry.ModItems;
 import com.mojang.serialization.MapCodec;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -44,6 +45,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 public class StargateBaseBlock extends HorizontalDirectionalBlock implements EntityBlock {
     public static final MapCodec<StargateBaseBlock> CODEC = simpleCodec(StargateBaseBlock::new);
     public static final BooleanProperty ASSEMBLED = BooleanProperty.create("assembled");
+    public static final BooleanProperty WORMHOLE_OPEN = BooleanProperty.create("wormhole_open");
     private static final VoxelShape NO_SNOW_COLLISION_SHAPE = box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
     private final StargateVariant variant;
 
@@ -56,7 +58,8 @@ public class StargateBaseBlock extends HorizontalDirectionalBlock implements Ent
         this.variant = variant;
         registerDefaultState(stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(ASSEMBLED, false));
+                .setValue(ASSEMBLED, false)
+                .setValue(WORMHOLE_OPEN, false));
     }
 
     @Override
@@ -66,7 +69,7 @@ public class StargateBaseBlock extends HorizontalDirectionalBlock implements Ent
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
-        builder.add(FACING, ASSEMBLED);
+        builder.add(FACING, ASSEMBLED, WORMHOLE_OPEN);
     }
 
     @Override
@@ -148,6 +151,21 @@ public class StargateBaseBlock extends HorizontalDirectionalBlock implements Ent
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (state.getValue(ASSEMBLED) && stack.is(ModItems.EIGHTH_CHEVRON_CRYSTAL.get()) && level.getBlockEntity(pos) instanceof StargateBaseBlockEntity base) {
+            if (!level.isClientSide) {
+                if (base.installEighthChevronUpgrade()) {
+                    if (!player.getAbilities().instabuild) {
+                        stack.shrink(1);
+                    }
+                    player.displayClientMessage(Component.translatable("message.lanteacraft.eighth_chevron_installed"), true);
+                } else {
+                    player.displayClientMessage(Component.translatable("message.lanteacraft.eighth_chevron_already_installed"), true);
+                }
+            }
+
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+
         if (state.getValue(ASSEMBLED) && stack.getItem() instanceof IrisUpgradeItem irisItem && level.getBlockEntity(pos) instanceof StargateBaseBlockEntity base) {
             if (!level.isClientSide) {
                 if (!base.hasIris()) {

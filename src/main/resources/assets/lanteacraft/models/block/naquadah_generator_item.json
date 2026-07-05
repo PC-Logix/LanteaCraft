@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "lanteacraft:block/naquadah_block",
+    "front": "lanteacraft:models/naquadah_generator_off_64",
+    "side": "lanteacraft:block/trinium_block"
+  }
+}
