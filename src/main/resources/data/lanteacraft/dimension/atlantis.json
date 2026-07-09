@@ -4,7 +4,7 @@
     "type": "minecraft:flat",
     "settings": {
       "biome": "minecraft:warm_ocean",
-      "features": false,
+      "features": true,
       "lakes": false,
       "layers": [
         {
@@ -13,15 +13,15 @@
         },
         {
           "block": "minecraft:stone",
-          "height": 36
+          "height": 93
         },
         {
           "block": "minecraft:sand",
-          "height": 3
+          "height": 4
         },
         {
           "block": "minecraft:water",
-          "height": 24
+          "height": 30
         }
       ],
       "structure_overrides": []

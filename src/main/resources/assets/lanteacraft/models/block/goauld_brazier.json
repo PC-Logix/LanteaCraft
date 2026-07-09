@@ -1,0 +1,6 @@
+{
+  "parent": "lanteacraft:block/template_obelisk",
+  "textures": {
+    "all": "minecraft:block/sandstone"
+  }
+}

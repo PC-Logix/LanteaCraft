@@ -17,6 +17,19 @@ public final class PlannedStargateResolver {
 
     public static Optional<StargateEntry> resolve(ServerLevel dialingLevel, String address) {
         StargateNetworkSavedData network = StargateNetworkSavedData.get(dialingLevel);
+        Optional<ExpeditionInstance> expedition = ExpeditionSavedData.get(dialingLevel).findByAddress(address);
+        if (expedition.isPresent()) {
+            ExpeditionInstance instance = expedition.get();
+            network.reserveGate(instance.address(), LanteaDimensions.EXPEDITIONS, instance.basePos(), instance.facing(), instance.variant(), "expedition");
+            ServerLevel targetLevel = dialingLevel.getServer().getLevel(LanteaDimensions.EXPEDITIONS);
+            if (targetLevel == null) {
+                return Optional.empty();
+            }
+
+            ExpeditionGenerator.placeIfNeeded(targetLevel, instance);
+            return StargateNetworkSavedData.get(targetLevel).findByAddress(instance.address()).flatMap(StargateRecord::activeEntry);
+        }
+
         Optional<PlannedStargate> fixedGate = FixedDimensionGates.byAddress(address);
         if (fixedGate.isPresent()) {
             PlannedStargate plan = fixedGate.get();

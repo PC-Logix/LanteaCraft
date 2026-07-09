@@ -33,6 +33,7 @@ public class StargateScreen extends AbstractContainerScreen<StargateMenu> {
     private static final int SYMBOL_FRAME_SOURCE_WIDTH = 472;
     private static final int SYMBOL_FRAME_SOURCE_HEIGHT = 88;
     private static final int SYMBOL_CELL_SIZE = 32;
+    private static final int EXTENDED_SYMBOL_CELL_SIZE = 24;
     private static final int SYMBOL_SOURCE_CELL_SIZE = 64;
     private static final int ICON_BUTTON_SIZE = 18;
     private static final int ICON_SIZE = 14;
@@ -102,8 +103,9 @@ public class StargateScreen extends AbstractContainerScreen<StargateMenu> {
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         guiGraphics.drawCenteredString(font, menu.address(), imageWidth / 2, 56, 0xE8E8E8);
-        //guiGraphics.drawString(font, Component.translatable("screen.lanteacraft.stargate.iris", irisLabel()), 70, 102, 0xD8C36D, false);
-        //guiGraphics.drawString(font, Component.translatable("screen.lanteacraft.stargate.redstone"), 70, 124, 0xAEB7B8, false);
+        guiGraphics.drawString(font, Component.translatable("screen.lanteacraft.stargate.iris_slot"), 47, 88, 0xAEB7B8, false);
+        guiGraphics.drawString(font, Component.translatable("screen.lanteacraft.stargate.eighth_chevron_slot"), 72, 88, eighthChevronColor(), false);
+        guiGraphics.drawString(font, eighthChevronLabel(), 103, 102, eighthChevronColor(), false);
     }
 
     private Component irisLabel() {
@@ -116,6 +118,16 @@ public class StargateScreen extends AbstractContainerScreen<StargateMenu> {
         return Component.translatable("screen.lanteacraft.stargate.iris.value",
                 Component.translatable("item.lanteacraft.iris_upgrade.type." + irisItem.irisType().serializedName()),
                 Component.translatable("screen.lanteacraft.stargate.iris.state." + state.serializedName()));
+    }
+
+    private Component eighthChevronLabel() {
+        return Component.translatable(menu.getSlot(1).hasItem()
+                ? "screen.lanteacraft.stargate.eighth_chevron.installed"
+                : "screen.lanteacraft.stargate.eighth_chevron.locked");
+    }
+
+    private int eighthChevronColor() {
+        return menu.getSlot(1).hasItem() ? 0x66E6FF : 0x6F7C83;
     }
 
     private void renderButtonIcons(GuiGraphics guiGraphics) {
@@ -135,19 +147,21 @@ public class StargateScreen extends AbstractContainerScreen<StargateMenu> {
 
     private void drawAddressGlyphs(GuiGraphics guiGraphics) {
         int addressLength = menu.address().length();
+        int cellSize = addressLength > StargateAddress.ADDRESS_LENGTH ? EXTENDED_SYMBOL_CELL_SIZE : SYMBOL_CELL_SIZE;
+        int glyphWidth = addressLength * cellSize;
         int startX = leftPos + (imageWidth - SYMBOL_FRAME_WIDTH) / 2;
         int y = topPos + 8;
         guiGraphics.blit(symbolFrameTexture(), startX, y, SYMBOL_FRAME_WIDTH, SYMBOL_FRAME_HEIGHT, 0.0F, 0.0F, SYMBOL_FRAME_SOURCE_WIDTH, SYMBOL_FRAME_SOURCE_HEIGHT, 512, 128);
         for (int i = 0; i < addressLength; i++) {
-            drawGlyph(guiGraphics, menu.address().charAt(i), startX + 6 + i * SYMBOL_CELL_SIZE, y + 6);
+            drawGlyph(guiGraphics, menu.address().charAt(i), startX + (SYMBOL_FRAME_WIDTH - glyphWidth) / 2 + i * cellSize, y + 6, cellSize);
         }
     }
 
-    private void drawGlyph(GuiGraphics guiGraphics, char glyph, int x, int y) {
+    private void drawGlyph(GuiGraphics guiGraphics, char glyph, int x, int y, int size) {
         int index = Math.max(0, GLYPHS.indexOf(glyph));
         int u = (index % 8) * SYMBOL_SOURCE_CELL_SIZE;
         int v = (index / 8) * SYMBOL_SOURCE_CELL_SIZE;
-        guiGraphics.blit(symbolTexture(), x, y, SYMBOL_CELL_SIZE, SYMBOL_CELL_SIZE, (float)u, (float)v, SYMBOL_SOURCE_CELL_SIZE, SYMBOL_SOURCE_CELL_SIZE, 512, 320);
+        guiGraphics.blit(symbolTexture(), x, y, size, size, (float)u, (float)v, SYMBOL_SOURCE_CELL_SIZE, SYMBOL_SOURCE_CELL_SIZE, 512, 320);
     }
 
     private ResourceLocation symbolFrameTexture() {

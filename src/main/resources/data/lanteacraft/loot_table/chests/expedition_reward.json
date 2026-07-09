@@ -1,0 +1,420 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "name": "lanteacraft:expedition_reward/materials",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 4.0,
+        "max": 7.0
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:naquadah_ingot",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3.0,
+                "max": 9.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:trinium_ingot",
+          "weight": 9,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2.0,
+                "max": 6.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:naquadah",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4.0,
+                "max": 12.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:trinium",
+          "weight": 7,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3.0,
+                "max": 9.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:blank_crystal",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 3.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:control_crystal",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 2.0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "lanteacraft:expedition_reward/vanilla_treasure",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 4.0,
+        "max": 7.0
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 7,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 4.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2.0,
+                "max": 8.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_ingot",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3.0,
+                "max": 10.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 5.0,
+                "max": 16.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:lapis_lazuli",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 8.0,
+                "max": 24.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3.0,
+                "max": 9.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_apple",
+          "weight": 3
+        }
+      ]
+    },
+    {
+      "name": "lanteacraft:expedition_reward/equipment",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 1.0,
+        "max": 2.0
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_sword",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "type": "minecraft:uniform",
+                "min": 15.0,
+                "max": 30.0
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_pickaxe",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "type": "minecraft:uniform",
+                "min": 15.0,
+                "max": 30.0
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_chestplate",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "type": "minecraft:uniform",
+                "min": 15.0,
+                "max": 30.0
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_leggings",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "type": "minecraft:uniform",
+                "min": 15.0,
+                "max": 30.0
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:shield",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:crossbow",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "type": "minecraft:uniform",
+                "min": 10.0,
+                "max": 25.0
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "lanteacraft:expedition_reward/tech_bonus",
+      "rolls": 2.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:energy_crystal",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "lanteacraft:set_zpm_energy",
+              "energy": {
+                "type": "minecraft:uniform",
+                "min": 250000.0,
+                "max": 1000000.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:core_crystal",
+          "weight": 7
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:eighth_chevron_crystal",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "options": "#minecraft:on_random_loot"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "lanteacraft:expedition_reward/zpm_chance",
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.18
+        }
+      ],
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:zpm",
+          "weight": 35,
+          "functions": [
+            {
+              "function": "lanteacraft:set_zpm_energy",
+              "energy": {
+                "type": "minecraft:uniform",
+                "min": 25000000.0,
+                "max": 100000000.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:zpm",
+          "weight": 18,
+          "functions": [
+            {
+              "function": "lanteacraft:set_zpm_energy",
+              "energy": {
+                "type": "minecraft:uniform",
+                "min": 100000000.0,
+                "max": 300000000.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:zpm",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "lanteacraft:set_zpm_energy",
+              "energy": {
+                "type": "minecraft:uniform",
+                "min": 300000000.0,
+                "max": 650000000.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lanteacraft:zpm",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "lanteacraft:set_zpm_energy",
+              "energy": {
+                "type": "minecraft:uniform",
+                "min": 650000000.0,
+                "max": 900000000.0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "lanteacraft:chests/expedition_reward"
+}

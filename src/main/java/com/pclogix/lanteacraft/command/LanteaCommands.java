@@ -2,36 +2,62 @@ package com.pclogix.lanteacraft.command;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.pclogix.lanteacraft.gate.StargateEntry;
 import com.pclogix.lanteacraft.gate.StargateNetworkSavedData;
 import com.pclogix.lanteacraft.gate.StargateRecord;
 import com.pclogix.lanteacraft.gate.StargateStatus;
+import com.pclogix.lanteacraft.worldgen.AtlantisCityManager;
+import com.pclogix.lanteacraft.worldgen.ExpeditionGenerator;
+import com.pclogix.lanteacraft.worldgen.ExpeditionInstance;
 import com.pclogix.lanteacraft.worldgen.LanteaWorldgenEvents;
 import com.pclogix.lanteacraft.worldgen.PlannedStargate;
 import com.pclogix.lanteacraft.worldgen.PlannedStargateResolver;
 import com.pclogix.lanteacraft.worldgen.PlannedStargateSavedData;
 import com.pclogix.lanteacraft.worldgen.StargateVillageLocator;
 import com.pclogix.lanteacraft.worldgen.StargateVillagePlanner;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.core.Direction;
+import net.minecraft.core.FrontAndTop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.JigsawBlockEntity;
+import net.minecraft.world.level.block.entity.JigsawBlockEntity.JointType;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 public final class LanteaCommands {
@@ -59,8 +85,222 @@ public final class LanteaCommands {
                         .then(Commands.literal("teleport")
                                 .then(Commands.argument("address", StringArgumentType.word())
                                         .executes(context -> teleportToGate(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "address"))))))
+                .then(Commands.literal("atlantis")
+                        .then(Commands.literal("place_city")
+                                .executes(context -> placeAtlantisCity(context.getSource(), defaultAtlantisOrigin(context.getSource())))
+                                .then(Commands.argument("origin", BlockPosArgument.blockPos())
+                                        .executes(context -> placeAtlantisCity(context.getSource(), BlockPosArgument.getLoadedBlockPos(context, "origin")))))
+                        .then(Commands.literal("city_bounds")
+                                .executes(context -> showAtlantisCityBounds(context.getSource(), defaultAtlantisOrigin(context.getSource())))
+                                .then(Commands.argument("origin", BlockPosArgument.blockPos())
+                                        .executes(context -> showAtlantisCityBounds(context.getSource(), BlockPosArgument.getLoadedBlockPos(context, "origin")))))
+                        .then(Commands.literal("export_city")
+                                .then(Commands.argument("from", BlockPosArgument.blockPos())
+                                        .then(Commands.argument("to", BlockPosArgument.blockPos())
+                                                .then(Commands.argument("name", StringArgumentType.word())
+                                                        .executes(context -> exportAtlantisCity(
+                                                                context.getSource(),
+                                                                BlockPosArgument.getLoadedBlockPos(context, "from"),
+                                                                BlockPosArgument.getLoadedBlockPos(context, "to"),
+                                                                defaultAtlantisOrigin(context.getSource()),
+                                                                StringArgumentType.getString(context, "name")))))))
+                        .then(Commands.literal("export_city_relative")
+                                .then(Commands.argument("from", BlockPosArgument.blockPos())
+                                        .then(Commands.argument("to", BlockPosArgument.blockPos())
+                                                .then(Commands.argument("origin", BlockPosArgument.blockPos())
+                                                        .then(Commands.argument("name", StringArgumentType.word())
+                                                                .executes(context -> exportAtlantisCity(
+                                                                        context.getSource(),
+                                                                        BlockPosArgument.getLoadedBlockPos(context, "from"),
+                                                                        BlockPosArgument.getLoadedBlockPos(context, "to"),
+                                                                        BlockPosArgument.getLoadedBlockPos(context, "origin"),
+                                                                        StringArgumentType.getString(context, "name"))))))))
+                        .then(Commands.literal("drain_city")
+                                .then(Commands.argument("from", BlockPosArgument.blockPos())
+                                        .then(Commands.argument("to", BlockPosArgument.blockPos())
+                                                .executes(context -> drainAtlantisCity(
+                                                        context.getSource(),
+                                                        BlockPosArgument.getLoadedBlockPos(context, "from"),
+                                                        BlockPosArgument.getLoadedBlockPos(context, "to"))))))
+                        .then(Commands.literal("drain_city_around")
+                                .then(Commands.argument("radius", IntegerArgumentType.integer(1, 160))
+                                        .executes(context -> drainAtlantisCityAround(
+                                                context.getSource().getPlayerOrException(),
+                                                IntegerArgumentType.getInteger(context, "radius"))))))
                 .then(Commands.literal("loot_chest")
-                        .executes(context -> spawnLootChest(context.getSource().getPlayerOrException()))));
+                        .executes(context -> spawnLootChest(context.getSource().getPlayerOrException())))
+                .then(Commands.literal("expeditions")
+                        .then(Commands.literal("export_templates")
+                                .executes(context -> exportExpeditionTemplates(context.getSource())))
+                        .then(Commands.literal("convert_orange_jigsaws")
+                                .then(Commands.argument("from", BlockPosArgument.blockPos())
+                                        .then(Commands.argument("to", BlockPosArgument.blockPos())
+                                                .then(Commands.argument("pool", ResourceLocationArgument.id())
+                                                        .executes(context -> convertOrangeJigsaws(
+                                                                context.getSource(),
+                                                                BlockPosArgument.getLoadedBlockPos(context, "from"),
+                                                                BlockPosArgument.getLoadedBlockPos(context, "to"),
+                                                                ResourceLocationArgument.getId(context, "pool"))))))))
+                .then(Commands.literal("spawn_trial")
+                        .executes(context -> spawnTrial(context.getSource().getPlayerOrException(), randomTrialSeed(context.getSource().getPlayerOrException()), false))
+                        .then(Commands.literal("clear")
+                                .executes(context -> spawnTrial(context.getSource().getPlayerOrException(), randomTrialSeed(context.getSource().getPlayerOrException()), true)))
+                        .then(Commands.argument("seed", LongArgumentType.longArg())
+                                .executes(context -> spawnTrial(context.getSource().getPlayerOrException(), LongArgumentType.getLong(context, "seed"), false))
+                                .then(Commands.literal("clear")
+                                        .executes(context -> spawnTrial(context.getSource().getPlayerOrException(), LongArgumentType.getLong(context, "seed"), true))))));
+
+    }
+
+    private static int exportExpeditionTemplates(CommandSourceStack source) {
+        MinecraftServer server = source.getServer();
+        Map<ResourceLocation, Resource> resources = server.getResourceManager().listResources(
+                "structure/expedition",
+                id -> id.getNamespace().equals("lanteacraft") && id.getPath().endsWith(".nbt"));
+        if (resources.isEmpty()) {
+            source.sendFailure(Component.literal("No bundled expedition templates were found.").withStyle(ChatFormatting.RED));
+            return 0;
+        }
+
+        Path generatedRoot = server.getWorldPath(LevelResource.GENERATED_DIR);
+        int copied = 0;
+        try {
+            for (Map.Entry<ResourceLocation, Resource> entry : resources.entrySet()) {
+                ResourceLocation id = entry.getKey();
+                String generatedName = id.getPath()
+                        .replaceFirst("^structure/", "")
+                        .replaceFirst("\\.nbt$", "");
+                ResourceLocation structureId = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), generatedName);
+                Path target = generatedStructurePath(generatedRoot, structureId);
+                Files.createDirectories(target.getParent());
+                try (InputStream input = entry.getValue().open()) {
+                    Files.copy(input, target, StandardCopyOption.REPLACE_EXISTING);
+                }
+                copied++;
+            }
+        } catch (IOException ex) {
+            source.sendFailure(Component.literal("Could not export expedition templates: " + ex.getMessage()).withStyle(ChatFormatting.RED));
+            return copied;
+        }
+
+        int exported = copied;
+        source.sendSuccess(() -> Component.literal("Exported " + exported + " expedition template(s) to " + generatedRoot
+                + ". Load gate room as lanteacraft:expedition/gate_room. Use /reload after saving edits.")
+                .withStyle(ChatFormatting.GREEN), true);
+        return copied;
+    }
+
+    private static Path generatedStructurePath(Path generatedRoot, ResourceLocation structureId) {
+        Path path = generatedRoot.resolve(structureId.getNamespace()).resolve("structures");
+        for (String segment : structureId.getPath().split("/")) {
+            path = path.resolve(segment);
+        }
+        return path.resolveSibling(path.getFileName() + ".nbt");
+    }
+
+    private static int convertOrangeJigsaws(CommandSourceStack source, BlockPos from, BlockPos to, ResourceLocation poolId) {
+        ServerLevel level = source.getLevel();
+        BlockPos min = new BlockPos(
+                Math.min(from.getX(), to.getX()),
+                Math.min(from.getY(), to.getY()),
+                Math.min(from.getZ(), to.getZ()));
+        BlockPos max = new BlockPos(
+                Math.max(from.getX(), to.getX()),
+                Math.max(from.getY(), to.getY()),
+                Math.max(from.getZ(), to.getZ()));
+        ResourceLocation door = ResourceLocation.fromNamespaceAndPath("lanteacraft", "expedition/door");
+        ResourceKey<StructureTemplatePool> poolKey = ResourceKey.create(Registries.TEMPLATE_POOL, poolId);
+        int converted = 0;
+        Set<BlockPos> visited = new HashSet<>();
+        for (int x = min.getX(); x <= max.getX(); x++) {
+            for (int y = min.getY(); y <= max.getY(); y++) {
+                for (int z = min.getZ(); z <= max.getZ(); z++) {
+                    BlockPos pos = new BlockPos(x, y, z);
+                    if (visited.contains(pos) || !level.getBlockState(pos).is(Blocks.ORANGE_WOOL)) {
+                        continue;
+                    }
+                    List<BlockPos> marker = collectOrangeMarker(level, pos, min, max, visited);
+                    if (marker.isEmpty()) {
+                        continue;
+                    }
+                    BlockPos jigsawPos = markerBottomCenter(marker, min, max);
+                    Direction front = outwardDirection(jigsawPos, min, max);
+                    for (BlockPos markerPos : marker) {
+                        level.setBlock(markerPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+                    }
+                    level.setBlock(jigsawPos, Blocks.JIGSAW.defaultBlockState()
+                            .setValue(JigsawBlock.ORIENTATION, FrontAndTop.fromFrontAndTop(front, Direction.UP)), Block.UPDATE_ALL);
+                    if (level.getBlockEntity(jigsawPos) instanceof JigsawBlockEntity jigsaw) {
+                        jigsaw.setName(door);
+                        jigsaw.setTarget(door);
+                        jigsaw.setPool(poolKey);
+                        jigsaw.setFinalState("minecraft:air");
+                        jigsaw.setJoint(JointType.ALIGNED);
+                        jigsaw.setChanged();
+                    }
+                    converted++;
+                }
+            }
+        }
+        int count = converted;
+        source.sendSuccess(() -> Component.literal("Converted " + count + " orange wool doorway patch(es) to Jigsaw Blocks using pool " + poolId
+                + ". Save the structure again with your Structure Block.").withStyle(ChatFormatting.GREEN), true);
+        return converted;
+    }
+
+    private static List<BlockPos> collectOrangeMarker(ServerLevel level, BlockPos start, BlockPos min, BlockPos max, Set<BlockPos> visited) {
+        List<BlockPos> marker = new ArrayList<>();
+        Queue<BlockPos> queue = new ArrayDeque<>();
+        queue.add(start);
+        visited.add(start);
+        while (!queue.isEmpty()) {
+            BlockPos pos = queue.remove();
+            marker.add(pos);
+            for (Direction direction : Direction.values()) {
+                BlockPos next = pos.relative(direction);
+                if (visited.contains(next)
+                        || next.getX() < min.getX() || next.getX() > max.getX()
+                        || next.getY() < min.getY() || next.getY() > max.getY()
+                        || next.getZ() < min.getZ() || next.getZ() > max.getZ()
+                        || !level.getBlockState(next).is(Blocks.ORANGE_WOOL)) {
+                    continue;
+                }
+                visited.add(next);
+                queue.add(next);
+            }
+        }
+        return marker;
+    }
+
+    private static BlockPos markerBottomCenter(List<BlockPos> marker, BlockPos structureMin, BlockPos structureMax) {
+        int minX = marker.stream().mapToInt(BlockPos::getX).min().orElse(0);
+        int minY = marker.stream().mapToInt(BlockPos::getY).min().orElse(0);
+        int minZ = marker.stream().mapToInt(BlockPos::getZ).min().orElse(0);
+        int maxX = marker.stream().mapToInt(BlockPos::getX).max().orElse(0);
+        int maxZ = marker.stream().mapToInt(BlockPos::getZ).max().orElse(0);
+        Direction front = outwardDirection(new BlockPos((minX + maxX) / 2, minY, (minZ + maxZ) / 2), structureMin, structureMax);
+        if (front.getAxis() == Direction.Axis.X) {
+            return new BlockPos(front == Direction.WEST ? minX : maxX, minY, (minZ + maxZ) / 2);
+        }
+        return new BlockPos((minX + maxX) / 2, minY, front == Direction.NORTH ? minZ : maxZ);
+    }
+
+    private static Direction outwardDirection(BlockPos pos, BlockPos min, BlockPos max) {
+        int west = Math.abs(pos.getX() - min.getX());
+        int east = Math.abs(max.getX() - pos.getX());
+        int north = Math.abs(pos.getZ() - min.getZ());
+        int south = Math.abs(max.getZ() - pos.getZ());
+        int closest = Math.min(Math.min(west, east), Math.min(north, south));
+        if (closest == south) {
+            return Direction.SOUTH;
+        }
+        if (closest == north) {
+            return Direction.NORTH;
+        }
+        if (closest == east) {
+            return Direction.EAST;
+        }
+        return Direction.WEST;
     }
 
     private static int discoverPlannedGates(CommandSourceStack source, ServerLevel level, BlockPos origin, int radius) {
@@ -190,6 +430,88 @@ public final class LanteaCommands {
         return new BlockPos(preferred.getX(), Math.max(y, gate.basePos().getY() + 1), preferred.getZ());
     }
 
+    private static int placeAtlantisCity(CommandSourceStack source, BlockPos origin) {
+        if (origin == null) {
+            return 0;
+        }
+        try {
+            int blocks = AtlantisCityManager.queuePlace(source.getLevel(), origin, source.getEntity() instanceof ServerPlayer player ? player : null);
+            source.sendSuccess(() -> Component.literal("Atlantis city placement queued: " + blocks + " blocks.").withStyle(ChatFormatting.GREEN), true);
+            return blocks;
+        } catch (IOException ex) {
+            source.sendFailure(Component.literal("Could not queue Atlantis city placement: " + ex.getMessage()).withStyle(ChatFormatting.RED));
+            return 0;
+        }
+    }
+
+    private static int showAtlantisCityBounds(CommandSourceStack source, BlockPos origin) {
+        if (origin == null) {
+            return 0;
+        }
+        try {
+            Optional<AtlantisCityManager.CityBounds> bounds = AtlantisCityManager.cityBounds(source.getLevel(), origin);
+            if (bounds.isEmpty()) {
+                source.sendFailure(Component.literal("Atlantis city resource is not available.").withStyle(ChatFormatting.RED));
+                return 0;
+            }
+            AtlantisCityManager.CityBounds cityBounds = bounds.get();
+            source.sendSuccess(() -> Component.literal("Atlantis city bounds: from " + formatPos(cityBounds.min()) + " to " + formatPos(cityBounds.max())).withStyle(ChatFormatting.AQUA), false);
+            return 1;
+        } catch (IOException ex) {
+            source.sendFailure(Component.literal("Could not read Atlantis city bounds: " + ex.getMessage()).withStyle(ChatFormatting.RED));
+            return 0;
+        }
+    }
+
+    private static int exportAtlantisCity(CommandSourceStack source, BlockPos from, BlockPos to, BlockPos origin, String name) {
+        if (origin == null) {
+            return 0;
+        }
+        try {
+            int blocks = AtlantisCityManager.queueExport(source.getLevel(), from, to, origin, name, source.getEntity() instanceof ServerPlayer player ? player : null);
+            source.sendSuccess(() -> Component.literal("Atlantis city export queued. Source template has " + blocks + " blocks.").withStyle(ChatFormatting.GREEN), true);
+            return blocks;
+        } catch (IOException ex) {
+            source.sendFailure(Component.literal("Could not queue Atlantis city export: " + ex.getMessage()).withStyle(ChatFormatting.RED));
+            return 0;
+        }
+    }
+
+    private static int drainAtlantisCity(CommandSourceStack source, BlockPos from, BlockPos to) {
+        try {
+            int positions = AtlantisCityManager.queueDrain(source.getLevel(), from, to, source.getEntity() instanceof ServerPlayer player ? player : null);
+            source.sendSuccess(() -> Component.literal("Atlantis city drain queued: " + positions + " positions.").withStyle(ChatFormatting.GREEN), true);
+            return positions;
+        } catch (IOException ex) {
+            source.sendFailure(Component.literal("Could not queue Atlantis city drain: " + ex.getMessage()).withStyle(ChatFormatting.RED));
+            return 0;
+        }
+    }
+
+    private static int drainAtlantisCityAround(ServerPlayer player, int radius) {
+        try {
+            int positions = AtlantisCityManager.queueConnectedDrain(player.serverLevel(), player.blockPosition(), radius, player);
+            player.sendSystemMessage(Component.literal("Atlantis connected drain queued: " + positions + " positions.").withStyle(ChatFormatting.GREEN));
+            return positions;
+        } catch (IOException ex) {
+            player.sendSystemMessage(Component.literal("Could not queue Atlantis connected drain: " + ex.getMessage()).withStyle(ChatFormatting.RED));
+            return 0;
+        }
+    }
+
+    private static String formatPos(BlockPos pos) {
+        return pos.getX() + "," + pos.getY() + "," + pos.getZ();
+    }
+
+    private static BlockPos defaultAtlantisOrigin(CommandSourceStack source) {
+        try {
+            return AtlantisCityManager.defaultOrigin(source.getLevel());
+        } catch (IOException ex) {
+            source.sendFailure(Component.literal("Could not choose default Atlantis city origin: " + ex.getMessage()).withStyle(ChatFormatting.RED));
+            return null;
+        }
+    }
+
     private static int spawnLootChest(ServerPlayer player) {
         ServerLevel level = player.serverLevel();
         BlockPos pos = player.blockPosition().relative(player.getDirection(), 2);
@@ -202,6 +524,29 @@ public final class LanteaCommands {
             LanteaWorldgenEvents.fillDebugLootChest(level, chest);
         }
         player.sendSystemMessage(Component.translatable("message.lanteacraft.loot_chest_spawned").withStyle(ChatFormatting.GREEN));
+        return 1;
+    }
+
+    private static long randomTrialSeed(ServerPlayer player) {
+        return player.serverLevel().random.nextLong() ^ player.blockPosition().asLong() ^ player.serverLevel().getGameTime();
+    }
+
+    private static int spawnTrial(ServerPlayer player, long seed, boolean clearBeforePlacement) {
+        ServerLevel level = player.serverLevel();
+        BlockPos basePos = player.blockPosition().relative(player.getDirection(), 10);
+        Optional<ExpeditionInstance> maybeExpedition = ExpeditionGenerator.placeDebugTrial(level, basePos, player.getDirection(), seed, clearBeforePlacement);
+        if (maybeExpedition.isEmpty()) {
+            player.sendSystemMessage(Component.literal("Expedition trial was not spawned: " + ExpeditionGenerator.lastPlacementFailure())
+                    .withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.literal("The old Java fallback room is disabled for /spawn_trial so it cannot hide template problems.")
+                    .withStyle(ChatFormatting.YELLOW));
+            return 0;
+        }
+        ExpeditionInstance expedition = maybeExpedition.get();
+        player.sendSystemMessage(Component.literal("Spawned expedition trial seed " + seed
+                + " address " + expedition.address()
+                + " at " + formatPos(expedition.basePos())
+                + (clearBeforePlacement ? " (cleared first)" : "")).withStyle(ChatFormatting.GREEN));
         return 1;
     }
 

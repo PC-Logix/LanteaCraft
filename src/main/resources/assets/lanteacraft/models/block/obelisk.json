@@ -1,0 +1,6 @@
+{
+  "parent": "lanteacraft:block/empty",
+  "textures": {
+    "particle": "lanteacraft:block/obelisk"
+  }
+}

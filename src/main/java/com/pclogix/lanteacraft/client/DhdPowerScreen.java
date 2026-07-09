@@ -9,11 +9,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class DhdPowerScreen extends AbstractContainerScreen<DhdPowerMenu> {
-    private static final ResourceLocation CRYSTAL_SLOT = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "textures/gui/dhd/dhd_powercrystal_slot.png");
+    private static final ResourceLocation INVENTORY = component("inventory_128.png");
+    private static final ResourceLocation CRYSTAL_SLOT = component("slot_128.png");
+    private static final int INVENTORY_TEXTURE_SIZE = 512;
+    private static final int INVENTORY_SOURCE_WIDTH = 356;
+    private static final int INVENTORY_SOURCE_HEIGHT = 180;
+    private static final int SLOT_TEXTURE_SIZE = 60;
     private static final int TEXT = 0xFFE6E2D0;
-    private static final int PANEL = 0xFF303038;
     private static final int PANEL_DARK = 0xFF17171C;
-    private static final int BORDER_LIGHT = 0xFF9A9AA4;
     private static final int BORDER_DARK = 0xFF0A0A0D;
     private static final int ENERGY_FILL = 0xFF21D17E;
 
@@ -36,10 +39,10 @@ public class DhdPowerScreen extends AbstractContainerScreen<DhdPowerMenu> {
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        guiGraphics.fill(leftPos, topPos + 40, leftPos + imageWidth, topPos + imageHeight, PANEL);
-        guiGraphics.fill(leftPos, topPos + 40, leftPos + imageWidth, topPos + 41, BORDER_LIGHT);
-        guiGraphics.fill(leftPos, topPos + imageHeight - 1, leftPos + imageWidth, topPos + imageHeight, BORDER_DARK);
-        guiGraphics.blit(CRYSTAL_SLOT, leftPos + 77, topPos, 24, 24, 0.0F, 0.0F, 24, 24, 60, 60);
+        guiGraphics.blit(INVENTORY, leftPos, topPos + 40, imageWidth, 90, 0.0F, 0.0F,
+                INVENTORY_SOURCE_WIDTH, INVENTORY_SOURCE_HEIGHT, INVENTORY_TEXTURE_SIZE, INVENTORY_TEXTURE_SIZE);
+        guiGraphics.blit(CRYSTAL_SLOT, leftPos + 77, topPos, 24, 24, 0.0F, 0.0F,
+                SLOT_TEXTURE_SIZE, SLOT_TEXTURE_SIZE, SLOT_TEXTURE_SIZE, SLOT_TEXTURE_SIZE);
 
         int barX = leftPos + 42;
         int barY = topPos + 28;
@@ -60,6 +63,10 @@ public class DhdPowerScreen extends AbstractContainerScreen<DhdPowerMenu> {
         int color = menu.crystalEnergy() > 0 ? 0xFFFFFFFF : 0xFF9F0101;
         guiGraphics.drawString(font, status, 49 + Math.max(0, (80 - font.width(status)) / 2), 28, color, true);
         guiGraphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, TEXT, false);
+    }
+
+    private static ResourceLocation component(String name) {
+        return ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "textures/gui/components/" + name);
     }
 
     private String formatRuntime(long seconds) {

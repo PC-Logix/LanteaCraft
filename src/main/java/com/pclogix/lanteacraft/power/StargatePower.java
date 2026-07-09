@@ -3,6 +3,8 @@ package com.pclogix.lanteacraft.power;
 import com.pclogix.lanteacraft.Config;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.gate.StargateEntry;
+import com.pclogix.lanteacraft.worldgen.FixedDimensionGates;
+import com.pclogix.lanteacraft.worldgen.LanteaDimensions;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -15,6 +17,17 @@ public final class StargatePower {
     }
 
     public static long calculateDialCost(StargateEntry origin, StargateEntry destination) {
+        if (isExpeditionConnection(origin, destination)) {
+            return Config.DIAL_COST_SAME_DIMENSION.get();
+        }
+
+        if (isAtlantis(destination)) {
+            long atlantisCost = Config.DIAL_COST_ATLANTIS.get();
+            if (atlantisCost > 0L) {
+                return atlantisCost;
+            }
+        }
+
         if (isCrossDimension(origin, destination)) {
             return multiply(Config.DIAL_COST_CROSS_DIMENSION.get(), Config.CROSS_DIMENSION_DIAL_MULTIPLIER.get());
         }
@@ -24,6 +37,14 @@ public final class StargatePower {
     }
 
     public static long calculateSustainCostPerTick(StargateEntry origin, StargateEntry destination) {
+        if (isAtlantisConnection(origin, destination)) {
+            return Config.ACTIVE_COST_ATLANTIS_PER_TICK.get();
+        }
+
+        if (isExpeditionConnection(origin, destination)) {
+            return Config.ACTIVE_COST_PER_TICK.get();
+        }
+
         if (isCrossDimension(origin, destination)) {
             return multiply(Config.CROSS_DIMENSION_COST_PER_TICK.get(), Config.CROSS_DIMENSION_SUSTAIN_MULTIPLIER.get());
         }
@@ -51,12 +72,20 @@ public final class StargatePower {
         return Math.max(1.0D, 1.0D + distance * Config.SAME_DIMENSION_DISTANCE_MULTIPLIER.get());
     }
 
-    public static boolean consumeDialPower(StargateBaseBlockEntity origin, StargateBaseBlockEntity destination, long amount) {
-        if (!requiresPowerToDial(origin)) {
+    public static boolean consumeDialPower(StargateBaseBlockEntity origin, StargateEntry destination, long amount) {
+        if (!requiresPowerToDial(origin, destination)) {
             return true;
         }
 
-        return origin != null && origin.consumeEnergy(amount, false);
+        if (origin == null) {
+            return false;
+        }
+
+        if (isAtlantis(destination)) {
+            return origin.consumeZpmEnergy(amount, false);
+        }
+
+        return origin.consumeEnergy(amount, false);
     }
 
     public static boolean consumeSustainPower(StargateBaseBlockEntity origin, StargateBaseBlockEntity destination, long amount) {
@@ -73,15 +102,48 @@ public final class StargatePower {
         };
     }
 
+    public static boolean consumeSustainPower(StargateBaseBlockEntity origin, StargateBaseBlockEntity destination, StargateEntry originEntry, StargateEntry destinationEntry, long amount) {
+        if (!Config.ENABLE_FE_POWER.getAsBoolean()) {
+            return true;
+        }
+
+        if (isExpeditionConnection(originEntry, destinationEntry)) {
+            return consumeOriginSustain(origin, amount);
+        }
+
+        if (!isAtlantisConnection(originEntry, destinationEntry)) {
+            return consumeSustainPower(origin, destination, amount);
+        }
+
+        return switch (Config.WORMHOLE_POWER_MODE.get()) {
+            case ORIGIN_ONLY -> consumeOriginZpmSustain(origin, amount);
+            case DESTINATION_ONLY -> consumeDestinationZpmSustain(destination, amount);
+            case BOTH_SIDES -> consumeOriginZpmSustain(origin, amount) && consumeDestinationZpmSustain(destination, amount);
+            case PREFER_ORIGIN -> consumeOriginZpmSustain(origin, amount) || consumeDestinationZpmSustain(destination, amount);
+            case PREFER_DESTINATION -> consumeDestinationZpmSustain(destination, amount) || consumeOriginZpmSustain(origin, amount);
+        };
+    }
+
     public static boolean requiresPowerToDial(StargateBaseBlockEntity gate) {
+        return requiresPowerToDial(gate, null);
+    }
+
+    public static boolean requiresPowerToDial(StargateBaseBlockEntity gate, StargateEntry destination) {
         return Config.ENABLE_FE_POWER.getAsBoolean()
-                && Config.PLAYER_BUILT_GATES_REQUIRE_POWER_TO_DIAL.getAsBoolean()
-                && (gate == null || !gate.hasAncientPower());
+                && (isAtlantis(destination)
+                || (Config.PLAYER_BUILT_GATES_REQUIRE_POWER_TO_DIAL.getAsBoolean()
+                && (gate == null || !gate.hasAncientPower())));
     }
 
     public static boolean requiresSustainPower(StargateBaseBlockEntity origin, StargateBaseBlockEntity destination) {
         return Config.ENABLE_FE_POWER.getAsBoolean()
                 && (requiresPowerToSustain(origin) || (canPayRemoteSustain(destination) && requiresPowerToSustain(destination)));
+    }
+
+    public static boolean requiresSustainPower(StargateBaseBlockEntity origin, StargateBaseBlockEntity destination, StargateEntry originEntry, StargateEntry destinationEntry) {
+        return Config.ENABLE_FE_POWER.getAsBoolean()
+                && (isAtlantisConnection(originEntry, destinationEntry)
+                || (isExpeditionConnection(originEntry, destinationEntry) ? requiresPowerToSustain(origin) : requiresSustainPower(origin, destination)));
     }
 
     public static StargateBaseBlockEntity baseEntity(MinecraftServer server, StargateEntry entry) {
@@ -106,6 +168,14 @@ public final class StargatePower {
         return !canPayRemoteSustain(destination)
                 || !requiresPowerToSustain(destination)
                 || consumeOne(destination, amount, false);
+    }
+
+    private static boolean consumeOriginZpmSustain(StargateBaseBlockEntity origin, long amount) {
+        return origin != null && origin.consumeZpmEnergy(amount, false);
+    }
+
+    private static boolean consumeDestinationZpmSustain(StargateBaseBlockEntity destination, long amount) {
+        return destination != null && canPayRemoteSustain(destination) && destination.consumeZpmEnergy(amount, false);
     }
 
     private static boolean requiresPowerToSustain(StargateBaseBlockEntity gate) {
@@ -133,6 +203,22 @@ public final class StargatePower {
 
     private static boolean isCrossDimension(StargateEntry origin, StargateEntry destination) {
         return !origin.dimension().equals(destination.dimension());
+    }
+
+    private static boolean isAtlantis(StargateEntry destination) {
+        return destination != null && FixedDimensionGates.ATLANTIS_ADDRESS.equals(destination.address());
+    }
+
+    private static boolean isAtlantisConnection(StargateEntry origin, StargateEntry destination) {
+        return isAtlantis(origin) || isAtlantis(destination);
+    }
+
+    private static boolean isExpeditionConnection(StargateEntry origin, StargateEntry destination) {
+        return isExpedition(origin) || isExpedition(destination);
+    }
+
+    private static boolean isExpedition(StargateEntry gate) {
+        return gate != null && gate.dimension().equals(LanteaDimensions.EXPEDITIONS.location());
     }
 
     private static long multiply(long value, double multiplier) {

@@ -4,6 +4,7 @@ import com.pclogix.lanteacraft.Config;
 import com.pclogix.lanteacraft.block.DhdBlock;
 import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.registry.ModBlockEntities;
+import com.pclogix.lanteacraft.registry.ModItems;
 import com.pclogix.lanteacraft.registry.ModSounds;
 import com.pclogix.lanteacraft.gate.IrisState;
 import com.pclogix.lanteacraft.gate.IrisType;
@@ -72,6 +73,22 @@ public class StargateBaseBlockEntity extends BlockEntity {
         @Override
         protected void onContentsChanged(int slot) {
             refreshIrisFromSlot();
+        }
+    };
+    private final ItemStackHandler eighthChevronItems = new ItemStackHandler(1) {
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return stack.is(ModItems.EIGHTH_CHEVRON_CRYSTAL.get());
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return 1;
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            refreshEighthChevronFromSlot();
         }
     };
 
@@ -265,6 +282,10 @@ public class StargateBaseBlockEntity extends BlockEntity {
         return irisItems;
     }
 
+    public ItemStackHandler eighthChevronItems() {
+        return eighthChevronItems;
+    }
+
     public ConfigurableEnergyStorage energyStorage() {
         return energy;
     }
@@ -293,31 +314,56 @@ public class StargateBaseBlockEntity extends BlockEntity {
             return false;
         }
 
-        eighthChevronUnlocked = true;
-        sync();
+        eighthChevronItems.setStackInSlot(0, new ItemStack(ModItems.EIGHTH_CHEVRON_CRYSTAL.get()));
         return true;
     }
 
     public long energyStored() {
         if (hasAncientPower()) {
-            return Long.MAX_VALUE;
+            return Config.GENERATED_GATES_ANCIENT_POWER_OPERATION_LIMIT.get() + playerPowerStored();
         }
         return playerPowerStored();
     }
 
     public boolean consumeEnergy(long amount, boolean simulate) {
+        return consumeEnergy(amount, simulate, true);
+    }
+
+    public boolean consumeEnergy(long amount, boolean simulate, boolean allowAncientPower) {
         if (amount <= 0L) {
             return true;
         }
 
-        if (hasAncientPower()) {
+        if (allowAncientPower && hasAncientPower()) {
             if (Config.GENERATED_GATES_PREFER_PLAYER_POWER.getAsBoolean() && consumePlayerPower(amount, simulate)) {
                 return true;
             }
-            return true;
+
+            long ancientAllowance = Math.max(0L, Config.GENERATED_GATES_ANCIENT_POWER_OPERATION_LIMIT.get());
+            if (amount <= ancientAllowance) {
+                return true;
+            }
+
+            return consumePlayerPower(amount - ancientAllowance, simulate);
         }
 
         return consumePlayerPower(amount, simulate);
+    }
+
+    public boolean consumeZpmEnergy(long amount, boolean simulate) {
+        if (amount <= 0L) {
+            return true;
+        }
+
+        Optional<ZpmHubBlockEntity> hub = linkedZpmHub();
+        if (hub.isEmpty() || hub.get().zpmEnergyStored() < amount) {
+            return false;
+        }
+
+        if (!simulate) {
+            hub.get().extractZpmEnergy((int)Math.min(Integer.MAX_VALUE, amount), false);
+        }
+        return true;
     }
 
     private boolean consumePlayerPower(long amount, boolean simulate) {
@@ -326,7 +372,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
         }
 
         long internal = energy.getEnergyStored();
-        long available = internal + linkedDhdEnergyStored();
+        long available = internal + linkedDhdEnergyStored() + linkedZpmEnergyStored();
         if (available < amount) {
             return false;
         }
@@ -342,7 +388,18 @@ public class StargateBaseBlockEntity extends BlockEntity {
 
         long remaining = amount - fromInternal;
         if (remaining > 0L) {
-            linkedDhd().ifPresent(dhd -> dhd.extractCrystalEnergy((int)Math.min(Integer.MAX_VALUE, remaining), false));
+            Optional<DhdBlockEntity> dhd = linkedDhd();
+            if (dhd.isPresent()) {
+                int fromDhd = dhd.get().extractCrystalEnergy((int)Math.min(Integer.MAX_VALUE, remaining), false);
+                remaining -= fromDhd;
+            }
+        }
+
+        if (remaining > 0L) {
+            Optional<ZpmHubBlockEntity> hub = linkedZpmHub();
+            if (hub.isPresent()) {
+                hub.get().extractZpmEnergy((int)Math.min(Integer.MAX_VALUE, remaining), false);
+            }
         }
         return true;
     }
@@ -351,7 +408,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
         if (!acceptsPlayerPower()) {
             return 0L;
         }
-        return energy.getEnergyStored() + linkedDhdEnergyStored();
+        return energy.getEnergyStored() + linkedDhdEnergyStored() + linkedZpmEnergyStored();
     }
 
     private boolean acceptsPlayerPower() {
@@ -360,6 +417,10 @@ public class StargateBaseBlockEntity extends BlockEntity {
 
     private long linkedDhdEnergyStored() {
         return linkedDhd().map(DhdBlockEntity::crystalEnergyStored).orElse(0);
+    }
+
+    private long linkedZpmEnergyStored() {
+        return linkedZpmHub().map(ZpmHubBlockEntity::zpmEnergyStored).orElse(0L);
     }
 
     private Optional<DhdBlockEntity> linkedDhd() {
@@ -379,6 +440,27 @@ public class StargateBaseBlockEntity extends BlockEntity {
                     .map(entry -> entry.basePos().equals(worldPosition))
                     .orElse(false)) {
                 return Optional.of(dhd);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<ZpmHubBlockEntity> linkedZpmHub() {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return Optional.empty();
+        }
+
+        int radius = Config.DHD_SEARCH_RADIUS.get();
+        for (BlockPos pos : BlockPos.betweenClosed(worldPosition.offset(-radius, -radius, -radius), worldPosition.offset(radius, radius, radius))) {
+            BlockPos hubPos = pos.immutable();
+            if (!(serverLevel.getBlockEntity(hubPos) instanceof ZpmHubBlockEntity hub)) {
+                continue;
+            }
+
+            if (StargateMultiblock.findNearestEntry(serverLevel, hubPos, radius)
+                    .map(entry -> entry.basePos().equals(worldPosition))
+                    .orElse(false)) {
+                return Optional.of(hub);
             }
         }
         return Optional.empty();
@@ -569,10 +651,10 @@ public class StargateBaseBlockEntity extends BlockEntity {
         StargateMultiblock.findEntryFrom(serverLevel, worldPosition).ifPresent(origin -> network.findConnectedDestination(origin.address()).ifPresent(destination -> {
             long cost = StargatePower.calculateSustainCostPerTick(origin, destination);
             StargateBaseBlockEntity destinationBase = StargatePower.baseEntity(serverLevel.getServer(), destination);
-            if (!StargatePower.requiresSustainPower(this, destinationBase)) {
+            if (!StargatePower.requiresSustainPower(this, destinationBase, origin, destination)) {
                 return;
             }
-            if (StargatePower.consumeSustainPower(this, destinationBase, cost)) {
+            if (StargatePower.consumeSustainPower(this, destinationBase, origin, destination, cost)) {
                 return;
             }
 
@@ -613,6 +695,14 @@ public class StargateBaseBlockEntity extends BlockEntity {
             irisMoveTicks = 0;
         }
 
+        sync();
+    }
+
+    private void refreshEighthChevronFromSlot() {
+        boolean installed = eighthChevronItems.getStackInSlot(0).is(ModItems.EIGHTH_CHEVRON_CRYSTAL.get());
+        if (eighthChevronUnlocked != installed) {
+            eighthChevronUnlocked = installed;
+        }
         sync();
     }
 
@@ -657,6 +747,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
         tag.putBoolean("ancientPower", ancientPower);
         tag.putBoolean("eighthChevronUnlocked", eighthChevronUnlocked);
         tag.put("irisItems", irisItems.serializeNBT(registries));
+        tag.put("eighthChevronItems", eighthChevronItems.serializeNBT(registries));
         tag.put("energy", energy.serializeNBT(registries));
         if (bottomCamouflage != null) {
             tag.putString("bottomCamouflage", BuiltInRegistries.BLOCK.getKey(bottomCamouflage.getBlock()).toString());
@@ -684,6 +775,12 @@ public class StargateBaseBlockEntity extends BlockEntity {
         if (tag.contains("irisItems")) {
             irisItems.deserializeNBT(registries, tag.getCompound("irisItems"));
         }
+        if (tag.contains("eighthChevronItems")) {
+            eighthChevronItems.deserializeNBT(registries, tag.getCompound("eighthChevronItems"));
+        } else if (eighthChevronUnlocked) {
+            eighthChevronItems.setStackInSlot(0, new ItemStack(ModItems.EIGHTH_CHEVRON_CRYSTAL.get()));
+        }
+        refreshEighthChevronFromSlot();
         if (tag.contains("energy")) {
             energy.deserializeNBT(registries, tag.get("energy"));
         }

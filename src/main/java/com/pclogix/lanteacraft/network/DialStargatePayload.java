@@ -25,7 +25,7 @@ public record DialStargatePayload(BlockPos dhdPos, String address) implements Cu
             DialStargatePayload::write,
             DialStargatePayload::read);
 
-    private static final int MAX_ADDRESS_LENGTH = StargateAddress.ADDRESS_LENGTH;
+    private static final int MAX_ADDRESS_LENGTH = StargateAddress.MAX_ADDRESS_LENGTH;
 
     private static DialStargatePayload read(RegistryFriendlyByteBuf buffer) {
         return new DialStargatePayload(buffer.readBlockPos(), normalize(buffer.readUtf(MAX_ADDRESS_LENGTH)));
@@ -57,9 +57,13 @@ public record DialStargatePayload(BlockPos dhdPos, String address) implements Cu
 
         StargateEntry local = localGate.get();
         if (targetAddress.isBlank()) {
-            StargateDialer.DialResult result = StargateDialer.disconnect(level, local);
+            StargateDialer.DialResult result = StargateDialer.dial(level, local, targetAddress);
             if (result.success()) {
-                player.displayClientMessage(Component.literal("Stargate disconnected.").withStyle(ChatFormatting.GRAY), false);
+                if ("dialing".equals(result.code())) {
+                    player.displayClientMessage(Component.literal(result.message()).withStyle(ChatFormatting.GREEN), false);
+                } else {
+                    player.displayClientMessage(Component.literal("Stargate disconnected.").withStyle(ChatFormatting.GRAY), false);
+                }
             } else if ("incoming_active".equals(result.code())) {
                 player.displayClientMessage(Component.literal("Incoming wormholes must be closed from the dialing gate.").withStyle(ChatFormatting.RED), false);
             } else {

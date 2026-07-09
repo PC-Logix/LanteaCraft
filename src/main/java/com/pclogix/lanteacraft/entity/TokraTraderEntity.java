@@ -17,6 +17,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -37,6 +39,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -53,7 +56,7 @@ public class TokraTraderEntity extends Villager {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, SpawnGroupData spawnGroupData) {
         SpawnGroupData result = super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
-        this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, this.getVillagerData().getLevel()));
+        normalizeTraderData();
         equipDefenderGear();
         this.setPersistenceRequired();
         return result;
@@ -69,6 +72,14 @@ public class TokraTraderEntity extends Villager {
     @Override
     protected Component getTypeName() {
         return Component.translatable("entity.lanteacraft.tokra_trader");
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (!this.level().isClientSide) {
+            normalizeTraderData();
+        }
+        return super.mobInteract(player, hand);
     }
 
     @Override
@@ -138,6 +149,13 @@ public class TokraTraderEntity extends Villager {
 
     private void equipDefenderGear() {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+    }
+
+    private void normalizeTraderData() {
+        VillagerData data = this.getVillagerData();
+        if (data.getType() != VillagerType.PLAINS || data.getProfession() != VillagerProfession.NITWIT) {
+            this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NITWIT, data.getLevel()));
+        }
     }
 
     private static VillagerTrades.ItemListing sell(ItemLike item, int emeraldCost, int count, int maxUses, int xp) {

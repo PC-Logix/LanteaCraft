@@ -2,6 +2,7 @@ package com.pclogix.lanteacraft.worldgen;
 
 import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.item.AddressTabletItem;
+import com.pclogix.lanteacraft.loot.SetZpmEnergyFunction;
 import com.pclogix.lanteacraft.registry.ModItems;
 import java.util.Comparator;
 import java.util.List;
@@ -37,24 +38,30 @@ public final class LanteaWorldgenEvents {
         if (name.equals(BuiltInLootTables.DESERT_PYRAMID.location())) {
             event.getTable().addPool(lanteaPool("desert_pyramid", 1.0F, 3.0F, 7.0F));
             event.getTable().addPool(tabletPool("desert_pyramid_tablets", 1.0F));
+            event.getTable().addPool(expeditionTabletPool("desert_pyramid_expeditions", 0.18F));
             event.getTable().addPool(fixedTabletPool("desert_pyramid_abydos_tablet", 0.035F, true));
             event.getTable().addPool(fixedTabletPool("desert_pyramid_atlantis_tablet", 0.01F, false));
+            event.getTable().addPool(zpmPool("desert_pyramid_zpm", 0.02F));
             return;
         }
 
         if (DUNGEON_LIKE_TABLES.contains(name)) {
             event.getTable().addPool(lanteaPool("dungeon", 0.55F, 1.0F, 3.0F));
             event.getTable().addPool(tabletPool("dungeon_tablets", 0.25F));
+            event.getTable().addPool(expeditionTabletPool("dungeon_expeditions", 0.12F));
             event.getTable().addPool(fixedTabletPool("dungeon_abydos_tablet", 0.006F, true));
             event.getTable().addPool(fixedTabletPool("dungeon_atlantis_tablet", 0.0025F, false));
+            event.getTable().addPool(zpmPool("dungeon_zpm", 0.005F));
             return;
         }
 
         if (name.getPath().startsWith("chests/")) {
             event.getTable().addPool(lanteaPool("world_chest", 0.16F, 1.0F, 2.0F));
             event.getTable().addPool(tabletPool("world_chest_tablets", 0.08F));
+            event.getTable().addPool(expeditionTabletPool("world_chest_expeditions", 0.035F));
             event.getTable().addPool(fixedTabletPool("world_chest_abydos_tablet", 0.0025F, true));
             event.getTable().addPool(fixedTabletPool("world_chest_atlantis_tablet", 0.001F, false));
+            event.getTable().addPool(zpmPool("world_chest_zpm", 0.001F));
         }
     }
 
@@ -74,6 +81,7 @@ public final class LanteaWorldgenEvents {
         chest.setItem(slot++, new ItemStack(ModItems.STARGATE_RING.get(), 6));
         chest.setItem(slot++, new ItemStack(ModItems.STARGATE_CHEVRON.get(), 3));
         chest.setItem(slot++, new ItemStack(ModItems.DHD.get()));
+        chest.setItem(slot++, new ItemStack(ModItems.EXPEDITION_ADDRESS_TABLET.get()));
         chest.setItem(slot++, new ItemStack(ModItems.CORE_CRYSTAL.get()));
         chest.setItem(slot++, new ItemStack(ModItems.CONTROL_CRYSTAL.get(), 2));
         chest.setChanged();
@@ -112,6 +120,15 @@ public final class LanteaWorldgenEvents {
                 .build();
     }
 
+    private static LootPool expeditionTabletPool(String name, float chance) {
+        return LootPool.lootPool()
+                .name(LanteaCraft.MODID + "_" + name)
+                .setRolls(ConstantValue.exactly(1.0F))
+                .when(LootItemRandomChanceCondition.randomChance(chance))
+                .add(LootItem.lootTableItem(ModItems.EXPEDITION_ADDRESS_TABLET.get()))
+                .build();
+    }
+
     private static LootPool fixedTabletPool(String name, float chance, boolean abydos) {
         return LootPool.lootPool()
                 .name(LanteaCraft.MODID + "_" + name)
@@ -119,6 +136,25 @@ public final class LanteaWorldgenEvents {
                 .when(LootItemRandomChanceCondition.randomChance(chance))
                 .add(LootItem.lootTableItem(abydos ? ModItems.ABYDOS_ADDRESS_TABLET.get() : ModItems.ATLANTIS_ADDRESS_TABLET.get()))
                 .build();
+    }
+
+    private static LootPool zpmPool(String name, float chance) {
+        return LootPool.lootPool()
+                .name(LanteaCraft.MODID + "_" + name)
+                .setRolls(ConstantValue.exactly(1.0F))
+                .when(LootItemRandomChanceCondition.randomChance(chance))
+                .add(zpmEntry(35, 5_000_000.0F, 25_000_000.0F))
+                .add(zpmEntry(25, 25_000_000.0F, 100_000_000.0F))
+                .add(zpmEntry(10, 100_000_000.0F, 300_000_000.0F))
+                .add(zpmEntry(3, 300_000_000.0F, 600_000_000.0F))
+                .add(zpmEntry(1, 600_000_000.0F, 850_000_000.0F))
+                .build();
+    }
+
+    private static LootItem.Builder<?> zpmEntry(int weight, float minEnergy, float maxEnergy) {
+        return LootItem.lootTableItem(ModItems.ZPM.get())
+                .setWeight(weight)
+                .apply(SetZpmEnergyFunction.setEnergy(UniformGenerator.between(minEnergy, maxEnergy)));
     }
 
     private static long mix(long seed, int value) {

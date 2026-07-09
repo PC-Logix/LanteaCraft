@@ -166,6 +166,9 @@ public class AddressTabletItem extends Item {
     }
 
     private static Optional<PlannedStargate> matchingPlan(ItemStack stack, String address) {
+        if (stack.getItem() instanceof ExpeditionAddressTabletItem) {
+            return Optional.empty();
+        }
         return planFromStack(stack).filter(plan -> plan.address().equals(address));
     }
 

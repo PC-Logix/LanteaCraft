@@ -4,6 +4,7 @@ import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.menu.DhdPowerMenu;
 import com.pclogix.lanteacraft.menu.NaquadahGeneratorMenu;
 import com.pclogix.lanteacraft.menu.StargateMenu;
+import com.pclogix.lanteacraft.menu.ZpmHubMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.bus.api.IEventBus;
@@ -25,6 +26,10 @@ public final class ModMenus {
     public static final DeferredHolder<MenuType<?>, MenuType<DhdPowerMenu>> DHD_POWER = MENUS.register(
             "dhd_power",
             () -> IMenuTypeExtension.create(DhdPowerMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<ZpmHubMenu>> ZPM_HUB = MENUS.register(
+            "zpm_hub",
+            () -> IMenuTypeExtension.create(ZpmHubMenu::new));
 
     private ModMenus() {
     }

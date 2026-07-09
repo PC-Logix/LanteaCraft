@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "TCT",
+    "LNL",
+    "TCT"
+  ],
+  "key": {
+    "C": {
+      "item": "lanteacraft:control_crystal"
+    },
+    "L": {
+      "item": "lanteacraft:lantean_panel"
+    },
+    "N": {
+      "item": "lanteacraft:naquadah_block"
+    },
+    "T": {
+      "item": "lanteacraft:trinium_ingot"
+    }
+  },
+  "result": {
+    "id": "lanteacraft:zpm_hub",
+    "count": 1
+  }
+}

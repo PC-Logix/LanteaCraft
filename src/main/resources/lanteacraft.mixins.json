@@ -3,6 +3,9 @@
   "package": "com.pclogix.lanteacraft.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
+  "client": [
+    "StructureBlockEditScreenMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

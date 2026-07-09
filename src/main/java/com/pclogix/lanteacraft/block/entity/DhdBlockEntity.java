@@ -127,7 +127,17 @@ public class DhdBlockEntity extends BlockEntity {
             return 0;
         }
 
-        int extracted = crystal.extractEnergy(amount, simulate);
+        int remaining = amount;
+        int extracted = 0;
+        while (remaining > 0) {
+            int step = crystal.extractEnergy(remaining, simulate);
+            if (step <= 0) {
+                break;
+            }
+            extracted += step;
+            remaining -= step;
+        }
+
         if (extracted > 0 && !simulate) {
             sync();
         }

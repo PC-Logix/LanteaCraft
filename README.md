@@ -214,7 +214,7 @@ Naquadah and trinium ore generation is provided through worldgen JSON and a NeoF
 
 ## Recipes
 
-The source includes vanilla crafting recipes for all current craftable items and blocks.
+The source includes vanilla crafting recipes for most current craftable items and blocks. Zero Point Modules intentionally do not have a default recipe; pack makers can add one with a datapack if they want craftable ZPMs.
 
 ### Materials
 
@@ -402,9 +402,24 @@ The common config currently exposes:
 
 Stargate bases can accept FE into an internal buffer when `power.enableFePower=true`. Classic gate behavior remains available by default: `power.requirePowerToDial=false` and `power.requirePowerToMaintainWormhole=false` mean dialing and active wormholes do not require FE unless a pack enables those rules.
 
-Powered dialing charges the origin gate by default. Active wormholes can draw sustain power from `ORIGIN_ONLY`, `DESTINATION_ONLY`, `BOTH_SIDES`, `PREFER_ORIGIN`, or `PREFER_DESTINATION`, and can use configurable same-dimension distance scaling and cross-dimension multipliers. Energy irises consume FE while closed when enabled and can fail open if unpowered.
+Powered dialing charges the origin gate by default. Active wormholes can draw sustain power from `ORIGIN_ONLY`, `DESTINATION_ONLY`, `BOTH_SIDES`, `PREFER_ORIGIN`, or `PREFER_DESTINATION`, and can use configurable same-dimension distance scaling and cross-dimension multipliers. Ordinary cross-dimension dials such as Nether, End, and Abydos are intentionally modest by default. Atlantis has a separate long-range dial cost so a single Energy Crystal is not enough by default. Generated ancient gates provide a configurable per-operation ancient power allowance instead of infinite FE; ordinary cross-dimension dials fit inside that allowance, but very expensive dials need supplemental player-provided power. Energy irises consume FE while closed when enabled and can fail open if unpowered.
 
 The Naquadah Generator is LanteaCraft's native FE source. It uses the legacy 1.7.10 generator model, burns Naquadah fuel, stores FE internally, and outputs to adjacent FE handlers.
+
+Energy Crystals hold 1,000,000 FE by default. Zero Point Modules hold 1,000,000,000 FE and can be installed in a ZPM Hub, which exposes that stored power to nearby linked Stargates and adjacent FE consumers. Zero Point Modules intentionally have no default crafting recipe. A default Atlantis dial requires an instantaneous 75,000,000 FE burst from linked ZPM infrastructure, then consumes 50,000 FE/t from linked ZPM infrastructure while the wormhole remains open. It still requires an installed Eighth Chevron Crystal for extended-address dialing.
+
+ZPM loot uses the custom `lanteacraft:set_zpm_energy` loot function, which accepts any vanilla number provider under `energy`. The built-in chest injections make ZPMs very rare and heavily weighted toward low remaining charge. Datapacks can use the same function, for example:
+
+```json
+{
+  "function": "lanteacraft:set_zpm_energy",
+  "energy": {
+    "type": "minecraft:uniform",
+    "min": 5000000,
+    "max": 25000000
+  }
+}
+```
 
 ## CC:Tweaked / ComputerCraft Support
 

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "offset=1": {
+      "model": "lanteacraft:block/empty"
+    },
+    "offset=2": {
+      "model": "lanteacraft:block/empty"
+    },
+    "offset=3": {
+      "model": "lanteacraft:block/empty"
+    }
+  }
+}

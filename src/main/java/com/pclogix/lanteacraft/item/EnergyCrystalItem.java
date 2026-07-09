@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
 public class EnergyCrystalItem extends Item {
-    public static final int CAPACITY = 2_000_000;
+    public static final int CAPACITY = 1_000_000;
     public static final int MAX_TRANSFER = 20_000;
 
     public EnergyCrystalItem(Properties properties) {

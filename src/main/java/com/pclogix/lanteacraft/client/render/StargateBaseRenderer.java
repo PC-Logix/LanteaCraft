@@ -76,10 +76,11 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     private static final double CHEVRON_ANGLE = 360.0D / CHEVRONS;
     private static final double CHEVRON_ANGLE_OFFSET = -90.0D + CHEVRON_WIDTH;
 
+    private static final int TOP_CHEVRON = 0;
     // Dialed address symbols do not lock chevrons in visual clockwise order.
-    // This maps address index -> chevron index to mimic the familiar lock
-    // sequence around the gate.
-    private static final int[] CHEVRON_LOCK_ORDER = { 8, 7, 6, 3, 2, 1, 0, 5, 4 };
+    // Reserve the top chevron for the final symbol so 7, 8, and 9-chevron
+    // dials all finish by locking the top middle chevron.
+    private static final int[] PRE_TOP_CHEVRON_LOCK_ORDER = { 8, 7, 6, 3, 2, 1, 5, 4 };
     private static final double SPIN_TICKS = 55.0D;
     private static final double CHEVRON_TICKS = 10.0D;
 
@@ -685,10 +686,11 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         // Each address symbol gets a spin window followed by a chevron lock
         // window. Later symbols start after the previous symbol's total window,
         // so the dialing animation advances one glyph/chevron at a time.
-        for (int i = 0; i < address.length() && i < CHEVRON_LOCK_ORDER.length; i++) {
+        int addressLength = Math.min(address.length(), CHEVRONS);
+        for (int i = 0; i < addressLength; i++) {
             double symbolStart = i * (SPIN_TICKS + CHEVRON_TICKS);
             double spinProgress = clamp((elapsed - symbolStart) / SPIN_TICKS);
-            double targetRotation = symbolRotation(address.charAt(i), i);
+            double targetRotation = symbolRotation(address.charAt(i), i, addressLength);
 
             // Rotate from the previous symbol to the current target using the
             // shortest path around the circle.
@@ -700,7 +702,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             // position and glow.
             double lockProgress = clamp((elapsed - symbolStart - SPIN_TICKS) / CHEVRON_TICKS);
             if (lockProgress > 0.0D) {
-                chevrons[CHEVRON_LOCK_ORDER[i]] = ease(lockProgress);
+                chevrons[chevronLockIndex(i, addressLength)] = ease(lockProgress);
             }
 
             // Completed symbols become the new starting angle for subsequent
@@ -714,7 +716,7 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         return new DialingRenderState(ringRotation, chevrons);
     }
 
-    private double symbolRotation(char symbol, int addressIndex) {
+    private double symbolRotation(char symbol, int addressIndex, int addressLength) {
         int index = LEGACY_GLYPHS.indexOf(symbol);
         if (index < 0) {
             return 0.0D;
@@ -726,13 +728,22 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         // legacy ASCII address format while making the visible ring symbol
         // match the DHD symbol the player pressed.
         double symbolRotation = index * RING_SYMBOL_ANGLE;
-        double chevronRotation = chevronRotation(addressIndex);
+        double chevronRotation = chevronRotation(addressIndex, addressLength);
         return normalizeAngle(chevronRotation - symbolRotation - RING_SYMBOL_CENTER_OFFSET);
     }
 
-    private double chevronRotation(int addressIndex) {
-        int lockIndex = CHEVRON_LOCK_ORDER[Math.min(addressIndex, CHEVRON_LOCK_ORDER.length - 1)];
+    private double chevronRotation(int addressIndex, int addressLength) {
+        int lockIndex = chevronLockIndex(addressIndex, addressLength);
         return lockIndex * CHEVRON_ANGLE - CHEVRON_ANGLE_OFFSET;
+    }
+
+    private int chevronLockIndex(int addressIndex, int addressLength) {
+        int finalAddressIndex = Math.max(0, Math.min(addressLength, CHEVRONS) - 1);
+        if (addressIndex >= finalAddressIndex) {
+            return TOP_CHEVRON;
+        }
+
+        return PRE_TOP_CHEVRON_LOCK_ORDER[Math.min(addressIndex, PRE_TOP_CHEVRON_LOCK_ORDER.length - 1)];
     }
 
     private DialingRenderState connectedState(StargateBaseBlockEntity blockEntity) {
@@ -744,13 +755,14 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         double[] chevrons = new double[CHEVRONS];
         // A connected gate displays all chevrons for the stored address as
         // fully locked, even when the active dialing animation is over.
-        for (int i = 0; i < address.length() && i < CHEVRON_LOCK_ORDER.length; i++) {
-            chevrons[CHEVRON_LOCK_ORDER[i]] = 1.0D;
+        int addressLength = Math.min(address.length(), CHEVRONS);
+        for (int i = 0; i < addressLength; i++) {
+            chevrons[chevronLockIndex(i, addressLength)] = 1.0D;
         }
 
         // Leave the ring parked on the final dialed symbol.
-        int finalSymbolIndex = Math.min(address.length(), CHEVRON_LOCK_ORDER.length) - 1;
-        double ringRotation = address.isEmpty() ? 0.0D : symbolRotation(address.charAt(finalSymbolIndex), finalSymbolIndex);
+        int finalSymbolIndex = addressLength - 1;
+        double ringRotation = address.isEmpty() ? 0.0D : symbolRotation(address.charAt(finalSymbolIndex), finalSymbolIndex, addressLength);
         return new DialingRenderState(ringRotation, chevrons);
     }
 

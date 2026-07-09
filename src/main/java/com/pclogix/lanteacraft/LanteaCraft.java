@@ -8,6 +8,7 @@ import com.pclogix.lanteacraft.registry.ModCreativeTabs;
 import com.pclogix.lanteacraft.registry.ModDataComponents;
 import com.pclogix.lanteacraft.registry.ModEntities;
 import com.pclogix.lanteacraft.registry.ModItems;
+import com.pclogix.lanteacraft.registry.ModLootFunctions;
 import com.pclogix.lanteacraft.registry.ModMenus;
 import com.pclogix.lanteacraft.network.ModNetworking;
 import com.pclogix.lanteacraft.gate.StargateChunkLoading;
@@ -16,6 +17,9 @@ import com.pclogix.lanteacraft.power.LanteaPowerCapabilities;
 import com.pclogix.lanteacraft.registry.ModBlockEntities;
 import com.pclogix.lanteacraft.registry.ModSounds;
 import com.pclogix.lanteacraft.worldgen.AbydosSpawner;
+import com.pclogix.lanteacraft.worldgen.AtlantisCityManager;
+import com.pclogix.lanteacraft.worldgen.AtlantisSpawnRules;
+import com.pclogix.lanteacraft.worldgen.ExpeditionTrialTracker;
 import com.pclogix.lanteacraft.worldgen.FixedDimensionGateBootstrap;
 import com.pclogix.lanteacraft.worldgen.LanteaRetrogen;
 import com.pclogix.lanteacraft.worldgen.LanteaWorldgenEvents;
@@ -38,6 +42,7 @@ public class LanteaCraft {
         ModBlockEntities.register(modEventBus);
         ModDataComponents.register(modEventBus);
         ModItems.register(modEventBus);
+        ModLootFunctions.register(modEventBus);
         ModMenus.register(modEventBus);
         ModCreativeTabs.register(modEventBus);
         ModSounds.register(modEventBus);
@@ -52,8 +57,12 @@ public class LanteaCraft {
         NeoForge.EVENT_BUS.addListener(LanteaRetrogen::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(LanteaRetrogen::onLevelTick);
         NeoForge.EVENT_BUS.addListener(FixedDimensionGateBootstrap::onLevelTick);
+        NeoForge.EVENT_BUS.addListener(ExpeditionTrialTracker::onLevelTick);
         NeoForge.EVENT_BUS.addListener(AbydosSpawner::onLevelTick);
         NeoForge.EVENT_BUS.addListener(AbydosSpawner::onChunkLoad);
+        NeoForge.EVENT_BUS.addListener(AtlantisCityManager::onLevelTick);
+        NeoForge.EVENT_BUS.addListener(AtlantisSpawnRules::onSpawnPlacementCheck);
+        NeoForge.EVENT_BUS.addListener(AtlantisSpawnRules::onPositionCheck);
         NeoForge.EVENT_BUS.addListener(LanteaCommands::register);
 
         modEventBus.addListener(StargateChunkLoading::registerTicketController);

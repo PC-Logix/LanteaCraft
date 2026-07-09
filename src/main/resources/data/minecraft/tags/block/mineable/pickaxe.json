@@ -9,6 +9,11 @@
     "lanteacraft:lantean_carved_wall",
     "lanteacraft:lantean_panel",
     "lanteacraft:lantean_light_panel",
-    "lanteacraft:lantean_dark_trim"
+    "lanteacraft:lantean_dark_trim",
+    "lanteacraft:naquadah_brazier",
+    "lanteacraft:trinium_brazier",
+    "lanteacraft:goauld_brazier",
+    "lanteacraft:obelisk",
+    "lanteacraft:zpm_hub"
   ]
 }

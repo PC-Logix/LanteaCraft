@@ -2,6 +2,7 @@ package com.pclogix.lanteacraft.menu;
 
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.gate.StargateVariant;
+import com.pclogix.lanteacraft.registry.ModItems;
 import com.pclogix.lanteacraft.registry.ModMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -15,7 +16,8 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class StargateMenu extends AbstractContainerMenu {
     private static final int IRIS_SLOT = 0;
-    private static final int PLAYER_INVENTORY_START = 1;
+    private static final int EIGHTH_CHEVRON_SLOT = 1;
+    private static final int PLAYER_INVENTORY_START = 2;
     private static final int PLAYER_INVENTORY_END = PLAYER_INVENTORY_START + 27;
     private static final int HOTBAR_START = PLAYER_INVENTORY_END;
     private static final int HOTBAR_END = HOTBAR_START + 9;
@@ -30,7 +32,7 @@ public class StargateMenu extends AbstractContainerMenu {
     }
 
     public StargateMenu(int containerId, Inventory playerInventory, StargateBaseBlockEntity base, StargateVariant variant, String address) {
-        this(containerId, playerInventory, base.getBlockPos(), variant, address, base, base.irisItems());
+        this(containerId, playerInventory, base.getBlockPos(), variant, address, base, base.irisItems(), base.eighthChevronItems());
     }
 
     private StargateMenu(int containerId, Inventory playerInventory, ClientData data) {
@@ -40,10 +42,11 @@ public class StargateMenu extends AbstractContainerMenu {
                 data.variant(),
                 data.address(),
                 playerInventory.player.level().getBlockEntity(data.basePos()) instanceof StargateBaseBlockEntity base ? base : null,
-                playerInventory.player.level().getBlockEntity(data.basePos()) instanceof StargateBaseBlockEntity base ? base.irisItems() : new ItemStackHandler(1));
+                playerInventory.player.level().getBlockEntity(data.basePos()) instanceof StargateBaseBlockEntity base ? base.irisItems() : new ItemStackHandler(1),
+                playerInventory.player.level().getBlockEntity(data.basePos()) instanceof StargateBaseBlockEntity base ? base.eighthChevronItems() : new ItemStackHandler(1));
     }
 
-    private StargateMenu(int containerId, Inventory playerInventory, BlockPos basePos, StargateVariant variant, String address, StargateBaseBlockEntity baseEntity, ItemStackHandler irisItems) {
+    private StargateMenu(int containerId, Inventory playerInventory, BlockPos basePos, StargateVariant variant, String address, StargateBaseBlockEntity baseEntity, ItemStackHandler irisItems, ItemStackHandler eighthChevronItems) {
         super(ModMenus.STARGATE.get(), containerId);
         this.basePos = basePos.immutable();
         this.variant = variant;
@@ -51,6 +54,7 @@ public class StargateMenu extends AbstractContainerMenu {
         this.baseEntity = baseEntity;
 
         addSlot(new SlotItemHandler(irisItems, 0, 48, 99));
+        addSlot(new SlotItemHandler(eighthChevronItems, 0, 76, 99));
         addPlayerInventory(playerInventory);
     }
 
@@ -87,8 +91,12 @@ public class StargateMenu extends AbstractContainerMenu {
         ItemStack stack = slot.getItem();
         moved = stack.copy();
 
-        if (index == IRIS_SLOT) {
+        if (index == IRIS_SLOT || index == EIGHTH_CHEVRON_SLOT) {
             if (!moveItemStackTo(stack, PLAYER_INVENTORY_START, HOTBAR_END, true)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (stack.is(ModItems.EIGHTH_CHEVRON_CRYSTAL.get())) {
+            if (!moveItemStackTo(stack, EIGHTH_CHEVRON_SLOT, EIGHTH_CHEVRON_SLOT + 1, false)) {
                 return ItemStack.EMPTY;
             }
         } else if (slots.get(IRIS_SLOT).mayPlace(stack)) {

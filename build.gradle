@@ -193,6 +193,39 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
+def defaultExpeditionGeneratedDir = layout.projectDirectory.dir("run/saves/New World/generated/lanteacraft/structures/expedition")
+def expeditionGeneratedDirProvider = providers.gradleProperty("expeditionGeneratedDir")
+        .map { file(it) }
+        .orElse(defaultExpeditionGeneratedDir)
+
+tasks.register("importExpeditionStructures", Exec) {
+    group = "lanteacraft"
+    description = "Copy Structure Block-saved expedition NBTs into src/main/resources and regenerate expedition jigsaw pools. Override with -PexpeditionGeneratedDir=<path>."
+    workingDir = projectDir
+    inputs.dir(expeditionGeneratedDirProvider)
+    outputs.dir(layout.projectDirectory.dir("src/main/resources/data/lanteacraft/structure/expedition"))
+    outputs.dir(layout.projectDirectory.dir("src/main/resources/data/lanteacraft/worldgen/template_pool/expedition"))
+    doFirst {
+        def source = expeditionGeneratedDirProvider.get().asFile
+        if (!source.exists()) {
+            throw new GradleException("Expedition generated structure folder does not exist: ${source}")
+        }
+        logger.lifecycle("Importing expedition structures from ${source}")
+    }
+    commandLine("python", "tools/generate_expedition_pools.py", "--import-generated", expeditionGeneratedDirProvider.get().asFile.absolutePath)
+}
+
+tasks.register("validateExpeditionStructures", Exec) {
+    group = "lanteacraft"
+    description = "Validate packaged expedition jigsaw structures and pools."
+    workingDir = projectDir
+    commandLine("python", "tools/validate_expedition_jigsaws.py")
+}
+
+tasks.named("processResources").configure {
+    mustRunAfter(tasks.named("importExpeditionStructures"))
+}
+
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
 idea {
     module {

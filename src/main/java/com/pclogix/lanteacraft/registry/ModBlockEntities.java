@@ -3,8 +3,10 @@ package com.pclogix.lanteacraft.registry;
 import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.block.entity.DhdBlockEntity;
 import com.pclogix.lanteacraft.block.entity.NaquadahGeneratorBlockEntity;
+import com.pclogix.lanteacraft.block.entity.ObeliskBlockEntity;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.block.entity.TransportRingBlockEntity;
+import com.pclogix.lanteacraft.block.entity.ZpmHubBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -41,6 +43,14 @@ public final class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NaquadahGeneratorBlockEntity>> NAQUADAH_GENERATOR = BLOCK_ENTITIES.register(
             "naquadah_generator",
             () -> BlockEntityType.Builder.of(NaquadahGeneratorBlockEntity::new, ModBlocks.NAQUADAH_GENERATOR.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ZpmHubBlockEntity>> ZPM_HUB = BLOCK_ENTITIES.register(
+            "zpm_hub",
+            () -> BlockEntityType.Builder.of(ZpmHubBlockEntity::new, ModBlocks.ZPM_HUB.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ObeliskBlockEntity>> OBELISK = BLOCK_ENTITIES.register(
+            "obelisk",
+            () -> BlockEntityType.Builder.of(ObeliskBlockEntity::new, ModBlocks.OBELISK.get()).build(null));
 
     private ModBlockEntities() {
     }

@@ -2,6 +2,9 @@ package com.pclogix.lanteacraft.gate;
 
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.power.StargatePower;
+import com.pclogix.lanteacraft.worldgen.ExpeditionInstance;
+import com.pclogix.lanteacraft.worldgen.ExpeditionSavedData;
+import com.pclogix.lanteacraft.worldgen.LanteaDimensions;
 import com.pclogix.lanteacraft.worldgen.PlannedStargateResolver;
 import java.util.Optional;
 import net.minecraft.core.registries.Registries;
@@ -16,6 +19,11 @@ public final class StargateDialer {
     public static DialResult dial(ServerLevel level, StargateEntry local, String address) {
         String targetAddress = normalize(address);
         if (targetAddress.isBlank()) {
+            Optional<String> returnAddress = expeditionReturnAddress(level, local);
+            if (returnAddress.isPresent()) {
+                closeIncomingExpeditionConnection(level, local);
+                return dial(level, local, returnAddress.get());
+            }
             return disconnect(level, local);
         }
 
@@ -30,9 +38,9 @@ public final class StargateDialer {
         }
 
         StargateBaseBlockEntity localBase = StargatePower.baseEntity(level.getServer(), local);
-        if (targetAddress.length() == StargateAddress.EXTENDED_ADDRESS_LENGTH
+        if (targetAddress.length() > StargateAddress.ADDRESS_LENGTH
                 && (localBase == null || !localBase.hasEighthChevronUnlocked())) {
-            return DialResult.fail("eighth_chevron_locked", "Stargate requires an installed Eighth Chevron Crystal to dial 8-chevron addresses.");
+            return DialResult.fail("eighth_chevron_locked", "Stargate requires an installed Eighth Chevron Crystal to dial extended addresses.");
         }
 
         Optional<StargateEntry> destination = PlannedStargateResolver.resolve(level, targetAddress);
@@ -41,6 +49,7 @@ public final class StargateDialer {
         }
 
         StargateEntry target = destination.get();
+        rememberExpeditionReturnAddress(level, local, target);
         if (local.address().equals(target.address())) {
             return DialResult.fail("local_address", "Cannot dial the local Stargate.");
         }
@@ -49,10 +58,9 @@ public final class StargateDialer {
             return DialResult.fail("incoming_active", "Incoming wormholes cannot be redirected from this gate.");
         }
 
-        StargateBaseBlockEntity targetBase = StargatePower.baseEntity(level.getServer(), target);
-        if (StargatePower.requiresPowerToDial(localBase)) {
+        if (StargatePower.requiresPowerToDial(localBase, target)) {
             long dialCost = StargatePower.calculateDialCost(local, target);
-            if (!StargatePower.consumeDialPower(localBase, targetBase, dialCost)) {
+            if (!StargatePower.consumeDialPower(localBase, target, dialCost)) {
                 return DialResult.fail("insufficient_power", "Stargate lacks " + dialCost + " FE to dial.");
             }
         }
@@ -98,7 +106,7 @@ public final class StargateDialer {
     }
 
     public static boolean isValidAddress(String address) {
-        if (address.length() != StargateAddress.ADDRESS_LENGTH && address.length() != StargateAddress.EXTENDED_ADDRESS_LENGTH) {
+        if (address.length() < StargateAddress.ADDRESS_LENGTH || address.length() > StargateAddress.MAX_ADDRESS_LENGTH) {
             return false;
         }
 
@@ -122,6 +130,32 @@ public final class StargateDialer {
         if (targetLevel != null && targetLevel.getBlockEntity(target.basePos()) instanceof StargateBaseBlockEntity targetBase) {
             targetBase.startDialing(local.address());
             targetBase.setConnectedAddress(local.address());
+        }
+    }
+
+    private static Optional<String> expeditionReturnAddress(ServerLevel level, StargateEntry local) {
+        if (!local.dimension().equals(LanteaDimensions.EXPEDITIONS.location())) {
+            return Optional.empty();
+        }
+
+        return ExpeditionSavedData.get(level).findByAddress(local.address())
+                .map(ExpeditionInstance::returnAddress)
+                .filter(address -> !address.isBlank());
+    }
+
+    private static void closeIncomingExpeditionConnection(ServerLevel level, StargateEntry local) {
+        StargateNetworkSavedData network = StargateNetworkSavedData.get(level);
+        network.findIncomingSource(local.address()).ifPresent(source -> {
+            ServerLevel sourceLevel = level.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, source.dimension()));
+            if (sourceLevel != null) {
+                disconnect(sourceLevel, source);
+            }
+        });
+    }
+
+    private static void rememberExpeditionReturnAddress(ServerLevel level, StargateEntry local, StargateEntry target) {
+        if (target.dimension().equals(LanteaDimensions.EXPEDITIONS.location())) {
+            ExpeditionSavedData.get(level).rememberReturnAddress(target.address(), local.address());
         }
     }
 

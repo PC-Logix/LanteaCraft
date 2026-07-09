@@ -1,11 +1,15 @@
 package com.pclogix.lanteacraft.registry;
 
 import com.pclogix.lanteacraft.LanteaCraft;
+import com.pclogix.lanteacraft.block.BrazierBlock;
 import com.pclogix.lanteacraft.block.DhdBlock;
 import com.pclogix.lanteacraft.block.NaquadahGeneratorBlock;
+import com.pclogix.lanteacraft.block.ObeliskBlock;
+import com.pclogix.lanteacraft.block.ObeliskCollisionBlock;
 import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.block.StargateComponentBlock;
 import com.pclogix.lanteacraft.block.TransportRingBlock;
+import com.pclogix.lanteacraft.block.ZpmHubBlock;
 import com.pclogix.lanteacraft.gate.StargateVariant;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -91,6 +95,10 @@ public final class ModBlocks {
             () -> new NaquadahGeneratorBlock(machineProperties(MapColor.COLOR_GREEN).strength(5.0F, 12.0F)
                     .lightLevel(state -> state.hasProperty(NaquadahGeneratorBlock.ACTIVE) && state.getValue(NaquadahGeneratorBlock.ACTIVE) ? 8 : 0)));
 
+    public static final DeferredBlock<Block> ZPM_HUB = BLOCKS.register(
+            "zpm_hub",
+            () -> new ZpmHubBlock(machineProperties(MapColor.COLOR_CYAN).strength(5.0F, 12.0F)));
+
     public static final DeferredBlock<Block> NAQUADAH_ORE = BLOCKS.registerSimpleBlock(
             "naquadah_ore",
             oreProperties(MapColor.STONE));
@@ -106,6 +114,34 @@ public final class ModBlocks {
     public static final DeferredBlock<Block> TRINIUM_BLOCK = BLOCKS.registerSimpleBlock(
             "trinium_block",
             metalProperties(MapColor.COLOR_LIGHT_BLUE).strength(5.0F, 6.0F));
+
+    public static final DeferredBlock<Block> NAQUADAH_BRAZIER = BLOCKS.register(
+            "naquadah_brazier",
+            () -> new BrazierBlock(brazierProperties(MapColor.COLOR_GREEN)));
+
+    public static final DeferredBlock<Block> TRINIUM_BRAZIER = BLOCKS.register(
+            "trinium_brazier",
+            () -> new BrazierBlock(brazierProperties(MapColor.COLOR_LIGHT_BLUE)));
+
+    public static final DeferredBlock<Block> GOAULD_BRAZIER = BLOCKS.register(
+            "goauld_brazier",
+            () -> new BrazierBlock(brazierProperties(MapColor.SAND).sound(SoundType.STONE)));
+
+    public static final DeferredBlock<Block> OBELISK = BLOCKS.register(
+            "obelisk",
+            () -> new ObeliskBlock(lanteanStoneProperties(MapColor.SAND).strength(3.0F, 6.0F).noOcclusion()));
+
+    public static final DeferredBlock<Block> OBELISK_COLLISION = BLOCKS.register(
+            "obelisk_collision",
+            () -> new ObeliskCollisionBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.NONE)
+                    .strength(3.0F, 6.0F)
+                    .noOcclusion()
+                    .noLootTable()
+                    .isValidSpawn((state, level, pos, entityType) -> false)
+                    .isRedstoneConductor((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false)));
 
     public static final DeferredBlock<Block> LANTEAN_WALL = BLOCKS.registerSimpleBlock(
             "lantean_wall",
@@ -139,6 +175,30 @@ public final class ModBlocks {
                     .isSuffocating((state, level, pos) -> false)
                     .isViewBlocking((state, level, pos) -> false)));
 
+    public static final DeferredBlock<Block> ANCIENT_CONTAINMENT_BLOCK = BLOCKS.registerSimpleBlock(
+            "ancient_containment_block",
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLUE)
+                    .strength(-1.0F, 3600000.0F)
+                    .sound(SoundType.DEEPSLATE_TILES)
+                    .noLootTable());
+
+    public static final DeferredBlock<Block> GOAULD_CONTAINMENT_BLOCK = BLOCKS.registerSimpleBlock(
+            "goauld_containment_block",
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.SAND)
+                    .strength(-1.0F, 3600000.0F)
+                    .sound(SoundType.STONE)
+                    .noLootTable());
+
+    public static final DeferredBlock<Block> EXPEDITION_REWARD_DOOR_MARKER = BLOCKS.registerSimpleBlock(
+            "expedition_reward_door_marker",
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_RED)
+                    .strength(1.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noLootTable());
+
     private ModBlocks() {
     }
 
@@ -171,6 +231,13 @@ public final class ModBlocks {
                 .mapColor(mapColor)
                 .requiresCorrectToolForDrops()
                 .sound(SoundType.METAL);
+    }
+
+    private static BlockBehaviour.Properties brazierProperties(MapColor mapColor) {
+        return metalProperties(mapColor)
+                .strength(3.0F, 6.0F)
+                .lightLevel(state -> 15)
+                .noOcclusion();
     }
 
     private static BlockBehaviour.Properties oreProperties(MapColor mapColor) {

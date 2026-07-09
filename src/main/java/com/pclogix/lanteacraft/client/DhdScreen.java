@@ -22,7 +22,7 @@ public class DhdScreen extends Screen {
     private static final int DHD_WIDTH = 260;
     private static final int DHD_HEIGHT = 180;
     private static final int PANEL_TOP_PADDING = 48;
-    private static final int MAX_ADDRESS_LENGTH = StargateAddress.ADDRESS_LENGTH;
+    private static final int MAX_ADDRESS_LENGTH = StargateAddress.MAX_ADDRESS_LENGTH;
 
     private final BlockPos dhdPos;
     private final ResourceLocation guiTexture;

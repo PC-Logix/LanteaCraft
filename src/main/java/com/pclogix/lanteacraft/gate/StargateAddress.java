@@ -9,6 +9,7 @@ public final class StargateAddress {
     public static final int GATE_ID_LENGTH = 6;
     public static final int ADDRESS_LENGTH = GATE_ID_LENGTH + 1;
     public static final int EXTENDED_ADDRESS_LENGTH = ADDRESS_LENGTH + 1;
+    public static final int MAX_ADDRESS_LENGTH = 9;
     public static final char OVERWORLD_GLYPH = 'A';
     public static final char NETHER_GLYPH = 'N';
     public static final char END_GLYPH = 'E';

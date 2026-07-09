@@ -1,0 +1,4 @@
+newmtl Material.001
+Ka 1.0 1.0 1.0 1.0
+Kd 1.0 1.0 1.0 1.0
+map_Kd #Material.001
