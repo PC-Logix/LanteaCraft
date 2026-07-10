@@ -11,9 +11,14 @@ import com.pclogix.lanteacraft.item.GdoItem;
 import com.pclogix.lanteacraft.item.IrisUpgradeItem;
 import com.pclogix.lanteacraft.item.ZpmItem;
 import com.pclogix.lanteacraft.worldgen.FixedDimensionGates;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -21,6 +26,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(LanteaCraft.MODID);
+
+    private static final TagKey<BannerPattern> STARGATE_BANNER_PATTERN = bannerPatternTag("stargate");
+    private static final TagKey<BannerPattern> LANTEAN_BANNER_PATTERN = bannerPatternTag("lantean");
+    private static final TagKey<BannerPattern> GOAULD_BANNER_PATTERN = bannerPatternTag("goauld");
+
+    public static final DeferredItem<Item> CREATIVE_TAB_ICON = ITEMS.registerSimpleItem("creative_tab_icon");
 
     public static final DeferredItem<BlockItem> STARGATE_RING = ITEMS.registerSimpleBlockItem("stargate_ring", ModBlocks.STARGATE_RING);
     public static final DeferredItem<BlockItem> STARGATE_CHEVRON = ITEMS.registerSimpleBlockItem("stargate_chevron", ModBlocks.STARGATE_CHEVRON);
@@ -58,6 +69,15 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> ANCIENT_CONTAINMENT_BLOCK = ITEMS.registerSimpleBlockItem("ancient_containment_block", ModBlocks.ANCIENT_CONTAINMENT_BLOCK);
     public static final DeferredItem<BlockItem> GOAULD_CONTAINMENT_BLOCK = ITEMS.registerSimpleBlockItem("goauld_containment_block", ModBlocks.GOAULD_CONTAINMENT_BLOCK);
     public static final DeferredItem<BlockItem> EXPEDITION_REWARD_DOOR_MARKER = ITEMS.registerSimpleBlockItem("expedition_reward_door_marker", ModBlocks.EXPEDITION_REWARD_DOOR_MARKER);
+    public static final DeferredItem<BannerPatternItem> STARGATE_BANNER_PATTERN_ITEM = ITEMS.register(
+            "stargate_banner_pattern",
+            () -> new BannerPatternItem(STARGATE_BANNER_PATTERN, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<BannerPatternItem> LANTEAN_BANNER_PATTERN_ITEM = ITEMS.register(
+            "lantean_banner_pattern",
+            () -> new BannerPatternItem(LANTEAN_BANNER_PATTERN, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<BannerPatternItem> GOAULD_BANNER_PATTERN_ITEM = ITEMS.register(
+            "goauld_banner_pattern",
+            () -> new BannerPatternItem(GOAULD_BANNER_PATTERN, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 
     public static final DeferredItem<Item> CONTROL_CRYSTAL = ITEMS.registerSimpleItem(
             "control_crystal",
@@ -123,5 +143,9 @@ public final class ModItems {
 
     public static void register(IEventBus modEventBus) {
         ITEMS.register(modEventBus);
+    }
+
+    private static TagKey<BannerPattern> bannerPatternTag(String path) {
+        return TagKey.create(Registries.BANNER_PATTERN, ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "pattern_item/" + path));
     }
 }

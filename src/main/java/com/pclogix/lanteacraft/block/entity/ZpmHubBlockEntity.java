@@ -97,13 +97,16 @@ public class ZpmHubBlockEntity extends BlockEntity {
             IEnergyStorage zpm = zpmStorage(slot);
             if (zpm != null) {
                 energy += zpm.getEnergyStored();
+                if (energy >= Integer.MAX_VALUE) {
+                    return Integer.MAX_VALUE;
+                }
             }
         }
         return energy;
     }
 
     public long zpmMaxEnergyStored() {
-        return (long)ZPM_SLOTS * ZpmItem.capacity();
+        return Integer.MAX_VALUE;
     }
 
     public int extractZpmEnergy(int amount, boolean simulate) {
@@ -142,7 +145,9 @@ public class ZpmHubBlockEntity extends BlockEntity {
 
         for (int slot = 0; slot < ZPM_SLOTS; slot++) {
             if (slot < zpmItems.getSlots() && zpmItems.getStackInSlot(slot).isEmpty()) {
-                zpmItems.setStackInSlot(slot, stack.copyWithCount(1));
+                ItemStack inserted = stack.copyWithCount(1);
+                ZpmItem.ensureEnergyComponent(inserted);
+                zpmItems.setStackInSlot(slot, inserted);
                 return true;
             }
         }
@@ -176,6 +181,7 @@ public class ZpmHubBlockEntity extends BlockEntity {
             return null;
         }
 
+        ZpmItem.ensureEnergyComponent(stack);
         return stack.getCapability(Capabilities.EnergyStorage.ITEM);
     }
 

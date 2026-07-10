@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
 public class ZpmItem extends Item {
-    public static final int DEFAULT_CAPACITY = 1_000_000_000;
+    public static final int DEFAULT_CAPACITY = (Integer.MAX_VALUE / 3) + 1;
     public static final int DEFAULT_MAX_TRANSFER = 100_000_000;
 
     public ZpmItem(Properties properties) {
@@ -51,14 +51,20 @@ public class ZpmItem extends Item {
     }
 
     public static int capacity() {
-        return Config.ZPM_CAPACITY == null ? DEFAULT_CAPACITY : Config.ZPM_CAPACITY.get();
+        return DEFAULT_CAPACITY;
     }
 
     public static int maxTransfer() {
         return Config.ZPM_MAX_TRANSFER == null ? DEFAULT_MAX_TRANSFER : Config.ZPM_MAX_TRANSFER.get();
     }
 
-    private int energyStored(ItemStack stack) {
-        return Mth.clamp(stack.getOrDefault(ModDataComponents.ENERGY, 0), 0, capacity());
+    public static int energyStored(ItemStack stack) {
+        return Mth.clamp(stack.getOrDefault(ModDataComponents.ENERGY, capacity()), 0, capacity());
+    }
+
+    public static void ensureEnergyComponent(ItemStack stack) {
+        if (!stack.has(ModDataComponents.ENERGY.get())) {
+            stack.set(ModDataComponents.ENERGY, capacity());
+        }
     }
 }

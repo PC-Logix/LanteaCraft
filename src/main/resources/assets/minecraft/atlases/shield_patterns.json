@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "lanteacraft:entity/shield/stargate"
+    },
+    {
+      "type": "single",
+      "resource": "lanteacraft:entity/shield/lantean"
+    },
+    {
+      "type": "single",
+      "resource": "lanteacraft:entity/shield/goauld"
+    }
+  ]
+}

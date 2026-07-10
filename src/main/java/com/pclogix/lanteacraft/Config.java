@@ -123,7 +123,7 @@ public final class Config {
         BUILDER.push("zpm");
         ZPM_CAPACITY = BUILDER
                 .comment("Stored FE in a single Zero Point Module.")
-                .defineInRange("zpmCapacity", 1_000_000_000, 0, Integer.MAX_VALUE);
+                .defineInRange("zpmCapacity", (Integer.MAX_VALUE / 3) + 1, 0, Integer.MAX_VALUE);
         ZPM_MAX_TRANSFER = BUILDER
                 .comment("Maximum FE a bare ZPM item can provide in one extraction call.")
                 .defineInRange("zpmMaxTransfer", 100_000_000, 0, Integer.MAX_VALUE);

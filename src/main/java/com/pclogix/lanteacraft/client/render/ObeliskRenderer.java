@@ -17,9 +17,9 @@ import net.minecraft.world.phys.Vec3;
 public class ObeliskRenderer implements BlockEntityRenderer<ObeliskBlockEntity> {
     private static final float MODEL_SCALE = 0.35F;
     // World-space nudge for tuning the OBJ over the anchor block: +X east, +Z south.
-    private static final double MODEL_OFFSET_X = 0.125D;
-    private static final double MODEL_OFFSET_Y = 0.0D;
-    private static final double MODEL_OFFSET_Z = 0.125D;
+    private static final double MODEL_OFFSET_X = 0.175D;
+    private static final double MODEL_OFFSET_Y = 0.10D;
+    private static final double MODEL_OFFSET_Z = 0.175D;
     private final ItemRenderer itemRenderer;
 
     public ObeliskRenderer(BlockEntityRendererProvider.Context context) {

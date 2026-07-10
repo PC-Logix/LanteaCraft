@@ -24,6 +24,7 @@ public class ZpmEnergyStorage implements IEnergyStorage {
             return 0;
         }
 
+        ZpmItem.ensureEnergyComponent(stack);
         int extracted = Math.min(getEnergyStored(), Math.min(ZpmItem.maxTransfer(), toExtract));
         if (extracted > 0 && !simulate) {
             stack.set(ModDataComponents.ENERGY, getEnergyStored() - extracted);
@@ -33,7 +34,8 @@ public class ZpmEnergyStorage implements IEnergyStorage {
 
     @Override
     public int getEnergyStored() {
-        return Mth.clamp(stack.getOrDefault(ModDataComponents.ENERGY, 0), 0, ZpmItem.capacity());
+        ZpmItem.ensureEnergyComponent(stack);
+        return Mth.clamp(stack.getOrDefault(ModDataComponents.ENERGY, ZpmItem.capacity()), 0, ZpmItem.capacity());
     }
 
     @Override

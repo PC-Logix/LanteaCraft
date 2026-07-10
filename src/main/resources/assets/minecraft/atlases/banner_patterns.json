@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "lanteacraft:entity/banner/stargate"
+    },
+    {
+      "type": "single",
+      "resource": "lanteacraft:entity/banner/lantean"
+    },
+    {
+      "type": "single",
+      "resource": "lanteacraft:entity/banner/goauld"
+    }
+  ]
+}
