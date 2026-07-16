@@ -8,7 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 
 public final class FixedDimensionGates {
-    public static final String ABYDOS_ADDRESS = "ABYDOSX";
+    // Series glyphs 27-7-15-32-12-30 map to 1-G-O-6-L-4 in the legacy alphabet.
+    public static final String ABYDOS_ADDRESS = "1GO6L4X";
+    private static final String LEGACY_ABYDOS_ADDRESS = "ABYDOSX";
     public static final String ATLANTIS_ADDRESS = "ATLANTIS";
 
     private static final PlannedStargate ABYDOS = new PlannedStargate(
@@ -38,7 +40,7 @@ public final class FixedDimensionGates {
 
     public static Optional<PlannedStargate> byAddress(String address) {
         String normalized = address == null ? "" : address.trim().toUpperCase();
-        if (ABYDOS.address().equals(normalized)) {
+        if (ABYDOS.address().equals(normalized) || LEGACY_ABYDOS_ADDRESS.equals(normalized)) {
             return Optional.of(ABYDOS);
         }
         if (ATLANTIS.address().equals(normalized)) {
