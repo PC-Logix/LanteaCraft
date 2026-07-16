@@ -102,7 +102,7 @@ public final class ExpeditionGenerator {
             Registries.LOOT_TABLE,
             ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "chests/expedition_reward"));
     private static final ResourceLocation DOOR_JIGSAW = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "expedition/door");
-    private static final int JIGSAW_MAX_DEPTH = 12;
+    private static final int JIGSAW_MAX_DEPTH = 18;
     private static final String EMPTY_JIGSAW = "minecraft:empty";
     private static final List<ResourceLocation> INTERSECTION_TEMPLATES = List.of(
             template("intersection_cross"),
