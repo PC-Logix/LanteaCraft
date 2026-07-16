@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 
 public final class FixedDimensionGates {
-    public static final String ABYDOS_ADDRESS = "ABYDOSIA";
+    public static final String ABYDOS_ADDRESS = "ABYDOSX";
     public static final String ATLANTIS_ADDRESS = "ATLANTIS";
 
     private static final PlannedStargate ABYDOS = new PlannedStargate(

@@ -2,7 +2,7 @@
   "fallback": "lanteacraft:expedition/terminators",
   "elements": [
     {
-      "weight": 8,
+      "weight": 12,
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "lanteacraft:expedition/intersection_cross",

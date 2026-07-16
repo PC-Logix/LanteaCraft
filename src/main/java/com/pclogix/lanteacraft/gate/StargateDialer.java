@@ -4,6 +4,7 @@ import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.power.StargatePower;
 import com.pclogix.lanteacraft.worldgen.ExpeditionInstance;
 import com.pclogix.lanteacraft.worldgen.ExpeditionSavedData;
+import com.pclogix.lanteacraft.worldgen.FixedDimensionGates;
 import com.pclogix.lanteacraft.worldgen.LanteaDimensions;
 import com.pclogix.lanteacraft.worldgen.PlannedStargateResolver;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 public final class StargateDialer {
     private StargateDialer() {
@@ -29,6 +31,10 @@ public final class StargateDialer {
 
         if (!isValidAddress(targetAddress)) {
             return DialResult.fail("invalid_address", "Invalid Stargate address: " + targetAddress);
+        }
+
+        if (FMLEnvironment.production && FixedDimensionGates.ATLANTIS_ADDRESS.equals(targetAddress)) {
+            return DialResult.fail("destination_disabled", "Atlantis is still in development and cannot be dialed yet.");
         }
 
         StargateNetworkSavedData network = StargateNetworkSavedData.get(level);

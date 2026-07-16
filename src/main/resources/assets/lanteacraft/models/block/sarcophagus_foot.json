@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "minecraft:block/sandstone_bottom",
+    "up": "lanteacraft:block/sarcophagus_foot",
+    "north": "minecraft:block/sandstone",
+    "south": "minecraft:block/sandstone",
+    "west": "minecraft:block/sandstone",
+    "east": "minecraft:block/sandstone",
+    "particle": "minecraft:block/sandstone"
+  }
+}

@@ -2,10 +2,15 @@ package com.pclogix.lanteacraft.registry;
 
 import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.block.BrazierBlock;
+import com.pclogix.lanteacraft.block.BrokenColumnBlock;
 import com.pclogix.lanteacraft.block.DhdBlock;
+import com.pclogix.lanteacraft.block.DecorativeFacingBlock;
 import com.pclogix.lanteacraft.block.NaquadahGeneratorBlock;
 import com.pclogix.lanteacraft.block.ObeliskBlock;
 import com.pclogix.lanteacraft.block.ObeliskCollisionBlock;
+import com.pclogix.lanteacraft.block.OfferingAltarBlock;
+import com.pclogix.lanteacraft.block.SarcophagusBlock;
+import com.pclogix.lanteacraft.block.SphinxBlock;
 import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.block.StargateComponentBlock;
 import com.pclogix.lanteacraft.block.TransportRingBlock;
@@ -143,6 +148,50 @@ public final class ModBlocks {
                     .isSuffocating((state, level, pos) -> false)
                     .isViewBlocking((state, level, pos) -> false)));
 
+    public static final DeferredBlock<Block> SARCOPHAGUS = BLOCKS.register(
+            "sarcophagus",
+            () -> new SarcophagusBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.SAND)
+                    .strength(2.0F, 6.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()));
+
+    public static final DeferredBlock<Block> SPHINX = BLOCKS.register(
+            "sphinx",
+            () -> new SphinxBlock(lanteanStoneProperties(MapColor.SAND).strength(3.0F, 6.0F).noOcclusion()));
+
+    public static final DeferredBlock<Block> SPHINX_HEAD = BLOCKS.register(
+            "sphinx_head",
+            () -> new DecorativeFacingBlock(lanteanStoneProperties(MapColor.SAND).strength(3.0F, 6.0F).noOcclusion()));
+
+    public static final DeferredBlock<Block> CANOPIC_JAR = BLOCKS.register(
+            "canopic_jar",
+            () -> new DecorativeFacingBlock(lanteanStoneProperties(MapColor.SAND).strength(1.5F, 3.0F).noOcclusion()));
+
+    public static final DeferredBlock<Block> SCARAB_IDOL = BLOCKS.register(
+            "scarab_idol",
+            () -> new DecorativeFacingBlock(lanteanStoneProperties(MapColor.SAND).strength(1.5F, 3.0F).noOcclusion()));
+
+    public static final DeferredBlock<Block> OFFERING_ALTAR = BLOCKS.register(
+            "offering_altar",
+            () -> new OfferingAltarBlock(lanteanStoneProperties(MapColor.SAND).strength(2.5F, 5.0F).noOcclusion()));
+
+    public static final DeferredBlock<Block> BROKEN_COLUMN = BLOCKS.register(
+            "broken_column",
+            () -> new BrokenColumnBlock(lanteanStoneProperties(MapColor.SAND).strength(2.5F, 5.0F).noOcclusion()));
+
+    public static final DeferredBlock<Block> SITTING_CAT_STATUE = BLOCKS.register(
+            "sitting_cat_statue",
+            () -> new DecorativeFacingBlock(lanteanMetalProperties(MapColor.COLOR_GREEN).strength(2.5F, 6.0F).noOcclusion()));
+
+    public static final DeferredBlock<Block> BRONZE_SITTING_CAT_STATUE = BLOCKS.register(
+            "bronze_sitting_cat_statue",
+            () -> new DecorativeFacingBlock(lanteanMetalProperties(MapColor.COLOR_GREEN).strength(2.5F, 6.0F).noOcclusion()));
+
+    public static final DeferredBlock<Block> RECLINING_CAT_STATUE = BLOCKS.register(
+            "reclining_cat_statue",
+            () -> new DecorativeFacingBlock(lanteanMetalProperties(MapColor.COLOR_GREEN).strength(2.5F, 6.0F).noOcclusion()));
+
     public static final DeferredBlock<Block> LANTEAN_WALL = BLOCKS.registerSimpleBlock(
             "lantean_wall",
             lanteanStoneProperties(MapColor.COLOR_LIGHT_BLUE));
@@ -191,6 +240,14 @@ public final class ModBlocks {
                     .sound(SoundType.STONE)
                     .noLootTable());
 
+    public static final DeferredBlock<Block> EXPEDITION_REWARD_DOOR = BLOCKS.registerSimpleBlock(
+            "expedition_reward_door",
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .strength(-1.0F, 3600000.0F)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .noLootTable());
+
     public static final DeferredBlock<Block> EXPEDITION_REWARD_DOOR_MARKER = BLOCKS.registerSimpleBlock(
             "expedition_reward_door_marker",
             BlockBehaviour.Properties.of()
@@ -222,7 +279,7 @@ public final class ModBlocks {
 
     private static BlockBehaviour.Properties dhdProperties(MapColor mapColor) {
         return machineProperties(mapColor)
-                .strength(4.0F, 12.0F)
+                .strength(4.0F, 1200.0F)
                 .lightLevel(state -> state.hasProperty(DhdBlock.ACTIVE) && state.getValue(DhdBlock.ACTIVE) ? 5 : 0);
     }
 

@@ -1,0 +1,14 @@
+{
+  "fallback": "lanteacraft:expedition/terminators",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "lanteacraft:expedition/reward_hall",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

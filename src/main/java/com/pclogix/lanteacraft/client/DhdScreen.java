@@ -27,6 +27,7 @@ public class DhdScreen extends Screen {
     private final BlockPos dhdPos;
     private final ResourceLocation guiTexture;
     private final ResourceLocation centreTexture;
+    private final StargateVariant variant;
     private final StringBuilder address = new StringBuilder();
     private int left;
     private int top;
@@ -38,6 +39,7 @@ public class DhdScreen extends Screen {
     public DhdScreen(BlockPos dhdPos, StargateVariant variant) {
         super(Component.literal("Dial Home Device"));
         this.dhdPos = dhdPos.immutable();
+        this.variant = variant;
         this.guiTexture = dhdTexture("dhd_gui", variant);
         this.centreTexture = dhdTexture("dhd_centre", variant);
     }
@@ -206,7 +208,7 @@ public class DhdScreen extends Screen {
 
     private void playButtonSound() {
         if (minecraft != null && minecraft.player != null) {
-            minecraft.player.playSound(ModSounds.DHD_BUTTON.get(), 0.75F, 1.0F);
+            minecraft.player.playSound(ModSounds.dhdButton(variant), 0.75F, 1.0F);
         }
     }
 }

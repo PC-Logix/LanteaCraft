@@ -129,16 +129,28 @@ public final class StargateMultiblock {
     }
 
     public static boolean disassembleFrom(Level level, BlockPos changedPos) {
+        return disassembleFrom(level, changedPos, false);
+    }
+
+    public static boolean disassembleFrom(Level level, BlockPos changedPos, boolean bypassProtection) {
         boolean disassembled = false;
         for (BlockPos basePos : BlockPos.betweenClosed(changedPos.offset(-3, -6, -3), changedPos.offset(3, 0, 3))) {
             if (level.getBlockState(basePos).getBlock() instanceof StargateBaseBlock) {
-                disassembled |= disassembleAtBase(level, basePos.immutable());
+                disassembled |= disassembleAtBase(level, basePos.immutable(), bypassProtection);
             }
         }
         return disassembled;
     }
 
     public static boolean disassembleAtBase(Level level, BlockPos basePos) {
+        return disassembleAtBase(level, basePos, false);
+    }
+
+    public static boolean disassembleAtBase(Level level, BlockPos basePos, boolean bypassProtection) {
+        if (!bypassProtection && level instanceof ServerLevel serverLevel
+                && GeneratedGateProtection.isProtectedGateBase(serverLevel, basePos)) {
+            return false;
+        }
         BlockState baseState = level.getBlockState(basePos);
         if (!(baseState.getBlock() instanceof StargateBaseBlock baseBlock)) {
             return false;

@@ -37,6 +37,14 @@ public final class Config {
             .comment("Generates LanteaCraft ores in already-existing chunks when they are loaded. Newly generated chunks already receive ores through normal worldgen.")
             .define("enableOreRetrogen", false);
 
+    public static final ModConfigSpec.BooleanValue ENABLE_EXPLODING_ENCHANTMENT = BUILDER
+            .comment("Enables explosions from projectiles fired by ranged weapons with the Exploding enchantment.")
+            .define("enableExplodingEnchantment", true);
+
+    public static final ModConfigSpec.BooleanValue PROTECT_GENERATED_GATES = BUILDER
+            .comment("Prevents non-creative players from breaking or disassembling generated Stargate installations and their linked DHDs.")
+            .define("protectGeneratedGates", true);
+
     public static final ModConfigSpec.IntValue ORE_RETROGEN_CHUNKS_PER_TICK = BUILDER
             .comment("Maximum number of old chunks to process for LanteaCraft ore retrogen per dimension tick.")
             .defineInRange("oreRetrogenChunksPerTick", 1, 1, 16);

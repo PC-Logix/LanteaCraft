@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "minecraft:item/brick"
+    "layer0": "lanteacraft:item/address_tablet"
   }
 }

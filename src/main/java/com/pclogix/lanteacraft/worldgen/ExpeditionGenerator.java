@@ -10,6 +10,7 @@ import com.pclogix.lanteacraft.gate.StargateCamouflage;
 import com.pclogix.lanteacraft.gate.StargateMultiblock;
 import com.pclogix.lanteacraft.gate.StargateNetworkSavedData;
 import com.pclogix.lanteacraft.gate.StargateVariant;
+import com.pclogix.lanteacraft.mixin.StructureTemplateAccessor;
 import com.pclogix.lanteacraft.registry.ModBlocks;
 import com.pclogix.lanteacraft.registry.ModEntities;
 import com.pclogix.lanteacraft.registry.ModItems;
@@ -24,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -48,9 +50,9 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BarrelBlock;
@@ -62,9 +64,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.JigsawBlockEntity;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -92,7 +102,7 @@ public final class ExpeditionGenerator {
             Registries.LOOT_TABLE,
             ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "chests/expedition_reward"));
     private static final ResourceLocation DOOR_JIGSAW = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "expedition/door");
-    private static final int JIGSAW_MAX_DEPTH = 48;
+    private static final int JIGSAW_MAX_DEPTH = 12;
     private static final String EMPTY_JIGSAW = "minecraft:empty";
     private static final List<ResourceLocation> INTERSECTION_TEMPLATES = List.of(
             template("intersection_cross"),
@@ -120,6 +130,7 @@ public final class ExpeditionGenerator {
                 (int)seed,
                 3,
                 basePos.immutable(),
+                level.dimension().location(),
                 facing,
                 StargateVariant.MILKY_WAY,
                 false,
@@ -128,9 +139,16 @@ public final class ExpeditionGenerator {
                 List.of(),
                 false,
                 seed,
+                List.of(),
                 null,
                 Direction.SOUTH);
-        return place(level, expedition, false, clearBeforePlacement) ? Optional.of(expedition) : Optional.empty();
+        ExpeditionSavedData data = ExpeditionSavedData.get(level);
+        data.rememberForPlacement(expedition);
+        if (!place(level, expedition, false, clearBeforePlacement)) {
+            data.forget(expedition.address());
+            return Optional.empty();
+        }
+        return data.findByAddress(expedition.address());
     }
 
     public static String lastPlacementFailure() {
@@ -143,6 +161,7 @@ public final class ExpeditionGenerator {
                 (int)seed,
                 3,
                 basePos.immutable(),
+                level.dimension().location(),
                 facing,
                 StargateVariant.MILKY_WAY,
                 false,
@@ -151,6 +170,7 @@ public final class ExpeditionGenerator {
                 List.of(),
                 false,
                 seed,
+                List.of(),
                 null,
                 Direction.SOUTH);
         BlockPos checkBasePos = basePos;
@@ -206,12 +226,6 @@ public final class ExpeditionGenerator {
                 .orElseGet(() -> new RewardPlacement(rewardFallbackBasePos.relative(facing, 22), facing));
         placeRewardChest(level, expedition, rewardPlacement);
         fillSideLoot(level, expedition);
-        BlockPos combatFallbackBasePos = layoutBasePos;
-        List<BlockPos> combatRoomCenters = ExpeditionSavedData.get(level).findByAddress(expedition.address())
-                .map(ExpeditionInstance::combatRoomCenters)
-                .filter(centers -> !centers.isEmpty())
-                .orElseGet(() -> List.of(combatFallbackBasePos.relative(facing, 16).above()));
-        spawnGuards(level, combatRoomCenters, expedition.tier());
         register(level, expedition, gatePos, gateFacing);
         StargateMultiblock.tryAssembleAtBase(level, gatePos);
         applyExpeditionCamouflage(level, gatePos, gateFacing);
@@ -233,45 +247,184 @@ public final class ExpeditionGenerator {
             return failPlacement("Missing jigsaw template pool: " + START_POOL);
         }
 
-        boolean placed = JigsawPlacement.generateJigsaw(level, maybePool.get(), DOOR_JIGSAW, JIGSAW_MAX_DEPTH, basePos, false);
-        if (!placed) {
+        normalizeRequiredJigsawRouting(level);
+
+        Optional<GeneratedJigsawPlacement> generated = generateJigsawWithUnmatchedConnectors(
+                level, maybePool.get(), DOOR_JIGSAW, JIGSAW_MAX_DEPTH, basePos, false);
+        if (generated.isEmpty()) {
             return failPlacement("Minecraft jigsaw placement failed for pool " + START_POOL + ".");
         }
+        generated.get().unmatchedJigsaws().forEach(jigsaw -> fillDoorwaySeal(
+                level, jigsaw.pos(), jigsaw.direction(), new DoorwayOpening(jigsaw.width(), jigsaw.height())));
 
-        WorldMarkers markers = processWorldMarkers(level, basePos, clearRadius, facing);
+        WorldMarkers markers = processWorldMarkers(level, generated.get().bounds(), facing);
+        TemplatePlacementMarkers placementMarkers = TemplatePlacementMarkers.peekPending();
+        if (placementMarkers.gatePos().isEmpty()) {
+            return failPlacement("Expedition jigsaw layout contained no Stargate marker.");
+        }
+        if (placementMarkers.dhdPos().isEmpty()) {
+            return failPlacement("Expedition jigsaw layout contained no DHD marker.");
+        }
+        if (markers.combatRoomCenters().isEmpty()) {
+            return failPlacement("Expedition jigsaw layout contained no Goa'uld spawner markers.");
+        }
+        if (markers.rewardPlacements().isEmpty()) {
+            return failPlacement("Expedition jigsaw layout contained no reward room marker.");
+        }
         LanteaCraft.LOGGER.info(
                 "Expedition jigsaw placed at {}; processed {} combat markers, {} spawn markers, sealed {} unresolved doorway(s), reward door marker present: {}",
                 basePos,
                 markers.combatRoomCenters().size(),
                 markers.spawnPositions().size(),
                 markers.sealedDoorways(),
-                markers.rewardPlacement().isPresent());
-        markers.rewardPlacement().ifPresent(reward -> {
+                !markers.rewardPlacements().isEmpty());
+        markers.rewardPlacements().forEach(reward -> {
             ExpeditionTrialPlacements.rememberReward(reward.entrance(), reward.facing());
             ExpeditionSavedData.get(level).rememberRewardDoor(expedition.address(), reward.entrance(), reward.facing());
         });
         ExpeditionSavedData.get(level).rememberTrialState(expedition.address(), markers.combatRoomCenters(), false);
-        ExpeditionSpawnMarkers.remember(expedition.address(), markers.spawnPositions());
         return true;
     }
 
-    private static WorldMarkers processWorldMarkers(ServerLevel level, BlockPos center, int radius, Direction facing) {
+    private static void normalizeRequiredJigsawRouting(ServerLevel level) {
+        normalizeJigsaw(level, template("gate_room"), "lanteacraft:expedition/door",
+                "lanteacraft:expedition/hall_in", "lanteacraft:expedition/entry_halls", 0);
+        normalizeJigsaw(level, template("entry_hall"), "lanteacraft:expedition/hall_out",
+                "lanteacraft:expedition/room_in", "lanteacraft:expedition/entry_rooms", 0);
+        normalizeJigsaw(level, template("intersection_cross"), "lanteacraft:expedition/branch_west_out",
+                "lanteacraft:expedition/combat_in", "lanteacraft:expedition/combat_rooms", 10);
+        normalizeJigsaw(level, template("intersection_cross"), "lanteacraft:expedition/branch_south_out",
+                "lanteacraft:expedition/hall_in", "lanteacraft:expedition/halls", 0);
+        normalizeJigsaw(level, template("intersection_cross"), "lanteacraft:expedition/reward_out",
+                "lanteacraft:expedition/hall_in", "lanteacraft:expedition/reward_halls", 10);
+        normalizeJigsaw(level, template("reward_hall"), "lanteacraft:expedition/hall_out",
+                "lanteacraft:expedition/reward_in", "lanteacraft:expedition/reward", 0);
+        normalizeJigsaw(level, template("room_small_1"), "lanteacraft:expedition/room_out",
+                "lanteacraft:expedition/hall_in", "lanteacraft:expedition/halls", 0);
+    }
+
+    private static void normalizeJigsaw(ServerLevel level, ResourceLocation templateId, String name,
+            String target, String pool, int selectionPriority) {
+        level.getStructureManager().get(templateId).ifPresent(template -> {
+            for (StructureTemplate.Palette palette : ((StructureTemplateAccessor)(Object)template).lanteacraft$getPalettes()) {
+                for (StructureTemplate.StructureBlockInfo info : palette.blocks(Blocks.JIGSAW)) {
+                    if (info.nbt() != null && name.equals(info.nbt().getString("name"))) {
+                        info.nbt().putString("target", target);
+                        info.nbt().putString("pool", pool);
+                        info.nbt().putInt("selection_priority", selectionPriority);
+                    }
+                }
+            }
+        });
+    }
+
+    private static Optional<GeneratedJigsawPlacement> generateJigsawWithUnmatchedConnectors(
+            ServerLevel level,
+            Holder<StructureTemplatePool> startPool,
+            ResourceLocation startJigsaw,
+            int maxDepth,
+            BlockPos startPos,
+            boolean keepJigsaws) {
+        var chunkGenerator = level.getChunkSource().getGenerator();
+        var templateManager = level.getStructureManager();
+        Structure.GenerationContext context = new Structure.GenerationContext(
+                level.registryAccess(),
+                chunkGenerator,
+                chunkGenerator.getBiomeSource(),
+                level.getChunkSource().randomState(),
+                templateManager,
+                level.getSeed(),
+                new ChunkPos(startPos),
+                level,
+                biome -> true);
+        Optional<Structure.GenerationStub> stub = JigsawPlacement.addPieces(
+                context,
+                startPool,
+                Optional.of(startJigsaw),
+                maxDepth,
+                startPos,
+                false,
+                Optional.empty(),
+                128,
+                PoolAliasLookup.EMPTY,
+                JigsawStructure.DEFAULT_DIMENSION_PADDING,
+                JigsawStructure.DEFAULT_LIQUID_SETTINGS);
+        if (stub.isEmpty()) {
+            return Optional.empty();
+        }
+
+        StructurePiecesBuilder builder = stub.get().getPiecesBuilder();
+        List<StructurePiece> pieces = builder.build().pieces();
+        List<GeneratedJigsaw> jigsaws = new ArrayList<>();
+        for (StructurePiece piece : pieces) {
+            if (!(piece instanceof PoolElementStructurePiece poolPiece)) {
+                continue;
+            }
+            for (StructureTemplate.StructureBlockInfo info : poolPiece.getElement().getShuffledJigsawBlocks(
+                    templateManager, poolPiece.getPosition(), poolPiece.getRotation(), RandomSource.create(0L))) {
+                if (info.nbt() == null || !info.state().is(Blocks.JIGSAW)) {
+                    continue;
+                }
+                Direction direction = info.state().getValue(JigsawBlock.ORIENTATION).front();
+                if (direction.getAxis().isHorizontal()) {
+                    BlockPos connectionPos = info.pos().relative(direction);
+                    boolean connected = poolPiece.getJunctions().stream().anyMatch(junction ->
+                            junction.getSourceX() == connectionPos.getX()
+                                    && junction.getSourceZ() == connectionPos.getZ());
+                    jigsaws.add(new GeneratedJigsaw(
+                            info.pos(),
+                            direction,
+                            info.nbt().getString("name"),
+                            info.nbt().getString("target"),
+                            info.nbt().getString("pool"),
+                            connected));
+                }
+            }
+        }
+
+        List<UnmatchedJigsaw> unmatched = jigsaws.stream()
+                .filter(GeneratedJigsaw::isOutgoing)
+                // The named start socket anchors the first piece at the gate; it
+                // has no preceding piece and must not be treated as a dead end.
+                .filter(jigsaw -> !jigsaw.pos().equals(startPos))
+                .filter(jigsaw -> !jigsaw.connected())
+                .map(jigsaw -> new UnmatchedJigsaw(jigsaw.pos(), jigsaw.direction(), jigsaw.sealWidth(), 7))
+                .toList();
+        for (StructurePiece piece : pieces) {
+            if (piece instanceof PoolElementStructurePiece poolPiece) {
+                poolPiece.place(
+                        level,
+                        level.structureManager(),
+                        chunkGenerator,
+                        level.getRandom(),
+                        BoundingBox.infinite(),
+                        startPos,
+                        keepJigsaws);
+            }
+        }
+        return Optional.of(new GeneratedJigsawPlacement(unmatched, builder.getBoundingBox()));
+    }
+
+    private static WorldMarkers processWorldMarkers(ServerLevel level, BoundingBox bounds, Direction facing) {
         List<BlockPos> spawnPositions = new ArrayList<>();
         List<BlockPos> combatRoomCenters = new ArrayList<>();
-        Optional<RewardPlacement> rewardPlacement = Optional.empty();
+        List<BlockPos> rewardMarkers = new ArrayList<>();
         int sealedDoorways = 0;
-        for (int x = -radius; x <= radius; x++) {
-            for (int z = -radius; z <= radius; z++) {
-                for (int y = -8; y <= HEIGHT + 48; y++) {
-                    BlockPos pos = center.offset(x, y, z);
+        for (int x = bounds.minX(); x <= bounds.maxX(); x++) {
+            for (int z = bounds.minZ(); z <= bounds.maxZ(); z++) {
+                for (int y = bounds.minY(); y <= bounds.maxY(); y++) {
+                    BlockPos pos = new BlockPos(x, y, z);
                     BlockState state = level.getBlockState(pos);
                     if (state.is(Blocks.ORANGE_WOOL)) {
                         level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
                     } else if (state.is(Blocks.LIME_WOOL)) {
-                        level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-                        BlockPos spawn = pos.above();
-                        spawnPositions.add(spawn);
-                        combatRoomCenters.add(spawn);
+                        level.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_ALL);
+                        if (level.getBlockEntity(pos) instanceof SpawnerBlockEntity spawner) {
+                            spawner.setEntityId(ModEntities.GOAULD_SOLDIER.get(), level.getRandom());
+                            spawner.setChanged();
+                        }
+                        spawnPositions.add(pos.immutable());
+                        combatRoomCenters.add(pos.immutable());
                     } else if (state.is(Blocks.BLUE_GLAZED_TERRACOTTA)) {
                         TemplatePlacementMarkers.rememberGate(pos, facingFromMarker(state));
                         level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
@@ -279,12 +432,8 @@ public final class ExpeditionGenerator {
                         TemplatePlacementMarkers.rememberDhd(pos, facingFromMarker(state));
                         level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
                     } else if (state.is(ModBlocks.EXPEDITION_REWARD_DOOR_MARKER.get())) {
-                        if (rewardPlacement.isEmpty()) {
-                            rewardPlacement = Optional.of(new RewardPlacement(pos, facing));
-                            lockRewardDoor(level, pos, facing);
-                        } else {
-                            level.setBlock(pos, ModBlocks.ANCIENT_CONTAINMENT_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL);
-                        }
+                        rewardMarkers.add(pos.immutable());
+                        level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
                     } else if (state.is(Blocks.TRAPPED_CHEST)) {
                         ExpeditionLootMarkers.rememberRewardChest(pos, horizontalFacingFromState(state, facing.getOpposite()));
                     } else if (state.is(Blocks.CHEST) || state.is(Blocks.BARREL)) {
@@ -301,8 +450,45 @@ public final class ExpeditionGenerator {
                 }
             }
         }
-        sealedDoorways += sealExteriorDoorwayOpenings(level, center, radius);
-        return new WorldMarkers(List.copyOf(spawnPositions), List.copyOf(combatRoomCenters), rewardPlacement, sealedDoorways);
+        List<RewardPlacement> rewardPlacements = rewardPlacementsFromMarkers(level, rewardMarkers);
+        sealedDoorways += sealExteriorDoorwayOpenings(level, bounds);
+        return new WorldMarkers(List.copyOf(spawnPositions), List.copyOf(combatRoomCenters), rewardPlacements, sealedDoorways);
+    }
+
+    private static List<RewardPlacement> rewardPlacementsFromMarkers(ServerLevel level, List<BlockPos> markers) {
+        if (markers.isEmpty()) {
+            return List.of();
+        }
+        Set<BlockPos> remaining = new HashSet<>(markers);
+        List<RewardPlacement> placements = new ArrayList<>();
+        while (!remaining.isEmpty()) {
+            ArrayDeque<BlockPos> pending = new ArrayDeque<>();
+            List<BlockPos> connected = new ArrayList<>();
+            BlockPos first = remaining.iterator().next();
+            remaining.remove(first);
+            pending.add(first);
+            while (!pending.isEmpty()) {
+                BlockPos pos = pending.removeFirst();
+                connected.add(pos);
+                for (Direction direction : Direction.values()) {
+                    BlockPos neighbor = pos.relative(direction);
+                    if (remaining.remove(neighbor)) {
+                        pending.addLast(neighbor);
+                    }
+                }
+            }
+
+            int minX = connected.stream().mapToInt(BlockPos::getX).min().orElse(first.getX());
+            int maxX = connected.stream().mapToInt(BlockPos::getX).max().orElse(first.getX());
+            int minY = connected.stream().mapToInt(BlockPos::getY).min().orElse(first.getY());
+            int minZ = connected.stream().mapToInt(BlockPos::getZ).min().orElse(first.getZ());
+            int maxZ = connected.stream().mapToInt(BlockPos::getZ).max().orElse(first.getZ());
+            BlockPos center = new BlockPos((minX + maxX) / 2, minY, (minZ + maxZ) / 2);
+            Direction facing = maxX - minX >= maxZ - minZ ? Direction.SOUTH : Direction.EAST;
+            lockRewardDoor(level, center, facing);
+            placements.add(new RewardPlacement(center, facing));
+        }
+        return List.copyOf(placements);
     }
 
     private static boolean sealUnresolvedDoorway(ServerLevel level, BlockPos pos, BlockState state) {
@@ -317,13 +503,8 @@ public final class ExpeditionGenerator {
             return false;
         }
 
-        Direction right = front.getClockWise();
-        BlockState seal = ModBlocks.GOAULD_CONTAINMENT_BLOCK.get().defaultBlockState();
-        for (int r = -2; r <= 2; r++) {
-            for (int y = 0; y <= 4; y++) {
-                level.setBlock(pos.relative(right, r).above(y), seal, Block.UPDATE_ALL);
-            }
-        }
+        int width = jigsaw.getTarget().getPath().endsWith("room_in") ? 9 : 7;
+        fillDoorwaySeal(level, pos, front, new DoorwayOpening(width, 7));
         return true;
     }
 
@@ -331,13 +512,13 @@ public final class ExpeditionGenerator {
         return location.equals(ResourceLocation.withDefaultNamespace("empty"));
     }
 
-    private static int sealExteriorDoorwayOpenings(ServerLevel level, BlockPos center, int radius) {
+    private static int sealExteriorDoorwayOpenings(ServerLevel level, BoundingBox bounds) {
         Set<BlockPos> sealedCenters = new HashSet<>();
         int sealed = 0;
-        for (int x = -radius; x <= radius; x++) {
-            for (int z = -radius; z <= radius; z++) {
-                for (int y = -4; y <= HEIGHT + 48; y++) {
-                    BlockPos pos = center.offset(x, y, z);
+        for (int x = bounds.minX(); x <= bounds.maxX(); x++) {
+            for (int z = bounds.minZ(); z <= bounds.maxZ(); z++) {
+                for (int y = bounds.minY(); y <= bounds.maxY(); y++) {
+                    BlockPos pos = new BlockPos(x, y, z);
                     for (Direction direction : Direction.Plane.HORIZONTAL) {
                         Optional<DoorwayOpening> opening = exteriorDoorwayOpening(level, pos, direction);
                         if (sealedCenters.contains(pos) || opening.isEmpty()) {
@@ -361,7 +542,10 @@ public final class ExpeditionGenerator {
 
         int forwardFloor = floorSupport(level, pos, direction, opening.get().width());
         int backwardFloor = floorSupport(level, pos, direction.getOpposite(), opening.get().width());
-        int minimumInterior = opening.get().width() * 2;
+        // Some authored rooms narrow or interrupt their floor immediately behind
+        // the doorway. One supported row is enough to identify the interior; the
+        // nearly supportless opposite side is what proves this opens into the void.
+        int minimumInterior = opening.get().width();
         if ((forwardFloor <= 1 && backwardFloor >= minimumInterior)
                 || (backwardFloor <= 1 && forwardFloor >= minimumInterior)) {
             return opening;
@@ -439,11 +623,21 @@ public final class ExpeditionGenerator {
     private static void fillDoorwaySeal(ServerLevel level, BlockPos pos, Direction direction, DoorwayOpening opening) {
         Direction right = direction.getClockWise();
         int halfWidth = opening.width() / 2;
-        BlockState seal = ModBlocks.GOAULD_CONTAINMENT_BLOCK.get().defaultBlockState();
         for (int r = -halfWidth; r <= halfWidth; r++) {
             for (int y = 0; y < opening.height(); y++) {
-                level.setBlock(pos.relative(right, r).above(y), seal, Block.UPDATE_ALL);
+                forceContainmentBlock(level, pos.relative(right, r).above(y));
             }
+        }
+    }
+
+    private static void forceContainmentBlock(ServerLevel level, BlockPos pos) {
+        BlockState seal = ModBlocks.GOAULD_CONTAINMENT_BLOCK.get().defaultBlockState();
+        if (!level.getBlockState(pos).isAir() && !level.getBlockState(pos).is(seal.getBlock())) {
+            level.removeBlock(pos, false);
+        }
+        level.setBlock(pos, seal, Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+        if (!level.getBlockState(pos).is(seal.getBlock())) {
+            LanteaCraft.LOGGER.warn("Could not force expedition doorway seal block at {}.", pos);
         }
     }
 
@@ -531,21 +725,32 @@ public final class ExpeditionGenerator {
 
     private static void lockRewardDoor(ServerLevel level, BlockPos basePos, Direction facing) {
         Direction right = facing.getClockWise();
-        for (int r = -2; r <= 2; r++) {
-            for (int y = 0; y <= 4; y++) {
-                level.setBlock(basePos.relative(right, r).above(y), ModBlocks.ANCIENT_CONTAINMENT_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL);
+        for (int r = -1; r <= 1; r++) {
+            for (int y = 0; y < 4; y++) {
+                level.setBlock(basePos.relative(right, r).above(y), ModBlocks.EXPEDITION_REWARD_DOOR.get().defaultBlockState(), Block.UPDATE_ALL);
             }
         }
     }
 
     public static void unlockRewardDoor(ServerLevel level, ExpeditionInstance expedition) {
-        RewardPlacement reward = expedition.rewardDoorPos() == null
-                ? rewardPlacement(level, expedition)
-                : new RewardPlacement(expedition.rewardDoorPos(), expedition.rewardDoorFacing());
+        List<RewardPlacement> rewards = expedition.rewardDoors().stream()
+                .map(door -> new RewardPlacement(door.pos(), door.facing()))
+                .toList();
+        if (rewards.isEmpty()) {
+            rewards = List.of(expedition.rewardDoorPos() == null
+                    ? rewardPlacement(level, expedition)
+                    : new RewardPlacement(expedition.rewardDoorPos(), expedition.rewardDoorFacing()));
+        }
+        for (RewardPlacement reward : rewards) {
+            unlockRewardDoor(level, reward);
+        }
+    }
+
+    private static void unlockRewardDoor(ServerLevel level, RewardPlacement reward) {
         Direction right = reward.facing().getClockWise();
         BlockPos basePos = reward.entrance();
-        for (int r = -2; r <= 2; r++) {
-            for (int y = 0; y <= 4; y++) {
+        for (int r = -1; r <= 1; r++) {
+            for (int y = 0; y < 4; y++) {
                 level.setBlock(basePos.relative(right, r).above(y), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
             }
         }
@@ -1001,7 +1206,6 @@ public final class ExpeditionGenerator {
     private static void clearPendingPlacementState() {
         TemplatePlacementMarkers.takePending();
         ExpeditionTrialPlacements.takeReward();
-        ExpeditionSpawnMarkers.takePending();
         ExpeditionLootMarkers.takeRewardChests();
         ExpeditionLootMarkers.takeSideContainers();
         ExpeditionLootMarkers.takeJars();
@@ -1374,7 +1578,7 @@ public final class ExpeditionGenerator {
         if (Math.abs(r) == RIGHT_RADIUS && y >= 2 && y <= 6 && f >= 6 && f <= 22) {
             return ModBlocks.LANTEAN_GLASS.get().defaultBlockState();
         }
-        return ModBlocks.ANCIENT_CONTAINMENT_BLOCK.get().defaultBlockState();
+        return ModBlocks.GOAULD_CONTAINMENT_BLOCK.get().defaultBlockState();
     }
 
     private static void placeFrame(ServerLevel level, BlockPos basePos, Direction facing, StargateVariant variant) {
@@ -1446,7 +1650,7 @@ public final class ExpeditionGenerator {
     }
 
     private static void placeDhdAt(ServerLevel level, BlockPos dhdPos, Direction facing, StargateVariant variant) {
-        level.setBlock(dhdPos.below(), ModBlocks.LANTEAN_PANEL.get().defaultBlockState(), Block.UPDATE_ALL);
+        level.setBlock(dhdPos.below(), ModBlocks.GOAULD_CONTAINMENT_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL);
         level.setBlock(dhdPos, dhdBlock(variant).defaultBlockState().setValue(DhdBlock.FACING, facing), Block.UPDATE_ALL);
         if (level.getBlockEntity(dhdPos) instanceof DhdBlockEntity dhd) {
             dhd.installChargedCrystal();
@@ -1570,32 +1774,6 @@ public final class ExpeditionGenerator {
         return tier >= 3 ? new ItemStack(ModItems.CORE_CRYSTAL.get()) : ItemStack.EMPTY;
     }
 
-    private static void spawnGuards(ServerLevel level, List<BlockPos> combatRoomCenters, int tier) {
-        List<BlockPos> markedSpawns = ExpeditionSpawnMarkers.takePending();
-        if (!markedSpawns.isEmpty()) {
-            spawnMarkedGuards(level, markedSpawns, tier);
-            return;
-        }
-
-        int countPerRoom = 2 + tier;
-        for (BlockPos center : combatRoomCenters) {
-            for (int i = 0; i < countPerRoom; i++) {
-                int x = center.getX() + (i % 2 == 0 ? -2 : 2) + (i % 3);
-                int z = center.getZ() + (i / 2);
-                ModEntities.GOAULD_SOLDIER.get().spawn(level, new BlockPos(x, center.getY(), z), MobSpawnType.STRUCTURE);
-            }
-        }
-    }
-
-    private static void spawnMarkedGuards(ServerLevel level, List<BlockPos> spawns, int tier) {
-        int maxPerMarker = Math.max(1, Math.min(3, tier));
-        for (BlockPos spawn : spawns) {
-            for (int i = 0; i < maxPerMarker; i++) {
-                ModEntities.GOAULD_SOLDIER.get().spawn(level, spawn.offset(i % 2, 0, i / 2), MobSpawnType.STRUCTURE);
-            }
-        }
-    }
-
     private static boolean isAssembledGateAt(ServerLevel level, BlockPos basePos) {
         BlockState state = level.getBlockState(basePos);
         return state.hasProperty(StargateBaseBlock.ASSEMBLED) && state.getValue(StargateBaseBlock.ASSEMBLED);
@@ -1681,7 +1859,23 @@ public final class ExpeditionGenerator {
     private record TemplateMarkers(List<BlockPos> spawnPositions, Optional<RewardPlacement> rewardPlacement) {
     }
 
-    private record WorldMarkers(List<BlockPos> spawnPositions, List<BlockPos> combatRoomCenters, Optional<RewardPlacement> rewardPlacement, int sealedDoorways) {
+    private record WorldMarkers(List<BlockPos> spawnPositions, List<BlockPos> combatRoomCenters, List<RewardPlacement> rewardPlacements, int sealedDoorways) {
+    }
+
+    private record GeneratedJigsaw(BlockPos pos, Direction direction, String name, String target, String pool, boolean connected) {
+        private boolean isOutgoing() {
+            return !target.equals(EMPTY_JIGSAW) && !pool.equals(EMPTY_JIGSAW);
+        }
+
+        private int sealWidth() {
+            return target.endsWith("/room_in") ? 9 : 7;
+        }
+    }
+
+    private record UnmatchedJigsaw(BlockPos pos, Direction direction, int width, int height) {
+    }
+
+    private record GeneratedJigsawPlacement(List<UnmatchedJigsaw> unmatchedJigsaws, BoundingBox bounds) {
     }
 
     private record DoorwayOpening(int width, int height) {
@@ -1746,20 +1940,6 @@ public final class ExpeditionGenerator {
         }
     }
 
-    private static final class ExpeditionSpawnMarkers {
-        private static List<BlockPos> pending = List.of();
-
-        private static void remember(String address, List<BlockPos> spawnPositions) {
-            pending = List.copyOf(spawnPositions);
-        }
-
-        private static List<BlockPos> takePending() {
-            List<BlockPos> spawns = pending;
-            pending = List.of();
-            return spawns;
-        }
-    }
-
     private static final class ExpeditionLootMarkers {
         private static List<LootContainerMarker> rewardChests = List.of();
         private static List<BlockPos> sideContainers = List.of();
@@ -1821,6 +2001,10 @@ public final class ExpeditionGenerator {
             TemplatePlacementMarkers markers = pending;
             pending = empty();
             return markers;
+        }
+
+        private static TemplatePlacementMarkers peekPending() {
+            return pending;
         }
     }
 }

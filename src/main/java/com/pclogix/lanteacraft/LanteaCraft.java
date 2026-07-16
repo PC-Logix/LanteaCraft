@@ -13,6 +13,9 @@ import com.pclogix.lanteacraft.registry.ModMenus;
 import com.pclogix.lanteacraft.network.ModNetworking;
 import com.pclogix.lanteacraft.gate.StargateChunkLoading;
 import com.pclogix.lanteacraft.gate.StargateTeleportHandler;
+import com.pclogix.lanteacraft.gate.GeneratedGateProtection;
+import com.pclogix.lanteacraft.enchantment.ExplodingEnchantmentHandler;
+import com.pclogix.lanteacraft.item.P90FireModeHandler;
 import com.pclogix.lanteacraft.power.LanteaPowerCapabilities;
 import com.pclogix.lanteacraft.registry.ModBlockEntities;
 import com.pclogix.lanteacraft.registry.ModSounds;
@@ -53,6 +56,9 @@ public class LanteaCraft {
             ComputerCraftCompat.register(modEventBus);
         }
         StargateTeleportHandler.register(NeoForge.EVENT_BUS);
+        GeneratedGateProtection.register(NeoForge.EVENT_BUS);
+        ExplodingEnchantmentHandler.register(NeoForge.EVENT_BUS);
+        P90FireModeHandler.register(NeoForge.EVENT_BUS);
         NeoForge.EVENT_BUS.addListener(LanteaWorldgenEvents::onLootTableLoad);
         NeoForge.EVENT_BUS.addListener(LanteaRetrogen::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(LanteaRetrogen::onLevelTick);

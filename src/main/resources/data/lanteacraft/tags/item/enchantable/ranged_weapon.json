@@ -1,0 +1,8 @@
+{
+  "values": [
+    "#minecraft:enchantable/bow",
+    "#minecraft:enchantable/crossbow",
+    "#minecraft:enchantable/trident",
+    "lanteacraft:staff_weapon"
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "variants": {
+    "facing=north,part=base_left_front": {
+      "model": "lanteacraft:block/sphinx_hind_left",
+      "y": 0
+    },
+    "facing=east,part=base_left_front": {
+      "model": "lanteacraft:block/sphinx_hind_left",
+      "y": 90
+    },
+    "facing=south,part=base_left_front": {
+      "model": "lanteacraft:block/sphinx_hind_left",
+      "y": 180
+    },
+    "facing=west,part=base_left_front": {
+      "model": "lanteacraft:block/sphinx_hind_left",
+      "y": 270
+    },
+    "facing=north,part=base_right_front": {
+      "model": "lanteacraft:block/sphinx_hind_right",
+      "y": 0
+    },
+    "facing=east,part=base_right_front": {
+      "model": "lanteacraft:block/sphinx_hind_right",
+      "y": 90
+    },
+    "facing=south,part=base_right_front": {
+      "model": "lanteacraft:block/sphinx_hind_right",
+      "y": 180
+    },
+    "facing=west,part=base_right_front": {
+      "model": "lanteacraft:block/sphinx_hind_right",
+      "y": 270
+    },
+    "facing=north,part=base_left_middle": {
+      "model": "lanteacraft:block/sphinx_belly_left",
+      "y": 0
+    },
+    "facing=east,part=base_left_middle": {
+      "model": "lanteacraft:block/sphinx_belly_left",
+      "y": 90
+    },
+    "facing=south,part=base_left_middle": {
+      "model": "lanteacraft:block/sphinx_belly_left",
+      "y": 180
+    },
+    "facing=west,part=base_left_middle": {
+      "model": "lanteacraft:block/sphinx_belly_left",
+      "y": 270
+    },
+    "facing=north,part=base_right_middle": {
+      "model": "lanteacraft:block/sphinx_belly_right",
+      "y": 0
+    },
+    "facing=east,part=base_right_middle": {
+      "model": "lanteacraft:block/sphinx_belly_right",
+      "y": 90
+    },
+    "facing=south,part=base_right_middle": {
+      "model": "lanteacraft:block/sphinx_belly_right",
+      "y": 180
+    },
+    "facing=west,part=base_right_middle": {
+      "model": "lanteacraft:block/sphinx_belly_right",
+      "y": 270
+    },
+    "facing=north,part=base_left_rear": {
+      "model": "lanteacraft:block/sphinx_paw",
+      "y": 0
+    },
+    "facing=east,part=base_left_rear": {
+      "model": "lanteacraft:block/sphinx_paw",
+      "y": 90
+    },
+    "facing=south,part=base_left_rear": {
+      "model": "lanteacraft:block/sphinx_paw",
+      "y": 180
+    },
+    "facing=west,part=base_left_rear": {
+      "model": "lanteacraft:block/sphinx_paw",
+      "y": 270
+    },
+    "facing=north,part=base_right_rear": {
+      "model": "lanteacraft:block/sphinx_paw",
+      "y": 0
+    },
+    "facing=east,part=base_right_rear": {
+      "model": "lanteacraft:block/sphinx_paw",
+      "y": 90
+    },
+    "facing=south,part=base_right_rear": {
+      "model": "lanteacraft:block/sphinx_paw",
+      "y": 180
+    },
+    "facing=west,part=base_right_rear": {
+      "model": "lanteacraft:block/sphinx_paw",
+      "y": 270
+    },
+    "facing=north,part=body_left_front": {
+      "model": "lanteacraft:block/sphinx_body_left",
+      "y": 0
+    },
+    "facing=east,part=body_left_front": {
+      "model": "lanteacraft:block/sphinx_body_left",
+      "y": 90
+    },
+    "facing=south,part=body_left_front": {
+      "model": "lanteacraft:block/sphinx_body_left",
+      "y": 180
+    },
+    "facing=west,part=body_left_front": {
+      "model": "lanteacraft:block/sphinx_body_left",
+      "y": 270
+    },
+    "facing=north,part=body_right_front": {
+      "model": "lanteacraft:block/sphinx_body_right",
+      "y": 0
+    },
+    "facing=east,part=body_right_front": {
+      "model": "lanteacraft:block/sphinx_body_right",
+      "y": 90
+    },
+    "facing=south,part=body_right_front": {
+      "model": "lanteacraft:block/sphinx_body_right",
+      "y": 180
+    },
+    "facing=west,part=body_right_front": {
+      "model": "lanteacraft:block/sphinx_body_right",
+      "y": 270
+    },
+    "facing=north,part=body_left_middle": {
+      "model": "lanteacraft:block/sphinx_body_left",
+      "y": 0
+    },
+    "facing=east,part=body_left_middle": {
+      "model": "lanteacraft:block/sphinx_body_left",
+      "y": 90
+    },
+    "facing=south,part=body_left_middle": {
+      "model": "lanteacraft:block/sphinx_body_left",
+      "y": 180
+    },
+    "facing=west,part=body_left_middle": {
+      "model": "lanteacraft:block/sphinx_body_left",
+      "y": 270
+    },
+    "facing=north,part=body_right_middle": {
+      "model": "lanteacraft:block/sphinx_body_right",
+      "y": 0
+    },
+    "facing=east,part=body_right_middle": {
+      "model": "lanteacraft:block/sphinx_body_right",
+      "y": 90
+    },
+    "facing=south,part=body_right_middle": {
+      "model": "lanteacraft:block/sphinx_body_right",
+      "y": 180
+    },
+    "facing=west,part=body_right_middle": {
+      "model": "lanteacraft:block/sphinx_body_right",
+      "y": 270
+    },
+    "facing=north,part=body_left_rear": {
+      "model": "lanteacraft:block/sphinx_chest_left",
+      "y": 0
+    },
+    "facing=east,part=body_left_rear": {
+      "model": "lanteacraft:block/sphinx_chest_left",
+      "y": 90
+    },
+    "facing=south,part=body_left_rear": {
+      "model": "lanteacraft:block/sphinx_chest_left",
+      "y": 180
+    },
+    "facing=west,part=body_left_rear": {
+      "model": "lanteacraft:block/sphinx_chest_left",
+      "y": 270
+    },
+    "facing=north,part=body_right_rear": {
+      "model": "lanteacraft:block/sphinx_chest_right",
+      "y": 0
+    },
+    "facing=east,part=body_right_rear": {
+      "model": "lanteacraft:block/sphinx_chest_right",
+      "y": 90
+    },
+    "facing=south,part=body_right_rear": {
+      "model": "lanteacraft:block/sphinx_chest_right",
+      "y": 180
+    },
+    "facing=west,part=body_right_rear": {
+      "model": "lanteacraft:block/sphinx_chest_right",
+      "y": 270
+    },
+    "facing=north,part=head_left": {
+      "model": "lanteacraft:block/sphinx_head_left",
+      "y": 0
+    },
+    "facing=east,part=head_left": {
+      "model": "lanteacraft:block/sphinx_head_left",
+      "y": 90
+    },
+    "facing=south,part=head_left": {
+      "model": "lanteacraft:block/sphinx_head_left",
+      "y": 180
+    },
+    "facing=west,part=head_left": {
+      "model": "lanteacraft:block/sphinx_head_left",
+      "y": 270
+    },
+    "facing=north,part=head_right": {
+      "model": "lanteacraft:block/sphinx_head_right",
+      "y": 0
+    },
+    "facing=east,part=head_right": {
+      "model": "lanteacraft:block/sphinx_head_right",
+      "y": 90
+    },
+    "facing=south,part=head_right": {
+      "model": "lanteacraft:block/sphinx_head_right",
+      "y": 180
+    },
+    "facing=west,part=head_right": {
+      "model": "lanteacraft:block/sphinx_head_right",
+      "y": 270
+    }
+  }
+}

@@ -31,6 +31,7 @@ public class GoauldObjArmorLayer extends RenderLayer<GoauldSoldierEntity, Goauld
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "textures/entity/goauld_jaffa_armor.png");
     private static final ResourceLocation HELMET_MODEL = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "models/obj/goauld_serpent_helmet.obj");
     private static final ResourceLocation HELMET_TEXTURE = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "textures/entity/goauld_serpent_helmet.png");
+    private static final double HELMET_Y_OFFSET = -0.28D;
     private ObjModel model;
     private ObjModel helmetModel;
 
@@ -53,8 +54,10 @@ public class GoauldObjArmorLayer extends RenderLayer<GoauldSoldierEntity, Goauld
         armor.render("bodyModel", poseStack.last(), consumer, packedLight);
         poseStack.popPose();
 
-        renderAnimatedPart(poseStack, armor, consumer, packedLight, "leftArmModel", parentModel.leftArm, 5.0F, 2.0F, 0.0F);
-        renderAnimatedPart(poseStack, armor, consumer, packedLight, "rightArmModel", parentModel.rightArm, -5.0F, 2.0F, 0.0F);
+        // The OBJ is mirrored by applyArmorPose's negative X scale, so its
+        // named left/right arm meshes correspond to the opposite model bones.
+        renderAnimatedPart(poseStack, armor, consumer, packedLight, "leftArmModel", parentModel.rightArm, 5.0F, 2.0F, 0.0F);
+        renderAnimatedPart(poseStack, armor, consumer, packedLight, "rightArmModel", parentModel.leftArm, -5.0F, 2.0F, 0.0F);
         renderAnimatedPart(poseStack, armor, consumer, packedLight, "leftLegModel", parentModel.leftLeg, 1.9F, 12.0F, 0.0F);
         renderAnimatedPart(poseStack, armor, consumer, packedLight, "leftFootModel", parentModel.leftLeg, 1.9F, 12.0F, 0.0F);
         renderAnimatedPart(poseStack, armor, consumer, packedLight, "rightLegModel", parentModel.rightLeg, -1.9F, 12.0F, 0.0F);
@@ -65,7 +68,7 @@ public class GoauldObjArmorLayer extends RenderLayer<GoauldSoldierEntity, Goauld
         }
 
         poseStack.pushPose();
-        poseStack.translate(0.0D, -0.48D, 0.0D);
+        poseStack.translate(0.0D, HELMET_Y_OFFSET, 0.0D);
         poseStack.scale(-0.052F, 0.052F, 0.052F);
         poseStack.translate(0.0D, 0.0D, 0.0D);
         VertexConsumer helmetConsumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(HELMET_TEXTURE));
@@ -116,6 +119,7 @@ public class GoauldObjArmorLayer extends RenderLayer<GoauldSoldierEntity, Goauld
             try {
                 List<double[]> positions = new ArrayList<>();
                 List<double[]> uvs = new ArrayList<>();
+                List<double[]> normals = new ArrayList<>();
                 Map<String, List<MeshVertex[]>> triangles = new HashMap<>();
                 String objectName = "default";
                 triangles.put(objectName, new ArrayList<>());
@@ -132,12 +136,15 @@ public class GoauldObjArmorLayer extends RenderLayer<GoauldSoldierEntity, Goauld
                         } else if (line.startsWith("vt ")) {
                             String[] parts = line.split("\\s+");
                             uvs.add(new double[] { Double.parseDouble(parts[1]), 1.0D - Double.parseDouble(parts[2]) });
+                        } else if (line.startsWith("vn ")) {
+                            String[] parts = line.split("\\s+");
+                            normals.add(new double[] { Double.parseDouble(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]) });
                         } else if (line.startsWith("f ")) {
                             String[] parts = line.split("\\s+");
                             if (parts.length >= 4) {
-                                MeshVertex first = vertex(parts[1], positions, uvs);
+                                MeshVertex first = vertex(parts[1], positions, uvs, normals);
                                 for (int i = 2; i < parts.length - 1; i++) {
-                                    triangles.get(objectName).add(new MeshVertex[] { first, vertex(parts[i], positions, uvs), vertex(parts[i + 1], positions, uvs) });
+                                    triangles.get(objectName).add(new MeshVertex[] { first, vertex(parts[i], positions, uvs, normals), vertex(parts[i + 1], positions, uvs, normals) });
                                 }
                             }
                         }
@@ -152,11 +159,12 @@ public class GoauldObjArmorLayer extends RenderLayer<GoauldSoldierEntity, Goauld
             }
         }
 
-        private static MeshVertex vertex(String token, List<double[]> positions, List<double[]> uvs) {
+        private static MeshVertex vertex(String token, List<double[]> positions, List<double[]> uvs, List<double[]> normals) {
             String[] indices = token.split("/");
             double[] position = positions.get(Integer.parseInt(indices[0]) - 1);
             double[] uv = indices.length > 1 && !indices[1].isBlank() ? uvs.get(Integer.parseInt(indices[1]) - 1) : new double[] { 0.0D, 0.0D };
-            return new MeshVertex(position[0], position[1], position[2], uv[0], uv[1]);
+            double[] normal = indices.length > 2 && !indices[2].isBlank() ? normals.get(Integer.parseInt(indices[2]) - 1) : new double[] { 0.0D, 1.0D, 0.0D };
+            return new MeshVertex(position[0], position[1], position[2], uv[0], uv[1], normal[0], normal[1], normal[2]);
         }
 
         private void render(String name, PoseStack.Pose pose, VertexConsumer consumer, int packedLight) {
@@ -170,14 +178,17 @@ public class GoauldObjArmorLayer extends RenderLayer<GoauldSoldierEntity, Goauld
     private record ObjMesh(List<MeshVertex[]> triangles) {
         private void render(PoseStack.Pose pose, VertexConsumer consumer, int packedLight) {
             for (MeshVertex[] triangle : triangles) {
-                emitTriangle(pose, consumer, packedLight, triangle[0], triangle[1], triangle[2]);
-                emitTriangle(pose, consumer, packedLight, triangle[2], triangle[1], triangle[0]);
+                emitTriangleAsQuad(pose, consumer, packedLight, triangle[0], triangle[1], triangle[2]);
+                emitTriangleAsQuad(pose, consumer, packedLight, triangle[2], triangle[1], triangle[0]);
             }
         }
 
-        private void emitTriangle(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, MeshVertex first, MeshVertex second, MeshVertex third) {
+        private void emitTriangleAsQuad(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, MeshVertex first, MeshVertex second, MeshVertex third) {
             emitVertex(pose, consumer, packedLight, first);
             emitVertex(pose, consumer, packedLight, second);
+            emitVertex(pose, consumer, packedLight, third);
+            // Entity render types use QUADS. Repeating the final vertex preserves
+            // the OBJ triangle without joining it to the following triangle.
             emitVertex(pose, consumer, packedLight, third);
         }
 
@@ -187,10 +198,10 @@ public class GoauldObjArmorLayer extends RenderLayer<GoauldSoldierEntity, Goauld
                     .setUv((float)vertex.u, (float)vertex.v)
                     .setOverlay(OverlayTexture.NO_OVERLAY)
                     .setLight(packedLight)
-                    .setNormal(0.0F, 1.0F, 0.0F);
+                    .setNormal(pose, (float)vertex.normalX, (float)vertex.normalY, (float)vertex.normalZ);
         }
     }
 
-    private record MeshVertex(double x, double y, double z, double u, double v) {
+    private record MeshVertex(double x, double y, double z, double u, double v, double normalX, double normalY, double normalZ) {
     }
 }

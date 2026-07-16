@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lanteacraft:block/canopic_jar",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "lanteacraft:block/canopic_jar",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lanteacraft:block/canopic_jar",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lanteacraft:block/canopic_jar",
+      "y": 270
+    }
+  }
+}

@@ -4,6 +4,7 @@ import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.block.entity.DhdBlockEntity;
 import com.pclogix.lanteacraft.block.entity.NaquadahGeneratorBlockEntity;
 import com.pclogix.lanteacraft.block.entity.ObeliskBlockEntity;
+import com.pclogix.lanteacraft.block.entity.OfferingAltarBlockEntity;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.block.entity.TransportRingBlockEntity;
 import com.pclogix.lanteacraft.block.entity.ZpmHubBlockEntity;
@@ -51,6 +52,10 @@ public final class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ObeliskBlockEntity>> OBELISK = BLOCK_ENTITIES.register(
             "obelisk",
             () -> BlockEntityType.Builder.of(ObeliskBlockEntity::new, ModBlocks.OBELISK.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<OfferingAltarBlockEntity>> OFFERING_ALTAR = BLOCK_ENTITIES.register(
+            "offering_altar",
+            () -> BlockEntityType.Builder.of(OfferingAltarBlockEntity::new, ModBlocks.OFFERING_ALTAR.get()).build(null));
 
     private ModBlockEntities() {
     }

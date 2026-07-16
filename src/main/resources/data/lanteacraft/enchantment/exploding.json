@@ -1,0 +1,20 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.lanteacraft.exploding"
+  },
+  "max_cost": {
+    "base": 45,
+    "per_level_above_first": 10
+  },
+  "max_level": 5,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 10
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#lanteacraft:enchantable/ranged_weapon",
+  "weight": 2
+}

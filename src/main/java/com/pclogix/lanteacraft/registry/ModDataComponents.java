@@ -15,6 +15,12 @@ public final class ModDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ENERGY = DATA_COMPONENTS.registerComponentType(
             "energy",
             builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> P90_ROUNDS = DATA_COMPONENTS.registerComponentType(
+            "p90_rounds",
+            builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> P90_AUTOMATIC = DATA_COMPONENTS.registerComponentType(
+            "p90_automatic",
+            builder -> builder.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
 
     private ModDataComponents() {
     }

@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,upside_down=false": { "model": "lanteacraft:block/broken_column" },
+    "facing=east,upside_down=false": { "model": "lanteacraft:block/broken_column", "y": 90 },
+    "facing=south,upside_down=false": { "model": "lanteacraft:block/broken_column", "y": 180 },
+    "facing=west,upside_down=false": { "model": "lanteacraft:block/broken_column", "y": 270 },
+    "facing=north,upside_down=true": { "model": "lanteacraft:block/broken_column", "x": 180 },
+    "facing=east,upside_down=true": { "model": "lanteacraft:block/broken_column", "x": 180, "y": 90 },
+    "facing=south,upside_down=true": { "model": "lanteacraft:block/broken_column", "x": 180, "y": 180 },
+    "facing=west,upside_down=true": { "model": "lanteacraft:block/broken_column", "x": 180, "y": 270 }
+  }
+}

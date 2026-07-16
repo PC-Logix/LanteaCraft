@@ -1,5 +1,6 @@
 package com.pclogix.lanteacraft.worldgen;
 
+import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.block.DhdBlock;
 import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.block.StargateComponentBlock;
@@ -14,13 +15,21 @@ import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 public final class DimensionGateGenerator {
+    private static final ResourceLocation ABYDOS_PLATFORM_TEMPLATE = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "abydos_stargate_platform");
+    private static final BlockPos ABYDOS_TEMPLATE_PIVOT = new BlockPos(5, 1, 2);
+
     private DimensionGateGenerator() {
     }
 
@@ -29,6 +38,9 @@ public final class DimensionGateGenerator {
         BlockPos basePos = existingOrPlannedBase(level, plan);
         boolean hasDuplicates = hasDuplicateFixedGateBases(level, plan);
         if (isAssembledGateAt(level, basePos) && !hasDuplicates) {
+            if (level.dimension().equals(LanteaDimensions.ABYDOS)) {
+                applyAbydosCamouflage(level, basePos);
+            }
             StargateNetworkSavedData.get(level).registerOrUpdateActiveGate(plan.address(), level.dimension(), basePos, plan.facing(), plan.variant(), "fixed_dimension");
             if (!data.isPlaced(plan.address())) {
                 data.markPlaced(plan.address());
@@ -45,6 +57,9 @@ public final class DimensionGateGenerator {
         StargateNetworkSavedData.get(level).registerOrUpdateActiveGate(plan.address(), level.dimension(), basePos, plan.facing(), plan.variant(), "fixed_dimension");
         forceFrameAssembled(level, basePos, plan.facing());
         StargateMultiblock.tryAssembleAtBase(level, basePos);
+        if (level.dimension().equals(LanteaDimensions.ABYDOS)) {
+            applyAbydosCamouflage(level, basePos);
+        }
         data.markPlaced(plan.address());
         return true;
     }
@@ -58,7 +73,6 @@ public final class DimensionGateGenerator {
         for (int r = -7; r <= 7; r++) {
             for (int f = -5; f <= 9; f++) {
                 BlockPos floor = basePos.relative(right, r).relative(facing, f).below();
-                level.setBlock(floor, Blocks.SMOOTH_SANDSTONE.defaultBlockState(), Block.UPDATE_ALL);
                 for (int y = 0; y <= 7; y++) {
                     BlockPos clear = floor.above(y + 1);
                     if (!level.getBlockState(clear).is(Blocks.BEDROCK)) {
@@ -68,10 +82,58 @@ public final class DimensionGateGenerator {
             }
         }
 
+        placeAbydosPlatform(level, basePos, facing);
         placePyramid(level, basePos.relative(facing.getOpposite(), 18), facing);
         placeFrame(level, basePos, facing, plan.variant());
         placeDhd(level, basePos, facing, plan.variant());
         return basePos;
+    }
+
+    private static void placeAbydosPlatform(ServerLevel level, BlockPos basePos, Direction facing) {
+        Optional<StructureTemplate> template = level.getStructureManager().get(ABYDOS_PLATFORM_TEMPLATE);
+        if (template.isEmpty()) {
+            LanteaCraft.LOGGER.warn("Missing Abydos Stargate platform template {}; using generated sandstone footing.", ABYDOS_PLATFORM_TEMPLATE);
+            Direction right = facing.getClockWise();
+            for (int r = -5; r <= 5; r++) {
+                for (int f = -2; f <= 6; f++) {
+                    level.setBlock(basePos.relative(right, r).relative(facing, f).below(), Blocks.SMOOTH_SANDSTONE.defaultBlockState(), Block.UPDATE_ALL);
+                }
+            }
+            return;
+        }
+
+        StructurePlaceSettings settings = new StructurePlaceSettings()
+                .setRotation(rotationFor(facing))
+                .setRotationPivot(ABYDOS_TEMPLATE_PIVOT)
+                .setIgnoreEntities(true)
+                .setKnownShape(true);
+        BlockPos origin = basePos.offset(
+                -ABYDOS_TEMPLATE_PIVOT.getX(),
+                -ABYDOS_TEMPLATE_PIVOT.getY() + 1,
+                -ABYDOS_TEMPLATE_PIVOT.getZ()
+        );
+        template.get().placeInWorld(level, origin, origin, settings, RandomSource.create(level.getSeed() ^ basePos.asLong()), Block.UPDATE_ALL);
+    }
+
+    private static void applyAbydosCamouflage(ServerLevel level, BlockPos basePos) {
+        if (!(level.getBlockEntity(basePos) instanceof StargateBaseBlockEntity base)) {
+            return;
+        }
+
+        BlockState platformState = level.getBlockState(basePos.below());
+        BlockState intendedCamouflage = Blocks.SMOOTH_SANDSTONE.defaultBlockState();
+        if (!base.hasBottomCamouflage() || base.bottomCamouflage().is(platformState.getBlock())) {
+            base.setBottomCamouflage(intendedCamouflage);
+        }
+    }
+
+    private static Rotation rotationFor(Direction facing) {
+        return switch (facing) {
+            case EAST -> Rotation.COUNTERCLOCKWISE_90;
+            case NORTH -> Rotation.CLOCKWISE_180;
+            case WEST -> Rotation.CLOCKWISE_90;
+            default -> Rotation.NONE;
+        };
     }
 
     private static void clearDuplicateAbydosInstallations(ServerLevel level, PlannedStargate plan) {

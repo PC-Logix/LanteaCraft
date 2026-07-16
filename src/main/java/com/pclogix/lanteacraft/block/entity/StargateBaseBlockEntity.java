@@ -11,6 +11,7 @@ import com.pclogix.lanteacraft.gate.IrisType;
 import com.pclogix.lanteacraft.gate.StargateEventDispatcher;
 import com.pclogix.lanteacraft.gate.StargateMultiblock;
 import com.pclogix.lanteacraft.gate.StargateNetworkSavedData;
+import com.pclogix.lanteacraft.gate.StargateVariant;
 import com.pclogix.lanteacraft.item.IrisUpgradeItem;
 import com.pclogix.lanteacraft.power.ConfigurableEnergyStorage;
 import com.pclogix.lanteacraft.power.StargatePower;
@@ -151,7 +152,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
                 int currentChevron = Math.min(dialingAddress.length() - 1, (int)((elapsed - SPIN_TICKS) / SYMBOL_TICKS));
                 while (currentChevron > lastChevronSound && lastChevronSound + 1 < dialingAddress.length()) {
                     lastChevronSound++;
-                    level.playSound(null, worldPosition, ModSounds.STARGATE_CHEVRON_LOCK.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                    level.playSound(null, worldPosition, ModSounds.stargateChevronLock(variant()), SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
             }
         }
@@ -182,8 +183,14 @@ public class StargateBaseBlockEntity extends BlockEntity {
 
     private void playRollSound() {
         if (level != null) {
-            level.playSound(null, worldPosition, ModSounds.STARGATE_ROLL.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(null, worldPosition, ModSounds.stargateRoll(variant()), SoundSource.BLOCKS, 1.0F, 1.0F);
         }
+    }
+
+    private StargateVariant variant() {
+        return getBlockState().getBlock() instanceof StargateBaseBlock base
+                ? base.variant()
+                : StargateVariant.MILKY_WAY;
     }
 
     private void sync() {

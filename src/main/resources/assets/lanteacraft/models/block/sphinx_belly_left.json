@@ -1,0 +1,32 @@
+{
+  "parent": "lanteacraft:block/sphinx_materials",
+  "elements": [
+    {
+      "from": [0,0,0],
+      "to": [16,7,16],
+      "faces": {
+        "down":{"texture":"#cut"}, "up":{"texture":"#cut"},
+        "north":{"texture":"#cut"}, "south":{"texture":"#cut"},
+        "west":{"texture":"#cut"}, "east":{"texture":"#cut"}
+      }
+    },
+    {
+      "from": [0,7,0],
+      "to": [16,8,16],
+      "faces": {
+        "down":{"texture":"#gold"}, "up":{"texture":"#gold"},
+        "north":{"texture":"#gold"}, "south":{"texture":"#gold"},
+        "west":{"texture":"#gold"}, "east":{"texture":"#gold"}
+      }
+    },
+    {
+      "from": [1,8,1],
+      "to": [16,13,16],
+      "faces": {
+        "down":{"texture":"#stone"}, "up":{"texture":"#stone"},
+        "north":{"texture":"#stone"}, "south":{"texture":"#stone"},
+        "west":{"texture":"#stone"}, "east":{"texture":"#stone"}
+      }
+    }
+  ]
+}

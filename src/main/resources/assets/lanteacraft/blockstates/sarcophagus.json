@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=north,part=foot,vertical=false": { "model": "lanteacraft:block/sarcophagus_foot" },
+    "facing=east,part=foot,vertical=false": { "model": "lanteacraft:block/sarcophagus_foot", "y": 90 },
+    "facing=south,part=foot,vertical=false": { "model": "lanteacraft:block/sarcophagus_foot", "y": 180 },
+    "facing=west,part=foot,vertical=false": { "model": "lanteacraft:block/sarcophagus_foot", "y": 270 },
+    "facing=north,part=middle,vertical=false": { "model": "lanteacraft:block/sarcophagus_middle" },
+    "facing=east,part=middle,vertical=false": { "model": "lanteacraft:block/sarcophagus_middle", "y": 90 },
+    "facing=south,part=middle,vertical=false": { "model": "lanteacraft:block/sarcophagus_middle", "y": 180 },
+    "facing=west,part=middle,vertical=false": { "model": "lanteacraft:block/sarcophagus_middle", "y": 270 },
+    "facing=north,part=head,vertical=false": { "model": "lanteacraft:block/sarcophagus_head" },
+    "facing=east,part=head,vertical=false": { "model": "lanteacraft:block/sarcophagus_head", "y": 90 },
+    "facing=south,part=head,vertical=false": { "model": "lanteacraft:block/sarcophagus_head", "y": 180 },
+    "facing=west,part=head,vertical=false": { "model": "lanteacraft:block/sarcophagus_head", "y": 270 },
+
+    "facing=north,part=foot,vertical=true": { "model": "lanteacraft:block/sarcophagus_foot", "x": 270, "y": 180 },
+    "facing=east,part=foot,vertical=true": { "model": "lanteacraft:block/sarcophagus_foot", "x": 270, "y": 270 },
+    "facing=south,part=foot,vertical=true": { "model": "lanteacraft:block/sarcophagus_foot", "x": 270 },
+    "facing=west,part=foot,vertical=true": { "model": "lanteacraft:block/sarcophagus_foot", "x": 270, "y": 90 },
+    "facing=north,part=middle,vertical=true": { "model": "lanteacraft:block/sarcophagus_middle", "x": 270, "y": 180 },
+    "facing=east,part=middle,vertical=true": { "model": "lanteacraft:block/sarcophagus_middle", "x": 270, "y": 270 },
+    "facing=south,part=middle,vertical=true": { "model": "lanteacraft:block/sarcophagus_middle", "x": 270 },
+    "facing=west,part=middle,vertical=true": { "model": "lanteacraft:block/sarcophagus_middle", "x": 270, "y": 90 },
+    "facing=north,part=head,vertical=true": { "model": "lanteacraft:block/sarcophagus_head", "x": 270, "y": 180 },
+    "facing=east,part=head,vertical=true": { "model": "lanteacraft:block/sarcophagus_head", "x": 270, "y": 270 },
+    "facing=south,part=head,vertical=true": { "model": "lanteacraft:block/sarcophagus_head", "x": 270 },
+    "facing=west,part=head,vertical=true": { "model": "lanteacraft:block/sarcophagus_head", "x": 270, "y": 90 }
+  }
+}

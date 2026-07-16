@@ -4,11 +4,61 @@
       "lanteacraft:stargate/milkyway/milkyway_roll"
     ]
   },
+  "stargate_roll.nox": {
+    "sounds": [
+      {
+        "name": "lanteacraft:stargate_roll",
+        "type": "event"
+      }
+    ]
+  },
+  "stargate_roll.pegasus": {
+    "sounds": [
+      {
+        "name": "lanteacraft:stargate_roll",
+        "type": "event"
+      }
+    ]
+  },
+  "stargate_roll.wraith": {
+    "sounds": [
+      {
+        "name": "lanteacraft:stargate_roll",
+        "type": "event"
+      }
+    ]
+  },
+
   "stargate_chevron_lock": {
     "sounds": [
       "lanteacraft:stargate/milkyway/milkyway_chevron_lock"
     ]
   },
+  "stargate_chevron_lock.nox": {
+    "sounds": [
+      {
+        "name": "lanteacraft:stargate_chevron_lock",
+        "type": "event"
+      }
+    ]
+  },
+  "stargate_chevron_lock.pegasus": {
+    "sounds": [
+      {
+        "name": "lanteacraft:stargate_chevron_lock",
+        "type": "event"
+      }
+    ]
+  },
+  "stargate_chevron_lock.wraith": {
+    "sounds": [
+      {
+        "name": "lanteacraft:stargate_chevron_lock",
+        "type": "event"
+      }
+    ]
+  },
+
   "stargate_open": {
     "sounds": [
       "lanteacraft:stargate/milkyway/milkyway_open"
@@ -24,11 +74,37 @@
       "lanteacraft:stargate/ambience/event_horizon_ripple"
     ]
   },
+
   "dhd_button": {
     "sounds": [
       "lanteacraft:stargate/milkyway/milkyway_dhd_button"
     ]
   },
+  "dhd_button.nox": {
+    "sounds": [
+      {
+        "name": "lanteacraft:dhd_button",
+        "type": "event"
+      }
+    ]
+  },
+  "dhd_button.pegasus": {
+    "sounds": [
+      {
+        "name": "lanteacraft:dhd_button",
+        "type": "event"
+      }
+    ]
+  },
+  "dhd_button.wraith": {
+    "sounds": [
+      {
+        "name": "lanteacraft:dhd_button",
+        "type": "event"
+      }
+    ]
+  },
+
   "mechanical_iris_open": {
     "sounds": [
       "lanteacraft:stargate/iris/metal_iris_open"
@@ -52,6 +128,67 @@
   "energy_iris_active": {
     "sounds": [
       "lanteacraft:stargate/iris/energy_iris_active"
+    ]
+  },
+
+  "staff_weapon_fire": {
+    "sounds": [
+      "lanteacraft:weapon/staff_weapon_fire"
+    ]
+  },
+
+  "music.abydos": {
+    "sounds": [
+      {
+        "name": "lanteacraft:music/buried_temple",
+        "stream": true
+      },
+      {
+        "name": "lanteacraft:music/echoes_of_the_empty_dune",
+        "stream": true
+      },
+      {
+        "name": "lanteacraft:music/the_first_breath_of_the_desert",
+        "stream": true
+      },
+      {
+        "name": "lanteacraft:music/the_spice_merchants_secret",
+        "stream": true
+      }
+    ]
+  },
+  "p90_fire_single": {
+    "sounds": [
+      "lanteacraft:weapon/p90_fire_single_1",
+      "lanteacraft:weapon/p90_fire_single_2",
+      "lanteacraft:weapon/p90_fire_single_3"
+    ]
+  },
+  "p90_fire_auto": {
+    "sounds": [
+      "lanteacraft:weapon/p90_fire_auto"
+    ]
+  },
+  "p90_reload": { "sounds": ["lanteacraft:weapon/p90_reload"] },
+  "p90_empty": { "sounds": ["lanteacraft:weapon/p90_empty"] },
+  "music.expeditions": {
+    "sounds": [
+      {
+        "name": "lanteacraft:music/buried_temple",
+        "stream": true
+      },
+      {
+        "name": "lanteacraft:music/echoes_of_the_empty_dune",
+        "stream": true
+      },
+      {
+        "name": "lanteacraft:music/the_first_breath_of_the_desert",
+        "stream": true
+      },
+      {
+        "name": "lanteacraft:music/the_spice_merchants_secret",
+        "stream": true
+      }
     ]
   }
 }

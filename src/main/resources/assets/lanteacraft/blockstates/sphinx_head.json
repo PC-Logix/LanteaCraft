@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lanteacraft:block/sphinx_head",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "lanteacraft:block/sphinx_head",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lanteacraft:block/sphinx_head",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lanteacraft:block/sphinx_head",
+      "y": 270
+    }
+  }
+}

@@ -7,22 +7,35 @@ import com.pclogix.lanteacraft.client.ZpmHubScreen;
 import com.pclogix.lanteacraft.client.model.GoauldSoldierModel;
 import com.pclogix.lanteacraft.client.render.GoauldSoldierRenderer;
 import com.pclogix.lanteacraft.client.render.ObeliskRenderer;
+import com.pclogix.lanteacraft.client.render.OfferingAltarRenderer;
 import com.pclogix.lanteacraft.client.render.StargateBaseRenderer;
 import com.pclogix.lanteacraft.client.render.TokraTraderRenderer;
+import com.pclogix.lanteacraft.client.render.StaffBlastRenderer;
+import com.pclogix.lanteacraft.client.render.P90BulletRenderer;
 import com.pclogix.lanteacraft.client.render.TransportRingRenderer;
 import com.pclogix.lanteacraft.client.render.ZpmHubRenderer;
 import com.pclogix.lanteacraft.registry.ModBlockEntities;
 import com.pclogix.lanteacraft.registry.ModEntities;
 import com.pclogix.lanteacraft.registry.ModMenus;
+import com.pclogix.lanteacraft.registry.ModSounds;
+import com.pclogix.lanteacraft.registry.ModItems;
+import com.pclogix.lanteacraft.worldgen.LanteaDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.Music;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.HumanoidArm;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
+import net.neoforged.neoforge.client.event.SelectMusicEvent;
+import net.neoforged.neoforge.client.event.RenderPlayerEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
@@ -36,12 +49,46 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 @EventBusSubscriber(modid = LanteaCraft.MODID, value = Dist.CLIENT)
 public class LanteaCraftClient {
     private static final ResourceLocation ATLANTIS_EFFECTS = ResourceLocation.fromNamespaceAndPath(LanteaCraft.MODID, "atlantis");
+    private static final int MUSIC_MIN_DELAY = 12_000;
+    private static final int MUSIC_MAX_DELAY = 24_000;
+    private static final Music ABYDOS_MUSIC = new Music(ModSounds.ABYDOS_MUSIC, MUSIC_MIN_DELAY, MUSIC_MAX_DELAY, true);
+    private static final Music EXPEDITION_MUSIC = new Music(ModSounds.EXPEDITION_MUSIC, MUSIC_MIN_DELAY, MUSIC_MAX_DELAY, true);
 
     public LanteaCraftClient(ModContainer container) {
         // Allows NeoForge to create a config screen for this mod's configs.
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
         // Do not forget to add translations for your config options to the en_us.json file.
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        NeoForge.EVENT_BUS.addListener(LanteaCraftClient::selectDimensionMusic);
+        NeoForge.EVENT_BUS.addListener(LanteaCraftClient::poseP90Player);
+    }
+
+    private static void poseP90Player(RenderPlayerEvent.Pre event) {
+        if (!event.getEntity().isUsingItem() || !event.getEntity().getUseItem().is(ModItems.P90.get())) {
+            return;
+        }
+
+        PlayerModel<?> model = event.getRenderer().getModel();
+        if (event.getEntity().getMainArm() == HumanoidArm.RIGHT) {
+            model.rightArmPose = HumanoidModel.ArmPose.CROSSBOW_HOLD;
+            model.leftArmPose = HumanoidModel.ArmPose.ITEM;
+        } else {
+            model.leftArmPose = HumanoidModel.ArmPose.CROSSBOW_HOLD;
+            model.rightArmPose = HumanoidModel.ArmPose.ITEM;
+        }
+    }
+
+    private static void selectDimensionMusic(SelectMusicEvent event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null) {
+            return;
+        }
+
+        if (minecraft.level.dimension().equals(LanteaDimensions.ABYDOS)) {
+            event.overrideMusic(ABYDOS_MUSIC);
+        } else if (minecraft.level.dimension().equals(LanteaDimensions.EXPEDITIONS)) {
+            event.overrideMusic(EXPEDITION_MUSIC);
+        }
     }
 
     @SubscribeEvent
@@ -57,8 +104,11 @@ public class LanteaCraftClient {
         event.registerBlockEntityRenderer(ModBlockEntities.TRANSPORT_RING.get(), TransportRingRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ZPM_HUB.get(), ZpmHubRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.OBELISK.get(), ObeliskRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.OFFERING_ALTAR.get(), OfferingAltarRenderer::new);
         event.registerEntityRenderer(ModEntities.TOKRA_TRADER.get(), TokraTraderRenderer::new);
         event.registerEntityRenderer(ModEntities.GOAULD_SOLDIER.get(), GoauldSoldierRenderer::new);
+        event.registerEntityRenderer(ModEntities.STAFF_BLAST.get(), StaffBlastRenderer::new);
+        event.registerEntityRenderer(ModEntities.P90_BULLET.get(), P90BulletRenderer::new);
     }
 
     @SubscribeEvent

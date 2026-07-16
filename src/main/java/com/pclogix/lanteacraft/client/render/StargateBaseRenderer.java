@@ -239,7 +239,24 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
 
         RenderType renderType = ItemBlockRenderTypes.getChunkRenderType(camouflage);
         VertexConsumer consumer = bufferSource.getBuffer(renderType);
-        blockRenderer.renderBatched(camouflage, pos, level, poseStack, consumer, false, RandomSource.create(camouflage.getSeed(pos)));
+        // The real block at this position is a Stargate component, not the
+        // camouflage state. Vanilla ambient occlusion would therefore sample
+        // the hidden gate and paint dark seams/corners onto otherwise ordinary
+        // full-cube models (sandstone makes the artifact especially obvious).
+        // Keep the world-aware model/tint path, but use flat face lighting so
+        // the disguised block is not shaded by geometry it is replacing.
+        blockRenderer.getModelRenderer().tesselateWithoutAO(
+                level,
+                blockRenderer.getBlockModel(camouflage),
+                camouflage,
+                pos,
+                poseStack,
+                consumer,
+                false,
+                RandomSource.create(camouflage.getSeed(pos)),
+                camouflage.getSeed(pos),
+                packedOverlay
+        );
     }
 
     private void renderShell(PoseStack poseStack, VertexConsumer consumer, int packedLight) {

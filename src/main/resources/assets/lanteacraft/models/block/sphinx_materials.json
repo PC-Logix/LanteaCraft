@@ -1,0 +1,9 @@
+{
+  "textures": {
+    "stone": "minecraft:block/sandstone_top",
+    "cut": "minecraft:block/cut_sandstone",
+    "gold": "minecraft:block/gold_block",
+    "dark": "minecraft:block/blackstone",
+    "particle": "minecraft:block/sandstone_top"
+  }
+}

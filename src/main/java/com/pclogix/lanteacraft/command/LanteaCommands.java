@@ -10,6 +10,7 @@ import com.pclogix.lanteacraft.gate.StargateStatus;
 import com.pclogix.lanteacraft.worldgen.AtlantisCityManager;
 import com.pclogix.lanteacraft.worldgen.ExpeditionGenerator;
 import com.pclogix.lanteacraft.worldgen.ExpeditionInstance;
+import com.pclogix.lanteacraft.worldgen.ExpeditionSavedData;
 import com.pclogix.lanteacraft.worldgen.LanteaWorldgenEvents;
 import com.pclogix.lanteacraft.worldgen.PlannedStargate;
 import com.pclogix.lanteacraft.worldgen.PlannedStargateResolver;
@@ -42,6 +43,7 @@ import net.minecraft.core.FrontAndTop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -130,6 +132,8 @@ public final class LanteaCommands {
                 .then(Commands.literal("loot_chest")
                         .executes(context -> spawnLootChest(context.getSource().getPlayerOrException())))
                 .then(Commands.literal("expeditions")
+                        .then(Commands.literal("find_spawners")
+                                .executes(context -> findExpeditionSpawners(context.getSource().getPlayerOrException())))
                         .then(Commands.literal("export_templates")
                                 .executes(context -> exportExpeditionTemplates(context.getSource())))
                         .then(Commands.literal("convert_orange_jigsaws")
@@ -150,6 +154,41 @@ public final class LanteaCommands {
                                 .then(Commands.literal("clear")
                                         .executes(context -> spawnTrial(context.getSource().getPlayerOrException(), LongArgumentType.getLong(context, "seed"), true))))));
 
+    }
+
+    private static int findExpeditionSpawners(ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        Optional<ExpeditionInstance> nearest = ExpeditionSavedData.get(level).expeditions().stream()
+                .filter(ExpeditionInstance::generated)
+                .filter(expedition -> expedition.dimension().equals(level.dimension().location()))
+                .min(Comparator.comparingDouble(expedition -> expedition.basePos().distSqr(player.blockPosition())));
+        if (nearest.isEmpty()) {
+            player.sendSystemMessage(Component.literal("No generated expedition was found.").withStyle(ChatFormatting.RED));
+            return 0;
+        }
+
+        ExpeditionInstance expedition = nearest.get();
+        List<BlockPos> remaining = expedition.combatRoomCenters().stream()
+                .filter(pos -> level.getBlockState(pos).is(Blocks.SPAWNER))
+                .toList();
+        if (expedition.rewardUnlocked() && remaining.isEmpty()) {
+            player.sendSystemMessage(Component.literal("Expedition " + expedition.address() + " is already unlocked.")
+                    .withStyle(ChatFormatting.GREEN));
+        } else if (expedition.rewardUnlocked()) {
+            ExpeditionSavedData.get(level).markRewardLocked(expedition.address());
+            player.sendSystemMessage(Component.literal("Repaired stale unlocked state for expedition " + expedition.address() + ".")
+                    .withStyle(ChatFormatting.YELLOW));
+        }
+        player.sendSystemMessage(Component.literal("Expedition " + expedition.address() + " has " + remaining.size()
+                + " remaining Goa'uld spawner(s):").withStyle(ChatFormatting.GOLD));
+        for (BlockPos pos : remaining) {
+            player.sendSystemMessage(Component.literal("  " + formatPos(pos)).withStyle(ChatFormatting.YELLOW));
+            for (int y = 1; y <= 24; y++) {
+                level.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5D, pos.getY() + y, pos.getZ() + 0.5D,
+                        1, 0.0D, 0.0D, 0.0D, 0.0D);
+            }
+        }
+        return remaining.size();
     }
 
     private static int exportExpeditionTemplates(CommandSourceStack source) {

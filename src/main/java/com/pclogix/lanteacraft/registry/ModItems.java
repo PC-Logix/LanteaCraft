@@ -10,6 +10,8 @@ import com.pclogix.lanteacraft.item.FixedAddressTabletItem;
 import com.pclogix.lanteacraft.item.GdoItem;
 import com.pclogix.lanteacraft.item.IrisUpgradeItem;
 import com.pclogix.lanteacraft.item.ZpmItem;
+import com.pclogix.lanteacraft.item.StaffWeaponItem;
+import com.pclogix.lanteacraft.item.P90Item;
 import com.pclogix.lanteacraft.worldgen.FixedDimensionGates;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -60,6 +62,16 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> TRINIUM_BRAZIER = ITEMS.registerSimpleBlockItem("trinium_brazier", ModBlocks.TRINIUM_BRAZIER);
     public static final DeferredItem<BlockItem> GOAULD_BRAZIER = ITEMS.registerSimpleBlockItem("goauld_brazier", ModBlocks.GOAULD_BRAZIER);
     public static final DeferredItem<BlockItem> OBELISK = ITEMS.registerSimpleBlockItem("obelisk", ModBlocks.OBELISK);
+    public static final DeferredItem<BlockItem> SARCOPHAGUS = ITEMS.registerSimpleBlockItem("sarcophagus", ModBlocks.SARCOPHAGUS);
+    public static final DeferredItem<BlockItem> SPHINX = ITEMS.registerSimpleBlockItem("sphinx", ModBlocks.SPHINX);
+    public static final DeferredItem<BlockItem> SPHINX_HEAD = ITEMS.registerSimpleBlockItem("sphinx_head", ModBlocks.SPHINX_HEAD);
+    public static final DeferredItem<BlockItem> CANOPIC_JAR = ITEMS.registerSimpleBlockItem("canopic_jar", ModBlocks.CANOPIC_JAR);
+    public static final DeferredItem<BlockItem> SCARAB_IDOL = ITEMS.registerSimpleBlockItem("scarab_idol", ModBlocks.SCARAB_IDOL);
+    public static final DeferredItem<BlockItem> OFFERING_ALTAR = ITEMS.registerSimpleBlockItem("offering_altar", ModBlocks.OFFERING_ALTAR);
+    public static final DeferredItem<BlockItem> BROKEN_COLUMN = ITEMS.registerSimpleBlockItem("broken_column", ModBlocks.BROKEN_COLUMN);
+    public static final DeferredItem<BlockItem> SITTING_CAT_STATUE = ITEMS.registerSimpleBlockItem("sitting_cat_statue", ModBlocks.SITTING_CAT_STATUE);
+    public static final DeferredItem<BlockItem> BRONZE_SITTING_CAT_STATUE = ITEMS.registerSimpleBlockItem("bronze_sitting_cat_statue", ModBlocks.BRONZE_SITTING_CAT_STATUE);
+    public static final DeferredItem<BlockItem> RECLINING_CAT_STATUE = ITEMS.registerSimpleBlockItem("reclining_cat_statue", ModBlocks.RECLINING_CAT_STATUE);
     public static final DeferredItem<BlockItem> LANTEAN_WALL = ITEMS.registerSimpleBlockItem("lantean_wall", ModBlocks.LANTEAN_WALL);
     public static final DeferredItem<BlockItem> LANTEAN_CARVED_WALL = ITEMS.registerSimpleBlockItem("lantean_carved_wall", ModBlocks.LANTEAN_CARVED_WALL);
     public static final DeferredItem<BlockItem> LANTEAN_PANEL = ITEMS.registerSimpleBlockItem("lantean_panel", ModBlocks.LANTEAN_PANEL);
@@ -68,6 +80,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> LANTEAN_GLASS = ITEMS.registerSimpleBlockItem("lantean_glass", ModBlocks.LANTEAN_GLASS);
     public static final DeferredItem<BlockItem> ANCIENT_CONTAINMENT_BLOCK = ITEMS.registerSimpleBlockItem("ancient_containment_block", ModBlocks.ANCIENT_CONTAINMENT_BLOCK);
     public static final DeferredItem<BlockItem> GOAULD_CONTAINMENT_BLOCK = ITEMS.registerSimpleBlockItem("goauld_containment_block", ModBlocks.GOAULD_CONTAINMENT_BLOCK);
+    public static final DeferredItem<BlockItem> EXPEDITION_REWARD_DOOR = ITEMS.registerSimpleBlockItem("expedition_reward_door", ModBlocks.EXPEDITION_REWARD_DOOR);
     public static final DeferredItem<BlockItem> EXPEDITION_REWARD_DOOR_MARKER = ITEMS.registerSimpleBlockItem("expedition_reward_door_marker", ModBlocks.EXPEDITION_REWARD_DOOR_MARKER);
     public static final DeferredItem<BannerPatternItem> STARGATE_BANNER_PATTERN_ITEM = ITEMS.register(
             "stargate_banner_pattern",
@@ -101,6 +114,23 @@ public final class ModItems {
     public static final DeferredItem<Item> TRINIUM = ITEMS.registerSimpleItem("trinium");
     public static final DeferredItem<Item> NAQUADAH_INGOT = ITEMS.registerSimpleItem("naquadah_ingot");
     public static final DeferredItem<Item> TRINIUM_INGOT = ITEMS.registerSimpleItem("trinium_ingot");
+    public static final DeferredItem<StaffWeaponItem> STAFF_WEAPON = ITEMS.register(
+            "staff_weapon",
+            () -> new StaffWeaponItem(new Item.Properties()
+                    .stacksTo(1)
+                    .durability(512)
+                    .rarity(Rarity.RARE)
+                    .attributes(StaffWeaponItem.createAttributes())));
+    public static final DeferredItem<P90Item> P90 = ITEMS.register(
+            "p90",
+            () -> new P90Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+    public static final DeferredItem<Item> P90_MAGAZINE = ITEMS.registerSimpleItem(
+            "p90_magazine",
+            new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> P90_EMPTY_MAGAZINE = ITEMS.registerSimpleItem(
+            "p90_empty_magazine",
+            new Item.Properties().stacksTo(16));
+    public static final DeferredItem<Item> P90_ROUND = ITEMS.registerSimpleItem("p90_round");
     public static final DeferredItem<IrisUpgradeItem> MECHANICAL_IRIS = ITEMS.register(
             "mechanical_iris",
             () -> new IrisUpgradeItem(IrisType.MECHANICAL, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));

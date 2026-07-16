@@ -113,7 +113,7 @@ public class StargateComponentBlock extends Block {
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && state.getValue(ASSEMBLED)) {
-            StargateMultiblock.disassembleFrom(level, pos);
+            StargateMultiblock.disassembleFrom(level, pos, player.getAbilities().instabuild);
         }
 
         return super.playerWillDestroy(level, pos, state, player);

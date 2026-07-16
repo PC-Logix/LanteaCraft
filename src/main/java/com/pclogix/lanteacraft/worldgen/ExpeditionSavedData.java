@@ -15,7 +15,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
 public class ExpeditionSavedData extends SavedData {
@@ -54,14 +56,18 @@ public class ExpeditionSavedData extends SavedData {
                     expeditionTag.getInt("slot"),
                     expeditionTag.getInt("tier"),
                     new BlockPos(expeditionTag.getInt("x"), expeditionTag.getInt("y"), expeditionTag.getInt("z")),
+                    expeditionTag.contains("dimension")
+                            ? ResourceLocation.parse(expeditionTag.getString("dimension"))
+                            : legacyDimension(expeditionTag),
                     facing,
                     variant,
                     expeditionTag.getBoolean("generated"),
                     expeditionTag.getBoolean("rewardClaimed"),
                     normalize(expeditionTag.getString("returnAddress")),
                     loadCombatRoomCenters(expeditionTag),
-                    expeditionTag.getBoolean("rewardUnlocked"),
+                    loadRewardUnlocked(expeditionTag),
                     expeditionTag.contains("layoutSeed") ? expeditionTag.getLong("layoutSeed") : expeditionTag.getInt("slot"),
+                    loadRewardDoors(expeditionTag),
                     loadRewardDoorPos(expeditionTag),
                     loadRewardDoorFacing(expeditionTag));
             if (!expedition.address().isBlank()) {
@@ -84,6 +90,7 @@ public class ExpeditionSavedData extends SavedData {
                 slot,
                 tier,
                 basePosForSlot(slot),
+                LanteaDimensions.EXPEDITIONS.location(),
                 Direction.SOUTH,
                 StargateVariant.PEGASUS,
                 false,
@@ -92,6 +99,7 @@ public class ExpeditionSavedData extends SavedData {
                 List.of(),
                 false,
                 seed ^ origin.asLong() ^ slot,
+                List.of(),
                 null,
                 Direction.SOUTH);
         byAddress.put(expedition.address(), expedition);
@@ -105,26 +113,40 @@ public class ExpeditionSavedData extends SavedData {
                 .toList();
     }
 
+    public void rememberForPlacement(ExpeditionInstance expedition) {
+        byAddress.put(expedition.address(), expedition);
+        setDirty();
+    }
+
+    public void forget(String expeditionAddress) {
+        if (byAddress.remove(normalize(expeditionAddress)) != null) {
+            setDirty();
+        }
+    }
+
     public void markGenerated(ExpeditionInstance expedition, BlockPos basePos) {
         markGenerated(expedition, basePos, expedition.facing());
     }
 
     public void markGenerated(ExpeditionInstance expedition, BlockPos basePos, Direction facing) {
+        ExpeditionInstance current = byAddress.getOrDefault(expedition.address(), expedition);
         ExpeditionInstance updated = new ExpeditionInstance(
-                expedition.address(),
-                expedition.slot(),
-                expedition.tier(),
+                current.address(),
+                current.slot(),
+                current.tier(),
                 basePos.immutable(),
+                current.dimension(),
                 facing,
-                expedition.variant(),
+                current.variant(),
                 true,
-                expedition.rewardClaimed(),
-                expedition.returnAddress(),
-                expedition.combatRoomCenters(),
-                expedition.rewardUnlocked(),
-                expedition.layoutSeed(),
-                expedition.rewardDoorPos(),
-                expedition.rewardDoorFacing());
+                current.rewardClaimed(),
+                current.returnAddress(),
+                current.combatRoomCenters(),
+                current.rewardUnlocked(),
+                current.layoutSeed(),
+                current.rewardDoors(),
+                current.rewardDoorPos(),
+                current.rewardDoorFacing());
         byAddress.put(updated.address(), updated);
         setDirty();
     }
@@ -143,9 +165,21 @@ public class ExpeditionSavedData extends SavedData {
         });
     }
 
+    public void markRewardLocked(String expeditionAddress) {
+        findByAddress(expeditionAddress).ifPresent(expedition -> {
+            byAddress.put(expedition.address(), expedition.withTrialState(expedition.combatRoomCenters(), false));
+            setDirty();
+        });
+    }
+
     public void rememberRewardDoor(String expeditionAddress, BlockPos rewardDoorPos, Direction rewardDoorFacing) {
         findByAddress(expeditionAddress).ifPresent(expedition -> {
-            byAddress.put(expedition.address(), expedition.withRewardDoor(rewardDoorPos, rewardDoorFacing));
+            List<ExpeditionRewardDoor> doors = new ArrayList<>(expedition.rewardDoors());
+            ExpeditionRewardDoor door = new ExpeditionRewardDoor(rewardDoorPos, rewardDoorFacing);
+            if (!doors.contains(door)) {
+                doors.add(door);
+            }
+            byAddress.put(expedition.address(), expedition.withRewardDoors(doors));
             setDirty();
         });
     }
@@ -168,6 +202,7 @@ public class ExpeditionSavedData extends SavedData {
             expeditionTag.putInt("x", expedition.basePos().getX());
             expeditionTag.putInt("y", expedition.basePos().getY());
             expeditionTag.putInt("z", expedition.basePos().getZ());
+            expeditionTag.putString("dimension", expedition.dimension().toString());
             expeditionTag.putString("facing", expedition.facing().getName());
             expeditionTag.putString("variant", expedition.variant().name());
             expeditionTag.putBoolean("generated", expedition.generated());
@@ -175,6 +210,16 @@ public class ExpeditionSavedData extends SavedData {
             expeditionTag.putString("returnAddress", expedition.returnAddress());
             expeditionTag.putBoolean("rewardUnlocked", expedition.rewardUnlocked());
             expeditionTag.putLong("layoutSeed", expedition.layoutSeed());
+            ListTag rewardDoors = new ListTag();
+            for (ExpeditionRewardDoor door : expedition.rewardDoors()) {
+                CompoundTag doorTag = new CompoundTag();
+                doorTag.putInt("x", door.pos().getX());
+                doorTag.putInt("y", door.pos().getY());
+                doorTag.putInt("z", door.pos().getZ());
+                doorTag.putString("facing", door.facing().getName());
+                rewardDoors.add(doorTag);
+            }
+            expeditionTag.put("rewardDoors", rewardDoors);
             if (expedition.rewardDoorPos() != null) {
                 expeditionTag.putInt("rewardDoorX", expedition.rewardDoorPos().getX());
                 expeditionTag.putInt("rewardDoorY", expedition.rewardDoorPos().getY());
@@ -204,6 +249,32 @@ public class ExpeditionSavedData extends SavedData {
             rooms.add(new BlockPos(roomTag.getInt("x"), roomTag.getInt("y"), roomTag.getInt("z")));
         }
         return List.copyOf(rooms);
+    }
+
+    private static ResourceLocation legacyDimension(CompoundTag expeditionTag) {
+        int slot = expeditionTag.getInt("slot");
+        return slot < 0 || slot >= 4096 ? Level.OVERWORLD.location() : LanteaDimensions.EXPEDITIONS.location();
+    }
+
+    private static List<ExpeditionRewardDoor> loadRewardDoors(CompoundTag expeditionTag) {
+        List<ExpeditionRewardDoor> doors = new ArrayList<>();
+        ListTag tags = expeditionTag.getList("rewardDoors", Tag.TAG_COMPOUND);
+        for (int i = 0; i < tags.size(); i++) {
+            CompoundTag doorTag = tags.getCompound(i);
+            Direction facing = Direction.byName(doorTag.getString("facing"));
+            doors.add(new ExpeditionRewardDoor(
+                    new BlockPos(doorTag.getInt("x"), doorTag.getInt("y"), doorTag.getInt("z")), facing));
+        }
+        if (doors.isEmpty() && expeditionTag.contains("rewardDoorX")) {
+            doors.add(new ExpeditionRewardDoor(loadRewardDoorPos(expeditionTag), loadRewardDoorFacing(expeditionTag)));
+        }
+        return List.copyOf(doors);
+    }
+
+    private static boolean loadRewardUnlocked(CompoundTag expeditionTag) {
+        int slot = expeditionTag.getInt("slot");
+        boolean legacyDebugTrial = !expeditionTag.contains("dimension") && (slot < 0 || slot >= 4096);
+        return !legacyDebugTrial && expeditionTag.getBoolean("rewardUnlocked");
     }
 
     private static BlockPos loadRewardDoorPos(CompoundTag expeditionTag) {

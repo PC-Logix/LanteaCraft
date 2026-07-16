@@ -1,6 +1,9 @@
 package com.pclogix.lanteacraft.client.model;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import com.pclogix.lanteacraft.entity.GoauldSoldierEntity;
+import com.pclogix.lanteacraft.registry.ModItems;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -9,11 +12,14 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.world.entity.HumanoidArm;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class GoauldSoldierModel extends HumanoidModel<GoauldSoldierEntity> {
+    private boolean holdingStaff;
+
     public GoauldSoldierModel(ModelPart root) {
         super(root);
         head.visible = false;
@@ -23,6 +29,23 @@ public class GoauldSoldierModel extends HumanoidModel<GoauldSoldierEntity> {
         leftArm.visible = false;
         rightLeg.visible = false;
         leftLeg.visible = false;
+    }
+
+    @Override
+    public void setupAnim(GoauldSoldierEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        holdingStaff = entity.getMainHandItem().is(ModItems.STAFF_WEAPON.get());
+        rightArmPose = ArmPose.EMPTY;
+        leftArmPose = ArmPose.EMPTY;
+        super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+    }
+
+    @Override
+    public void translateToHand(HumanoidArm arm, PoseStack poseStack) {
+        super.translateToHand(arm, poseStack);
+        if (holdingStaff && arm == HumanoidArm.RIGHT) {
+            poseStack.translate(-0.35D, 0.0D, 0.0D);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(-22.5F));
+        }
     }
 
     public static LayerDefinition createBodyLayer() {

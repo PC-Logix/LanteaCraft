@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lanteacraft:block/scarab_idol",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "lanteacraft:block/scarab_idol",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lanteacraft:block/scarab_idol",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lanteacraft:block/scarab_idol",
+      "y": 270
+    }
+  }
+}

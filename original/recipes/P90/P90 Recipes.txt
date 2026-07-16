@@ -1,0 +1,4 @@
+P90: iron receiver/body, copper internals, glass sight, redstone trigger mechanism.
+Ammunition batch: gunpowder + copper ingot + iron nugget → 8 cartridge items.
+Empty magazine: glass pane surrounded by iron nuggets.
+Loaded magazine: empty magazine surrounded by all 8 cartridges → one 50-round magazine.

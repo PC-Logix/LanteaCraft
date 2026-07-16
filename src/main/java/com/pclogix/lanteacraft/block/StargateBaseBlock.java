@@ -216,7 +216,7 @@ public class StargateBaseBlock extends HorizontalDirectionalBlock implements Ent
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && state.getValue(ASSEMBLED)) {
-            StargateMultiblock.disassembleAtBase(level, pos);
+            StargateMultiblock.disassembleAtBase(level, pos, player.getAbilities().instabuild);
         }
 
         return super.playerWillDestroy(level, pos, state, player);
