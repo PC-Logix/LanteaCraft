@@ -1,0 +1,12 @@
+{
+  "multipart": [
+    { "when": { "assembled": false, "facing": "north" }, "apply": { "model": "lanteacraft:block/wraith_stargate_base" } },
+    { "when": { "assembled": false, "facing": "east" }, "apply": { "model": "lanteacraft:block/wraith_stargate_base", "y": 90 } },
+    { "when": { "assembled": false, "facing": "south" }, "apply": { "model": "lanteacraft:block/wraith_stargate_base", "y": 180 } },
+    { "when": { "assembled": false, "facing": "west" }, "apply": { "model": "lanteacraft:block/wraith_stargate_base", "y": 270 } },
+    { "when": { "assembled": true, "facing": "north" }, "apply": { "renderer": "lanteacraft:stargate", "model": "lanteacraft:block/wraith_stargate_assembled_bluemap" } },
+    { "when": { "assembled": true, "facing": "east" }, "apply": { "renderer": "lanteacraft:stargate", "model": "lanteacraft:block/wraith_stargate_assembled_bluemap", "y": 90 } },
+    { "when": { "assembled": true, "facing": "south" }, "apply": { "renderer": "lanteacraft:stargate", "model": "lanteacraft:block/wraith_stargate_assembled_bluemap", "y": 180 } },
+    { "when": { "assembled": true, "facing": "west" }, "apply": { "renderer": "lanteacraft:stargate", "model": "lanteacraft:block/wraith_stargate_assembled_bluemap", "y": 270 } }
+  ]
+}

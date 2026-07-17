@@ -297,22 +297,58 @@
       ],
       "faces": {
         "down": {
-          "texture": "#nose"
+          "texture": "#nose",
+          "uv": [
+            9.75,
+            15,
+            11,
+            16
+          ]
         },
         "up": {
-          "texture": "#nose"
+          "texture": "#nose",
+          "uv": [
+            9.75,
+            0,
+            11,
+            1
+          ]
         },
         "north": {
-          "texture": "#nose"
+          "texture": "#nose",
+          "uv": [
+            5,
+            7.25,
+            6.25,
+            8.5
+          ]
         },
         "south": {
-          "texture": "#nose"
+          "texture": "#nose",
+          "uv": [
+            9.75,
+            7.25,
+            11,
+            8.5
+          ]
         },
         "west": {
-          "texture": "#nose"
+          "texture": "#nose",
+          "uv": [
+            0,
+            7.25,
+            1,
+            8.5
+          ]
         },
         "east": {
-          "texture": "#nose"
+          "texture": "#nose",
+          "uv": [
+            15,
+            7.25,
+            16,
+            8.5
+          ]
         }
       }
     },

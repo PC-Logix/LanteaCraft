@@ -1,0 +1,42 @@
+{
+  "variants": {
+    "active=false,facing=north": {
+      "model": "lanteacraft:block/naquadah_generator",
+      "renderer": "lanteacraft:obj"
+    },
+    "active=false,facing=east": {
+      "model": "lanteacraft:block/naquadah_generator",
+      "y": 90,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=false,facing=south": {
+      "model": "lanteacraft:block/naquadah_generator",
+      "y": 180,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=false,facing=west": {
+      "model": "lanteacraft:block/naquadah_generator",
+      "y": 270,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=true,facing=north": {
+      "model": "lanteacraft:block/naquadah_generator_on",
+      "renderer": "lanteacraft:obj"
+    },
+    "active=true,facing=east": {
+      "model": "lanteacraft:block/naquadah_generator_on",
+      "y": 90,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=true,facing=south": {
+      "model": "lanteacraft:block/naquadah_generator_on",
+      "y": 180,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=true,facing=west": {
+      "model": "lanteacraft:block/naquadah_generator_on",
+      "y": 270,
+      "renderer": "lanteacraft:obj"
+    }
+  }
+}

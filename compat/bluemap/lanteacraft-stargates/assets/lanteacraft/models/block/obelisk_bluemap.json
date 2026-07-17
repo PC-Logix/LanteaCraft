@@ -1,0 +1,6 @@
+{
+  "textures": {
+    "map_Obelisk_01": "lanteacraft:block/obelisk",
+    "particle": "lanteacraft:block/obelisk"
+  }
+}

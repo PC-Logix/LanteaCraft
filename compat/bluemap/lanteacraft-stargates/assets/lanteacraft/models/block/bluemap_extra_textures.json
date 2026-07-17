@@ -1,0 +1,8 @@
+{
+  "textures": {
+    "zpm": "lanteacraft:item/zpm_glb",
+    "stargate_banner": "lanteacraft:entity/banner/stargate",
+    "lantean_banner": "lanteacraft:entity/banner/lantean",
+    "goauld_banner": "lanteacraft:entity/banner/goauld"
+  }
+}

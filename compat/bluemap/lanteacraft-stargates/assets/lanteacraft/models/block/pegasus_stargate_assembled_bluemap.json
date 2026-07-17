@@ -1,0 +1,13 @@
+{
+  "loader": "neoforge:obj",
+  "model": "lanteacraft:models/obj/stargate_assembled.obj",
+  "ambientocclusion": false,
+  "flip_v": true,
+  "automatic_culling": false,
+  "shade_quads": true,
+  "textures": {
+    "frame": "lanteacraft:tileentity/stargate_pegasus",
+    "glyphs": "lanteacraft:tileentity/stargate_glyphs_pegasus",
+    "particle": "lanteacraft:block/stargate_base_front_pegasus"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lanteacraft:block/zpm_hub",
+      "renderer": "lanteacraft:obj"
+    },
+    "facing=east": {
+      "model": "lanteacraft:block/zpm_hub",
+      "y": 90,
+      "renderer": "lanteacraft:obj"
+    },
+    "facing=south": {
+      "model": "lanteacraft:block/zpm_hub",
+      "y": 180,
+      "renderer": "lanteacraft:obj"
+    },
+    "facing=west": {
+      "model": "lanteacraft:block/zpm_hub",
+      "y": 270,
+      "renderer": "lanteacraft:obj"
+    }
+  }
+}

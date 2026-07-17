@@ -2,6 +2,7 @@ package com.pclogix.lanteacraft;
 
 import com.mojang.logging.LogUtils;
 import com.pclogix.lanteacraft.compat.computercraft.ComputerCraftCompat;
+import com.pclogix.lanteacraft.compat.bluemap.BlueMapCompat;
 import com.pclogix.lanteacraft.command.LanteaCommands;
 import com.pclogix.lanteacraft.registry.ModBlocks;
 import com.pclogix.lanteacraft.registry.ModCreativeTabs;
@@ -54,6 +55,9 @@ public class LanteaCraft {
         modEventBus.addListener(LanteaPowerCapabilities::register);
         if (ModList.get().isLoaded("computercraft")) {
             ComputerCraftCompat.register(modEventBus);
+        }
+        if (ModList.get().isLoaded("bluemap")) {
+            BlueMapCompat.register();
         }
         StargateTeleportHandler.register(NeoForge.EVENT_BUS);
         GeneratedGateProtection.register(NeoForge.EVENT_BUS);

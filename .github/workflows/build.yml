@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Java 21
         uses: actions/setup-java@v4
@@ -43,13 +45,43 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      - name: Calculate mod version
+        id: version
+        shell: bash
+        run: |
+          base_version="$(sed -n 's/^mod_version=//p' gradle.properties | tail -n 1)"
+          seed_version="$(sed -n 's/^mod_version_seed=//p' gradle.properties | tail -n 1)"
+          seed_build="$(sed -n 's/^mod_version_seed_build=//p' gradle.properties | tail -n 1)"
+          version_commit="$(git log -G '^mod_version=' --format='%H' -n 1 -- gradle.properties)"
+
+          if [[ -z "$base_version" || -z "$version_commit" ]]; then
+            echo "Unable to determine the mod version or its starting commit." >&2
+            exit 1
+          fi
+
+          if git rev-parse "${version_commit}^" >/dev/null 2>&1; then
+            relative_build="$(git rev-list --count "${version_commit}^..HEAD")"
+          else
+            relative_build="$(git rev-list --count HEAD)"
+          fi
+
+          build_number="$relative_build"
+          if [[ "$base_version" == "$seed_version" ]]; then
+            build_number=$((relative_build + seed_build - 1))
+          fi
+
+          full_version="${base_version}.${build_number}"
+          echo "build_number=$build_number" >> "$GITHUB_OUTPUT"
+          echo "full_version=$full_version" >> "$GITHUB_OUTPUT"
+          echo "Building LanteaCraft $full_version"
+
       - name: Build
-        run: ./gradlew build -Pbuild_number=${{ github.run_number }}
+        run: ./gradlew build -Pbuild_number=${{ steps.version.outputs.build_number }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: lanteacraft-${{ github.run_number }}
+          name: lanteacraft-${{ steps.version.outputs.full_version }}
           path: build/libs/*.jar
           if-no-files-found: error
 
@@ -59,5 +91,5 @@ jobs:
           ORG_GRADLE_PROJECT_curseforge_project: ${{ vars.CURSEFORGE_PROJECT_ID }}
           ORG_GRADLE_PROJECT_curseforge_token: ${{ secrets.CURSEFORGE_TOKEN }}
           ORG_GRADLE_PROJECT_curseforge_release_type: ${{ github.event_name == 'workflow_dispatch' && inputs.release_type || 'release' }}
-          ORG_GRADLE_PROJECT_curseforge_changelog: Build ${{ github.run_number }} from ${{ github.sha }}
-        run: ./gradlew publishCurseForge -Pbuild_number=${{ github.run_number }} --no-configuration-cache
+          ORG_GRADLE_PROJECT_curseforge_changelog: Build ${{ steps.version.outputs.full_version }} from ${{ github.sha }}
+        run: ./gradlew publishCurseForge -Pbuild_number=${{ steps.version.outputs.build_number }} --no-configuration-cache

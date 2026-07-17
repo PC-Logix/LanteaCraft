@@ -1,0 +1,42 @@
+{
+  "variants": {
+    "active=false,facing=north": {
+      "model": "lanteacraft:block/wraith_dhd",
+      "y": 180,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=false,facing=east": {
+      "model": "lanteacraft:block/wraith_dhd",
+      "y": 270,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=false,facing=south": {
+      "model": "lanteacraft:block/wraith_dhd",
+      "renderer": "lanteacraft:obj"
+    },
+    "active=false,facing=west": {
+      "model": "lanteacraft:block/wraith_dhd",
+      "y": 90,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=true,facing=north": {
+      "model": "lanteacraft:block/wraith_dhd_on",
+      "y": 180,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=true,facing=east": {
+      "model": "lanteacraft:block/wraith_dhd_on",
+      "y": 270,
+      "renderer": "lanteacraft:obj"
+    },
+    "active=true,facing=south": {
+      "model": "lanteacraft:block/wraith_dhd_on",
+      "renderer": "lanteacraft:obj"
+    },
+    "active=true,facing=west": {
+      "model": "lanteacraft:block/wraith_dhd_on",
+      "y": 90,
+      "renderer": "lanteacraft:obj"
+    }
+  }
+}

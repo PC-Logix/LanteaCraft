@@ -34,6 +34,12 @@ sourceSets.main.resources {
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
     maven {
+        url "https://repo.bluecolored.de/releases"
+        content {
+            includeGroup("de.bluecolored")
+        }
+    }
+    maven {
         url "https://maven.squiddev.cc"
         content {
             includeGroup("cc.tweaked")
@@ -154,6 +160,7 @@ dependencies {
     compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-core-api:1.120.0")
     compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-forge-api:1.120.0")
     localRuntime("cc.tweaked:cc-tweaked-${minecraft_version}-forge:1.120.0")
+    compileOnly("de.bluecolored:bluemap-core:5.7")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -255,6 +262,27 @@ tasks.register("validateExpeditionStructures", Exec) {
 
 tasks.named("processResources").configure {
     mustRunAfter(tasks.named("importExpeditionStructures"))
+}
+
+def blueMapPack = tasks.register("blueMapPack", Zip) {
+    group = "build"
+    description = "Package the BlueMap 5.7 Stargate resource pack."
+    from(layout.projectDirectory.dir("compat/bluemap/lanteacraft-stargates"))
+    archiveFileName = "lanteacraft-stargates-bluemap-5.7.zip"
+    destinationDirectory = layout.buildDirectory.dir("distributions")
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+tasks.named("processResources").configure {
+    dependsOn(blueMapPack)
+    from(blueMapPack.flatMap { it.archiveFile }) {
+        into("META-INF/lanteacraft/bluemap")
+    }
+}
+
+tasks.named("assemble").configure {
+    dependsOn(blueMapPack)
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

@@ -1,0 +1,30 @@
+# Textures beginning with # are resolved through the OBJ model's texture map.
+newmtl frame
+Ka 1.0 1.0 1.0
+Kd 1.0 1.0 1.0
+map_Kd #frame
+
+newmtl frame_85
+Ka 0.85 0.85 0.85
+Kd 0.85 0.85 0.85
+map_Kd #frame
+
+newmtl frame_75
+Ka 0.75 0.75 0.75
+Kd 0.75 0.75 0.75
+map_Kd #frame
+
+newmtl frame_55
+Ka 0.55 0.55 0.55
+Kd 0.55 0.55 0.55
+map_Kd #frame
+
+newmtl glyphs
+Ka 1.0 1.0 1.0
+Kd 1.0 1.0 1.0
+map_Kd #glyphs
+
+newmtl chevron_lit
+Ka 0.28 0.28 0.28
+Kd 0.28 0.28 0.28
+map_Kd #frame
