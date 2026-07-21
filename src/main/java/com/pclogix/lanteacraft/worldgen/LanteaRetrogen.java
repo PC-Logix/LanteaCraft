@@ -75,27 +75,42 @@ public final class LanteaRetrogen {
                 continue;
             }
 
-            runOreRetrogen(level, chunkPos);
+            boolean placedOre = runOreRetrogen(level, chunkPos);
+            if (placedOre) {
+                chunk.setUnsaved(true);
+            }
             data.markOresProcessed(chunkPos);
         }
     }
 
-    private static void runOreRetrogen(ServerLevel level, ChunkPos chunkPos) {
+    private static boolean runOreRetrogen(ServerLevel level, ChunkPos chunkPos) {
         BlockPos origin = chunkPos.getWorldPosition();
         RandomSource random = RandomSource.create(retrogenSeed(level, chunkPos));
+        boolean placedOre = false;
 
         for (ResourceKey<PlacedFeature> featureKey : ORE_FEATURES) {
             Optional<Holder.Reference<PlacedFeature>> feature = level.registryAccess()
                     .lookupOrThrow(Registries.PLACED_FEATURE)
                     .get(featureKey);
-            feature.ifPresentOrElse(
-                    placedFeature -> placedFeature.value().placeWithBiomeCheck(level, level.getChunkSource().getGenerator(), random, origin),
-                    () -> LanteaCraft.LOGGER.warn("Skipping missing LanteaCraft retrogen feature {}.", featureKey.location()));
+            if (feature.isEmpty()) {
+                LanteaCraft.LOGGER.warn("Skipping missing LanteaCraft retrogen feature {}.", featureKey.location());
+                continue;
+            }
+
+            boolean featurePlaced = feature.get().value().placeWithBiomeCheck(
+                    level, level.getChunkSource().getGenerator(), random, origin);
+            placedOre |= featurePlaced;
+            if (Config.DEBUG_LOGGING.getAsBoolean()) {
+                LanteaCraft.LOGGER.info("LanteaCraft retrogen feature {} in chunk {}: placed={}",
+                        featureKey.location(), chunkPos, featurePlaced);
+            }
         }
 
         if (Config.DEBUG_LOGGING.getAsBoolean()) {
-            LanteaCraft.LOGGER.info("Ran LanteaCraft ore retrogen for chunk {} in {}.", chunkPos, level.dimension().location());
+            LanteaCraft.LOGGER.info("Finished LanteaCraft ore retrogen for chunk {} in {}: placedAny={}",
+                    chunkPos, level.dimension().location(), placedOre);
         }
+        return placedOre;
     }
 
     private static void enqueue(ResourceKey<Level> dimension, long chunk) {
