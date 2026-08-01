@@ -39,7 +39,7 @@ public final class DimensionGateGenerator {
         boolean hasDuplicates = hasDuplicateFixedGateBases(level, plan);
         if (isAssembledGateAt(level, basePos) && !hasDuplicates) {
             if (level.dimension().equals(LanteaDimensions.ABYDOS)) {
-                AbydosPyramidGenerator.ensureInitialized(level, basePos, plan.facing());
+                AbydosPyramidGenerator.ensureInitialized(level, basePos, plan.facing(), 0);
                 applyAbydosCamouflage(level, basePos);
             }
             StargateNetworkSavedData.get(level).registerOrUpdateActiveGate(plan.address(), level.dimension(), basePos, plan.facing(), plan.variant(), "fixed_dimension");
@@ -84,7 +84,7 @@ public final class DimensionGateGenerator {
         }
 
         placeAbydosPlatform(level, basePos, facing);
-        AbydosPyramidGenerator.ensureInitialized(level, basePos, facing);
+        AbydosPyramidGenerator.ensureInitialized(level, basePos, facing, AbydosPyramidGenerator.GATE_PLATFORM_HEIGHT);
         placeFrame(level, basePos, facing, plan.variant());
         placeDhd(level, basePos, facing, plan.variant());
         return basePos;

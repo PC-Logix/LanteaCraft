@@ -13,7 +13,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 
 public final class AbydosComplexSavedData extends SavedData {
     private static final String DATA_NAME = LanteaCraft.MODID + "_abydos_complex";
-    private static final int COMPLEX_VERSION = 1;
+    private static final int COMPLEX_VERSION = 4;
     private static final SavedData.Factory<AbydosComplexSavedData> FACTORY = new SavedData.Factory<>(
             AbydosComplexSavedData::new,
             AbydosComplexSavedData::load);
@@ -21,6 +21,7 @@ public final class AbydosComplexSavedData extends SavedData {
     private final Set<Long> generatedChunks = new HashSet<>();
     private BlockPos gateBase;
     private Direction facing = Direction.SOUTH;
+    private int gatePlatformHeight;
 
     public static AbydosComplexSavedData get(ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(FACTORY, DATA_NAME);
@@ -34,6 +35,7 @@ public final class AbydosComplexSavedData extends SavedData {
             if (loadedFacing != null && loadedFacing.getAxis().isHorizontal()) {
                 data.facing = loadedFacing;
             }
+            data.gatePlatformHeight = tag.getInt("gatePlatformHeight");
         }
         if (tag.getInt("complexVersion") == COMPLEX_VERSION) {
             for (long chunk : tag.getLongArray("generatedChunks")) {
@@ -45,7 +47,7 @@ public final class AbydosComplexSavedData extends SavedData {
         return data;
     }
 
-    public boolean initialize(BlockPos basePos, Direction gateFacing) {
+    public boolean initialize(BlockPos basePos, Direction gateFacing, int platformHeight) {
         BlockPos immutableBase = basePos.immutable();
         if (immutableBase.equals(gateBase) && gateFacing == facing) {
             return false;
@@ -53,6 +55,7 @@ public final class AbydosComplexSavedData extends SavedData {
 
         gateBase = immutableBase;
         facing = gateFacing;
+        gatePlatformHeight = platformHeight;
         generatedChunks.clear();
         setDirty();
         return true;
@@ -68,6 +71,10 @@ public final class AbydosComplexSavedData extends SavedData {
 
     public Direction facing() {
         return facing;
+    }
+
+    public int gatePlatformHeight() {
+        return gatePlatformHeight;
     }
 
     public boolean hasGenerated(ChunkPos chunkPos) {
@@ -89,6 +96,7 @@ public final class AbydosComplexSavedData extends SavedData {
             tag.putInt("gateY", gateBase.getY());
             tag.putInt("gateZ", gateBase.getZ());
             tag.putString("facing", facing.getName());
+            tag.putInt("gatePlatformHeight", gatePlatformHeight);
         }
         tag.putLongArray("generatedChunks", generatedChunks.stream().mapToLong(Long::longValue).toArray());
         return tag;

@@ -1,5 +1,6 @@
 package com.pclogix.lanteacraft.compat.computercraft;
 
+import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.gate.StargateDialer;
 import com.pclogix.lanteacraft.gate.StargateEntry;
@@ -35,6 +36,7 @@ public class StargatePeripheral implements IPeripheral, PacketReceiver {
     private final ServerLevel level;
     private final BlockPos basePos;
     private PacketNetwork wirelessNetwork;
+    private boolean wirelessUnavailableLogged;
 
     StargatePeripheral(ServerLevel level, BlockPos basePos) {
         this.level = level;
@@ -60,6 +62,7 @@ public class StargatePeripheral implements IPeripheral, PacketReceiver {
     @Override
     public boolean equals(IPeripheral other) {
         return other instanceof StargatePeripheral peripheral
+                && level.getServer() == peripheral.level.getServer()
                 && level.dimension().equals(peripheral.level.dimension())
                 && basePos.equals(peripheral.basePos);
     }
@@ -244,7 +247,23 @@ public class StargatePeripheral implements IPeripheral, PacketReceiver {
     }
 
     void registerWirelessReceiver() {
-        PacketNetwork network = ComputerCraftAPI.getWirelessNetwork(level.getServer());
+        PacketNetwork network;
+        try {
+            network = ComputerCraftAPI.getWirelessNetwork(level.getServer());
+        } catch (IllegalStateException exception) {
+            unregisterWirelessReceiver();
+            if (!wirelessUnavailableLogged) {
+                LanteaCraft.LOGGER.warn(
+                        "CC:Tweaked wireless network is unavailable for Stargate {} in {}; skipping receiver registration.",
+                        basePos,
+                        level.dimension().location(),
+                        exception);
+                wirelessUnavailableLogged = true;
+            }
+            return;
+        }
+
+        wirelessUnavailableLogged = false;
         if (wirelessNetwork == network) {
             return;
         }
@@ -297,7 +316,10 @@ public class StargatePeripheral implements IPeripheral, PacketReceiver {
                 packet.replyChannel(),
                 packet.payload(),
                 new StargatePacketSender(remoteLevel, remote.get().basePos(), local.get().address()));
-        ComputerCraftAPI.getWirelessNetwork(level.getServer()).transmitSameDimension(repeated, REPEATER_RANGE);
+        registerWirelessReceiver();
+        if (wirelessNetwork != null) {
+            wirelessNetwork.transmitSameDimension(repeated, REPEATER_RANGE);
+        }
     }
 
     private static boolean canRelay(StargateEntry gate, ServerLevel level) {

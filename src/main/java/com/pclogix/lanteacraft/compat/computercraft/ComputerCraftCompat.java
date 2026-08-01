@@ -17,6 +17,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public final class ComputerCraftCompat {
@@ -25,9 +27,41 @@ public final class ComputerCraftCompat {
     private ComputerCraftCompat() {
     }
 
-    public static void register(IEventBus modEventBus) {
+    public static void register(IEventBus modEventBus, IEventBus gameEventBus) {
         modEventBus.addListener(ComputerCraftCompat::registerCapabilities);
+        gameEventBus.addListener(ComputerCraftCompat::onServerStarting);
+        gameEventBus.addListener(ComputerCraftCompat::onServerStopping);
         StargateEventDispatcher.register(ComputerCraftCompat::handleGateEvent);
+    }
+
+    private static void onServerStarting(ServerStartingEvent event) {
+        removePeripheralsForOtherServers(event.getServer());
+    }
+
+    private static void onServerStopping(ServerStoppingEvent event) {
+        removePeripheralsForServer(event.getServer());
+    }
+
+    private static void removePeripheralsForOtherServers(MinecraftServer server) {
+        PERIPHERALS.entrySet().removeIf(entry -> {
+            if (entry.getKey().server() == server) {
+                return false;
+            }
+
+            entry.getValue().unregisterWirelessReceiver();
+            return true;
+        });
+    }
+
+    private static void removePeripheralsForServer(MinecraftServer server) {
+        PERIPHERALS.entrySet().removeIf(entry -> {
+            if (entry.getKey().server() != server) {
+                return false;
+            }
+
+            entry.getValue().unregisterWirelessReceiver();
+            return true;
+        });
     }
 
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -63,7 +97,7 @@ public final class ComputerCraftCompat {
     }
 
     private static StargatePeripheral peripheral(ServerLevel level, StargateEntry entry) {
-        return PERIPHERALS.computeIfAbsent(GateKey.of(entry), ignored -> new StargatePeripheral(level, entry.basePos()));
+        return PERIPHERALS.computeIfAbsent(GateKey.of(level, entry), ignored -> new StargatePeripheral(level, entry.basePos()));
     }
 
     private static void handleGateEvent(StargateEventDispatcher.GateEvent event) {
@@ -117,12 +151,12 @@ public final class ComputerCraftCompat {
     }
 
     static GateKey key(ServerLevel level, BlockPos basePos) {
-        return new GateKey(level.dimension().location().toString(), basePos.immutable());
+        return new GateKey(level.getServer(), level.dimension().location().toString(), basePos.immutable());
     }
 
-    private record GateKey(String dimension, BlockPos basePos) {
-        static GateKey of(StargateEntry entry) {
-            return new GateKey(entry.dimension().toString(), entry.basePos());
+    private record GateKey(MinecraftServer server, String dimension, BlockPos basePos) {
+        static GateKey of(ServerLevel level, StargateEntry entry) {
+            return new GateKey(level.getServer(), entry.dimension().toString(), entry.basePos());
         }
     }
 }

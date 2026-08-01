@@ -7,6 +7,7 @@ import com.pclogix.lanteacraft.compat.bluemap.BlueMapCompat;
 import com.pclogix.lanteacraft.command.LanteaCommands;
 import com.pclogix.lanteacraft.registry.ModBlocks;
 import com.pclogix.lanteacraft.registry.ModCreativeTabs;
+import com.pclogix.lanteacraft.registry.ModChunkGenerators;
 import com.pclogix.lanteacraft.registry.ModDataComponents;
 import com.pclogix.lanteacraft.registry.ModEntities;
 import com.pclogix.lanteacraft.registry.ModItems;
@@ -45,6 +46,7 @@ public class LanteaCraft {
 
     public LanteaCraft(IEventBus modEventBus, ModContainer modContainer) {
         ModBlocks.register(modEventBus);
+        ModChunkGenerators.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModDataComponents.register(modEventBus);
         ModItems.register(modEventBus);
@@ -56,7 +58,7 @@ public class LanteaCraft {
         ModNetworking.register(modEventBus);
         modEventBus.addListener(LanteaPowerCapabilities::register);
         if (ModList.get().isLoaded("computercraft")) {
-            ComputerCraftCompat.register(modEventBus);
+            ComputerCraftCompat.register(modEventBus, NeoForge.EVENT_BUS);
         }
         if (ModList.get().isLoaded("opencomputers")) {
             OpenComputersCompat.register(modEventBus);
@@ -74,8 +76,8 @@ public class LanteaCraft {
         NeoForge.EVENT_BUS.addListener(FixedDimensionGateBootstrap::onLevelTick);
         NeoForge.EVENT_BUS.addListener(ExpeditionTrialTracker::onLevelTick);
         NeoForge.EVENT_BUS.addListener(AbydosSpawner::onLevelTick);
-        NeoForge.EVENT_BUS.addListener(AbydosSpawner::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(AbydosPyramidGenerator::onChunkLoad);
+        NeoForge.EVENT_BUS.addListener(AbydosSpawner::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(AtlantisCityManager::onLevelTick);
         NeoForge.EVENT_BUS.addListener(AtlantisSpawnRules::onSpawnPlacementCheck);
         NeoForge.EVENT_BUS.addListener(AtlantisSpawnRules::onPositionCheck);
