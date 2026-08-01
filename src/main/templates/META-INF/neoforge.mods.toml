@@ -96,6 +96,13 @@ config="${mod_id}.mixins.json"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
+    modId="opencomputers"
+    type="optional"
+    versionRange="[1.9.0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
     modId="bluemap"
     type="optional"
     versionRange="[5.7,5.8)"

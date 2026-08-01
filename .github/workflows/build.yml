@@ -33,6 +33,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check out OpenComputers API
+        uses: actions/checkout@v4
+        with:
+          repository: CaitlynMainer/OpenComputers
+          ref: a4a9950b74bae158d607c833f8122e806ae38ca1
+          path: .opencomputers
+          persist-credentials: false
+
       - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
@@ -43,7 +51,19 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
+        run: chmod +x ./gradlew ./.opencomputers/gradlew
+
+      - name: Build OpenComputers API
+        id: opencomputers
+        shell: bash
+        run: |
+          ./.opencomputers/gradlew -p .opencomputers apiJar
+          api_jar="$(find .opencomputers/build/libs -maxdepth 1 -name '*-api.jar' -print -quit)"
+          if [[ -z "$api_jar" ]]; then
+            echo "OpenComputers API jar was not produced." >&2
+            exit 1
+          fi
+          echo "api_jar=$api_jar" >> "$GITHUB_OUTPUT"
 
       - name: Calculate mod version
         id: version
@@ -76,7 +96,7 @@ jobs:
           echo "Building LanteaCraft $full_version"
 
       - name: Build
-        run: ./gradlew build -Pbuild_number=${{ steps.version.outputs.build_number }}
+        run: ./gradlew build -Pbuild_number=${{ steps.version.outputs.build_number }} -Popencomputers_api_jar=${{ steps.opencomputers.outputs.api_jar }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -92,4 +112,4 @@ jobs:
           ORG_GRADLE_PROJECT_curseforge_token: ${{ secrets.CURSEFORGE_TOKEN }}
           ORG_GRADLE_PROJECT_curseforge_release_type: ${{ github.event_name == 'workflow_dispatch' && inputs.release_type || 'release' }}
           ORG_GRADLE_PROJECT_curseforge_changelog: Build ${{ steps.version.outputs.full_version }} from ${{ github.sha }}
-        run: ./gradlew publishCurseForge -Pbuild_number=${{ steps.version.outputs.build_number }} --no-configuration-cache
+        run: ./gradlew publishCurseForge -Pbuild_number=${{ steps.version.outputs.build_number }} -Popencomputers_api_jar=${{ steps.opencomputers.outputs.api_jar }} --no-configuration-cache

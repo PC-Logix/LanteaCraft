@@ -39,6 +39,7 @@ public final class DimensionGateGenerator {
         boolean hasDuplicates = hasDuplicateFixedGateBases(level, plan);
         if (isAssembledGateAt(level, basePos) && !hasDuplicates) {
             if (level.dimension().equals(LanteaDimensions.ABYDOS)) {
+                AbydosPyramidGenerator.ensureInitialized(level, basePos, plan.facing());
                 applyAbydosCamouflage(level, basePos);
             }
             StargateNetworkSavedData.get(level).registerOrUpdateActiveGate(plan.address(), level.dimension(), basePos, plan.facing(), plan.variant(), "fixed_dimension");
@@ -66,7 +67,7 @@ public final class DimensionGateGenerator {
 
     private static BlockPos placeAbydosGate(ServerLevel level, PlannedStargate plan) {
         clearDuplicateAbydosInstallations(level, plan);
-        BlockPos basePos = surfaceBase(level, plan.basePos());
+        BlockPos basePos = abydosGateBase(level, plan.basePos());
         Direction facing = plan.facing();
         Direction right = facing.getClockWise();
 
@@ -83,7 +84,7 @@ public final class DimensionGateGenerator {
         }
 
         placeAbydosPlatform(level, basePos, facing);
-        placePyramid(level, basePos.relative(facing.getOpposite(), 18), facing);
+        AbydosPyramidGenerator.ensureInitialized(level, basePos, facing);
         placeFrame(level, basePos, facing, plan.variant());
         placeDhd(level, basePos, facing, plan.variant());
         return basePos;
@@ -252,21 +253,6 @@ public final class DimensionGateGenerator {
         return ModBlocks.LANTEAN_WALL.get().defaultBlockState();
     }
 
-    private static void placePyramid(ServerLevel level, BlockPos center, Direction facing) {
-        Direction right = facing.getClockWise();
-        for (int layer = 0; layer < 5; layer++) {
-            int radius = 5 - layer;
-            for (int r = -radius; r <= radius; r++) {
-                for (int f = -radius; f <= radius; f++) {
-                    if (Math.abs(r) == radius || Math.abs(f) == radius || layer == 4) {
-                        BlockPos pos = center.relative(right, r).relative(facing, f).above(layer);
-                        level.setBlock(pos, Blocks.CUT_SANDSTONE.defaultBlockState(), Block.UPDATE_ALL);
-                    }
-                }
-            }
-        }
-    }
-
     private static void placeFrame(ServerLevel level, BlockPos basePos, Direction facing, StargateVariant variant) {
         Direction right = facing.getClockWise();
         for (int y = 0; y <= 6; y++) {
@@ -298,7 +284,14 @@ public final class DimensionGateGenerator {
 
     private static BlockPos existingOrPlannedBase(ServerLevel level, PlannedStargate plan) {
         return existingFixedGateBase(level, plan)
-                .orElseGet(() -> level.dimension().equals(LanteaDimensions.ATLANTIS) ? plan.basePos() : surfaceBase(level, plan.basePos()));
+                .orElseGet(() -> {
+                    if (level.dimension().equals(LanteaDimensions.ATLANTIS)) {
+                        return plan.basePos();
+                    }
+                    return level.dimension().equals(LanteaDimensions.ABYDOS)
+                            ? abydosGateBase(level, plan.basePos())
+                            : surfaceBase(level, plan.basePos());
+                });
     }
 
     private static Optional<BlockPos> existingFixedGateBase(ServerLevel level, PlannedStargate plan) {
@@ -359,6 +352,10 @@ public final class DimensionGateGenerator {
     private static BlockPos surfaceBase(ServerLevel level, BlockPos plannedBase) {
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, plannedBase.getX(), plannedBase.getZ());
         return new BlockPos(plannedBase.getX(), Math.max(level.getMinBuildHeight() + 1, y), plannedBase.getZ());
+    }
+
+    private static BlockPos abydosGateBase(ServerLevel level, BlockPos plannedBase) {
+        return surfaceBase(level, plannedBase).above(AbydosPyramidGenerator.GATE_PLATFORM_HEIGHT);
     }
 
     private static boolean isFramePosition(int x, int y) {

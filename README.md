@@ -441,6 +441,16 @@ Active Stargate wormholes also act as CC:Tweaked wireless repeaters. A wireless 
 
 ComputerCraft support is optional. LanteaCraft compiles against the CC:Tweaked API and declares the mod dependency as optional.
 
+## OpenComputers Support
+
+If OpenComputers is present, place an Adapter next to an assembled Stargate base. The Adapter exposes a `stargate` component with the same gate-control, status, iris, and GDO methods listed above for CC:Tweaked, including `hasIris()`, `getIrisType()`, `getIrisState()`, `openIris()`, `closeIris()`, `isIrisRedstoneEnabled()`, `isIrisRedstoneLocked()`, `setIrisRedstoneEnabled(enabled)`, `getGdoCode()`, and `setGdoCode(code)`.
+
+OpenComputers programs receive `stargate_event` signals with the event payload table. GDO activity also emits `stargate_idc_received` with the receiver address, code, acceptance state, action, iris state flags, and full payload.
+
+Active Stargate wormholes also repeat OpenComputers wireless network packets across the connection. A wireless network card in range of one gate can reach receivers within 64 blocks of the remote gate, including across dimensions; packet source, destination, port, payload, and TTL semantics are preserved.
+
+OpenComputers support is optional. Builds target the `1.9.0` API artifact; local builds can override it with the port's current API jar using `-Popencomputers_api_jar=F:\GitHub\OpenComputers\build\libs\opencomputers-1.9.0-3-api.jar`.
+
 ## Known Prototype Areas
 
 The following areas are expected to change:
