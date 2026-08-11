@@ -449,7 +449,9 @@ OpenComputers programs receive `stargate_event` signals with the event payload t
 
 Active Stargate wormholes also repeat OpenComputers wireless network packets across the connection. A wireless network card in range of one gate can reach receivers within 64 blocks of the remote gate, including across dimensions; packet source, destination, port, payload, and TTL semantics are preserved.
 
-OpenComputers support is optional. Builds target the `1.9.0` API artifact; local builds can override it with the port's current API jar using `-Popencomputers_api_jar=F:\GitHub\OpenComputers\build\libs\opencomputers-1.9.0-3-api.jar`.
+The optional `LanteaCraft Stargate API` loot disk provides an OpenOS convenience wrapper and a real `/bin/stargate` dialing program. Copy `/lib/stargate.lua` and `/bin/stargate.lua` from the disk to the computer, then run `stargate <address>`, `stargate status`, `stargate disconnect`, or `stargate iris open|close`. The library also provides `pullEvent()` and `pullIdcEvent()` helpers; pass a component address as the final argument when controlling a non-primary gate.
+
+OpenComputers support is optional. Builds compile against the `li.cil.oc:opencomputers:1.9.4-2:api` Maven artifact. To test the integration in a local game, install the matching OpenComputers: Rebooted and ScalableCatsForce jars alongside LanteaCraft.
 
 ## Known Prototype Areas
 

@@ -166,17 +166,9 @@ dependencies {
     compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-core-api:1.120.0")
     compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-forge-api:1.120.0")
     localRuntime("cc.tweaked:cc-tweaked-${minecraft_version}-forge:1.120.0")
-    def openComputersApiJar = providers.gradleProperty('opencomputers_api_jar')
-    def siblingOpenComputersApiJar = file("../OpenComputers/build/libs/opencomputers-1.9.0-3-api.jar")
+    compileOnly("li.cil.oc:opencomputers:${opencomputers_version}:api")
     def siblingOpenComputersRuntimeJar = file("../OpenComputers/build/libs/opencomputers-1.9.0-3.jar")
     def siblingScalaRuntimeJar = file("../OpenComputers/build/libs/scalablecatsforce-neoforge-3.3.3-build-15-with-library.jar")
-    if (openComputersApiJar.isPresent()) {
-        compileOnly files(openComputersApiJar.get())
-    } else if (siblingOpenComputersApiJar.exists()) {
-        compileOnly files(siblingOpenComputersApiJar)
-    } else {
-        compileOnly "li.cil.oc:opencomputers:1.9.0:api"
-    }
     if (siblingOpenComputersRuntimeJar.exists() && siblingScalaRuntimeJar.exists()) {
         localRuntime files(siblingOpenComputersRuntimeJar, siblingScalaRuntimeJar)
     }
