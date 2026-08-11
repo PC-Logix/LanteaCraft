@@ -1,23 +1,11 @@
-name: Build
+name: Java CI with Gradle
 
 on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
   pull_request:
   workflow_dispatch:
-    inputs:
-      release_type:
-        description: CurseForge release channel
-        required: true
-        default: alpha
-        type: choice
-        options:
-          - alpha
-          - beta
-          - release
 
 permissions:
   contents: read
@@ -36,8 +24,8 @@ jobs:
       - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
           java-version: "21"
+          distribution: temurin
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -84,12 +72,3 @@ jobs:
           name: lanteacraft-${{ steps.version.outputs.full_version }}
           path: build/libs/*.jar
           if-no-files-found: error
-
-      - name: Publish to CurseForge
-        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
-        env:
-          ORG_GRADLE_PROJECT_curseforge_project: ${{ vars.CURSEFORGE_PROJECT_ID }}
-          ORG_GRADLE_PROJECT_curseforge_token: ${{ secrets.CURSEFORGE_TOKEN }}
-          ORG_GRADLE_PROJECT_curseforge_release_type: ${{ github.event_name == 'workflow_dispatch' && inputs.release_type || 'release' }}
-          ORG_GRADLE_PROJECT_curseforge_changelog: Build ${{ steps.version.outputs.full_version }} from ${{ github.sha }}
-        run: ./gradlew publishCurseForge -Pbuild_number=${{ steps.version.outputs.build_number }} --no-configuration-cache

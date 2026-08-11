@@ -1,0 +1,109 @@
+name: Publish CurseForge Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: temurin
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Read publishing metadata
+        id: metadata
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
+        run: |
+          mod_id="$(sed -n 's/^mod_id=//p' gradle.properties | tail -n 1)"
+          minecraft_version="$(sed -n 's/^minecraft_version=//p' gradle.properties | tail -n 1)"
+          release_version="${RELEASE_TAG#v}"
+
+          if [[ -z "$mod_id" || -z "$minecraft_version" || -z "$release_version" ]]; then
+            echo "Unable to determine CurseForge publishing metadata." >&2
+            exit 1
+          fi
+          if [[ -z "$CURSEFORGE_PROJECT_ID" ]]; then
+            echo "CURSEFORGE_PROJECT_ID repository variable is not configured." >&2
+            exit 1
+          fi
+
+          echo "mod_id=$mod_id" >> "$GITHUB_OUTPUT"
+          echo "minecraft_version=$minecraft_version" >> "$GITHUB_OUTPUT"
+          echo "release_version=$release_version" >> "$GITHUB_OUTPUT"
+          echo "curseforge_project_id=$CURSEFORGE_PROJECT_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Build release artifact
+        run: ./gradlew build -Prelease_tag="${{ github.event.release.tag_name }}"
+
+      - name: Verify release artifact
+        shell: bash
+        run: |
+          artifact="build/libs/${{ steps.metadata.outputs.mod_id }}-${{ steps.metadata.outputs.release_version }}.jar"
+          if [[ ! -f "$artifact" ]]; then
+            echo "Expected release artifact not found: $artifact" >&2
+            find build/libs -maxdepth 1 -type f -printf '%f\n' | sort >&2
+            exit 1
+          fi
+
+      - name: Prepare changelog
+        id: changelog
+        shell: bash
+        env:
+          RELEASE_BODY: ${{ github.event.release.body }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          delimiter="CHANGELOG_$(date +%s)_$RANDOM"
+          echo "text<<$delimiter" >> "$GITHUB_OUTPUT"
+
+          if [[ -n "${RELEASE_BODY//[[:space:]]/}" ]]; then
+            printf '%s\n' "$RELEASE_BODY" >> "$GITHUB_OUTPUT"
+          else
+            previous_tag="$(git describe --tags --abbrev=0 "$RELEASE_TAG^" 2>/dev/null || true)"
+            if [[ -n "$previous_tag" ]]; then
+              git log "$previous_tag..$RELEASE_TAG" --pretty=format:'- %s (%h)' >> "$GITHUB_OUTPUT"
+            else
+              git log -1 "$RELEASE_TAG" --pretty=format:'- %s (%h)' >> "$GITHUB_OUTPUT"
+            fi
+            echo >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "$delimiter" >> "$GITHUB_OUTPUT"
+
+      - name: Publish to CurseForge
+        uses: Kira-NT/mc-publish@v3
+        with:
+          curseforge-id: ${{ steps.metadata.outputs.curseforge_project_id }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: build/libs/${{ steps.metadata.outputs.mod_id }}-${{ steps.metadata.outputs.release_version }}.jar
+          name: LanteaCraft ${{ github.event.release.tag_name }}
+          version: ${{ github.event.release.tag_name }}
+          version-type: ${{ github.event.release.prerelease && 'alpha' || 'release' }}
+          changelog: ${{ steps.changelog.outputs.text }}
+          loaders: neoforge
+          game-versions: ${{ steps.metadata.outputs.minecraft_version }}
+          java: 21
+          environment: client | server

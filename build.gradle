@@ -2,7 +2,6 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'net.neoforged.moddev' version '2.0.141'
-    id 'net.darkhax.curseforgegradle' version '1.1.28'
     id 'idea'
 }
 
@@ -15,11 +14,13 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
+def releaseTag = findProperty('release_tag')?.toString()?.trim()
+def releaseVersion = releaseTag ? releaseTag.replaceFirst(/^v/, '') : null
 def buildNumber = providers.gradleProperty('build_number')
         .orElse(providers.environmentVariable('GITHUB_RUN_NUMBER'))
         .getOrElse('')
         .trim()
-version = buildNumber ? "${mod_version}.${buildNumber}" : mod_version
+version = releaseVersion ?: (buildNumber ? "${mod_version}.${buildNumber}" : mod_version)
 group = mod_group_id
 
 sourceSets.main.resources {
@@ -54,7 +55,7 @@ repositories {
 }
 
 base {
-    archivesName = "${mod_id}-${minecraft_version}"
+    archivesName = mod_id
 }
 
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
@@ -209,32 +210,6 @@ publishing {
     repositories {
         maven {
             url "file://${project.projectDir}/repo"
-        }
-    }
-}
-
-tasks.register('publishCurseForge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-    group = 'publishing'
-    description = 'Build and publish the main mod JAR to CurseForge.'
-
-    def curseForgeToken = providers.gradleProperty('curseforge_token')
-    def curseForgeProject = providers.gradleProperty('curseforge_project')
-    apiToken = curseForgeToken.orNull
-    def curseForgeProjectId = curseForgeProject.getOrElse('0')
-    def mainFile = upload(curseForgeProjectId, tasks.named('jar'))
-    mainFile.releaseType = providers.gradleProperty('curseforge_release_type').getOrElse('alpha')
-    mainFile.changelog = providers.gradleProperty('curseforge_changelog')
-            .getOrElse("Automated build ${project.version}")
-    mainFile.addGameVersion(minecraft_version)
-    mainFile.addModLoader('NeoForge')
-    mainFile.addEnvironment('Client', 'Server')
-
-    doFirst {
-        if (!curseForgeProject.isPresent()) {
-            throw new GradleException('Missing CurseForge project ID (curseforge_project).')
-        }
-        if (!curseForgeToken.isPresent()) {
-            throw new GradleException('Missing CurseForge API token (curseforge_token).')
         }
     }
 }
