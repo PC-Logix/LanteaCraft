@@ -4,6 +4,7 @@ import com.pclogix.lanteacraft.client.NaquadahGeneratorScreen;
 import com.pclogix.lanteacraft.client.DhdPowerScreen;
 import com.pclogix.lanteacraft.client.StargateScreen;
 import com.pclogix.lanteacraft.client.ZpmHubScreen;
+import com.pclogix.lanteacraft.client.InterServerTransferClientState;
 import com.pclogix.lanteacraft.client.model.GoauldSoldierModel;
 import com.pclogix.lanteacraft.client.render.GoauldSoldierRenderer;
 import com.pclogix.lanteacraft.client.render.ObeliskRenderer;
@@ -18,6 +19,7 @@ import com.pclogix.lanteacraft.registry.ModBlockEntities;
 import com.pclogix.lanteacraft.registry.ModEntities;
 import com.pclogix.lanteacraft.registry.ModMenus;
 import com.pclogix.lanteacraft.registry.ModSounds;
+import com.pclogix.lanteacraft.network.ModNetworking;
 import com.pclogix.lanteacraft.registry.ModItems;
 import com.pclogix.lanteacraft.worldgen.LanteaDimensions;
 import net.minecraft.client.Minecraft;
@@ -30,11 +32,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.HumanoidArm;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.SelectMusicEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -54,13 +58,20 @@ public class LanteaCraftClient {
     private static final Music ABYDOS_MUSIC = new Music(ModSounds.ABYDOS_MUSIC, MUSIC_MIN_DELAY, MUSIC_MAX_DELAY, true);
     private static final Music EXPEDITION_MUSIC = new Music(ModSounds.EXPEDITION_MUSIC, MUSIC_MIN_DELAY, MUSIC_MAX_DELAY, true);
 
-    public LanteaCraftClient(ModContainer container) {
+    public LanteaCraftClient(IEventBus modEventBus, ModContainer container) {
         // Allows NeoForge to create a config screen for this mod's configs.
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
         // Do not forget to add translations for your config options to the en_us.json file.
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         NeoForge.EVENT_BUS.addListener(LanteaCraftClient::selectDimensionMusic);
         NeoForge.EVENT_BUS.addListener(LanteaCraftClient::poseP90Player);
+        ModNetworking.registerClient(modEventBus, (payload, context) ->
+                context.enqueueWork(() -> InterServerTransferClientState.receive(payload)));
+    }
+
+    @SubscribeEvent
+    static void onClientLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
+        InterServerTransferClientState.onLoggingIn(event.getConnection());
     }
 
     private static void poseP90Player(RenderPlayerEvent.Pre event) {

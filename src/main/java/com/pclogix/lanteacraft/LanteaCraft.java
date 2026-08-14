@@ -15,6 +15,7 @@ import com.pclogix.lanteacraft.registry.ModLootFunctions;
 import com.pclogix.lanteacraft.registry.ModMenus;
 import com.pclogix.lanteacraft.network.ModNetworking;
 import com.pclogix.lanteacraft.gate.StargateChunkLoading;
+import com.pclogix.lanteacraft.gate.InterServerLinkConfig;
 import com.pclogix.lanteacraft.gate.StargateTeleportHandler;
 import com.pclogix.lanteacraft.gate.GeneratedGateProtection;
 import com.pclogix.lanteacraft.enchantment.ExplodingEnchantmentHandler;
@@ -67,6 +68,7 @@ public class LanteaCraft {
             BlueMapCompat.register();
         }
         StargateTeleportHandler.register(NeoForge.EVENT_BUS);
+        NeoForge.EVENT_BUS.addListener(InterServerLinkConfig::onPlayerLoggedOut);
         GeneratedGateProtection.register(NeoForge.EVENT_BUS);
         ExplodingEnchantmentHandler.register(NeoForge.EVENT_BUS);
         P90FireModeHandler.register(NeoForge.EVENT_BUS);

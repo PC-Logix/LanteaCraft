@@ -72,7 +72,7 @@ public record DialStargatePayload(BlockPos dhdPos, String address) implements Cu
             return;
         }
 
-        StargateDialer.DialResult result = StargateDialer.dial(level, local, targetAddress);
+        StargateDialer.DialResult result = StargateDialer.dial(level, local, targetAddress, player);
         if (!result.success()) {
             LanteaCraft.LOGGER.warn("DHD at {} failed to dial {} from local gate {}: {} ({})", payload.dhdPos(), targetAddress, local.basePos(), result.message(), result.code());
             player.displayClientMessage(Component.literal(result.message()).withStyle(ChatFormatting.RED), false);

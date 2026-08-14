@@ -164,6 +164,54 @@ Dialing rules in the current implementation:
 - The outgoing gate controls disconnect.
 - Incoming-side travel is rejected unless enabled in config.
 
+### Inter-server Stargates
+
+Nine-chevron addresses are reserved for server-to-server Stargate transfers. They are configured by server administrators in the server-only file `config/lanteacraft/interserver-links.json`. The source server sends one client transfer request and does not retry if the destination connection fails.
+
+Both servers must configure the same link. `localGateCoords` identifies the gate used on that server, `remoteGateCoords` documents the matching gate on the other server, and `linkId` must be identical on both sides. Treat `linkId` as a shared secret.
+
+Server A:
+
+```json
+{
+  "serverId": "server-a",
+  "links": {
+    "ADDRESS1-": {
+      "localDimension": "minecraft:overworld",
+      "localGateCoords": "10 64 10",
+      "remoteServerId": "server-b",
+      "host": "serverb.com",
+      "port": 25536,
+      "remoteDimension": "minecraft:overworld",
+      "remoteGateCoords": "50 64 -40",
+      "linkId": "replace-with-a-long-random-shared-value"
+    }
+  }
+}
+```
+
+Server B uses the same address and `linkId`, reverses the server IDs and endpoints, and sets its own gate as `localGateCoords`:
+
+```json
+{
+  "serverId": "server-b",
+  "links": {
+    "ADDRESS1-": {
+      "localDimension": "minecraft:overworld",
+      "localGateCoords": "50 64 -40",
+      "remoteServerId": "server-a",
+      "host": "servera.com",
+      "port": 25565,
+      "remoteDimension": "minecraft:overworld",
+      "remoteGateCoords": "10 64 10",
+      "linkId": "replace-with-a-long-random-shared-value"
+    }
+  }
+}
+```
+
+The destination receives a short-lived, player-bound handoff token and accepts it only when its matching link configuration authorizes the source server. No Minecraft-version, mod-list, or other compatibility probing is performed; those are administrator responsibilities.
+
 ## Stargate Travel
 
 When a wormhole is open, entities entering the outgoing event horizon are teleported to the destination gate. Travel preserves relative position and attempts to transform facing/velocity to match the destination gate orientation.

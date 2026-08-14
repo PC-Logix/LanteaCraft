@@ -11,6 +11,7 @@ import java.util.Optional;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.fml.loading.FMLEnvironment;
 
@@ -19,6 +20,10 @@ public final class StargateDialer {
     }
 
     public static DialResult dial(ServerLevel level, StargateEntry local, String address) {
+        return dial(level, local, address, null);
+    }
+
+    public static DialResult dial(ServerLevel level, StargateEntry local, String address, ServerPlayer player) {
         String targetAddress = normalize(address);
         if (targetAddress.isBlank()) {
             Optional<String> returnAddress = expeditionReturnAddress(level, local);
@@ -47,6 +52,16 @@ public final class StargateDialer {
         if (targetAddress.length() > StargateAddress.ADDRESS_LENGTH
                 && (localBase == null || !localBase.hasEighthChevronUnlocked())) {
             return DialResult.fail("eighth_chevron_locked", "Stargate requires an installed Eighth Chevron Crystal to dial extended addresses.");
+        }
+
+        if (targetAddress.length() == StargateAddress.MAX_ADDRESS_LENGTH) {
+            if (player == null) {
+                return DialResult.fail("interserver_requires_player", "Inter-server Stargates can only be dialed by a player at a DHD.");
+            }
+            if (!InterServerLinkConfig.sendTransfer(player, targetAddress)) {
+                return DialResult.fail("unknown_interserver_address", "No configured inter-server Stargate link exists for " + targetAddress + ".");
+            }
+            return DialResult.success("transferring", "Transferring through inter-server Stargate " + targetAddress + ".");
         }
 
         Optional<StargateEntry> destination = PlannedStargateResolver.resolve(level, targetAddress);
