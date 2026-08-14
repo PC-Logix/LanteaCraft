@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "lanteacraft:stargate_ring",
+    "lanteacraft:stargate_chevron",
+    "lanteacraft:stargate_base",
+    "lanteacraft:dhd",
+    "lanteacraft:nox_stargate_ring",
+    "lanteacraft:nox_stargate_chevron",
+    "lanteacraft:nox_stargate_base",
+    "lanteacraft:nox_dhd",
+    "lanteacraft:wraith_stargate_ring",
+    "lanteacraft:wraith_stargate_chevron",
+    "lanteacraft:wraith_stargate_base",
+    "lanteacraft:wraith_dhd",
+    "lanteacraft:pegasus_stargate_ring",
+    "lanteacraft:pegasus_stargate_chevron",
+    "lanteacraft:pegasus_stargate_base",
+    "lanteacraft:pegasus_dhd",
+    "lanteacraft:transport_ring"
+  ]
+}

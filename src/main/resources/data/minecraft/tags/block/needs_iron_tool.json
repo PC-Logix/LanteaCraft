@@ -1,29 +1,4 @@
 {
   "replace": false,
-  "values": [
-    "lanteacraft:naquadah_ore",
-    "lanteacraft:trinium_ore",
-    "lanteacraft:naquadah_block",
-    "lanteacraft:trinium_block",
-    "lanteacraft:lantean_wall",
-    "lanteacraft:lantean_carved_wall",
-    "lanteacraft:lantean_panel",
-    "lanteacraft:lantean_light_panel",
-    "lanteacraft:lantean_dark_trim",
-    "lanteacraft:naquadah_brazier",
-    "lanteacraft:trinium_brazier",
-    "lanteacraft:goauld_brazier",
-    "lanteacraft:obelisk",
-    "lanteacraft:sphinx",
-    "lanteacraft:sphinx_head",
-    "lanteacraft:canopic_jar",
-    "lanteacraft:scarab_idol",
-    "lanteacraft:offering_altar",
-    "lanteacraft:broken_column",
-    "lanteacraft:sitting_cat_statue",
-    "lanteacraft:bronze_sitting_cat_statue",
-    "lanteacraft:reclining_cat_statue",
-    "lanteacraft:sarcophagus",
-    "lanteacraft:zpm_hub"
-  ]
+  "values": []
 }

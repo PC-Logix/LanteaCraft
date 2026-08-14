@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:block",
+  "pools": [{
+    "rolls": 1,
+    "entries": [{"type": "minecraft:item", "name": "lanteacraft:nox_stargate_chevron"}],
+    "conditions": [{"condition": "minecraft:survives_explosion"}]
+  }]
+}

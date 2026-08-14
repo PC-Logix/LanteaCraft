@@ -29,11 +29,11 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> STARGATE_RING = BLOCKS.register(
             "stargate_ring",
-            () -> new StargateComponentBlock(machineProperties(MapColor.METAL).strength(8.0F, 1200.0F)));
+            () -> new StargateComponentBlock(stargateProperties(MapColor.METAL).strength(8.0F, 1200.0F)));
 
     public static final DeferredBlock<Block> STARGATE_CHEVRON = BLOCKS.register(
             "stargate_chevron",
-            () -> new StargateComponentBlock(machineProperties(MapColor.COLOR_RED).strength(8.0F, 1200.0F)));
+            () -> new StargateComponentBlock(stargateProperties(MapColor.COLOR_RED).strength(8.0F, 1200.0F)));
 
     public static final DeferredBlock<Block> STARGATE_BASE = BLOCKS.register(
             "stargate_base",
@@ -45,11 +45,11 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> NOX_STARGATE_RING = BLOCKS.register(
             "nox_stargate_ring",
-            () -> new StargateComponentBlock(machineProperties(MapColor.PLANT).strength(8.0F, 1200.0F), StargateVariant.NOX));
+            () -> new StargateComponentBlock(stargateProperties(MapColor.PLANT).strength(8.0F, 1200.0F), StargateVariant.NOX));
 
     public static final DeferredBlock<Block> NOX_STARGATE_CHEVRON = BLOCKS.register(
             "nox_stargate_chevron",
-            () -> new StargateComponentBlock(machineProperties(MapColor.PLANT).strength(8.0F, 1200.0F), StargateVariant.NOX));
+            () -> new StargateComponentBlock(stargateProperties(MapColor.PLANT).strength(8.0F, 1200.0F), StargateVariant.NOX));
 
     public static final DeferredBlock<Block> NOX_STARGATE_BASE = BLOCKS.register(
             "nox_stargate_base",
@@ -61,11 +61,11 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> WRAITH_STARGATE_RING = BLOCKS.register(
             "wraith_stargate_ring",
-            () -> new StargateComponentBlock(machineProperties(MapColor.COLOR_GREEN).strength(8.0F, 1200.0F), StargateVariant.WRAITH));
+            () -> new StargateComponentBlock(stargateProperties(MapColor.COLOR_GREEN).strength(8.0F, 1200.0F), StargateVariant.WRAITH));
 
     public static final DeferredBlock<Block> WRAITH_STARGATE_CHEVRON = BLOCKS.register(
             "wraith_stargate_chevron",
-            () -> new StargateComponentBlock(machineProperties(MapColor.COLOR_GREEN).strength(8.0F, 1200.0F), StargateVariant.WRAITH));
+            () -> new StargateComponentBlock(stargateProperties(MapColor.COLOR_GREEN).strength(8.0F, 1200.0F), StargateVariant.WRAITH));
 
     public static final DeferredBlock<Block> WRAITH_STARGATE_BASE = BLOCKS.register(
             "wraith_stargate_base",
@@ -77,11 +77,11 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> PEGASUS_STARGATE_RING = BLOCKS.register(
             "pegasus_stargate_ring",
-            () -> new StargateComponentBlock(machineProperties(MapColor.COLOR_LIGHT_BLUE).strength(8.0F, 1200.0F), StargateVariant.PEGASUS));
+            () -> new StargateComponentBlock(stargateProperties(MapColor.COLOR_LIGHT_BLUE).strength(8.0F, 1200.0F), StargateVariant.PEGASUS));
 
     public static final DeferredBlock<Block> PEGASUS_STARGATE_CHEVRON = BLOCKS.register(
             "pegasus_stargate_chevron",
-            () -> new StargateComponentBlock(machineProperties(MapColor.COLOR_LIGHT_BLUE).strength(8.0F, 1200.0F), StargateVariant.PEGASUS));
+            () -> new StargateComponentBlock(stargateProperties(MapColor.COLOR_LIGHT_BLUE).strength(8.0F, 1200.0F), StargateVariant.PEGASUS));
 
     public static final DeferredBlock<Block> PEGASUS_STARGATE_BASE = BLOCKS.register(
             "pegasus_stargate_base",
@@ -93,7 +93,7 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> TRANSPORT_RING = BLOCKS.register(
             "transport_ring",
-            () -> new TransportRingBlock(machineProperties(MapColor.GOLD).strength(5.0F, 20.0F)));
+            () -> new TransportRingBlock(machineProperties(MapColor.GOLD).strength(5.0F, 20.0F).requiresCorrectToolForDrops()));
 
     public static final DeferredBlock<Block> NAQUADAH_GENERATOR = BLOCKS.register(
             "naquadah_generator",
@@ -267,18 +267,21 @@ public final class ModBlocks {
         return BlockBehaviour.Properties.of()
                 .mapColor(mapColor)
                 .noOcclusion()
-                .requiresCorrectToolForDrops()
                 .sound(SoundType.METAL);
     }
 
+    private static BlockBehaviour.Properties stargateProperties(MapColor mapColor) {
+        return machineProperties(mapColor).requiresCorrectToolForDrops();
+    }
+
     private static BlockBehaviour.Properties stargateBaseProperties(MapColor mapColor) {
-        return machineProperties(mapColor)
+        return stargateProperties(mapColor)
                 .strength(10.0F, 1200.0F)
                 .lightLevel(state -> state.hasProperty(StargateBaseBlock.WORMHOLE_OPEN) && state.getValue(StargateBaseBlock.WORMHOLE_OPEN) ? 12 : 0);
     }
 
     private static BlockBehaviour.Properties dhdProperties(MapColor mapColor) {
-        return machineProperties(mapColor)
+        return stargateProperties(mapColor)
                 .strength(4.0F, 1200.0F)
                 .lightLevel(state -> state.hasProperty(DhdBlock.ACTIVE) && state.getValue(DhdBlock.ACTIVE) ? 5 : 0);
     }
@@ -286,7 +289,6 @@ public final class ModBlocks {
     private static BlockBehaviour.Properties metalProperties(MapColor mapColor) {
         return BlockBehaviour.Properties.of()
                 .mapColor(mapColor)
-                .requiresCorrectToolForDrops()
                 .sound(SoundType.METAL);
     }
 
@@ -301,7 +303,6 @@ public final class ModBlocks {
         return BlockBehaviour.Properties.of()
                 .mapColor(mapColor)
                 .strength(3.0F, 3.0F)
-                .requiresCorrectToolForDrops()
                 .sound(SoundType.STONE);
     }
 
@@ -309,7 +310,6 @@ public final class ModBlocks {
         return BlockBehaviour.Properties.of()
                 .mapColor(mapColor)
                 .strength(4.0F, 9.0F)
-                .requiresCorrectToolForDrops()
                 .sound(SoundType.DEEPSLATE_TILES);
     }
 
@@ -317,7 +317,6 @@ public final class ModBlocks {
         return BlockBehaviour.Properties.of()
                 .mapColor(mapColor)
                 .strength(4.5F, 12.0F)
-                .requiresCorrectToolForDrops()
                 .sound(SoundType.COPPER);
     }
 }
