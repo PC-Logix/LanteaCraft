@@ -117,6 +117,9 @@ public final class ExpeditionGenerator {
 
     public static void placeIfNeeded(ServerLevel level, ExpeditionInstance expedition) {
         if (isAssembledGateAt(level, expedition.basePos())) {
+            if (needsMilkyWayRepair(level, expedition.basePos())) {
+                repairExistingGate(level, expedition.basePos(), expedition.facing());
+            }
             register(level, expedition, expedition.basePos());
             return;
         }
@@ -1779,6 +1782,89 @@ public final class ExpeditionGenerator {
         return state.hasProperty(StargateBaseBlock.ASSEMBLED) && state.getValue(StargateBaseBlock.ASSEMBLED);
     }
 
+    private static boolean needsMilkyWayRepair(ServerLevel level, BlockPos basePos) {
+        BlockState baseState = level.getBlockState(basePos);
+        if (!(baseState.getBlock() instanceof StargateBaseBlock base)
+                || base.variant() != StargateVariant.MILKY_WAY) {
+            return true;
+        }
+
+        return findDhdPositions(level, basePos).stream()
+                .anyMatch(pos -> level.getBlockState(pos).getBlock() instanceof DhdBlock dhd
+                        && dhd.variant() != StargateVariant.MILKY_WAY);
+    }
+
+    private static void repairExistingGate(ServerLevel level, BlockPos basePos, Direction facing) {
+        BlockState oldBaseState = level.getBlockState(basePos);
+        boolean replaceFrame = !(oldBaseState.getBlock() instanceof StargateBaseBlock base)
+                || base.variant() != StargateVariant.MILKY_WAY;
+        boolean wasAssembled = oldBaseState.hasProperty(StargateBaseBlock.ASSEMBLED)
+                && oldBaseState.getValue(StargateBaseBlock.ASSEMBLED);
+        boolean wasOpen = oldBaseState.hasProperty(StargateBaseBlock.WORMHOLE_OPEN)
+                && oldBaseState.getValue(StargateBaseBlock.WORMHOLE_OPEN);
+        CompoundTag baseData = replaceFrame && level.getBlockEntity(basePos) instanceof StargateBaseBlockEntity base
+                ? base.saveWithoutMetadata(level.registryAccess())
+                : null;
+        List<BlockPos> dhdPositions = findDhdPositions(level, basePos);
+        List<DhdRepair> dhds = new ArrayList<>();
+        for (BlockPos dhdPos : dhdPositions) {
+            BlockState dhdState = level.getBlockState(dhdPos);
+            if (!(dhdState.getBlock() instanceof DhdBlock dhd) || dhd.variant() == StargateVariant.MILKY_WAY) {
+                continue;
+            }
+
+            CompoundTag dhdData = level.getBlockEntity(dhdPos) instanceof DhdBlockEntity dhdEntity
+                    ? dhdEntity.saveWithoutMetadata(level.registryAccess())
+                    : null;
+            if (level.getBlockEntity(dhdPos) instanceof DhdBlockEntity dhdEntity) {
+                // Prevent DhdBlock.onRemove from dropping a crystal while the block
+                // entity data is being moved to the Milky Way DHD.
+                dhdEntity.removeCrystal();
+            }
+            dhds.add(new DhdRepair(dhdPos, dhdState, dhdData));
+        }
+
+        if (replaceFrame) {
+            placeFrame(level, basePos, facing, StargateVariant.MILKY_WAY);
+            if (baseData != null && level.getBlockEntity(basePos) instanceof StargateBaseBlockEntity base) {
+                base.loadWithComponents(baseData, level.registryAccess());
+            }
+        }
+
+        for (DhdRepair dhd : dhds) {
+            BlockState state = dhdBlock(StargateVariant.MILKY_WAY).defaultBlockState()
+                    .setValue(DhdBlock.FACING, dhd.oldState().getValue(DhdBlock.FACING))
+                    .setValue(DhdBlock.ACTIVE, dhd.oldState().getValue(DhdBlock.ACTIVE));
+            level.setBlock(dhd.pos(), state, Block.UPDATE_ALL);
+            if (dhd.data() != null && level.getBlockEntity(dhd.pos()) instanceof DhdBlockEntity dhdEntity) {
+                dhdEntity.loadWithComponents(dhd.data(), level.registryAccess());
+            }
+        }
+
+        if (replaceFrame && dhdPositions.isEmpty()) {
+            placeDhd(level, basePos, facing, StargateVariant.MILKY_WAY);
+        }
+        StargateMultiblock.tryAssembleAtBase(level, basePos);
+        BlockState repairedBase = level.getBlockState(basePos);
+        if (repairedBase.hasProperty(StargateBaseBlock.ASSEMBLED) && repairedBase.getValue(StargateBaseBlock.ASSEMBLED) != wasAssembled) {
+            repairedBase = repairedBase.setValue(StargateBaseBlock.ASSEMBLED, wasAssembled);
+        }
+        if (repairedBase.hasProperty(StargateBaseBlock.WORMHOLE_OPEN) && repairedBase.getValue(StargateBaseBlock.WORMHOLE_OPEN) != wasOpen) {
+            repairedBase = repairedBase.setValue(StargateBaseBlock.WORMHOLE_OPEN, wasOpen);
+        }
+        level.setBlock(basePos, repairedBase, Block.UPDATE_ALL);
+    }
+
+    private static List<BlockPos> findDhdPositions(ServerLevel level, BlockPos basePos) {
+        List<BlockPos> positions = new ArrayList<>();
+        for (BlockPos pos : BlockPos.betweenClosed(basePos.offset(-8, -2, -8), basePos.offset(8, 4, 8))) {
+            if (level.getBlockState(pos).getBlock() instanceof DhdBlock) {
+                positions.add(pos.immutable());
+            }
+        }
+        return positions;
+    }
+
     private static boolean isFramePosition(int x, int y) {
         return y == 0 || y == 6 || Math.abs(x) == 3;
     }
@@ -1921,6 +2007,9 @@ public final class ExpeditionGenerator {
     }
 
     private record LootContainerMarker(BlockPos pos, Direction facing) {
+    }
+
+    private record DhdRepair(BlockPos pos, BlockState oldState, CompoundTag data) {
     }
 
     public record DebugPlacementCheck(boolean clear, BlockPos layoutBasePos, int radius, int minYOffset, int maxYOffset, List<BlockPos> blockedSamples) {

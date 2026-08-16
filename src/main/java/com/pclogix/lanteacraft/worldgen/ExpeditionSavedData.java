@@ -36,6 +36,7 @@ public class ExpeditionSavedData extends SavedData {
 
     public static ExpeditionSavedData load(CompoundTag tag, HolderLookup.Provider registries) {
         ExpeditionSavedData data = new ExpeditionSavedData();
+        boolean migratedVariant = false;
         ListTag expeditions = tag.getList("expeditions", Tag.TAG_COMPOUND);
         for (int i = 0; i < expeditions.size(); i++) {
             CompoundTag expeditionTag = expeditions.getCompound(i);
@@ -43,14 +44,13 @@ public class ExpeditionSavedData extends SavedData {
             if (facing == null) {
                 facing = Direction.SOUTH;
             }
-            StargateVariant variant = StargateVariant.PEGASUS;
-            if (expeditionTag.contains("variant")) {
-                try {
-                    variant = StargateVariant.valueOf(expeditionTag.getString("variant"));
-                } catch (IllegalArgumentException ignored) {
-                    variant = StargateVariant.PEGASUS;
-                }
+            // Expeditions are always Milky Way gates.  Keep reading old records, but
+            // normalize their persisted variant so the original Pegasus default is
+            // migrated when the world is loaded.
+            if (!expeditionTag.contains("variant") || !"MILKY_WAY".equals(expeditionTag.getString("variant"))) {
+                migratedVariant = true;
             }
+            StargateVariant variant = StargateVariant.MILKY_WAY;
             ExpeditionInstance expedition = new ExpeditionInstance(
                     normalize(expeditionTag.getString("address")),
                     expeditionTag.getInt("slot"),
@@ -74,6 +74,9 @@ public class ExpeditionSavedData extends SavedData {
                 data.byAddress.put(expedition.address(), expedition);
             }
         }
+        if (migratedVariant) {
+            data.setDirty();
+        }
         return data;
     }
 
@@ -92,7 +95,7 @@ public class ExpeditionSavedData extends SavedData {
                 basePosForSlot(slot),
                 LanteaDimensions.EXPEDITIONS.location(),
                 Direction.SOUTH,
-                StargateVariant.PEGASUS,
+                StargateVariant.MILKY_WAY,
                 false,
                 false,
                 "",
