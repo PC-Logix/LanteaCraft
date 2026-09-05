@@ -8,6 +8,8 @@ import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
 import com.pclogix.lanteacraft.gate.IrisType;
 import com.pclogix.lanteacraft.gate.StargateVariant;
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -100,6 +102,12 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
     // the final segment without branching back to zero.
     private static final double[] SIN = new double[RING_SEGMENTS + 1];
     private static final double[] COS = new double[RING_SEGMENTS + 1];
+
+    // The client level clock is periodically corrected from the server. Those
+    // corrections are fine for world simulation, but can make a purely visual
+    // rotation step backwards or forwards. Keep a presentation clock per gate
+    // that is seeded from the synchronized dial state and then runs locally.
+    private final Map<DialClockKey, ClientDialClock> dialClocks = new HashMap<>();
 
     static {
         for (int i = 0; i <= RING_SEGMENTS; i++) {
@@ -532,23 +540,27 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             return;
         }
 
-        double gameTime = blockEntity.getLevel().getGameTime() + partialTick;
         // While dialing, the ring/chevrons provide the visual feedback. The
         // actual puddle appears only once the connection is established.
         if (blockEntity.isDialing(blockEntity.getLevel().getGameTime())) {
             return;
         }
 
-        double openElapsed = gameTime - (blockEntity.dialingStartGameTime() + blockEntity.dialingDurationTicks());
+        double animationTime = presentationElapsed(
+                blockEntity,
+                dialClockKey(blockEntity),
+                blockEntity.dialingAddress(),
+                partialTick);
+        double openElapsed = animationTime - blockEntity.dialingDurationTicks();
         PoseStack.Pose pose = poseStack.last();
         // The kawoosh is a short-lived protrusion that plays at connection
         // open, unless the iris is already blocking the front of the gate.
         if (!blockEntity.isIrisObstructing() && openElapsed >= 0.0D && openElapsed <= KAWOOSH_TICKS) {
-            renderKawoosh(pose, consumer, packedLight, gameTime, openElapsed / KAWOOSH_TICKS);
+            renderKawoosh(pose, consumer, packedLight, animationTime, openElapsed / KAWOOSH_TICKS);
         }
 
         // The steady-state event horizon is a rippled translucent disc.
-        renderHorizonDisc(pose, consumer, packedLight, gameTime, 1.0D, HORIZON_RADIUS, HORIZON_Z, HORIZON_ALPHA);
+        renderHorizonDisc(pose, consumer, packedLight, animationTime, 1.0D, HORIZON_RADIUS, HORIZON_Z, HORIZON_ALPHA);
     }
 
     private void renderHorizonDisc(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, double gameTime, double scale, double radius, double baseZ, float alpha) {
@@ -690,29 +702,50 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             return connectedState(blockEntity);
         }
 
+        DialClockKey clockKey = dialClockKey(blockEntity);
         if (!blockEntity.isDialing(blockEntity.getLevel().getGameTime())) {
+            // Keep the completed dial clock while the wormhole is open: the
+            // kawoosh and event horizon continue from this same smooth timeline.
+            if (!blockEntity.isConnected()) {
+                dialClocks.remove(clockKey);
+            }
             return connectedState(blockEntity);
         }
 
-        double elapsed = blockEntity.getLevel().getGameTime() + partialTick - blockEntity.dialingStartGameTime();
         String address = blockEntity.dialingAddress();
+        double elapsed = presentationElapsed(blockEntity, clockKey, address, partialTick);
         double[] chevrons = new double[CHEVRONS];
         double ringRotation = 0.0D;
         double previousRotation = 0.0D;
 
+        int addressLength = Math.min(address.length(), CHEVRONS);
+        if (addressLength == 0) {
+            return new DialingRenderState(ringRotation, chevrons);
+        }
+
+        // A mechanical Milky Way dial alternates direction for every symbol.
+        // Pick the first direction from the shortest initial movement, then
+        // deliberately reverse after each lock. The remaining rotations must
+        // honour that direction even when it means taking nearly a full turn.
+        double firstTargetRotation = symbolRotation(address.charAt(0), 0, addressLength);
+        boolean firstSpinPositive = shortestAngleDelta(0.0D, firstTargetRotation) >= 0.0D;
+
         // Each address symbol gets a spin window followed by a chevron lock
         // window. Later symbols start after the previous symbol's total window,
         // so the dialing animation advances one glyph/chevron at a time.
-        int addressLength = Math.min(address.length(), CHEVRONS);
         for (int i = 0; i < addressLength; i++) {
             double symbolStart = i * (SPIN_TICKS + CHEVRON_TICKS);
             double spinProgress = clamp((elapsed - symbolStart) / SPIN_TICKS);
             double targetRotation = symbolRotation(address.charAt(i), i, addressLength);
+            boolean spinPositive = (i & 1) == 0 ? firstSpinPositive : !firstSpinPositive;
+            double directedTargetRotation = directedTargetRotation(previousRotation, targetRotation, spinPositive);
 
-            // Rotate from the previous symbol to the current target using the
-            // shortest path around the circle.
+            // Keep the ring on the selected side of its current rotation. This
+            // is intentionally not a shortest-path interpolation: if the next
+            // glyph lies behind the ring, the show-style mechanical dial makes
+            // the full remaining trip before locking it.
             if (spinProgress > 0.0D) {
-                ringRotation = lerpAngle(previousRotation, targetRotation, ease(spinProgress));
+                ringRotation = lerp(previousRotation, directedTargetRotation, ease(spinProgress));
             }
 
             // Once spinning finishes, the mapped chevron eases into its locked
@@ -723,10 +756,11 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             }
 
             // Completed symbols become the new starting angle for subsequent
-            // symbols. This keeps partial ticks from snapping backwards.
+            // symbols. Keep this angle unwrapped so the prescribed direction
+            // survives the 0/360-degree boundary without snapping backwards.
             if (elapsed >= symbolStart + SPIN_TICKS) {
-                previousRotation = targetRotation;
-                ringRotation = targetRotation;
+                previousRotation = directedTargetRotation;
+                ringRotation = directedTargetRotation;
             }
         }
 
@@ -783,15 +817,53 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
         return new DialingRenderState(ringRotation, chevrons);
     }
 
-    private double lerpAngle(double start, double end, double progress) {
-        // Interpolate across the wrap boundary correctly. For example, 350 -> 5
-        // should move 15 degrees forward, not 345 degrees backward.
+    private double shortestAngleDelta(double start, double end) {
         double delta = normalizeAngle(end - start);
         if (delta > 180.0D) {
             delta -= 360.0D;
         }
 
-        return normalizeAngle(start + delta * progress);
+        return delta;
+    }
+
+    private double directedTargetRotation(double start, double target, boolean positive) {
+        double positiveDelta = normalizeAngle(target - start);
+        // Repeated glyphs still need a visible spin. A zero delta therefore
+        // becomes one complete turn in the direction chosen for this symbol.
+        if (positiveDelta == 0.0D) {
+            return positive ? start + 360.0D : start - 360.0D;
+        }
+
+        return positive ? start + positiveDelta : start - (360.0D - positiveDelta);
+    }
+
+    private DialClockKey dialClockKey(StargateBaseBlockEntity blockEntity) {
+        return new DialClockKey(blockEntity.getLevel().dimension().location(), blockEntity.getBlockPos().asLong());
+    }
+
+    private double presentationElapsed(StargateBaseBlockEntity blockEntity, DialClockKey clockKey, String address, float partialTick) {
+        double synchronizedElapsed = Math.max(0.0D,
+                blockEntity.getLevel().getGameTime() + partialTick - blockEntity.dialingStartGameTime());
+        long now = System.nanoTime();
+        ClientDialClock clock = dialClocks.get(clockKey);
+        if (clock == null
+                || clock.dialingStartGameTime() != blockEntity.dialingStartGameTime()
+                || clock.dialingDurationTicks() != blockEntity.dialingDurationTicks()
+                || !clock.address().equals(address)) {
+            clock = new ClientDialClock(
+                    blockEntity.dialingStartGameTime(),
+                    blockEntity.dialingDurationTicks(),
+                    address,
+                    synchronizedElapsed,
+                    now);
+            dialClocks.put(clockKey, clock);
+        }
+
+        return clock.elapsedAt(now);
+    }
+
+    private double lerp(double start, double end, double progress) {
+        return start + (end - start) * progress;
     }
 
     private double normalizeAngle(double angle) {
@@ -826,6 +898,15 @@ public class StargateBaseRenderer implements BlockEntityRenderer<StargateBaseBlo
             // Defensive bounds check keeps rendering resilient if constants or
             // lock-order data change later.
             return index >= 0 && index < chevronLocks.length ? chevronLocks[index] : 0.0D;
+        }
+    }
+
+    private record DialClockKey(ResourceLocation dimension, long blockPos) {
+    }
+
+    private record ClientDialClock(long dialingStartGameTime, int dialingDurationTicks, String address, double initialElapsed, long startedAtNanos) {
+        private double elapsedAt(long now) {
+            return initialElapsed + (now - startedAtNanos) / 50_000_000.0D;
         }
     }
 

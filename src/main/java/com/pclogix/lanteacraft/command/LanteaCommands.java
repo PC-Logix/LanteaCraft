@@ -11,6 +11,7 @@ import com.pclogix.lanteacraft.worldgen.AtlantisCityManager;
 import com.pclogix.lanteacraft.worldgen.ExpeditionGenerator;
 import com.pclogix.lanteacraft.worldgen.ExpeditionInstance;
 import com.pclogix.lanteacraft.worldgen.ExpeditionSavedData;
+import com.pclogix.lanteacraft.worldgen.ExpeditionWorldBorder;
 import com.pclogix.lanteacraft.worldgen.LanteaWorldgenEvents;
 import com.pclogix.lanteacraft.worldgen.PlannedStargate;
 import com.pclogix.lanteacraft.worldgen.PlannedStargateResolver;
@@ -407,6 +408,7 @@ public final class LanteaCommands {
         }
 
         BlockPos landing = landingPos(targetLevel, gate);
+        ExpeditionWorldBorder.ensureDisabled(targetLevel);
         player.teleportTo(targetLevel, landing.getX() + 0.5D, landing.getY(), landing.getZ() + 0.5D, player.getYRot(), player.getXRot());
         player.sendSystemMessage(Component.literal("Teleported to " + gate.address() + " at " + gate.basePos().getX() + "," + gate.basePos().getY() + "," + gate.basePos().getZ()).withStyle(ChatFormatting.GREEN));
         return 1;

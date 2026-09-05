@@ -3,6 +3,7 @@ package com.pclogix.lanteacraft.gate;
 import com.pclogix.lanteacraft.LanteaCraft;
 import com.pclogix.lanteacraft.Config;
 import com.pclogix.lanteacraft.block.entity.StargateBaseBlockEntity;
+import com.pclogix.lanteacraft.worldgen.ExpeditionWorldBorder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -251,6 +252,7 @@ public class StargateTeleportHandler {
                 .add(0.0D, entryVelocity.y, 0.0D);
         float exitYaw = yawFromVector(exitLook, destination.facing().toYRot());
 
+        ExpeditionWorldBorder.ensureDisabled(destinationLevel);
         LanteaCraft.LOGGER.info("Teleporting {} from gate {} to gate {} at {}", entity.getName().getString(), source.address(), destination.address(), target);
         if (entity.teleportTo(destinationLevel, target.x, target.y, target.z, Set.<RelativeMovement>of(), exitYaw, entity.getXRot())) {
             entity.setDeltaMovement(exitVelocity);

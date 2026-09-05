@@ -38,6 +38,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
     private static final int SYMBOL_TICKS = 65;
     private static final int SPIN_TICKS = 55;
     private static final int IRIS_MOVE_TICKS = 40;
+    private static final float STARGATE_SOUND_VOLUME = 0.5F;
 
     private String dialingAddress = "";
     private long dialingStartGameTime = -1L;
@@ -126,7 +127,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
         openSoundPlayed = false;
         nextAmbientSoundTime = 0L;
         if (wasConnected && level != null) {
-            level.playSound(null, worldPosition, ModSounds.STARGATE_CLOSE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(null, worldPosition, ModSounds.STARGATE_CLOSE.get(), SoundSource.BLOCKS, STARGATE_SOUND_VOLUME, 1.0F);
         }
         setWormholeOpen(false);
         sync();
@@ -152,14 +153,14 @@ public class StargateBaseBlockEntity extends BlockEntity {
                 int currentChevron = Math.min(dialingAddress.length() - 1, (int)((elapsed - SPIN_TICKS) / SYMBOL_TICKS));
                 while (currentChevron > lastChevronSound && lastChevronSound + 1 < dialingAddress.length()) {
                     lastChevronSound++;
-                    level.playSound(null, worldPosition, ModSounds.stargateChevronLock(variant()), SoundSource.BLOCKS, 1.0F, 1.0F);
+                    level.playSound(null, worldPosition, ModSounds.stargateChevronLock(variant()), SoundSource.BLOCKS, STARGATE_SOUND_VOLUME, 1.0F);
                 }
             }
         }
 
         if (isConnected() && dialingStartGameTime >= 0L && gameTime > dialingStartGameTime + dialingDurationTicks && !openSoundPlayed) {
             openSoundPlayed = true;
-            level.playSound(null, worldPosition, ModSounds.STARGATE_OPEN.get(), SoundSource.BLOCKS, 1.25F, 1.0F);
+            level.playSound(null, worldPosition, ModSounds.STARGATE_OPEN.get(), SoundSource.BLOCKS, 1.25F * STARGATE_SOUND_VOLUME, 1.0F);
             setWormholeOpen(true);
             StargateMultiblock.findEntryFrom(level, worldPosition).ifPresent(gate -> StargateEventDispatcher.wormholeOpened((net.minecraft.server.level.ServerLevel)level, gate));
         }
@@ -174,7 +175,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
 
         if (isConnected() && !isDialing(gameTime) && nextAmbientSoundTime > 0L && gameTime >= nextAmbientSoundTime) {
             nextAmbientSoundTime = gameTime + 85L;
-            level.playSound(null, worldPosition, ModSounds.STARGATE_AMBIENT.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
+            level.playSound(null, worldPosition, ModSounds.STARGATE_AMBIENT.get(), SoundSource.BLOCKS, 0.35F * STARGATE_SOUND_VOLUME, 1.0F);
         }
 
         tickWormholePower();
@@ -183,7 +184,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
 
     private void playRollSound() {
         if (level != null) {
-            level.playSound(null, worldPosition, ModSounds.stargateRoll(variant()), SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(null, worldPosition, ModSounds.stargateRoll(variant()), SoundSource.BLOCKS, STARGATE_SOUND_VOLUME, 1.0F);
         }
     }
 
@@ -678,7 +679,7 @@ public class StargateBaseBlockEntity extends BlockEntity {
             return;
         }
 
-        level.playSound(null, worldPosition, irisSound(opening), SoundSource.BLOCKS, 0.85F, 1.0F);
+        level.playSound(null, worldPosition, irisSound(opening), SoundSource.BLOCKS, 0.85F * STARGATE_SOUND_VOLUME, 1.0F);
     }
 
     private SoundEvent irisSound(boolean opening) {
