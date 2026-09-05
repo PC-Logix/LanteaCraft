@@ -18,6 +18,7 @@ def releaseTag = findProperty('release_tag')?.toString()?.trim()
 def releaseVersion = releaseTag ? releaseTag.replaceFirst(/^v/, '') : null
 def buildNumber = providers.gradleProperty('build_number')
         .orElse(providers.environmentVariable('GITHUB_RUN_NUMBER'))
+        .orElse(providers.environmentVariable('BUILD_NUMBER'))
         .getOrElse('')
         .trim()
 version = releaseVersion ?: (buildNumber ? "${mod_version}.${buildNumber}" : mod_version)
