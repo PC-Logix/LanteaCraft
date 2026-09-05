@@ -21,7 +21,7 @@ def buildNumber = providers.gradleProperty('build_number')
         .orElse(providers.environmentVariable('BUILD_NUMBER'))
         .getOrElse('')
         .trim()
-version = releaseVersion ?: (buildNumber ? "${mod_version}.${buildNumber}" : mod_version)
+version = releaseVersion ?: (buildNumber ? "${mod_version}-dev-${buildNumber}" : mod_version)
 group = mod_group_id
 
 sourceSets.main.resources {
