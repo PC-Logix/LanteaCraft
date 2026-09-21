@@ -77,6 +77,7 @@ public class LanteaCraft {
         NeoForge.EVENT_BUS.addListener(ExpeditionTrialTracker::onLevelTick);
         NeoForge.EVENT_BUS.addListener(AbydosSpawner::onLevelTick);
         NeoForge.EVENT_BUS.addListener(AbydosPyramidGenerator::onChunkLoad);
+        NeoForge.EVENT_BUS.addListener(AbydosPyramidGenerator::onLevelTick);
         NeoForge.EVENT_BUS.addListener(AbydosSpawner::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(AtlantisCityManager::onLevelTick);
         NeoForge.EVENT_BUS.addListener(AtlantisSpawnRules::onSpawnPlacementCheck);

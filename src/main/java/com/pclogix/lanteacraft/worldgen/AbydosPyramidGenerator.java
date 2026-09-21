@@ -5,6 +5,12 @@ import com.pclogix.lanteacraft.block.DhdBlock;
 import com.pclogix.lanteacraft.block.StargateBaseBlock;
 import com.pclogix.lanteacraft.block.StargateComponentBlock;
 import com.pclogix.lanteacraft.registry.ModBlocks;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -16,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.level.ChunkEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 /** Builds the monumental, movie-inspired arrival complex around the fixed Abydos gate. */
 public final class AbydosPyramidGenerator {
@@ -30,6 +37,9 @@ public final class AbydosPyramidGenerator {
     private static final int MIN_F = PYRAMID_CENTER_F - PYRAMID_HALF_WIDTH - TERRAIN_BLEND_RADIUS;
     private static final int MAX_F = 150 + TERRAIN_BLEND_RADIUS;
     private static final int UPDATE_FLAGS = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
+    private static final int CHUNKS_PER_TICK = 1;
+    private static final Map<ServerLevel, Set<Long>> PENDING_CHUNKS = new WeakHashMap<>();
+    private static final ThreadLocal<Set<Long>> GENERATING_CHUNKS = ThreadLocal.withInitial(HashSet::new);
 
     private AbydosPyramidGenerator() {
     }
@@ -38,6 +48,7 @@ public final class AbydosPyramidGenerator {
         AbydosComplexSavedData data = AbydosComplexSavedData.get(level);
         boolean newAnchor = data.initialize(gateBase, facing, gatePlatformHeight);
         if (newAnchor) {
+            PENDING_CHUNKS.remove(level);
             clearLegacyPyramid(level, gateBase, facing);
             LanteaCraft.LOGGER.info("Preparing the Abydos pyramid complex around gate {} facing {}.", gateBase, facing);
         }
@@ -48,7 +59,7 @@ public final class AbydosPyramidGenerator {
             for (int chunkZ = gateChunkZ - 12; chunkZ <= gateChunkZ + 12; chunkZ++) {
                 LevelChunk chunk = level.getChunkSource().getChunkNow(chunkX, chunkZ);
                 if (chunk != null) {
-                    generateChunkIfNeeded(level, chunk.getPos(), data);
+                    enqueueChunk(level, chunk.getPos(), data);
                 }
             }
         }
@@ -64,8 +75,41 @@ public final class AbydosPyramidGenerator {
 
         AbydosComplexSavedData data = AbydosComplexSavedData.get(level);
         if (data.isInitialized()) {
-            generateChunkIfNeeded(level, chunk.getPos(), data);
+            enqueueChunk(level, chunk.getPos(), data);
         }
+    }
+
+    public static void onLevelTick(LevelTickEvent.Post event) {
+        if (!(event.getLevel() instanceof ServerLevel level) || !level.dimension().equals(LanteaDimensions.ABYDOS)) {
+            return;
+        }
+
+        AbydosComplexSavedData data = AbydosComplexSavedData.get(level);
+        if (!data.isInitialized()) {
+            return;
+        }
+
+        Set<Long> pendingChunks = PENDING_CHUNKS.get(level);
+        if (pendingChunks == null || pendingChunks.isEmpty()) {
+            return;
+        }
+
+        Iterator<Long> iterator = pendingChunks.iterator();
+        for (int generated = 0; generated < CHUNKS_PER_TICK && iterator.hasNext(); generated++) {
+            ChunkPos chunkPos = new ChunkPos(iterator.next());
+            iterator.remove();
+            LevelChunk chunk = level.getChunkSource().getChunkNow(chunkPos.x, chunkPos.z);
+            if (chunk != null) {
+                generateChunkIfNeeded(level, chunk.getPos(), data);
+            }
+        }
+    }
+
+    private static void enqueueChunk(ServerLevel level, ChunkPos chunkPos, AbydosComplexSavedData data) {
+        if (data.hasGenerated(chunkPos) || !intersectsComplex(chunkPos, data.gateBase(), data.facing())) {
+            return;
+        }
+        PENDING_CHUNKS.computeIfAbsent(level, ignored -> new LinkedHashSet<>()).add(chunkPos.toLong());
     }
 
     private static void generateChunkIfNeeded(ServerLevel level, ChunkPos chunkPos, AbydosComplexSavedData data) {
@@ -73,8 +117,21 @@ public final class AbydosPyramidGenerator {
             return;
         }
 
-        generateChunk(level, chunkPos, data.gateBase(), data.facing(), -data.gatePlatformHeight());
-        data.markGenerated(chunkPos);
+        Set<Long> generatingChunks = GENERATING_CHUNKS.get();
+        long chunkKey = chunkPos.toLong();
+        if (!generatingChunks.add(chunkKey)) {
+            return;
+        }
+
+        try {
+            generateChunk(level, chunkPos, data.gateBase(), data.facing(), -data.gatePlatformHeight());
+            data.markGenerated(chunkPos);
+        } finally {
+            generatingChunks.remove(chunkKey);
+            if (generatingChunks.isEmpty()) {
+                GENERATING_CHUNKS.remove();
+            }
+        }
     }
 
     private static boolean intersectsComplex(ChunkPos chunkPos, BlockPos gateBase, Direction facing) {
