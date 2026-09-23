@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
@@ -49,7 +50,12 @@ public final class AbydosPyramidGenerator {
         boolean newAnchor = data.initialize(gateBase, facing, gatePlatformHeight);
         if (newAnchor) {
             PENDING_CHUNKS.remove(level);
-            clearLegacyPyramid(level, gateBase, facing);
+            // Sable performs synchronous neighbor chunk reads from block updates and block reads.
+            // The legacy cleanup is optional migration work, so do not run it in the dial path
+            // when Sable is installed.
+            if (!ModList.get().isLoaded("sable")) {
+                clearLegacyPyramid(level, gateBase, facing);
+            }
             LanteaCraft.LOGGER.info("Preparing the Abydos pyramid complex around gate {} facing {}.", gateBase, facing);
         }
 
