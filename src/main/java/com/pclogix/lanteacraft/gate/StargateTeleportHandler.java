@@ -23,6 +23,7 @@ import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import dev.ryanhcode.sable.companion.SableCompanion;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
@@ -103,13 +104,13 @@ public class StargateTeleportHandler {
         }
 
         long now = level.getGameTime();
-        for (Entity entity : List.copyOf(level.getEntities((Entity)null, gateScanBounds(gate), this::canGateAffect))) {
+        for (Entity entity : List.copyOf(level.getEntities((Entity)null, gateScanBounds(level, gate), this::canGateAffect))) {
             Long hitUntil = kawooshHits.get(entity.getUUID());
             if (hitUntil != null && hitUntil > now) {
                 continue;
             }
 
-            if (!isInsideKawoosh(entity.getBoundingBox().getCenter(), gate)) {
+            if (!isInsideKawoosh(entity.position(), level, gate)) {
                 continue;
             }
 
@@ -124,13 +125,13 @@ public class StargateTeleportHandler {
 
     private void tickGate(ServerLevel level, StargateEntry source, StargateEntry destination) {
         long now = level.getGameTime();
-        for (Entity entity : List.copyOf(level.getEntities((Entity)null, gateScanBounds(source), this::canGateAffect))) {
+        for (Entity entity : List.copyOf(level.getEntities((Entity)null, gateScanBounds(level, source), this::canGateAffect))) {
             Long cooldownUntil = cooldowns.get(entity.getUUID());
             if (cooldownUntil != null && cooldownUntil > now) {
                 continue;
             }
 
-            Optional<GateLocalPosition> localPosition = localPositionInGate(entity.position(), source);
+            Optional<GateLocalPosition> localPosition = localPositionInGate(entity.position(), level, source);
             if (localPosition.isEmpty()) {
                 continue;
             }
@@ -148,13 +149,13 @@ public class StargateTeleportHandler {
 
     private void tickIncomingGate(ServerLevel level, StargateEntry destination, Optional<StargateEntry> source) {
         long now = level.getGameTime();
-        for (Entity entity : List.copyOf(level.getEntities((Entity)null, gateScanBounds(destination), this::canGateAffect))) {
+        for (Entity entity : List.copyOf(level.getEntities((Entity)null, gateScanBounds(level, destination), this::canGateAffect))) {
             Long cooldownUntil = cooldowns.get(entity.getUUID());
             if (cooldownUntil != null && cooldownUntil > now) {
                 continue;
             }
 
-            Optional<GateLocalPosition> localPosition = localPositionInGate(entity.position(), destination);
+            Optional<GateLocalPosition> localPosition = localPositionInGate(entity.position(), level, destination);
             if (localPosition.isEmpty()) {
                 continue;
             }
@@ -179,22 +180,20 @@ public class StargateTeleportHandler {
                 continue;
             }
 
-            for (Entity entity : List.copyOf(level.getEntities((Entity)null, gateScanBounds(gate), this::canGateAffect))) {
-                Optional<GateLocalPosition> localPosition = localPositionInGate(entity.position(), gate);
+            for (Entity entity : List.copyOf(level.getEntities((Entity)null, gateScanBounds(level, gate), this::canGateAffect))) {
+                Optional<GateLocalPosition> localPosition = localPositionInGate(entity.position(), level, gate);
                 localPosition.ifPresent(position -> pushOutOfIris(entity, gate, position));
             }
         }
     }
 
-    private Optional<GateLocalPosition> localPositionInGate(Vec3 entityPos, StargateEntry gate) {
-        Vec3 baseCenter = Vec3.atBottomCenterOf(gate.basePos());
-        Vec3 offset = entityPos.subtract(baseCenter);
-        Vec3 right = step(gate.facing().getClockWise());
-        Vec3 forward = step(gate.facing());
+    private Optional<GateLocalPosition> localPositionInGate(Vec3 entityPos, ServerLevel level, StargateEntry gate) {
+        GateFrame frame = gateFrame(level, gate);
+        Vec3 offset = entityPos.subtract(frame.baseCenter());
 
-        double localX = offset.dot(right);
-        double localY = entityPos.y - gate.basePos().getY();
-        double localDepth = offset.dot(forward);
+        double localX = offset.dot(frame.right());
+        double localY = offset.dot(frame.up());
+        double localDepth = offset.dot(frame.forward());
 
         if (Math.abs(localX) > HALF_INTERIOR_WIDTH || localY < MIN_INTERIOR_Y || localY > MAX_INTERIOR_Y || Math.abs(localDepth) > HALF_INTERIOR_DEPTH) {
             return Optional.empty();
@@ -203,15 +202,13 @@ public class StargateTeleportHandler {
         return Optional.of(new GateLocalPosition(localX, localY, localDepth));
     }
 
-    private boolean isInsideKawoosh(Vec3 entityPos, StargateEntry gate) {
-        Vec3 baseCenter = Vec3.atBottomCenterOf(gate.basePos());
-        Vec3 offset = entityPos.subtract(baseCenter);
-        Vec3 right = step(gate.facing().getClockWise());
-        Vec3 forward = step(gate.facing());
+    private boolean isInsideKawoosh(Vec3 entityPos, ServerLevel level, StargateEntry gate) {
+        GateFrame frame = gateFrame(level, gate);
+        Vec3 offset = entityPos.subtract(frame.baseCenter());
 
-        double localX = offset.dot(right);
-        double localY = entityPos.y - gate.basePos().getY();
-        double localDepth = offset.dot(forward);
+        double localX = offset.dot(frame.right());
+        double localY = offset.dot(frame.up());
+        double localDepth = offset.dot(frame.forward());
         double radialDistance = Math.sqrt(localX * localX + Math.pow(localY - KAWOOSH_CENTER_Y, 2.0D));
 
         return localDepth >= -HALF_INTERIOR_DEPTH
@@ -246,10 +243,12 @@ public class StargateTeleportHandler {
                 .add(step(destination.facing().getClockWise()).scale(localPosition.x()))
                 .add(step(destination.facing()).scale(EXIT_DISTANCE))
                 .add(0.0D, localPosition.y(), 0.0D);
+        ServerLevel sourceLevel = (ServerLevel)entity.level();
+        GateFrame sourceFrame = gateFrame(sourceLevel, source);
+        GateFrame destinationFrame = gateFrame(destinationLevel, destination);
         Vec3 entryVelocity = entity.getDeltaMovement();
-        Vec3 exitLook = transformSourceToDestination(entity.getLookAngle(), source, destination);
-        Vec3 exitVelocity = transformSourceToDestination(entryVelocity, source, destination)
-                .add(0.0D, entryVelocity.y, 0.0D);
+        Vec3 exitLook = transformSourceToDestination(entity.getLookAngle(), sourceFrame, destinationFrame);
+        Vec3 exitVelocity = transformSourceToDestination(entryVelocity, sourceFrame, destinationFrame);
         float exitYaw = yawFromVector(exitLook, destination.facing().toYRot());
 
         ExpeditionWorldBorder.ensureDisabled(destinationLevel);
@@ -297,8 +296,21 @@ public class StargateTeleportHandler {
         return !entity.isRemoved() && !entity.isPassenger();
     }
 
-    private AABB gateScanBounds(StargateEntry gate) {
-        return new AABB(gate.basePos()).inflate(4.0D, 1.0D, 4.0D).expandTowards(0.0D, 7.0D, 0.0D);
+    private GateFrame gateFrame(ServerLevel level, StargateEntry gate) {
+        Vec3 plotBase = Vec3.atBottomCenterOf(gate.basePos());
+        Vec3 base = SableCompanion.INSTANCE.projectOutOfSubLevel(level, plotBase);
+        Vec3 right = SableCompanion.INSTANCE.projectOutOfSubLevel(level, plotBase.add(step(gate.facing().getClockWise())))
+                .subtract(base).normalize();
+        Vec3 up = SableCompanion.INSTANCE.projectOutOfSubLevel(level, plotBase.add(0.0D, 1.0D, 0.0D))
+                .subtract(base).normalize();
+        Vec3 forward = SableCompanion.INSTANCE.projectOutOfSubLevel(level, plotBase.add(step(gate.facing())))
+                .subtract(base).normalize();
+        return new GateFrame(base, right, up, forward);
+    }
+
+    private AABB gateScanBounds(ServerLevel level, StargateEntry gate) {
+        Vec3 base = gateFrame(level, gate).baseCenter();
+        return new AABB(base, base).inflate(5.0D, 8.0D, 5.0D);
     }
 
     private boolean isGateOpen(ServerLevel level, StargateEntry gate) {
@@ -369,15 +381,13 @@ public class StargateTeleportHandler {
         return Config.GATE_TELEPORT_COOLDOWN_TICKS.get();
     }
 
-    private static Vec3 transformSourceToDestination(Vec3 vector, StargateEntry source, StargateEntry destination) {
-        Vec3 sourceRight = step(source.facing().getClockWise());
-        Vec3 sourceForward = step(source.facing());
-        Vec3 destinationRight = step(destination.facing().getClockWise());
-        Vec3 destinationForward = step(destination.facing());
-
-        double right = vector.dot(sourceRight);
-        double forward = vector.dot(sourceForward);
-        return destinationRight.scale(right).subtract(destinationForward.scale(forward));
+    private static Vec3 transformSourceToDestination(Vec3 vector, GateFrame source, GateFrame destination) {
+        double right = vector.dot(source.right());
+        double up = vector.dot(source.up());
+        double forward = vector.dot(source.forward());
+        return destination.right().scale(right)
+                .add(destination.up().scale(up))
+                .subtract(destination.forward().scale(forward));
     }
 
     private static float yawFromVector(Vec3 vector, float fallbackYaw) {
@@ -390,5 +400,8 @@ public class StargateTeleportHandler {
     }
 
     private record GateLocalPosition(double x, double y, double depth) {
+    }
+
+    private record GateFrame(Vec3 baseCenter, Vec3 right, Vec3 up, Vec3 forward) {
     }
 }

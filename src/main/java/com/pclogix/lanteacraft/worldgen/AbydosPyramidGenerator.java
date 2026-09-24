@@ -101,13 +101,26 @@ public final class AbydosPyramidGenerator {
         }
 
         Iterator<Long> iterator = pendingChunks.iterator();
+        Long retryChunk = null;
         for (int generated = 0; generated < CHUNKS_PER_TICK && iterator.hasNext(); generated++) {
             ChunkPos chunkPos = new ChunkPos(iterator.next());
             iterator.remove();
             LevelChunk chunk = level.getChunkSource().getChunkNow(chunkPos.x, chunkPos.z);
-            if (chunk != null) {
-                generateChunkIfNeeded(level, chunk.getPos(), data);
+            if (chunk == null) {
+                // A queued chunk may unload before its turn. Keep it queued so it
+                // is processed if it becomes loaded again instead of losing its build.
+                retryChunk = chunkPos.toLong();
+                continue;
             }
+            try {
+                generateChunkIfNeeded(level, chunk.getPos(), data);
+            } catch (RuntimeException exception) {
+                retryChunk = chunkPos.toLong();
+                LanteaCraft.LOGGER.error("Failed to generate Abydos complex chunk {}; it will be retried.", chunkPos, exception);
+            }
+        }
+        if (retryChunk != null) {
+            pendingChunks.add(retryChunk);
         }
     }
 
@@ -205,9 +218,10 @@ public final class AbydosPyramidGenerator {
 
         int structureSurfaceY = gateBase.getY() + baseY;
         int naturalGroundY = level.getHeight(Heightmap.Types.OCEAN_FLOOR, x, z) - 1;
-        int naturalTopY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) - 1;
+        int naturalTopY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) - 1;
         BlockPos naturalTop = new BlockPos(x, naturalTopY, z);
-        boolean wasWater = !level.getFluidState(naturalTop).isEmpty();
+        BlockPos motionBlockingTop = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) - 1, z);
+        boolean wasWater = !level.getFluidState(motionBlockingTop).isEmpty();
         double blend = distance / (double)TERRAIN_BLEND_RADIUS;
         int desiredY = (int)Math.round(structureSurfaceY + (naturalGroundY - structureSurfaceY) * blend);
         if (wasWater) {
@@ -241,7 +255,7 @@ public final class AbydosPyramidGenerator {
         int worldSurfaceY = gateBase.getY() + surfaceY;
         int terrainTopY = Math.min(
                 level.getMaxBuildHeight() - 1,
-                level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) - 1);
+                level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) - 1);
         for (int y = terrainTopY; y > worldSurfaceY; y--) {
             clearTerrain(level, new BlockPos(x, y, z));
         }

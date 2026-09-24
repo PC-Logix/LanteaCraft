@@ -53,6 +53,12 @@ repositories {
             includeGroup("cc.tweaked")
         }
     }
+    exclusiveContent {
+        forRepositories(maven { url = "https://maven.ryanhcode.dev/releases" })
+        filter {
+            includeGroup "dev.ryanhcode.sable-companion"
+        }
+    }
 }
 
 base {
@@ -143,6 +149,12 @@ configurations {
 }
 
 dependencies {
+    // Sable Companion provides identity transforms when Sable is absent and active sublevel transforms when installed.
+    jarJar(api("dev.ryanhcode.sable-companion:sable-companion-common-${minecraft_version}:[${sable_companion_version},)")) {
+        version {
+            prefer(sable_companion_version)
+        }
+    }
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
